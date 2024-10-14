@@ -1,12 +1,13 @@
 # Vidhra
-Better management, finops, and usage of cloud
+Better management, finOps, and usage of cloud
 
 ### Overview
-Vidhra is a Cloud Wastage Reduction Tool, an open-source project designed to efficiently manage cloud resources, reduce cloud wastage, and optimize costs. It includes a **Karma Allocation** inspired by the paper [karma allocator](https://www.usenix.org/conference/osdi23/presentation/vuppalapati) module to allocate cloud resources based on usage efficiency and a **FinOps** module to provide optimization recommendations, generate reports, and manage cloud wastage alerts.
+Vidhra is a Cloud Optimization Tool, an open-source project designed to efficiently manage cloud resources, reduce cloud wastage, and optimize costs. It includes a **Karma Allocation** inspired by the paper [karma allocator](https://www.usenix.org/conference/osdi23/presentation/vuppalapati) module to allocate cloud resources based on usage efficiency and a **FinOps** module to provide optimization recommendations, generate reports, and manage cloud wastage alerts.
 
 The project integrates with **AWS** and **GCP** billing APIs to track cloud costs, provide actionable optimization suggestions, and reward efficient teams with monetary credits. The Karma allocator encourages teams to be more resource-efficient, while the FinOps module helps organizations take control of their cloud spending.
 
 ### Features
+- **Cloud LAM**: Runs actions with a simple query prompt.
 - **Karma Allocation**: Allocates cloud resources to teams based on efficiency, rewarding optimal usage.
 - **FinOps Optimization**: Detects cloud wastage and provides optimization recommendations to reduce costs.
 - **Cloud Integration**: Integrates with AWS and GCP billing APIs for real-time cost monitoring.
