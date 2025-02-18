@@ -7,13 +7,10 @@ Vidhra is a Cloud Optimization Tool, an open-source project designed to efficien
 The project integrates with **AWS** and **GCP** billing APIs to track cloud costs, provide actionable optimization suggestions, and reward efficient teams with monetary credits. The Karma allocator encourages teams to be more resource-efficient, while the FinOps module helps organizations take control of their cloud spending.
 
 ### Features
-- **Cloud LAM**: Runs actions with a simple query prompt.
-- **Karma Allocation**: Allocates cloud resources to teams based on efficiency, rewarding optimal usage.
+- **Cloud Query**: Runs actions with a simple query prompt.
 - **FinOps Optimization**: Detects cloud wastage and provides optimization recommendations to reduce costs.
 - **Cloud Integration**: Integrates with AWS and GCP billing APIs for real-time cost monitoring.
 - **Cost Reporting**: Generates detailed reports on cloud costs, efficiency, and areas for potential savings.
-- **Alert System**: Sets alerts for inefficient cloud usage, budget overruns, and underutilized resources.
-- **Gamification**: A Karma credit system motivates teams to improve cloud resource management.
 ### Leveraging LLMs for Enhanced Functionality
 
 **Vidhra** uses **Large Language Models (LLMs)** to make data processing, reporting, and decision-making more efficient. Here’s how LLMs are utilized to simplify and enhance various aspects of the project:
