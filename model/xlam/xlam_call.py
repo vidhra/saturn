@@ -34,41 +34,6 @@ query = "can you get the billing account for the project vidhra.com and list all
 
 
 
-get_weather_api = {
-    "name": "get_weather",
-    "description": "Get the current weather for a location",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "location": {
-                "type": "string",
-                "description": "The city and state, e.g. San Francisco, New York"
-            },
-            "unit": {
-                "type": "string",
-                "enum": ["celsius", "fahrenheit"],
-                "description": "The unit of temperature to return"
-            }
-        },
-        "required": ["location"]
-    }
-}
-
-search_api = {
-    "name": "search",
-    "description": "Search for information on the internet",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "query": {
-                "type": "string",
-                "description": "The search query, e.g. 'latest news on AI'"
-            }
-        },
-        "required": ["query"]
-    }
-}
-
 openai_format_tools = [
   {
     "name": "get_billing_account",
