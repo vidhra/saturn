@@ -20,7 +20,8 @@ The example format is as follows. Please make sure the parameter type is correct
 """.strip()
 
 # Define the user query
-query = "can you get the billing account for the project vidhra.com and list all the projects associated with it and update the billing account to a budget of 10000"
+query = "can you get the billing account for the project vidhra.com and list all the projects associated with it and test the iam policy"
+
 
 
 client = OpenAI(
@@ -474,17 +475,25 @@ openai_format_tools = [
   }
 ]
 
+def build_prompt(task_instruction: str, format_instruction: str, tools: list, query: str):
+    prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
+    prompt += f"[BEGIN OF AVAILABLE TOOLS]\n{json.dumps(openai_format_tools)}\n[END OF AVAILABLE TOOLS]\n\n"
+    prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
+    prompt += f"[BEGIN OF QUERY]\n{query}\n[END OF QUERY]\n\n"
+    return prompt
+
+content = build_prompt(task_instruction, format_instruction, openai_format_tools, query)
 
 # Helper function to build the prompt
 response = client.chat.completions.create(
-  model="gpt-4o",
+  model="o3-mini",
   messages=[
     {
       "role": "user",
       "content": [
         {
           "type": "text",
-          "text": query
+          "text": content
         }
       ]
     },
@@ -503,6 +512,14 @@ response = client.chat.completions.create(
 )
 # Call the API to get the response
 
+tool_calls = response.choices[0].message.tool_calls
+content = response.choices[0].message.content
+print("Reasoning: ", content)
 
+if tool_calls:
+    available_tools = [tool_call.function.name for tool_call in tool_calls]
+    print(available_tools)
+else:
+    print("No tool calls found")    
 # Print the response content
-print(response.choices[0].message.tool_calls)
+# print(response.choices[0].message.tool_calls)
