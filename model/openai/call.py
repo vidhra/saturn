@@ -1,8 +1,12 @@
 import json
 from openai import ChatCompletion
 from openai import OpenAI
+import asyncio
+import os
+from google.cloud import billing_v1
 # Set your OpenAI API key
 api_key = "sk-proj-MJmVD8pfcaf7GesMW4gOT3BlbkFJNUioNOsSm7kMom161U9D"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "vidhra-eb3e8152e0a2.json"
 
 # Define the task instruction
 task_instruction = """
@@ -482,9 +486,30 @@ def build_prompt(task_instruction: str, format_instruction: str, tools: list, qu
     prompt += f"[BEGIN OF QUERY]\n{query}\n[END OF QUERY]\n\n"
     return prompt
 
+
+async def get_billing_info():
+    client = billing_v1.CloudBillingAsyncClient()
+    
+    # Retrieve the billing info
+    try:
+        # Format should be "projects/PROJECT_ID"
+        request = billing_v1.GetProjectBillingInfoRequest(
+            name="projects/vidhra"  # Replace with your actual project ID
+        )
+        billing_info = await client.get_project_billing_info(request=request)
+        print(billing_info)
+    except Exception as e:
+        print(f"Error getting billing info: {e}")
+
+# Create the request and run it
+request = billing_v1.GetProjectBillingInfoRequest(
+    name="projects/vidhra"  # Replace with your actual project ID
+)
+asyncio.run(get_billing_info())
+
 content = build_prompt(task_instruction, format_instruction, openai_format_tools, query)
 
-# Helper function to build the prompt
+#Helper function to build the prompt
 response = client.chat.completions.create(
   model="o3-mini",
   messages=[
@@ -510,8 +535,7 @@ response = client.chat.completions.create(
   tools=openai_format_tools,
   max_completion_tokens=5000
 )
-# Call the API to get the response
-
+#Call the API to get the response
 tool_calls = response.choices[0].message.tool_calls
 content = response.choices[0].message.content
 print("Reasoning: ", content)
@@ -520,6 +544,7 @@ if tool_calls:
     available_tools = [tool_call.function.name for tool_call in tool_calls]
     print(available_tools)
 else:
-    print("No tool calls found")    
-# Print the response content
-# print(response.choices[0].message.tool_calls)
+    print("No tool calls found")  
+
+#Print the response content
+print(response.choices[0].message.tool_calls)
