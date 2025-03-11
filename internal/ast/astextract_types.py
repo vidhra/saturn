@@ -17,31 +17,27 @@ def extract_request_classes_from_file(file_path: str):
       - Capture & truncate the docstring (to 1024 chars).
       - Extract attributes from any 'Attributes:' block in the docstring
         of the form:
-          attribute_name (str):
-              Some multiline description
+            attribute_name (str):
+                Some multiline description
     Returns a list of dictionaries with keys:
       - 'type': Always 'request_class'
       - 'name': The class name
       - 'docstring': The truncated docstring
       - 'attributes': A dict of {attribute_name: {"type": "...", "description": "..."}}
     """
-
     with open(file_path, "r", encoding="utf-8") as f:
         source = f.read()
 
     tree = ast.parse(source, file_path)
     extracted_classes = []
 
-    # Regex to identify attribute lines of the form:
-    #   name (str):
-    #       Some description...
+    # Regex to identify attribute lines, e.g. "attribute_name (str): Some description..."
     attr_pattern = re.compile(r"^\s*(\w+)\s*\(\s*([\w\[\], \.]+)\)\:\s*(.*)$")
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ClassDef):
-            # Check if this class inherits from proto.Message
+            # Determine if this class inherits from proto.Message.
             base_names = [base.id for base in node.bases if isinstance(base, ast.Name)]
-            # Or, if there's a more complex base like proto.Message in a dotted import:
             base_attrs = [
                 f"{base.value.id}.{base.attr}" 
                 for base in node.bases 
@@ -55,30 +51,27 @@ def extract_request_classes_from_file(file_path: str):
                 docstring_truncated = docstring.strip()[:1024]
 
                 attributes = {}
-                
-                # We'll do a docstring-based approach to parse any "Attributes:" section
+                # Look for an "Attributes:" section in the docstring.
                 doc_lines = docstring.splitlines()
                 in_attributes_section = False
                 attr_name_in_progress = None
                 attr_desc_in_progress = []
 
                 for line in doc_lines:
-                    # Detect if we are in the "Attributes:" section
+                    # Enter the attributes section when the marker is encountered.
                     if "Attributes:" in line:
                         in_attributes_section = True
                         continue
 
-                    # If we are in the attributes section, look for attribute lines
                     if in_attributes_section:
                         match = attr_pattern.match(line)
                         if match:
-                            # Finalize any previous attribute
+                            # Finalize any previous attribute being processed.
                             if attr_name_in_progress:
                                 existing = attributes.get(attr_name_in_progress, {})
                                 existing["description"] = (
-                                    existing.get("description", "")
-                                    + " "
-                                    + " ".join(attr_desc_in_progress)
+                                    existing.get("description", "") + " " +
+                                    " ".join(attr_desc_in_progress)
                                 ).strip()
                                 attributes[attr_name_in_progress] = existing
                                 attr_name_in_progress = None
@@ -87,7 +80,6 @@ def extract_request_classes_from_file(file_path: str):
                             attr_name, attr_type, attr_desc = match.groups()
                             attr_name = attr_name.strip()
                             attr_type = attr_type.strip()
-
                             attributes[attr_name] = {
                                 "type": attr_type or "string",
                                 "description": attr_desc.strip()
@@ -95,21 +87,18 @@ def extract_request_classes_from_file(file_path: str):
                             attr_name_in_progress = attr_name
                             attr_desc_in_progress = []
                         else:
-                            # If we already matched an attribute, keep reading lines
                             if attr_name_in_progress:
                                 attr_desc_in_progress.append(line.strip())
 
-                # Finalize any leftover attribute
+                # Finalize the last attribute if still in progress.
                 if attr_name_in_progress:
                     existing = attributes.get(attr_name_in_progress, {})
                     existing["description"] = (
-                        existing.get("description", "")
-                        + " "
-                        + " ".join(attr_desc_in_progress)
+                        existing.get("description", "") + " " +
+                        " ".join(attr_desc_in_progress)
                     ).strip()
                     attributes[attr_name_in_progress] = existing
 
-                # Build final output for this request class
                 extracted_classes.append({
                     "type": "request_class",
                     "name": class_name,
@@ -119,24 +108,51 @@ def extract_request_classes_from_file(file_path: str):
 
     return extracted_classes
 
+def process_package_types(metadata_path: str):
+    """
+    For a given gapic_metadata.json file, locate the 'types' directory within the package,
+    and extract all request classes from every Python file in that directory.
+    Returns a dictionary mapping file paths to lists of extracted request classes.
+    """
+    package_dir = os.path.dirname(metadata_path)
+    types_dir = os.path.join(package_dir, "types")
+    extracted_types = {}
+
+    if os.path.isdir(types_dir):
+        for root, _, files in os.walk(types_dir):
+            for file in files:
+                if file.endswith(".py"):
+                    file_path = os.path.join(root, file)
+                    classes = extract_request_classes_from_file(file_path)
+                    if classes:
+                        extracted_types[file_path] = classes
+    return extracted_types
+
+def process_all_packages_types(base_directory: str):
+    """
+    Recursively search for gapic_metadata.json files under the base directory,
+    process each package to extract request classes from its 'types' directory,
+    and save each package's results in its own output folder.
+    """
+    for root, _, files in os.walk(base_directory):
+        for file in files:
+            if file == "gapic_metadata.json":
+                metadata_path = os.path.join(root, file)
+                types_data = process_package_types(metadata_path)
+                if types_data:
+                    working_dir = r"\Users\AMD\vidhra\internal\ast"
+                    output_dir = os.path.join(working_dir, "extracted_methods")
+                    tools_dir = os.path.join(output_dir, metadata_path.split("\\")[-2])
+                    os.makedirs(tools_dir, exist_ok=True)
+                    output_file = os.path.join(tools_dir, "types.json")
+                    with open(output_file, "w", encoding="utf-8") as f:
+                        json.dump(types_data, f, indent=2)
+                    print(f"Extracted request classes saved to {output_file}")
+
 def main():
-    # Example usage: parse the "cloud_billing.py" file that includes request classes
-    # Adjust the path below as appropriate for your environment
-    metadata_path = r"C:\Users\AMD\vidhra\internal\ast\google-cloud-python\packages\google-cloud-billing\google\cloud\billing_v1\gapic_metadata.json"
-    client_file = r"C:\Users\AMD\vidhra\internal\ast\google-cloud-python\packages\google-cloud-billing\google\cloud\billing_v1\types\cloud_billing.py"
-
-    # (Optional) load metadata for other tasks
-    metadata = load_gapic_metadata(metadata_path)
-
-    request_classes_info = extract_request_classes_from_file(client_file)
-    
-    # Write out the extracted data
-    output_file = "extracted_request_classes.json"
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(request_classes_info, f, indent=2)
-
-    print(f"Extracted {len(request_classes_info)} request classes from {client_file}")
-    print(f"Results written to {output_file}")
+    # Set the base directory for the packages.
+    base_directory = r"\Users\AMD\vidhra\internal\ast\google-cloud-python\packages"
+    process_all_packages_types(base_directory)
 
 if __name__ == "__main__":
     main()

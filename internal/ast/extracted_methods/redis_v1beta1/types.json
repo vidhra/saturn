@@ -1,0 +1,521 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-redis\\google\\cloud\\redis_v1beta1\\types\\cloud_redis.py": [
+    {
+      "type": "request_class",
+      "name": "NodeInfo",
+      "docstring": "Node specific properties.\n\nAttributes:\n    id (str):\n        Output only. Node identifying string. e.g.\n        'node-0', 'node-1'\n    zone (str):\n        Output only. Location of the node.",
+      "attributes": {
+        "id": {
+          "type": "str",
+          "description": "Output only. Node identifying string. e.g. 'node-0', 'node-1'"
+        },
+        "zone": {
+          "type": "str",
+          "description": "Output only. Location of the node."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Instance",
+      "docstring": "A Memorystore for Redis instance.\n\nAttributes:\n    name (str):\n        Required. Unique name of the resource in this scope\n        including project and location using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n\n        Note: Redis instances are managed and addressed at regional\n        level so location_id here refers to a GCP region; however,\n        users may choose which specific zone (or collection of zones\n        for cross-zone instances) an instance should be provisioned\n        in. Refer to\n        [location_id][google.cloud.redis.v1beta1.Instance.location_id]\n        and\n        [alternative_location_id][google.cloud.redis.v1beta1.Instance.alternative_location_id]\n        fields for more details.\n    display_name (str):\n        An arbitrary and optional user-provided name\n        for the instance.\n    labels (MutableMapping[str, str]):\n        Resource labels to represent user provided\n        metadata\n    location_id (str):\n        Optional. The zone",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Unique name of the resource in this scope including project and location using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``  Note: Redis instances are managed and addressed at regional level so location_id here refers to a GCP region; however, users may choose which specific zone (or collection of zones for cross-zone instances) an instance should be provisioned in. Refer to [location_id][google.cloud.redis.v1beta1.Instance.location_id] and [alternative_location_id][google.cloud.redis.v1beta1.Instance.alternative_location_id] fields for more details."
+        },
+        "display_name": {
+          "type": "str",
+          "description": "An arbitrary and optional user-provided name for the instance."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Resource labels to represent user provided metadata"
+        },
+        "location_id": {
+          "type": "str",
+          "description": "Optional. The zone where the instance will be provisioned. If not provided, the service will choose a zone from the specified region for the instance. For standard tier, additional nodes will be added across multiple zones for protection against zonal failures. If specified, at least one node will be provisioned in this zone."
+        },
+        "alternative_location_id": {
+          "type": "str",
+          "description": "Optional. If specified, at least one node will be provisioned in this zone in addition to the zone specified in location_id. Only applicable to standard tier. If provided, it must be a different zone from the one provided in [location_id]. Additional nodes beyond the first 2 will be placed in zones selected by the service."
+        },
+        "redis_version": {
+          "type": "str",
+          "description": "Optional. The version of Redis software. If not provided, latest supported version will be used. Currently, the supported values are:  -  ``REDIS_3_2`` for Redis 3.2 compatibility -  ``REDIS_4_0`` for Redis 4.0 compatibility (default) -  ``REDIS_5_0`` for Redis 5.0 compatibility -  ``REDIS_6_X`` for Redis 6.x compatibility"
+        },
+        "reserved_ip_range": {
+          "type": "str",
+          "description": "Optional. For DIRECT_PEERING mode, the CIDR range of internal addresses that are reserved for this instance. Range must be unique and non-overlapping with existing subnets in an authorized network. For PRIVATE_SERVICE_ACCESS mode, the name of one allocated IP address ranges associated with this private service access connection. If not provided, the service will choose an unused /29 block, for example, 10.0.0.0/29 or 192.168.0.0/29. For READ_REPLICAS_ENABLED the default block size is /28."
+        },
+        "secondary_ip_range": {
+          "type": "str",
+          "description": "Optional. Additional IP range for node placement. Required when enabling read replicas on an existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or \"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address range associated with the private service access connection, or \"auto\"."
+        },
+        "host": {
+          "type": "str",
+          "description": "Output only. Hostname or IP address of the exposed Redis endpoint used by  clients to connect to the service."
+        },
+        "port": {
+          "type": "int",
+          "description": "Output only. The port number of the exposed Redis endpoint."
+        },
+        "current_location_id": {
+          "type": "str",
+          "description": "Output only. The current zone where the Redis primary node is located. In basic tier, this will always be the same as [location_id]. In standard tier, this can be the zone of any node in the instance."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time the instance was created."
+        },
+        "state": {
+          "type": "google.cloud.redis_v1beta1.types.Instance.State",
+          "description": "Output only. The current state of this instance."
+        },
+        "status_message": {
+          "type": "str",
+          "description": "Output only. Additional information about the current status of this instance, if available."
+        },
+        "redis_configs": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. Redis configuration parameters, according to http://redis.io/topics/config. Currently, the only supported parameters are:  Redis version 3.2 and newer:  -  maxmemory-policy -  notify-keyspace-events  Redis version 4.0 and newer:  -  activedefrag -  lfu-decay-time -  lfu-log-factor -  maxmemory-gb  Redis version 5.0 and newer:  -  stream-node-max-bytes -  stream-node-max-entries"
+        },
+        "tier": {
+          "type": "google.cloud.redis_v1beta1.types.Instance.Tier",
+          "description": "Required. The service tier of the instance."
+        },
+        "memory_size_gb": {
+          "type": "int",
+          "description": "Required. Redis memory size in GiB."
+        },
+        "authorized_network": {
+          "type": "str",
+          "description": "Optional. The full name of the Google Compute Engine `network <https://cloud.google.com/vpc/docs/vpc>`__ to which the instance is connected. If left unspecified, the ``default`` network will be used."
+        },
+        "persistence_iam_identity": {
+          "type": "str",
+          "description": "Output only. Cloud IAM identity used by import / export operations to transfer data to/from Cloud Storage. Format is \"serviceAccount:<service_account_email>\". The value may change over time for a given instance so should be checked before each import/export operation."
+        },
+        "connect_mode": {
+          "type": "google.cloud.redis_v1beta1.types.Instance.ConnectMode",
+          "description": "Optional. The network connect mode of the Redis instance. If not provided, the connect mode defaults to DIRECT_PEERING."
+        },
+        "auth_enabled": {
+          "type": "bool",
+          "description": "Optional. Indicates whether OSS Redis AUTH is enabled for the instance. If set to \"true\" AUTH is enabled on the instance. Default value is \"false\" meaning AUTH is disabled."
+        },
+        "server_ca_certs": {
+          "type": "MutableSequence[google.cloud.redis_v1beta1.types.TlsCertificate]",
+          "description": "Output only. List of server CA certificates for the instance."
+        },
+        "transit_encryption_mode": {
+          "type": "google.cloud.redis_v1beta1.types.Instance.TransitEncryptionMode",
+          "description": "Optional. The TLS mode of the Redis instance. If not provided, TLS is disabled for the instance."
+        },
+        "maintenance_policy": {
+          "type": "google.cloud.redis_v1beta1.types.MaintenancePolicy",
+          "description": "Optional. The maintenance policy for the instance. If not provided, maintenance events can be performed at any time."
+        },
+        "maintenance_schedule": {
+          "type": "google.cloud.redis_v1beta1.types.MaintenanceSchedule",
+          "description": "Output only. Date and time of upcoming maintenance events which have been scheduled."
+        },
+        "replica_count": {
+          "type": "int",
+          "description": "Optional. The number of replica nodes. The valid range for the Standard Tier with read replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled for a Standard Tier instance, the only valid value is 1 and the default is 1. The valid value for basic tier is 0 and the default is also 0."
+        },
+        "nodes": {
+          "type": "MutableSequence[google.cloud.redis_v1beta1.types.NodeInfo]",
+          "description": "Output only. Info per node."
+        },
+        "read_endpoint": {
+          "type": "str",
+          "description": "Output only. Hostname or IP address of the exposed readonly Redis endpoint. Standard tier only. Targets all healthy replica nodes in instance. Replication is asynchronous and replica nodes will exhibit some lag behind the primary. Write requests must target 'host'."
+        },
+        "read_endpoint_port": {
+          "type": "int",
+          "description": "Output only. The port number of the exposed readonly redis endpoint. Standard tier only. Write requests should target 'port'."
+        },
+        "read_replicas_mode": {
+          "type": "google.cloud.redis_v1beta1.types.Instance.ReadReplicasMode",
+          "description": "Optional. Read replicas mode for the instance. Defaults to READ_REPLICAS_DISABLED."
+        },
+        "persistence_config": {
+          "type": "google.cloud.redis_v1beta1.types.PersistenceConfig",
+          "description": "Optional. Persistence configuration parameters"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PersistenceConfig",
+      "docstring": "Configuration of the persistence functionality.\n\nAttributes:\n    persistence_mode (google.cloud.redis_v1beta1.types.PersistenceConfig.PersistenceMode):\n        Optional. Controls whether Persistence\n        features are enabled. If not provided, the\n        existing value will be used.\n    rdb_snapshot_period (google.cloud.redis_v1beta1.types.PersistenceConfig.SnapshotPeriod):\n        Optional. Period between RDB snapshots. Snapshots will be\n        attempted every period starting from the provided snapshot\n        start time. For example, a start time of 01/01/2033 06:45\n        and SIX_HOURS snapshot period will do nothing until\n        01/01/2033, and then trigger snapshots every day at 06:45,\n        12:45, 18:45, and 00:45 the next day, and so on. If not\n        provided, TWENTY_FOUR_HOURS will be used as default.\n    rdb_next_snapshot_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The next time that a snapshot\n        attempt is scheduled to occur.\n    rdb_snapshot_start_time (goog",
+      "attributes": {
+        "persistence_mode": {
+          "type": "google.cloud.redis_v1beta1.types.PersistenceConfig.PersistenceMode",
+          "description": "Optional. Controls whether Persistence features are enabled. If not provided, the existing value will be used."
+        },
+        "rdb_snapshot_period": {
+          "type": "google.cloud.redis_v1beta1.types.PersistenceConfig.SnapshotPeriod",
+          "description": "Optional. Period between RDB snapshots. Snapshots will be attempted every period starting from the provided snapshot start time. For example, a start time of 01/01/2033 06:45 and SIX_HOURS snapshot period will do nothing until 01/01/2033, and then trigger snapshots every day at 06:45, 12:45, 18:45, and 00:45 the next day, and so on. If not provided, TWENTY_FOUR_HOURS will be used as default."
+        },
+        "rdb_next_snapshot_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The next time that a snapshot attempt is scheduled to occur."
+        },
+        "rdb_snapshot_start_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Optional. Date and time that the first snapshot was/will be attempted, and to which future snapshots will be aligned. If not provided, the current time will be used."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RescheduleMaintenanceRequest",
+      "docstring": "Request for\n[RescheduleMaintenance][google.cloud.redis.v1beta1.CloudRedis.RescheduleMaintenance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.\n    reschedule_type (google.cloud.redis_v1beta1.types.RescheduleMaintenanceRequest.RescheduleType):\n        Required. If reschedule type is SPECIFIC_TIME, must set up\n        schedule_time as well.\n    schedule_time (google.protobuf.timestamp_pb2.Timestamp):\n        Optional. Timestamp when the maintenance shall be\n        rescheduled to if reschedule_type=SPECIFIC_TIME, in RFC 3339\n        format, for example ``2012-11-15T16:19:00.094Z``.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "reschedule_type": {
+          "type": "google.cloud.redis_v1beta1.types.RescheduleMaintenanceRequest.RescheduleType",
+          "description": "Required. If reschedule type is SPECIFIC_TIME, must set up schedule_time as well."
+        },
+        "schedule_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Optional. Timestamp when the maintenance shall be rescheduled to if reschedule_type=SPECIFIC_TIME, in RFC 3339 format, for example ``2012-11-15T16:19:00.094Z``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MaintenancePolicy",
+      "docstring": "Maintenance policy for an instance.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time when the policy was\n        created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time when the policy was\n        last updated.\n    description (str):\n        Optional. Description of what this policy is for.\n        Create/Update methods return INVALID_ARGUMENT if the length\n        is greater than 512.\n    weekly_maintenance_window (MutableSequence[google.cloud.redis_v1beta1.types.WeeklyMaintenanceWindow]):\n        Optional. Maintenance window that is applied to resources\n        covered by this policy. Minimum 1. For the current version,\n        the maximum number of weekly_window is expected to be one.",
+      "attributes": {
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time when the policy was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time when the policy was last updated."
+        },
+        "description": {
+          "type": "str",
+          "description": "Optional. Description of what this policy is for. Create/Update methods return INVALID_ARGUMENT if the length is greater than 512."
+        },
+        "weekly_maintenance_window": {
+          "type": "MutableSequence[google.cloud.redis_v1beta1.types.WeeklyMaintenanceWindow]",
+          "description": "Optional. Maintenance window that is applied to resources covered by this policy. Minimum 1. For the current version, the maximum number of weekly_window is expected to be one."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "WeeklyMaintenanceWindow",
+      "docstring": "Time window in which disruptive maintenance updates occur.\nNon-disruptive updates can occur inside or outside this window.\n\nAttributes:\n    day (google.type.dayofweek_pb2.DayOfWeek):\n        Required. The day of week that maintenance\n        updates occur.\n    start_time (google.type.timeofday_pb2.TimeOfDay):\n        Required. Start time of the window in UTC\n        time.\n    duration (google.protobuf.duration_pb2.Duration):\n        Output only. Duration of the maintenance\n        window. The current window is fixed at 1 hour.",
+      "attributes": {
+        "day": {
+          "type": "google.type.dayofweek_pb2.DayOfWeek",
+          "description": "Required. The day of week that maintenance updates occur."
+        },
+        "start_time": {
+          "type": "google.type.timeofday_pb2.TimeOfDay",
+          "description": "Required. Start time of the window in UTC time."
+        },
+        "duration": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "Output only. Duration of the maintenance window. The current window is fixed at 1 hour."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MaintenanceSchedule",
+      "docstring": "Upcoming maintenance schedule. If no maintenance is\nscheduled, fields are not populated.\n\nAttributes:\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The start time of any upcoming\n        scheduled maintenance for this instance.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The end time of any upcoming\n        scheduled maintenance for this instance.\n    can_reschedule (bool):\n        If the scheduled maintenance can be\n        rescheduled, default is true.\n    schedule_deadline_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The deadline that the\n        maintenance schedule start time can not go\n        beyond, including reschedule.",
+      "attributes": {
+        "start_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The start time of any upcoming scheduled maintenance for this instance."
+        },
+        "end_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The end time of any upcoming scheduled maintenance for this instance."
+        },
+        "can_reschedule": {
+          "type": "bool",
+          "description": "If the scheduled maintenance can be rescheduled, default is true."
+        },
+        "schedule_deadline_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The deadline that the maintenance schedule start time can not go beyond, including reschedule."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListInstancesRequest",
+      "docstring": "Request for\n[ListInstances][google.cloud.redis.v1beta1.CloudRedis.ListInstances].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the instance location using\n        the form: ``projects/{project_id}/locations/{location_id}``\n        where ``location_id`` refers to a GCP region.\n    page_size (int):\n        The maximum number of items to return.\n\n        If not specified, a default value of 1000 will be used by\n        the service. Regardless of the page_size value, the response\n        may include a partial list and a caller should only rely on\n        response's\n        [``next_page_token``][google.cloud.redis.v1beta1.ListInstancesResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        The ``next_page_token`` value returned from a previous\n        [ListInstances][google.cloud.redis.v1beta1.CloudRedis.ListInstances]\n        request, if any.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the instance location using the form: ``projects/{project_id}/locations/{location_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "page_size": {
+          "type": "int",
+          "description": "The maximum number of items to return.  If not specified, a default value of 1000 will be used by the service. Regardless of the page_size value, the response may include a partial list and a caller should only rely on response's [``next_page_token``][google.cloud.redis.v1beta1.ListInstancesResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "The ``next_page_token`` value returned from a previous [ListInstances][google.cloud.redis.v1beta1.CloudRedis.ListInstances] request, if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListInstancesResponse",
+      "docstring": "Response for\n[ListInstances][google.cloud.redis.v1beta1.CloudRedis.ListInstances].\n\nAttributes:\n    instances (MutableSequence[google.cloud.redis_v1beta1.types.Instance]):\n        A list of Redis instances in the project in the specified\n        location, or across all locations.\n\n        If the ``location_id`` in the parent field of the request is\n        \"-\", all regions available to the project are queried, and\n        the results aggregated. If in such an aggregated query a\n        location is unavailable, a placeholder Redis entry is\n        included in the response with the ``name`` field set to a\n        value of the form\n        ``projects/{project_id}/locations/{location_id}/instances/``-\n        and the ``status`` field set to ERROR and ``status_message``\n        field set to \"location not available for ListInstances\".\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.\n    unreachable (MutableSequence[str]",
+      "attributes": {
+        "instances": {
+          "type": "MutableSequence[google.cloud.redis_v1beta1.types.Instance]",
+          "description": "A list of Redis instances in the project in the specified location, or across all locations.  If the ``location_id`` in the parent field of the request is \"-\", all regions available to the project are queried, and the results aggregated. If in such an aggregated query a location is unavailable, a placeholder Redis entry is included in the response with the ``name`` field set to a value of the form ``projects/{project_id}/locations/{location_id}/instances/``- and the ``status`` field set to ERROR and ``status_message`` field set to \"location not available for ListInstances\"."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        },
+        "unreachable": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetInstanceRequest",
+      "docstring": "Request for\n[GetInstance][google.cloud.redis.v1beta1.CloudRedis.GetInstance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetInstanceAuthStringRequest",
+      "docstring": "Request for\n[GetInstanceAuthString][google.cloud.redis.v1beta1.CloudRedis.GetInstanceAuthString].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "InstanceAuthString",
+      "docstring": "Instance AUTH string details.\n\nAttributes:\n    auth_string (str):\n        AUTH string set on the instance.",
+      "attributes": {
+        "auth_string": {
+          "type": "str",
+          "description": "AUTH string set on the instance."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateInstanceRequest",
+      "docstring": "Request for\n[CreateInstance][google.cloud.redis.v1beta1.CloudRedis.CreateInstance].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the instance location using\n        the form: ``projects/{project_id}/locations/{location_id}``\n        where ``location_id`` refers to a GCP region.\n    instance_id (str):\n        Required. The logical name of the Redis instance in the\n        customer project with the following restrictions:\n\n        -  Must contain only lowercase letters, numbers, and\n           hyphens.\n        -  Must start with a letter.\n        -  Must be between 1-40 characters.\n        -  Must end with a number or a letter.\n        -  Must be unique within the customer project / location\n    instance (google.cloud.redis_v1beta1.types.Instance):\n        Required. A Redis [Instance] resource",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the instance location using the form: ``projects/{project_id}/locations/{location_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "instance_id": {
+          "type": "str",
+          "description": "Required. The logical name of the Redis instance in the customer project with the following restrictions:  -  Must contain only lowercase letters, numbers, and hyphens. -  Must start with a letter. -  Must be between 1-40 characters. -  Must end with a number or a letter. -  Must be unique within the customer project / location"
+        },
+        "instance": {
+          "type": "google.cloud.redis_v1beta1.types.Instance",
+          "description": "Required. A Redis [Instance] resource"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateInstanceRequest",
+      "docstring": "Request for\n[UpdateInstance][google.cloud.redis.v1beta1.CloudRedis.UpdateInstance].\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. Mask of fields to update. At least one path must\n        be supplied in this field. The elements of the repeated\n        paths field may only include these fields from\n        [Instance][google.cloud.redis.v1beta1.Instance]:\n\n        -  ``displayName``\n        -  ``labels``\n        -  ``memorySizeGb``\n        -  ``redisConfig``\n        -  ``replica_count``\n    instance (google.cloud.redis_v1beta1.types.Instance):\n        Required. Update description. Only fields specified in\n        update_mask are updated.",
+      "attributes": {
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Required. Mask of fields to update. At least one path must be supplied in this field. The elements of the repeated paths field may only include these fields from [Instance][google.cloud.redis.v1beta1.Instance]:  -  ``displayName`` -  ``labels`` -  ``memorySizeGb`` -  ``redisConfig`` -  ``replica_count``"
+        },
+        "instance": {
+          "type": "google.cloud.redis_v1beta1.types.Instance",
+          "description": "Required. Update description. Only fields specified in update_mask are updated."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpgradeInstanceRequest",
+      "docstring": "Request for\n[UpgradeInstance][google.cloud.redis.v1beta1.CloudRedis.UpgradeInstance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.\n    redis_version (str):\n        Required. Specifies the target version of\n        Redis software to upgrade to.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "redis_version": {
+          "type": "str",
+          "description": "Required. Specifies the target version of Redis software to upgrade to."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteInstanceRequest",
+      "docstring": "Request for\n[DeleteInstance][google.cloud.redis.v1beta1.CloudRedis.DeleteInstance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GcsSource",
+      "docstring": "The Cloud Storage location for the input content\n\nAttributes:\n    uri (str):\n        Required. Source data URI. (e.g.\n        'gs://my_bucket/my_object').",
+      "attributes": {
+        "uri": {
+          "type": "str",
+          "description": "Required. Source data URI. (e.g. 'gs://my_bucket/my_object')."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "InputConfig",
+      "docstring": "The input content\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    gcs_source (google.cloud.redis_v1beta1.types.GcsSource):\n        Google Cloud Storage location where input\n        content is located.\n\n        This field is a member of `oneof`_ ``source``.",
+      "attributes": {
+        "gcs_source": {
+          "type": "google.cloud.redis_v1beta1.types.GcsSource",
+          "description": "Google Cloud Storage location where input content is located.  This field is a member of `oneof`_ ``source``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportInstanceRequest",
+      "docstring": "Request for\n[Import][google.cloud.redis.v1beta1.CloudRedis.ImportInstance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.\n    input_config (google.cloud.redis_v1beta1.types.InputConfig):\n        Required. Specify data to be imported.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "input_config": {
+          "type": "google.cloud.redis_v1beta1.types.InputConfig",
+          "description": "Required. Specify data to be imported."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GcsDestination",
+      "docstring": "The Cloud Storage location for the output content\n\nAttributes:\n    uri (str):\n        Required. Data destination URI (e.g.\n        'gs://my_bucket/my_object'). Existing files will be\n        overwritten.",
+      "attributes": {
+        "uri": {
+          "type": "str",
+          "description": "Required. Data destination URI (e.g. 'gs://my_bucket/my_object'). Existing files will be overwritten."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "OutputConfig",
+      "docstring": "The output content\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    gcs_destination (google.cloud.redis_v1beta1.types.GcsDestination):\n        Google Cloud Storage destination for output\n        content.\n\n        This field is a member of `oneof`_ ``destination``.",
+      "attributes": {
+        "gcs_destination": {
+          "type": "google.cloud.redis_v1beta1.types.GcsDestination",
+          "description": "Google Cloud Storage destination for output content.  This field is a member of `oneof`_ ``destination``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ExportInstanceRequest",
+      "docstring": "Request for\n[Export][google.cloud.redis.v1beta1.CloudRedis.ExportInstance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.\n    output_config (google.cloud.redis_v1beta1.types.OutputConfig):\n        Required. Specify data to be exported.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "output_config": {
+          "type": "google.cloud.redis_v1beta1.types.OutputConfig",
+          "description": "Required. Specify data to be exported."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FailoverInstanceRequest",
+      "docstring": "Request for\n[Failover][google.cloud.redis.v1beta1.CloudRedis.FailoverInstance].\n\nAttributes:\n    name (str):\n        Required. Redis instance resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/instances/{instance_id}``\n        where ``location_id`` refers to a GCP region.\n    data_protection_mode (google.cloud.redis_v1beta1.types.FailoverInstanceRequest.DataProtectionMode):\n        Optional. Available data protection modes that the user can\n        choose. If it's unspecified, data protection mode will be\n        LIMITED_DATA_LOSS by default.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Redis instance resource name using the form: ``projects/{project_id}/locations/{location_id}/instances/{instance_id}`` where ``location_id`` refers to a GCP region."
+        },
+        "data_protection_mode": {
+          "type": "google.cloud.redis_v1beta1.types.FailoverInstanceRequest.DataProtectionMode",
+          "description": "Optional. Available data protection modes that the user can choose. If it's unspecified, data protection mode will be LIMITED_DATA_LOSS by default."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "LocationMetadata",
+      "docstring": "This location metadata represents additional configuration options\nfor a given location where a Redis instance may be created. All\nfields are output only. It is returned as content of the\n``google.cloud.location.Location.metadata`` field.\n\nAttributes:\n    available_zones (MutableMapping[str, google.cloud.redis_v1beta1.types.ZoneMetadata]):\n        Output only. The set of available zones in the location. The\n        map is keyed by the lowercase ID of each zone, as defined by\n        GCE. These keys can be specified in ``location_id`` or\n        ``alternative_location_id`` fields when creating a Redis\n        instance.",
+      "attributes": {
+        "available_zones": {
+          "type": "MutableMapping[str, google.cloud.redis_v1beta1.types.ZoneMetadata]",
+          "description": "Output only. The set of available zones in the location. The map is keyed by the lowercase ID of each zone, as defined by GCE. These keys can be specified in ``location_id`` or ``alternative_location_id`` fields when creating a Redis instance."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ZoneMetadata",
+      "docstring": "Defines specific information for a particular zone. Currently\nempty and reserved for future use only.",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "TlsCertificate",
+      "docstring": "TlsCertificate Resource\n\nAttributes:\n    serial_number (str):\n        Serial number, as extracted from the\n        certificate.\n    cert (str):\n        PEM representation.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time when the certificate was created in\n        `RFC 3339 <https://tools.ietf.org/html/rfc3339>`__ format,\n        for example ``2020-05-18T00:00:00.094Z``.\n    expire_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time when the certificate expires in `RFC\n        3339 <https://tools.ietf.org/html/rfc3339>`__ format, for\n        example ``2020-05-18T00:00:00.094Z``.\n    sha1_fingerprint (str):\n        Sha1 Fingerprint of the certificate.",
+      "attributes": {
+        "serial_number": {
+          "type": "str",
+          "description": "Serial number, as extracted from the certificate."
+        },
+        "cert": {
+          "type": "str",
+          "description": "PEM representation."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time when the certificate was created in `RFC 3339 <https://tools.ietf.org/html/rfc3339>`__ format, for example ``2020-05-18T00:00:00.094Z``."
+        },
+        "expire_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time when the certificate expires in `RFC 3339 <https://tools.ietf.org/html/rfc3339>`__ format, for example ``2020-05-18T00:00:00.094Z``."
+        },
+        "sha1_fingerprint": {
+          "type": "str",
+          "description": "Sha1 Fingerprint of the certificate."
+        }
+      }
+    }
+  ]
+}

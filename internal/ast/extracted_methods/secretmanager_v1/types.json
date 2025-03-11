@@ -1,0 +1,516 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-secret-manager\\google\\cloud\\secretmanager_v1\\types\\resources.py": [
+    {
+      "type": "request_class",
+      "name": "Secret",
+      "docstring": "A [Secret][google.cloud.secretmanager.v1.Secret] is a logical secret\nwhose value and versions can be accessed.\n\nA [Secret][google.cloud.secretmanager.v1.Secret] is made up of zero\nor more\n[SecretVersions][google.cloud.secretmanager.v1.SecretVersion] that\nrepresent the secret data.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Output only. The resource name of the\n        [Secret][google.cloud.secretmanager.v1.Secret] in the format\n        ``projects/*/secrets/*``.\n    replication (google.cloud.secretmanager_v1.types.Replication):\n        Optional. Immutable. The replication policy of the secret\n        data attached to the\n        [Secret][google.cloud.secretmanager.v1.Secret].\n\n        The replication policy c",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The resource name of the [Secret][google.cloud.secretmanager.v1.Secret] in the format ``projects/*/secrets/*``."
+        },
+        "replication": {
+          "type": "google.cloud.secretmanager_v1.types.Replication",
+          "description": "Optional. Immutable. The replication policy of the secret data attached to the [Secret][google.cloud.secretmanager.v1.Secret].  The replication policy cannot be changed after the Secret has been created."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time at which the [Secret][google.cloud.secretmanager.v1.Secret] was created."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "The labels assigned to this Secret.  Label keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}][\\p{Ll}\\p{Lo}\\p{N}_-]{0,62}``  Label values must be between 0 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}\\p{N}_-]{0,63}``  No more than 64 labels can be assigned to a given resource."
+        },
+        "topics": {
+          "type": "MutableSequence[google.cloud.secretmanager_v1.types.Topic]",
+          "description": "Optional. A list of up to 10 Pub/Sub topics to which messages are published when control plane operations are called on the secret or its versions."
+        },
+        "expire_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Optional. Timestamp in UTC when the [Secret][google.cloud.secretmanager.v1.Secret] is scheduled to expire. This is always provided on output, regardless of what was sent on input.  This field is a member of `oneof`_ ``expiration``."
+        },
+        "ttl": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "Input only. The TTL for the [Secret][google.cloud.secretmanager.v1.Secret].  This field is a member of `oneof`_ ``expiration``."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. Etag of the currently stored [Secret][google.cloud.secretmanager.v1.Secret]."
+        },
+        "rotation": {
+          "type": "google.cloud.secretmanager_v1.types.Rotation",
+          "description": "Optional. Rotation policy attached to the [Secret][google.cloud.secretmanager.v1.Secret]. May be excluded if there is no rotation policy."
+        },
+        "version_aliases": {
+          "type": "MutableMapping[str, int]",
+          "description": "Optional. Mapping from version alias to version name.  A version alias is a string with a maximum length of 63 characters and can contain uppercase and lowercase letters, numerals, and the hyphen (``-``) and underscore ('_') characters. An alias string must start with a letter and cannot be the string 'latest' or 'NEW'. No more than 50 aliases can be assigned to a given secret.  Version-Alias pairs will be viewable via GetSecret and modifiable via UpdateSecret. Access by alias is only be supported on GetSecretVersion and AccessSecretVersion."
+        },
+        "annotations": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. Custom metadata about the secret.  Annotations are distinct from various forms of labels. Annotations exist to allow client tools to store their own state information without requiring a database.  Annotation keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, begin and end with an alphanumeric character ([a-z0-9A-Z]), and may have dashes (-), underscores (_), dots (.), and alphanumerics in between these symbols.  The total size of annotation keys and values must be less than 16KiB."
+        },
+        "version_destroy_ttl": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "Optional. Secret Version TTL after destruction request This is a part of the Delayed secret version destroy feature. For secret with TTL>0, version destruction doesn't happen immediately on calling destroy instead the version goes to a disabled state and destruction happens after the TTL expires."
+        },
+        "customer_managed_encryption": {
+          "type": "google.cloud.secretmanager_v1.types.CustomerManagedEncryption",
+          "description": "Optional. The customer-managed encryption configuration of the Regionalised Secrets. If no configuration is provided, Google-managed default encryption is used.  Updates to the [Secret][google.cloud.secretmanager.v1.Secret] encryption configuration only apply to [SecretVersions][google.cloud.secretmanager.v1.SecretVersion] added afterwards. They do not apply retroactively to existing [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SecretVersion",
+      "docstring": "A secret version resource in the Secret Manager API.\n\nAttributes:\n    name (str):\n        Output only. The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        in the format ``projects/*/secrets/*/versions/*``.\n\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        IDs in a [Secret][google.cloud.secretmanager.v1.Secret]\n        start at 1 and are incremented for each subsequent version\n        of the secret.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time at which the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        was created.\n    destroy_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time this\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        was destroyed. Only present if\n        [state][google.cloud.secretmanager.v1.SecretVersion.state]\n        is\n        [DESTROYED][google.cloud.secretmanager.v1.SecretVersion.State.D",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] in the format ``projects/*/secrets/*/versions/*``.  [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] IDs in a [Secret][google.cloud.secretmanager.v1.Secret] start at 1 and are incremented for each subsequent version of the secret."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time at which the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] was created."
+        },
+        "destroy_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time this [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] was destroyed. Only present if [state][google.cloud.secretmanager.v1.SecretVersion.state] is [DESTROYED][google.cloud.secretmanager.v1.SecretVersion.State.DESTROYED]."
+        },
+        "state": {
+          "type": "google.cloud.secretmanager_v1.types.SecretVersion.State",
+          "description": "Output only. The current state of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        },
+        "replication_status": {
+          "type": "google.cloud.secretmanager_v1.types.ReplicationStatus",
+          "description": "The replication status of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. Etag of the currently stored [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        },
+        "client_specified_payload_checksum": {
+          "type": "bool",
+          "description": "Output only. True if payload checksum specified in [SecretPayload][google.cloud.secretmanager.v1.SecretPayload] object has been received by [SecretManagerService][google.cloud.secretmanager.v1.SecretManagerService] on [SecretManagerService.AddSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AddSecretVersion]."
+        },
+        "scheduled_destroy_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Optional. Output only. Scheduled destroy time for secret version. This is a part of the Delayed secret version destroy feature. For a Secret with a valid version destroy TTL, when a secert version is destroyed, the version is moved to disabled state and it is scheduled for destruction. The version is destroyed only after the ``scheduled_destroy_time``."
+        },
+        "customer_managed_encryption": {
+          "type": "google.cloud.secretmanager_v1.types.CustomerManagedEncryptionStatus",
+          "description": "Output only. The customer-managed encryption status of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]. Only populated if customer-managed encryption is used and [Secret][google.cloud.secretmanager.v1.Secret] is a Regionalised Secret."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Replication",
+      "docstring": "A policy that defines the replication and encryption\nconfiguration of data.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    automatic (google.cloud.secretmanager_v1.types.Replication.Automatic):\n        The [Secret][google.cloud.secretmanager.v1.Secret] will\n        automatically be replicated without any restrictions.\n\n        This field is a member of `oneof`_ ``replication``.\n    user_managed (google.cloud.secretmanager_v1.types.Replication.UserManaged):\n        The [Secret][google.cloud.secretmanager.v1.Secret] will only\n        be replicated into the locations specified.\n\n        This field is a member of `oneof`_ ``replication``.",
+      "attributes": {
+        "automatic": {
+          "type": "google.cloud.secretmanager_v1.types.Replication.Automatic",
+          "description": "The [Secret][google.cloud.secretmanager.v1.Secret] will automatically be replicated without any restrictions.  This field is a member of `oneof`_ ``replication``."
+        },
+        "user_managed": {
+          "type": "google.cloud.secretmanager_v1.types.Replication.UserManaged",
+          "description": "The [Secret][google.cloud.secretmanager.v1.Secret] will only be replicated into the locations specified.  This field is a member of `oneof`_ ``replication``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CustomerManagedEncryption",
+      "docstring": "Configuration for encrypting secret payloads using\ncustomer-managed encryption keys (CMEK).\n\nAttributes:\n    kms_key_name (str):\n        Required. The resource name of the Cloud KMS CryptoKey used\n        to encrypt secret payloads.\n\n        For secrets using the\n        [UserManaged][google.cloud.secretmanager.v1.Replication.UserManaged]\n        replication policy type, Cloud KMS CryptoKeys must reside in\n        the same location as the [replica\n        location][Secret.UserManaged.Replica.location].\n\n        For secrets using the\n        [Automatic][google.cloud.secretmanager.v1.Replication.Automatic]\n        replication policy type, Cloud KMS CryptoKeys must reside in\n        ``global``.\n\n        The expected format is\n        ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
+      "attributes": {
+        "kms_key_name": {
+          "type": "str",
+          "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ReplicationStatus",
+      "docstring": "The replication status of a\n[SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    automatic (google.cloud.secretmanager_v1.types.ReplicationStatus.AutomaticStatus):\n        Describes the replication status of a\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        with automatic replication.\n\n        Only populated if the parent\n        [Secret][google.cloud.secretmanager.v1.Secret] has an\n        automatic replication policy.\n\n        This field is a member of `oneof`_ ``replication_status``.\n    user_managed (google.cloud.secretmanager_v1.types.ReplicationStatus.UserManagedStatus):\n        Describes the replication status of a\n        [SecretVersion][go",
+      "attributes": {
+        "automatic": {
+          "type": "google.cloud.secretmanager_v1.types.ReplicationStatus.AutomaticStatus",
+          "description": "Describes the replication status of a [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] with automatic replication.  Only populated if the parent [Secret][google.cloud.secretmanager.v1.Secret] has an automatic replication policy.  This field is a member of `oneof`_ ``replication_status``."
+        },
+        "user_managed": {
+          "type": "google.cloud.secretmanager_v1.types.ReplicationStatus.UserManagedStatus",
+          "description": "Describes the replication status of a [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] with user-managed replication.  Only populated if the parent [Secret][google.cloud.secretmanager.v1.Secret] has a user-managed replication policy.  This field is a member of `oneof`_ ``replication_status``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CustomerManagedEncryptionStatus",
+      "docstring": "Describes the status of customer-managed encryption.\n\nAttributes:\n    kms_key_version_name (str):\n        Required. The resource name of the Cloud KMS\n        CryptoKeyVersion used to encrypt the secret payload, in the\n        following format:\n        ``projects/*/locations/*/keyRings/*/cryptoKeys/*/versions/*``.",
+      "attributes": {
+        "kms_key_version_name": {
+          "type": "str",
+          "description": "Required. The resource name of the Cloud KMS CryptoKeyVersion used to encrypt the secret payload, in the following format: ``projects/*/locations/*/keyRings/*/cryptoKeys/*/versions/*``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Topic",
+      "docstring": "A Pub/Sub topic which Secret Manager will publish to when\ncontrol plane events occur on this secret.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Pub/Sub topic that will\n        be published to, in the following format:\n        ``projects/*/topics/*``. For publication to succeed, the\n        Secret Manager service agent must have the\n        ``pubsub.topic.publish`` permission on the topic. The\n        Pub/Sub Publisher role (``roles/pubsub.publisher``) includes\n        this permission.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the Pub/Sub topic that will be published to, in the following format: ``projects/*/topics/*``. For publication to succeed, the Secret Manager service agent must have the ``pubsub.topic.publish`` permission on the topic. The Pub/Sub Publisher role (``roles/pubsub.publisher``) includes this permission."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Rotation",
+      "docstring": "The rotation time and period for a\n[Secret][google.cloud.secretmanager.v1.Secret]. At\nnext_rotation_time, Secret Manager will send a Pub/Sub notification\nto the topics configured on the Secret.\n[Secret.topics][google.cloud.secretmanager.v1.Secret.topics] must be\nset to configure rotation.\n\nAttributes:\n    next_rotation_time (google.protobuf.timestamp_pb2.Timestamp):\n        Optional. Timestamp in UTC at which the\n        [Secret][google.cloud.secretmanager.v1.Secret] is scheduled\n        to rotate. Cannot be set to less than 300s (5 min) in the\n        future and at most 3153600000s (100 years).\n\n        [next_rotation_time][google.cloud.secretmanager.v1.Rotation.next_rotation_time]\n        MUST be set if\n        [rotation_period][google.cloud.secretmanager.v1.Rotation.rotation_period]\n        is set.\n    rotation_period (google.protobuf.duration_pb2.Duration):\n        Input only. The Duration between rotation notifications.\n        Must be in seconds and at least 3600s (1h) and at most\n        3153600000s (1",
+      "attributes": {
+        "next_rotation_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Optional. Timestamp in UTC at which the [Secret][google.cloud.secretmanager.v1.Secret] is scheduled to rotate. Cannot be set to less than 300s (5 min) in the future and at most 3153600000s (100 years).  [next_rotation_time][google.cloud.secretmanager.v1.Rotation.next_rotation_time] MUST be set if [rotation_period][google.cloud.secretmanager.v1.Rotation.rotation_period] is set."
+        },
+        "rotation_period": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "Input only. The Duration between rotation notifications. Must be in seconds and at least 3600s (1h) and at most 3153600000s (100 years).  If [rotation_period][google.cloud.secretmanager.v1.Rotation.rotation_period] is set, [next_rotation_time][google.cloud.secretmanager.v1.Rotation.next_rotation_time] must be set. [next_rotation_time][google.cloud.secretmanager.v1.Rotation.next_rotation_time] will be advanced by this period when the service automatically sends rotation notifications."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SecretPayload",
+      "docstring": "A secret payload resource in the Secret Manager API. This contains\nthe sensitive secret payload that is associated with a\n[SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    data (bytes):\n        The secret data. Must be no larger than\n        64KiB.\n    data_crc32c (int):\n        Optional. If specified,\n        [SecretManagerService][google.cloud.secretmanager.v1.SecretManagerService]\n        will verify the integrity of the received\n        [data][google.cloud.secretmanager.v1.SecretPayload.data] on\n        [SecretManagerService.AddSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AddSecretVersion]\n        calls using the crc32c checksum and store it to include in\n        future\n        [SecretManagerService.AccessSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AccessSecretVersion]\n        responses. If a checksum is not provided in the\n   ",
+      "attributes": {
+        "data": {
+          "type": "bytes",
+          "description": "The secret data. Must be no larger than 64KiB."
+        },
+        "data_crc32c": {
+          "type": "int",
+          "description": "Optional. If specified, [SecretManagerService][google.cloud.secretmanager.v1.SecretManagerService] will verify the integrity of the received [data][google.cloud.secretmanager.v1.SecretPayload.data] on [SecretManagerService.AddSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AddSecretVersion] calls using the crc32c checksum and store it to include in future [SecretManagerService.AccessSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AccessSecretVersion] responses. If a checksum is not provided in the [SecretManagerService.AddSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AddSecretVersion] request, the [SecretManagerService][google.cloud.secretmanager.v1.SecretManagerService] will generate and store one for you.  The CRC32C value is encoded as a Int64 for compatibility, and can be safely downconverted to uint32 in languages that support this type. https://cloud.google.com/apis/design/design_patterns#integer_types  This field is a member of `oneof`_ ``_data_crc32c``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Automatic",
+      "docstring": "A replication policy that replicates the\n[Secret][google.cloud.secretmanager.v1.Secret] payload without any\nrestrictions.\n\nAttributes:\n    customer_managed_encryption (google.cloud.secretmanager_v1.types.CustomerManagedEncryption):\n        Optional. The customer-managed encryption configuration of\n        the [Secret][google.cloud.secretmanager.v1.Secret]. If no\n        configuration is provided, Google-managed default encryption\n        is used.\n\n        Updates to the\n        [Secret][google.cloud.secretmanager.v1.Secret] encryption\n        configuration only apply to\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]\n        added afterwards. They do not apply retroactively to\n        existing\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion].",
+      "attributes": {
+        "customer_managed_encryption": {
+          "type": "google.cloud.secretmanager_v1.types.CustomerManagedEncryption",
+          "description": "Optional. The customer-managed encryption configuration of the [Secret][google.cloud.secretmanager.v1.Secret]. If no configuration is provided, Google-managed default encryption is used.  Updates to the [Secret][google.cloud.secretmanager.v1.Secret] encryption configuration only apply to [SecretVersions][google.cloud.secretmanager.v1.SecretVersion] added afterwards. They do not apply retroactively to existing [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserManaged",
+      "docstring": "A replication policy that replicates the\n[Secret][google.cloud.secretmanager.v1.Secret] payload into the\nlocations specified in [Secret.replication.user_managed.replicas][]\n\nAttributes:\n    replicas (MutableSequence[google.cloud.secretmanager_v1.types.Replication.UserManaged.Replica]):\n        Required. The list of Replicas for this\n        [Secret][google.cloud.secretmanager.v1.Secret].\n\n        Cannot be empty.",
+      "attributes": {
+        "replicas": {
+          "type": "MutableSequence[google.cloud.secretmanager_v1.types.Replication.UserManaged.Replica]",
+          "description": "Required. The list of Replicas for this [Secret][google.cloud.secretmanager.v1.Secret].  Cannot be empty."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AutomaticStatus",
+      "docstring": "The replication status of a\n[SecretVersion][google.cloud.secretmanager.v1.SecretVersion] using\nautomatic replication.\n\nOnly populated if the parent\n[Secret][google.cloud.secretmanager.v1.Secret] has an automatic\nreplication policy.\n\nAttributes:\n    customer_managed_encryption (google.cloud.secretmanager_v1.types.CustomerManagedEncryptionStatus):\n        Output only. The customer-managed encryption status of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n        Only populated if customer-managed encryption is used.",
+      "attributes": {
+        "customer_managed_encryption": {
+          "type": "google.cloud.secretmanager_v1.types.CustomerManagedEncryptionStatus",
+          "description": "Output only. The customer-managed encryption status of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]. Only populated if customer-managed encryption is used."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserManagedStatus",
+      "docstring": "The replication status of a\n[SecretVersion][google.cloud.secretmanager.v1.SecretVersion] using\nuser-managed replication.\n\nOnly populated if the parent\n[Secret][google.cloud.secretmanager.v1.Secret] has a user-managed\nreplication policy.\n\nAttributes:\n    replicas (MutableSequence[google.cloud.secretmanager_v1.types.ReplicationStatus.UserManagedStatus.ReplicaStatus]):\n        Output only. The list of replica statuses for the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].",
+      "attributes": {
+        "replicas": {
+          "type": "MutableSequence[google.cloud.secretmanager_v1.types.ReplicationStatus.UserManagedStatus.ReplicaStatus]",
+          "description": "Output only. The list of replica statuses for the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Replica",
+      "docstring": "Represents a Replica for this\n[Secret][google.cloud.secretmanager.v1.Secret].\n\nAttributes:\n    location (str):\n        The canonical IDs of the location to replicate data. For\n        example: ``\"us-east1\"``.\n    customer_managed_encryption (google.cloud.secretmanager_v1.types.CustomerManagedEncryption):\n        Optional. The customer-managed encryption configuration of\n        the [User-Managed Replica][Replication.UserManaged.Replica].\n        If no configuration is provided, Google-managed default\n        encryption is used.\n\n        Updates to the\n        [Secret][google.cloud.secretmanager.v1.Secret] encryption\n        configuration only apply to\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]\n        added afterwards. They do not apply retroactively to\n        existing\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion].",
+      "attributes": {
+        "location": {
+          "type": "str",
+          "description": "The canonical IDs of the location to replicate data. For example: ``\"us-east1\"``."
+        },
+        "customer_managed_encryption": {
+          "type": "google.cloud.secretmanager_v1.types.CustomerManagedEncryption",
+          "description": "Optional. The customer-managed encryption configuration of the [User-Managed Replica][Replication.UserManaged.Replica]. If no configuration is provided, Google-managed default encryption is used.  Updates to the [Secret][google.cloud.secretmanager.v1.Secret] encryption configuration only apply to [SecretVersions][google.cloud.secretmanager.v1.SecretVersion] added afterwards. They do not apply retroactively to existing [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ReplicaStatus",
+      "docstring": "Describes the status of a user-managed replica for the\n[SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n\nAttributes:\n    location (str):\n        Output only. The canonical ID of the replica location. For\n        example: ``\"us-east1\"``.\n    customer_managed_encryption (google.cloud.secretmanager_v1.types.CustomerManagedEncryptionStatus):\n        Output only. The customer-managed encryption status of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n        Only populated if customer-managed encryption is used.",
+      "attributes": {
+        "location": {
+          "type": "str",
+          "description": "Output only. The canonical ID of the replica location. For example: ``\"us-east1\"``."
+        },
+        "customer_managed_encryption": {
+          "type": "google.cloud.secretmanager_v1.types.CustomerManagedEncryptionStatus",
+          "description": "Output only. The customer-managed encryption status of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]. Only populated if customer-managed encryption is used."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-secret-manager\\google\\cloud\\secretmanager_v1\\types\\service.py": [
+    {
+      "type": "request_class",
+      "name": "ListSecretsRequest",
+      "docstring": "Request message for\n[SecretManagerService.ListSecrets][google.cloud.secretmanager.v1.SecretManagerService.ListSecrets].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the project associated with\n        the [Secrets][google.cloud.secretmanager.v1.Secret], in the\n        format ``projects/*`` or ``projects/*/locations/*``\n    page_size (int):\n        Optional. The maximum number of results to be\n        returned in a single page. If set to 0, the\n        server decides the number of results to return.\n        If the number is greater than 25000, it is\n        capped at 25000.\n    page_token (str):\n        Optional. Pagination token, returned earlier via\n        [ListSecretsResponse.next_page_token][google.cloud.secretmanager.v1.ListSecretsResponse.next_page_token].\n    filter (str):\n        Optional. Filter string, adhering to the rules in\n        `List-operation\n        filtering <https://cloud.google.com/secret-manager/docs/filtering>`__.\n        List only secrets matching the filter. ",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the project associated with the [Secrets][google.cloud.secretmanager.v1.Secret], in the format ``projects/*`` or ``projects/*/locations/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The maximum number of results to be returned in a single page. If set to 0, the server decides the number of results to return. If the number is greater than 25000, it is capped at 25000."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. Pagination token, returned earlier via [ListSecretsResponse.next_page_token][google.cloud.secretmanager.v1.ListSecretsResponse.next_page_token]."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Filter string, adhering to the rules in `List-operation filtering <https://cloud.google.com/secret-manager/docs/filtering>`__. List only secrets matching the filter. If filter is empty, all secrets are listed."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListSecretsResponse",
+      "docstring": "Response message for\n[SecretManagerService.ListSecrets][google.cloud.secretmanager.v1.SecretManagerService.ListSecrets].\n\nAttributes:\n    secrets (MutableSequence[google.cloud.secretmanager_v1.types.Secret]):\n        The list of [Secrets][google.cloud.secretmanager.v1.Secret]\n        sorted in reverse by create_time (newest first).\n    next_page_token (str):\n        A token to retrieve the next page of results. Pass this\n        value in\n        [ListSecretsRequest.page_token][google.cloud.secretmanager.v1.ListSecretsRequest.page_token]\n        to retrieve the next page.\n    total_size (int):\n        The total number of\n        [Secrets][google.cloud.secretmanager.v1.Secret] but 0 when\n        the\n        [ListSecretsRequest.filter][google.cloud.secretmanager.v1.ListSecretsRequest.filter]\n        field is set.",
+      "attributes": {
+        "secrets": {
+          "type": "MutableSequence[google.cloud.secretmanager_v1.types.Secret]",
+          "description": "The list of [Secrets][google.cloud.secretmanager.v1.Secret] sorted in reverse by create_time (newest first)."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token to retrieve the next page of results. Pass this value in [ListSecretsRequest.page_token][google.cloud.secretmanager.v1.ListSecretsRequest.page_token] to retrieve the next page."
+        },
+        "total_size": {
+          "type": "int",
+          "description": "The total number of [Secrets][google.cloud.secretmanager.v1.Secret] but 0 when the [ListSecretsRequest.filter][google.cloud.secretmanager.v1.ListSecretsRequest.filter] field is set."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateSecretRequest",
+      "docstring": "Request message for\n[SecretManagerService.CreateSecret][google.cloud.secretmanager.v1.SecretManagerService.CreateSecret].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the project to associate with\n        the [Secret][google.cloud.secretmanager.v1.Secret], in the\n        format ``projects/*`` or ``projects/*/locations/*``.\n    secret_id (str):\n        Required. This must be unique within the project.\n\n        A secret ID is a string with a maximum length of 255\n        characters and can contain uppercase and lowercase letters,\n        numerals, and the hyphen (``-``) and underscore (``_``)\n        characters.\n    secret (google.cloud.secretmanager_v1.types.Secret):\n        Required. A [Secret][google.cloud.secretmanager.v1.Secret]\n        with initial field values.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the project to associate with the [Secret][google.cloud.secretmanager.v1.Secret], in the format ``projects/*`` or ``projects/*/locations/*``."
+        },
+        "secret_id": {
+          "type": "str",
+          "description": "Required. This must be unique within the project.  A secret ID is a string with a maximum length of 255 characters and can contain uppercase and lowercase letters, numerals, and the hyphen (``-``) and underscore (``_``) characters."
+        },
+        "secret": {
+          "type": "google.cloud.secretmanager_v1.types.Secret",
+          "description": "Required. A [Secret][google.cloud.secretmanager.v1.Secret] with initial field values."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AddSecretVersionRequest",
+      "docstring": "Request message for\n[SecretManagerService.AddSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AddSecretVersion].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the\n        [Secret][google.cloud.secretmanager.v1.Secret] to associate\n        with the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        in the format ``projects/*/secrets/*`` or\n        ``projects/*/locations/*/secrets/*``.\n    payload (google.cloud.secretmanager_v1.types.SecretPayload):\n        Required. The secret payload of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the [Secret][google.cloud.secretmanager.v1.Secret] to associate with the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] in the format ``projects/*/secrets/*`` or ``projects/*/locations/*/secrets/*``."
+        },
+        "payload": {
+          "type": "google.cloud.secretmanager_v1.types.SecretPayload",
+          "description": "Required. The secret payload of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetSecretRequest",
+      "docstring": "Request message for\n[SecretManagerService.GetSecret][google.cloud.secretmanager.v1.SecretManagerService.GetSecret].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [Secret][google.cloud.secretmanager.v1.Secret], in the\n        format ``projects/*/secrets/*`` or\n        ``projects/*/locations/*/secrets/*``.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [Secret][google.cloud.secretmanager.v1.Secret], in the format ``projects/*/secrets/*`` or ``projects/*/locations/*/secrets/*``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListSecretVersionsRequest",
+      "docstring": "Request message for\n[SecretManagerService.ListSecretVersions][google.cloud.secretmanager.v1.SecretManagerService.ListSecretVersions].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the\n        [Secret][google.cloud.secretmanager.v1.Secret] associated\n        with the\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]\n        to list, in the format ``projects/*/secrets/*`` or\n        ``projects/*/locations/*/secrets/*``.\n    page_size (int):\n        Optional. The maximum number of results to be\n        returned in a single page. If set to 0, the\n        server decides the number of results to return.\n        If the number is greater than 25000, it is\n        capped at 25000.\n    page_token (str):\n        Optional. Pagination token, returned earlier via\n        ListSecretVersionsResponse.next_page_token][].\n    filter (str):\n        Optional. Filter string, adhering to the rules in\n        `List-operation\n        filtering <https://cloud.google.com/secret-manager/docs/f",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the [Secret][google.cloud.secretmanager.v1.Secret] associated with the [SecretVersions][google.cloud.secretmanager.v1.SecretVersion] to list, in the format ``projects/*/secrets/*`` or ``projects/*/locations/*/secrets/*``."
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The maximum number of results to be returned in a single page. If set to 0, the server decides the number of results to return. If the number is greater than 25000, it is capped at 25000."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. Pagination token, returned earlier via ListSecretVersionsResponse.next_page_token][]."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Filter string, adhering to the rules in `List-operation filtering <https://cloud.google.com/secret-manager/docs/filtering>`__. List only secret versions matching the filter. If filter is empty, all secret versions are listed."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListSecretVersionsResponse",
+      "docstring": "Response message for\n[SecretManagerService.ListSecretVersions][google.cloud.secretmanager.v1.SecretManagerService.ListSecretVersions].\n\nAttributes:\n    versions (MutableSequence[google.cloud.secretmanager_v1.types.SecretVersion]):\n        The list of\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]\n        sorted in reverse by create_time (newest first).\n    next_page_token (str):\n        A token to retrieve the next page of results. Pass this\n        value in\n        [ListSecretVersionsRequest.page_token][google.cloud.secretmanager.v1.ListSecretVersionsRequest.page_token]\n        to retrieve the next page.\n    total_size (int):\n        The total number of\n        [SecretVersions][google.cloud.secretmanager.v1.SecretVersion]\n        but 0 when the\n        [ListSecretsRequest.filter][google.cloud.secretmanager.v1.ListSecretsRequest.filter]\n        field is set.",
+      "attributes": {
+        "versions": {
+          "type": "MutableSequence[google.cloud.secretmanager_v1.types.SecretVersion]",
+          "description": "The list of [SecretVersions][google.cloud.secretmanager.v1.SecretVersion] sorted in reverse by create_time (newest first)."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token to retrieve the next page of results. Pass this value in [ListSecretVersionsRequest.page_token][google.cloud.secretmanager.v1.ListSecretVersionsRequest.page_token] to retrieve the next page."
+        },
+        "total_size": {
+          "type": "int",
+          "description": "The total number of [SecretVersions][google.cloud.secretmanager.v1.SecretVersion] but 0 when the [ListSecretsRequest.filter][google.cloud.secretmanager.v1.ListSecretsRequest.filter] field is set."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetSecretVersionRequest",
+      "docstring": "Request message for\n[SecretManagerService.GetSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.GetSecretVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        in the format ``projects/*/secrets/*/versions/*`` or\n        ``projects/*/locations/*/secrets/*/versions/*``.\n\n        ``projects/*/secrets/*/versions/latest`` or\n        ``projects/*/locations/*/secrets/*/versions/latest`` is an\n        alias to the most recently created\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] in the format ``projects/*/secrets/*/versions/*`` or ``projects/*/locations/*/secrets/*/versions/*``.  ``projects/*/secrets/*/versions/latest`` or ``projects/*/locations/*/secrets/*/versions/latest`` is an alias to the most recently created [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateSecretRequest",
+      "docstring": "Request message for\n[SecretManagerService.UpdateSecret][google.cloud.secretmanager.v1.SecretManagerService.UpdateSecret].\n\nAttributes:\n    secret (google.cloud.secretmanager_v1.types.Secret):\n        Required. [Secret][google.cloud.secretmanager.v1.Secret]\n        with updated field values.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. Specifies the fields to be updated.",
+      "attributes": {
+        "secret": {
+          "type": "google.cloud.secretmanager_v1.types.Secret",
+          "description": "Required. [Secret][google.cloud.secretmanager.v1.Secret] with updated field values."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Required. Specifies the fields to be updated."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AccessSecretVersionRequest",
+      "docstring": "Request message for\n[SecretManagerService.AccessSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AccessSecretVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        in the format ``projects/*/secrets/*/versions/*`` or\n        ``projects/*/locations/*/secrets/*/versions/*``.\n\n        ``projects/*/secrets/*/versions/latest`` or\n        ``projects/*/locations/*/secrets/*/versions/latest`` is an\n        alias to the most recently created\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] in the format ``projects/*/secrets/*/versions/*`` or ``projects/*/locations/*/secrets/*/versions/*``.  ``projects/*/secrets/*/versions/latest`` or ``projects/*/locations/*/secrets/*/versions/latest`` is an alias to the most recently created [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AccessSecretVersionResponse",
+      "docstring": "Response message for\n[SecretManagerService.AccessSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.AccessSecretVersion].\n\nAttributes:\n    name (str):\n        The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        in the format ``projects/*/secrets/*/versions/*`` or\n        ``projects/*/locations/*/secrets/*/versions/*``.\n    payload (google.cloud.secretmanager_v1.types.SecretPayload):\n        Secret payload",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] in the format ``projects/*/secrets/*/versions/*`` or ``projects/*/locations/*/secrets/*/versions/*``."
+        },
+        "payload": {
+          "type": "google.cloud.secretmanager_v1.types.SecretPayload",
+          "description": "Secret payload"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteSecretRequest",
+      "docstring": "Request message for\n[SecretManagerService.DeleteSecret][google.cloud.secretmanager.v1.SecretManagerService.DeleteSecret].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [Secret][google.cloud.secretmanager.v1.Secret] to delete in\n        the format ``projects/*/secrets/*``.\n    etag (str):\n        Optional. Etag of the\n        [Secret][google.cloud.secretmanager.v1.Secret]. The request\n        succeeds if it matches the etag of the currently stored\n        secret object. If the etag is omitted, the request succeeds.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [Secret][google.cloud.secretmanager.v1.Secret] to delete in the format ``projects/*/secrets/*``."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. Etag of the [Secret][google.cloud.secretmanager.v1.Secret]. The request succeeds if it matches the etag of the currently stored secret object. If the etag is omitted, the request succeeds."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DisableSecretVersionRequest",
+      "docstring": "Request message for\n[SecretManagerService.DisableSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.DisableSecretVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        to disable in the format ``projects/*/secrets/*/versions/*``\n        or ``projects/*/locations/*/secrets/*/versions/*``.\n    etag (str):\n        Optional. Etag of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n        The request succeeds if it matches the etag of the currently\n        stored secret version object. If the etag is omitted, the\n        request succeeds.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] to disable in the format ``projects/*/secrets/*/versions/*`` or ``projects/*/locations/*/secrets/*/versions/*``."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. Etag of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]. The request succeeds if it matches the etag of the currently stored secret version object. If the etag is omitted, the request succeeds."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EnableSecretVersionRequest",
+      "docstring": "Request message for\n[SecretManagerService.EnableSecretVersion][google.cloud.secretmanager.v1.SecretManagerService.EnableSecretVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        to enable in the format ``projects/*/secrets/*/versions/*``\n        or ``projects/*/locations/*/secrets/*/versions/*``.\n    etag (str):\n        Optional. Etag of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n        The request succeeds if it matches the etag of the currently\n        stored secret version object. If the etag is omitted, the\n        request succeeds.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] to enable in the format ``projects/*/secrets/*/versions/*`` or ``projects/*/locations/*/secrets/*/versions/*``."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. Etag of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]. The request succeeds if it matches the etag of the currently stored secret version object. If the etag is omitted, the request succeeds."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DestroySecretVersionRequest",
+      "docstring": "Request message for\n[SecretManagerService.DestroySecretVersion][google.cloud.secretmanager.v1.SecretManagerService.DestroySecretVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]\n        to destroy in the format ``projects/*/secrets/*/versions/*``\n        or ``projects/*/locations/*/secrets/*/versions/*``.\n    etag (str):\n        Optional. Etag of the\n        [SecretVersion][google.cloud.secretmanager.v1.SecretVersion].\n        The request succeeds if it matches the etag of the currently\n        stored secret version object. If the etag is omitted, the\n        request succeeds.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] to destroy in the format ``projects/*/secrets/*/versions/*`` or ``projects/*/locations/*/secrets/*/versions/*``."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. Etag of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion]. The request succeeds if it matches the etag of the currently stored secret version object. If the etag is omitted, the request succeeds."
+        }
+      }
+    }
+  ]
+}

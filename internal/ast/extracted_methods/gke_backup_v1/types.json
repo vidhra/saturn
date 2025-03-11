@@ -1,0 +1,1555 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\backup.py": [
+    {
+      "type": "request_class",
+      "name": "Backup",
+      "docstring": "Represents a request to perform a single point-in-time\ncapture of some portion of the state of a GKE cluster, the\nrecord of the backup operation itself, and an anchor for the\nunderlying artifacts that comprise the Backup (the config backup\nand VolumeBackups).\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Output only. The fully qualified name of the Backup.\n        ``projects/*/locations/*/backupPlans/*/backups/*``\n    uid (str):\n        Output only. Server generated global unique identifier of\n        `UUID4 <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this Backup\n        resource was created.\n",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The fully qualified name of the Backup. ``projects/*/locations/*/backupPlans/*/backups/*``"
+        },
+        "uid": {
+          "type": "str",
+          "description": "Output only. Server generated global unique identifier of `UUID4 <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__"
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this Backup resource was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this Backup resource was last updated."
+        },
+        "manual": {
+          "type": "bool",
+          "description": "Output only. This flag indicates whether this Backup resource was created manually by a user or via a schedule in the BackupPlan. A value of True means that the Backup was created manually."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. A set of custom labels supplied by user."
+        },
+        "delete_lock_days": {
+          "type": "int",
+          "description": "Optional. Minimum age for this Backup (in days). If this field is set to a non-zero value, the Backup will be \"locked\" against deletion (either manual or automatic deletion) for the number of days provided (measured from the creation time of the Backup). MUST be an integer value between 0-90 (inclusive).  Defaults to parent BackupPlan's [backup_delete_lock_days][google.cloud.gkebackup.v1.BackupPlan.RetentionPolicy.backup_delete_lock_days] setting and may only be increased (either at creation time or in a subsequent update)."
+        },
+        "delete_lock_expire_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time at which an existing delete lock will expire for this backup (calculated from create_time + [delete_lock_days][google.cloud.gkebackup.v1.Backup.delete_lock_days])."
+        },
+        "retain_days": {
+          "type": "int",
+          "description": "Optional. The age (in days) after which this Backup will be automatically deleted. Must be an integer value >= 0:  -  If 0, no automatic deletion will occur for this Backup. -  If not 0, this must be >= [delete_lock_days][google.cloud.gkebackup.v1.Backup.delete_lock_days] and <= 365.  Once a Backup is created, this value may only be increased.  Defaults to the parent BackupPlan's [backup_retain_days][google.cloud.gkebackup.v1.BackupPlan.RetentionPolicy.backup_retain_days] value."
+        },
+        "retain_expire_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time at which this Backup will be automatically deleted (calculated from create_time + [retain_days][google.cloud.gkebackup.v1.Backup.retain_days])."
+        },
+        "encryption_key": {
+          "type": "google.cloud.gke_backup_v1.types.EncryptionKey",
+          "description": "Output only. The customer managed encryption key that was used to encrypt the Backup's artifacts. Inherited from the parent BackupPlan's [encryption_key][google.cloud.gkebackup.v1.BackupPlan.BackupConfig.encryption_key] value."
+        },
+        "all_namespaces": {
+          "type": "bool",
+          "description": "Output only. If True, all namespaces were included in the Backup.  This field is a member of `oneof`_ ``backup_scope``."
+        },
+        "selected_namespaces": {
+          "type": "google.cloud.gke_backup_v1.types.Namespaces",
+          "description": "Output only. If set, the list of namespaces that were included in the Backup.  This field is a member of `oneof`_ ``backup_scope``."
+        },
+        "selected_applications": {
+          "type": "google.cloud.gke_backup_v1.types.NamespacedNames",
+          "description": "Output only. If set, the list of ProtectedApplications whose resources were included in the Backup.  This field is a member of `oneof`_ ``backup_scope``."
+        },
+        "contains_volume_data": {
+          "type": "bool",
+          "description": "Output only. Whether or not the Backup contains volume data. Controlled by the parent BackupPlan's [include_volume_data][google.cloud.gkebackup.v1.BackupPlan.BackupConfig.include_volume_data] value."
+        },
+        "contains_secrets": {
+          "type": "bool",
+          "description": "Output only. Whether or not the Backup contains Kubernetes Secrets. Controlled by the parent BackupPlan's [include_secrets][google.cloud.gkebackup.v1.BackupPlan.BackupConfig.include_secrets] value."
+        },
+        "cluster_metadata": {
+          "type": "google.cloud.gke_backup_v1.types.Backup.ClusterMetadata",
+          "description": "Output only. Information about the GKE cluster from which this Backup was created."
+        },
+        "state": {
+          "type": "google.cloud.gke_backup_v1.types.Backup.State",
+          "description": "Output only. Current state of the Backup"
+        },
+        "state_reason": {
+          "type": "str",
+          "description": "Output only. Human-readable description of why the backup is in the current ``state``."
+        },
+        "complete_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Completion time of the Backup"
+        },
+        "resource_count": {
+          "type": "int",
+          "description": "Output only. The total number of Kubernetes resources included in the Backup."
+        },
+        "volume_count": {
+          "type": "int",
+          "description": "Output only. The total number of volume backups contained in the Backup."
+        },
+        "size_bytes": {
+          "type": "int",
+          "description": "Output only. The total size of the Backup in bytes = config backup size + sum(volume backup sizes)"
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. ``etag`` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a backup from overwriting each other. It is strongly suggested that systems make use of the ``etag`` in the read-modify-write cycle to perform backup updates in order to avoid race conditions: An ``etag`` is returned in the response to ``GetBackup``, and systems are expected to put that etag in the request to ``UpdateBackup`` or ``DeleteBackup`` to ensure that their change will be applied to the same version of the resource."
+        },
+        "description": {
+          "type": "str",
+          "description": "Optional. User specified descriptive string for this Backup."
+        },
+        "pod_count": {
+          "type": "int",
+          "description": "Output only. The total number of Kubernetes Pods contained in the Backup."
+        },
+        "config_backup_size_bytes": {
+          "type": "int",
+          "description": "Output only. The size of the config backup in bytes."
+        },
+        "permissive_mode": {
+          "type": "bool",
+          "description": "Output only. If false, Backup will fail when Backup for GKE detects Kubernetes configuration that is non-standard or requires additional setup to restore.  Inherited from the parent BackupPlan's [permissive_mode][google.cloud.gkebackup.v1.BackupPlan.BackupConfig.permissive_mode] value."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ClusterMetadata",
+      "docstring": "Information about the GKE cluster from which this Backup was\ncreated.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    cluster (str):\n        Output only. The source cluster from which this Backup was\n        created. Valid formats:\n\n        -  ``projects/*/locations/*/clusters/*``\n        -  ``projects/*/zones/*/clusters/*``\n\n        This is inherited from the parent BackupPlan's\n        [cluster][google.cloud.gkebackup.v1.BackupPlan.cluster]\n        field.\n    k8s_version (str):\n        Output only. The Kubernetes server version of\n        the source cluster.\n    backup_crd_versions (MutableMapping[str, str]):\n        Output only. A list of the Backup for GKE CRD\n        versions found in the cluster.\n    gke_version (str):\n       ",
+      "attributes": {
+        "cluster": {
+          "type": "str",
+          "description": "Output only. The source cluster from which this Backup was created. Valid formats:  -  ``projects/*/locations/*/clusters/*`` -  ``projects/*/zones/*/clusters/*``  This is inherited from the parent BackupPlan's [cluster][google.cloud.gkebackup.v1.BackupPlan.cluster] field."
+        },
+        "k8s_version": {
+          "type": "str",
+          "description": "Output only. The Kubernetes server version of the source cluster."
+        },
+        "backup_crd_versions": {
+          "type": "MutableMapping[str, str]",
+          "description": "Output only. A list of the Backup for GKE CRD versions found in the cluster."
+        },
+        "gke_version": {
+          "type": "str",
+          "description": "Output only. GKE version  This field is a member of `oneof`_ ``platform_version``."
+        },
+        "anthos_version": {
+          "type": "str",
+          "description": "Output only. Anthos version  This field is a member of `oneof`_ ``platform_version``."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\backup_plan.py": [
+    {
+      "type": "request_class",
+      "name": "BackupPlan",
+      "docstring": "Defines the configuration and scheduling for a \"line\" of\nBackups.\n\nAttributes:\n    name (str):\n        Output only. The full name of the BackupPlan resource.\n        Format: ``projects/*/locations/*/backupPlans/*``\n    uid (str):\n        Output only. Server generated global unique identifier of\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__\n        format.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        BackupPlan resource was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        BackupPlan resource was last updated.\n    description (str):\n        Optional. User specified descriptive string\n        for this BackupPlan.\n    cluster (str):\n        Required. Immutable. The source cluster from which Backups\n        will be created via this BackupPlan. Valid formats:\n\n        -  ``projects/*/locations/*/clusters/*``\n        -  ``projects/*/zones/*/cluste",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The full name of the BackupPlan resource. Format: ``projects/*/locations/*/backupPlans/*``"
+        },
+        "uid": {
+          "type": "str",
+          "description": "Output only. Server generated global unique identifier of `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__ format."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this BackupPlan resource was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this BackupPlan resource was last updated."
+        },
+        "description": {
+          "type": "str",
+          "description": "Optional. User specified descriptive string for this BackupPlan."
+        },
+        "cluster": {
+          "type": "str",
+          "description": "Required. Immutable. The source cluster from which Backups will be created via this BackupPlan. Valid formats:  -  ``projects/*/locations/*/clusters/*`` -  ``projects/*/zones/*/clusters/*``"
+        },
+        "retention_policy": {
+          "type": "google.cloud.gke_backup_v1.types.BackupPlan.RetentionPolicy",
+          "description": "Optional. RetentionPolicy governs lifecycle of Backups created under this plan."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. A set of custom labels supplied by user."
+        },
+        "backup_schedule": {
+          "type": "google.cloud.gke_backup_v1.types.BackupPlan.Schedule",
+          "description": "Optional. Defines a schedule for automatic Backup creation via this BackupPlan."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. ``etag`` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a backup plan from overwriting each other. It is strongly suggested that systems make use of the 'etag' in the read-modify-write cycle to perform BackupPlan updates in order to avoid race conditions: An ``etag`` is returned in the response to ``GetBackupPlan``, and systems are expected to put that etag in the request to ``UpdateBackupPlan`` or ``DeleteBackupPlan`` to ensure that their change will be applied to the same version of the resource."
+        },
+        "deactivated": {
+          "type": "bool",
+          "description": "Optional. This flag indicates whether this BackupPlan has been deactivated. Setting this field to True locks the BackupPlan such that no further updates will be allowed (except deletes), including the deactivated field itself. It also prevents any new Backups from being created via this BackupPlan (including scheduled Backups).  Default: False"
+        },
+        "backup_config": {
+          "type": "google.cloud.gke_backup_v1.types.BackupPlan.BackupConfig",
+          "description": "Optional. Defines the configuration of Backups created via this BackupPlan."
+        },
+        "protected_pod_count": {
+          "type": "int",
+          "description": "Output only. The number of Kubernetes Pods backed up in the last successful Backup created via this BackupPlan."
+        },
+        "state": {
+          "type": "google.cloud.gke_backup_v1.types.BackupPlan.State",
+          "description": "Output only. State of the BackupPlan. This State field reflects the various stages a BackupPlan can be in during the Create operation. It will be set to \"DEACTIVATED\" if the BackupPlan is deactivated on an Update"
+        },
+        "state_reason": {
+          "type": "str",
+          "description": "Output only. Human-readable description of why BackupPlan is in the current ``state``"
+        },
+        "rpo_risk_level": {
+          "type": "int",
+          "description": "Output only. A number that represents the current risk level of this BackupPlan from RPO perspective with 1 being no risk and 5 being highest risk."
+        },
+        "rpo_risk_reason": {
+          "type": "str",
+          "description": "Output only. Human-readable description of why the BackupPlan is in the current rpo_risk_level and action items if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RpoConfig",
+      "docstring": "Defines RPO scheduling configuration for automatically\ncreating Backups via this BackupPlan.\n\nAttributes:\n    target_rpo_minutes (int):\n        Required. Defines the target RPO for the\n        BackupPlan in minutes, which means the target\n        maximum data loss in time that is acceptable for\n        this BackupPlan. This must be at least 60, i.e.,\n        1 hour, and at most 86400, i.e., 60 days.\n    exclusion_windows (MutableSequence[google.cloud.gke_backup_v1.types.ExclusionWindow]):\n        Optional. User specified time windows during which backup\n        can NOT happen for this BackupPlan - backups should start\n        and finish outside of any given exclusion window. Note:\n        backup jobs will be scheduled to start and finish outside\n        the duration of the window as much as possible, but running\n        jobs will not get canceled when it runs into the window. All\n        the time and date values in exclusion_windows entry in the\n        API are in UTC. We only allow <=1 recurrence (daily or\n ",
+      "attributes": {
+        "target_rpo_minutes": {
+          "type": "int",
+          "description": "Required. Defines the target RPO for the BackupPlan in minutes, which means the target maximum data loss in time that is acceptable for this BackupPlan. This must be at least 60, i.e., 1 hour, and at most 86400, i.e., 60 days."
+        },
+        "exclusion_windows": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.ExclusionWindow]",
+          "description": "Optional. User specified time windows during which backup can NOT happen for this BackupPlan - backups should start and finish outside of any given exclusion window. Note: backup jobs will be scheduled to start and finish outside the duration of the window as much as possible, but running jobs will not get canceled when it runs into the window. All the time and date values in exclusion_windows entry in the API are in UTC. We only allow <=1 recurrence (daily or weekly) exclusion window for a BackupPlan while no restriction on number of single occurrence windows."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ExclusionWindow",
+      "docstring": "Defines a time window during which no backup should\nhappen. All time and date are in UTC.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    start_time (google.type.timeofday_pb2.TimeOfDay):\n        Required. Specifies the start time of the\n        window using time of the day in UTC.\n    duration (google.protobuf.duration_pb2.Duration):\n        Required. Specifies duration of the window. Duration must be\n        >= 5 minutes and < (target RPO - 20 minutes). Additional\n        restrictions based on the recurrence type to allow some time\n        for backup to happen:\n\n        -  single_occurrence_date: no restriction, but UI may warn\n           about this when duration >= target RPO\n        -  daily window: duration < 24 hours\n        -",
+      "attributes": {
+        "start_time": {
+          "type": "google.type.timeofday_pb2.TimeOfDay",
+          "description": "Required. Specifies the start time of the window using time of the day in UTC."
+        },
+        "duration": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "Required. Specifies duration of the window. Duration must be >= 5 minutes and < (target RPO - 20 minutes). Additional restrictions based on the recurrence type to allow some time for backup to happen:  -  single_occurrence_date: no restriction, but UI may warn about this when duration >= target RPO -  daily window: duration < 24 hours -  weekly window:  -  days of week includes all seven days of a week: duration < 24 hours -  all other weekly window: duration < 168 hours (i.e., 24 \\* 7 hours)"
+        },
+        "single_occurrence_date": {
+          "type": "google.type.date_pb2.Date",
+          "description": "No recurrence. The exclusion window occurs only once and on this date in UTC.  This field is a member of `oneof`_ ``recurrence``."
+        },
+        "daily": {
+          "type": "bool",
+          "description": "The exclusion window occurs every day if set to \"True\". Specifying this field to \"False\" is an error.  This field is a member of `oneof`_ ``recurrence``."
+        },
+        "days_of_week": {
+          "type": "google.cloud.gke_backup_v1.types.ExclusionWindow.DayOfWeekList",
+          "description": "The exclusion window occurs on these days of each week in UTC.  This field is a member of `oneof`_ ``recurrence``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RetentionPolicy",
+      "docstring": "RetentionPolicy defines a Backup retention policy for a\nBackupPlan.\n\nAttributes:\n    backup_delete_lock_days (int):\n        Optional. Minimum age for Backups created via this\n        BackupPlan (in days). This field MUST be an integer value\n        between 0-90 (inclusive). A Backup created under this\n        BackupPlan will NOT be deletable until it reaches Backup's\n        (create_time + backup_delete_lock_days). Updating this field\n        of a BackupPlan does NOT affect existing Backups under it.\n        Backups created AFTER a successful update will inherit the\n        new value.\n\n        Default: 0 (no delete blocking)\n    backup_retain_days (int):\n        Optional. The default maximum age of a Backup created via\n        this BackupPlan. This field MUST be an integer value >= 0\n        and <= 365. If specified, a Backup created under this\n        BackupPlan will be automatically deleted after its age\n        reaches (create_time + backup_retain_days). If not\n        specified, Backups created under this",
+      "attributes": {
+        "backup_delete_lock_days": {
+          "type": "int",
+          "description": "Optional. Minimum age for Backups created via this BackupPlan (in days). This field MUST be an integer value between 0-90 (inclusive). A Backup created under this BackupPlan will NOT be deletable until it reaches Backup's (create_time + backup_delete_lock_days). Updating this field of a BackupPlan does NOT affect existing Backups under it. Backups created AFTER a successful update will inherit the new value.  Default: 0 (no delete blocking)"
+        },
+        "backup_retain_days": {
+          "type": "int",
+          "description": "Optional. The default maximum age of a Backup created via this BackupPlan. This field MUST be an integer value >= 0 and <= 365. If specified, a Backup created under this BackupPlan will be automatically deleted after its age reaches (create_time + backup_retain_days). If not specified, Backups created under this BackupPlan will NOT be subject to automatic deletion. Updating this field does NOT affect existing Backups under it. Backups created AFTER a successful update will automatically pick up the new value. NOTE: backup_retain_days must be >= [backup_delete_lock_days][google.cloud.gkebackup.v1.BackupPlan.RetentionPolicy.backup_delete_lock_days]. If [cron_schedule][google.cloud.gkebackup.v1.BackupPlan.Schedule.cron_schedule] is defined, then this must be <= 360 \\* the creation interval. If [rpo_config][google.cloud.gkebackup.v1.BackupPlan.Schedule.rpo_config] is defined, then this must be <= 360 \\* [target_rpo_minutes][Schedule.rpo_config.target_rpo_minutes] / (1440minutes/day).  Default: 0 (no automatic deletion)"
+        },
+        "locked": {
+          "type": "bool",
+          "description": "Optional. This flag denotes whether the retention policy of this BackupPlan is locked. If set to True, no further update is allowed on this policy, including the ``locked`` field itself.  Default: False"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Schedule",
+      "docstring": "Defines scheduling parameters for automatically creating\nBackups via this BackupPlan.\n\nAttributes:\n    cron_schedule (str):\n        Optional. A standard\n        `cron <https://wikipedia.com/wiki/cron>`__ string that\n        defines a repeating schedule for creating Backups via this\n        BackupPlan. This is mutually exclusive with the\n        [rpo_config][google.cloud.gkebackup.v1.BackupPlan.Schedule.rpo_config]\n        field since at most one schedule can be defined for a\n        BackupPlan. If this is defined, then\n        [backup_retain_days][google.cloud.gkebackup.v1.BackupPlan.RetentionPolicy.backup_retain_days]\n        must also be defined.\n\n        Default (empty): no automatic backup creation will occur.\n    paused (bool):\n        Optional. This flag denotes whether automatic\n        Backup creation is paused for this BackupPlan.\n\n        Default: False\n    rpo_config (google.cloud.gke_backup_v1.types.RpoConfig):\n        Optional. Defines the RPO schedule configuration for this\n        BackupPlan. T",
+      "attributes": {
+        "cron_schedule": {
+          "type": "str",
+          "description": "Optional. A standard `cron <https://wikipedia.com/wiki/cron>`__ string that defines a repeating schedule for creating Backups via this BackupPlan. This is mutually exclusive with the [rpo_config][google.cloud.gkebackup.v1.BackupPlan.Schedule.rpo_config] field since at most one schedule can be defined for a BackupPlan. If this is defined, then [backup_retain_days][google.cloud.gkebackup.v1.BackupPlan.RetentionPolicy.backup_retain_days] must also be defined."
+        },
+        "Default": {
+          "type": "empty",
+          "description": "no automatic backup creation will occur."
+        },
+        "paused": {
+          "type": "bool",
+          "description": "Optional. This flag denotes whether automatic Backup creation is paused for this BackupPlan.  Default: False"
+        },
+        "rpo_config": {
+          "type": "google.cloud.gke_backup_v1.types.RpoConfig",
+          "description": "Optional. Defines the RPO schedule configuration for this BackupPlan. This is mutually exclusive with the [cron_schedule][google.cloud.gkebackup.v1.BackupPlan.Schedule.cron_schedule] field since at most one schedule can be defined for a BackupPLan. If this is defined, then [backup_retain_days][google.cloud.gkebackup.v1.BackupPlan.RetentionPolicy.backup_retain_days] must also be defined."
+        },
+        "next_scheduled_backup_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Start time of next scheduled backup under this BackupPlan by either cron_schedule or rpo config."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "BackupConfig",
+      "docstring": "BackupConfig defines the configuration of Backups created via\nthis BackupPlan.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    all_namespaces (bool):\n        If True, include all namespaced resources\n\n        This field is a member of `oneof`_ ``backup_scope``.\n    selected_namespaces (google.cloud.gke_backup_v1.types.Namespaces):\n        If set, include just the resources in the\n        listed namespaces.\n\n        This field is a member of `oneof`_ ``backup_scope``.\n    selected_applications (google.cloud.gke_backup_v1.types.NamespacedNames):\n        If set, include just the resources referenced\n        by the listed ProtectedApplications.\n\n        This field is a member of `oneof`_ ``backup_scope``.\n    include_volume_data (bool):",
+      "attributes": {
+        "all_namespaces": {
+          "type": "bool",
+          "description": "If True, include all namespaced resources  This field is a member of `oneof`_ ``backup_scope``."
+        },
+        "selected_namespaces": {
+          "type": "google.cloud.gke_backup_v1.types.Namespaces",
+          "description": "If set, include just the resources in the listed namespaces.  This field is a member of `oneof`_ ``backup_scope``."
+        },
+        "selected_applications": {
+          "type": "google.cloud.gke_backup_v1.types.NamespacedNames",
+          "description": "If set, include just the resources referenced by the listed ProtectedApplications.  This field is a member of `oneof`_ ``backup_scope``."
+        },
+        "include_volume_data": {
+          "type": "bool",
+          "description": "Optional. This flag specifies whether volume data should be backed up when PVCs are included in the scope of a Backup.  Default: False"
+        },
+        "include_secrets": {
+          "type": "bool",
+          "description": "Optional. This flag specifies whether Kubernetes Secret resources should be included when they fall into the scope of Backups.  Default: False"
+        },
+        "encryption_key": {
+          "type": "google.cloud.gke_backup_v1.types.EncryptionKey",
+          "description": "Optional. This defines a customer managed encryption key that will be used to encrypt the \"config\" portion (the Kubernetes resources) of Backups created via this plan."
+        },
+        "Default": {
+          "type": "empty",
+          "description": "Config backup artifacts will not be encrypted."
+        },
+        "permissive_mode": {
+          "type": "bool",
+          "description": "Optional. If false, Backups will fail when Backup for GKE detects Kubernetes configuration that is non-standard or requires additional setup to restore.  Default: False"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DayOfWeekList",
+      "docstring": "Holds repeated DaysOfWeek values as a container.\n\nAttributes:\n    days_of_week (MutableSequence[google.type.dayofweek_pb2.DayOfWeek]):\n        Optional. A list of days of week.",
+      "attributes": {
+        "days_of_week": {
+          "type": "MutableSequence[google.type.dayofweek_pb2.DayOfWeek]",
+          "description": "Optional. A list of days of week."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\common.py": [
+    {
+      "type": "request_class",
+      "name": "Namespaces",
+      "docstring": "A list of Kubernetes Namespaces\n\nAttributes:\n    namespaces (MutableSequence[str]):\n        Optional. A list of Kubernetes Namespaces",
+      "attributes": {
+        "namespaces": {
+          "type": "MutableSequence[str]",
+          "description": "Optional. A list of Kubernetes Namespaces"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "NamespacedName",
+      "docstring": "A reference to a namespaced resource in Kubernetes.\n\nAttributes:\n    namespace (str):\n        Optional. The Namespace of the Kubernetes\n        resource.\n    name (str):\n        Optional. The name of the Kubernetes\n        resource.",
+      "attributes": {
+        "namespace": {
+          "type": "str",
+          "description": "Optional. The Namespace of the Kubernetes resource."
+        },
+        "name": {
+          "type": "str",
+          "description": "Optional. The name of the Kubernetes resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "NamespacedNames",
+      "docstring": "A list of namespaced Kubernetes resources.\n\nAttributes:\n    namespaced_names (MutableSequence[google.cloud.gke_backup_v1.types.NamespacedName]):\n        Optional. A list of namespaced Kubernetes\n        resources.",
+      "attributes": {
+        "namespaced_names": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.NamespacedName]",
+          "description": "Optional. A list of namespaced Kubernetes resources."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EncryptionKey",
+      "docstring": "Defined a customer managed encryption key that will be used\nto encrypt Backup artifacts.\n\nAttributes:\n    gcp_kms_encryption_key (str):\n        Optional. Google Cloud KMS encryption key. Format:\n        ``projects/*/locations/*/keyRings/*/cryptoKeys/*``",
+      "attributes": {
+        "gcp_kms_encryption_key": {
+          "type": "str",
+          "description": "Optional. Google Cloud KMS encryption key. Format: ``projects/*/locations/*/keyRings/*/cryptoKeys/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "VolumeTypeEnum",
+      "docstring": "Message to encapsulate VolumeType enum.",
+      "attributes": {}
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\gkebackup.py": [
+    {
+      "type": "request_class",
+      "name": "OperationMetadata",
+      "docstring": "Represents the metadata of the long-running operation.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation was\n        created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation finished\n        running.\n    target (str):\n        Output only. Server-defined resource path for\n        the target of the operation.\n    verb (str):\n        Output only. Name of the verb executed by the\n        operation.\n    status_message (str):\n        Output only. Human-readable status of the\n        operation, if any.\n    requested_cancellation (bool):\n        Output only. Identifies whether the user has requested\n        cancellation of the operation. Operations that have\n        successfully been cancelled have [Operation.error][] value\n        with a [google.rpc.Status.code][google.rpc.Status.code] of\n        1, corresponding to ``Code.CANCELLED``.\n    api_version (str):\n        Output only. API version used to s",
+      "attributes": {
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time the operation was created."
+        },
+        "end_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time the operation finished running."
+        },
+        "target": {
+          "type": "str",
+          "description": "Output only. Server-defined resource path for the target of the operation."
+        },
+        "verb": {
+          "type": "str",
+          "description": "Output only. Name of the verb executed by the operation."
+        },
+        "status_message": {
+          "type": "str",
+          "description": "Output only. Human-readable status of the operation, if any."
+        },
+        "requested_cancellation": {
+          "type": "bool",
+          "description": "Output only. Identifies whether the user has requested cancellation of the operation. Operations that have successfully been cancelled have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding to ``Code.CANCELLED``."
+        },
+        "api_version": {
+          "type": "str",
+          "description": "Output only. API version used to start the operation."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateBackupPlanRequest",
+      "docstring": "Request message for CreateBackupPlan.\n\nAttributes:\n    parent (str):\n        Required. The location within which to create the\n        BackupPlan. Format: ``projects/*/locations/*``\n    backup_plan (google.cloud.gke_backup_v1.types.BackupPlan):\n        Required. The BackupPlan resource object to\n        create.\n    backup_plan_id (str):\n        Required. The client-provided short name for\n        the BackupPlan resource. This name must:\n\n        - be between 1 and 63 characters long\n          (inclusive)\n        - consist of only lower-case ASCII letters,\n          numbers, and dashes\n        - start with a lower-case letter\n        - end with a lower-case letter or number\n        - be unique within the set of BackupPlans in\n          this location",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The location within which to create the BackupPlan. Format: ``projects/*/locations/*``"
+        },
+        "backup_plan": {
+          "type": "google.cloud.gke_backup_v1.types.BackupPlan",
+          "description": "Required. The BackupPlan resource object to create."
+        },
+        "backup_plan_id": {
+          "type": "str",
+          "description": "Required. The client-provided short name for the BackupPlan resource. This name must:  - be between 1 and 63 characters long (inclusive) - consist of only lower-case ASCII letters, numbers, and dashes - start with a lower-case letter - end with a lower-case letter or number - be unique within the set of BackupPlans in this location"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListBackupPlansRequest",
+      "docstring": "Request message for ListBackupPlans.\n\nAttributes:\n    parent (str):\n        Required. The location that contains the BackupPlans to\n        list. Format: ``projects/*/locations/*``\n    page_size (int):\n        Optional. The target number of results to return in a single\n        response. If not specified, a default value will be chosen\n        by the service. Note that the response may include a partial\n        list and a caller should only rely on the response's\n        [next_page_token][google.cloud.gkebackup.v1.ListBackupPlansResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        Optional. The value of\n        [next_page_token][google.cloud.gkebackup.v1.ListBackupPlansResponse.next_page_token]\n        received from a previous ``ListBackupPlans`` call. Provide\n        this to retrieve the subsequent page in a multi-page list of\n        results. When paginating, all other parameters provided to\n        ``ListBackupPlans`` must match the ca",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The location that contains the BackupPlans to list. Format: ``projects/*/locations/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The target number of results to return in a single response. If not specified, a default value will be chosen by the service. Note that the response may include a partial list and a caller should only rely on the response's [next_page_token][google.cloud.gkebackup.v1.ListBackupPlansResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The value of [next_page_token][google.cloud.gkebackup.v1.ListBackupPlansResponse.next_page_token] received from a previous ``ListBackupPlans`` call. Provide this to retrieve the subsequent page in a multi-page list of results. When paginating, all other parameters provided to ``ListBackupPlans`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Field match expression used to filter the results."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Optional. Field by which to sort the results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListBackupPlansResponse",
+      "docstring": "Response message for ListBackupPlans.\n\nAttributes:\n    backup_plans (MutableSequence[google.cloud.gke_backup_v1.types.BackupPlan]):\n        The list of BackupPlans matching the given\n        criteria.\n    next_page_token (str):\n        A token which may be sent as\n        [page_token][google.cloud.gkebackup.v1.ListBackupPlansRequest.page_token]\n        in a subsequent ``ListBackupPlans`` call to retrieve the\n        next page of results. If this field is omitted or empty,\n        then there are no more results to return.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
+      "attributes": {
+        "backup_plans": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.BackupPlan]",
+          "description": "The list of BackupPlans matching the given criteria."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token which may be sent as [page_token][google.cloud.gkebackup.v1.ListBackupPlansRequest.page_token] in a subsequent ``ListBackupPlans`` call to retrieve the next page of results. If this field is omitted or empty, then there are no more results to return."
+        },
+        "unreachable": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetBackupPlanRequest",
+      "docstring": "Request message for GetBackupPlan.\n\nAttributes:\n    name (str):\n        Required. Fully qualified BackupPlan name. Format:\n        ``projects/*/locations/*/backupPlans/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Fully qualified BackupPlan name. Format: ``projects/*/locations/*/backupPlans/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateBackupPlanRequest",
+      "docstring": "Request message for UpdateBackupPlan.\n\nAttributes:\n    backup_plan (google.cloud.gke_backup_v1.types.BackupPlan):\n        Required. A new version of the BackupPlan resource that\n        contains updated fields. This may be sparsely populated if\n        an ``update_mask`` is provided.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. This is used to specify the fields to be\n        overwritten in the BackupPlan targeted for update. The\n        values for each of these updated fields will be taken from\n        the ``backup_plan`` provided with this request. Field names\n        are relative to the root of the resource (e.g.,\n        ``description``, ``backup_config.include_volume_data``,\n        etc.) If no ``update_mask`` is provided, all fields in\n        ``backup_plan`` will be written to the target BackupPlan\n        resource. Note that OUTPUT_ONLY and IMMUTABLE fields in\n        ``backup_plan`` are ignored and are not used to update the\n        target BackupPlan.",
+      "attributes": {
+        "backup_plan": {
+          "type": "google.cloud.gke_backup_v1.types.BackupPlan",
+          "description": "Required. A new version of the BackupPlan resource that contains updated fields. This may be sparsely populated if an ``update_mask`` is provided."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Optional. This is used to specify the fields to be overwritten in the BackupPlan targeted for update. The values for each of these updated fields will be taken from the ``backup_plan`` provided with this request. Field names are relative to the root of the resource (e.g., ``description``, ``backup_config.include_volume_data``, etc.) If no ``update_mask`` is provided, all fields in ``backup_plan`` will be written to the target BackupPlan resource. Note that OUTPUT_ONLY and IMMUTABLE fields in ``backup_plan`` are ignored and are not used to update the target BackupPlan."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteBackupPlanRequest",
+      "docstring": "Request message for DeleteBackupPlan.\n\nAttributes:\n    name (str):\n        Required. Fully qualified BackupPlan name. Format:\n        ``projects/*/locations/*/backupPlans/*``\n    etag (str):\n        Optional. If provided, this value must match the current\n        value of the target BackupPlan's\n        [etag][google.cloud.gkebackup.v1.BackupPlan.etag] field or\n        the request is rejected.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Fully qualified BackupPlan name. Format: ``projects/*/locations/*/backupPlans/*``"
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. If provided, this value must match the current value of the target BackupPlan's [etag][google.cloud.gkebackup.v1.BackupPlan.etag] field or the request is rejected."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateBackupRequest",
+      "docstring": "Request message for CreateBackup.\n\nAttributes:\n    parent (str):\n        Required. The BackupPlan within which to create the Backup.\n        Format: ``projects/*/locations/*/backupPlans/*``\n    backup (google.cloud.gke_backup_v1.types.Backup):\n        Optional. The Backup resource to create.\n    backup_id (str):\n        Optional. The client-provided short name for\n        the Backup resource. This name must:\n\n        - be between 1 and 63 characters long\n          (inclusive)\n        - consist of only lower-case ASCII letters,\n          numbers, and dashes\n        - start with a lower-case letter\n        - end with a lower-case letter or number\n        - be unique within the set of Backups in this\n          BackupPlan",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The BackupPlan within which to create the Backup. Format: ``projects/*/locations/*/backupPlans/*``"
+        },
+        "backup": {
+          "type": "google.cloud.gke_backup_v1.types.Backup",
+          "description": "Optional. The Backup resource to create."
+        },
+        "backup_id": {
+          "type": "str",
+          "description": "Optional. The client-provided short name for the Backup resource. This name must:  - be between 1 and 63 characters long (inclusive) - consist of only lower-case ASCII letters, numbers, and dashes - start with a lower-case letter - end with a lower-case letter or number - be unique within the set of Backups in this BackupPlan"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListBackupsRequest",
+      "docstring": "Request message for ListBackups.\n\nAttributes:\n    parent (str):\n        Required. The BackupPlan that contains the Backups to list.\n        Format: ``projects/*/locations/*/backupPlans/*``\n    page_size (int):\n        Optional. The target number of results to return in a single\n        response. If not specified, a default value will be chosen\n        by the service. Note that the response may include a partial\n        list and a caller should only rely on the response's\n        [next_page_token][google.cloud.gkebackup.v1.ListBackupsResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        Optional. The value of\n        [next_page_token][google.cloud.gkebackup.v1.ListBackupsResponse.next_page_token]\n        received from a previous ``ListBackups`` call. Provide this\n        to retrieve the subsequent page in a multi-page list of\n        results. When paginating, all other parameters provided to\n        ``ListBackups`` must match the call that ",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The BackupPlan that contains the Backups to list. Format: ``projects/*/locations/*/backupPlans/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The target number of results to return in a single response. If not specified, a default value will be chosen by the service. Note that the response may include a partial list and a caller should only rely on the response's [next_page_token][google.cloud.gkebackup.v1.ListBackupsResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The value of [next_page_token][google.cloud.gkebackup.v1.ListBackupsResponse.next_page_token] received from a previous ``ListBackups`` call. Provide this to retrieve the subsequent page in a multi-page list of results. When paginating, all other parameters provided to ``ListBackups`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Field match expression used to filter the results."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Optional. Field by which to sort the results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListBackupsResponse",
+      "docstring": "Response message for ListBackups.\n\nAttributes:\n    backups (MutableSequence[google.cloud.gke_backup_v1.types.Backup]):\n        The list of Backups matching the given\n        criteria.\n    next_page_token (str):\n        A token which may be sent as\n        [page_token][google.cloud.gkebackup.v1.ListBackupsRequest.page_token]\n        in a subsequent ``ListBackups`` call to retrieve the next\n        page of results. If this field is omitted or empty, then\n        there are no more results to return.",
+      "attributes": {
+        "backups": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.Backup]",
+          "description": "The list of Backups matching the given criteria."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token which may be sent as [page_token][google.cloud.gkebackup.v1.ListBackupsRequest.page_token] in a subsequent ``ListBackups`` call to retrieve the next page of results. If this field is omitted or empty, then there are no more results to return."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetBackupRequest",
+      "docstring": "Request message for GetBackup.\n\nAttributes:\n    name (str):\n        Required. Full name of the Backup resource. Format:\n        ``projects/*/locations/*/backupPlans/*/backups/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full name of the Backup resource. Format: ``projects/*/locations/*/backupPlans/*/backups/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateBackupRequest",
+      "docstring": "Request message for UpdateBackup.\n\nAttributes:\n    backup (google.cloud.gke_backup_v1.types.Backup):\n        Required. A new version of the Backup resource that contains\n        updated fields. This may be sparsely populated if an\n        ``update_mask`` is provided.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. This is used to specify the fields to be\n        overwritten in the Backup targeted for update. The values\n        for each of these updated fields will be taken from the\n        ``backup_plan`` provided with this request. Field names are\n        relative to the root of the resource. If no ``update_mask``\n        is provided, all fields in ``backup`` will be written to the\n        target Backup resource. Note that OUTPUT_ONLY and IMMUTABLE\n        fields in ``backup`` are ignored and are not used to update\n        the target Backup.",
+      "attributes": {
+        "backup": {
+          "type": "google.cloud.gke_backup_v1.types.Backup",
+          "description": "Required. A new version of the Backup resource that contains updated fields. This may be sparsely populated if an ``update_mask`` is provided."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Optional. This is used to specify the fields to be overwritten in the Backup targeted for update. The values for each of these updated fields will be taken from the ``backup_plan`` provided with this request. Field names are relative to the root of the resource. If no ``update_mask`` is provided, all fields in ``backup`` will be written to the target Backup resource. Note that OUTPUT_ONLY and IMMUTABLE fields in ``backup`` are ignored and are not used to update the target Backup."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteBackupRequest",
+      "docstring": "Request message for DeleteBackup.\n\nAttributes:\n    name (str):\n        Required. Name of the Backup resource. Format:\n        ``projects/*/locations/*/backupPlans/*/backups/*``\n    etag (str):\n        Optional. If provided, this value must match the current\n        value of the target Backup's\n        [etag][google.cloud.gkebackup.v1.Backup.etag] field or the\n        request is rejected.\n    force (bool):\n        Optional. If set to true, any VolumeBackups\n        below this Backup will also be deleted.\n        Otherwise, the request will only succeed if the\n        Backup has no VolumeBackups.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the Backup resource. Format: ``projects/*/locations/*/backupPlans/*/backups/*``"
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. If provided, this value must match the current value of the target Backup's [etag][google.cloud.gkebackup.v1.Backup.etag] field or the request is rejected."
+        },
+        "force": {
+          "type": "bool",
+          "description": "Optional. If set to true, any VolumeBackups below this Backup will also be deleted. Otherwise, the request will only succeed if the Backup has no VolumeBackups."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListVolumeBackupsRequest",
+      "docstring": "Request message for ListVolumeBackups.\n\nAttributes:\n    parent (str):\n        Required. The Backup that contains the VolumeBackups to\n        list. Format:\n        ``projects/*/locations/*/backupPlans/*/backups/*``\n    page_size (int):\n        Optional. The target number of results to return in a single\n        response. If not specified, a default value will be chosen\n        by the service. Note that the response may include a partial\n        list and a caller should only rely on the response's\n        [next_page_token][google.cloud.gkebackup.v1.ListVolumeBackupsResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        Optional. The value of\n        [next_page_token][google.cloud.gkebackup.v1.ListVolumeBackupsResponse.next_page_token]\n        received from a previous ``ListVolumeBackups`` call. Provide\n        this to retrieve the subsequent page in a multi-page list of\n        results. When paginating, all other parameters provided to\n     ",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The Backup that contains the VolumeBackups to list. Format: ``projects/*/locations/*/backupPlans/*/backups/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The target number of results to return in a single response. If not specified, a default value will be chosen by the service. Note that the response may include a partial list and a caller should only rely on the response's [next_page_token][google.cloud.gkebackup.v1.ListVolumeBackupsResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The value of [next_page_token][google.cloud.gkebackup.v1.ListVolumeBackupsResponse.next_page_token] received from a previous ``ListVolumeBackups`` call. Provide this to retrieve the subsequent page in a multi-page list of results. When paginating, all other parameters provided to ``ListVolumeBackups`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Field match expression used to filter the results."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Optional. Field by which to sort the results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListVolumeBackupsResponse",
+      "docstring": "Response message for ListVolumeBackups.\n\nAttributes:\n    volume_backups (MutableSequence[google.cloud.gke_backup_v1.types.VolumeBackup]):\n        The list of VolumeBackups matching the given\n        criteria.\n    next_page_token (str):\n        A token which may be sent as\n        [page_token][google.cloud.gkebackup.v1.ListVolumeBackupsRequest.page_token]\n        in a subsequent ``ListVolumeBackups`` call to retrieve the\n        next page of results. If this field is omitted or empty,\n        then there are no more results to return.",
+      "attributes": {
+        "volume_backups": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.VolumeBackup]",
+          "description": "The list of VolumeBackups matching the given criteria."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token which may be sent as [page_token][google.cloud.gkebackup.v1.ListVolumeBackupsRequest.page_token] in a subsequent ``ListVolumeBackups`` call to retrieve the next page of results. If this field is omitted or empty, then there are no more results to return."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetVolumeBackupRequest",
+      "docstring": "Request message for GetVolumeBackup.\n\nAttributes:\n    name (str):\n        Required. Full name of the VolumeBackup resource. Format:\n        ``projects/*/locations/*/backupPlans/*/backups/*/volumeBackups/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full name of the VolumeBackup resource. Format: ``projects/*/locations/*/backupPlans/*/backups/*/volumeBackups/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateRestorePlanRequest",
+      "docstring": "Request message for CreateRestorePlan.\n\nAttributes:\n    parent (str):\n        Required. The location within which to create the\n        RestorePlan. Format: ``projects/*/locations/*``\n    restore_plan (google.cloud.gke_backup_v1.types.RestorePlan):\n        Required. The RestorePlan resource object to\n        create.\n    restore_plan_id (str):\n        Required. The client-provided short name for\n        the RestorePlan resource. This name must:\n\n        - be between 1 and 63 characters long\n          (inclusive)\n        - consist of only lower-case ASCII letters,\n          numbers, and dashes\n        - start with a lower-case letter\n        - end with a lower-case letter or number\n        - be unique within the set of RestorePlans in\n          this location",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The location within which to create the RestorePlan. Format: ``projects/*/locations/*``"
+        },
+        "restore_plan": {
+          "type": "google.cloud.gke_backup_v1.types.RestorePlan",
+          "description": "Required. The RestorePlan resource object to create."
+        },
+        "restore_plan_id": {
+          "type": "str",
+          "description": "Required. The client-provided short name for the RestorePlan resource. This name must:  - be between 1 and 63 characters long (inclusive) - consist of only lower-case ASCII letters, numbers, and dashes - start with a lower-case letter - end with a lower-case letter or number - be unique within the set of RestorePlans in this location"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListRestorePlansRequest",
+      "docstring": "Request message for ListRestorePlans.\n\nAttributes:\n    parent (str):\n        Required. The location that contains the RestorePlans to\n        list. Format: ``projects/*/locations/*``\n    page_size (int):\n        Optional. The target number of results to return in a single\n        response. If not specified, a default value will be chosen\n        by the service. Note that the response may include a partial\n        list and a caller should only rely on the response's\n        [next_page_token][google.cloud.gkebackup.v1.ListRestorePlansResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        Optional. The value of\n        [next_page_token][google.cloud.gkebackup.v1.ListRestorePlansResponse.next_page_token]\n        received from a previous ``ListRestorePlans`` call. Provide\n        this to retrieve the subsequent page in a multi-page list of\n        results. When paginating, all other parameters provided to\n        ``ListRestorePlans`` must match ",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The location that contains the RestorePlans to list. Format: ``projects/*/locations/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The target number of results to return in a single response. If not specified, a default value will be chosen by the service. Note that the response may include a partial list and a caller should only rely on the response's [next_page_token][google.cloud.gkebackup.v1.ListRestorePlansResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The value of [next_page_token][google.cloud.gkebackup.v1.ListRestorePlansResponse.next_page_token] received from a previous ``ListRestorePlans`` call. Provide this to retrieve the subsequent page in a multi-page list of results. When paginating, all other parameters provided to ``ListRestorePlans`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Field match expression used to filter the results."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Optional. Field by which to sort the results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListRestorePlansResponse",
+      "docstring": "Response message for ListRestorePlans.\n\nAttributes:\n    restore_plans (MutableSequence[google.cloud.gke_backup_v1.types.RestorePlan]):\n        The list of RestorePlans matching the given\n        criteria.\n    next_page_token (str):\n        A token which may be sent as\n        [page_token][google.cloud.gkebackup.v1.ListRestorePlansRequest.page_token]\n        in a subsequent ``ListRestorePlans`` call to retrieve the\n        next page of results. If this field is omitted or empty,\n        then there are no more results to return.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
+      "attributes": {
+        "restore_plans": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestorePlan]",
+          "description": "The list of RestorePlans matching the given criteria."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token which may be sent as [page_token][google.cloud.gkebackup.v1.ListRestorePlansRequest.page_token] in a subsequent ``ListRestorePlans`` call to retrieve the next page of results. If this field is omitted or empty, then there are no more results to return."
+        },
+        "unreachable": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetRestorePlanRequest",
+      "docstring": "Request message for GetRestorePlan.\n\nAttributes:\n    name (str):\n        Required. Fully qualified RestorePlan name. Format:\n        ``projects/*/locations/*/restorePlans/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Fully qualified RestorePlan name. Format: ``projects/*/locations/*/restorePlans/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateRestorePlanRequest",
+      "docstring": "Request message for UpdateRestorePlan.\n\nAttributes:\n    restore_plan (google.cloud.gke_backup_v1.types.RestorePlan):\n        Required. A new version of the RestorePlan resource that\n        contains updated fields. This may be sparsely populated if\n        an ``update_mask`` is provided.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. This is used to specify the fields to be\n        overwritten in the RestorePlan targeted for update. The\n        values for each of these updated fields will be taken from\n        the ``restore_plan`` provided with this request. Field names\n        are relative to the root of the resource. If no\n        ``update_mask`` is provided, all fields in ``restore_plan``\n        will be written to the target RestorePlan resource. Note\n        that OUTPUT_ONLY and IMMUTABLE fields in ``restore_plan``\n        are ignored and are not used to update the target\n        RestorePlan.",
+      "attributes": {
+        "restore_plan": {
+          "type": "google.cloud.gke_backup_v1.types.RestorePlan",
+          "description": "Required. A new version of the RestorePlan resource that contains updated fields. This may be sparsely populated if an ``update_mask`` is provided."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Optional. This is used to specify the fields to be overwritten in the RestorePlan targeted for update. The values for each of these updated fields will be taken from the ``restore_plan`` provided with this request. Field names are relative to the root of the resource. If no ``update_mask`` is provided, all fields in ``restore_plan`` will be written to the target RestorePlan resource. Note that OUTPUT_ONLY and IMMUTABLE fields in ``restore_plan`` are ignored and are not used to update the target RestorePlan."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteRestorePlanRequest",
+      "docstring": "Request message for DeleteRestorePlan.\n\nAttributes:\n    name (str):\n        Required. Fully qualified RestorePlan name. Format:\n        ``projects/*/locations/*/restorePlans/*``\n    etag (str):\n        Optional. If provided, this value must match the current\n        value of the target RestorePlan's\n        [etag][google.cloud.gkebackup.v1.RestorePlan.etag] field or\n        the request is rejected.\n    force (bool):\n        Optional. If set to true, any Restores below\n        this RestorePlan will also be deleted.\n        Otherwise, the request will only succeed if the\n        RestorePlan has no Restores.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Fully qualified RestorePlan name. Format: ``projects/*/locations/*/restorePlans/*``"
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. If provided, this value must match the current value of the target RestorePlan's [etag][google.cloud.gkebackup.v1.RestorePlan.etag] field or the request is rejected."
+        },
+        "force": {
+          "type": "bool",
+          "description": "Optional. If set to true, any Restores below this RestorePlan will also be deleted. Otherwise, the request will only succeed if the RestorePlan has no Restores."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateRestoreRequest",
+      "docstring": "Request message for CreateRestore.\n\nAttributes:\n    parent (str):\n        Required. The RestorePlan within which to create the\n        Restore. Format: ``projects/*/locations/*/restorePlans/*``\n    restore (google.cloud.gke_backup_v1.types.Restore):\n        Required. The restore resource to create.\n    restore_id (str):\n        Required. The client-provided short name for\n        the Restore resource. This name must:\n\n        - be between 1 and 63 characters long\n          (inclusive)\n        - consist of only lower-case ASCII letters,\n          numbers, and dashes\n        - start with a lower-case letter\n        - end with a lower-case letter or number\n        - be unique within the set of Restores in this\n          RestorePlan.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The RestorePlan within which to create the Restore. Format: ``projects/*/locations/*/restorePlans/*``"
+        },
+        "restore": {
+          "type": "google.cloud.gke_backup_v1.types.Restore",
+          "description": "Required. The restore resource to create."
+        },
+        "restore_id": {
+          "type": "str",
+          "description": "Required. The client-provided short name for the Restore resource. This name must:  - be between 1 and 63 characters long (inclusive) - consist of only lower-case ASCII letters, numbers, and dashes - start with a lower-case letter - end with a lower-case letter or number - be unique within the set of Restores in this RestorePlan."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListRestoresRequest",
+      "docstring": "Request message for ListRestores.\n\nAttributes:\n    parent (str):\n        Required. The RestorePlan that contains the Restores to\n        list. Format: ``projects/*/locations/*/restorePlans/*``\n    page_size (int):\n        Optional. The target number of results to return in a single\n        response. If not specified, a default value will be chosen\n        by the service. Note that the response may include a partial\n        list and a caller should only rely on the response's\n        [next_page_token][google.cloud.gkebackup.v1.ListRestoresResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        Optional. The value of\n        [next_page_token][google.cloud.gkebackup.v1.ListRestoresResponse.next_page_token]\n        received from a previous ``ListRestores`` call. Provide this\n        to retrieve the subsequent page in a multi-page list of\n        results. When paginating, all other parameters provided to\n        ``ListRestores`` must match the ca",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The RestorePlan that contains the Restores to list. Format: ``projects/*/locations/*/restorePlans/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The target number of results to return in a single response. If not specified, a default value will be chosen by the service. Note that the response may include a partial list and a caller should only rely on the response's [next_page_token][google.cloud.gkebackup.v1.ListRestoresResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The value of [next_page_token][google.cloud.gkebackup.v1.ListRestoresResponse.next_page_token] received from a previous ``ListRestores`` call. Provide this to retrieve the subsequent page in a multi-page list of results. When paginating, all other parameters provided to ``ListRestores`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Field match expression used to filter the results."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Optional. Field by which to sort the results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListRestoresResponse",
+      "docstring": "Response message for ListRestores.\n\nAttributes:\n    restores (MutableSequence[google.cloud.gke_backup_v1.types.Restore]):\n        The list of Restores matching the given\n        criteria.\n    next_page_token (str):\n        A token which may be sent as\n        [page_token][google.cloud.gkebackup.v1.ListRestoresRequest.page_token]\n        in a subsequent ``ListRestores`` call to retrieve the next\n        page of results. If this field is omitted or empty, then\n        there are no more results to return.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
+      "attributes": {
+        "restores": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.Restore]",
+          "description": "The list of Restores matching the given criteria."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token which may be sent as [page_token][google.cloud.gkebackup.v1.ListRestoresRequest.page_token] in a subsequent ``ListRestores`` call to retrieve the next page of results. If this field is omitted or empty, then there are no more results to return."
+        },
+        "unreachable": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetRestoreRequest",
+      "docstring": "Request message for GetRestore.\n\nAttributes:\n    name (str):\n        Required. Name of the restore resource. Format:\n        ``projects/*/locations/*/restorePlans/*/restores/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the restore resource. Format: ``projects/*/locations/*/restorePlans/*/restores/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateRestoreRequest",
+      "docstring": "Request message for UpdateRestore.\n\nAttributes:\n    restore (google.cloud.gke_backup_v1.types.Restore):\n        Required. A new version of the Restore resource that\n        contains updated fields. This may be sparsely populated if\n        an ``update_mask`` is provided.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. This is used to specify the fields to be\n        overwritten in the Restore targeted for update. The values\n        for each of these updated fields will be taken from the\n        ``restore`` provided with this request. Field names are\n        relative to the root of the resource. If no ``update_mask``\n        is provided, all fields in ``restore`` will be written to\n        the target Restore resource. Note that OUTPUT_ONLY and\n        IMMUTABLE fields in ``restore`` are ignored and are not used\n        to update the target Restore.",
+      "attributes": {
+        "restore": {
+          "type": "google.cloud.gke_backup_v1.types.Restore",
+          "description": "Required. A new version of the Restore resource that contains updated fields. This may be sparsely populated if an ``update_mask`` is provided."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Optional. This is used to specify the fields to be overwritten in the Restore targeted for update. The values for each of these updated fields will be taken from the ``restore`` provided with this request. Field names are relative to the root of the resource. If no ``update_mask`` is provided, all fields in ``restore`` will be written to the target Restore resource. Note that OUTPUT_ONLY and IMMUTABLE fields in ``restore`` are ignored and are not used to update the target Restore."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteRestoreRequest",
+      "docstring": "Request message for DeleteRestore.\n\nAttributes:\n    name (str):\n        Required. Full name of the Restore Format:\n        ``projects/*/locations/*/restorePlans/*/restores/*``\n    etag (str):\n        Optional. If provided, this value must match the current\n        value of the target Restore's\n        [etag][google.cloud.gkebackup.v1.Restore.etag] field or the\n        request is rejected.\n    force (bool):\n        Optional. If set to true, any VolumeRestores\n        below this restore will also be deleted.\n        Otherwise, the request will only succeed if the\n        restore has no VolumeRestores.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full name of the Restore Format: ``projects/*/locations/*/restorePlans/*/restores/*``"
+        },
+        "etag": {
+          "type": "str",
+          "description": "Optional. If provided, this value must match the current value of the target Restore's [etag][google.cloud.gkebackup.v1.Restore.etag] field or the request is rejected."
+        },
+        "force": {
+          "type": "bool",
+          "description": "Optional. If set to true, any VolumeRestores below this restore will also be deleted. Otherwise, the request will only succeed if the restore has no VolumeRestores."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListVolumeRestoresRequest",
+      "docstring": "Request message for ListVolumeRestores.\n\nAttributes:\n    parent (str):\n        Required. The Restore that contains the VolumeRestores to\n        list. Format:\n        ``projects/*/locations/*/restorePlans/*/restores/*``\n    page_size (int):\n        Optional. The target number of results to return in a single\n        response. If not specified, a default value will be chosen\n        by the service. Note that the response may include a partial\n        list and a caller should only rely on the response's\n        [next_page_token][google.cloud.gkebackup.v1.ListVolumeRestoresResponse.next_page_token]\n        to determine if there are more instances left to be queried.\n    page_token (str):\n        Optional. The value of\n        [next_page_token][google.cloud.gkebackup.v1.ListVolumeRestoresResponse.next_page_token]\n        received from a previous ``ListVolumeRestores`` call.\n        Provide this to retrieve the subsequent page in a multi-page\n        list of results. When paginating, all other parameters\n        p",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The Restore that contains the VolumeRestores to list. Format: ``projects/*/locations/*/restorePlans/*/restores/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The target number of results to return in a single response. If not specified, a default value will be chosen by the service. Note that the response may include a partial list and a caller should only rely on the response's [next_page_token][google.cloud.gkebackup.v1.ListVolumeRestoresResponse.next_page_token] to determine if there are more instances left to be queried."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The value of [next_page_token][google.cloud.gkebackup.v1.ListVolumeRestoresResponse.next_page_token] received from a previous ``ListVolumeRestores`` call. Provide this to retrieve the subsequent page in a multi-page list of results. When paginating, all other parameters provided to ``ListVolumeRestores`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Field match expression used to filter the results."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Optional. Field by which to sort the results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListVolumeRestoresResponse",
+      "docstring": "Response message for ListVolumeRestores.\n\nAttributes:\n    volume_restores (MutableSequence[google.cloud.gke_backup_v1.types.VolumeRestore]):\n        The list of VolumeRestores matching the given\n        criteria.\n    next_page_token (str):\n        A token which may be sent as\n        [page_token][google.cloud.gkebackup.v1.ListVolumeRestoresRequest.page_token]\n        in a subsequent ``ListVolumeRestores`` call to retrieve the\n        next page of results. If this field is omitted or empty,\n        then there are no more results to return.",
+      "attributes": {
+        "volume_restores": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.VolumeRestore]",
+          "description": "The list of VolumeRestores matching the given criteria."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token which may be sent as [page_token][google.cloud.gkebackup.v1.ListVolumeRestoresRequest.page_token] in a subsequent ``ListVolumeRestores`` call to retrieve the next page of results. If this field is omitted or empty, then there are no more results to return."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetVolumeRestoreRequest",
+      "docstring": "Request message for GetVolumeRestore.\n\nAttributes:\n    name (str):\n        Required. Full name of the VolumeRestore resource. Format:\n        ``projects/*/locations/*/restorePlans/*/restores/*/volumeRestores/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full name of the VolumeRestore resource. Format: ``projects/*/locations/*/restorePlans/*/restores/*/volumeRestores/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetBackupIndexDownloadUrlRequest",
+      "docstring": "Request message for GetBackupIndexDownloadUrl.\n\nAttributes:\n    backup (str):\n        Required. Full name of Backup resource. Format:\n        projects/{project}/locations/{location}/backupPlans/{backup_plan}/backups/{backup}",
+      "attributes": {
+        "backup": {
+          "type": "str",
+          "description": "Required. Full name of Backup resource. Format: projects/{project}/locations/{location}/backupPlans/{backup_plan}/backups/{backup}"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetBackupIndexDownloadUrlResponse",
+      "docstring": "Response message for GetBackupIndexDownloadUrl.\n\nAttributes:\n    signed_url (str):",
+      "attributes": {
+        "signed_url": {
+          "type": "str",
+          "description": ""
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\restore.py": [
+    {
+      "type": "request_class",
+      "name": "Restore",
+      "docstring": "Represents both a request to Restore some portion of a Backup\ninto a target GKE cluster and a record of the restore operation\nitself.\n\nAttributes:\n    name (str):\n        Output only. The full name of the Restore resource. Format:\n        ``projects/*/locations/*/restorePlans/*/restores/*``\n    uid (str):\n        Output only. Server generated global unique identifier of\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__\n        format.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this Restore\n        resource was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this Restore\n        resource was last updated.\n    description (str):\n        User specified descriptive string for this\n        Restore.\n    backup (str):\n        Required. Immutable. A reference to the\n        [Backup][google.cloud.gkebackup.v1.Backup] used as the\n        source from which this Restore will res",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The full name of the Restore resource. Format: ``projects/*/locations/*/restorePlans/*/restores/*``"
+        },
+        "uid": {
+          "type": "str",
+          "description": "Output only. Server generated global unique identifier of `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__ format."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this Restore resource was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this Restore resource was last updated."
+        },
+        "description": {
+          "type": "str",
+          "description": "User specified descriptive string for this Restore."
+        },
+        "backup": {
+          "type": "str",
+          "description": "Required. Immutable. A reference to the [Backup][google.cloud.gkebackup.v1.Backup] used as the source from which this Restore will restore. Note that this Backup must be a sub-resource of the RestorePlan's [backup_plan][google.cloud.gkebackup.v1.RestorePlan.backup_plan]. Format: ``projects/*/locations/*/backupPlans/*/backups/*``."
+        },
+        "cluster": {
+          "type": "str",
+          "description": "Output only. The target cluster into which this Restore will restore data. Valid formats:  -  ``projects/*/locations/*/clusters/*`` -  ``projects/*/zones/*/clusters/*``  Inherited from parent RestorePlan's [cluster][google.cloud.gkebackup.v1.RestorePlan.cluster] value."
+        },
+        "restore_config": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig",
+          "description": "Output only. Configuration of the Restore. Inherited from parent RestorePlan's [restore_config][google.cloud.gkebackup.v1.RestorePlan.restore_config]."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "A set of custom labels supplied by user."
+        },
+        "state": {
+          "type": "google.cloud.gke_backup_v1.types.Restore.State",
+          "description": "Output only. The current state of the Restore."
+        },
+        "state_reason": {
+          "type": "str",
+          "description": "Output only. Human-readable description of why the Restore is in its current state."
+        },
+        "complete_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Timestamp of when the restore operation completed."
+        },
+        "resources_restored_count": {
+          "type": "int",
+          "description": "Output only. Number of resources restored during the restore execution."
+        },
+        "resources_excluded_count": {
+          "type": "int",
+          "description": "Output only. Number of resources excluded during the restore execution."
+        },
+        "resources_failed_count": {
+          "type": "int",
+          "description": "Output only. Number of resources that failed to be restored during the restore execution."
+        },
+        "volumes_restored_count": {
+          "type": "int",
+          "description": "Output only. Number of volumes restored during the restore execution."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. ``etag`` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a restore from overwriting each other. It is strongly suggested that systems make use of the ``etag`` in the read-modify-write cycle to perform restore updates in order to avoid race conditions: An ``etag`` is returned in the response to ``GetRestore``, and systems are expected to put that etag in the request to ``UpdateRestore`` or ``DeleteRestore`` to ensure that their change will be applied to the same version of the resource."
+        },
+        "filter": {
+          "type": "google.cloud.gke_backup_v1.types.Restore.Filter",
+          "description": "Optional. Immutable. Filters resources for ``Restore``. If not specified, the scope of the restore will remain the same as defined in the ``RestorePlan``. If this is specified, and no resources are matched by the ``inclusion_filters`` or everyting is excluded by the ``exclusion_filters``, nothing will be restored. This filter can only be specified if the value of [namespaced_resource_restore_mode][google.cloud.gkebackup.v1.RestoreConfig.namespaced_resource_restore_mode] is set to ``MERGE_SKIP_ON_CONFLICT``, ``MERGE_REPLACE_VOLUME_ON_CONFLICT`` or ``MERGE_REPLACE_ON_CONFLICT``."
+        },
+        "volume_data_restore_policy_overrides": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.VolumeDataRestorePolicyOverride]",
+          "description": "Optional. Immutable. Overrides the volume data restore policies selected in the Restore Config for override-scoped resources."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RestoreConfig",
+      "docstring": "Configuration of a restore.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    volume_data_restore_policy (google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicy):\n        Optional. Specifies the mechanism to be used to restore\n        volume data. Default: VOLUME_DATA_RESTORE_POLICY_UNSPECIFIED\n        (will be treated as NO_VOLUME_DATA_RESTORATION).\n    cluster_resource_conflict_policy (google.cloud.gke_backup_v1.types.RestoreConfig.ClusterResourceConflictPolicy):\n        Optional. Defines the behavior for handling the situation\n        where cluster-scoped resources being restored already exist\n        in the target cluster. This MUST be set to a value other\n        than CLUSTER_RESOURCE_CONFLICT_POLICY_UNSPECIFIED i",
+      "attributes": {
+        "volume_data_restore_policy": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicy",
+          "description": "Optional. Specifies the mechanism to be used to restore volume data. Default: VOLUME_DATA_RESTORE_POLICY_UNSPECIFIED (will be treated as NO_VOLUME_DATA_RESTORATION)."
+        },
+        "cluster_resource_conflict_policy": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.ClusterResourceConflictPolicy",
+          "description": "Optional. Defines the behavior for handling the situation where cluster-scoped resources being restored already exist in the target cluster. This MUST be set to a value other than CLUSTER_RESOURCE_CONFLICT_POLICY_UNSPECIFIED if [cluster_resource_restore_scope][google.cloud.gkebackup.v1.RestoreConfig.cluster_resource_restore_scope] is not empty."
+        },
+        "namespaced_resource_restore_mode": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.NamespacedResourceRestoreMode",
+          "description": "Optional. Defines the behavior for handling the situation where sets of namespaced resources being restored already exist in the target cluster. This MUST be set to a value other than NAMESPACED_RESOURCE_RESTORE_MODE_UNSPECIFIED."
+        },
+        "cluster_resource_restore_scope": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.ClusterResourceRestoreScope",
+          "description": "Optional. Identifies the cluster-scoped resources to restore from the Backup. Not specifying it means NO cluster resource will be restored."
+        },
+        "all_namespaces": {
+          "type": "bool",
+          "description": "Restore all namespaced resources in the Backup if set to \"True\". Specifying this field to \"False\" is an error.  This field is a member of `oneof`_ ``namespaced_resource_restore_scope``."
+        },
+        "selected_namespaces": {
+          "type": "google.cloud.gke_backup_v1.types.Namespaces",
+          "description": "A list of selected Namespaces to restore from the Backup. The listed Namespaces and all resources contained in them will be restored.  This field is a member of `oneof`_ ``namespaced_resource_restore_scope``."
+        },
+        "selected_applications": {
+          "type": "google.cloud.gke_backup_v1.types.NamespacedNames",
+          "description": "A list of selected ProtectedApplications to restore. The listed ProtectedApplications and all the resources to which they refer will be restored.  This field is a member of `oneof`_ ``namespaced_resource_restore_scope``."
+        },
+        "no_namespaces": {
+          "type": "bool",
+          "description": "Do not restore any namespaced resources if set to \"True\". Specifying this field to \"False\" is not allowed.  This field is a member of `oneof`_ ``namespaced_resource_restore_scope``."
+        },
+        "excluded_namespaces": {
+          "type": "google.cloud.gke_backup_v1.types.Namespaces",
+          "description": "A list of selected namespaces excluded from restoration. All namespaces except those in this list will be restored.  This field is a member of `oneof`_ ``namespaced_resource_restore_scope``."
+        },
+        "substitution_rules": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.SubstitutionRule]",
+          "description": "Optional. A list of transformation rules to be applied against Kubernetes resources as they are selected for restoration from a Backup. Rules are executed in order defined - this order matters, as changes made by a rule may impact the filtering logic of subsequent rules. An empty list means no substitution will occur."
+        },
+        "transformation_rules": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.TransformationRule]",
+          "description": "Optional. A list of transformation rules to be applied against Kubernetes resources as they are selected for restoration from a Backup. Rules are executed in order defined - this order matters, as changes made by a rule may impact the filtering logic of subsequent rules. An empty list means no transformation will occur."
+        },
+        "volume_data_restore_policy_bindings": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicyBinding]",
+          "description": "Optional. A table that binds volumes by their scope to a restore policy. Bindings must have a unique scope. Any volumes not scoped in the bindings are subject to the policy defined in volume_data_restore_policy."
+        },
+        "restore_order": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.RestoreOrder",
+          "description": "Optional. RestoreOrder contains custom ordering to use on a Restore."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ResourceSelector",
+      "docstring": "Defines a selector to identify a single or a group of\nresources. Conditions in the selector are optional, but at least\none field should be set to a non-empty value. If a condition is\nnot specified, no restrictions will be applied on that\ndimension.\nIf more than one condition is specified, a resource will be\nselected if and only if all conditions are met.\n\nAttributes:\n    group_kind (google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind):\n        Optional. Selects resources using their\n        Kubernetes GroupKinds. If specified, only\n        resources of provided GroupKind will be\n        selected.\n    name (str):\n        Optional. Selects resources using their\n        resource names. If specified, only resources\n        with the provided name will be selected.\n    namespace (str):\n        Optional. Selects resources using their namespaces. This\n        only applies to namespace scoped resources and cannot be\n        used for selecting cluster scoped resources. If specified,\n        only resources in the p",
+      "attributes": {
+        "group_kind": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind",
+          "description": "Optional. Selects resources using their Kubernetes GroupKinds. If specified, only resources of provided GroupKind will be selected."
+        },
+        "name": {
+          "type": "str",
+          "description": "Optional. Selects resources using their resource names. If specified, only resources with the provided name will be selected."
+        },
+        "namespace": {
+          "type": "str",
+          "description": "Optional. Selects resources using their namespaces. This only applies to namespace scoped resources and cannot be used for selecting cluster scoped resources. If specified, only resources in the provided namespace will be selected. If not specified, the filter will apply to both cluster scoped and namespace scoped resources (e.g. name or label). The `Namespace <https://pkg.go.dev/k8s.io/api/core/v1#Namespace>`__ resource itself will be restored if and only if any resources within the namespace are restored."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. Selects resources using Kubernetes `labels <https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/>`__. If specified, a resource will be selected if and only if the resource has all of the provided labels and all the label values match."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "VolumeDataRestorePolicyOverride",
+      "docstring": "Defines an override to apply a VolumeDataRestorePolicy for\nscoped resources.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    policy (google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicy):\n        Required. The VolumeDataRestorePolicy to\n        apply when restoring volumes in scope.\n    selected_pvcs (google.cloud.gke_backup_v1.types.NamespacedNames):\n        A list of PVCs to apply the policy override\n        to.\n\n        This field is a member of `oneof`_ ``scope``.",
+      "attributes": {
+        "policy": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicy",
+          "description": "Required. The VolumeDataRestorePolicy to apply when restoring volumes in scope."
+        },
+        "selected_pvcs": {
+          "type": "google.cloud.gke_backup_v1.types.NamespacedNames",
+          "description": "A list of PVCs to apply the policy override to.  This field is a member of `oneof`_ ``scope``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Filter",
+      "docstring": "Defines the filter for ``Restore``. This filter can be used to\nfurther refine the resource selection of the ``Restore`` beyond the\ncoarse-grained scope defined in the ``RestorePlan``.\n``exclusion_filters`` take precedence over ``inclusion_filters``. If\na resource matches both ``inclusion_filters`` and\n``exclusion_filters``, it will not be restored.\n\nAttributes:\n    inclusion_filters (MutableSequence[google.cloud.gke_backup_v1.types.ResourceSelector]):\n        Optional. Selects resources for restoration. If specified,\n        only resources which match ``inclusion_filters`` will be\n        selected for restoration. A resource will be selected if it\n        matches any ``ResourceSelector`` of the\n        ``inclusion_filters``.\n    exclusion_filters (MutableSequence[google.cloud.gke_backup_v1.types.ResourceSelector]):\n        Optional. Excludes resources from restoration. If specified,\n        a resource will not be restored if it matches any\n        ``ResourceSelector`` of the ``exclusion_filters``.",
+      "attributes": {
+        "inclusion_filters": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.ResourceSelector]",
+          "description": "Optional. Selects resources for restoration. If specified, only resources which match ``inclusion_filters`` will be selected for restoration. A resource will be selected if it matches any ``ResourceSelector`` of the ``inclusion_filters``."
+        },
+        "exclusion_filters": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.ResourceSelector]",
+          "description": "Optional. Excludes resources from restoration. If specified, a resource will not be restored if it matches any ``ResourceSelector`` of the ``exclusion_filters``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GroupKind",
+      "docstring": "This is a direct map to the Kubernetes GroupKind type\n`GroupKind <https://godoc.org/k8s.io/apimachinery/pkg/runtime/schema#GroupKind>`__\nand is used for identifying specific \"types\" of resources to\nrestore.\n\nAttributes:\n    resource_group (str):\n        Optional. API group string of a Kubernetes\n        resource, e.g. \"apiextensions.k8s.io\",\n        \"storage.k8s.io\", etc. Note: use empty string\n        for core API group\n    resource_kind (str):\n        Optional. Kind of a Kubernetes resource, must\n        be in UpperCamelCase (PascalCase) and singular\n        form. E.g. \"CustomResourceDefinition\",\n        \"StorageClass\", etc.",
+      "attributes": {
+        "resource_group": {
+          "type": "str",
+          "description": "Optional. API group string of a Kubernetes resource, e.g. \"apiextensions.k8s.io\", \"storage.k8s.io\", etc. Note: use empty string for core API group"
+        },
+        "resource_kind": {
+          "type": "str",
+          "description": "Optional. Kind of a Kubernetes resource, must be in UpperCamelCase (PascalCase) and singular form. E.g. \"CustomResourceDefinition\", \"StorageClass\", etc."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ClusterResourceRestoreScope",
+      "docstring": "Defines the scope of cluster-scoped resources to restore.\n\nSome group kinds are not reasonable choices for a restore, and\nwill cause an error if selected here. Any scope selection that\nwould restore \"all valid\" resources automatically excludes these\ngroup kinds.\n- gkebackup.gke.io/BackupJob\n- gkebackup.gke.io/RestoreJob\n- metrics.k8s.io/NodeMetrics\n- migration.k8s.io/StorageState\n- migration.k8s.io/StorageVersionMigration\n- Node\n- snapshot.storage.k8s.io/VolumeSnapshotContent\n- storage.k8s.io/CSINode\n\nSome group kinds are driven by restore configuration elsewhere,\nand will cause an error if selected here.\n- Namespace\n- PersistentVolume\n\nAttributes:\n    selected_group_kinds (MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]):\n        Optional. A list of cluster-scoped resource\n        group kinds to restore from the backup. If\n        specified, only the selected resources will be\n        restored. Mutually exclusive to any other field\n        in the message.\n    excluded_group_kinds (M",
+      "attributes": {
+        "selected_group_kinds": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]",
+          "description": "Optional. A list of cluster-scoped resource group kinds to restore from the backup. If specified, only the selected resources will be restored. Mutually exclusive to any other field in the message."
+        },
+        "excluded_group_kinds": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]",
+          "description": "Optional. A list of cluster-scoped resource group kinds to NOT restore from the backup. If specified, all valid cluster-scoped resources will be restored except for those specified in the list. Mutually exclusive to any other field in the message."
+        },
+        "all_group_kinds": {
+          "type": "bool",
+          "description": "Optional. If True, all valid cluster-scoped resources will be restored. Mutually exclusive to any other field in the message."
+        },
+        "no_group_kinds": {
+          "type": "bool",
+          "description": "Optional. If True, no cluster-scoped resources will be restored. This has the same restore scope as if the message is not defined. Mutually exclusive to any other field in the message."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SubstitutionRule",
+      "docstring": "A transformation rule to be applied against Kubernetes\nresources as they are selected for restoration from a Backup. A\nrule contains both filtering logic (which resources are subject\nto substitution) and substitution logic.\n\nAttributes:\n    target_namespaces (MutableSequence[str]):\n        Optional. (Filtering parameter) Any resource\n        subject to substitution must be contained within\n        one of the listed Kubernetes Namespace in the\n        Backup. If this field is not provided, no\n        namespace filtering will be performed (all\n        resources in all Namespaces, including all\n        cluster-scoped resources, will be candidates for\n        substitution).\n        To mix cluster-scoped and namespaced resources\n        in the same rule, use an empty string (\"\") as\n        one of the target namespaces.\n    target_group_kinds (MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]):\n        Optional. (Filtering parameter) Any resource\n        subject to substitution must belong t",
+      "attributes": {
+        "target_namespaces": {
+          "type": "MutableSequence[str]",
+          "description": "Optional. (Filtering parameter) Any resource subject to substitution must be contained within one of the listed Kubernetes Namespace in the Backup. If this field is not provided, no namespace filtering will be performed (all resources in all Namespaces, including all cluster-scoped resources, will be candidates for substitution). To mix cluster-scoped and namespaced resources in the same rule, use an empty string (\"\") as one of the target namespaces."
+        },
+        "target_group_kinds": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]",
+          "description": "Optional. (Filtering parameter) Any resource subject to substitution must belong to one of the listed \"types\". If this field is not provided, no type filtering will be performed (all resources of all types matching previous filtering parameters will be candidates for substitution)."
+        },
+        "target_json_path": {
+          "type": "str",
+          "description": "Required. This is a [JSONPath] (https://kubernetes.io/docs/reference/kubectl/jsonpath/) expression that matches specific fields of candidate resources and it operates as both a filtering parameter (resources that are not matched with this expression will not be candidates for substitution) as well as a field identifier (identifies exactly which fields out of the candidate resources will be modified)."
+        },
+        "original_value_pattern": {
+          "type": "str",
+          "description": "Optional. (Filtering parameter) This is a [regular expression] (https://en.wikipedia.org/wiki/Regular_expression) that is compared against the fields matched by the target_json_path expression (and must also have passed the previous filters). Substitution will not be performed against fields whose value does not match this expression. If this field is NOT specified, then ALL fields matched by the target_json_path expression will undergo substitution. Note that an empty (e.g., \"\", rather than unspecified) value for this field will only match empty fields."
+        },
+        "new_value": {
+          "type": "str",
+          "description": "Optional. This is the new value to set for any fields that pass the filtering and selection criteria. To remove a value from a Kubernetes resource, either leave this field unspecified, or set it to the empty string (\"\")."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "TransformationRuleAction",
+      "docstring": "TransformationRuleAction defines a TransformationRule action\nbased on the JSON Patch RFC\n(https://www.rfc-editor.org/rfc/rfc6902)\n\nAttributes:\n    op (google.cloud.gke_backup_v1.types.RestoreConfig.TransformationRuleAction.Op):\n        Required. op specifies the operation to\n        perform.\n    from_path (str):\n        Optional. A string containing a JSON Pointer\n        value that references the location in the target\n        document to move the value from.\n    path (str):\n        Optional. A string containing a JSON-Pointer\n        value that references a location within the\n        target document where the operation is\n        performed.\n    value (str):\n        Optional. A string that specifies the desired\n        value in string format to use for\n        transformation.",
+      "attributes": {
+        "op": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.TransformationRuleAction.Op",
+          "description": "Required. op specifies the operation to perform."
+        },
+        "from_path": {
+          "type": "str",
+          "description": "Optional. A string containing a JSON Pointer value that references the location in the target document to move the value from."
+        },
+        "path": {
+          "type": "str",
+          "description": "Optional. A string containing a JSON-Pointer value that references a location within the target document where the operation is performed."
+        },
+        "value": {
+          "type": "str",
+          "description": "Optional. A string that specifies the desired value in string format to use for transformation."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ResourceFilter",
+      "docstring": "ResourceFilter specifies matching criteria to limit the scope\nof a change to a specific set of kubernetes resources that are\nselected for restoration from a backup.\n\nAttributes:\n    namespaces (MutableSequence[str]):\n        Optional. (Filtering parameter) Any resource\n        subject to transformation must be contained\n        within one of the listed Kubernetes Namespace in\n        the Backup. If this field is not provided, no\n        namespace filtering will be performed (all\n        resources in all Namespaces, including all\n        cluster-scoped resources, will be candidates for\n        transformation).\n    group_kinds (MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]):\n        Optional. (Filtering parameter) Any resource\n        subject to transformation must belong to one of\n        the listed \"types\". If this field is not\n        provided, no type filtering will be performed\n        (all resources of all types matching previous\n        filtering parameters will be candidates ",
+      "attributes": {
+        "namespaces": {
+          "type": "MutableSequence[str]",
+          "description": "Optional. (Filtering parameter) Any resource subject to transformation must be contained within one of the listed Kubernetes Namespace in the Backup. If this field is not provided, no namespace filtering will be performed (all resources in all Namespaces, including all cluster-scoped resources, will be candidates for transformation)."
+        },
+        "group_kinds": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind]",
+          "description": "Optional. (Filtering parameter) Any resource subject to transformation must belong to one of the listed \"types\". If this field is not provided, no type filtering will be performed (all resources of all types matching previous filtering parameters will be candidates for transformation)."
+        },
+        "json_path": {
+          "type": "str",
+          "description": "Optional. This is a [JSONPath] (https://github.com/json-path/JsonPath/blob/master/README.md) expression that matches specific fields of candidate resources and it operates as a filtering parameter (resources that are not matched with this expression will not be candidates for transformation)."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "TransformationRule",
+      "docstring": "A transformation rule to be applied against Kubernetes\nresources as they are selected for restoration from a Backup. A\nrule contains both filtering logic (which resources are subject\nto transform) and transformation logic.\n\nAttributes:\n    field_actions (MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.TransformationRuleAction]):\n        Required. A list of transformation rule\n        actions to take against candidate resources.\n        Actions are executed in order defined - this\n        order matters, as they could potentially\n        interfere with each other and the first\n        operation could affect the outcome of the second\n        operation.\n    resource_filter (google.cloud.gke_backup_v1.types.RestoreConfig.ResourceFilter):\n        Optional. This field is used to specify a set\n        of fields that should be used to determine which\n        resources in backup should be acted upon by the\n        supplied transformation rule actions, and this\n        will ensure that only specific resou",
+      "attributes": {
+        "field_actions": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.TransformationRuleAction]",
+          "description": "Required. A list of transformation rule actions to take against candidate resources. Actions are executed in order defined - this order matters, as they could potentially interfere with each other and the first operation could affect the outcome of the second operation."
+        },
+        "resource_filter": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.ResourceFilter",
+          "description": "Optional. This field is used to specify a set of fields that should be used to determine which resources in backup should be acted upon by the supplied transformation rule actions, and this will ensure that only specific resources are affected by transformation rule actions."
+        },
+        "description": {
+          "type": "str",
+          "description": "Optional. The description is a user specified string description of the transformation rule."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "VolumeDataRestorePolicyBinding",
+      "docstring": "Binds resources in the scope to the given\nVolumeDataRestorePolicy.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    policy (google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicy):\n        Required. The VolumeDataRestorePolicy to\n        apply when restoring volumes in scope.\n    volume_type (google.cloud.gke_backup_v1.types.VolumeTypeEnum.VolumeType):\n        The volume type, as determined by the PVC's\n        bound PV, to apply the policy to.\n\n        This field is a member of `oneof`_ ``scope``.",
+      "attributes": {
+        "policy": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.VolumeDataRestorePolicy",
+          "description": "Required. The VolumeDataRestorePolicy to apply when restoring volumes in scope."
+        },
+        "volume_type": {
+          "type": "google.cloud.gke_backup_v1.types.VolumeTypeEnum.VolumeType",
+          "description": "The volume type, as determined by the PVC's bound PV, to apply the policy to.  This field is a member of `oneof`_ ``scope``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RestoreOrder",
+      "docstring": "Allows customers to specify dependencies between resources\nthat Backup for GKE can use to compute a resasonable restore\norder.\n\nAttributes:\n    group_kind_dependencies (MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.RestoreOrder.GroupKindDependency]):\n        Optional. Contains a list of group kind\n        dependency pairs provided by the customer, that\n        is used by Backup for GKE to generate a group\n        kind restore order.",
+      "attributes": {
+        "group_kind_dependencies": {
+          "type": "MutableSequence[google.cloud.gke_backup_v1.types.RestoreConfig.RestoreOrder.GroupKindDependency]",
+          "description": "Optional. Contains a list of group kind dependency pairs provided by the customer, that is used by Backup for GKE to generate a group kind restore order."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GroupKindDependency",
+      "docstring": "Defines a dependency between two group kinds.\n\nAttributes:\n    satisfying (google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind):\n        Required. The satisfying group kind must be\n        restored first in order to satisfy the\n        dependency.\n    requiring (google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind):\n        Required. The requiring group kind requires\n        that the other group kind be restored first.",
+      "attributes": {
+        "satisfying": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind",
+          "description": "Required. The satisfying group kind must be restored first in order to satisfy the dependency."
+        },
+        "requiring": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig.GroupKind",
+          "description": "Required. The requiring group kind requires that the other group kind be restored first."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\restore_plan.py": [
+    {
+      "type": "request_class",
+      "name": "RestorePlan",
+      "docstring": "The configuration of a potential series of Restore operations\nto be performed against Backups belong to a particular\nBackupPlan.\n\nAttributes:\n    name (str):\n        Output only. The full name of the RestorePlan resource.\n        Format: ``projects/*/locations/*/restorePlans/*``.\n    uid (str):\n        Output only. Server generated global unique identifier of\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__\n        format.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        RestorePlan resource was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        RestorePlan resource was last updated.\n    description (str):\n        Optional. User specified descriptive string\n        for this RestorePlan.\n    backup_plan (str):\n        Required. Immutable. A reference to the\n        [BackupPlan][google.cloud.gkebackup.v1.BackupPlan] from\n        which Backups may be u",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The full name of the RestorePlan resource. Format: ``projects/*/locations/*/restorePlans/*``."
+        },
+        "uid": {
+          "type": "str",
+          "description": "Output only. Server generated global unique identifier of `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__ format."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this RestorePlan resource was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this RestorePlan resource was last updated."
+        },
+        "description": {
+          "type": "str",
+          "description": "Optional. User specified descriptive string for this RestorePlan."
+        },
+        "backup_plan": {
+          "type": "str",
+          "description": "Required. Immutable. A reference to the [BackupPlan][google.cloud.gkebackup.v1.BackupPlan] from which Backups may be used as the source for Restores created via this RestorePlan. Format: ``projects/*/locations/*/backupPlans/*``."
+        },
+        "cluster": {
+          "type": "str",
+          "description": "Required. Immutable. The target cluster into which Restores created via this RestorePlan will restore data. NOTE: the cluster's region must be the same as the RestorePlan. Valid formats:  -  ``projects/*/locations/*/clusters/*`` -  ``projects/*/zones/*/clusters/*``"
+        },
+        "restore_config": {
+          "type": "google.cloud.gke_backup_v1.types.RestoreConfig",
+          "description": "Required. Configuration of Restores created via this RestorePlan."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. A set of custom labels supplied by user."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. ``etag`` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a restore from overwriting each other. It is strongly suggested that systems make use of the ``etag`` in the read-modify-write cycle to perform restore updates in order to avoid race conditions: An ``etag`` is returned in the response to ``GetRestorePlan``, and systems are expected to put that etag in the request to ``UpdateRestorePlan`` or ``DeleteRestorePlan`` to ensure that their change will be applied to the same version of the resource."
+        },
+        "state": {
+          "type": "google.cloud.gke_backup_v1.types.RestorePlan.State",
+          "description": "Output only. State of the RestorePlan. This State field reflects the various stages a RestorePlan can be in during the Create operation."
+        },
+        "state_reason": {
+          "type": "str",
+          "description": "Output only. Human-readable description of why RestorePlan is in the current ``state``"
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-backup\\google\\cloud\\gke_backup_v1\\types\\volume.py": [
+    {
+      "type": "request_class",
+      "name": "VolumeBackup",
+      "docstring": "Represents the backup of a specific persistent volume as a\ncomponent of a Backup - both the record of the operation and a\npointer to the underlying storage-specific artifacts.\n\nAttributes:\n    name (str):\n        Output only. The full name of the VolumeBackup resource.\n        Format:\n        ``projects/*/locations/*/backupPlans/*/backups/*/volumeBackups/*``.\n    uid (str):\n        Output only. Server generated global unique identifier of\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__\n        format.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        VolumeBackup resource was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        VolumeBackup resource was last updated.\n    source_pvc (google.cloud.gke_backup_v1.types.NamespacedName):\n        Output only. A reference to the source\n        Kubernetes PVC from which this VolumeBackup was\n        created.\n ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The full name of the VolumeBackup resource. Format: ``projects/*/locations/*/backupPlans/*/backups/*/volumeBackups/*``."
+        },
+        "uid": {
+          "type": "str",
+          "description": "Output only. Server generated global unique identifier of `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__ format."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this VolumeBackup resource was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this VolumeBackup resource was last updated."
+        },
+        "source_pvc": {
+          "type": "google.cloud.gke_backup_v1.types.NamespacedName",
+          "description": "Output only. A reference to the source Kubernetes PVC from which this VolumeBackup was created."
+        },
+        "volume_backup_handle": {
+          "type": "str",
+          "description": "Output only. A storage system-specific opaque handle to the underlying volume backup."
+        },
+        "format_": {
+          "type": "google.cloud.gke_backup_v1.types.VolumeBackup.VolumeBackupFormat",
+          "description": "Output only. The format used for the volume backup."
+        },
+        "storage_bytes": {
+          "type": "int",
+          "description": "Output only. The aggregate size of the underlying artifacts associated with this VolumeBackup in the backup storage. This may change over time when multiple backups of the same volume share the same backup storage location. In particular, this is likely to increase in size when the immediately preceding backup of the same volume is deleted."
+        },
+        "disk_size_bytes": {
+          "type": "int",
+          "description": "Output only. The minimum size of the disk to which this VolumeBackup can be restored."
+        },
+        "complete_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when the associated underlying volume backup operation completed."
+        },
+        "state": {
+          "type": "google.cloud.gke_backup_v1.types.VolumeBackup.State",
+          "description": "Output only. The current state of this VolumeBackup."
+        },
+        "state_message": {
+          "type": "str",
+          "description": "Output only. A human readable message explaining why the VolumeBackup is in its current state."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. ``etag`` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a volume backup from overwriting each other. It is strongly suggested that systems make use of the ``etag`` in the read-modify-write cycle to perform volume backup updates in order to avoid race conditions."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "VolumeRestore",
+      "docstring": "Represents the operation of restoring a volume from a\nVolumeBackup.\n\nAttributes:\n    name (str):\n        Output only. Full name of the VolumeRestore resource.\n        Format:\n        ``projects/*/locations/*/restorePlans/*/restores/*/volumeRestores/*``\n    uid (str):\n        Output only. Server generated global unique identifier of\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__\n        format.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        VolumeRestore resource was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp when this\n        VolumeRestore resource was last updated.\n    volume_backup (str):\n        Output only. The full name of the VolumeBackup from which\n        the volume will be restored. Format:\n        ``projects/*/locations/*/backupPlans/*/backups/*/volumeBackups/*``.\n    target_pvc (google.cloud.gke_backup_v1.types.NamespacedName):\n        Output o",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Full name of the VolumeRestore resource. Format: ``projects/*/locations/*/restorePlans/*/restores/*/volumeRestores/*``"
+        },
+        "uid": {
+          "type": "str",
+          "description": "Output only. Server generated global unique identifier of `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier>`__ format."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this VolumeRestore resource was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when this VolumeRestore resource was last updated."
+        },
+        "volume_backup": {
+          "type": "str",
+          "description": "Output only. The full name of the VolumeBackup from which the volume will be restored. Format: ``projects/*/locations/*/backupPlans/*/backups/*/volumeBackups/*``."
+        },
+        "target_pvc": {
+          "type": "google.cloud.gke_backup_v1.types.NamespacedName",
+          "description": "Output only. The reference to the target Kubernetes PVC to be restored."
+        },
+        "volume_handle": {
+          "type": "str",
+          "description": "Output only. A storage system-specific opaque handler to the underlying volume created for the target PVC from the volume backup."
+        },
+        "volume_type": {
+          "type": "google.cloud.gke_backup_v1.types.VolumeRestore.VolumeType",
+          "description": "Output only. The type of volume provisioned"
+        },
+        "complete_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp when the associated underlying volume restoration completed."
+        },
+        "state": {
+          "type": "google.cloud.gke_backup_v1.types.VolumeRestore.State",
+          "description": "Output only. The current state of this VolumeRestore."
+        },
+        "state_message": {
+          "type": "str",
+          "description": "Output only. A human readable message explaining why the VolumeRestore is in its current state."
+        },
+        "etag": {
+          "type": "str",
+          "description": "Output only. ``etag`` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a volume restore from overwriting each other. It is strongly suggested that systems make use of the ``etag`` in the read-modify-write cycle to perform volume restore updates in order to avoid race conditions."
+        }
+      }
+    }
+  ]
+}

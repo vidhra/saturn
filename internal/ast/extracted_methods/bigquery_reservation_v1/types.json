@@ -1,0 +1,607 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-reservation\\google\\cloud\\bigquery_reservation_v1\\types\\reservation.py": [
+    {
+      "type": "request_class",
+      "name": "Reservation",
+      "docstring": "A reservation is a mechanism used to guarantee slots to\nusers.\n\nAttributes:\n    name (str):\n        The resource name of the reservation, e.g.,\n        ``projects/*/locations/*/reservations/team1-prod``. The\n        reservation_id must only contain lower case alphanumeric\n        characters or dashes. It must start with a letter and must\n        not end with a dash. Its maximum length is 64 characters.\n    slot_capacity (int):\n        Minimum slots available to this reservation. A slot is a\n        unit of computational power in BigQuery, and serves as the\n        unit of parallelism.\n\n        Queries using this reservation might use more slots during\n        runtime if ignore_idle_slots is set to false.\n\n        If total slot_capacity of the reservation and its siblings\n        exceeds the total slot_count of all capacity commitments,\n        the request will fail with\n        ``google.rpc.Code.RESOURCE_EXHAUSTED``.\n\n        NOTE: for reservations in US or EU multi-regions, slot\n        capacity constraints ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The resource name of the reservation, e.g., ``projects/*/locations/*/reservations/team1-prod``. The reservation_id must only contain lower case alphanumeric characters or dashes. It must start with a letter and must not end with a dash. Its maximum length is 64 characters."
+        },
+        "slot_capacity": {
+          "type": "int",
+          "description": "Minimum slots available to this reservation. A slot is a unit of computational power in BigQuery, and serves as the unit of parallelism.  Queries using this reservation might use more slots during runtime if ignore_idle_slots is set to false.  If total slot_capacity of the reservation and its siblings exceeds the total slot_count of all capacity commitments, the request will fail with ``google.rpc.Code.RESOURCE_EXHAUSTED``.  NOTE: for reservations in US or EU multi-regions, slot capacity constraints are checked separately for default and auxiliary regions. See multi_region_auxiliary flag for more details."
+        },
+        "ignore_idle_slots": {
+          "type": "bool",
+          "description": "If false, any query or pipeline job using this reservation will use idle slots from other reservations within the same admin project. If true, a query or pipeline job using this reservation will execute with the slot capacity specified in the slot_capacity field at most."
+        },
+        "autoscale": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Reservation.Autoscale",
+          "description": "The configuration parameters for the auto scaling feature. Note this is an alpha feature."
+        },
+        "concurrency": {
+          "type": "int",
+          "description": "Job concurrency target which sets a soft upper bound on the number of jobs that can run concurrently in this reservation. This is a soft target due to asynchronous nature of the system and various optimizations for small queries. Default value is 0 which means that concurrency target will be automatically computed by the system. NOTE: this field is exposed as ``target_job_concurrency`` in the Information Schema, DDL and BQ CLI."
+        },
+        "creation_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Creation time of the reservation."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Last update time of the reservation."
+        },
+        "multi_region_auxiliary": {
+          "type": "bool",
+          "description": "Applicable only for reservations located within one of the BigQuery multi-regions (US or EU).  If set to true, this reservation is placed in the organization's secondary region which is designated for disaster recovery purposes. If false, this reservation is placed in the organization's default region.  NOTE: this is a preview feature. Project must be allow-listed in order to set this field."
+        },
+        "edition": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Edition",
+          "description": "Edition of the reservation."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CapacityCommitment",
+      "docstring": "Capacity commitment is a way to purchase compute capacity for\nBigQuery jobs (in the form of slots) with some committed period\nof usage. Annual commitments renew by default. Commitments can\nbe removed after their commitment end time passes.\n\nIn order to remove annual commitment, its plan needs to be\nchanged to monthly or flex first.\n\nA capacity commitment resource exists as a child resource of the\nadmin project.\n\nAttributes:\n    name (str):\n        Output only. The resource name of the capacity commitment,\n        e.g.,\n        ``projects/myproject/locations/US/capacityCommitments/123``\n        The commitment_id must only contain lower case alphanumeric\n        characters or dashes. It must start with a letter and must\n        not end with a dash. Its maximum length is 64 characters.\n    slot_count (int):\n        Number of slots in this commitment.\n    plan (google.cloud.bigquery_reservation_v1.types.CapacityCommitment.CommitmentPlan):\n        Capacity commitment commitment plan.\n    state (google.cloud.bigque",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. The resource name of the capacity commitment, e.g., ``projects/myproject/locations/US/capacityCommitments/123`` The commitment_id must only contain lower case alphanumeric characters or dashes. It must start with a letter and must not end with a dash. Its maximum length is 64 characters."
+        },
+        "slot_count": {
+          "type": "int",
+          "description": "Number of slots in this commitment."
+        },
+        "plan": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment.CommitmentPlan",
+          "description": "Capacity commitment commitment plan."
+        },
+        "state": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment.State",
+          "description": "Output only. State of the commitment."
+        },
+        "commitment_start_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The start of the current commitment period. It is applicable only for ACTIVE capacity commitments."
+        },
+        "commitment_end_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The end of the current commitment period. It is applicable only for ACTIVE capacity commitments."
+        },
+        "failure_status": {
+          "type": "google.rpc.status_pb2.Status",
+          "description": "Output only. For FAILED commitment plan, provides the reason of failure."
+        },
+        "renewal_plan": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment.CommitmentPlan",
+          "description": "The plan this capacity commitment is converted to after commitment_end_time passes. Once the plan is changed, committed period is extended according to commitment plan. Only applicable for ANNUAL and TRIAL commitments."
+        },
+        "multi_region_auxiliary": {
+          "type": "bool",
+          "description": "Applicable only for commitments located within one of the BigQuery multi-regions (US or EU).  If set to true, this commitment is placed in the organization's secondary region which is designated for disaster recovery purposes. If false, this commitment is placed in the organization's default region.  NOTE: this is a preview feature. Project must be allow-listed in order to set this field."
+        },
+        "edition": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Edition",
+          "description": "Edition of the capacity commitment."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateReservationRequest",
+      "docstring": "The request for\n[ReservationService.CreateReservation][google.cloud.bigquery.reservation.v1.ReservationService.CreateReservation].\n\nAttributes:\n    parent (str):\n        Required. Project, location. E.g.,\n        ``projects/myproject/locations/US``\n    reservation_id (str):\n        The reservation ID. It must only contain\n        lower case alphanumeric characters or dashes. It\n        must start with a letter and must not end with a\n        dash. Its maximum length is 64 characters.\n    reservation (google.cloud.bigquery_reservation_v1.types.Reservation):\n        Definition of the new reservation to create.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Project, location. E.g., ``projects/myproject/locations/US``"
+        },
+        "reservation_id": {
+          "type": "str",
+          "description": "The reservation ID. It must only contain lower case alphanumeric characters or dashes. It must start with a letter and must not end with a dash. Its maximum length is 64 characters."
+        },
+        "reservation": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Reservation",
+          "description": "Definition of the new reservation to create."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListReservationsRequest",
+      "docstring": "The request for\n[ReservationService.ListReservations][google.cloud.bigquery.reservation.v1.ReservationService.ListReservations].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name containing project and\n        location, e.g.: ``projects/myproject/locations/US``\n    page_size (int):\n        The maximum number of items to return per\n        page.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource name containing project and location, e.g.: ``projects/myproject/locations/US``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "The maximum number of items to return per page."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "The next_page_token value returned from a previous List request, if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListReservationsResponse",
+      "docstring": "The response for\n[ReservationService.ListReservations][google.cloud.bigquery.reservation.v1.ReservationService.ListReservations].\n\nAttributes:\n    reservations (MutableSequence[google.cloud.bigquery_reservation_v1.types.Reservation]):\n        List of reservations visible to the user.\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.",
+      "attributes": {
+        "reservations": {
+          "type": "MutableSequence[google.cloud.bigquery_reservation_v1.types.Reservation]",
+          "description": "List of reservations visible to the user."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetReservationRequest",
+      "docstring": "The request for\n[ReservationService.GetReservation][google.cloud.bigquery.reservation.v1.ReservationService.GetReservation].\n\nAttributes:\n    name (str):\n        Required. Resource name of the reservation to retrieve.\n        E.g.,\n        ``projects/myproject/locations/US/reservations/team1-prod``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the reservation to retrieve. E.g., ``projects/myproject/locations/US/reservations/team1-prod``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteReservationRequest",
+      "docstring": "The request for\n[ReservationService.DeleteReservation][google.cloud.bigquery.reservation.v1.ReservationService.DeleteReservation].\n\nAttributes:\n    name (str):\n        Required. Resource name of the reservation to retrieve.\n        E.g.,\n        ``projects/myproject/locations/US/reservations/team1-prod``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the reservation to retrieve. E.g., ``projects/myproject/locations/US/reservations/team1-prod``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateReservationRequest",
+      "docstring": "The request for\n[ReservationService.UpdateReservation][google.cloud.bigquery.reservation.v1.ReservationService.UpdateReservation].\n\nAttributes:\n    reservation (google.cloud.bigquery_reservation_v1.types.Reservation):\n        Content of the reservation to update.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Standard field mask for the set of fields to\n        be updated.",
+      "attributes": {
+        "reservation": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Reservation",
+          "description": "Content of the reservation to update."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Standard field mask for the set of fields to be updated."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateCapacityCommitmentRequest",
+      "docstring": "The request for\n[ReservationService.CreateCapacityCommitment][google.cloud.bigquery.reservation.v1.ReservationService.CreateCapacityCommitment].\n\nAttributes:\n    parent (str):\n        Required. Resource name of the parent reservation. E.g.,\n        ``projects/myproject/locations/US``\n    capacity_commitment (google.cloud.bigquery_reservation_v1.types.CapacityCommitment):\n        Content of the capacity commitment to create.\n    enforce_single_admin_project_per_org (bool):\n        If true, fail the request if another project\n        in the organization has a capacity commitment.\n    capacity_commitment_id (str):\n        The optional capacity commitment ID. Capacity\n        commitment name will be generated automatically\n        if this field is empty. This field must only\n        contain lower case alphanumeric characters or\n        dashes. The first and last character cannot be a\n        dash. Max length is 64 characters. NOTE: this ID\n        won't be kept if the capacity commitment is\n        split or merge",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Resource name of the parent reservation. E.g., ``projects/myproject/locations/US``"
+        },
+        "capacity_commitment": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment",
+          "description": "Content of the capacity commitment to create."
+        },
+        "enforce_single_admin_project_per_org": {
+          "type": "bool",
+          "description": "If true, fail the request if another project in the organization has a capacity commitment."
+        },
+        "capacity_commitment_id": {
+          "type": "str",
+          "description": "The optional capacity commitment ID. Capacity commitment name will be generated automatically if this field is empty. This field must only contain lower case alphanumeric characters or dashes. The first and last character cannot be a dash. Max length is 64 characters. NOTE: this ID won't be kept if the capacity commitment is split or merged."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListCapacityCommitmentsRequest",
+      "docstring": "The request for\n[ReservationService.ListCapacityCommitments][google.cloud.bigquery.reservation.v1.ReservationService.ListCapacityCommitments].\n\nAttributes:\n    parent (str):\n        Required. Resource name of the parent reservation. E.g.,\n        ``projects/myproject/locations/US``\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Resource name of the parent reservation. E.g., ``projects/myproject/locations/US``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "The maximum number of items to return."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "The next_page_token value returned from a previous List request, if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListCapacityCommitmentsResponse",
+      "docstring": "The response for\n[ReservationService.ListCapacityCommitments][google.cloud.bigquery.reservation.v1.ReservationService.ListCapacityCommitments].\n\nAttributes:\n    capacity_commitments (MutableSequence[google.cloud.bigquery_reservation_v1.types.CapacityCommitment]):\n        List of capacity commitments visible to the\n        user.\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.",
+      "attributes": {
+        "capacity_commitments": {
+          "type": "MutableSequence[google.cloud.bigquery_reservation_v1.types.CapacityCommitment]",
+          "description": "List of capacity commitments visible to the user."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetCapacityCommitmentRequest",
+      "docstring": "The request for\n[ReservationService.GetCapacityCommitment][google.cloud.bigquery.reservation.v1.ReservationService.GetCapacityCommitment].\n\nAttributes:\n    name (str):\n        Required. Resource name of the capacity commitment to\n        retrieve. E.g.,\n        ``projects/myproject/locations/US/capacityCommitments/123``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the capacity commitment to retrieve. E.g., ``projects/myproject/locations/US/capacityCommitments/123``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteCapacityCommitmentRequest",
+      "docstring": "The request for\n[ReservationService.DeleteCapacityCommitment][google.cloud.bigquery.reservation.v1.ReservationService.DeleteCapacityCommitment].\n\nAttributes:\n    name (str):\n        Required. Resource name of the capacity commitment to\n        delete. E.g.,\n        ``projects/myproject/locations/US/capacityCommitments/123``\n    force (bool):\n        Can be used to force delete commitments even\n        if assignments exist. Deleting commitments with\n        assignments may cause queries to fail if they no\n        longer have access to slots.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the capacity commitment to delete. E.g., ``projects/myproject/locations/US/capacityCommitments/123``"
+        },
+        "force": {
+          "type": "bool",
+          "description": "Can be used to force delete commitments even if assignments exist. Deleting commitments with assignments may cause queries to fail if they no longer have access to slots."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateCapacityCommitmentRequest",
+      "docstring": "The request for\n[ReservationService.UpdateCapacityCommitment][google.cloud.bigquery.reservation.v1.ReservationService.UpdateCapacityCommitment].\n\nAttributes:\n    capacity_commitment (google.cloud.bigquery_reservation_v1.types.CapacityCommitment):\n        Content of the capacity commitment to update.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Standard field mask for the set of fields to\n        be updated.",
+      "attributes": {
+        "capacity_commitment": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment",
+          "description": "Content of the capacity commitment to update."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Standard field mask for the set of fields to be updated."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SplitCapacityCommitmentRequest",
+      "docstring": "The request for\n[ReservationService.SplitCapacityCommitment][google.cloud.bigquery.reservation.v1.ReservationService.SplitCapacityCommitment].\n\nAttributes:\n    name (str):\n        Required. The resource name e.g.,:\n        ``projects/myproject/locations/US/capacityCommitments/123``\n    slot_count (int):\n        Number of slots in the capacity commitment\n        after the split.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name e.g.,: ``projects/myproject/locations/US/capacityCommitments/123``"
+        },
+        "slot_count": {
+          "type": "int",
+          "description": "Number of slots in the capacity commitment after the split."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SplitCapacityCommitmentResponse",
+      "docstring": "The response for\n[ReservationService.SplitCapacityCommitment][google.cloud.bigquery.reservation.v1.ReservationService.SplitCapacityCommitment].\n\nAttributes:\n    first (google.cloud.bigquery_reservation_v1.types.CapacityCommitment):\n        First capacity commitment, result of a split.\n    second (google.cloud.bigquery_reservation_v1.types.CapacityCommitment):\n        Second capacity commitment, result of a\n        split.",
+      "attributes": {
+        "first": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment",
+          "description": "First capacity commitment, result of a split."
+        },
+        "second": {
+          "type": "google.cloud.bigquery_reservation_v1.types.CapacityCommitment",
+          "description": "Second capacity commitment, result of a split."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MergeCapacityCommitmentsRequest",
+      "docstring": "The request for\n[ReservationService.MergeCapacityCommitments][google.cloud.bigquery.reservation.v1.ReservationService.MergeCapacityCommitments].\n\nAttributes:\n    parent (str):\n        Parent resource that identifies admin project and location\n        e.g., ``projects/myproject/locations/us``\n    capacity_commitment_ids (MutableSequence[str]):\n        Ids of capacity commitments to merge.\n        These capacity commitments must exist under\n        admin project and location specified in the\n        parent.\n        ID is the last portion of capacity commitment\n        name e.g., 'abc' for\n        projects/myproject/locations/US/capacityCommitments/abc",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Parent resource that identifies admin project and location e.g., ``projects/myproject/locations/us``"
+        },
+        "capacity_commitment_ids": {
+          "type": "MutableSequence[str]",
+          "description": "Ids of capacity commitments to merge. These capacity commitments must exist under admin project and location specified in the parent. ID is the last portion of capacity commitment name e.g., 'abc' for projects/myproject/locations/US/capacityCommitments/abc"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Assignment",
+      "docstring": "An assignment allows a project to submit jobs\nof a certain type using slots from the specified reservation.\n\nAttributes:\n    name (str):\n        Output only. Name of the resource. E.g.:\n        ``projects/myproject/locations/US/reservations/team1-prod/assignments/123``.\n        The assignment_id must only contain lower case alphanumeric\n        characters or dashes and the max length is 64 characters.\n    assignee (str):\n        The resource which will use the reservation. E.g.\n        ``projects/myproject``, ``folders/123``, or\n        ``organizations/456``.\n    job_type (google.cloud.bigquery_reservation_v1.types.Assignment.JobType):\n        Which type of jobs will use the reservation.\n    state (google.cloud.bigquery_reservation_v1.types.Assignment.State):\n        Output only. State of the assignment.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Name of the resource. E.g.: ``projects/myproject/locations/US/reservations/team1-prod/assignments/123``. The assignment_id must only contain lower case alphanumeric characters or dashes and the max length is 64 characters."
+        },
+        "assignee": {
+          "type": "str",
+          "description": "The resource which will use the reservation. E.g. ``projects/myproject``, ``folders/123``, or ``organizations/456``."
+        },
+        "job_type": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Assignment.JobType",
+          "description": "Which type of jobs will use the reservation."
+        },
+        "state": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Assignment.State",
+          "description": "Output only. State of the assignment."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateAssignmentRequest",
+      "docstring": "The request for\n[ReservationService.CreateAssignment][google.cloud.bigquery.reservation.v1.ReservationService.CreateAssignment].\nNote: \"bigquery.reservationAssignments.create\" permission is\nrequired on the related assignee.\n\nAttributes:\n    parent (str):\n        Required. The parent resource name of the assignment E.g.\n        ``projects/myproject/locations/US/reservations/team1-prod``\n    assignment (google.cloud.bigquery_reservation_v1.types.Assignment):\n        Assignment resource to create.\n    assignment_id (str):\n        The optional assignment ID. Assignment name\n        will be generated automatically if this field is\n        empty. This field must only contain lower case\n        alphanumeric characters or dashes. Max length is\n        64 characters.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource name of the assignment E.g. ``projects/myproject/locations/US/reservations/team1-prod``"
+        },
+        "assignment": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Assignment",
+          "description": "Assignment resource to create."
+        },
+        "assignment_id": {
+          "type": "str",
+          "description": "The optional assignment ID. Assignment name will be generated automatically if this field is empty. This field must only contain lower case alphanumeric characters or dashes. Max length is 64 characters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListAssignmentsRequest",
+      "docstring": "The request for\n[ReservationService.ListAssignments][google.cloud.bigquery.reservation.v1.ReservationService.ListAssignments].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name e.g.:\n\n        ``projects/myproject/locations/US/reservations/team1-prod``\n\n        Or:\n\n        ``projects/myproject/locations/US/reservations/-``\n    page_size (int):\n        The maximum number of items to return per\n        page.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource name e.g.:  ``projects/myproject/locations/US/reservations/team1-prod``  Or:  ``projects/myproject/locations/US/reservations/-``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "The maximum number of items to return per page."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "The next_page_token value returned from a previous List request, if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListAssignmentsResponse",
+      "docstring": "The response for\n[ReservationService.ListAssignments][google.cloud.bigquery.reservation.v1.ReservationService.ListAssignments].\n\nAttributes:\n    assignments (MutableSequence[google.cloud.bigquery_reservation_v1.types.Assignment]):\n        List of assignments visible to the user.\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.",
+      "attributes": {
+        "assignments": {
+          "type": "MutableSequence[google.cloud.bigquery_reservation_v1.types.Assignment]",
+          "description": "List of assignments visible to the user."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteAssignmentRequest",
+      "docstring": "The request for\n[ReservationService.DeleteAssignment][google.cloud.bigquery.reservation.v1.ReservationService.DeleteAssignment].\nNote: \"bigquery.reservationAssignments.delete\" permission is\nrequired on the related assignee.\n\nAttributes:\n    name (str):\n        Required. Name of the resource, e.g.\n        ``projects/myproject/locations/US/reservations/team1-prod/assignments/123``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the resource, e.g. ``projects/myproject/locations/US/reservations/team1-prod/assignments/123``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SearchAssignmentsRequest",
+      "docstring": "The request for\n[ReservationService.SearchAssignments][google.cloud.bigquery.reservation.v1.ReservationService.SearchAssignments].\nNote: \"bigquery.reservationAssignments.search\" permission is\nrequired on the related assignee.\n\nAttributes:\n    parent (str):\n        Required. The resource name of the admin project(containing\n        project and location), e.g.:\n        ``projects/myproject/locations/US``.\n    query (str):\n        Please specify resource name as assignee in the query.\n\n        Examples:\n\n        -  ``assignee=projects/myproject``\n        -  ``assignee=folders/123``\n        -  ``assignee=organizations/456``\n    page_size (int):\n        The maximum number of items to return per\n        page.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the admin project(containing project and location), e.g.: ``projects/myproject/locations/US``."
+        },
+        "query": {
+          "type": "str",
+          "description": "Please specify resource name as assignee in the query.  Examples:  -  ``assignee=projects/myproject`` -  ``assignee=folders/123`` -  ``assignee=organizations/456``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "The maximum number of items to return per page."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "The next_page_token value returned from a previous List request, if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SearchAllAssignmentsRequest",
+      "docstring": "The request for\n[ReservationService.SearchAllAssignments][google.cloud.bigquery.reservation.v1.ReservationService.SearchAllAssignments].\nNote: \"bigquery.reservationAssignments.search\" permission is\nrequired on the related assignee.\n\nAttributes:\n    parent (str):\n        Required. The resource name with location (project name\n        could be the wildcard '-'), e.g.:\n        ``projects/-/locations/US``.\n    query (str):\n        Please specify resource name as assignee in the query.\n\n        Examples:\n\n        -  ``assignee=projects/myproject``\n        -  ``assignee=folders/123``\n        -  ``assignee=organizations/456``\n    page_size (int):\n        The maximum number of items to return per\n        page.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name with location (project name could be the wildcard '-'), e.g.: ``projects/-/locations/US``."
+        },
+        "query": {
+          "type": "str",
+          "description": "Please specify resource name as assignee in the query.  Examples:  -  ``assignee=projects/myproject`` -  ``assignee=folders/123`` -  ``assignee=organizations/456``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "The maximum number of items to return per page."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "The next_page_token value returned from a previous List request, if any."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SearchAssignmentsResponse",
+      "docstring": "The response for\n[ReservationService.SearchAssignments][google.cloud.bigquery.reservation.v1.ReservationService.SearchAssignments].\n\nAttributes:\n    assignments (MutableSequence[google.cloud.bigquery_reservation_v1.types.Assignment]):\n        List of assignments visible to the user.\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.",
+      "attributes": {
+        "assignments": {
+          "type": "MutableSequence[google.cloud.bigquery_reservation_v1.types.Assignment]",
+          "description": "List of assignments visible to the user."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SearchAllAssignmentsResponse",
+      "docstring": "The response for\n[ReservationService.SearchAllAssignments][google.cloud.bigquery.reservation.v1.ReservationService.SearchAllAssignments].\n\nAttributes:\n    assignments (MutableSequence[google.cloud.bigquery_reservation_v1.types.Assignment]):\n        List of assignments visible to the user.\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.",
+      "attributes": {
+        "assignments": {
+          "type": "MutableSequence[google.cloud.bigquery_reservation_v1.types.Assignment]",
+          "description": "List of assignments visible to the user."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MoveAssignmentRequest",
+      "docstring": "The request for\n[ReservationService.MoveAssignment][google.cloud.bigquery.reservation.v1.ReservationService.MoveAssignment].\n\n**Note**: \"bigquery.reservationAssignments.create\" permission is\nrequired on the destination_id.\n\n**Note**: \"bigquery.reservationAssignments.create\" and\n\"bigquery.reservationAssignments.delete\" permission are required on\nthe related assignee.\n\nAttributes:\n    name (str):\n        Required. The resource name of the assignment, e.g.\n        ``projects/myproject/locations/US/reservations/team1-prod/assignments/123``\n    destination_id (str):\n        The new reservation ID, e.g.:\n        ``projects/myotherproject/locations/US/reservations/team2-prod``\n    assignment_id (str):\n        The optional assignment ID. A new assignment\n        name is generated if this field is empty.\n\n        This field can contain only lowercase\n        alphanumeric characters or dashes. Max length is\n        64 characters.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The resource name of the assignment, e.g. ``projects/myproject/locations/US/reservations/team1-prod/assignments/123``"
+        },
+        "destination_id": {
+          "type": "str",
+          "description": "The new reservation ID, e.g.: ``projects/myotherproject/locations/US/reservations/team2-prod``"
+        },
+        "assignment_id": {
+          "type": "str",
+          "description": "The optional assignment ID. A new assignment name is generated if this field is empty.  This field can contain only lowercase alphanumeric characters or dashes. Max length is 64 characters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateAssignmentRequest",
+      "docstring": "The request for\n[ReservationService.UpdateAssignment][google.cloud.bigquery.reservation.v1.ReservationService.UpdateAssignment].\n\nAttributes:\n    assignment (google.cloud.bigquery_reservation_v1.types.Assignment):\n        Content of the assignment to update.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Standard field mask for the set of fields to\n        be updated.",
+      "attributes": {
+        "assignment": {
+          "type": "google.cloud.bigquery_reservation_v1.types.Assignment",
+          "description": "Content of the assignment to update."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Standard field mask for the set of fields to be updated."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "TableReference",
+      "docstring": "Fully qualified reference to BigQuery table.\nInternally stored as google.cloud.bi.v1.BqTableReference.\n\nAttributes:\n    project_id (str):\n        The assigned project ID of the project.\n    dataset_id (str):\n        The ID of the dataset in the above project.\n    table_id (str):\n        The ID of the table in the above dataset.",
+      "attributes": {
+        "project_id": {
+          "type": "str",
+          "description": "The assigned project ID of the project."
+        },
+        "dataset_id": {
+          "type": "str",
+          "description": "The ID of the dataset in the above project."
+        },
+        "table_id": {
+          "type": "str",
+          "description": "The ID of the table in the above dataset."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "BiReservation",
+      "docstring": "Represents a BI Reservation.\n\nAttributes:\n    name (str):\n        The resource name of the singleton BI reservation.\n        Reservation names have the form\n        ``projects/{project_id}/locations/{location_id}/biReservation``.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The last update timestamp of a\n        reservation.\n    size (int):\n        Size of a reservation, in bytes.\n    preferred_tables (MutableSequence[google.cloud.bigquery_reservation_v1.types.TableReference]):\n        Preferred tables to use BI capacity for.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The resource name of the singleton BI reservation. Reservation names have the form ``projects/{project_id}/locations/{location_id}/biReservation``."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The last update timestamp of a reservation."
+        },
+        "size": {
+          "type": "int",
+          "description": "Size of a reservation, in bytes."
+        },
+        "preferred_tables": {
+          "type": "MutableSequence[google.cloud.bigquery_reservation_v1.types.TableReference]",
+          "description": "Preferred tables to use BI capacity for."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetBiReservationRequest",
+      "docstring": "A request to get a singleton BI reservation.\n\nAttributes:\n    name (str):\n        Required. Name of the requested reservation, for example:\n        ``projects/{project_id}/locations/{location_id}/biReservation``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the requested reservation, for example: ``projects/{project_id}/locations/{location_id}/biReservation``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateBiReservationRequest",
+      "docstring": "A request to update a BI reservation.\n\nAttributes:\n    bi_reservation (google.cloud.bigquery_reservation_v1.types.BiReservation):\n        A reservation to update.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        A list of fields to be updated in this\n        request.",
+      "attributes": {
+        "bi_reservation": {
+          "type": "google.cloud.bigquery_reservation_v1.types.BiReservation",
+          "description": "A reservation to update."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "A list of fields to be updated in this request."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Autoscale",
+      "docstring": "Auto scaling settings.\n\nAttributes:\n    current_slots (int):\n        Output only. The slot capacity added to this reservation\n        when autoscale happens. Will be between [0, max_slots].\n    max_slots (int):\n        Number of slots to be scaled when needed.",
+      "attributes": {
+        "current_slots": {
+          "type": "int",
+          "description": "Output only. The slot capacity added to this reservation when autoscale happens. Will be between [0, max_slots]."
+        },
+        "max_slots": {
+          "type": "int",
+          "description": "Number of slots to be scaled when needed."
+        }
+      }
+    }
+  ]
+}
