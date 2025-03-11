@@ -1,0 +1,534 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-api-gateway\\google\\cloud\\apigateway_v1\\types\\apigateway.py": [
+    {
+      "type": "request_class",
+      "name": "Api",
+      "docstring": "An API that can be served by one or more Gateways.\n\nAttributes:\n    name (str):\n        Output only. Resource name of the API.\n        Format:\n        projects/{project}/locations/global/apis/{api}\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Created time.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Updated time.\n    labels (MutableMapping[str, str]):\n        Optional. Resource labels to represent\n        user-provided metadata. Refer to cloud\n        documentation on labels for more details.\n        https://cloud.google.com/compute/docs/labeling-resources\n    display_name (str):\n        Optional. Display name.\n    managed_service (str):\n        Optional. Immutable. The name of a Google\n        Managed Service (\n        https://cloud.google.com/service-infrastructure/docs/glossary#managed).\n        If not specified, a new Service will\n        automatically be created in the same project as\n        this API.\n    state (google.cloud.apigatew",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Resource name of the API. Format: projects/{project}/locations/global/apis/{api}"
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Created time."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Updated time."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. Resource labels to represent user-provided metadata. Refer to cloud documentation on labels for more details. https://cloud.google.com/compute/docs/labeling-resources"
+        },
+        "display_name": {
+          "type": "str",
+          "description": "Optional. Display name."
+        },
+        "managed_service": {
+          "type": "str",
+          "description": "Optional. Immutable. The name of a Google Managed Service ( https://cloud.google.com/service-infrastructure/docs/glossary#managed). If not specified, a new Service will automatically be created in the same project as this API."
+        },
+        "state": {
+          "type": "google.cloud.apigateway_v1.types.Api.State",
+          "description": "Output only. State of the API."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ApiConfig",
+      "docstring": "An API Configuration is a combination of settings for both\nthe Managed Service and Gateways serving this API Config.\n\nAttributes:\n    name (str):\n        Output only. Resource name of the API Config. Format:\n        projects/{project}/locations/global/apis/{api}/configs/{api_config}\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Created time.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Updated time.\n    labels (MutableMapping[str, str]):\n        Optional. Resource labels to represent\n        user-provided metadata. Refer to cloud\n        documentation on labels for more details.\n        https://cloud.google.com/compute/docs/labeling-resources\n    display_name (str):\n        Optional. Display name.\n    gateway_service_account (str):\n        Immutable. The Google Cloud IAM Service Account that\n        Gateways serving this config should use to authenticate to\n        other services. This may either be the Service Account's\n        email (``{AC",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Resource name of the API Config. Format: projects/{project}/locations/global/apis/{api}/configs/{api_config}"
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Created time."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Updated time."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. Resource labels to represent user-provided metadata. Refer to cloud documentation on labels for more details. https://cloud.google.com/compute/docs/labeling-resources"
+        },
+        "display_name": {
+          "type": "str",
+          "description": "Optional. Display name."
+        },
+        "gateway_service_account": {
+          "type": "str",
+          "description": "Immutable. The Google Cloud IAM Service Account that Gateways serving this config should use to authenticate to other services. This may either be the Service Account's email (``{ACCOUNT_ID}@{PROJECT}.iam.gserviceaccount.com``) or its full resource name (``projects/{PROJECT}/accounts/{UNIQUE_ID}``). This is most often used when the service is a GCP resource such as a Cloud Run Service or an IAP-secured service."
+        },
+        "service_config_id": {
+          "type": "str",
+          "description": "Output only. The ID of the associated Service Config ( https://cloud.google.com/service-infrastructure/docs/glossary#config)."
+        },
+        "state": {
+          "type": "google.cloud.apigateway_v1.types.ApiConfig.State",
+          "description": "Output only. State of the API Config."
+        },
+        "openapi_documents": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.ApiConfig.OpenApiDocument]",
+          "description": "Optional. OpenAPI specification documents. If specified, grpc_services and managed_service_configs must not be included."
+        },
+        "grpc_services": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.ApiConfig.GrpcServiceDefinition]",
+          "description": "Optional. gRPC service definition files. If specified, openapi_documents must not be included."
+        },
+        "managed_service_configs": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.ApiConfig.File]",
+          "description": "Optional. Service Configuration files. At least one must be included when using gRPC service definitions. See https://cloud.google.com/endpoints/docs/grpc/grpc-service-config#service_configuration_overview for the expected file contents.  If multiple files are specified, the files are merged with the following rules:  -  All singular scalar fields are merged using \"last one wins\" semantics in the order of the files uploaded. -  Repeated fields are concatenated. -  Singular embedded messages are merged using these rules for nested fields."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Gateway",
+      "docstring": "A Gateway is an API-aware HTTP proxy. It performs API-Method\nand/or API-Consumer specific actions based on an API Config such\nas authentication, policy enforcement, and backend selection.\n\nAttributes:\n    name (str):\n        Output only. Resource name of the Gateway.\n        Format:\n        projects/{project}/locations/{location}/gateways/{gateway}\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Created time.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Updated time.\n    labels (MutableMapping[str, str]):\n        Optional. Resource labels to represent\n        user-provided metadata. Refer to cloud\n        documentation on labels for more details.\n        https://cloud.google.com/compute/docs/labeling-resources\n    display_name (str):\n        Optional. Display name.\n    api_config (str):\n        Required. Resource name of the API Config for\n        this Gateway. Format:\n        projects/{project}/locations/global/apis/{api}/configs/{apiConfig}\n",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Resource name of the Gateway. Format: projects/{project}/locations/{location}/gateways/{gateway}"
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Created time."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. Updated time."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. Resource labels to represent user-provided metadata. Refer to cloud documentation on labels for more details. https://cloud.google.com/compute/docs/labeling-resources"
+        },
+        "display_name": {
+          "type": "str",
+          "description": "Optional. Display name."
+        },
+        "api_config": {
+          "type": "str",
+          "description": "Required. Resource name of the API Config for this Gateway. Format: projects/{project}/locations/global/apis/{api}/configs/{apiConfig}"
+        },
+        "state": {
+          "type": "google.cloud.apigateway_v1.types.Gateway.State",
+          "description": "Output only. The current state of the Gateway."
+        },
+        "default_hostname": {
+          "type": "str",
+          "description": "Output only. The default API Gateway host name of the form ``{gateway_id}-{hash}.{region_code}.gateway.dev``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListGatewaysRequest",
+      "docstring": "Request message for ApiGatewayService.ListGateways\n\nAttributes:\n    parent (str):\n        Required. Parent resource of the Gateway, of the form:\n        ``projects/*/locations/*``\n    page_size (int):\n        Page size.\n    page_token (str):\n        Page token.\n    filter (str):\n        Filter.\n    order_by (str):\n        Order by parameters.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Parent resource of the Gateway, of the form: ``projects/*/locations/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Page size."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Filter."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Order by parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListGatewaysResponse",
+      "docstring": "Response message for ApiGatewayService.ListGateways\n\nAttributes:\n    gateways (MutableSequence[google.cloud.apigateway_v1.types.Gateway]):\n        Gateways.\n    next_page_token (str):\n        Next page token.\n    unreachable_locations (MutableSequence[str]):\n        Locations that could not be reached.",
+      "attributes": {
+        "gateways": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.Gateway]",
+          "description": "Gateways."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Next page token."
+        },
+        "unreachable_locations": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetGatewayRequest",
+      "docstring": "Request message for ApiGatewayService.GetGateway\n\nAttributes:\n    name (str):\n        Required. Resource name of the form:\n        ``projects/*/locations/*/gateways/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the form: ``projects/*/locations/*/gateways/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateGatewayRequest",
+      "docstring": "Request message for ApiGatewayService.CreateGateway\n\nAttributes:\n    parent (str):\n        Required. Parent resource of the Gateway, of the form:\n        ``projects/*/locations/*``\n    gateway_id (str):\n        Required. Identifier to assign to the\n        Gateway. Must be unique within scope of the\n        parent resource.\n    gateway (google.cloud.apigateway_v1.types.Gateway):\n        Required. Gateway resource.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Parent resource of the Gateway, of the form: ``projects/*/locations/*``"
+        },
+        "gateway_id": {
+          "type": "str",
+          "description": "Required. Identifier to assign to the Gateway. Must be unique within scope of the parent resource."
+        },
+        "gateway": {
+          "type": "google.cloud.apigateway_v1.types.Gateway",
+          "description": "Required. Gateway resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateGatewayRequest",
+      "docstring": "Request message for ApiGatewayService.UpdateGateway\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Field mask is used to specify the fields to be overwritten\n        in the Gateway resource by the update. The fields specified\n        in the update_mask are relative to the resource, not the\n        full request. A field will be overwritten if it is in the\n        mask. If the user does not provide a mask then all fields\n        will be overwritten.\n    gateway (google.cloud.apigateway_v1.types.Gateway):\n        Required. Gateway resource.",
+      "attributes": {
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Field mask is used to specify the fields to be overwritten in the Gateway resource by the update. The fields specified in the update_mask are relative to the resource, not the full request. A field will be overwritten if it is in the mask. If the user does not provide a mask then all fields will be overwritten."
+        },
+        "gateway": {
+          "type": "google.cloud.apigateway_v1.types.Gateway",
+          "description": "Required. Gateway resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteGatewayRequest",
+      "docstring": "Request message for ApiGatewayService.DeleteGateway\n\nAttributes:\n    name (str):\n        Required. Resource name of the form:\n        ``projects/*/locations/*/gateways/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the form: ``projects/*/locations/*/gateways/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListApisRequest",
+      "docstring": "Request message for ApiGatewayService.ListApis\n\nAttributes:\n    parent (str):\n        Required. Parent resource of the API, of the form:\n        ``projects/*/locations/global``\n    page_size (int):\n        Page size.\n    page_token (str):\n        Page token.\n    filter (str):\n        Filter.\n    order_by (str):\n        Order by parameters.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Parent resource of the API, of the form: ``projects/*/locations/global``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Page size."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Filter."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Order by parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListApisResponse",
+      "docstring": "Response message for ApiGatewayService.ListApis\n\nAttributes:\n    apis (MutableSequence[google.cloud.apigateway_v1.types.Api]):\n        APIs.\n    next_page_token (str):\n        Next page token.\n    unreachable_locations (MutableSequence[str]):\n        Locations that could not be reached.",
+      "attributes": {
+        "apis": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.Api]",
+          "description": "APIs."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Next page token."
+        },
+        "unreachable_locations": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetApiRequest",
+      "docstring": "Request message for ApiGatewayService.GetApi\n\nAttributes:\n    name (str):\n        Required. Resource name of the form:\n        ``projects/*/locations/global/apis/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the form: ``projects/*/locations/global/apis/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateApiRequest",
+      "docstring": "Request message for ApiGatewayService.CreateApi\n\nAttributes:\n    parent (str):\n        Required. Parent resource of the API, of the form:\n        ``projects/*/locations/global``\n    api_id (str):\n        Required. Identifier to assign to the API.\n        Must be unique within scope of the parent\n        resource.\n    api (google.cloud.apigateway_v1.types.Api):\n        Required. API resource.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Parent resource of the API, of the form: ``projects/*/locations/global``"
+        },
+        "api_id": {
+          "type": "str",
+          "description": "Required. Identifier to assign to the API. Must be unique within scope of the parent resource."
+        },
+        "api": {
+          "type": "google.cloud.apigateway_v1.types.Api",
+          "description": "Required. API resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateApiRequest",
+      "docstring": "Request message for ApiGatewayService.UpdateApi\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Field mask is used to specify the fields to be overwritten\n        in the Api resource by the update. The fields specified in\n        the update_mask are relative to the resource, not the full\n        request. A field will be overwritten if it is in the mask.\n        If the user does not provide a mask then all fields will be\n        overwritten.\n    api (google.cloud.apigateway_v1.types.Api):\n        Required. API resource.",
+      "attributes": {
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Field mask is used to specify the fields to be overwritten in the Api resource by the update. The fields specified in the update_mask are relative to the resource, not the full request. A field will be overwritten if it is in the mask. If the user does not provide a mask then all fields will be overwritten."
+        },
+        "api": {
+          "type": "google.cloud.apigateway_v1.types.Api",
+          "description": "Required. API resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteApiRequest",
+      "docstring": "Request message for ApiGatewayService.DeleteApi\n\nAttributes:\n    name (str):\n        Required. Resource name of the form:\n        ``projects/*/locations/global/apis/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the form: ``projects/*/locations/global/apis/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListApiConfigsRequest",
+      "docstring": "Request message for ApiGatewayService.ListApiConfigs\n\nAttributes:\n    parent (str):\n        Required. Parent resource of the API Config, of the form:\n        ``projects/*/locations/global/apis/*``\n    page_size (int):\n        Page size.\n    page_token (str):\n        Page token.\n    filter (str):\n        Filter.\n    order_by (str):\n        Order by parameters.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Parent resource of the API Config, of the form: ``projects/*/locations/global/apis/*``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Page size."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Filter."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Order by parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListApiConfigsResponse",
+      "docstring": "Response message for ApiGatewayService.ListApiConfigs\n\nAttributes:\n    api_configs (MutableSequence[google.cloud.apigateway_v1.types.ApiConfig]):\n        API Configs.\n    next_page_token (str):\n        Next page token.\n    unreachable_locations (MutableSequence[str]):\n        Locations that could not be reached.",
+      "attributes": {
+        "api_configs": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.ApiConfig]",
+          "description": "API Configs."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "Next page token."
+        },
+        "unreachable_locations": {
+          "type": "MutableSequence[str]",
+          "description": "Locations that could not be reached."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetApiConfigRequest",
+      "docstring": "Request message for ApiGatewayService.GetApiConfig\n\nAttributes:\n    name (str):\n        Required. Resource name of the form:\n        ``projects/*/locations/global/apis/*/configs/*``\n    view (google.cloud.apigateway_v1.types.GetApiConfigRequest.ConfigView):\n        Specifies which fields of the API Config are returned in the\n        response. Defaults to ``BASIC`` view.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the form: ``projects/*/locations/global/apis/*/configs/*``"
+        },
+        "view": {
+          "type": "google.cloud.apigateway_v1.types.GetApiConfigRequest.ConfigView",
+          "description": "Specifies which fields of the API Config are returned in the response. Defaults to ``BASIC`` view."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateApiConfigRequest",
+      "docstring": "Request message for ApiGatewayService.CreateApiConfig\n\nAttributes:\n    parent (str):\n        Required. Parent resource of the API Config, of the form:\n        ``projects/*/locations/global/apis/*``\n    api_config_id (str):\n        Required. Identifier to assign to the API\n        Config. Must be unique within scope of the\n        parent resource.\n    api_config (google.cloud.apigateway_v1.types.ApiConfig):\n        Required. API resource.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Parent resource of the API Config, of the form: ``projects/*/locations/global/apis/*``"
+        },
+        "api_config_id": {
+          "type": "str",
+          "description": "Required. Identifier to assign to the API Config. Must be unique within scope of the parent resource."
+        },
+        "api_config": {
+          "type": "google.cloud.apigateway_v1.types.ApiConfig",
+          "description": "Required. API resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateApiConfigRequest",
+      "docstring": "Request message for ApiGatewayService.UpdateApiConfig\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Field mask is used to specify the fields to be overwritten\n        in the ApiConfig resource by the update. The fields\n        specified in the update_mask are relative to the resource,\n        not the full request. A field will be overwritten if it is\n        in the mask. If the user does not provide a mask then all\n        fields will be overwritten.\n    api_config (google.cloud.apigateway_v1.types.ApiConfig):\n        Required. API Config resource.",
+      "attributes": {
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Field mask is used to specify the fields to be overwritten in the ApiConfig resource by the update. The fields specified in the update_mask are relative to the resource, not the full request. A field will be overwritten if it is in the mask. If the user does not provide a mask then all fields will be overwritten."
+        },
+        "api_config": {
+          "type": "google.cloud.apigateway_v1.types.ApiConfig",
+          "description": "Required. API Config resource."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteApiConfigRequest",
+      "docstring": "Request message for ApiGatewayService.DeleteApiConfig\n\nAttributes:\n    name (str):\n        Required. Resource name of the form:\n        ``projects/*/locations/global/apis/*/configs/*``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Resource name of the form: ``projects/*/locations/global/apis/*/configs/*``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "OperationMetadata",
+      "docstring": "Represents the metadata of the long-running operation.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation was\n        created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation finished\n        running.\n    target (str):\n        Output only. Server-defined resource path for\n        the target of the operation.\n    verb (str):\n        Output only. Name of the verb executed by the\n        operation.\n    status_message (str):\n        Output only. Human-readable status of the\n        operation, if any.\n    requested_cancellation (bool):\n        Output only. Identifies whether the user has requested\n        cancellation of the operation. Operations that have\n        successfully been cancelled have [Operation.error][] value\n        with a [google.rpc.Status.code][google.rpc.Status.code] of\n        1, corresponding to ``Code.CANCELLED``.\n    api_version (str):\n        Output only. API version used to s",
+      "attributes": {
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time the operation was created."
+        },
+        "end_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time the operation finished running."
+        },
+        "target": {
+          "type": "str",
+          "description": "Output only. Server-defined resource path for the target of the operation."
+        },
+        "verb": {
+          "type": "str",
+          "description": "Output only. Name of the verb executed by the operation."
+        },
+        "status_message": {
+          "type": "str",
+          "description": "Output only. Human-readable status of the operation, if any."
+        },
+        "requested_cancellation": {
+          "type": "bool",
+          "description": "Output only. Identifies whether the user has requested cancellation of the operation. Operations that have successfully been cancelled have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding to ``Code.CANCELLED``."
+        },
+        "api_version": {
+          "type": "str",
+          "description": "Output only. API version used to start the operation."
+        },
+        "diagnostics": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.OperationMetadata.Diagnostic]",
+          "description": "Output only. Diagnostics generated during processing of configuration source files."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "File",
+      "docstring": "A lightweight description of a file.\n\nAttributes:\n    path (str):\n        The file path (full or relative path). This\n        is typically the path of the file when it is\n        uploaded.\n    contents (bytes):\n        The bytes that constitute the file.",
+      "attributes": {
+        "path": {
+          "type": "str",
+          "description": "The file path (full or relative path). This is typically the path of the file when it is uploaded."
+        },
+        "contents": {
+          "type": "bytes",
+          "description": "The bytes that constitute the file."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "OpenApiDocument",
+      "docstring": "An OpenAPI Specification Document describing an API.\n\nAttributes:\n    document (google.cloud.apigateway_v1.types.ApiConfig.File):\n        The OpenAPI Specification document file.",
+      "attributes": {
+        "document": {
+          "type": "google.cloud.apigateway_v1.types.ApiConfig.File",
+          "description": "The OpenAPI Specification document file."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GrpcServiceDefinition",
+      "docstring": "A gRPC service definition.\n\nAttributes:\n    file_descriptor_set (google.cloud.apigateway_v1.types.ApiConfig.File):\n        Input only. File descriptor set, generated by protoc.\n\n        To generate, use protoc with imports and source info\n        included. For an example test.proto file, the following\n        command would put the value in a new file named out.pb.\n\n        $ protoc --include_imports --include_source_info test.proto\n        -o out.pb\n    source (MutableSequence[google.cloud.apigateway_v1.types.ApiConfig.File]):\n        Optional. Uncompiled proto files associated with the\n        descriptor set, used for display purposes (server-side\n        compilation is not supported). These should match the inputs\n        to 'protoc' command used to generate file_descriptor_set.",
+      "attributes": {
+        "file_descriptor_set": {
+          "type": "google.cloud.apigateway_v1.types.ApiConfig.File",
+          "description": "Input only. File descriptor set, generated by protoc.  To generate, use protoc with imports and source info included. For an example test.proto file, the following command would put the value in a new file named out.pb.  $ protoc --include_imports --include_source_info test.proto -o out.pb"
+        },
+        "source": {
+          "type": "MutableSequence[google.cloud.apigateway_v1.types.ApiConfig.File]",
+          "description": "Optional. Uncompiled proto files associated with the descriptor set, used for display purposes (server-side compilation is not supported). These should match the inputs to 'protoc' command used to generate file_descriptor_set."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Diagnostic",
+      "docstring": "Diagnostic information from configuration processing.\n\nAttributes:\n    location (str):\n        Location of the diagnostic.\n    message (str):\n        The diagnostic message.",
+      "attributes": {
+        "location": {
+          "type": "str",
+          "description": "Location of the diagnostic."
+        },
+        "message": {
+          "type": "str",
+          "description": "The diagnostic message."
+        }
+      }
+    }
+  ]
+}

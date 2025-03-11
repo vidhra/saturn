@@ -1,0 +1,947 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\catalog.py": [
+    {
+      "type": "request_class",
+      "name": "CatalogItem",
+      "docstring": "CatalogItem captures all metadata information of items to be\nrecommended.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    id (str):\n        Required. Catalog item identifier. UTF-8\n        encoded string with a length limit of 128 bytes.\n\n        This id must be unique among all catalog items\n        within the same catalog. It should also be used\n        when logging user events in order for the user\n        events to be joined with the Catalog.\n    category_hierarchies (MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy]):\n        Required. Catalog item categories. This field is repeated\n        for supporting one catalog item belonging to several\n        parallel category hierarchies.\n\n        For example, if a shoes product belongs to both [\"Shoes &\n        Accessories\" -> \"Shoes\"] and [\"Sports & Fitness\" ->\n        \"Athletic Clothing\" -> \"Shoes\"], it could be represented as:\n\n        :",
+      "attributes": {
+        "id": {
+          "type": "str",
+          "description": "Required. Catalog item identifier. UTF-8 encoded string with a length limit of 128 bytes.  This id must be unique among all catalog items within the same catalog. It should also be used when logging user events in order for the user events to be joined with the Catalog."
+        },
+        "category_hierarchies": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy]",
+          "description": "Required. Catalog item categories. This field is repeated for supporting one catalog item belonging to several parallel category hierarchies.  For example, if a shoes product belongs to both [\"Shoes & Accessories\" -> \"Shoes\"] and [\"Sports & Fitness\" -> \"Athletic Clothing\" -> \"Shoes\"], it could be represented as:  ::  \"categoryHierarchies\": [ { \"categories\": [\"Shoes & Accessories\", \"Shoes\"]}, { \"categories\": [\"Sports & Fitness\", \"Athletic Clothing\", \"Shoes\"] } ]"
+        },
+        "title": {
+          "type": "str",
+          "description": "Required. Catalog item title. UTF-8 encoded string with a length limit of 1 KiB."
+        },
+        "description": {
+          "type": "str",
+          "description": "Optional. Catalog item description. UTF-8 encoded string with a length limit of 5 KiB."
+        },
+        "item_attributes": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+          "description": "Optional. Highly encouraged. Extra catalog item attributes to be included in the recommendation model. For example, for retail products, this could include the store name, vendor, style, color, etc. These are very strong signals for recommendation model, thus we highly recommend providing the item attributes here."
+        },
+        "language_code": {
+          "type": "str",
+          "description": "Optional. Language of the title/description/item_attributes. Use language tags defined by BCP 47. https://www.rfc-editor.org/rfc/bcp/bcp47.txt. Our supported language codes include 'en', 'es', 'fr', 'de', 'ar', 'fa', 'zh', 'ja', 'ko', 'sv', 'ro', 'nl'. For other languages, contact your Google account manager."
+        },
+        "tags": {
+          "type": "MutableSequence[str]",
+          "description": "Optional. Filtering tags associated with the catalog item. Each tag should be a UTF-8 encoded string with a length limit of 1 KiB.  This tag can be used for filtering recommendation results by passing the tag as part of the predict request filter."
+        },
+        "item_group_id": {
+          "type": "str",
+          "description": "Optional. Variant group identifier for prediction results. UTF-8 encoded string with a length limit of 128 bytes.  This field must be enabled before it can be used. `Learn more </recommendations-ai/docs/catalog#item-group-id>`__."
+        },
+        "product_metadata": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem",
+          "description": "Optional. Metadata specific to retail products.  This field is a member of `oneof`_ ``recommendation_type``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ProductCatalogItem",
+      "docstring": "ProductCatalogItem captures item metadata specific to retail\nproducts.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    exact_price (google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.ExactPrice):\n        Optional. The exact product price.\n\n        This field is a member of `oneof`_ ``price``.\n    price_range (google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.PriceRange):\n        Optional. The product price range.\n\n        This field is a member of `oneof`_ ``price``.\n    costs (MutableMapping[str, float]):\n        Optional. A map to pass the costs associated with the\n        product.\n\n        For example: {\"manufacturing\": 45.5} The profit of selling\n        this item is computed like so:\n\n        - ",
+      "attributes": {
+        "exact_price": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.ExactPrice",
+          "description": "Optional. The exact product price.  This field is a member of `oneof`_ ``price``."
+        },
+        "price_range": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.PriceRange",
+          "description": "Optional. The product price range.  This field is a member of `oneof`_ ``price``."
+        },
+        "costs": {
+          "type": "MutableMapping[str, float]",
+          "description": "Optional. A map to pass the costs associated with the product.  For example: {\"manufacturing\": 45.5} The profit of selling this item is computed like so:  -  If 'exactPrice' is provided, profit = displayPrice - sum(costs) -  If 'priceRange' is provided, profit = minPrice - sum(costs)"
+        },
+        "currency_code": {
+          "type": "str",
+          "description": "Optional. Only required if the price is set. Currency code for price/costs. Use three-character ISO-4217 code."
+        },
+        "stock_state": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState",
+          "description": "Optional. Online stock state of the catalog item. Default is ``IN_STOCK``."
+        },
+        "available_quantity": {
+          "type": "int",
+          "description": "Optional. The available quantity of the item."
+        },
+        "canonical_product_uri": {
+          "type": "str",
+          "description": "Optional. Canonical URL directly linking to the item detail page with a length limit of 5 KiB.."
+        },
+        "images": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.Image]",
+          "description": "Optional. Product images for the catalog item."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Image",
+      "docstring": "Catalog item thumbnail/detail image.\n\nAttributes:\n    uri (str):\n        Required. URL of the image with a length\n        limit of 5 KiB.\n    height (int):\n        Optional. Height of the image in number of\n        pixels.\n    width (int):\n        Optional. Width of the image in number of\n        pixels.",
+      "attributes": {
+        "uri": {
+          "type": "str",
+          "description": "Required. URL of the image with a length limit of 5 KiB."
+        },
+        "height": {
+          "type": "int",
+          "description": "Optional. Height of the image in number of pixels."
+        },
+        "width": {
+          "type": "int",
+          "description": "Optional. Width of the image in number of pixels."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CategoryHierarchy",
+      "docstring": "Category represents catalog item category hierarchy.\n\nAttributes:\n    categories (MutableSequence[str]):\n        Required. Catalog item categories. Each\n        category should be a UTF-8 encoded string with a\n        length limit of 2 KiB.\n\n        Note that the order in the list denotes the\n        specificity (from least to most specific).",
+      "attributes": {
+        "categories": {
+          "type": "MutableSequence[str]",
+          "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific)."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ExactPrice",
+      "docstring": "Exact product price.\n\nAttributes:\n    display_price (float):\n        Optional. Display price of the product.\n    original_price (float):\n        Optional. Price of the product without any\n        discount. If zero, by default set to be the\n        'displayPrice'.",
+      "attributes": {
+        "display_price": {
+          "type": "float",
+          "description": "Optional. Display price of the product."
+        },
+        "original_price": {
+          "type": "float",
+          "description": "Optional. Price of the product without any discount. If zero, by default set to be the 'displayPrice'."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PriceRange",
+      "docstring": "Product price range when there are a range of prices for\ndifferent variations of the same product.\n\nAttributes:\n    min_ (float):\n        Required. The minimum product price.\n    max_ (float):\n        Required. The maximum product price.",
+      "attributes": {
+        "min_": {
+          "type": "float",
+          "description": "Required. The minimum product price."
+        },
+        "max_": {
+          "type": "float",
+          "description": "Required. The maximum product price."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\catalog_service.py": [
+    {
+      "type": "request_class",
+      "name": "CreateCatalogItemRequest",
+      "docstring": "Request message for CreateCatalogItem method.\n\nAttributes:\n    parent (str):\n        Required. The parent catalog resource name, such as\n        ``projects/*/locations/global/catalogs/default_catalog``.\n    catalog_item (google.cloud.recommendationengine_v1beta1.types.CatalogItem):\n        Required. The catalog item to create.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent catalog resource name, such as ``projects/*/locations/global/catalogs/default_catalog``."
+        },
+        "catalog_item": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.CatalogItem",
+          "description": "Required. The catalog item to create."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetCatalogItemRequest",
+      "docstring": "Request message for GetCatalogItem method.\n\nAttributes:\n    name (str):\n        Required. Full resource name of catalog item, such as\n        ``projects/*/locations/global/catalogs/default_catalog/catalogitems/some_catalog_item_id``.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full resource name of catalog item, such as ``projects/*/locations/global/catalogs/default_catalog/catalogitems/some_catalog_item_id``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListCatalogItemsRequest",
+      "docstring": "Request message for ListCatalogItems method.\n\nAttributes:\n    parent (str):\n        Required. The parent catalog resource name, such as\n        ``projects/*/locations/global/catalogs/default_catalog``.\n    page_size (int):\n        Optional. Maximum number of results to return\n        per page. If zero, the service will choose a\n        reasonable default.\n    page_token (str):\n        Optional. The previous\n        ListCatalogItemsResponse.next_page_token.\n    filter (str):\n        Optional. A filter to apply on the list\n        results.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent catalog resource name, such as ``projects/*/locations/global/catalogs/default_catalog``."
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. Maximum number of results to return per page. If zero, the service will choose a reasonable default."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The previous ListCatalogItemsResponse.next_page_token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. A filter to apply on the list results."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListCatalogItemsResponse",
+      "docstring": "Response message for ListCatalogItems method.\n\nAttributes:\n    catalog_items (MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem]):\n        The catalog items.\n    next_page_token (str):\n        If empty, the list is complete. If nonempty, the token to\n        pass to the next request's\n        ListCatalogItemRequest.page_token.",
+      "attributes": {
+        "catalog_items": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem]",
+          "description": "The catalog items."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "If empty, the list is complete. If nonempty, the token to pass to the next request's ListCatalogItemRequest.page_token."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateCatalogItemRequest",
+      "docstring": "Request message for UpdateCatalogItem method.\n\nAttributes:\n    name (str):\n        Required. Full resource name of catalog item, such as\n        ``projects/*/locations/global/catalogs/default_catalog/catalogItems/some_catalog_item_id``.\n    catalog_item (google.cloud.recommendationengine_v1beta1.types.CatalogItem):\n        Required. The catalog item to update/create. The\n        'catalog_item_id' field has to match that in the 'name'.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. Indicates which fields in the\n        provided 'item' to update. If not set, will by\n        default update all fields.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full resource name of catalog item, such as ``projects/*/locations/global/catalogs/default_catalog/catalogItems/some_catalog_item_id``."
+        },
+        "catalog_item": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.CatalogItem",
+          "description": "Required. The catalog item to update/create. The 'catalog_item_id' field has to match that in the 'name'."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "Optional. Indicates which fields in the provided 'item' to update. If not set, will by default update all fields."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteCatalogItemRequest",
+      "docstring": "Request message for DeleteCatalogItem method.\n\nAttributes:\n    name (str):\n        Required. Full resource name of catalog item, such as\n        ``projects/*/locations/global/catalogs/default_catalog/catalogItems/some_catalog_item_id``.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full resource name of catalog item, such as ``projects/*/locations/global/catalogs/default_catalog/catalogItems/some_catalog_item_id``."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\common.py": [
+    {
+      "type": "request_class",
+      "name": "FeatureMap",
+      "docstring": "FeatureMap represents extra features that customers want to\ninclude in the recommendation model for catalogs/user events as\ncategorical/numerical features.\n\nAttributes:\n    categorical_features (MutableMapping[str, google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList]):\n        Categorical features that can take on one of a limited\n        number of possible values. Some examples would be the\n        brand/maker of a product, or country of a customer.\n\n        Feature names and values must be UTF-8 encoded strings.\n\n        For example:\n        ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``\n    numerical_features (MutableMapping[str, google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList]):\n        Numerical features. Some examples would be the height/weight\n        of a product, or age of a customer.\n\n        Feature names must be UTF-8 encoded strings.\n\n        For example:\n        ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[",
+      "attributes": {
+        "categorical_features": {
+          "type": "MutableMapping[str, google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList]",
+          "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``"
+        },
+        "numerical_features": {
+          "type": "MutableMapping[str, google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList]",
+          "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StringList",
+      "docstring": "A list of string features.\n\nAttributes:\n    value (MutableSequence[str]):\n        String feature value with a length limit of\n        128 bytes.",
+      "attributes": {
+        "value": {
+          "type": "MutableSequence[str]",
+          "description": "String feature value with a length limit of 128 bytes."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FloatList",
+      "docstring": "A list of float features.\n\nAttributes:\n    value (MutableSequence[float]):\n        Float feature value.",
+      "attributes": {
+        "value": {
+          "type": "MutableSequence[float]",
+          "description": "Float feature value."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\import_.py": [
+    {
+      "type": "request_class",
+      "name": "GcsSource",
+      "docstring": "Google Cloud Storage location for input content.\nformat.\n\nAttributes:\n    input_uris (MutableSequence[str]):\n        Required. Google Cloud Storage URIs to input files. URI can\n        be up to 2000 characters long. URIs can match the full\n        object path (for example,\n        ``gs://bucket/directory/object.json``) or a pattern matching\n        one or more files, such as ``gs://bucket/directory/*.json``.\n        A request can contain at most 100 files, and each file can\n        be up to 2 GB. See `Importing catalog\n        information </recommendations-ai/docs/upload-catalog>`__ for\n        the expected file format and setup instructions.",
+      "attributes": {
+        "input_uris": {
+          "type": "MutableSequence[str]",
+          "description": "Required. Google Cloud Storage URIs to input files. URI can be up to 2000 characters long. URIs can match the full object path (for example, ``gs://bucket/directory/object.json``) or a pattern matching one or more files, such as ``gs://bucket/directory/*.json``. A request can contain at most 100 files, and each file can be up to 2 GB. See `Importing catalog information </recommendations-ai/docs/upload-catalog>`__ for the expected file format and setup instructions."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CatalogInlineSource",
+      "docstring": "The inline source for the input config for ImportCatalogItems\nmethod.\n\nAttributes:\n    catalog_items (MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem]):\n        Optional. A list of catalog items to\n        update/create. Recommended max of 10k items.",
+      "attributes": {
+        "catalog_items": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem]",
+          "description": "Optional. A list of catalog items to update/create. Recommended max of 10k items."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserEventInlineSource",
+      "docstring": "The inline source for the input config for ImportUserEvents\nmethod.\n\nAttributes:\n    user_events (MutableSequence[google.cloud.recommendationengine_v1beta1.types.UserEvent]):\n        Optional. A list of user events to import.\n        Recommended max of 10k items.",
+      "attributes": {
+        "user_events": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.UserEvent]",
+          "description": "Optional. A list of user events to import. Recommended max of 10k items."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportErrorsConfig",
+      "docstring": "Configuration of destination for Import related errors.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    gcs_prefix (str):\n        Google Cloud Storage path for import errors. This must be an\n        empty, existing Cloud Storage bucket. Import errors will be\n        written to a file in this bucket, one per line, as a\n        JSON-encoded ``google.rpc.Status`` message.\n\n        This field is a member of `oneof`_ ``destination``.",
+      "attributes": {
+        "gcs_prefix": {
+          "type": "str",
+          "description": "Google Cloud Storage path for import errors. This must be an empty, existing Cloud Storage bucket. Import errors will be written to a file in this bucket, one per line, as a JSON-encoded ``google.rpc.Status`` message.  This field is a member of `oneof`_ ``destination``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportCatalogItemsRequest",
+      "docstring": "Request message for Import methods.\n\nAttributes:\n    parent (str):\n        Required.\n        ``projects/1234/locations/global/catalogs/default_catalog``\n    request_id (str):\n        Optional. Unique identifier provided by\n        client, within the ancestor dataset scope.\n        Ensures idempotency and used for request\n        deduplication. Server-generated if unspecified.\n        Up to 128 characters long. This is returned as\n        google.longrunning.Operation.name in the\n        response.\n    input_config (google.cloud.recommendationengine_v1beta1.types.InputConfig):\n        Required. The desired input location of the\n        data.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Optional. The desired location of errors\n        incurred during the Import.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. ``projects/1234/locations/global/catalogs/default_catalog``"
+        },
+        "request_id": {
+          "type": "str",
+          "description": "Optional. Unique identifier provided by client, within the ancestor dataset scope. Ensures idempotency and used for request deduplication. Server-generated if unspecified. Up to 128 characters long. This is returned as google.longrunning.Operation.name in the response."
+        },
+        "input_config": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.InputConfig",
+          "description": "Required. The desired input location of the data."
+        },
+        "errors_config": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig",
+          "description": "Optional. The desired location of errors incurred during the Import."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportUserEventsRequest",
+      "docstring": "Request message for the ImportUserEvents request.\n\nAttributes:\n    parent (str):\n        Required.\n        ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``\n    request_id (str):\n        Optional. Unique identifier provided by client, within the\n        ancestor dataset scope. Ensures idempotency for expensive\n        long running operations. Server-generated if unspecified. Up\n        to 128 characters long. This is returned as\n        google.longrunning.Operation.name in the response. Note that\n        this field must not be set if the desired input config is\n        catalog_inline_source.\n    input_config (google.cloud.recommendationengine_v1beta1.types.InputConfig):\n        Required. The desired input location of the\n        data.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Optional. The desired location of errors\n        incurred during the Import.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``"
+        },
+        "request_id": {
+          "type": "str",
+          "description": "Optional. Unique identifier provided by client, within the ancestor dataset scope. Ensures idempotency for expensive long running operations. Server-generated if unspecified. Up to 128 characters long. This is returned as google.longrunning.Operation.name in the response. Note that this field must not be set if the desired input config is catalog_inline_source."
+        },
+        "input_config": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.InputConfig",
+          "description": "Required. The desired input location of the data."
+        },
+        "errors_config": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig",
+          "description": "Optional. The desired location of errors incurred during the Import."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "InputConfig",
+      "docstring": "The input config source.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    catalog_inline_source (google.cloud.recommendationengine_v1beta1.types.CatalogInlineSource):\n        The Inline source for the input content for\n        Catalog items.\n\n        This field is a member of `oneof`_ ``source``.\n    gcs_source (google.cloud.recommendationengine_v1beta1.types.GcsSource):\n        Google Cloud Storage location for the input\n        content.\n\n        This field is a member of `oneof`_ ``source``.\n    user_event_inline_source (google.cloud.recommendationengine_v1beta1.types.UserEventInlineSource):\n        The Inline source for the input content for\n        UserEvents.\n\n        This field is a member of `oneof`_ ``source``.",
+      "attributes": {
+        "catalog_inline_source": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.CatalogInlineSource",
+          "description": "The Inline source for the input content for Catalog items.  This field is a member of `oneof`_ ``source``."
+        },
+        "gcs_source": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.GcsSource",
+          "description": "Google Cloud Storage location for the input content.  This field is a member of `oneof`_ ``source``."
+        },
+        "user_event_inline_source": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.UserEventInlineSource",
+          "description": "The Inline source for the input content for UserEvents.  This field is a member of `oneof`_ ``source``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportMetadata",
+      "docstring": "Metadata related to the progress of the Import operation.\nThis will be returned by the\ngoogle.longrunning.Operation.metadata field.\n\nAttributes:\n    operation_name (str):\n        Name of the operation.\n    request_id (str):\n        Id of the request / operation. This is\n        parroting back the requestId that was passed in\n        the request.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Operation create time.\n    success_count (int):\n        Count of entries that were processed\n        successfully.\n    failure_count (int):\n        Count of entries that encountered errors\n        while processing.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Operation last update time. If the operation\n        is done, this is also the finish time.",
+      "attributes": {
+        "operation_name": {
+          "type": "str",
+          "description": "Name of the operation."
+        },
+        "request_id": {
+          "type": "str",
+          "description": "Id of the request / operation. This is parroting back the requestId that was passed in the request."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Operation create time."
+        },
+        "success_count": {
+          "type": "int",
+          "description": "Count of entries that were processed successfully."
+        },
+        "failure_count": {
+          "type": "int",
+          "description": "Count of entries that encountered errors while processing."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Operation last update time. If the operation is done, this is also the finish time."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportCatalogItemsResponse",
+      "docstring": "Response of the ImportCatalogItemsRequest. If the long\nrunning operation is done, then this message is returned by the\ngoogle.longrunning.Operations.response field if the operation\nwas successful.\n\nAttributes:\n    error_samples (MutableSequence[google.rpc.status_pb2.Status]):\n        A sample of errors encountered while\n        processing the request.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Echoes the destination for the complete\n        errors in the request if set.",
+      "attributes": {
+        "error_samples": {
+          "type": "MutableSequence[google.rpc.status_pb2.Status]",
+          "description": "A sample of errors encountered while processing the request."
+        },
+        "errors_config": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig",
+          "description": "Echoes the destination for the complete errors in the request if set."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ImportUserEventsResponse",
+      "docstring": "Response of the ImportUserEventsRequest. If the long running\noperation was successful, then this message is returned by the\ngoogle.longrunning.Operations.response field if the operation\nwas successful.\n\nAttributes:\n    error_samples (MutableSequence[google.rpc.status_pb2.Status]):\n        A sample of errors encountered while\n        processing the request.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Echoes the destination for the complete\n        errors if this field was set in the request.\n    import_summary (google.cloud.recommendationengine_v1beta1.types.UserEventImportSummary):\n        Aggregated statistics of user event import\n        status.",
+      "attributes": {
+        "error_samples": {
+          "type": "MutableSequence[google.rpc.status_pb2.Status]",
+          "description": "A sample of errors encountered while processing the request."
+        },
+        "errors_config": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig",
+          "description": "Echoes the destination for the complete errors if this field was set in the request."
+        },
+        "import_summary": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.UserEventImportSummary",
+          "description": "Aggregated statistics of user event import status."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserEventImportSummary",
+      "docstring": "A summary of import result. The UserEventImportSummary\nsummarizes the import status for user events.\n\nAttributes:\n    joined_events_count (int):\n        Count of user events imported with complete\n        existing catalog information.\n    unjoined_events_count (int):\n        Count of user events imported, but with\n        catalog information not found in the imported\n        catalog.",
+      "attributes": {
+        "joined_events_count": {
+          "type": "int",
+          "description": "Count of user events imported with complete existing catalog information."
+        },
+        "unjoined_events_count": {
+          "type": "int",
+          "description": "Count of user events imported, but with catalog information not found in the imported catalog."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\prediction_apikey_registry_service.py": [
+    {
+      "type": "request_class",
+      "name": "PredictionApiKeyRegistration",
+      "docstring": "Registered Api Key.\n\nAttributes:\n    api_key (str):\n        The API key.",
+      "attributes": {
+        "api_key": {
+          "type": "str",
+          "description": "The API key."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreatePredictionApiKeyRegistrationRequest",
+      "docstring": "Request message for the ``CreatePredictionApiKeyRegistration``\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource path.\n        ``projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store``.\n    prediction_api_key_registration (google.cloud.recommendationengine_v1beta1.types.PredictionApiKeyRegistration):\n        Required. The prediction API key\n        registration.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource path. ``projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store``."
+        },
+        "prediction_api_key_registration": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.PredictionApiKeyRegistration",
+          "description": "Required. The prediction API key registration."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListPredictionApiKeyRegistrationsRequest",
+      "docstring": "Request message for the ``ListPredictionApiKeyRegistrations``.\n\nAttributes:\n    parent (str):\n        Required. The parent placement resource name such as\n        ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``\n    page_size (int):\n        Optional. Maximum number of results to return\n        per page. If unset, the service will choose a\n        reasonable default.\n    page_token (str):\n        Optional. The previous\n        ``ListPredictionApiKeyRegistration.nextPageToken``.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent placement resource name such as ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. Maximum number of results to return per page. If unset, the service will choose a reasonable default."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The previous ``ListPredictionApiKeyRegistration.nextPageToken``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListPredictionApiKeyRegistrationsResponse",
+      "docstring": "Response message for the ``ListPredictionApiKeyRegistrations``.\n\nAttributes:\n    prediction_api_key_registrations (MutableSequence[google.cloud.recommendationengine_v1beta1.types.PredictionApiKeyRegistration]):\n        The list of registered API keys.\n    next_page_token (str):\n        If empty, the list is complete. If nonempty, pass the token\n        to the next request's\n        ``ListPredictionApiKeysRegistrationsRequest.pageToken``.",
+      "attributes": {
+        "prediction_api_key_registrations": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.PredictionApiKeyRegistration]",
+          "description": "The list of registered API keys."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "If empty, the list is complete. If nonempty, pass the token to the next request's ``ListPredictionApiKeysRegistrationsRequest.pageToken``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeletePredictionApiKeyRegistrationRequest",
+      "docstring": "Request message for ``DeletePredictionApiKeyRegistration`` method.\n\nAttributes:\n    name (str):\n        Required. The API key to unregister including full resource\n        path.\n        ``projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/predictionApiKeyRegistrations/<YOUR_API_KEY>``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The API key to unregister including full resource path. ``projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/predictionApiKeyRegistrations/<YOUR_API_KEY>``"
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\prediction_service.py": [
+    {
+      "type": "request_class",
+      "name": "PredictRequest",
+      "docstring": "Request message for Predict method.\n\nAttributes:\n    name (str):\n        Required. Full resource name of the format:\n        ``{name=projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/placements/*}``\n        The id of the recommendation engine placement. This id is\n        used to identify the set of models that will be used to make\n        the prediction.\n\n        We currently support three placements with the following IDs\n        by default:\n\n        -  ``shopping_cart``: Predicts items frequently bought\n           together with one or more catalog items in the same\n           shopping session. Commonly displayed after\n           ``add-to-cart`` events, on product detail pages, or on\n           the shopping cart page.\n\n        -  ``home_page``: Predicts the next product that a user will\n           most likely engage with or purchase based on the shopping\n           or viewing history of the specified ``userId`` or\n           ``visitorId``. For example - Recommendations for",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Full resource name of the format: ``{name=projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/placements/*}`` The id of the recommendation engine placement. This id is used to identify the set of models that will be used to make the prediction.  We currently support three placements with the following IDs by default:  -  ``shopping_cart``: Predicts items frequently bought together with one or more catalog items in the same shopping session. Commonly displayed after ``add-to-cart`` events, on product detail pages, or on the shopping cart page.  -  ``home_page``: Predicts the next product that a user will most likely engage with or purchase based on the shopping or viewing history of the specified ``userId`` or ``visitorId``. For example - Recommendations for you.  -  ``product_detail``: Predicts the next product that a user will most likely engage with or purchase. The prediction is based on the shopping or viewing history of the specified ``userId`` or ``visitorId`` and its relevance to a specified ``CatalogItem``. Typically used on product detail pages. For example - More items like this.  -  ``recently_viewed_default``: Returns up to 75 items recently viewed by the specified ``userId`` or ``visitorId``, most recent ones first. Returns nothing if neither of them has viewed any items yet. For example - Recently viewed.  The full list of available placements can be seen at https://console.cloud.google.com/recommendation/datafeeds/default_catalog/dashboard"
+        },
+        "user_event": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.UserEvent",
+          "description": "Required. Context about the user, what they are looking at and what action they took to trigger the predict request. Note that this user event detail won't be ingested to userEvent logs. Thus, a separate userEvent write request is required for event logging."
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. Maximum number of results to return per page. Set this property to the number of prediction results required. If zero, the service will choose a reasonable default."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The previous PredictResponse.next_page_token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Filter for restricting prediction results. Accepts values for tags and the ``filterOutOfStockItems`` flag.  -  Tag expressions. Restricts predictions to items that match all of the specified tags. Boolean operators ``OR`` and ``NOT`` are supported if the expression is enclosed in parentheses, and must be separated from the tag values by a space. ``-\"tagA\"`` is also supported and is equivalent to ``NOT \"tagA\"``. Tag values must be double quoted UTF-8 encoded strings with a size limit of 1 KiB.  -  filterOutOfStockItems. Restricts predictions to items that do not have a stockState value of OUT_OF_STOCK.  Examples:  -  tag=(\"Red\" OR \"Blue\") tag=\"New-Arrival\" tag=(NOT \"promotional\") -  filterOutOfStockItems tag=(-\"promotional\") -  filterOutOfStockItems"
+        },
+        "dry_run": {
+          "type": "bool",
+          "description": "Optional. Use dryRun mode for this prediction query. If set to true, a dummy model will be used that returns arbitrary catalog items. Note that the dryRun mode should only be used for testing the API, or if the model is not ready."
+        },
+        "params": {
+          "type": "MutableMapping[str, google.protobuf.struct_pb2.Value]",
+          "description": "Optional. Additional domain specific parameters for the predictions.  Allowed values:  -  ``returnCatalogItem``: Boolean. If set to true, the associated catalogItem object will be returned in the ``PredictResponse.PredictionResult.itemMetadata`` object in the method response. -  ``returnItemScore``: Boolean. If set to true, the prediction 'score' corresponding to each returned item will be set in the ``metadata`` field in the prediction response. The given 'score' indicates the probability of an item being clicked/purchased given the user's context and history."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. The labels for the predict request.  -  Label keys can contain lowercase letters, digits and hyphens, must start with a letter, and must end with a letter or digit. -  Non-zero label values can contain lowercase letters, digits and hyphens, must start with a letter, and must end with a letter or digit. -  No more than 64 labels can be associated with a given request.  See https://goo.gl/xmQnxf for more information on and examples of labels."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PredictResponse",
+      "docstring": "Response message for predict method.\n\nAttributes:\n    results (MutableSequence[google.cloud.recommendationengine_v1beta1.types.PredictResponse.PredictionResult]):\n        A list of recommended items. The order\n        represents the ranking (from the most relevant\n        item to the least).\n    recommendation_token (str):\n        A unique recommendation token. This should be\n        included in the user event logs resulting from\n        this recommendation, which enables accurate\n        attribution of recommendation model performance.\n    items_missing_in_catalog (MutableSequence[str]):\n        IDs of items in the request that were missing\n        from the catalog.\n    dry_run (bool):\n        True if the dryRun property was set in the\n        request.\n    metadata (MutableMapping[str, google.protobuf.struct_pb2.Value]):\n        Additional domain specific prediction\n        response metadata.\n    next_page_token (str):\n        If empty, the list is complete. If nonempty, the token to\n        pass to the next",
+      "attributes": {
+        "results": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.PredictResponse.PredictionResult]",
+          "description": "A list of recommended items. The order represents the ranking (from the most relevant item to the least)."
+        },
+        "recommendation_token": {
+          "type": "str",
+          "description": "A unique recommendation token. This should be included in the user event logs resulting from this recommendation, which enables accurate attribution of recommendation model performance."
+        },
+        "items_missing_in_catalog": {
+          "type": "MutableSequence[str]",
+          "description": "IDs of items in the request that were missing from the catalog."
+        },
+        "dry_run": {
+          "type": "bool",
+          "description": "True if the dryRun property was set in the request."
+        },
+        "metadata": {
+          "type": "MutableMapping[str, google.protobuf.struct_pb2.Value]",
+          "description": "Additional domain specific prediction response metadata."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "If empty, the list is complete. If nonempty, the token to pass to the next request's PredictRequest.page_token."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PredictionResult",
+      "docstring": "PredictionResult represents the recommendation prediction\nresults.\n\nAttributes:\n    id (str):\n        ID of the recommended catalog item\n    item_metadata (MutableMapping[str, google.protobuf.struct_pb2.Value]):\n        Additional item metadata / annotations.\n\n        Possible values:\n\n        -  ``catalogItem``: JSON representation of the catalogItem.\n           Will be set if ``returnCatalogItem`` is set to true in\n           ``PredictRequest.params``.\n        -  ``score``: Prediction score in double value. Will be set\n           if ``returnItemScore`` is set to true in\n           ``PredictRequest.params``.",
+      "attributes": {
+        "id": {
+          "type": "str",
+          "description": "ID of the recommended catalog item"
+        },
+        "item_metadata": {
+          "type": "MutableMapping[str, google.protobuf.struct_pb2.Value]",
+          "description": "Additional item metadata / annotations.  Possible values:  -  ``catalogItem``: JSON representation of the catalogItem. Will be set if ``returnCatalogItem`` is set to true in ``PredictRequest.params``. -  ``score``: Prediction score in double value. Will be set if ``returnItemScore`` is set to true in ``PredictRequest.params``."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\user_event.py": [
+    {
+      "type": "request_class",
+      "name": "UserEvent",
+      "docstring": "UserEvent captures all metadata information recommendation\nengine needs to know about how end users interact with\ncustomers' website.\n\nAttributes:\n    event_type (str):\n        Required. User event type. Allowed values are:\n\n        -  ``add-to-cart`` Products being added to cart.\n        -  ``add-to-list`` Items being added to a list (shopping\n           list, favorites etc).\n        -  ``category-page-view`` Special pages such as sale or\n           promotion pages viewed.\n        -  ``checkout-start`` User starting a checkout process.\n        -  ``detail-page-view`` Products detail page viewed.\n        -  ``home-page-view`` Homepage viewed.\n        -  ``page-visit`` Generic page visits not included in the\n           event types above.\n        -  ``purchase-complete`` User finishing a purchase.\n        -  ``refund`` Purchased items being refunded or returned.\n        -  ``remove-from-cart`` Products being removed from cart.\n        -  ``remove-from-list`` Items being removed from a list.\n        -  ``search`",
+      "attributes": {
+        "event_type": {
+          "type": "str",
+          "description": "Required. User event type. Allowed values are:  -  ``add-to-cart`` Products being added to cart. -  ``add-to-list`` Items being added to a list (shopping list, favorites etc). -  ``category-page-view`` Special pages such as sale or promotion pages viewed. -  ``checkout-start`` User starting a checkout process. -  ``detail-page-view`` Products detail page viewed. -  ``home-page-view`` Homepage viewed. -  ``page-visit`` Generic page visits not included in the event types above. -  ``purchase-complete`` User finishing a purchase. -  ``refund`` Purchased items being refunded or returned. -  ``remove-from-cart`` Products being removed from cart. -  ``remove-from-list`` Items being removed from a list. -  ``search`` Product search. -  ``shopping-cart-page-view`` User viewing a shopping cart. -  ``impression`` List of items displayed. Used by Google Tag Manager."
+        },
+        "user_info": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.UserInfo",
+          "description": "Required. User information."
+        },
+        "event_detail": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.EventDetail",
+          "description": "Optional. User event detailed information common across different recommendation types."
+        },
+        "product_event_detail": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ProductEventDetail",
+          "description": "Optional. Retail product specific user event metadata.  This field is required for the following event types:  -  ``add-to-cart`` -  ``add-to-list`` -  ``category-page-view`` -  ``checkout-start`` -  ``detail-page-view`` -  ``purchase-complete`` -  ``refund`` -  ``remove-from-cart`` -  ``remove-from-list`` -  ``search``  This field is optional for the following event types:  -  ``page-visit`` -  ``shopping-cart-page-view`` - note that 'product_event_detail' should be set for this unless the shopping cart is empty.  This field is not allowed for the following event types:  -  ``home-page-view``"
+        },
+        "event_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Optional. Only required for ImportUserEvents method. Timestamp of user event created."
+        },
+        "event_source": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.UserEvent.EventSource",
+          "description": "Optional. This field should *not* be set when using JavaScript pixel or the Recommendations AI Tag. Defaults to ``EVENT_SOURCE_UNSPECIFIED``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserInfo",
+      "docstring": "Information of end users.\n\nAttributes:\n    visitor_id (str):\n        Required. A unique identifier for tracking\n        visitors with a length limit of 128 bytes.\n\n        For example, this could be implemented with a\n        http cookie, which should be able to uniquely\n        identify a visitor on a single device. This\n        unique identifier should not change if the\n        visitor log in/out of the website. Maximum\n        length 128 bytes. Cannot be empty.\n    user_id (str):\n        Optional. Unique identifier for logged-in\n        user with a length limit of 128 bytes. Required\n        only for logged-in users.\n    ip_address (str):\n        Optional. IP address of the user. This could be either IPv4\n        (e.g. 104.133.9.80) or IPv6 (e.g.\n        2001:0db8:85a3:0000:0000:8a2e:0370:7334). This should *not*\n        be set when using the javascript pixel or if\n        ``direct_user_request`` is set. Used to extract location\n        information for personalization.\n    user_agent (str):\n        Optiona",
+      "attributes": {
+        "visitor_id": {
+          "type": "str",
+          "description": "Required. A unique identifier for tracking visitors with a length limit of 128 bytes.  For example, this could be implemented with a http cookie, which should be able to uniquely identify a visitor on a single device. This unique identifier should not change if the visitor log in/out of the website. Maximum length 128 bytes. Cannot be empty."
+        },
+        "user_id": {
+          "type": "str",
+          "description": "Optional. Unique identifier for logged-in user with a length limit of 128 bytes. Required only for logged-in users."
+        },
+        "ip_address": {
+          "type": "str",
+          "description": "Optional. IP address of the user. This could be either IPv4 (e.g. 104.133.9.80) or IPv6 (e.g. 2001:0db8:85a3:0000:0000:8a2e:0370:7334). This should *not* be set when using the javascript pixel or if ``direct_user_request`` is set. Used to extract location information for personalization."
+        },
+        "user_agent": {
+          "type": "str",
+          "description": "Optional. User agent as included in the HTTP header. UTF-8 encoded string with a length limit of 1 KiB.  This should *not* be set when using the JavaScript pixel or if ``directUserRequest`` is set."
+        },
+        "direct_user_request": {
+          "type": "bool",
+          "description": "Optional. Indicates if the request is made directly from the end user in which case the user_agent and ip_address fields can be populated from the HTTP request. This should *not* be set when using the javascript pixel. This flag should be set only if the API request is made directly from the end user such as a mobile app (and not if a gateway or a server is processing and pushing the user events)."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EventDetail",
+      "docstring": "User event details shared by all recommendation types.\n\nAttributes:\n    uri (str):\n        Optional. Complete url (window.location.href)\n        of the user's current page. When using the\n        JavaScript pixel, this value is filled in\n        automatically. Maximum length 5KB.\n    referrer_uri (str):\n        Optional. The referrer url of the current\n        page. When using the JavaScript pixel, this\n        value is filled in automatically.\n    page_view_id (str):\n        Optional. A unique id of a web page view. This should be\n        kept the same for all user events triggered from the same\n        pageview. For example, an item detail page view could\n        trigger multiple events as the user is browsing the page.\n        The ``pageViewId`` property should be kept the same for all\n        these events so that they can be grouped together properly.\n        This ``pageViewId`` will be automatically generated if using\n        the JavaScript pixel.\n    experiment_ids (MutableSequence[str]):\n        Option",
+      "attributes": {
+        "uri": {
+          "type": "str",
+          "description": "Optional. Complete url (window.location.href) of the user's current page. When using the JavaScript pixel, this value is filled in automatically. Maximum length 5KB."
+        },
+        "referrer_uri": {
+          "type": "str",
+          "description": "Optional. The referrer url of the current page. When using the JavaScript pixel, this value is filled in automatically."
+        },
+        "page_view_id": {
+          "type": "str",
+          "description": "Optional. A unique id of a web page view. This should be kept the same for all user events triggered from the same pageview. For example, an item detail page view could trigger multiple events as the user is browsing the page. The ``pageViewId`` property should be kept the same for all these events so that they can be grouped together properly. This ``pageViewId`` will be automatically generated if using the JavaScript pixel."
+        },
+        "experiment_ids": {
+          "type": "MutableSequence[str]",
+          "description": "Optional. A list of identifiers for the independent experiment groups this user event belongs to. This is used to distinguish between user events associated with different experiment setups (e.g. using Recommendation Engine system, using different recommendation models)."
+        },
+        "recommendation_token": {
+          "type": "str",
+          "description": "Optional. Recommendation token included in the recommendation prediction response.  This field enables accurate attribution of recommendation model performance.  This token enables us to accurately attribute page view or purchase back to the event and the particular predict response containing this clicked/purchased item. If user clicks on product K in the recommendation results, pass the ``PredictResponse.recommendationToken`` property as a url parameter to product K's page. When recording events on product K's page, log the PredictResponse.recommendation_token to this field.  Optional, but highly encouraged for user events that are the result of a recommendation prediction query."
+        },
+        "event_attributes": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+          "description": "Optional. Extra user event features to include in the recommendation model.  For product recommendation, an example of extra user information is traffic_channel, i.e. how user arrives at the site. Users can arrive at the site by coming to the site directly, or coming through Google search, and etc."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ProductEventDetail",
+      "docstring": "ProductEventDetail captures user event information specific\nto retail products.\n\nAttributes:\n    search_query (str):\n        Required for ``search`` events. Other event types should not\n        set this field. The user's search query as UTF-8 encoded\n        text with a length limit of 5 KiB.\n    page_categories (MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy]):\n        Required for ``category-page-view`` events. Other event\n        types should not set this field. The categories associated\n        with a category page. Category pages include special pages\n        such as sales or promotions. For instance, a special sale\n        page may have the category hierarchy: categories : [\"Sales\",\n        \"2017 Black Friday Deals\"].\n    product_details (MutableSequence[google.cloud.recommendationengine_v1beta1.types.ProductDetail]):\n        The main product details related to the event.\n\n        This field is required for the following event types:\n\n        -  ``add-to-ca",
+      "attributes": {
+        "search_query": {
+          "type": "str",
+          "description": "Required for ``search`` events. Other event types should not set this field. The user's search query as UTF-8 encoded text with a length limit of 5 KiB."
+        },
+        "page_categories": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy]",
+          "description": "Required for ``category-page-view`` events. Other event types should not set this field. The categories associated with a category page. Category pages include special pages such as sales or promotions. For instance, a special sale page may have the category hierarchy: categories : [\"Sales\", \"2017 Black Friday Deals\"]."
+        },
+        "product_details": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.ProductDetail]",
+          "description": "The main product details related to the event.  This field is required for the following event types:  -  ``add-to-cart`` -  ``add-to-list`` -  ``checkout-start`` -  ``detail-page-view`` -  ``purchase-complete`` -  ``refund`` -  ``remove-from-cart`` -  ``remove-from-list``  This field is optional for the following event types:  -  ``page-visit`` -  ``shopping-cart-page-view`` - note that 'product_details' should be set for this unless the shopping cart is empty.  This field is not allowed for the following event types:  -  ``category-page-view`` -  ``home-page-view`` -  ``search``"
+        },
+        "list_id": {
+          "type": "str",
+          "description": "Required for ``add-to-list`` and ``remove-from-list`` events. The id or name of the list that the item is being added to or removed from. Other event types should not set this field."
+        },
+        "cart_id": {
+          "type": "str",
+          "description": "Optional. The id or name of the associated shopping cart. This id is used to associate multiple items added or present in the cart before purchase.  This can only be set for ``add-to-cart``, ``remove-from-cart``, ``checkout-start``, ``purchase-complete``, or ``shopping-cart-page-view`` events."
+        },
+        "purchase_transaction": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.PurchaseTransaction",
+          "description": "Optional. A transaction represents the entire purchase transaction. Required for ``purchase-complete`` events. Optional for ``checkout-start`` events. Other event types should not set this field."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PurchaseTransaction",
+      "docstring": "A transaction represents the entire purchase transaction.\n\nAttributes:\n    id (str):\n        Optional. The transaction ID with a length\n        limit of 128 bytes.\n    revenue (float):\n        Required. Total revenue or grand total associated with the\n        transaction. This value include shipping, tax, or other\n        adjustments to total revenue that you want to include as\n        part of your revenue calculations. This field is not\n        required if the event type is ``refund``.\n    taxes (MutableMapping[str, float]):\n        Optional. All the taxes associated with the\n        transaction.\n    costs (MutableMapping[str, float]):\n        Optional. All the costs associated with the product. These\n        can be manufacturing costs, shipping expenses not borne by\n        the end user, or any other costs.\n\n        Total product cost such that profit = revenue - (sum(taxes)\n        + sum(costs)) If product_cost is not set, then profit =\n        revenue - tax - shipping - sum(CatalogItem.costs).\n\n        If",
+      "attributes": {
+        "id": {
+          "type": "str",
+          "description": "Optional. The transaction ID with a length limit of 128 bytes."
+        },
+        "revenue": {
+          "type": "float",
+          "description": "Required. Total revenue or grand total associated with the transaction. This value include shipping, tax, or other adjustments to total revenue that you want to include as part of your revenue calculations. This field is not required if the event type is ``refund``."
+        },
+        "taxes": {
+          "type": "MutableMapping[str, float]",
+          "description": "Optional. All the taxes associated with the transaction."
+        },
+        "costs": {
+          "type": "MutableMapping[str, float]",
+          "description": "Optional. All the costs associated with the product. These can be manufacturing costs, shipping expenses not borne by the end user, or any other costs.  Total product cost such that profit = revenue - (sum(taxes) + sum(costs)) If product_cost is not set, then profit = revenue - tax - shipping - sum(CatalogItem.costs).  If CatalogItem.cost is not specified for one of the items, CatalogItem.cost based profit *cannot* be calculated for this Transaction."
+        },
+        "currency_code": {
+          "type": "str",
+          "description": "Required. Currency code. Use three-character ISO-4217 code. This field is not required if the event type is ``refund``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ProductDetail",
+      "docstring": "Detailed product information associated with a user event.\n\nAttributes:\n    id (str):\n        Required. Catalog item ID. UTF-8 encoded\n        string with a length limit of 128 characters.\n    currency_code (str):\n        Optional. Currency code for price/costs. Use\n        three-character ISO-4217 code. Required only if\n        originalPrice or displayPrice is set.\n    original_price (float):\n        Optional. Original price of the product. If\n        provided, this will override the original price\n        in Catalog for this product.\n    display_price (float):\n        Optional. Display price of the product (e.g.\n        discounted price). If provided, this will\n        override the display price in Catalog for this\n        product.\n    stock_state (google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState):\n        Optional. Item stock state. If provided, this\n        overrides the stock state in Catalog for items\n        in this event.\n    quantity (int):\n        Optional. Quantity of t",
+      "attributes": {
+        "id": {
+          "type": "str",
+          "description": "Required. Catalog item ID. UTF-8 encoded string with a length limit of 128 characters."
+        },
+        "currency_code": {
+          "type": "str",
+          "description": "Optional. Currency code for price/costs. Use three-character ISO-4217 code. Required only if originalPrice or displayPrice is set."
+        },
+        "original_price": {
+          "type": "float",
+          "description": "Optional. Original price of the product. If provided, this will override the original price in Catalog for this product."
+        },
+        "display_price": {
+          "type": "float",
+          "description": "Optional. Display price of the product (e.g. discounted price). If provided, this will override the display price in Catalog for this product."
+        },
+        "stock_state": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState",
+          "description": "Optional. Item stock state. If provided, this overrides the stock state in Catalog for items in this event."
+        },
+        "quantity": {
+          "type": "int",
+          "description": "Optional. Quantity of the product associated with the user event. For example, this field will be 2 if two products are added to the shopping cart for ``add-to-cart`` event. Required for ``add-to-cart``, ``add-to-list``, ``remove-from-cart``, ``checkout-start``, ``purchase-complete``, ``refund`` event types."
+        },
+        "available_quantity": {
+          "type": "int",
+          "description": "Optional. Quantity of the products in stock when a user event happens. Optional. If provided, this overrides the available quantity in Catalog for this event. and can only be set if ``stock_status`` is set to ``IN_STOCK``.  Note that if an item is out of stock, you must set the ``stock_state`` field to be ``OUT_OF_STOCK``. Leaving this field unspecified / as zero is not sufficient to mark the item out of stock."
+        },
+        "item_attributes": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+          "description": "Optional. Extra features associated with a product in the user event."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\user_event_service.py": [
+    {
+      "type": "request_class",
+      "name": "PurgeUserEventsRequest",
+      "docstring": "Request message for PurgeUserEvents method.\n\nAttributes:\n    parent (str):\n        Required. The resource name of the event_store under which\n        the events are created. The format is\n        ``projects/${projectId}/locations/global/catalogs/${catalogId}/eventStores/${eventStoreId}``\n    filter (str):\n        Required. The filter string to specify the events to be\n        deleted. Empty string filter is not allowed. This filter can\n        also be used with ListUserEvents API to list events that\n        will be deleted. The eligible fields for filtering are:\n\n        -  eventType - UserEvent.eventType field of type string.\n        -  eventTime - in ISO 8601 \"zulu\" format.\n        -  visitorId - field of type string. Specifying this will\n           delete all events associated with a visitor.\n        -  userId - field of type string. Specifying this will\n           delete all events associated with a user. Example 1:\n           Deleting all events in a time range.\n           ``eventTime > \"2012-04-23T18:25",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The resource name of the event_store under which the events are created. The format is ``projects/${projectId}/locations/global/catalogs/${catalogId}/eventStores/${eventStoreId}``"
+        },
+        "filter": {
+          "type": "str",
+          "description": "Required. The filter string to specify the events to be deleted. Empty string filter is not allowed. This filter can also be used with ListUserEvents API to list events that will be deleted. The eligible fields for filtering are:  -  eventType - UserEvent.eventType field of type string. -  eventTime - in ISO 8601 \"zulu\" format. -  visitorId - field of type string. Specifying this will delete all events associated with a visitor. -  userId - field of type string. Specifying this will delete all events associated with a user. Example 1: Deleting all events in a time range. ``eventTime > \"2012-04-23T18:25:43.511Z\" eventTime < \"2012-04-23T18:30:43.511Z\"`` Example 2: Deleting specific eventType in time range. ``eventTime > \"2012-04-23T18:25:43.511Z\" eventType = \"detail-page-view\"`` Example 3: Deleting all events for a specific visitor ``visitorId = visitor1024`` The filtering fields are assumed to have an implicit AND."
+        },
+        "force": {
+          "type": "bool",
+          "description": "Optional. The default value is false. Override this flag to true to actually perform the purge. If the field is not set to true, a sampling of events to be deleted will be returned."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PurgeUserEventsMetadata",
+      "docstring": "Metadata related to the progress of the PurgeUserEvents\noperation. This will be returned by the\ngoogle.longrunning.Operation.metadata field.\n\nAttributes:\n    operation_name (str):\n        The ID of the request / operation.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Operation create time.",
+      "attributes": {
+        "operation_name": {
+          "type": "str",
+          "description": "The ID of the request / operation."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Operation create time."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PurgeUserEventsResponse",
+      "docstring": "Response of the PurgeUserEventsRequest. If the long running\noperation is successfully done, then this message is returned by\nthe google.longrunning.Operations.response field.\n\nAttributes:\n    purged_events_count (int):\n        The total count of events purged as a result\n        of the operation.\n    user_events_sample (MutableSequence[google.cloud.recommendationengine_v1beta1.types.UserEvent]):\n        A sampling of events deleted (or will be deleted) depending\n        on the ``force`` property in the request. Max of 500 items\n        will be returned.",
+      "attributes": {
+        "purged_events_count": {
+          "type": "int",
+          "description": "The total count of events purged as a result of the operation."
+        },
+        "user_events_sample": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.UserEvent]",
+          "description": "A sampling of events deleted (or will be deleted) depending on the ``force`` property in the request. Max of 500 items will be returned."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "WriteUserEventRequest",
+      "docstring": "Request message for WriteUserEvent method.\n\nAttributes:\n    parent (str):\n        Required. The parent eventStore resource name, such as\n        ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``.\n    user_event (google.cloud.recommendationengine_v1beta1.types.UserEvent):\n        Required. User event to write.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent eventStore resource name, such as ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``."
+        },
+        "user_event": {
+          "type": "google.cloud.recommendationengine_v1beta1.types.UserEvent",
+          "description": "Required. User event to write."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CollectUserEventRequest",
+      "docstring": "Request message for CollectUserEvent method.\n\nAttributes:\n    parent (str):\n        Required. The parent eventStore name, such as\n        ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``.\n    user_event (str):\n        Required. URL encoded UserEvent proto.\n    uri (str):\n        Optional. The url including cgi-parameters\n        but excluding the hash fragment. The URL must be\n        truncated to 1.5K bytes to conservatively be\n        under the 2K bytes. This is often more useful\n        than the referer url, because many browsers only\n        send the domain for 3rd party requests.\n    ets (int):\n        Optional. The event timestamp in\n        milliseconds. This prevents browser caching of\n        otherwise identical get requests. The name is\n        abbreviated to reduce the payload bytes.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent eventStore name, such as ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``."
+        },
+        "user_event": {
+          "type": "str",
+          "description": "Required. URL encoded UserEvent proto."
+        },
+        "uri": {
+          "type": "str",
+          "description": "Optional. The url including cgi-parameters but excluding the hash fragment. The URL must be truncated to 1.5K bytes to conservatively be under the 2K bytes. This is often more useful than the referer url, because many browsers only send the domain for 3rd party requests."
+        },
+        "ets": {
+          "type": "int",
+          "description": "Optional. The event timestamp in milliseconds. This prevents browser caching of otherwise identical get requests. The name is abbreviated to reduce the payload bytes."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListUserEventsRequest",
+      "docstring": "Request message for ListUserEvents method.\n\nAttributes:\n    parent (str):\n        Required. The parent eventStore resource name, such as\n        ``projects/*/locations/*/catalogs/default_catalog/eventStores/default_event_store``.\n    page_size (int):\n        Optional. Maximum number of results to return\n        per page. If zero, the service will choose a\n        reasonable default.\n    page_token (str):\n        Optional. The previous\n        ListUserEventsResponse.next_page_token.\n    filter (str):\n        Optional. Filtering expression to specify restrictions over\n        returned events. This is a sequence of terms, where each\n        term applies some kind of a restriction to the returned user\n        events. Use this expression to restrict results to a\n        specific time range, or filter events by eventType. eg:\n        eventTime > \"2012-04-23T18:25:43.511Z\"\n        eventsMissingCatalogItems\n        eventTime<\"2012-04-23T18:25:43.511Z\" eventType=search\n\n        We expect only 3 types of fields:\n\n     ",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent eventStore resource name, such as ``projects/*/locations/*/catalogs/default_catalog/eventStores/default_event_store``."
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. Maximum number of results to return per page. If zero, the service will choose a reasonable default."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. The previous ListUserEventsResponse.next_page_token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Optional. Filtering expression to specify restrictions over returned events. This is a sequence of terms, where each term applies some kind of a restriction to the returned user events. Use this expression to restrict results to a specific time range, or filter events by eventType. eg: eventTime > \"2012-04-23T18:25:43.511Z\" eventsMissingCatalogItems eventTime<\"2012-04-23T18:25:43.511Z\" eventType=search  We expect only 3 types of fields:  ::  * eventTime: this can be specified a maximum of 2 times, once with a less than operator and once with a greater than operator. The eventTime restrict should result in one contiguous valid eventTime range.  * eventType: only 1 eventType restriction can be specified.  * eventsMissingCatalogItems: specififying this will restrict results to events for which catalog items were not found in the catalog. The default behavior is to return only those events for which catalog items were found.  Some examples of valid filters expressions:  -  Example 1: eventTime > \"2012-04-23T18:25:43.511Z\" eventTime < \"2012-04-23T18:30:43.511Z\" -  Example 2: eventTime > \"2012-04-23T18:25:43.511Z\" eventType = detail-page-view -  Example 3: eventsMissingCatalogItems eventType = search eventTime < \"2018-04-23T18:30:43.511Z\" -  Example 4: eventTime > \"2012-04-23T18:25:43.511Z\" -  Example 5: eventType = search -  Example 6: eventsMissingCatalogItems"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListUserEventsResponse",
+      "docstring": "Response message for ListUserEvents method.\n\nAttributes:\n    user_events (MutableSequence[google.cloud.recommendationengine_v1beta1.types.UserEvent]):\n        The user events.\n    next_page_token (str):\n        If empty, the list is complete. If nonempty, the token to\n        pass to the next request's ListUserEvents.page_token.",
+      "attributes": {
+        "user_events": {
+          "type": "MutableSequence[google.cloud.recommendationengine_v1beta1.types.UserEvent]",
+          "description": "The user events."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "If empty, the list is complete. If nonempty, the token to pass to the next request's ListUserEvents.page_token."
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,477 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-maps-addressvalidation\\google\\maps\\addressvalidation_v1\\types\\address.py": [
+    {
+      "type": "request_class",
+      "name": "Address",
+      "docstring": "Details of the post-processed address. Post-processing\nincludes correcting misspelled parts of the address, replacing\nincorrect parts, and inferring missing parts.\n\nAttributes:\n    formatted_address (str):\n        The post-processed address, formatted as a\n        single-line address following the address\n        formatting rules of the region where the address\n        is located.\n    postal_address (google.type.postal_address_pb2.PostalAddress):\n        The post-processed address represented as a\n        postal address.\n    address_components (MutableSequence[google.maps.addressvalidation_v1.types.AddressComponent]):\n        Unordered list. The individual address\n        components of the formatted and corrected\n        address, along with validation information. This\n        provides information on the validation status of\n        the individual components.\n\n        Address components are not ordered in a\n        particular way. Do not make any assumptions on\n        the ordering of the address components i",
+      "attributes": {
+        "formatted_address": {
+          "type": "str",
+          "description": "The post-processed address, formatted as a single-line address following the address formatting rules of the region where the address is located."
+        },
+        "postal_address": {
+          "type": "google.type.postal_address_pb2.PostalAddress",
+          "description": "The post-processed address represented as a postal address."
+        },
+        "address_components": {
+          "type": "MutableSequence[google.maps.addressvalidation_v1.types.AddressComponent]",
+          "description": "Unordered list. The individual address components of the formatted and corrected address, along with validation information. This provides information on the validation status of the individual components.  Address components are not ordered in a particular way. Do not make any assumptions on the ordering of the address components in the list."
+        },
+        "missing_component_types": {
+          "type": "MutableSequence[str]",
+          "description": "The types of components that were expected to be present in a correctly formatted mailing address but were not found in the input AND could not be inferred. Components of this type are not present in ``formatted_address``, ``postal_address``, or ``address_components``. An example might be ``['street_number', 'route']`` for an input like \"Boulder, Colorado, 80301, USA\". The list of possible types can be found `here <https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types>`__."
+        },
+        "unconfirmed_component_types": {
+          "type": "MutableSequence[str]",
+          "description": "The types of the components that are present in the ``address_components`` but could not be confirmed to be correct. This field is provided for the sake of convenience: its contents are equivalent to iterating through the ``address_components`` to find the types of all the components where the [confirmation_level][google.maps.addressvalidation.v1.AddressComponent.confirmation_level] is not [CONFIRMED][google.maps.addressvalidation.v1.AddressComponent.ConfirmationLevel.CONFIRMED] or the [inferred][google.maps.addressvalidation.v1.AddressComponent.inferred] flag is not set to ``true``. The list of possible types can be found `here <https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types>`__."
+        },
+        "unresolved_tokens": {
+          "type": "MutableSequence[str]",
+          "description": "Any tokens in the input that could not be resolved. This might be an input that was not recognized as a valid part of an address (for example in an input like \"123235253253 Main St, San Francisco, CA, 94105\", the unresolved tokens may look like ``[\"123235253253\"]`` since that does not look like a valid street number."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AddressComponent",
+      "docstring": "Represents an address component, such as a street, city, or\nstate.\n\nAttributes:\n    component_name (google.maps.addressvalidation_v1.types.ComponentName):\n        The name for this component.\n    component_type (str):\n        The type of the address component. See `Table 2: Additional\n        types returned by the Places\n        service <https://developers.google.com/places/web-service/supported_types#table2>`__\n        for a list of possible types.\n    confirmation_level (google.maps.addressvalidation_v1.types.AddressComponent.ConfirmationLevel):\n        Indicates the level of certainty that we have\n        that the component is correct.\n    inferred (bool):\n        Indicates that the component was not part of\n        the input, but we inferred it for the address\n        location and believe it should be provided for a\n        complete address.\n    spell_corrected (bool):\n        Indicates a correction to a misspelling in\n        the component name.  The API does not always\n        flag changes from one spel",
+      "attributes": {
+        "component_name": {
+          "type": "google.maps.addressvalidation_v1.types.ComponentName",
+          "description": "The name for this component."
+        },
+        "component_type": {
+          "type": "str",
+          "description": "The type of the address component. See `Table 2: Additional types returned by the Places service <https://developers.google.com/places/web-service/supported_types#table2>`__ for a list of possible types."
+        },
+        "confirmation_level": {
+          "type": "google.maps.addressvalidation_v1.types.AddressComponent.ConfirmationLevel",
+          "description": "Indicates the level of certainty that we have that the component is correct."
+        },
+        "inferred": {
+          "type": "bool",
+          "description": "Indicates that the component was not part of the input, but we inferred it for the address location and believe it should be provided for a complete address."
+        },
+        "spell_corrected": {
+          "type": "bool",
+          "description": "Indicates a correction to a misspelling in the component name.  The API does not always flag changes from one spelling variant to another, such as when changing \"centre\" to \"center\". It also does not always flag common misspellings, such as when changing \"Amphitheater Pkwy\" to \"Amphitheatre Pkwy\"."
+        },
+        "replaced": {
+          "type": "bool",
+          "description": "Indicates the name of the component was replaced with a completely different one, for example a wrong postal code being replaced with one that is correct for the address. This is not a cosmetic change, the input component has been changed to a different one."
+        },
+        "unexpected": {
+          "type": "bool",
+          "description": "Indicates an address component that is not expected to be present in a postal address for the given region. We have retained it only because it was part of the input."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ComponentName",
+      "docstring": "A wrapper for the name of the component.\n\nAttributes:\n    text (str):\n        The name text. For example, \"5th Avenue\" for\n        a street name or \"1253\" for a street number.\n    language_code (str):\n        The BCP-47 language code. This will not be\n        present if the component name is not associated\n        with a language, such as a street number.",
+      "attributes": {
+        "text": {
+          "type": "str",
+          "description": "The name text. For example, \"5th Avenue\" for a street name or \"1253\" for a street number."
+        },
+        "language_code": {
+          "type": "str",
+          "description": "The BCP-47 language code. This will not be present if the component name is not associated with a language, such as a street number."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-maps-addressvalidation\\google\\maps\\addressvalidation_v1\\types\\address_validation_service.py": [
+    {
+      "type": "request_class",
+      "name": "ValidateAddressRequest",
+      "docstring": "The request for validating an address.\n\nAttributes:\n    address (google.type.postal_address_pb2.PostalAddress):\n        Required. The address being validated. Unformatted addresses\n        should be submitted via\n        [``address_lines``][google.type.PostalAddress.address_lines].\n\n        The total length of the fields in this input must not exceed\n        280 characters.\n\n        Supported regions can be found\n        `here <https://developers.google.com/maps/documentation/address-validation/coverage>`__.\n\n        The [language_code][google.type.PostalAddress.language_code]\n        value in the input address is reserved for future uses and\n        is ignored today. The validated address result will be\n        populated based on the preferred language for the given\n        address, as identified by the system.\n\n        The Address Validation API ignores the values in\n        [recipients][google.type.PostalAddress.recipients] and\n        [organization][google.type.PostalAddress.organization]. Any\n        val",
+      "attributes": {
+        "address": {
+          "type": "google.type.postal_address_pb2.PostalAddress",
+          "description": "Required. The address being validated. Unformatted addresses should be submitted via [``address_lines``][google.type.PostalAddress.address_lines].  The total length of the fields in this input must not exceed 280 characters.  Supported regions can be found `here <https://developers.google.com/maps/documentation/address-validation/coverage>`__.  The [language_code][google.type.PostalAddress.language_code] value in the input address is reserved for future uses and is ignored today. The validated address result will be populated based on the preferred language for the given address, as identified by the system.  The Address Validation API ignores the values in [recipients][google.type.PostalAddress.recipients] and [organization][google.type.PostalAddress.organization]. Any values in those fields will be discarded and not returned. Please do not set them."
+        },
+        "previous_response_id": {
+          "type": "str",
+          "description": "This field must be empty for the first address validation request. If more requests are necessary to fully validate a single address (for example if the changes the user makes after the initial validation need to be re-validated), then each followup request must populate this field with the [response_id][google.maps.addressvalidation.v1.ValidateAddressResponse.response_id] from the very first response in the validation sequence."
+        },
+        "enable_usps_cass": {
+          "type": "bool",
+          "description": "Enables USPS CASS compatible mode. This affects *only* the [google.maps.addressvalidation.v1.ValidationResult.usps_data] field of [google.maps.addressvalidation.v1.ValidationResult]. Note: for USPS CASS enabled requests for addresses in Puerto Rico, a [google.type.PostalAddress.region_code] of the ``address`` must be provided as \"PR\", or an [google.type.PostalAddress.administrative_area] of the ``address`` must be provided as \"Puerto Rico\" (case-insensitive) or \"PR\".  It's recommended to use a componentized ``address``, or alternatively specify at least two [google.type.PostalAddress.address_lines] where the first line contains the street number and name and the second line contains the city, state, and zip code."
+        },
+        "session_token": {
+          "type": "str",
+          "description": "Optional. A string which identifies an Autocomplete session for billing purposes. Must be a URL and filename safe base64 string with at most 36 ASCII characters in length. Otherwise an INVALID_ARGUMENT error is returned.  The session begins when the user starts typing a query, and concludes when they select a place and a call to Place Details or Address Validation is made. Each session can have multiple autocomplete queries, followed by one Place Details or Address Validation request. The credentials used for each request within a session must belong to the same Google Cloud Console project. Once a session has concluded, the token is no longer valid; your app must generate a fresh token for each session. If the ``session_token`` parameter is omitted, or if you reuse a session token, the session is charged as if no session token was provided (each request is billed separately).  Note: Address Validation can only be used in sessions with the Autocomplete (New) API, not the old Autocomplete API. See https://developers.google.com/maps/documentation/places/web-service/session-pricing for more details."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ValidateAddressResponse",
+      "docstring": "The response to an address validation request.\n\nAttributes:\n    result (google.maps.addressvalidation_v1.types.ValidationResult):\n        The result of the address validation.\n    response_id (str):\n        The UUID that identifies this response. If the address needs\n        to be re-validated, this UUID *must* accompany the new\n        request.",
+      "attributes": {
+        "result": {
+          "type": "google.maps.addressvalidation_v1.types.ValidationResult",
+          "description": "The result of the address validation."
+        },
+        "response_id": {
+          "type": "str",
+          "description": "The UUID that identifies this response. If the address needs to be re-validated, this UUID *must* accompany the new request."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ProvideValidationFeedbackRequest",
+      "docstring": "The request for sending validation feedback.\n\nAttributes:\n    conclusion (google.maps.addressvalidation_v1.types.ProvideValidationFeedbackRequest.ValidationConclusion):\n        Required. The outcome of the sequence of validation\n        attempts.\n\n        If this field is set to\n        ``VALIDATION_CONCLUSION_UNSPECIFIED``, an\n        ``INVALID_ARGUMENT`` error will be returned.\n    response_id (str):\n        Required. The ID of the response that this feedback is for.\n        This should be the\n        [response_id][google.maps.addressvalidation.v1.ValidateAddressRequest.response_id]\n        from the first response in a series of address validation\n        attempts.",
+      "attributes": {
+        "conclusion": {
+          "type": "google.maps.addressvalidation_v1.types.ProvideValidationFeedbackRequest.ValidationConclusion",
+          "description": "Required. The outcome of the sequence of validation attempts.  If this field is set to ``VALIDATION_CONCLUSION_UNSPECIFIED``, an ``INVALID_ARGUMENT`` error will be returned."
+        },
+        "response_id": {
+          "type": "str",
+          "description": "Required. The ID of the response that this feedback is for. This should be the [response_id][google.maps.addressvalidation.v1.ValidateAddressRequest.response_id] from the first response in a series of address validation attempts."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ProvideValidationFeedbackResponse",
+      "docstring": "The response for validation feedback.\n\nThe response is empty if the feedback is sent successfully.",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "ValidationResult",
+      "docstring": "The result of validating an address.\n\nAttributes:\n    verdict (google.maps.addressvalidation_v1.types.Verdict):\n        Overall verdict flags\n    address (google.maps.addressvalidation_v1.types.Address):\n        Information about the address itself as\n        opposed to the geocode.\n    geocode (google.maps.addressvalidation_v1.types.Geocode):\n        Information about the location and place that\n        the address geocoded to.\n    metadata (google.maps.addressvalidation_v1.types.AddressMetadata):\n        Other information relevant to deliverability. ``metadata``\n        is not guaranteed to be fully populated for every address\n        sent to the Address Validation API.\n    usps_data (google.maps.addressvalidation_v1.types.UspsData):\n        Extra deliverability flags provided by USPS. Only provided\n        in region ``US`` and ``PR``.",
+      "attributes": {
+        "verdict": {
+          "type": "google.maps.addressvalidation_v1.types.Verdict",
+          "description": "Overall verdict flags"
+        },
+        "address": {
+          "type": "google.maps.addressvalidation_v1.types.Address",
+          "description": "Information about the address itself as opposed to the geocode."
+        },
+        "geocode": {
+          "type": "google.maps.addressvalidation_v1.types.Geocode",
+          "description": "Information about the location and place that the address geocoded to."
+        },
+        "metadata": {
+          "type": "google.maps.addressvalidation_v1.types.AddressMetadata",
+          "description": "Other information relevant to deliverability. ``metadata`` is not guaranteed to be fully populated for every address sent to the Address Validation API."
+        },
+        "usps_data": {
+          "type": "google.maps.addressvalidation_v1.types.UspsData",
+          "description": "Extra deliverability flags provided by USPS. Only provided in region ``US`` and ``PR``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Verdict",
+      "docstring": "High level overview of the address validation result and\ngeocode.\n\nAttributes:\n    input_granularity (google.maps.addressvalidation_v1.types.Verdict.Granularity):\n        The granularity of the **input** address. This is the result\n        of parsing the input address and does not give any\n        validation signals. For validation signals, refer to\n        ``validation_granularity`` below.\n\n        For example, if the input address includes a specific\n        apartment number, then the ``input_granularity`` here will\n        be ``SUB_PREMISE``. If we cannot match the apartment number\n        in the databases or the apartment number is invalid, the\n        ``validation_granularity`` will likely be ``PREMISE`` or\n        below.\n    validation_granularity (google.maps.addressvalidation_v1.types.Verdict.Granularity):\n        The granularity level that the API can fully **validate**\n        the address to. For example, an ``validation_granularity``\n        of ``PREMISE`` indicates all address components at the le",
+      "attributes": {
+        "input_granularity": {
+          "type": "google.maps.addressvalidation_v1.types.Verdict.Granularity",
+          "description": "The granularity of the **input** address. This is the result of parsing the input address and does not give any validation signals. For validation signals, refer to ``validation_granularity`` below.  For example, if the input address includes a specific apartment number, then the ``input_granularity`` here will be ``SUB_PREMISE``. If we cannot match the apartment number in the databases or the apartment number is invalid, the ``validation_granularity`` will likely be ``PREMISE`` or below."
+        },
+        "validation_granularity": {
+          "type": "google.maps.addressvalidation_v1.types.Verdict.Granularity",
+          "description": "The granularity level that the API can fully **validate** the address to. For example, an ``validation_granularity`` of ``PREMISE`` indicates all address components at the level of ``PREMISE`` or more coarse can be validated.  Per address component validation result can be found in [google.maps.addressvalidation.v1.Address.address_components]."
+        },
+        "geocode_granularity": {
+          "type": "google.maps.addressvalidation_v1.types.Verdict.Granularity",
+          "description": "Information about the granularity of the [``geocode``][google.maps.addressvalidation.v1.ValidationResult.geocode]. This can be understood as the semantic meaning of how coarse or fine the geocoded location is.  This can differ from the ``validation_granularity`` above occasionally. For example, our database might record the existence of an apartment number but do not have a precise location for the apartment within a big apartment complex. In that case, the ``validation_granularity`` will be ``SUB_PREMISE`` but the ``geocode_granularity`` will be ``PREMISE``."
+        },
+        "address_complete": {
+          "type": "bool",
+          "description": "The address is considered complete if there are no unresolved tokens, no unexpected or missing address components. See [``missing_component_types``][google.maps.addressvalidation.v1.Address.missing_component_types], [``unresolved_tokens``][google.maps.addressvalidation.v1.Address.unresolved_tokens] or [``unexpected``][google.maps.addressvalidation.v1.AddressComponent.unexpected] fields for more details."
+        },
+        "has_unconfirmed_components": {
+          "type": "bool",
+          "description": "At least one address component cannot be categorized or validated, see [google.maps.addressvalidation.v1.Address.address_components] for details."
+        },
+        "has_inferred_components": {
+          "type": "bool",
+          "description": "At least one address component was inferred (added) that wasn't in the input, see [google.maps.addressvalidation.v1.Address.address_components] for details."
+        },
+        "has_replaced_components": {
+          "type": "bool",
+          "description": "At least one address component was replaced, see [google.maps.addressvalidation.v1.Address.address_components] for details."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-maps-addressvalidation\\google\\maps\\addressvalidation_v1\\types\\geocode.py": [
+    {
+      "type": "request_class",
+      "name": "Geocode",
+      "docstring": "Contains information about the place the input was geocoded\nto.\n\nAttributes:\n    location (google.type.latlng_pb2.LatLng):\n        The geocoded location of the input.\n\n        Using place IDs is preferred over using\n        addresses, latitude/longitude coordinates, or\n        plus codes. Using coordinates when routing or\n        calculating driving directions will always\n        result in the point being snapped to the road\n        nearest to those coordinates. This may not be a\n        road that will quickly or safely lead to the\n        destination and may not be near an access point\n        to the property. Additionally, when a location\n        is reverse geocoded, there is no guarantee that\n        the returned address will match the original.\n    plus_code (google.maps.addressvalidation_v1.types.PlusCode):\n        The plus code corresponding to the ``location``.\n    bounds (google.geo.type.types.Viewport):\n        The bounds of the geocoded place.\n    feature_size_meters (float):\n        The size of the",
+      "attributes": {
+        "location": {
+          "type": "google.type.latlng_pb2.LatLng",
+          "description": "The geocoded location of the input.  Using place IDs is preferred over using addresses, latitude/longitude coordinates, or plus codes. Using coordinates when routing or calculating driving directions will always result in the point being snapped to the road nearest to those coordinates. This may not be a road that will quickly or safely lead to the destination and may not be near an access point to the property. Additionally, when a location is reverse geocoded, there is no guarantee that the returned address will match the original."
+        },
+        "plus_code": {
+          "type": "google.maps.addressvalidation_v1.types.PlusCode",
+          "description": "The plus code corresponding to the ``location``."
+        },
+        "bounds": {
+          "type": "google.geo.type.types.Viewport",
+          "description": "The bounds of the geocoded place."
+        },
+        "feature_size_meters": {
+          "type": "float",
+          "description": "The size of the geocoded place, in meters. This is another measure of the coarseness of the geocoded location, but in physical size rather than in semantic meaning."
+        },
+        "place_id": {
+          "type": "str",
+          "description": "The PlaceID of the place this input geocodes to.  For more information about Place IDs see `here <https://developers.google.com/maps/documentation/places/web-service/place-id>`__."
+        },
+        "place_types": {
+          "type": "MutableSequence[str]",
+          "description": "The type(s) of place that the input geocoded to. For example, ``['locality', 'political']``. The full list of types can be found `here <https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types>`__."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PlusCode",
+      "docstring": "Plus code (http://plus.codes) is a location reference with\ntwo formats: global code defining a 14mx14m (1/8000th of a\ndegree) or smaller rectangle, and compound code, replacing the\nprefix with a reference location.\n\nAttributes:\n    global_code (str):\n        Place's global (full) code, such as\n        \"9FWM33GV+HQ\", representing an 1/8000 by 1/8000\n        degree area (~14 by 14 meters).\n    compound_code (str):\n        Place's compound code, such as \"33GV+HQ,\n        Ramberg, Norway\", containing the suffix of the\n        global code and replacing the prefix with a\n        formatted name of a reference entity.",
+      "attributes": {
+        "global_code": {
+          "type": "str",
+          "description": "Place's global (full) code, such as \"9FWM33GV+HQ\", representing an 1/8000 by 1/8000 degree area (~14 by 14 meters)."
+        },
+        "compound_code": {
+          "type": "str",
+          "description": "Place's compound code, such as \"33GV+HQ, Ramberg, Norway\", containing the suffix of the global code and replacing the prefix with a formatted name of a reference entity."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-maps-addressvalidation\\google\\maps\\addressvalidation_v1\\types\\metadata_.py": [
+    {
+      "type": "request_class",
+      "name": "AddressMetadata",
+      "docstring": "The metadata for the address. ``metadata`` is not guaranteed to be\nfully populated for every address sent to the Address Validation\nAPI.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    business (bool):\n        Indicates that this is the address of a\n        business. If unset, indicates that the value is\n        unknown.\n\n        This field is a member of `oneof`_ ``_business``.\n    po_box (bool):\n        Indicates that the address of a PO box.\n        If unset, indicates that the value is unknown.\n\n        This field is a member of `oneof`_ ``_po_box``.\n    residential (bool):\n        Indicates that this is the address of a\n        residence. If unset, indicates that the value is\n        unknown.\n\n        This field is a member of `oneof`_ ``_residential``.",
+      "attributes": {
+        "business": {
+          "type": "bool",
+          "description": "Indicates that this is the address of a business. If unset, indicates that the value is unknown.  This field is a member of `oneof`_ ``_business``."
+        },
+        "po_box": {
+          "type": "bool",
+          "description": "Indicates that the address of a PO box. If unset, indicates that the value is unknown.  This field is a member of `oneof`_ ``_po_box``."
+        },
+        "residential": {
+          "type": "bool",
+          "description": "Indicates that this is the address of a residence. If unset, indicates that the value is unknown.  This field is a member of `oneof`_ ``_residential``."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-maps-addressvalidation\\google\\maps\\addressvalidation_v1\\types\\usps_data.py": [
+    {
+      "type": "request_class",
+      "name": "UspsAddress",
+      "docstring": "USPS representation of a US address.\n\nAttributes:\n    first_address_line (str):\n        First address line.\n    firm (str):\n        Firm name.\n    second_address_line (str):\n        Second address line.\n    urbanization (str):\n        Puerto Rican urbanization name.\n    city_state_zip_address_line (str):\n        City + state + postal code.\n    city (str):\n        City name.\n    state (str):\n        2 letter state code.\n    zip_code (str):\n        Postal code e.g. 10009.\n    zip_code_extension (str):\n        4-digit postal code extension e.g. 5023.",
+      "attributes": {
+        "first_address_line": {
+          "type": "str",
+          "description": "First address line."
+        },
+        "firm": {
+          "type": "str",
+          "description": "Firm name."
+        },
+        "second_address_line": {
+          "type": "str",
+          "description": "Second address line."
+        },
+        "urbanization": {
+          "type": "str",
+          "description": "Puerto Rican urbanization name."
+        },
+        "city_state_zip_address_line": {
+          "type": "str",
+          "description": "City + state + postal code."
+        },
+        "city": {
+          "type": "str",
+          "description": "City name."
+        },
+        "state": {
+          "type": "str",
+          "description": "2 letter state code."
+        },
+        "zip_code": {
+          "type": "str",
+          "description": "Postal code e.g. 10009."
+        },
+        "zip_code_extension": {
+          "type": "str",
+          "description": "4-digit postal code extension e.g. 5023."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UspsData",
+      "docstring": "The USPS data for the address. ``uspsData`` is not guaranteed to be\nfully populated for every US or PR address sent to the Address\nValidation API. It's recommended to integrate the backup address\nfields in the response if you utilize uspsData as the primary part\nof the response.\n\nAttributes:\n    standardized_address (google.maps.addressvalidation_v1.types.UspsAddress):\n        USPS standardized address.\n    delivery_point_code (str):\n        2 digit delivery point code\n    delivery_point_check_digit (str):\n        The delivery point check digit. This number is added to the\n        end of the delivery_point_barcode for mechanically scanned\n        mail. Adding all the digits of the delivery_point_barcode,\n        delivery_point_check_digit, postal code, and ZIP+4 together\n        should yield a number divisible by 10.\n    dpv_confirmation (str):\n        The possible values for DPV confirmation. Returns a single\n        character or returns no value.\n\n        -  ``N``: Primary and any secondary number informati",
+      "attributes": {
+        "standardized_address": {
+          "type": "google.maps.addressvalidation_v1.types.UspsAddress",
+          "description": "USPS standardized address."
+        },
+        "delivery_point_code": {
+          "type": "str",
+          "description": "2 digit delivery point code"
+        },
+        "delivery_point_check_digit": {
+          "type": "str",
+          "description": "The delivery point check digit. This number is added to the end of the delivery_point_barcode for mechanically scanned mail. Adding all the digits of the delivery_point_barcode, delivery_point_check_digit, postal code, and ZIP+4 together should yield a number divisible by 10."
+        },
+        "dpv_confirmation": {
+          "type": "str",
+          "description": "The possible values for DPV confirmation. Returns a single character or returns no value.  -  ``N``: Primary and any secondary number information failed to DPV confirm. -  ``D``: Address was DPV confirmed for the primary number only, and the secondary number information was missing. -  ``S``: Address was DPV confirmed for the primary number only, and the secondary number information was present but not confirmed. -  ``Y``: Address was DPV confirmed for primary and any secondary numbers. -  Empty: If the response does not contain a ``dpv_confirmation`` value, the address was not submitted for DPV confirmation."
+        },
+        "dpv_footnote": {
+          "type": "str",
+          "description": "The footnotes from delivery point validation. Multiple footnotes may be strung together in the same string.  -  ``AA``: Input address matched to the ZIP+4 file -  ``A1``: Input address was not matched to the ZIP+4 file -  ``BB``: Matched to DPV (all components) -  ``CC``: Secondary number not matched and not required -  ``C1``: Secondary number not matched but required -  ``N1``: High-rise address missing secondary number -  ``M1``: Primary number missing -  ``M3``: Primary number invalid -  ``P1``: Input address PO, RR or HC box number missing -  ``P3``: Input address PO, RR, or HC Box number invalid -  ``F1``: Input address matched to a military address -  ``G1``: Input address matched to a general delivery address -  ``U1``: Input address matched to a unique ZIP code -  ``PB``: Input address matched to PBSA record -  ``RR``: DPV confirmed address with PMB information -  ``R1``: DPV confirmed address without PMB information -  ``R7``: Carrier Route R777 or R779 record -  ``IA``: Informed Address identified -  ``TA``: Primary number matched by dropping a trailing alpha"
+        },
+        "dpv_cmra": {
+          "type": "str",
+          "description": "Indicates if the address is a CMRA (Commercial Mail Receiving Agency)--a private business receiving mail for clients. Returns a single character.  -  ``Y``: The address is a CMRA -  ``N``: The address is not a CMRA"
+        },
+        "dpv_vacant": {
+          "type": "str",
+          "description": "Is this place vacant? Returns a single character.  -  ``Y``: The address is vacant -  ``N``: The address is not vacant"
+        },
+        "dpv_no_stat": {
+          "type": "str",
+          "description": "Is this a no stat address or an active address? No stat addresses are ones which are not continuously occupied or addresses that the USPS does not service. Returns a single character.  -  ``Y``: The address is not active -  ``N``: The address is active"
+        },
+        "dpv_no_stat_reason_code": {
+          "type": "int",
+          "description": "Indicates the NoStat type. Returns a reason code as int.  -  ``1``: IDA (Internal Drop Address) \u2013 Addresses that do not receive mail directly from the USPS but are delivered to a drop address that services them. -  ``2``: CDS - Addresses that have not yet become deliverable. For example, a new subdivision where lots and primary numbers have been determined, but no structure exists yet for occupancy. -  ``3``: Collision - Addresses that do not actually DPV confirm. -  ``4``: CMZ (College, Military and Other Types) - ZIP + 4 records USPS has incorporated into the data. -  ``5``: Regular - Indicates addresses not receiving delivery and the addresses are not counted as possible deliveries. -  ``6``: Secondary Required - The address requires secondary information."
+        },
+        "dpv_drop": {
+          "type": "str",
+          "description": "Flag indicates mail is delivered to a single receptable at a site. Returns a single character.  -  ``Y``: The mail is delivered to a single receptable at a site. -  ``N``: The mail is not delivered to a single receptable at a site."
+        },
+        "dpv_throwback": {
+          "type": "str",
+          "description": "Indicates that mail is not delivered to the street address. Returns a single character.  -  ``Y``: The mail is not delivered to the street address. -  ``N``: The mail is delivered to the street address."
+        },
+        "dpv_non_delivery_days": {
+          "type": "str",
+          "description": "Flag indicates mail delivery is not performed every day of the week. Returns a single character.  -  ``Y``: The mail delivery is not performed every day of the week. -  ``N``: No indication the mail delivery is not performed every day of the week."
+        },
+        "dpv_non_delivery_days_values": {
+          "type": "int",
+          "description": "Integer identifying non-delivery days. It can be interrogated using bit flags:  0x40 \u2013 Sunday is a non-delivery day 0x20 \u2013 Monday is a non-delivery day 0x10 \u2013 Tuesday is a non-delivery day 0x08 \u2013 Wednesday is a non-delivery day 0x04 \u2013 Thursday is a non-delivery day 0x02 \u2013 Friday is a non-delivery day 0x01 \u2013 Saturday is a non-delivery day"
+        },
+        "dpv_no_secure_location": {
+          "type": "str",
+          "description": "Flag indicates door is accessible, but package will not be left due to security concerns. Returns a single character.  -  ``Y``: The package will not be left due to security concerns. -  ``N``: No indication the package will not be left due to security concerns."
+        },
+        "dpv_pbsa": {
+          "type": "str",
+          "description": "Indicates the address was matched to PBSA record. Returns a single character.  -  ``Y``: The address was matched to PBSA record. -  ``N``: The address was not matched to PBSA record."
+        },
+        "dpv_door_not_accessible": {
+          "type": "str",
+          "description": "Flag indicates addresses where USPS cannot knock on a door to deliver mail. Returns a single character.  -  ``Y``: The door is not accessible. -  ``N``: No indication the door is not accessible."
+        },
+        "dpv_enhanced_delivery_code": {
+          "type": "str",
+          "description": "Indicates that more than one DPV return code is valid for the address. Returns a single character.  -  ``Y``: Address was DPV confirmed for primary and any secondary numbers. -  ``N``: Primary and any secondary number information failed to DPV confirm. -  ``S``: Address was DPV confirmed for the primary number only, and the secondary number information was present by not confirmed, or a single trailing alpha on a primary number was dropped to make a DPV match and secondary information required. -  ``D``: Address was DPV confirmed for the primary number only, and the secondary number information was missing. -  ``R``: Address confirmed but assigned to phantom route R777 and R779 and USPS delivery is not provided."
+        },
+        "carrier_route": {
+          "type": "str",
+          "description": "The carrier route code. A four character code consisting of a one letter prefix and a three digit route designator.  Prefixes:  -  ``C``: Carrier route (or city route) -  ``R``: Rural route -  ``H``: Highway Contract Route -  ``B``: Post Office Box Section -  ``G``: General delivery unit"
+        },
+        "carrier_route_indicator": {
+          "type": "str",
+          "description": "Carrier route rate sort indicator."
+        },
+        "ews_no_match": {
+          "type": "bool",
+          "description": "The delivery address is matchable, but the EWS file indicates that an exact match will be available soon."
+        },
+        "post_office_city": {
+          "type": "str",
+          "description": "Main post office city."
+        },
+        "post_office_state": {
+          "type": "str",
+          "description": "Main post office state."
+        },
+        "abbreviated_city": {
+          "type": "str",
+          "description": "Abbreviated city."
+        },
+        "fips_county_code": {
+          "type": "str",
+          "description": "FIPS county code."
+        },
+        "county": {
+          "type": "str",
+          "description": "County name."
+        },
+        "elot_number": {
+          "type": "str",
+          "description": "Enhanced Line of Travel (eLOT) number."
+        },
+        "elot_flag": {
+          "type": "str",
+          "description": "eLOT Ascending/Descending Flag (A/D)."
+        },
+        "lacs_link_return_code": {
+          "type": "str",
+          "description": "LACSLink return code."
+        },
+        "lacs_link_indicator": {
+          "type": "str",
+          "description": "LACSLink indicator."
+        },
+        "po_box_only_postal_code": {
+          "type": "bool",
+          "description": "PO Box only postal code."
+        },
+        "suitelink_footnote": {
+          "type": "str",
+          "description": "Footnotes from matching a street or highrise record to suite information. If business name match is found, the secondary number is returned.  -  ``A``: SuiteLink record match, business address improved. -  ``00``: No match, business address is not improved."
+        },
+        "pmb_designator": {
+          "type": "str",
+          "description": "PMB (Private Mail Box) unit designator."
+        },
+        "pmb_number": {
+          "type": "str",
+          "description": "PMB (Private Mail Box) number;"
+        },
+        "address_record_type": {
+          "type": "str",
+          "description": "Type of the address record that matches the input address.  -  ``F``: FIRM. This is a match to a Firm Record, which is the finest level of match available for an address. -  ``G``: GENERAL DELIVERY. This is a match to a General Delivery record. -  ``H``: BUILDING / APARTMENT. This is a match to a Building or Apartment record. -  ``P``: POST OFFICE BOX. This is a match to a Post Office Box. -  ``R``: RURAL ROUTE or HIGHWAY CONTRACT: This is a match to either a Rural Route or a Highway Contract record, both of which may have associated Box Number ranges. -  ``S``: STREET RECORD: This is a match to a Street record containing a valid primary number range."
+        },
+        "default_address": {
+          "type": "bool",
+          "description": "Indicator that a default address was found, but more specific addresses exists."
+        },
+        "error_message": {
+          "type": "str",
+          "description": "Error message for USPS data retrieval. This is populated when USPS processing is suspended because of the detection of artificially created addresses.  The USPS data fields might not be populated when this error is present."
+        },
+        "cass_processed": {
+          "type": "bool",
+          "description": "Indicator that the request has been CASS processed."
+        }
+      }
+    }
+  ]
+}

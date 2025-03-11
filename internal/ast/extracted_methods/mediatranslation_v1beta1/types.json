@@ -1,0 +1,106 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-media-translation\\google\\cloud\\mediatranslation_v1beta1\\types\\media_translation.py": [
+    {
+      "type": "request_class",
+      "name": "TranslateSpeechConfig",
+      "docstring": "Provides information to the speech translation that specifies\nhow to process the request.\n\nAttributes:\n    audio_encoding (str):\n        Required. Encoding of audio data. Supported formats:\n\n        -  ``linear16``\n\n           Uncompressed 16-bit signed little-endian samples (Linear\n           PCM).\n\n        -  ``flac``\n\n           ``flac`` (Free Lossless Audio Codec) is the recommended\n           encoding because it is lossless--therefore recognition is\n           not compromised--and requires only about half the\n           bandwidth of ``linear16``.\n\n        -  ``mulaw``\n\n           8-bit samples that compand 14-bit audio samples using\n           G.711 PCMU/mu-law.\n\n        -  ``amr``\n\n           Adaptive Multi-Rate Narrowband codec.\n           ``sample_rate_hertz`` must be 8000.\n\n        -  ``amr-wb``\n\n           Adaptive Multi-Rate Wideband codec. ``sample_rate_hertz``\n           must be 16000.\n\n        -  ``ogg-opus``\n\n           Opus encoded audio frames in\n           `Ogg <https://wikipedia.org/wiki/Og",
+      "attributes": {
+        "audio_encoding": {
+          "type": "str",
+          "description": "Required. Encoding of audio data. Supported formats:  -  ``linear16``  Uncompressed 16-bit signed little-endian samples (Linear PCM).  -  ``flac``  ``flac`` (Free Lossless Audio Codec) is the recommended encoding because it is lossless--therefore recognition is not compromised--and requires only about half the bandwidth of ``linear16``.  -  ``mulaw``  8-bit samples that compand 14-bit audio samples using G.711 PCMU/mu-law.  -  ``amr``  Adaptive Multi-Rate Narrowband codec. ``sample_rate_hertz`` must be 8000.  -  ``amr-wb``  Adaptive Multi-Rate Wideband codec. ``sample_rate_hertz`` must be 16000.  -  ``ogg-opus``  Opus encoded audio frames in `Ogg <https://wikipedia.org/wiki/Ogg>`__ container. ``sample_rate_hertz`` must be one of 8000, 12000, 16000, 24000, or 48000.  -  ``mp3``  MP3 audio. Support all standard MP3 bitrates (which range from 32-320 kbps). When using this encoding, ``sample_rate_hertz`` has to match the sample rate of the file being used."
+        },
+        "source_language_code": {
+          "type": "str",
+          "description": "Required. Source language code (BCP-47) of the input audio."
+        },
+        "target_language_code": {
+          "type": "str",
+          "description": "Required. Target language code (BCP-47) of the output."
+        },
+        "sample_rate_hertz": {
+          "type": "int",
+          "description": "Optional. Sample rate in Hertz of the audio data. Valid values are: 8000-48000. 16000 is optimal. For best results, set the sampling rate of the audio source to 16000 Hz. If that's not possible, use the native sample rate of the audio source (instead of re-sampling)."
+        },
+        "model": {
+          "type": "str",
+          "description": "Optional. ``google-provided-model/video`` and ``google-provided-model/enhanced-phone-call`` are premium models. ``google-provided-model/phone-call`` is not premium model."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StreamingTranslateSpeechConfig",
+      "docstring": "Config used for streaming translation.\n\nAttributes:\n    audio_config (google.cloud.mediatranslation_v1beta1.types.TranslateSpeechConfig):\n        Required. The common config for all the\n        following audio contents.\n    single_utterance (bool):\n        Optional. If ``false`` or omitted, the system performs\n        continuous translation (continuing to wait for and process\n        audio even if the user pauses speaking) until the client\n        closes the input stream (gRPC API) or until the maximum time\n        limit has been reached. May return multiple\n        ``StreamingTranslateSpeechResult``\\ s with the ``is_final``\n        flag set to ``true``.\n\n        If ``true``, the speech translator will detect a single\n        spoken utterance. When it detects that the user has paused\n        or stopped speaking, it will return an\n        ``END_OF_SINGLE_UTTERANCE`` event and cease translation.\n        When the client receives 'END_OF_SINGLE_UTTERANCE' event,\n        the client should stop sending the requests",
+      "attributes": {
+        "audio_config": {
+          "type": "google.cloud.mediatranslation_v1beta1.types.TranslateSpeechConfig",
+          "description": "Required. The common config for all the following audio contents."
+        },
+        "single_utterance": {
+          "type": "bool",
+          "description": "Optional. If ``false`` or omitted, the system performs continuous translation (continuing to wait for and process audio even if the user pauses speaking) until the client closes the input stream (gRPC API) or until the maximum time limit has been reached. May return multiple ``StreamingTranslateSpeechResult``\\ s with the ``is_final`` flag set to ``true``.  If ``true``, the speech translator will detect a single spoken utterance. When it detects that the user has paused or stopped speaking, it will return an ``END_OF_SINGLE_UTTERANCE`` event and cease translation. When the client receives 'END_OF_SINGLE_UTTERANCE' event, the client should stop sending the requests. However, clients should keep receiving remaining responses until the stream is terminated. To construct the complete sentence in a streaming way, one should override (if 'is_final' of previous response is false), or append (if 'is_final' of previous response is true)."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StreamingTranslateSpeechRequest",
+      "docstring": "The top-level message sent by the client for the\n``StreamingTranslateSpeech`` method. Multiple\n``StreamingTranslateSpeechRequest`` messages are sent. The first\nmessage must contain a ``streaming_config`` message and must not\ncontain ``audio_content`` data. All subsequent messages must contain\n``audio_content`` data and must not contain a ``streaming_config``\nmessage.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    streaming_config (google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechConfig):\n        Provides information to the recognizer that specifies how to\n        process the request. The first\n        ``StreamingTranslateSpeechRequest`` message must contain a\n        ``streaming_config`` message.\n\n        This fi",
+      "attributes": {
+        "streaming_config": {
+          "type": "google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechConfig",
+          "description": "Provides information to the recognizer that specifies how to process the request. The first ``StreamingTranslateSpeechRequest`` message must contain a ``streaming_config`` message.  This field is a member of `oneof`_ ``streaming_request``."
+        },
+        "audio_content": {
+          "type": "bytes",
+          "description": "The audio data to be translated. Sequential chunks of audio data are sent in sequential ``StreamingTranslateSpeechRequest`` messages. The first ``StreamingTranslateSpeechRequest`` message must not contain ``audio_content`` data and all subsequent ``StreamingTranslateSpeechRequest`` messages must contain ``audio_content`` data. The audio bytes must be encoded as specified in ``StreamingTranslateSpeechConfig``. Note: as with all bytes fields, protobuffers use a pure binary representation (not base64).  This field is a member of `oneof`_ ``streaming_request``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StreamingTranslateSpeechResult",
+      "docstring": "A streaming speech translation result corresponding to a\nportion of the audio that is currently being processed.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    text_translation_result (google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechResult.TextTranslationResult):\n        Text translation result.\n\n        This field is a member of `oneof`_ ``result``.",
+      "attributes": {
+        "text_translation_result": {
+          "type": "google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechResult.TextTranslationResult",
+          "description": "Text translation result.  This field is a member of `oneof`_ ``result``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StreamingTranslateSpeechResponse",
+      "docstring": "A streaming speech translation response corresponding to a\nportion of the audio currently processed.\n\nAttributes:\n    error (google.rpc.status_pb2.Status):\n        Output only. If set, returns a\n        [google.rpc.Status][google.rpc.Status] message that\n        specifies the error for the operation.\n    result (google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechResult):\n        Output only. The translation result that is currently being\n        processed (is_final could be true or false).\n    speech_event_type (google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechResponse.SpeechEventType):\n        Output only. Indicates the type of speech\n        event.",
+      "attributes": {
+        "error": {
+          "type": "google.rpc.status_pb2.Status",
+          "description": "Output only. If set, returns a [google.rpc.Status][google.rpc.Status] message that specifies the error for the operation."
+        },
+        "result": {
+          "type": "google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechResult",
+          "description": "Output only. The translation result that is currently being processed (is_final could be true or false)."
+        },
+        "speech_event_type": {
+          "type": "google.cloud.mediatranslation_v1beta1.types.StreamingTranslateSpeechResponse.SpeechEventType",
+          "description": "Output only. Indicates the type of speech event."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "TextTranslationResult",
+      "docstring": "Text translation result.\n\nAttributes:\n    translation (str):\n        Output only. The translated sentence.\n    is_final (bool):\n        Output only. If ``false``, this\n        ``StreamingTranslateSpeechResult`` represents an interim\n        result that may change. If ``true``, this is the final time\n        the translation service will return this particular\n        ``StreamingTranslateSpeechResult``, the streaming translator\n        will not return any further hypotheses for this portion of\n        the transcript and corresponding audio.",
+      "attributes": {
+        "translation": {
+          "type": "str",
+          "description": "Output only. The translated sentence."
+        },
+        "is_final": {
+          "type": "bool",
+          "description": "Output only. If ``false``, this ``StreamingTranslateSpeechResult`` represents an interim result that may change. If ``true``, this is the final time the translation service will return this particular ``StreamingTranslateSpeechResult``, the streaming translator will not return any further hypotheses for this portion of the transcript and corresponding audio."
+        }
+      }
+    }
+  ]
+}

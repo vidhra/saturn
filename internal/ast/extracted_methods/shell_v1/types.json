@@ -1,0 +1,216 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-shell\\google\\cloud\\shell_v1\\types\\cloudshell.py": [
+    {
+      "type": "request_class",
+      "name": "Environment",
+      "docstring": "A Cloud Shell environment, which is defined as the\ncombination of a Docker image specifying what is installed on\nthe environment and a home directory containing the user's data\nthat will remain across sessions. Each user has at least an\nenvironment with the ID \"default\".\n\nAttributes:\n    name (str):\n        Immutable. Full name of this resource, in the format\n        ``users/{owner_email}/environments/{environment_id}``.\n        ``{owner_email}`` is the email address of the user to whom\n        this environment belongs, and ``{environment_id}`` is the\n        identifier of this environment. For example,\n        ``users/someone@example.com/environments/default``.\n    id (str):\n        Output only. The environment's identifier,\n        unique among the user's environments.\n    docker_image (str):\n        Required. Immutable. Full path to the Docker\n        image used to run this environment, e.g.\n        \"gcr.io/dev-con/cloud-devshell:latest\".\n    state (google.cloud.shell_v1.types.Environment.State):\n        O",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Immutable. Full name of this resource, in the format ``users/{owner_email}/environments/{environment_id}``. ``{owner_email}`` is the email address of the user to whom this environment belongs, and ``{environment_id}`` is the identifier of this environment. For example, ``users/someone@example.com/environments/default``."
+        },
+        "id": {
+          "type": "str",
+          "description": "Output only. The environment's identifier, unique among the user's environments."
+        },
+        "docker_image": {
+          "type": "str",
+          "description": "Required. Immutable. Full path to the Docker image used to run this environment, e.g. \"gcr.io/dev-con/cloud-devshell:latest\"."
+        },
+        "state": {
+          "type": "google.cloud.shell_v1.types.Environment.State",
+          "description": "Output only. Current execution state of this environment."
+        },
+        "web_host": {
+          "type": "str",
+          "description": "Output only. Host to which clients can connect to initiate HTTPS or WSS connections with the environment."
+        },
+        "ssh_username": {
+          "type": "str",
+          "description": "Output only. Username that clients should use when initiating SSH sessions with the environment."
+        },
+        "ssh_host": {
+          "type": "str",
+          "description": "Output only. Host to which clients can connect to initiate SSH sessions with the environment."
+        },
+        "ssh_port": {
+          "type": "int",
+          "description": "Output only. Port to which clients can connect to initiate SSH sessions with the environment."
+        },
+        "public_keys": {
+          "type": "MutableSequence[str]",
+          "description": "Output only. Public keys associated with the environment. Clients can connect to this environment via SSH only if they possess a private key corresponding to at least one of these public keys. Keys can be added to or removed from the environment using the AddPublicKey and RemovePublicKey methods."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetEnvironmentRequest",
+      "docstring": "Request message for\n[GetEnvironment][google.cloud.shell.v1.CloudShellService.GetEnvironment].\n\nAttributes:\n    name (str):\n        Required. Name of the requested resource, for example\n        ``users/me/environments/default`` or\n        ``users/someone@example.com/environments/default``.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the requested resource, for example ``users/me/environments/default`` or ``users/someone@example.com/environments/default``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateEnvironmentMetadata",
+      "docstring": "Message included in the metadata field of operations returned from\n[CreateEnvironment][google.cloud.shell.v1.CloudShellService.CreateEnvironment].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteEnvironmentMetadata",
+      "docstring": "Message included in the metadata field of operations returned from\n[DeleteEnvironment][google.cloud.shell.v1.CloudShellService.DeleteEnvironment].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "StartEnvironmentRequest",
+      "docstring": "Request message for\n[StartEnvironment][google.cloud.shell.v1.CloudShellService.StartEnvironment].\n\nAttributes:\n    name (str):\n        Name of the resource that should be started, for example\n        ``users/me/environments/default`` or\n        ``users/someone@example.com/environments/default``.\n    access_token (str):\n        The initial access token passed to the\n        environment. If this is present and valid, the\n        environment will be pre-authenticated with\n        gcloud so that the user can run gcloud commands\n        in Cloud Shell without having to log in. This\n        code can be updated later by calling\n        AuthorizeEnvironment.\n    public_keys (MutableSequence[str]):\n        Public keys that should be added to the\n        environment before it is started.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Name of the resource that should be started, for example ``users/me/environments/default`` or ``users/someone@example.com/environments/default``."
+        },
+        "access_token": {
+          "type": "str",
+          "description": "The initial access token passed to the environment. If this is present and valid, the environment will be pre-authenticated with gcloud so that the user can run gcloud commands in Cloud Shell without having to log in. This code can be updated later by calling AuthorizeEnvironment."
+        },
+        "public_keys": {
+          "type": "MutableSequence[str]",
+          "description": "Public keys that should be added to the environment before it is started."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AuthorizeEnvironmentRequest",
+      "docstring": "Request message for\n[AuthorizeEnvironment][google.cloud.shell.v1.CloudShellService.AuthorizeEnvironment].\n\nAttributes:\n    name (str):\n        Name of the resource that should receive the credentials,\n        for example ``users/me/environments/default`` or\n        ``users/someone@example.com/environments/default``.\n    access_token (str):\n        The OAuth access token that should be sent to\n        the environment.\n    id_token (str):\n        The OAuth ID token that should be sent to the\n        environment.\n    expire_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time when the credentials expire. If not\n        set, defaults to one hour from when the server\n        received the request.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Name of the resource that should receive the credentials, for example ``users/me/environments/default`` or ``users/someone@example.com/environments/default``."
+        },
+        "access_token": {
+          "type": "str",
+          "description": "The OAuth access token that should be sent to the environment."
+        },
+        "id_token": {
+          "type": "str",
+          "description": "The OAuth ID token that should be sent to the environment."
+        },
+        "expire_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "The time when the credentials expire. If not set, defaults to one hour from when the server received the request."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AuthorizeEnvironmentResponse",
+      "docstring": "Response message for\n[AuthorizeEnvironment][google.cloud.shell.v1.CloudShellService.AuthorizeEnvironment].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "AuthorizeEnvironmentMetadata",
+      "docstring": "Message included in the metadata field of operations returned from\n[AuthorizeEnvironment][google.cloud.shell.v1.CloudShellService.AuthorizeEnvironment].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "StartEnvironmentMetadata",
+      "docstring": "Message included in the metadata field of operations returned from\n[StartEnvironment][google.cloud.shell.v1.CloudShellService.StartEnvironment].\n\nAttributes:\n    state (google.cloud.shell_v1.types.StartEnvironmentMetadata.State):\n        Current state of the environment being\n        started.",
+      "attributes": {
+        "state": {
+          "type": "google.cloud.shell_v1.types.StartEnvironmentMetadata.State",
+          "description": "Current state of the environment being started."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StartEnvironmentResponse",
+      "docstring": "Message included in the response field of operations returned from\n[StartEnvironment][google.cloud.shell.v1.CloudShellService.StartEnvironment]\nonce the operation is complete.\n\nAttributes:\n    environment (google.cloud.shell_v1.types.Environment):\n        Environment that was started.",
+      "attributes": {
+        "environment": {
+          "type": "google.cloud.shell_v1.types.Environment",
+          "description": "Environment that was started."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AddPublicKeyRequest",
+      "docstring": "Request message for\n[AddPublicKey][google.cloud.shell.v1.CloudShellService.AddPublicKey].\n\nAttributes:\n    environment (str):\n        Environment this key should be added to, e.g.\n        ``users/me/environments/default``.\n    key (str):\n        Key that should be added to the environment. Supported\n        formats are ``ssh-dss`` (see RFC4253), ``ssh-rsa`` (see\n        RFC4253), ``ecdsa-sha2-nistp256`` (see RFC5656),\n        ``ecdsa-sha2-nistp384`` (see RFC5656) and\n        ``ecdsa-sha2-nistp521`` (see RFC5656). It should be\n        structured as <format> <content>, where <content> part is\n        encoded with Base64.",
+      "attributes": {
+        "environment": {
+          "type": "str",
+          "description": "Environment this key should be added to, e.g. ``users/me/environments/default``."
+        },
+        "key": {
+          "type": "str",
+          "description": "Key that should be added to the environment. Supported formats are ``ssh-dss`` (see RFC4253), ``ssh-rsa`` (see RFC4253), ``ecdsa-sha2-nistp256`` (see RFC5656), ``ecdsa-sha2-nistp384`` (see RFC5656) and ``ecdsa-sha2-nistp521`` (see RFC5656). It should be structured as <format> <content>, where <content> part is encoded with Base64."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AddPublicKeyResponse",
+      "docstring": "Response message for\n[AddPublicKey][google.cloud.shell.v1.CloudShellService.AddPublicKey].\n\nAttributes:\n    key (str):\n        Key that was added to the environment.",
+      "attributes": {
+        "key": {
+          "type": "str",
+          "description": "Key that was added to the environment."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AddPublicKeyMetadata",
+      "docstring": "Message included in the metadata field of operations returned from\n[AddPublicKey][google.cloud.shell.v1.CloudShellService.AddPublicKey].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "RemovePublicKeyRequest",
+      "docstring": "Request message for\n[RemovePublicKey][google.cloud.shell.v1.CloudShellService.RemovePublicKey].\n\nAttributes:\n    environment (str):\n        Environment this key should be removed from, e.g.\n        ``users/me/environments/default``.\n    key (str):\n        Key that should be removed from the\n        environment.",
+      "attributes": {
+        "environment": {
+          "type": "str",
+          "description": "Environment this key should be removed from, e.g. ``users/me/environments/default``."
+        },
+        "key": {
+          "type": "str",
+          "description": "Key that should be removed from the environment."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RemovePublicKeyResponse",
+      "docstring": "Response message for\n[RemovePublicKey][google.cloud.shell.v1.CloudShellService.RemovePublicKey].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "RemovePublicKeyMetadata",
+      "docstring": "Message included in the metadata field of operations returned from\n[RemovePublicKey][google.cloud.shell.v1.CloudShellService.RemovePublicKey].",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "CloudShellErrorDetails",
+      "docstring": "Cloud-shell specific information that will be included as\ndetails in failure responses.\n\nAttributes:\n    code (google.cloud.shell_v1.types.CloudShellErrorDetails.CloudShellErrorCode):\n        Code indicating the specific error the\n        occurred.",
+      "attributes": {
+        "code": {
+          "type": "google.cloud.shell_v1.types.CloudShellErrorDetails.CloudShellErrorCode",
+          "description": "Code indicating the specific error the occurred."
+        }
+      }
+    }
+  ]
+}

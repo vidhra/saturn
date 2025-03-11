@@ -1,0 +1,1874 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-analytics-data\\google\\analytics\\data_v1alpha\\types\\analytics_data_api.py": [
+    {
+      "type": "request_class",
+      "name": "CreateRecurringAudienceListRequest",
+      "docstring": "A request to create a new recurring audience list.\n\nAttributes:\n    parent (str):\n        Required. The parent resource where this recurring audience\n        list will be created. Format: ``properties/{property}``\n    recurring_audience_list (google.analytics.data_v1alpha.types.RecurringAudienceList):\n        Required. The recurring audience list to\n        create.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource where this recurring audience list will be created. Format: ``properties/{property}``"
+        },
+        "recurring_audience_list": {
+          "type": "google.analytics.data_v1alpha.types.RecurringAudienceList",
+          "description": "Required. The recurring audience list to create."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RecurringAudienceList",
+      "docstring": "A recurring audience list produces new audience lists each\nday. Audience lists are users in an audience at the time of the\nlist's creation. A recurring audience list ensures that you have\naudience list based on the most recent data available for use\neach day.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Output only. Identifier. The recurring audience list\n        resource name assigned during creation. This resource name\n        identifies this ``RecurringAudienceList``.\n\n        Format:\n        ``properties/{property}/recurringAudienceLists/{recurring_audience_list}``\n    audience (str):\n        Required. The audience resource name. This resource name\n        identifies the audience being listed and is shared between\n        the Analytics Data & Admin APIs.\n\n        Format: ``properties/{property}/audiences/{audience}``\n    audience_display_name (str):\n        Output only. The descriptive display name for\n   ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Identifier. The recurring audience list resource name assigned during creation. This resource name identifies this ``RecurringAudienceList``.  Format: ``properties/{property}/recurringAudienceLists/{recurring_audience_list}``"
+        },
+        "audience": {
+          "type": "str",
+          "description": "Required. The audience resource name. This resource name identifies the audience being listed and is shared between the Analytics Data & Admin APIs.  Format: ``properties/{property}/audiences/{audience}``"
+        },
+        "audience_display_name": {
+          "type": "str",
+          "description": "Output only. The descriptive display name for this audience. For example, \"Purchasers\"."
+        },
+        "dimensions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.AudienceDimension]",
+          "description": "Required. The dimensions requested and displayed in the audience list response."
+        },
+        "active_days_remaining": {
+          "type": "int",
+          "description": "Optional. The number of remaining days that a recurring audience export will produce an audience list instance. This counter decreases by one each day, and when it reaches zero, no new audience lists will be created.  Recurring audience list request for Analytics 360 properties default to 180 days and have a maximum of 365 days. Requests for standard Analytics properties default to 14 days and have a maximum of 30 days.  The minimum value allowed during creation is 1. Requests above their respective maximum will be coerced to their maximum.  This field is a member of `oneof`_ ``_active_days_remaining``."
+        },
+        "audience_lists": {
+          "type": "MutableSequence[str]",
+          "description": "Output only. Audience list resource names for audience list instances created for this recurring audience list. One audience list is created for each day, and the audience list will be listed here.  This list is ordered with the most recently created audience list first."
+        },
+        "webhook_notification": {
+          "type": "google.analytics.data_v1alpha.types.WebhookNotification",
+          "description": "Optional. Configures webhook notifications to be sent from the Google Analytics Data API to your webhook server. Use of webhooks is optional. If unused, you'll need to poll this API to determine when a recurring audience list creates new audience lists. Webhooks allow a notification to be sent to your servers & avoid the need for polling.  Two POST requests will be sent each time a recurring audience list creates an audience list. This happens once per day until a recurring audience list reaches 0 active days remaining. The first request will be sent showing a newly created audience list in its CREATING state. The second request will be sent after the audience list completes creation (either the ACTIVE or FAILED state).  This field is a member of `oneof`_ ``_webhook_notification``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "WebhookNotification",
+      "docstring": "Configures a long-running operation resource to send a\nwebhook notification from the Google Analytics Data API to your\nwebhook server when the resource updates.\n\nNotification configurations contain private values & are only\nvisible to your GCP project. Different GCP projects may attach\ndifferent webhook notifications to the same long-running\noperation resource.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    uri (str):\n        Optional. The web address that will receive the webhook\n        notification. This address will receive POST requests as the\n        state of the long running operation resource changes. The\n        POST request will contain both a JSON version of the long\n        running operation resource in the body and a\n        ``sentTimestamp`` field. The sent timestamp will specify the\n        unix microseconds since the epoch that the request was sent;\n        this lets you identify replayed notifications.\n\n        An ",
+      "attributes": {
+        "uri": {
+          "type": "str",
+          "description": "Optional. The web address that will receive the webhook notification. This address will receive POST requests as the state of the long running operation resource changes. The POST request will contain both a JSON version of the long running operation resource in the body and a ``sentTimestamp`` field. The sent timestamp will specify the unix microseconds since the epoch that the request was sent; this lets you identify replayed notifications.  An example URI is ``https://us-central1-example-project-id.cloudfunctions.net/example-function-1``.  The URI must use HTTPS and point to a site with a valid SSL certificate on the web server. The URI must have a maximum string length of 128 characters & use only the allowlisted characters from `RFC 1738 <https://www.rfc-editor.org/rfc/rfc1738>`__.  When your webhook server receives a notification, it is expected to reply with an HTTP response status code of 200 within 5 seconds.  A URI is required to use webhook notifications.  Requests to this webhook server will contain an ID token authenticating the service account ``google-analytics-audience-export@system.gserviceaccount.com``. To learn more about ID tokens, see https://cloud.google.com/docs/authentication/token-types#id. For Google Cloud Functions, this lets you configure your function to require authentication. In Cloud IAM, you will need to grant the service account permissions to the Cloud Run Invoker (``roles/run.invoker``) & Cloud Functions Invoker (``roles/cloudfunctions.invoker``) roles for the webhook post request to pass Google Cloud Functions authentication. This API can send webhook notifications to arbitrary URIs; for webhook servers other than Google Cloud Functions, this ID token in the authorization bearer header should be ignored if it is not needed.  This field is a member of `oneof`_ ``_uri``."
+        },
+        "channel_token": {
+          "type": "str",
+          "description": "Optional. The channel token is an arbitrary string value and must have a maximum string length of 64 characters. Channel tokens allow you to verify the source of a webhook notification. This guards against the message being spoofed. The channel token will be specified in the ``X-Goog-Channel-Token`` HTTP header of the webhook POST request.  A channel token is not required to use webhook notifications.  This field is a member of `oneof`_ ``_channel_token``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetRecurringAudienceListRequest",
+      "docstring": "A request to retrieve configuration metadata about a specific\nrecurring audience list.\n\nAttributes:\n    name (str):\n        Required. The recurring audience list resource name. Format:\n        ``properties/{property}/recurringAudienceLists/{recurring_audience_list}``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The recurring audience list resource name. Format: ``properties/{property}/recurringAudienceLists/{recurring_audience_list}``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListRecurringAudienceListsRequest",
+      "docstring": "A request to list all recurring audience lists for a\nproperty.\n\nAttributes:\n    parent (str):\n        Required. All recurring audience lists for this property\n        will be listed in the response. Format:\n        ``properties/{property}``\n    page_size (int):\n        Optional. The maximum number of recurring\n        audience lists to return. The service may return\n        fewer than this value. If unspecified, at most\n        200 recurring audience lists will be returned.\n        The maximum value is 1000 (higher values will be\n        coerced to the maximum).\n    page_token (str):\n        Optional. A page token, received from a previous\n        ``ListRecurringAudienceLists`` call. Provide this to\n        retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListRecurringAudienceLists`` must match the call that\n        provided the page token.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. All recurring audience lists for this property will be listed in the response. Format: ``properties/{property}``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The maximum number of recurring audience lists to return. The service may return fewer than this value. If unspecified, at most 200 recurring audience lists will be returned. The maximum value is 1000 (higher values will be coerced to the maximum)."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. A page token, received from a previous ``ListRecurringAudienceLists`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListRecurringAudienceLists`` must match the call that provided the page token."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListRecurringAudienceListsResponse",
+      "docstring": "A list of all recurring audience lists for a property.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    recurring_audience_lists (MutableSequence[google.analytics.data_v1alpha.types.RecurringAudienceList]):\n        Each recurring audience list for a property.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.\n\n        This field is a member of `oneof`_ ``_next_page_token``.",
+      "attributes": {
+        "recurring_audience_lists": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.RecurringAudienceList]",
+          "description": "Each recurring audience list for a property."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages.  This field is a member of `oneof`_ ``_next_page_token``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetPropertyQuotasSnapshotRequest",
+      "docstring": "A request to return the PropertyQuotasSnapshot for a given\ncategory.\n\nAttributes:\n    name (str):\n        Required. Quotas from this property will be listed in the\n        response. Format:\n        ``properties/{property}/propertyQuotasSnapshot``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Quotas from this property will be listed in the response. Format: ``properties/{property}/propertyQuotasSnapshot``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PropertyQuotasSnapshot",
+      "docstring": "Current state of all Property Quotas organized by quota\ncategory.\n\nAttributes:\n    name (str):\n        Identifier. The property quota snapshot\n        resource name.\n    core_property_quota (google.analytics.data_v1alpha.types.PropertyQuota):\n        Property Quota for core property tokens\n    realtime_property_quota (google.analytics.data_v1alpha.types.PropertyQuota):\n        Property Quota for realtime property tokens\n    funnel_property_quota (google.analytics.data_v1alpha.types.PropertyQuota):\n        Property Quota for funnel property tokens",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Identifier. The property quota snapshot resource name."
+        },
+        "core_property_quota": {
+          "type": "google.analytics.data_v1alpha.types.PropertyQuota",
+          "description": "Property Quota for core property tokens"
+        },
+        "realtime_property_quota": {
+          "type": "google.analytics.data_v1alpha.types.PropertyQuota",
+          "description": "Property Quota for realtime property tokens"
+        },
+        "funnel_property_quota": {
+          "type": "google.analytics.data_v1alpha.types.PropertyQuota",
+          "description": "Property Quota for funnel property tokens"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetAudienceListRequest",
+      "docstring": "A request to retrieve configuration metadata about a specific\naudience list.\n\nAttributes:\n    name (str):\n        Required. The audience list resource name. Format:\n        ``properties/{property}/audienceLists/{audience_list}``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The audience list resource name. Format: ``properties/{property}/audienceLists/{audience_list}``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListAudienceListsRequest",
+      "docstring": "A request to list all audience lists for a property.\n\nAttributes:\n    parent (str):\n        Required. All audience lists for this property will be\n        listed in the response. Format: ``properties/{property}``\n    page_size (int):\n        Optional. The maximum number of audience\n        lists to return. The service may return fewer\n        than this value. If unspecified, at most 200\n        audience lists will be returned. The maximum\n        value is 1000 (higher values will be coerced to\n        the maximum).\n    page_token (str):\n        Optional. A page token, received from a previous\n        ``ListAudienceLists`` call. Provide this to retrieve the\n        subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListAudienceLists`` must match the call that provided the\n        page token.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. All audience lists for this property will be listed in the response. Format: ``properties/{property}``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The maximum number of audience lists to return. The service may return fewer than this value. If unspecified, at most 200 audience lists will be returned. The maximum value is 1000 (higher values will be coerced to the maximum)."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. A page token, received from a previous ``ListAudienceLists`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListAudienceLists`` must match the call that provided the page token."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListAudienceListsResponse",
+      "docstring": "A list of all audience lists for a property.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    audience_lists (MutableSequence[google.analytics.data_v1alpha.types.AudienceList]):\n        Each audience list for a property.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.\n\n        This field is a member of `oneof`_ ``_next_page_token``.",
+      "attributes": {
+        "audience_lists": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.AudienceList]",
+          "description": "Each audience list for a property."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages.  This field is a member of `oneof`_ ``_next_page_token``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateAudienceListRequest",
+      "docstring": "A request to create a new audience list.\n\nAttributes:\n    parent (str):\n        Required. The parent resource where this audience list will\n        be created. Format: ``properties/{property}``\n    audience_list (google.analytics.data_v1alpha.types.AudienceList):\n        Required. The audience list to create.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource where this audience list will be created. Format: ``properties/{property}``"
+        },
+        "audience_list": {
+          "type": "google.analytics.data_v1alpha.types.AudienceList",
+          "description": "Required. The audience list to create."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AudienceList",
+      "docstring": "An audience list is a list of users in an audience at the\ntime of the list's creation. One audience may have multiple\naudience lists created for different days.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Output only. Identifier. The audience list resource name\n        assigned during creation. This resource name identifies this\n        ``AudienceList``.\n\n        Format:\n        ``properties/{property}/audienceLists/{audience_list}``\n    audience (str):\n        Required. The audience resource name. This resource name\n        identifies the audience being listed and is shared between\n        the Analytics Data & Admin APIs.\n\n        Format: ``properties/{property}/audiences/{audience}``\n    audience_display_name (str):\n        Output only. The descriptive display name for\n        this audience. For example, \"Purchasers\".\n    dimensions (MutableSequence[google.analytics.data_v1alpha.types.AudienceDimension]):\n ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Identifier. The audience list resource name assigned during creation. This resource name identifies this ``AudienceList``.  Format: ``properties/{property}/audienceLists/{audience_list}``"
+        },
+        "audience": {
+          "type": "str",
+          "description": "Required. The audience resource name. This resource name identifies the audience being listed and is shared between the Analytics Data & Admin APIs.  Format: ``properties/{property}/audiences/{audience}``"
+        },
+        "audience_display_name": {
+          "type": "str",
+          "description": "Output only. The descriptive display name for this audience. For example, \"Purchasers\"."
+        },
+        "dimensions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.AudienceDimension]",
+          "description": "Required. The dimensions requested and displayed in the query response."
+        },
+        "state": {
+          "type": "google.analytics.data_v1alpha.types.AudienceList.State",
+          "description": "Output only. The current state for this AudienceList.  This field is a member of `oneof`_ ``_state``."
+        },
+        "begin_creating_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time when CreateAudienceList was called and the AudienceList began the ``CREATING`` state.  This field is a member of `oneof`_ ``_begin_creating_time``."
+        },
+        "creation_quota_tokens_charged": {
+          "type": "int",
+          "description": "Output only. The total quota tokens charged during creation of the AudienceList. Because this token count is based on activity from the ``CREATING`` state, this tokens charged will be fixed once an AudienceList enters the ``ACTIVE`` or ``FAILED`` states."
+        },
+        "row_count": {
+          "type": "int",
+          "description": "Output only. The total number of rows in the AudienceList result.  This field is a member of `oneof`_ ``_row_count``."
+        },
+        "error_message": {
+          "type": "str",
+          "description": "Output only. Error message is populated when an audience list fails during creation. A common reason for such a failure is quota exhaustion.  This field is a member of `oneof`_ ``_error_message``."
+        },
+        "percentage_completed": {
+          "type": "float",
+          "description": "Output only. The percentage completed for this audience export ranging between 0 to 100.  This field is a member of `oneof`_ ``_percentage_completed``."
+        },
+        "recurring_audience_list": {
+          "type": "str",
+          "description": "Output only. The recurring audience list that created this audience list. Recurring audience lists create audience lists daily.  If audience lists are created directly, they will have no associated recurring audience list, and this field will be blank.  This field is a member of `oneof`_ ``_recurring_audience_list``."
+        },
+        "webhook_notification": {
+          "type": "google.analytics.data_v1alpha.types.WebhookNotification",
+          "description": "Optional. Configures webhook notifications to be sent from the Google Analytics Data API to your webhook server. Use of webhooks is optional. If unused, you'll need to poll this API to determine when an audience list is ready to be used. Webhooks allow a notification to be sent to your servers & avoid the need for polling.  Either one or two POST requests will be sent to the webhook. The first POST request will be sent immediately showing the newly created audience list in its CREATING state. The second POST request will be sent after the audience list completes creation (either the ACTIVE or FAILED state).  If identical audience lists are requested in quick succession, the second & subsequent audience lists can be served from cache. In that case, the audience list create method can return an audience list is already ACTIVE. In this scenario, only one POST request will be sent to the webhook.  This field is a member of `oneof`_ ``_webhook_notification``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AudienceListMetadata",
+      "docstring": "This metadata is currently blank.",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "QueryAudienceListRequest",
+      "docstring": "A request to list users in an audience list.\n\nAttributes:\n    name (str):\n        Required. The name of the audience list to retrieve users\n        from. Format:\n        ``properties/{property}/audienceLists/{audience_list}``\n    offset (int):\n        Optional. The row count of the start row. The first row is\n        counted as row 0.\n\n        When paging, the first request does not specify offset; or\n        equivalently, sets offset to 0; the first request returns\n        the first ``limit`` of rows. The second request sets offset\n        to the ``limit`` of the first request; the second request\n        returns the second ``limit`` of rows.\n\n        To learn more about this pagination parameter, see\n        `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__.\n    limit (int):\n        Optional. The number of rows to return. If unspecified,\n        10,000 rows are returned. The API returns a maximum of\n        250,000 rows per request, no matter how many you ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The name of the audience list to retrieve users from. Format: ``properties/{property}/audienceLists/{audience_list}``"
+        },
+        "offset": {
+          "type": "int",
+          "description": "Optional. The row count of the start row. The first row is counted as row 0.  When paging, the first request does not specify offset; or equivalently, sets offset to 0; the first request returns the first ``limit`` of rows. The second request sets offset to the ``limit`` of the first request; the second request returns the second ``limit`` of rows.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__."
+        },
+        "limit": {
+          "type": "int",
+          "description": "Optional. The number of rows to return. If unspecified, 10,000 rows are returned. The API returns a maximum of 250,000 rows per request, no matter how many you ask for. ``limit`` must be positive.  The API can also return fewer rows than the requested ``limit``, if there aren't as many dimension values as the ``limit``.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "QueryAudienceListResponse",
+      "docstring": "A list of users in an audience list.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    audience_list (google.analytics.data_v1alpha.types.AudienceList):\n        Configuration data about AudienceList being\n        queried. Returned to help interpret the audience\n        rows in this response. For example, the\n        dimensions in this AudienceList correspond to\n        the columns in the AudienceRows.\n\n        This field is a member of `oneof`_ ``_audience_list``.\n    audience_rows (MutableSequence[google.analytics.data_v1alpha.types.AudienceRow]):\n        Rows for each user in an audience list. The\n        number of rows in this response will be less\n        than or equal to request's page size.\n    row_count (int):\n        The total number of rows in the AudienceList result.\n        ``rowCount`` is independent of the number of rows returned\n        in the response, the ``limit`` request parameter, and the\n        ``offset`` request p",
+      "attributes": {
+        "audience_list": {
+          "type": "google.analytics.data_v1alpha.types.AudienceList",
+          "description": "Configuration data about AudienceList being queried. Returned to help interpret the audience rows in this response. For example, the dimensions in this AudienceList correspond to the columns in the AudienceRows.  This field is a member of `oneof`_ ``_audience_list``."
+        },
+        "audience_rows": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.AudienceRow]",
+          "description": "Rows for each user in an audience list. The number of rows in this response will be less than or equal to request's page size."
+        },
+        "row_count": {
+          "type": "int",
+          "description": "The total number of rows in the AudienceList result. ``rowCount`` is independent of the number of rows returned in the response, the ``limit`` request parameter, and the ``offset`` request parameter. For example if a query returns 175 rows and includes ``limit`` of 50 in the API request, the response will contain ``rowCount`` of 175 but only 50 rows.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__.  This field is a member of `oneof`_ ``_row_count``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SheetExportAudienceListRequest",
+      "docstring": "A request to export users in an audience list to a Google\nSheet.\n\nAttributes:\n    name (str):\n        Required. The name of the audience list to retrieve users\n        from. Format:\n        ``properties/{property}/audienceLists/{audience_list}``\n    offset (int):\n        Optional. The row count of the start row. The first row is\n        counted as row 0.\n\n        When paging, the first request does not specify offset; or\n        equivalently, sets offset to 0; the first request returns\n        the first ``limit`` of rows. The second request sets offset\n        to the ``limit`` of the first request; the second request\n        returns the second ``limit`` of rows.\n\n        To learn more about this pagination parameter, see\n        `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__.\n    limit (int):\n        Optional. The number of rows to return. If unspecified,\n        10,000 rows are returned. The API returns a maximum of\n        250,000 rows per request, no ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The name of the audience list to retrieve users from. Format: ``properties/{property}/audienceLists/{audience_list}``"
+        },
+        "offset": {
+          "type": "int",
+          "description": "Optional. The row count of the start row. The first row is counted as row 0.  When paging, the first request does not specify offset; or equivalently, sets offset to 0; the first request returns the first ``limit`` of rows. The second request sets offset to the ``limit`` of the first request; the second request returns the second ``limit`` of rows.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__."
+        },
+        "limit": {
+          "type": "int",
+          "description": "Optional. The number of rows to return. If unspecified, 10,000 rows are returned. The API returns a maximum of 250,000 rows per request, no matter how many you ask for. ``limit`` must be positive.  The API can also return fewer rows than the requested ``limit``, if there aren't as many dimension values as the ``limit``.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SheetExportAudienceListResponse",
+      "docstring": "The created Google Sheet with the list of users in an\naudience list.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    spreadsheet_uri (str):\n        A uri for you to visit in your browser to\n        view the Google Sheet.\n\n        This field is a member of `oneof`_ ``_spreadsheet_uri``.\n    spreadsheet_id (str):\n        An ID that identifies the created Google\n        Sheet resource.\n\n        This field is a member of `oneof`_ ``_spreadsheet_id``.\n    row_count (int):\n        The total number of rows in the AudienceList result.\n        ``rowCount`` is independent of the number of rows returned\n        in the response, the ``limit`` request parameter, and the\n        ``offset`` request parameter. For example if a query returns\n        175 rows and includes ``limit`` of 50 in the API request,\n        the response will contain ``rowCount`` of 175 but only 50\n        rows.\n\n        To learn more about this pagination parameter, see\n     ",
+      "attributes": {
+        "spreadsheet_uri": {
+          "type": "str",
+          "description": "A uri for you to visit in your browser to view the Google Sheet.  This field is a member of `oneof`_ ``_spreadsheet_uri``."
+        },
+        "spreadsheet_id": {
+          "type": "str",
+          "description": "An ID that identifies the created Google Sheet resource.  This field is a member of `oneof`_ ``_spreadsheet_id``."
+        },
+        "row_count": {
+          "type": "int",
+          "description": "The total number of rows in the AudienceList result. ``rowCount`` is independent of the number of rows returned in the response, the ``limit`` request parameter, and the ``offset`` request parameter. For example if a query returns 175 rows and includes ``limit`` of 50 in the API request, the response will contain ``rowCount`` of 175 but only 50 rows.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__.  This field is a member of `oneof`_ ``_row_count``."
+        },
+        "audience_list": {
+          "type": "google.analytics.data_v1alpha.types.AudienceList",
+          "description": "Configuration data about AudienceList being exported. Returned to help interpret the AudienceList in the Google Sheet of this response.  For example, the AudienceList may have more rows than are present in the Google Sheet, and in that case, you may want to send an additional sheet export request with a different ``offset`` value to retrieve the next page of rows in an additional Google Sheet.  This field is a member of `oneof`_ ``_audience_list``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AudienceRow",
+      "docstring": "Dimension value attributes for the audience user row.\n\nAttributes:\n    dimension_values (MutableSequence[google.analytics.data_v1alpha.types.AudienceDimensionValue]):\n        Each dimension value attribute for an\n        audience user. One dimension value will be added\n        for each dimension column requested.",
+      "attributes": {
+        "dimension_values": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.AudienceDimensionValue]",
+          "description": "Each dimension value attribute for an audience user. One dimension value will be added for each dimension column requested."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AudienceDimension",
+      "docstring": "An audience dimension is a user attribute. Specific user attributed\nare requested and then later returned in the\n``QueryAudienceListResponse``.\n\nAttributes:\n    dimension_name (str):\n        Optional. The API name of the dimension. See the `API\n        Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/audience-list-api-schema#dimensions>`__\n        for the list of dimension names.",
+      "attributes": {
+        "dimension_name": {
+          "type": "str",
+          "description": "Optional. The API name of the dimension. See the `API Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/audience-list-api-schema#dimensions>`__ for the list of dimension names."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "AudienceDimensionValue",
+      "docstring": "The value of a dimension.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    value (str):\n        Value as a string if the dimension type is a\n        string.\n\n        This field is a member of `oneof`_ ``one_value``.",
+      "attributes": {
+        "value": {
+          "type": "str",
+          "description": "Value as a string if the dimension type is a string.  This field is a member of `oneof`_ ``one_value``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RunFunnelReportRequest",
+      "docstring": "The request for a funnel report.\n\nAttributes:\n    property (str):\n        Optional. A Google Analytics property identifier whose\n        events are tracked. Specified in the URL path and not the\n        body. To learn more, see `where to find your Property\n        ID <https://developers.google.com/analytics/devguides/reporting/data/v1/property-id>`__.\n        Within a batch request, this property should either be\n        unspecified or consistent with the batch-level property.\n\n        Example: properties/1234\n    date_ranges (MutableSequence[google.analytics.data_v1alpha.types.DateRange]):\n        Optional. Date ranges of data to read. If\n        multiple date ranges are requested, each\n        response row will contain a zero based date\n        range index. If two date ranges overlap, the\n        event data for the overlapping days is included\n        in the response rows for both date ranges.\n    funnel (google.analytics.data_v1alpha.types.Funnel):\n        Optional. The configuration of this request's\n    ",
+      "attributes": {
+        "property": {
+          "type": "str",
+          "description": "Optional. A Google Analytics property identifier whose events are tracked. Specified in the URL path and not the body. To learn more, see `where to find your Property ID <https://developers.google.com/analytics/devguides/reporting/data/v1/property-id>`__. Within a batch request, this property should either be unspecified or consistent with the batch-level property.  Example: properties/1234"
+        },
+        "date_ranges": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.DateRange]",
+          "description": "Optional. Date ranges of data to read. If multiple date ranges are requested, each response row will contain a zero based date range index. If two date ranges overlap, the event data for the overlapping days is included in the response rows for both date ranges."
+        },
+        "funnel": {
+          "type": "google.analytics.data_v1alpha.types.Funnel",
+          "description": "Optional. The configuration of this request's funnel. This funnel configuration is required."
+        },
+        "funnel_breakdown": {
+          "type": "google.analytics.data_v1alpha.types.FunnelBreakdown",
+          "description": "Optional. If specified, this breakdown adds a dimension to the funnel table sub report response. This breakdown dimension expands each funnel step to the unique values of the breakdown dimension. For example, a breakdown by the ``deviceCategory`` dimension will create rows for ``mobile``, ``tablet``, ``desktop``, and the total."
+        },
+        "funnel_next_action": {
+          "type": "google.analytics.data_v1alpha.types.FunnelNextAction",
+          "description": "Optional. If specified, next action adds a dimension to the funnel visualization sub report response. This next action dimension expands each funnel step to the unique values of the next action. For example a next action of the ``eventName`` dimension will create rows for several events (for example ``session_start`` & ``click``) and the total.  Next action only supports ``eventName`` and most Page / Screen dimensions like ``pageTitle`` and ``pagePath``."
+        },
+        "funnel_visualization_type": {
+          "type": "google.analytics.data_v1alpha.types.RunFunnelReportRequest.FunnelVisualizationType",
+          "description": "Optional. The funnel visualization type controls the dimensions present in the funnel visualization sub report response. If not specified, ``STANDARD_FUNNEL`` is used."
+        },
+        "segments": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Segment]",
+          "description": "Optional. The configurations of segments. Segments are subsets of a property's data. In a funnel report with segments, the funnel is evaluated in each segment.  Each segment specified in this request produces a separate row in the response; in the response, each segment identified by its name.  The segments parameter is optional. Requests are limited to 4 segments."
+        },
+        "limit": {
+          "type": "int",
+          "description": "Optional. The number of rows to return. If unspecified, 10,000 rows are returned. The API returns a maximum of 250,000 rows per request, no matter how many you ask for. ``limit`` must be positive.  The API can also return fewer rows than the requested ``limit``, if there aren't as many dimension values as the ``limit``."
+        },
+        "dimension_filter": {
+          "type": "google.analytics.data_v1alpha.types.FilterExpression",
+          "description": "Optional. Dimension filters allow you to ask for only specific dimension values in the report. To learn more, see `Creating a Report: Dimension Filters <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters>`__ for examples. Metrics cannot be used in this filter."
+        },
+        "return_property_quota": {
+          "type": "bool",
+          "description": "Optional. Toggles whether to return the current state of this Analytics Property's quota. Quota is returned in `PropertyQuota <#PropertyQuota>`__."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "RunFunnelReportResponse",
+      "docstring": "The funnel report response contains two sub reports. The two\nsub reports are different combinations of dimensions and\nmetrics.\n\nAttributes:\n    funnel_table (google.analytics.data_v1alpha.types.FunnelSubReport):\n        The funnel table is a report with the funnel\n        step, segment, breakdown dimension, active\n        users, completion rate, abandonments, and\n        abandonments rate.\n\n        The segment dimension is only present in this\n        response if a segment was requested. The\n        breakdown dimension is only present in this\n        response if it was requested.\n    funnel_visualization (google.analytics.data_v1alpha.types.FunnelSubReport):\n        The funnel visualization is a report with the funnel step,\n        segment, date, next action dimension, and active users.\n\n        The segment dimension is only present in this response if a\n        segment was requested. The date dimension is only present in\n        this response if it was requested through the\n        ``TRENDED_FUNNEL`` funnel ",
+      "attributes": {
+        "funnel_table": {
+          "type": "google.analytics.data_v1alpha.types.FunnelSubReport",
+          "description": "The funnel table is a report with the funnel step, segment, breakdown dimension, active users, completion rate, abandonments, and abandonments rate.  The segment dimension is only present in this response if a segment was requested. The breakdown dimension is only present in this response if it was requested."
+        },
+        "funnel_visualization": {
+          "type": "google.analytics.data_v1alpha.types.FunnelSubReport",
+          "description": "The funnel visualization is a report with the funnel step, segment, date, next action dimension, and active users.  The segment dimension is only present in this response if a segment was requested. The date dimension is only present in this response if it was requested through the ``TRENDED_FUNNEL`` funnel type. The next action dimension is only present in the response if it was requested."
+        },
+        "property_quota": {
+          "type": "google.analytics.data_v1alpha.types.PropertyQuota",
+          "description": "This Analytics Property's quota state including this request."
+        },
+        "kind": {
+          "type": "str",
+          "description": "Identifies what kind of resource this message is. This ``kind`` is always the fixed string \"analyticsData#runFunnelReport\". Useful to distinguish between response types in JSON."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ReportTask",
+      "docstring": "A specific report task configuration.\n\nAttributes:\n    name (str):\n        Output only. Identifier. The report task resource name\n        assigned during creation. Format:\n        \"properties/{property}/reportTasks/{report_task}\".\n    report_definition (google.analytics.data_v1alpha.types.ReportTask.ReportDefinition):\n        Optional. A report definition to fetch report\n        data, which describes the structure of a report.\n        It typically includes the fields that will be\n        included in the report and the criteria that\n        will be used to filter the data.\n    report_metadata (google.analytics.data_v1alpha.types.ReportTask.ReportMetadata):\n        Output only. The report metadata for a\n        specific report task, which provides information\n        about a report.  It typically includes the\n        following information: the resource name of the\n        report, the state of the report, the timestamp\n        the report was created, etc,",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Output only. Identifier. The report task resource name assigned during creation. Format: \"properties/{property}/reportTasks/{report_task}\"."
+        },
+        "report_definition": {
+          "type": "google.analytics.data_v1alpha.types.ReportTask.ReportDefinition",
+          "description": "Optional. A report definition to fetch report data, which describes the structure of a report. It typically includes the fields that will be included in the report and the criteria that will be used to filter the data."
+        },
+        "report_metadata": {
+          "type": "google.analytics.data_v1alpha.types.ReportTask.ReportMetadata",
+          "description": "Output only. The report metadata for a specific report task, which provides information about a report.  It typically includes the following information: the resource name of the report, the state of the report, the timestamp the report was created, etc,"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateReportTaskRequest",
+      "docstring": "A request to create a report task.\n\nAttributes:\n    parent (str):\n        Required. The parent resource where this report task will be\n        created. Format: ``properties/{propertyId}``\n    report_task (google.analytics.data_v1alpha.types.ReportTask):\n        Required. The report task configuration to\n        create.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. The parent resource where this report task will be created. Format: ``properties/{propertyId}``"
+        },
+        "report_task": {
+          "type": "google.analytics.data_v1alpha.types.ReportTask",
+          "description": "Required. The report task configuration to create."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ReportTaskMetadata",
+      "docstring": "Represents the metadata of a long-running operation.\nCurrently, this metadata is blank.",
+      "attributes": {}
+    },
+    {
+      "type": "request_class",
+      "name": "QueryReportTaskRequest",
+      "docstring": "A request to fetch the report content for a report task.\n\nAttributes:\n    name (str):\n        Required. The report source name. Format:\n        ``properties/{property}/reportTasks/{report}``\n    offset (int):\n        Optional. The row count of the start row in the report. The\n        first row is counted as row 0.\n\n        When paging, the first request does not specify offset; or\n        equivalently, sets offset to 0; the first request returns\n        the first ``limit`` of rows. The second request sets offset\n        to the ``limit`` of the first request; the second request\n        returns the second ``limit`` of rows.\n\n        To learn more about this pagination parameter, see\n        `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__.\n    limit (int):\n        Optional. The number of rows to return from the report. If\n        unspecified, 10,000 rows are returned. The API returns a\n        maximum of 250,000 rows per request, no matter how many you\n     ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The report source name. Format: ``properties/{property}/reportTasks/{report}``"
+        },
+        "offset": {
+          "type": "int",
+          "description": "Optional. The row count of the start row in the report. The first row is counted as row 0.  When paging, the first request does not specify offset; or equivalently, sets offset to 0; the first request returns the first ``limit`` of rows. The second request sets offset to the ``limit`` of the first request; the second request returns the second ``limit`` of rows.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__."
+        },
+        "limit": {
+          "type": "int",
+          "description": "Optional. The number of rows to return from the report. If unspecified, 10,000 rows are returned. The API returns a maximum of 250,000 rows per request, no matter how many you ask for. ``limit`` must be positive.  The API can also return fewer rows than the requested ``limit``, if there aren't as many dimension values as the ``limit``. The number of rows available to a QueryReportTaskRequest is further limited by the limit of the associated ReportTask. A query can retrieve at most ReportTask.limit rows. For example, if the ReportTask has a limit of 1,000, then a QueryReportTask request with offset=900 and limit=500 will return at most 100 rows.  To learn more about this pagination parameter, see `Pagination <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination>`__."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "QueryReportTaskResponse",
+      "docstring": "The report content corresponding to a report task.\n\nAttributes:\n    dimension_headers (MutableSequence[google.analytics.data_v1alpha.types.DimensionHeader]):\n        Describes dimension columns. The number of\n        DimensionHeaders and ordering of\n        DimensionHeaders matches the dimensions present\n        in rows.\n    metric_headers (MutableSequence[google.analytics.data_v1alpha.types.MetricHeader]):\n        Describes metric columns. The number of\n        MetricHeaders and ordering of MetricHeaders\n        matches the metrics present in rows.\n    rows (MutableSequence[google.analytics.data_v1alpha.types.Row]):\n        Rows of dimension value combinations and\n        metric values in the report.\n    totals (MutableSequence[google.analytics.data_v1alpha.types.Row]):\n        If requested, the totaled values of metrics.\n    maximums (MutableSequence[google.analytics.data_v1alpha.types.Row]):\n        If requested, the maximum values of metrics.\n    minimums (MutableSequence[google.analytics.data_v1alpha.typ",
+      "attributes": {
+        "dimension_headers": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.DimensionHeader]",
+          "description": "Describes dimension columns. The number of DimensionHeaders and ordering of DimensionHeaders matches the dimensions present in rows."
+        },
+        "metric_headers": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.MetricHeader]",
+          "description": "Describes metric columns. The number of MetricHeaders and ordering of MetricHeaders matches the metrics present in rows."
+        },
+        "rows": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Row]",
+          "description": "Rows of dimension value combinations and metric values in the report."
+        },
+        "totals": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Row]",
+          "description": "If requested, the totaled values of metrics."
+        },
+        "maximums": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Row]",
+          "description": "If requested, the maximum values of metrics."
+        },
+        "minimums": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Row]",
+          "description": "If requested, the minimum values of metrics."
+        },
+        "row_count": {
+          "type": "int",
+          "description": "The total number of rows in the query result."
+        },
+        "metadata": {
+          "type": "google.analytics.data_v1alpha.types.ResponseMetaData",
+          "description": "Metadata for the report."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetReportTaskRequest",
+      "docstring": "A request to retrieve configuration metadata about a specific\nreport task.\n\nAttributes:\n    name (str):\n        Required. The report task resource name. Format:\n        ``properties/{property}/reportTasks/{report_task}``",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. The report task resource name. Format: ``properties/{property}/reportTasks/{report_task}``"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListReportTasksRequest",
+      "docstring": "A request to list all report tasks for a property.\n\nAttributes:\n    parent (str):\n        Required. All report tasks for this property will be listed\n        in the response. Format: ``properties/{property}``\n    page_size (int):\n        Optional. The maximum number of report tasks\n        to return.\n    page_token (str):\n        Optional. A page token, received from a previous\n        ``ListReportTasks`` call. Provide this to retrieve the\n        subsequent page.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. All report tasks for this property will be listed in the response. Format: ``properties/{property}``"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Optional. The maximum number of report tasks to return."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "Optional. A page token, received from a previous ``ListReportTasks`` call. Provide this to retrieve the subsequent page."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListReportTasksResponse",
+      "docstring": "A list of all report tasks for a property.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    report_tasks (MutableSequence[google.analytics.data_v1alpha.types.ReportTask]):\n        Each report task for a property.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.\n\n        This field is a member of `oneof`_ ``_next_page_token``.",
+      "attributes": {
+        "report_tasks": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.ReportTask]",
+          "description": "Each report task for a property."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages.  This field is a member of `oneof`_ ``_next_page_token``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ReportDefinition",
+      "docstring": "The definition of how a report should be run.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    dimensions (MutableSequence[google.analytics.data_v1alpha.types.Dimension]):\n        Optional. The dimensions requested and\n        displayed.\n    metrics (MutableSequence[google.analytics.data_v1alpha.types.Metric]):\n        Optional. The metrics requested and\n        displayed.\n    date_ranges (MutableSequence[google.analytics.data_v1alpha.types.DateRange]):\n        Optional. Date ranges of data to read. If multiple date\n        ranges are requested, each response row will contain a zero\n        based date range index. If two date ranges overlap, the\n        event data for the overlapping days is included in the\n        response rows for both date ranges. In a cohort request,\n        this ``dateRanges`` must be unspecified.\n    dimension_filter (google.analytics.data_v1alpha.types.FilterExpression):\n        Optional. Dimension filters let ",
+      "attributes": {
+        "dimensions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Dimension]",
+          "description": "Optional. The dimensions requested and displayed."
+        },
+        "metrics": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Metric]",
+          "description": "Optional. The metrics requested and displayed."
+        },
+        "date_ranges": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.DateRange]",
+          "description": "Optional. Date ranges of data to read. If multiple date ranges are requested, each response row will contain a zero based date range index. If two date ranges overlap, the event data for the overlapping days is included in the response rows for both date ranges. In a cohort request, this ``dateRanges`` must be unspecified."
+        },
+        "dimension_filter": {
+          "type": "google.analytics.data_v1alpha.types.FilterExpression",
+          "description": "Optional. Dimension filters let you ask for only specific dimension values in the report. To learn more, see `Fundamentals of Dimension Filters <https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters>`__ for examples. Metrics cannot be used in this filter."
+        },
+        "metric_filter": {
+          "type": "google.analytics.data_v1alpha.types.FilterExpression",
+          "description": "Optional. The filter clause of metrics. Applied after aggregating the report's rows, similar to SQL having-clause. Dimensions cannot be used in this filter."
+        },
+        "offset": {
+          "type": "int",
+          "description": "Optional. The row count of the start row from Google Analytics Storage. The first row is counted as row 0.  When creating a report task, the ``offset`` and ``limit`` parameters define the subset of data rows from Google Analytics storage to be included in the generated report. For example, if there are a total of 300,000 rows in Google Analytics storage, the initial report task may have the first 10,000 rows with a limit of 10,000 and an offset of 0. Subsequently, another report task could cover the next 10,000 rows with a limit of 10,000 and an offset of 10,000."
+        },
+        "limit": {
+          "type": "int",
+          "description": "Optional. The number of rows to return in the Report. If unspecified, 10,000 rows are returned. The API returns a maximum of 250,000 rows per request, no matter how many you ask for. ``limit`` must be positive.  The API can also return fewer rows than the requested ``limit``, if there aren't as many dimension values as the ``limit``. For instance, there are fewer than 300 possible values for the dimension ``country``, so when reporting on only ``country``, you can't get more than 300 rows, even if you set ``limit`` to a higher value."
+        },
+        "metric_aggregations": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.MetricAggregation]",
+          "description": "Optional. Aggregation of metrics. Aggregated metric values will be shown in rows where the dimension_values are set to \"RESERVED_(MetricAggregation)\"."
+        },
+        "order_bys": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.OrderBy]",
+          "description": "Optional. Specifies how rows are ordered in the response."
+        },
+        "currency_code": {
+          "type": "str",
+          "description": "Optional. A currency code in ISO4217 format, such as \"AED\", \"USD\", \"JPY\". If the field is empty, the report uses the property's default currency."
+        },
+        "cohort_spec": {
+          "type": "google.analytics.data_v1alpha.types.CohortSpec",
+          "description": "Optional. Cohort group associated with this request. If there is a cohort group in the request the 'cohort' dimension must be present."
+        },
+        "keep_empty_rows": {
+          "type": "bool",
+          "description": "Optional. If false or unspecified, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter.  Regardless of this ``keep_empty_rows`` setting, only data recorded by the Google Analytics property can be displayed in a report.  For example if a property never logs a ``purchase`` event, then a query for the ``eventName`` dimension and ``eventCount`` metric will not have a row containing eventName: \"purchase\" and eventCount: 0."
+        },
+        "sampling_level": {
+          "type": "google.analytics.data_v1alpha.types.SamplingLevel",
+          "description": "Optional. The report's sampling level.  This field is a member of `oneof`_ ``_sampling_level``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ReportMetadata",
+      "docstring": "The report metadata for a specific report task.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    state (google.analytics.data_v1alpha.types.ReportTask.ReportMetadata.State):\n        Output only. The current state for this\n        report task.\n\n        This field is a member of `oneof`_ ``_state``.\n    begin_creating_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time when ``CreateReportTask`` was called\n        and the report began the ``CREATING`` state.\n\n        This field is a member of `oneof`_ ``_begin_creating_time``.\n    creation_quota_tokens_charged (int):\n        Output only. The total quota tokens charged during creation\n        of the report. Because this token count is based on activity\n        from the ``CREATING`` state, this tokens charge will be\n        fixed once a report task enters the ``ACTIVE`` or ``FAILED``\n        state.\n    task_row_count (int):\n        Output only. The total number of",
+      "attributes": {
+        "state": {
+          "type": "google.analytics.data_v1alpha.types.ReportTask.ReportMetadata.State",
+          "description": "Output only. The current state for this report task.  This field is a member of `oneof`_ ``_state``."
+        },
+        "begin_creating_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The time when ``CreateReportTask`` was called and the report began the ``CREATING`` state.  This field is a member of `oneof`_ ``_begin_creating_time``."
+        },
+        "creation_quota_tokens_charged": {
+          "type": "int",
+          "description": "Output only. The total quota tokens charged during creation of the report. Because this token count is based on activity from the ``CREATING`` state, this tokens charge will be fixed once a report task enters the ``ACTIVE`` or ``FAILED`` state."
+        },
+        "task_row_count": {
+          "type": "int",
+          "description": "Output only. The total number of rows in the report result. This field will be populated when the state is active. You can utilize ``task_row_count`` for pagination within the confines of their existing report.  This field is a member of `oneof`_ ``_task_row_count``."
+        },
+        "error_message": {
+          "type": "str",
+          "description": "Output only. Error message is populated if a report task fails during creation.  This field is a member of `oneof`_ ``_error_message``."
+        },
+        "total_row_count": {
+          "type": "int",
+          "description": "Output only. The total number of rows in Google Analytics storage. If you want to query additional data rows beyond the current report, they can initiate a new report task based on the ``total_row_count``.  The ``task_row_count`` represents the number of rows specifically pertaining to the current report, whereas ``total_row_count`` encompasses the total count of rows across all data retrieved from Google Analytics storage.  For example, suppose the current report's ``task_row_count`` is 20, displaying the data from the first 20 rows. Simultaneously, the ``total_row_count`` is 30, indicating the presence of data for all 30 rows. The ``task_row_count`` can be utilizated to paginate through the initial 20 rows. To expand the report and include data from all 30 rows, a new report task can be created using the total_row_count to access the full set of 30 rows' worth of data.  This field is a member of `oneof`_ ``_total_row_count``."
+        }
+      }
+    }
+  ],
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-analytics-data\\google\\analytics\\data_v1alpha\\types\\data.py": [
+    {
+      "type": "request_class",
+      "name": "DateRange",
+      "docstring": "A contiguous set of days: ``startDate``, ``startDate + 1``, ...,\n``endDate``. Requests are allowed up to 4 date ranges.\n\nAttributes:\n    start_date (str):\n        The inclusive start date for the query in the format\n        ``YYYY-MM-DD``. Cannot be after ``end_date``. The format\n        ``NdaysAgo``, ``yesterday``, or ``today`` is also accepted,\n        and in that case, the date is inferred based on the\n        property's reporting time zone.\n    end_date (str):\n        The inclusive end date for the query in the format\n        ``YYYY-MM-DD``. Cannot be before ``start_date``. The format\n        ``NdaysAgo``, ``yesterday``, or ``today`` is also accepted,\n        and in that case, the date is inferred based on the\n        property's reporting time zone.\n    name (str):\n        Assigns a name to this date range. The dimension\n        ``dateRange`` is valued to this name in a report response.\n        If set, cannot begin with ``date_range_`` or ``RESERVED_``.\n        If not set, date ranges are named by their z",
+      "attributes": {
+        "start_date": {
+          "type": "str",
+          "description": "The inclusive start date for the query in the format ``YYYY-MM-DD``. Cannot be after ``end_date``. The format ``NdaysAgo``, ``yesterday``, or ``today`` is also accepted, and in that case, the date is inferred based on the property's reporting time zone."
+        },
+        "end_date": {
+          "type": "str",
+          "description": "The inclusive end date for the query in the format ``YYYY-MM-DD``. Cannot be before ``start_date``. The format ``NdaysAgo``, ``yesterday``, or ``today`` is also accepted, and in that case, the date is inferred based on the property's reporting time zone."
+        },
+        "name": {
+          "type": "str",
+          "description": "Assigns a name to this date range. The dimension ``dateRange`` is valued to this name in a report response. If set, cannot begin with ``date_range_`` or ``RESERVED_``. If not set, date ranges are named by their zero based index in the request: ``date_range_0``, ``date_range_1``, etc."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Dimension",
+      "docstring": "Dimensions are attributes of your data. For example, the\ndimension city indicates the city from which an event\noriginates. Dimension values in report responses are strings;\nfor example, the city could be \"Paris\" or \"New York\".\n\nAttributes:\n    name (str):\n        The name of the dimension. See the `API\n        Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions>`__\n        for the list of dimension names supported by core reporting\n        methods such as ``runReport`` and ``batchRunReports``. See\n        `Realtime\n        Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/realtime-api-schema#dimensions>`__\n        for the list of dimension names supported by the\n        ``runRealtimeReport`` method. See `Funnel\n        Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/exploration-api-schema#dimensions>`__\n        for the list of dimension names supported by the\n        ``runFunnelReport`` method.\n\n   ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The name of the dimension. See the `API Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions>`__ for the list of dimension names supported by core reporting methods such as ``runReport`` and ``batchRunReports``. See `Realtime Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/realtime-api-schema#dimensions>`__ for the list of dimension names supported by the ``runRealtimeReport`` method. See `Funnel Dimensions <https://developers.google.com/analytics/devguides/reporting/data/v1/exploration-api-schema#dimensions>`__ for the list of dimension names supported by the ``runFunnelReport`` method.  If ``dimensionExpression`` is specified, ``name`` can be any string that you would like within the allowed character set. For example if a ``dimensionExpression`` concatenates ``country`` and ``city``, you could call that dimension ``countryAndCity``. Dimension names that you choose must match the regular expression ``^[a-zA-Z0-9_]$``.  Dimensions are referenced by ``name`` in ``dimensionFilter``, ``orderBys``, ``dimensionExpression``, and ``pivots``."
+        },
+        "dimension_expression": {
+          "type": "google.analytics.data_v1alpha.types.DimensionExpression",
+          "description": "One dimension can be the result of an expression of multiple dimensions. For example, dimension \"country, city\": concatenate(country, \", \", city)."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DimensionExpression",
+      "docstring": "Used to express a dimension which is the result of a formula of\nmultiple dimensions. Example usages:\n\n1) lower_case(dimension)\n2) concatenate(dimension1, symbol, dimension2).\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    lower_case (google.analytics.data_v1alpha.types.DimensionExpression.CaseExpression):\n        Used to convert a dimension value to lower\n        case.\n\n        This field is a member of `oneof`_ ``one_expression``.\n    upper_case (google.analytics.data_v1alpha.types.DimensionExpression.CaseExpression):\n        Used to convert a dimension value to upper\n        case.\n\n        This field is a member of `oneof`_ ``one_expression``.\n    concatenate (google.analytics.data_v1alpha.types.DimensionExpression.ConcatenateExp",
+      "attributes": {
+        "lower_case": {
+          "type": "google.analytics.data_v1alpha.types.DimensionExpression.CaseExpression",
+          "description": "Used to convert a dimension value to lower case.  This field is a member of `oneof`_ ``one_expression``."
+        },
+        "upper_case": {
+          "type": "google.analytics.data_v1alpha.types.DimensionExpression.CaseExpression",
+          "description": "Used to convert a dimension value to upper case.  This field is a member of `oneof`_ ``one_expression``."
+        },
+        "concatenate": {
+          "type": "google.analytics.data_v1alpha.types.DimensionExpression.ConcatenateExpression",
+          "description": "Used to combine dimension values to a single dimension. For example, dimension \"country, city\": concatenate(country, \", \", city).  This field is a member of `oneof`_ ``one_expression``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Metric",
+      "docstring": "The quantitative measurements of a report. For example, the metric\n``eventCount`` is the total number of events. Requests are allowed\nup to 10 metrics.\n\nAttributes:\n    name (str):\n        The name of the metric. See the `API\n        Metrics <https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics>`__\n        for the list of metric names supported by core reporting\n        methods such as ``runReport`` and ``batchRunReports``. See\n        `Realtime\n        Metrics <https://developers.google.com/analytics/devguides/reporting/data/v1/realtime-api-schema#metrics>`__\n        for the list of metric names supported by the\n        ``runRealtimeReport`` method. See `Funnel\n        Metrics <https://developers.google.com/analytics/devguides/reporting/data/v1/exploration-api-schema#metrics>`__\n        for the list of metric names supported by the\n        ``runFunnelReport`` method.\n\n        If ``expression`` is specified, ``name`` can be any string\n        that you would like within the al",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The name of the metric. See the `API Metrics <https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics>`__ for the list of metric names supported by core reporting methods such as ``runReport`` and ``batchRunReports``. See `Realtime Metrics <https://developers.google.com/analytics/devguides/reporting/data/v1/realtime-api-schema#metrics>`__ for the list of metric names supported by the ``runRealtimeReport`` method. See `Funnel Metrics <https://developers.google.com/analytics/devguides/reporting/data/v1/exploration-api-schema#metrics>`__ for the list of metric names supported by the ``runFunnelReport`` method.  If ``expression`` is specified, ``name`` can be any string that you would like within the allowed character set. For example if ``expression`` is ``screenPageViews/sessions``, you could call that metric's name = ``viewsPerSession``. Metric names that you choose must match the regular expression ``^[a-zA-Z0-9_]$``.  Metrics are referenced by ``name`` in ``metricFilter``, ``orderBys``, and metric ``expression``."
+        },
+        "expression": {
+          "type": "str",
+          "description": "A mathematical expression for derived metrics. For example, the metric Event count per user is ``eventCount/totalUsers``."
+        },
+        "invisible": {
+          "type": "bool",
+          "description": "Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in ``metricFilter``, ``orderBys``, or a metric ``expression``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FilterExpression",
+      "docstring": "To express dimension or metric filters. The fields in the\nsame FilterExpression need to be either all dimensions or all\nmetrics.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    and_group (google.analytics.data_v1alpha.types.FilterExpressionList):\n        The FilterExpressions in and_group have an AND relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    or_group (google.analytics.data_v1alpha.types.FilterExpressionList):\n        The FilterExpressions in or_group have an OR relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    not_expression (google.analytics.data_v1alpha.types.FilterExpression):\n        The FilterExpression is NOT of not_expression.\n\n        This field is a member of `oneof`_ ``ex",
+      "attributes": {
+        "and_group": {
+          "type": "google.analytics.data_v1alpha.types.FilterExpressionList",
+          "description": "The FilterExpressions in and_group have an AND relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "or_group": {
+          "type": "google.analytics.data_v1alpha.types.FilterExpressionList",
+          "description": "The FilterExpressions in or_group have an OR relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "not_expression": {
+          "type": "google.analytics.data_v1alpha.types.FilterExpression",
+          "description": "The FilterExpression is NOT of not_expression.  This field is a member of `oneof`_ ``expr``."
+        },
+        "filter": {
+          "type": "google.analytics.data_v1alpha.types.Filter",
+          "description": "A primitive filter. In the same FilterExpression, all of the filter's field names need to be either all dimensions or all metrics.  This field is a member of `oneof`_ ``expr``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FilterExpressionList",
+      "docstring": "A list of filter expressions.\n\nAttributes:\n    expressions (MutableSequence[google.analytics.data_v1alpha.types.FilterExpression]):\n        A list of filter expressions.",
+      "attributes": {
+        "expressions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.FilterExpression]",
+          "description": "A list of filter expressions."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Filter",
+      "docstring": "An expression to filter dimension or metric values.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    field_name (str):\n        The dimension name or metric name. Must be a\n        name defined in dimensions or metrics.\n    string_filter (google.analytics.data_v1alpha.types.StringFilter):\n        Strings related filter.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    in_list_filter (google.analytics.data_v1alpha.types.InListFilter):\n        A filter for in list values.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    numeric_filter (google.analytics.data_v1alpha.types.NumericFilter):\n        A filter for numeric or date values.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    between_filte",
+      "attributes": {
+        "field_name": {
+          "type": "str",
+          "description": "The dimension name or metric name. Must be a name defined in dimensions or metrics."
+        },
+        "string_filter": {
+          "type": "google.analytics.data_v1alpha.types.StringFilter",
+          "description": "Strings related filter.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "in_list_filter": {
+          "type": "google.analytics.data_v1alpha.types.InListFilter",
+          "description": "A filter for in list values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "numeric_filter": {
+          "type": "google.analytics.data_v1alpha.types.NumericFilter",
+          "description": "A filter for numeric or date values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "between_filter": {
+          "type": "google.analytics.data_v1alpha.types.BetweenFilter",
+          "description": "A filter for between two values.  This field is a member of `oneof`_ ``one_filter``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StringFilter",
+      "docstring": "The filter for string\n\nAttributes:\n    match_type (google.analytics.data_v1alpha.types.StringFilter.MatchType):\n        The match type for this filter.\n    value (str):\n        The string value used for the matching.\n    case_sensitive (bool):\n        If true, the string value is case sensitive.",
+      "attributes": {
+        "match_type": {
+          "type": "google.analytics.data_v1alpha.types.StringFilter.MatchType",
+          "description": "The match type for this filter."
+        },
+        "value": {
+          "type": "str",
+          "description": "The string value used for the matching."
+        },
+        "case_sensitive": {
+          "type": "bool",
+          "description": "If true, the string value is case sensitive."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "InListFilter",
+      "docstring": "The result needs to be in a list of string values.\n\nAttributes:\n    values (MutableSequence[str]):\n        The list of string values.\n        Must be non-empty.\n    case_sensitive (bool):\n        If true, the string value is case sensitive.",
+      "attributes": {
+        "values": {
+          "type": "MutableSequence[str]",
+          "description": "The list of string values. Must be non-empty."
+        },
+        "case_sensitive": {
+          "type": "bool",
+          "description": "If true, the string value is case sensitive."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "NumericFilter",
+      "docstring": "Filters for numeric or date values.\n\nAttributes:\n    operation (google.analytics.data_v1alpha.types.NumericFilter.Operation):\n        The operation type for this filter.\n    value (google.analytics.data_v1alpha.types.NumericValue):\n        A numeric value or a date value.",
+      "attributes": {
+        "operation": {
+          "type": "google.analytics.data_v1alpha.types.NumericFilter.Operation",
+          "description": "The operation type for this filter."
+        },
+        "value": {
+          "type": "google.analytics.data_v1alpha.types.NumericValue",
+          "description": "A numeric value or a date value."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "OrderBy",
+      "docstring": "Order bys define how rows will be sorted in the response. For\nexample, ordering rows by descending event count is one\nordering, and ordering rows by the event name string is a\ndifferent ordering.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    metric (google.analytics.data_v1alpha.types.OrderBy.MetricOrderBy):\n        Sorts results by a metric's values.\n\n        This field is a member of `oneof`_ ``one_order_by``.\n    dimension (google.analytics.data_v1alpha.types.OrderBy.DimensionOrderBy):\n        Sorts results by a dimension's values.\n\n        This field is a member of `oneof`_ ``one_order_by``.\n    desc (bool):\n        If true, sorts by descending order.",
+      "attributes": {
+        "metric": {
+          "type": "google.analytics.data_v1alpha.types.OrderBy.MetricOrderBy",
+          "description": "Sorts results by a metric's values.  This field is a member of `oneof`_ ``one_order_by``."
+        },
+        "dimension": {
+          "type": "google.analytics.data_v1alpha.types.OrderBy.DimensionOrderBy",
+          "description": "Sorts results by a dimension's values.  This field is a member of `oneof`_ ``one_order_by``."
+        },
+        "desc": {
+          "type": "bool",
+          "description": "If true, sorts by descending order."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "BetweenFilter",
+      "docstring": "To express that the result needs to be between two numbers\n(inclusive).\n\nAttributes:\n    from_value (google.analytics.data_v1alpha.types.NumericValue):\n        Begins with this number.\n    to_value (google.analytics.data_v1alpha.types.NumericValue):\n        Ends with this number.",
+      "attributes": {
+        "from_value": {
+          "type": "google.analytics.data_v1alpha.types.NumericValue",
+          "description": "Begins with this number."
+        },
+        "to_value": {
+          "type": "google.analytics.data_v1alpha.types.NumericValue",
+          "description": "Ends with this number."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "NumericValue",
+      "docstring": "To represent a number.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    int64_value (int):\n        Integer value\n\n        This field is a member of `oneof`_ ``one_value``.\n    double_value (float):\n        Double value\n\n        This field is a member of `oneof`_ ``one_value``.",
+      "attributes": {
+        "int64_value": {
+          "type": "int",
+          "description": "Integer value  This field is a member of `oneof`_ ``one_value``."
+        },
+        "double_value": {
+          "type": "float",
+          "description": "Double value  This field is a member of `oneof`_ ``one_value``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CohortSpec",
+      "docstring": "The specification of cohorts for a cohort report.\n\nCohort reports create a time series of user retention for the\ncohort. For example, you could select the cohort of users that were\nacquired in the first week of September and follow that cohort for\nthe next six weeks. Selecting the users acquired in the first week\nof September cohort is specified in the ``cohort`` object. Following\nthat cohort for the next six weeks is specified in the\n``cohortsRange`` object.\n\nFor examples, see `Cohort Report\nExamples <https://developers.google.com/analytics/devguides/reporting/data/v1/advanced#cohort_report_examples>`__.\n\nThe report response could show a weekly time series where say your\napp has retained 60% of this cohort after three weeks and 25% of\nthis cohort after six weeks. These two percentages can be calculated\nby the metric ``cohortActiveUsers/cohortTotalUsers`` and will be\nseparate rows in the report.\n\nAttributes:\n    cohorts (MutableSequence[google.analytics.data_v1alpha.types.Cohort]):\n        Defines the selecti",
+      "attributes": {
+        "cohorts": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Cohort]",
+          "description": "Defines the selection criteria to group users into cohorts. Most cohort reports define only a single cohort. If multiple cohorts are specified, each cohort can be recognized in the report by their name."
+        },
+        "cohorts_range": {
+          "type": "google.analytics.data_v1alpha.types.CohortsRange",
+          "description": "Cohort reports follow cohorts over an extended reporting date range. This range specifies an offset duration to follow the cohorts over."
+        },
+        "cohort_report_settings": {
+          "type": "google.analytics.data_v1alpha.types.CohortReportSettings",
+          "description": "Optional settings for a cohort report."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Cohort",
+      "docstring": "Defines a cohort selection criteria. A cohort is a group of users\nwho share a common characteristic. For example, users with the same\n``firstSessionDate`` belong to the same cohort.\n\nAttributes:\n    name (str):\n        Assigns a name to this cohort. The dimension ``cohort`` is\n        valued to this name in a report response. If set, cannot\n        begin with ``cohort_`` or ``RESERVED_``. If not set, cohorts\n        are named by their zero based index ``cohort_0``,\n        ``cohort_1``, etc.\n    dimension (str):\n        Dimension used by the cohort. Required and only supports\n        ``firstSessionDate``.\n    date_range (google.analytics.data_v1alpha.types.DateRange):\n        The cohort selects users whose first touch date is between\n        start date and end date defined in the ``dateRange``. This\n        ``dateRange`` does not specify the full date range of event\n        data that is present in a cohort report. In a cohort report,\n        this ``dateRange`` is extended by the granularity and offset\n       ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Assigns a name to this cohort. The dimension ``cohort`` is valued to this name in a report response. If set, cannot begin with ``cohort_`` or ``RESERVED_``. If not set, cohorts are named by their zero based index ``cohort_0``, ``cohort_1``, etc."
+        },
+        "dimension": {
+          "type": "str",
+          "description": "Dimension used by the cohort. Required and only supports ``firstSessionDate``."
+        },
+        "date_range": {
+          "type": "google.analytics.data_v1alpha.types.DateRange",
+          "description": "The cohort selects users whose first touch date is between start date and end date defined in the ``dateRange``. This ``dateRange`` does not specify the full date range of event data that is present in a cohort report. In a cohort report, this ``dateRange`` is extended by the granularity and offset present in the ``cohortsRange``; event data for the extended reporting date range is present in a cohort report.  In a cohort request, this ``dateRange`` is required and the ``dateRanges`` in the ``RunReportRequest`` or ``RunPivotReportRequest`` must be unspecified.  This ``dateRange`` should generally be aligned with the cohort's granularity. If ``CohortsRange`` uses daily granularity, this ``dateRange`` can be a single day. If ``CohortsRange`` uses weekly granularity, this ``dateRange`` can be aligned to a week boundary, starting at Sunday and ending Saturday. If ``CohortsRange`` uses monthly granularity, this ``dateRange`` can be aligned to a month, starting at the first and ending on the last day of the month."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CohortsRange",
+      "docstring": "Configures the extended reporting date range for a cohort\nreport. Specifies an offset duration to follow the cohorts over.\n\nAttributes:\n    granularity (google.analytics.data_v1alpha.types.CohortsRange.Granularity):\n        Required. The granularity used to interpret the\n        ``startOffset`` and ``endOffset`` for the extended reporting\n        date range for a cohort report.\n    start_offset (int):\n        ``startOffset`` specifies the start date of the extended\n        reporting date range for a cohort report. ``startOffset`` is\n        commonly set to 0 so that reports contain data from the\n        acquisition of the cohort forward.\n\n        If ``granularity`` is ``DAILY``, the ``startDate`` of the\n        extended reporting date range is ``startDate`` of the cohort\n        plus ``startOffset`` days.\n\n        If ``granularity`` is ``WEEKLY``, the ``startDate`` of the\n        extended reporting date range is ``startDate`` of the cohort\n        plus ``startOffset * 7`` days.\n\n        If ``granularity`` is ",
+      "attributes": {
+        "granularity": {
+          "type": "google.analytics.data_v1alpha.types.CohortsRange.Granularity",
+          "description": "Required. The granularity used to interpret the ``startOffset`` and ``endOffset`` for the extended reporting date range for a cohort report."
+        },
+        "start_offset": {
+          "type": "int",
+          "description": "``startOffset`` specifies the start date of the extended reporting date range for a cohort report. ``startOffset`` is commonly set to 0 so that reports contain data from the acquisition of the cohort forward.  If ``granularity`` is ``DAILY``, the ``startDate`` of the extended reporting date range is ``startDate`` of the cohort plus ``startOffset`` days.  If ``granularity`` is ``WEEKLY``, the ``startDate`` of the extended reporting date range is ``startDate`` of the cohort plus ``startOffset * 7`` days.  If ``granularity`` is ``MONTHLY``, the ``startDate`` of the extended reporting date range is ``startDate`` of the cohort plus ``startOffset * 30`` days."
+        },
+        "end_offset": {
+          "type": "int",
+          "description": "Required. ``endOffset`` specifies the end date of the extended reporting date range for a cohort report. ``endOffset`` can be any positive integer but is commonly set to 5 to 10 so that reports contain data on the cohort for the next several granularity time periods.  If ``granularity`` is ``DAILY``, the ``endDate`` of the extended reporting date range is ``endDate`` of the cohort plus ``endOffset`` days.  If ``granularity`` is ``WEEKLY``, the ``endDate`` of the extended reporting date range is ``endDate`` of the cohort plus ``endOffset * 7`` days.  If ``granularity`` is ``MONTHLY``, the ``endDate`` of the extended reporting date range is ``endDate`` of the cohort plus ``endOffset * 30`` days."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CohortReportSettings",
+      "docstring": "Optional settings of a cohort report.\n\nAttributes:\n    accumulate (bool):\n        If true, accumulates the result from first touch day to the\n        end day. Not supported in ``RunReportRequest``.",
+      "attributes": {
+        "accumulate": {
+          "type": "bool",
+          "description": "If true, accumulates the result from first touch day to the end day. Not supported in ``RunReportRequest``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ResponseMetaData",
+      "docstring": "Response's metadata carrying additional information about the\nreport content.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    data_loss_from_other_row (bool):\n        If true, indicates some buckets of dimension combinations\n        are rolled into \"(other)\" row. This can happen for high\n        cardinality reports.\n\n        The metadata parameter dataLossFromOtherRow is populated\n        based on the aggregated data table used in the report. The\n        parameter will be accurately populated regardless of the\n        filters and limits in the report.\n\n        For example, the (other) row could be dropped from the\n        report because the request contains a filter on\n        sessionSource = google. This parameter will still be\n        populated if data loss from other row was present in the\n        input aggregate data used to generate this report.\n\n        To learn more, see `About the (other) row and data\n        sampling <https",
+      "attributes": {
+        "data_loss_from_other_row": {
+          "type": "bool",
+          "description": "If true, indicates some buckets of dimension combinations are rolled into \"(other)\" row. This can happen for high cardinality reports.  The metadata parameter dataLossFromOtherRow is populated based on the aggregated data table used in the report. The parameter will be accurately populated regardless of the filters and limits in the report.  For example, the (other) row could be dropped from the report because the request contains a filter on sessionSource = google. This parameter will still be populated if data loss from other row was present in the input aggregate data used to generate this report.  To learn more, see `About the (other) row and data sampling <https://support.google.com/analytics/answer/13208658#reports>`__."
+        },
+        "schema_restriction_response": {
+          "type": "google.analytics.data_v1alpha.types.ResponseMetaData.SchemaRestrictionResponse",
+          "description": "Describes the schema restrictions actively enforced in creating this report. To learn more, see `Access and data-restriction management <https://support.google.com/analytics/answer/10851388>`__.  This field is a member of `oneof`_ ``_schema_restriction_response``."
+        },
+        "currency_code": {
+          "type": "str",
+          "description": "The currency code used in this report. Intended to be used in formatting currency metrics like ``purchaseRevenue`` for visualization. If currency_code was specified in the request, this response parameter will echo the request parameter; otherwise, this response parameter is the property's current currency_code.  Currency codes are string encodings of currency types from the ISO 4217 standard (https://en.wikipedia.org/wiki/ISO_4217); for example \"USD\", \"EUR\", \"JPY\". To learn more, see https://support.google.com/analytics/answer/9796179.  This field is a member of `oneof`_ ``_currency_code``."
+        },
+        "time_zone": {
+          "type": "str",
+          "description": "The property's current timezone. Intended to be used to interpret time-based dimensions like ``hour`` and ``minute``. Formatted as strings from the IANA Time Zone database (https://www.iana.org/time-zones); for example \"America/New_York\" or \"Asia/Tokyo\".  This field is a member of `oneof`_ ``_time_zone``."
+        },
+        "empty_reason": {
+          "type": "str",
+          "description": "If empty reason is specified, the report is empty for this reason.  This field is a member of `oneof`_ ``_empty_reason``."
+        },
+        "subject_to_thresholding": {
+          "type": "bool",
+          "description": "If ``subjectToThresholding`` is true, this report is subject to thresholding and only returns data that meets the minimum aggregation thresholds. It is possible for a request to be subject to thresholding thresholding and no data is absent from the report, and this happens when all data is above the thresholds. To learn more, see `Data thresholds <https://support.google.com/analytics/answer/9383630>`__ and `About Demographics and Interests <https://support.google.com/analytics/answer/2799357>`__.  This field is a member of `oneof`_ ``_subject_to_thresholding``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DimensionHeader",
+      "docstring": "Describes a dimension column in the report. Dimensions\nrequested in a report produce column entries within rows and\nDimensionHeaders. However, dimensions used exclusively within\nfilters or expressions do not produce columns in a report;\ncorrespondingly, those dimensions do not produce headers.\n\nAttributes:\n    name (str):\n        The dimension's name.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The dimension's name."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MetricHeader",
+      "docstring": "Describes a metric column in the report. Visible metrics\nrequested in a report produce column entries within rows and\nMetricHeaders. However, metrics used exclusively within filters\nor expressions do not produce columns in a report;\ncorrespondingly, those metrics do not produce headers.\n\nAttributes:\n    name (str):\n        The metric's name.\n    type_ (google.analytics.data_v1alpha.types.MetricType):\n        The metric's data type.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The metric's name."
+        },
+        "type_": {
+          "type": "google.analytics.data_v1alpha.types.MetricType",
+          "description": "The metric's data type."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Row",
+      "docstring": "Report data for each row. For example if RunReportRequest contains:\n\n.. code:: none\n\n   \"dimensions\": [\n     {\n       \"name\": \"eventName\"\n     },\n     {\n       \"name\": \"countryId\"\n     }\n   ],\n   \"metrics\": [\n     {\n       \"name\": \"eventCount\"\n     }\n   ]\n\nOne row with 'in_app_purchase' as the eventName, 'JP' as the\ncountryId, and 15 as the eventCount, would be:\n\n.. code:: none\n\n   \"dimensionValues\": [\n     {\n       \"value\": \"in_app_purchase\"\n     },\n     {\n       \"value\": \"JP\"\n     }\n   ],\n   \"metricValues\": [\n     {\n       \"value\": \"15\"\n     }\n   ]\n\nAttributes:\n    dimension_values (MutableSequence[google.analytics.data_v1alpha.types.DimensionValue]):\n        List of requested dimension values. In a PivotReport,\n        dimension_values are only listed for dimensions included in\n        a pivot.\n    metric_values (MutableSequence[google.analytics.data_v1alpha.types.MetricValue]):\n        List of requested visible metric values.",
+      "attributes": {
+        "dimension_values": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.DimensionValue]",
+          "description": "List of requested dimension values. In a PivotReport, dimension_values are only listed for dimensions included in a pivot."
+        },
+        "metric_values": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.MetricValue]",
+          "description": "List of requested visible metric values."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DimensionValue",
+      "docstring": "The value of a dimension.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    value (str):\n        Value as a string if the dimension type is a\n        string.\n\n        This field is a member of `oneof`_ ``one_value``.",
+      "attributes": {
+        "value": {
+          "type": "str",
+          "description": "Value as a string if the dimension type is a string.  This field is a member of `oneof`_ ``one_value``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MetricValue",
+      "docstring": "The value of a metric.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    value (str):\n        Measurement value. See MetricHeader for type.\n\n        This field is a member of `oneof`_ ``one_value``.",
+      "attributes": {
+        "value": {
+          "type": "str",
+          "description": "Measurement value. See MetricHeader for type.  This field is a member of `oneof`_ ``one_value``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "PropertyQuota",
+      "docstring": "Current state of all quotas for this Analytics Property. If\nany quota for a property is exhausted, all requests to that\nproperty will return Resource Exhausted errors.\n\nAttributes:\n    tokens_per_day (google.analytics.data_v1alpha.types.QuotaStatus):\n        Standard Analytics Properties can use up to\n        200,000 tokens per day; Analytics 360 Properties\n        can use 2,000,000 tokens per day. Most requests\n        consume fewer than 10 tokens.\n    tokens_per_hour (google.analytics.data_v1alpha.types.QuotaStatus):\n        Standard Analytics Properties can use up to\n        40,000 tokens per hour; Analytics 360 Properties\n        can use 400,000 tokens per hour. An API request\n        consumes a single number of tokens, and that\n        number is deducted from all of the hourly,\n        daily, and per project hourly quotas.\n    concurrent_requests (google.analytics.data_v1alpha.types.QuotaStatus):\n        Standard Analytics Properties can send up to\n        10 concurrent requests; Analytics 360 Properties",
+      "attributes": {
+        "tokens_per_day": {
+          "type": "google.analytics.data_v1alpha.types.QuotaStatus",
+          "description": "Standard Analytics Properties can use up to 200,000 tokens per day; Analytics 360 Properties can use 2,000,000 tokens per day. Most requests consume fewer than 10 tokens."
+        },
+        "tokens_per_hour": {
+          "type": "google.analytics.data_v1alpha.types.QuotaStatus",
+          "description": "Standard Analytics Properties can use up to 40,000 tokens per hour; Analytics 360 Properties can use 400,000 tokens per hour. An API request consumes a single number of tokens, and that number is deducted from all of the hourly, daily, and per project hourly quotas."
+        },
+        "concurrent_requests": {
+          "type": "google.analytics.data_v1alpha.types.QuotaStatus",
+          "description": "Standard Analytics Properties can send up to 10 concurrent requests; Analytics 360 Properties can use up to 50 concurrent requests."
+        },
+        "server_errors_per_project_per_hour": {
+          "type": "google.analytics.data_v1alpha.types.QuotaStatus",
+          "description": "Standard Analytics Properties and cloud project pairs can have up to 10 server errors per hour; Analytics 360 Properties and cloud project pairs can have up to 50 server errors per hour."
+        },
+        "potentially_thresholded_requests_per_hour": {
+          "type": "google.analytics.data_v1alpha.types.QuotaStatus",
+          "description": "Analytics Properties can send up to 120 requests with potentially thresholded dimensions per hour. In a batch request, each report request is individually counted for this quota if the request contains potentially thresholded dimensions."
+        },
+        "tokens_per_project_per_hour": {
+          "type": "google.analytics.data_v1alpha.types.QuotaStatus",
+          "description": "Analytics Properties can use up to 35% of their tokens per project per hour. This amounts to standard Analytics Properties can use up to 14,000 tokens per project per hour, and Analytics 360 Properties can use 140,000 tokens per project per hour. An API request consumes a single number of tokens, and that number is deducted from all of the hourly, daily, and per project hourly quotas."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "QuotaStatus",
+      "docstring": "Current state for a particular quota group.\n\nAttributes:\n    consumed (int):\n        Quota consumed by this request.\n    remaining (int):\n        Quota remaining after this request.",
+      "attributes": {
+        "consumed": {
+          "type": "int",
+          "description": "Quota consumed by this request."
+        },
+        "remaining": {
+          "type": "int",
+          "description": "Quota remaining after this request."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelBreakdown",
+      "docstring": "Breakdowns add a dimension to the funnel table sub report\nresponse.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    breakdown_dimension (google.analytics.data_v1alpha.types.Dimension):\n        The dimension column added to the funnel table sub report\n        response. The breakdown dimension breaks down each funnel\n        step. A valid ``breakdownDimension`` is required if\n        ``funnelBreakdown`` is specified.\n    limit (int):\n        The maximum number of distinct values of the breakdown\n        dimension to return in the response. A ``limit`` of ``5`` is\n        used if limit is not specified. Limit must exceed zero and\n        cannot exceed 15.\n\n        This field is a member of `oneof`_ ``_limit``.",
+      "attributes": {
+        "breakdown_dimension": {
+          "type": "google.analytics.data_v1alpha.types.Dimension",
+          "description": "The dimension column added to the funnel table sub report response. The breakdown dimension breaks down each funnel step. A valid ``breakdownDimension`` is required if ``funnelBreakdown`` is specified."
+        },
+        "limit": {
+          "type": "int",
+          "description": "The maximum number of distinct values of the breakdown dimension to return in the response. A ``limit`` of ``5`` is used if limit is not specified. Limit must exceed zero and cannot exceed 15.  This field is a member of `oneof`_ ``_limit``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelNextAction",
+      "docstring": "Next actions state the value for a dimension after the user has\nachieved a step but before the same user has achieved the next step.\nFor example if the ``nextActionDimension`` is ``eventName``, then\n``nextActionDimension`` in the ``i``\\ th funnel step row will return\nfirst event after the event that qualified the user into the\n``i``\\ th funnel step but before the user achieved the ``i+1``\\ th\nfunnel step.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    next_action_dimension (google.analytics.data_v1alpha.types.Dimension):\n        The dimension column added to the funnel visualization sub\n        report response. The next action dimension returns the next\n        dimension value of this dimension after the user has\n        attained the ``i``\\ th funnel step.\n\n        ``nextActionDimension`` currently only supports\n        ``eventName`` and most Page / Screen dimensions like\n        ``pageTitle`` and ``pagePath``. ``nextActionDimensio",
+      "attributes": {
+        "next_action_dimension": {
+          "type": "google.analytics.data_v1alpha.types.Dimension",
+          "description": "The dimension column added to the funnel visualization sub report response. The next action dimension returns the next dimension value of this dimension after the user has attained the ``i``\\ th funnel step.  ``nextActionDimension`` currently only supports ``eventName`` and most Page / Screen dimensions like ``pageTitle`` and ``pagePath``. ``nextActionDimension`` cannot be a dimension expression."
+        },
+        "limit": {
+          "type": "int",
+          "description": "The maximum number of distinct values of the breakdown dimension to return in the response. A ``limit`` of ``5`` is used if limit is not specified. Limit must exceed zero and cannot exceed 5.  This field is a member of `oneof`_ ``_limit``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Funnel",
+      "docstring": "Configures the funnel in a funnel report request. A funnel\nreports on users as they pass through a sequence of steps.\n\nFunnel exploration lets you visualize the steps your users take\nto complete a task and quickly see how well they are succeeding\nor failing at each step. For example, how do prospects become\nshoppers and then become buyers? How do one time buyers become\nrepeat buyers? With this information, you can improve\ninefficient or abandoned customer journeys.\n\nAttributes:\n    is_open_funnel (bool):\n        In an open funnel, users can enter the funnel\n        in any step, and in a closed funnel, users must\n        enter the funnel in the first step. Optional. If\n        unspecified, a closed funnel is used.\n    steps (MutableSequence[google.analytics.data_v1alpha.types.FunnelStep]):\n        The sequential steps of this funnel.",
+      "attributes": {
+        "is_open_funnel": {
+          "type": "bool",
+          "description": "In an open funnel, users can enter the funnel in any step, and in a closed funnel, users must enter the funnel in the first step. Optional. If unspecified, a closed funnel is used."
+        },
+        "steps": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.FunnelStep]",
+          "description": "The sequential steps of this funnel."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelStep",
+      "docstring": "Steps define the user journey you want to measure. Steps\ncontain one or more conditions that your users must meet to be\nincluded in that step of the funnel journey.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        The distinctive name for this step. If unspecified, steps\n        will be named by a 1 based indexed name (for example \"0. \",\n        \"1. \", etc.). This name defines string value returned by the\n        ``funnelStepName`` dimension. For example, specifying\n        ``name = Purchase`` in the request's third funnel step will\n        produce ``3. Purchase`` in the funnel report response.\n    is_directly_followed_by (bool):\n        If true, this step must directly follow the previous step.\n        If false, there can be events between the previous step and\n        this step. If unspecified, ``isDirectlyFollowedBy`` is\n        treated as false.\n    within_duration_from_prior_step (google.protobuf.duration_pb2",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The distinctive name for this step. If unspecified, steps will be named by a 1 based indexed name (for example \"0. \", \"1. \", etc.). This name defines string value returned by the ``funnelStepName`` dimension. For example, specifying ``name = Purchase`` in the request's third funnel step will produce ``3. Purchase`` in the funnel report response."
+        },
+        "is_directly_followed_by": {
+          "type": "bool",
+          "description": "If true, this step must directly follow the previous step. If false, there can be events between the previous step and this step. If unspecified, ``isDirectlyFollowedBy`` is treated as false."
+        },
+        "within_duration_from_prior_step": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "If specified, this step must complete within this duration of the completion of the prior step. ``withinDurationFromPriorStep`` is inclusive of the endpoint at the microsecond granularity. For example a duration of 5 seconds can be completed at 4.9 or 5.0 seconds, but not 5 seconds and 1 microsecond.  ``withinDurationFromPriorStep`` is optional, and if unspecified, steps may be separated by any time duration.  This field is a member of `oneof`_ ``_within_duration_from_prior_step``."
+        },
+        "filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.FunnelFilterExpression",
+          "description": "The condition that your users must meet to be included in this step of the funnel journey."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelSubReport",
+      "docstring": "Funnel sub reports contain the dimension and metric data\nvalues. For example, 12 users reached the second step of the\nfunnel.\n\nAttributes:\n    dimension_headers (MutableSequence[google.analytics.data_v1alpha.types.DimensionHeader]):\n        Describes dimension columns. Funnel reports\n        always include the funnel step dimension in sub\n        report responses. Additional dimensions like\n        breakdowns, dates, and next actions may be\n        present in the response if requested.\n    metric_headers (MutableSequence[google.analytics.data_v1alpha.types.MetricHeader]):\n        Describes metric columns. Funnel reports\n        always include active users in sub report\n        responses. The funnel table includes additional\n        metrics like completion rate, abandonments, and\n        abandonments rate.\n    rows (MutableSequence[google.analytics.data_v1alpha.types.Row]):\n        Rows of dimension value combinations and\n        metric values in the report.\n    metadata (google.analytics.data_v1alpha.types.Fu",
+      "attributes": {
+        "dimension_headers": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.DimensionHeader]",
+          "description": "Describes dimension columns. Funnel reports always include the funnel step dimension in sub report responses. Additional dimensions like breakdowns, dates, and next actions may be present in the response if requested."
+        },
+        "metric_headers": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.MetricHeader]",
+          "description": "Describes metric columns. Funnel reports always include active users in sub report responses. The funnel table includes additional metrics like completion rate, abandonments, and abandonments rate."
+        },
+        "rows": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.Row]",
+          "description": "Rows of dimension value combinations and metric values in the report."
+        },
+        "metadata": {
+          "type": "google.analytics.data_v1alpha.types.FunnelResponseMetadata",
+          "description": "Metadata for the funnel report."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserSegment",
+      "docstring": "User segments are subsets of users who engaged with your site\nor app. For example, users who have previously purchased; users\nwho added items to their shopping carts, but didn\u2019t complete a\npurchase.\n\nAttributes:\n    user_inclusion_criteria (google.analytics.data_v1alpha.types.UserSegmentCriteria):\n        Defines which users are included in this\n        segment. Optional.\n    exclusion (google.analytics.data_v1alpha.types.UserSegmentExclusion):\n        Defines which users are excluded in this\n        segment. Optional.",
+      "attributes": {
+        "user_inclusion_criteria": {
+          "type": "google.analytics.data_v1alpha.types.UserSegmentCriteria",
+          "description": "Defines which users are included in this segment. Optional."
+        },
+        "exclusion": {
+          "type": "google.analytics.data_v1alpha.types.UserSegmentExclusion",
+          "description": "Defines which users are excluded in this segment. Optional."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserSegmentCriteria",
+      "docstring": "A user matches a criteria if the user's events meet the\nconditions in the criteria.\n\nAttributes:\n    and_condition_groups (MutableSequence[google.analytics.data_v1alpha.types.UserSegmentConditionGroup]):\n        A user matches this criteria if the user matches each of\n        these ``andConditionGroups`` and each of the\n        ``andSequenceGroups``. ``andConditionGroups`` may be empty\n        if ``andSequenceGroups`` are specified.\n    and_sequence_groups (MutableSequence[google.analytics.data_v1alpha.types.UserSegmentSequenceGroup]):\n        A user matches this criteria if the user matches each of\n        these ``andSequenceGroups`` and each of the\n        ``andConditionGroups``. ``andSequenceGroups`` may be empty\n        if ``andConditionGroups`` are specified.",
+      "attributes": {
+        "and_condition_groups": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.UserSegmentConditionGroup]",
+          "description": "A user matches this criteria if the user matches each of these ``andConditionGroups`` and each of the ``andSequenceGroups``. ``andConditionGroups`` may be empty if ``andSequenceGroups`` are specified."
+        },
+        "and_sequence_groups": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.UserSegmentSequenceGroup]",
+          "description": "A user matches this criteria if the user matches each of these ``andSequenceGroups`` and each of the ``andConditionGroups``. ``andSequenceGroups`` may be empty if ``andConditionGroups`` are specified."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserSegmentConditionGroup",
+      "docstring": "Conditions tell Analytics what data to include in or exclude\nfrom the segment.\n\nAttributes:\n    condition_scoping (google.analytics.data_v1alpha.types.UserCriteriaScoping):\n        Data is included or excluded from the segment based on if it\n        matches the condition group. This scoping defines how many\n        events the ``segmentFilterExpression`` is evaluated on\n        before the condition group is determined to be matched or\n        not. For example if\n        ``conditionScoping = USER_CRITERIA_WITHIN_SAME_SESSION``,\n        the expression is evaluated on all events in a session, and\n        then, the condition group is determined to be matched or not\n        for this user. For example if\n        ``conditionScoping = USER_CRITERIA_WITHIN_SAME_EVENT``, the\n        expression is evaluated on a single event, and then, the\n        condition group is determined to be matched or not for this\n        user.\n\n        Optional. If unspecified,\n        ``conditionScoping = ACROSS_ALL_SESSIONS`` is used.\n    seg",
+      "attributes": {
+        "condition_scoping": {
+          "type": "google.analytics.data_v1alpha.types.UserCriteriaScoping",
+          "description": "Data is included or excluded from the segment based on if it matches the condition group. This scoping defines how many events the ``segmentFilterExpression`` is evaluated on before the condition group is determined to be matched or not. For example if ``conditionScoping = USER_CRITERIA_WITHIN_SAME_SESSION``, the expression is evaluated on all events in a session, and then, the condition group is determined to be matched or not for this user. For example if ``conditionScoping = USER_CRITERIA_WITHIN_SAME_EVENT``, the expression is evaluated on a single event, and then, the condition group is determined to be matched or not for this user.  Optional. If unspecified, ``conditionScoping = ACROSS_ALL_SESSIONS`` is used."
+        },
+        "segment_filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpression",
+          "description": "Data is included or excluded from the segment based on if it matches this expression. Expressions express criteria on dimension, metrics, and/or parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserSegmentSequenceGroup",
+      "docstring": "Define conditions that must occur in a specific order for the\nuser to be a member of the segment.\n\nAttributes:\n    sequence_scoping (google.analytics.data_v1alpha.types.UserCriteriaScoping):\n        All sequence steps must be satisfied in the scoping for the\n        user to match the sequence. For example if\n        ``sequenceScoping = USER_CRITERIA_WITHIN_SAME_SESSION``, all\n        sequence steps must complete within one session for the user\n        to match the sequence.\n        ``sequenceScoping = USER_CRITERIA_WITHIN_SAME_EVENT`` is not\n        supported.\n\n        Optional. If unspecified,\n        ``conditionScoping = ACROSS_ALL_SESSIONS`` is used.\n    sequence_maximum_duration (google.protobuf.duration_pb2.Duration):\n        Defines the time period in which the whole sequence must\n        occur; for example, 30 Minutes. ``sequenceMaximumDuration``\n        is inclusive of the endpoint at the microsecond granularity.\n        For example a sequence with a maximum duration of 5 seconds\n        can be comple",
+      "attributes": {
+        "sequence_scoping": {
+          "type": "google.analytics.data_v1alpha.types.UserCriteriaScoping",
+          "description": "All sequence steps must be satisfied in the scoping for the user to match the sequence. For example if ``sequenceScoping = USER_CRITERIA_WITHIN_SAME_SESSION``, all sequence steps must complete within one session for the user to match the sequence. ``sequenceScoping = USER_CRITERIA_WITHIN_SAME_EVENT`` is not supported.  Optional. If unspecified, ``conditionScoping = ACROSS_ALL_SESSIONS`` is used."
+        },
+        "sequence_maximum_duration": {
+          "type": "google.protobuf.duration_pb2.Duration",
+          "description": "Defines the time period in which the whole sequence must occur; for example, 30 Minutes. ``sequenceMaximumDuration`` is inclusive of the endpoint at the microsecond granularity. For example a sequence with a maximum duration of 5 seconds can be completed at 4.9 or 5.0 seconds, but not 5 seconds and 1 microsecond.  ``sequenceMaximumDuration`` is optional, and if unspecified, sequences can be completed in any time duration."
+        },
+        "user_sequence_steps": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.UserSequenceStep]",
+          "description": "An ordered sequence of condition steps. A user's events must complete each step in order for the user to match the ``UserSegmentSequenceGroup``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserSequenceStep",
+      "docstring": "A condition that must occur in the specified step order for\nthis user to match the sequence.\n\nAttributes:\n    is_directly_followed_by (bool):\n        If true, the event satisfying this step must be the very\n        next event after the event satifying the last step. If\n        false, this step indirectly follows the prior step; for\n        example, there may be events between the prior step and this\n        step. ``isDirectlyFollowedBy`` must be false for the first\n        step.\n    step_scoping (google.analytics.data_v1alpha.types.UserCriteriaScoping):\n        This sequence step must be satisfied in the scoping for the\n        user to match the sequence. For example if\n        ``sequenceScoping = WITHIN_SAME_SESSION``, this sequence\n        steps must complete within one session for the user to match\n        the sequence. ``stepScoping = ACROSS_ALL_SESSIONS`` is only\n        allowed if the ``sequenceScoping = ACROSS_ALL_SESSIONS``.\n\n        Optional. If unspecified, ``stepScoping`` uses the same\n        ``Us",
+      "attributes": {
+        "is_directly_followed_by": {
+          "type": "bool",
+          "description": "If true, the event satisfying this step must be the very next event after the event satifying the last step. If false, this step indirectly follows the prior step; for example, there may be events between the prior step and this step. ``isDirectlyFollowedBy`` must be false for the first step."
+        },
+        "step_scoping": {
+          "type": "google.analytics.data_v1alpha.types.UserCriteriaScoping",
+          "description": "This sequence step must be satisfied in the scoping for the user to match the sequence. For example if ``sequenceScoping = WITHIN_SAME_SESSION``, this sequence steps must complete within one session for the user to match the sequence. ``stepScoping = ACROSS_ALL_SESSIONS`` is only allowed if the ``sequenceScoping = ACROSS_ALL_SESSIONS``.  Optional. If unspecified, ``stepScoping`` uses the same ``UserCriteriaScoping`` as the ``sequenceScoping``."
+        },
+        "segment_filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpression",
+          "description": "A user matches this sequence step if their events match this expression. Expressions express criteria on dimension, metrics, and/or parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UserSegmentExclusion",
+      "docstring": "Specifies which users are excluded in this segment.\n\nAttributes:\n    user_exclusion_duration (google.analytics.data_v1alpha.types.UserExclusionDuration):\n        Specifies how long an exclusion will last if a user matches\n        the ``userExclusionCriteria``.\n\n        Optional. If unspecified, ``userExclusionDuration`` of\n        ``USER_EXCLUSION_TEMPORARY`` is used.\n    user_exclusion_criteria (google.analytics.data_v1alpha.types.UserSegmentCriteria):\n        If a user meets this condition, the user is excluded from\n        membership in the segment for the ``userExclusionDuration``.",
+      "attributes": {
+        "user_exclusion_duration": {
+          "type": "google.analytics.data_v1alpha.types.UserExclusionDuration",
+          "description": "Specifies how long an exclusion will last if a user matches the ``userExclusionCriteria``.  Optional. If unspecified, ``userExclusionDuration`` of ``USER_EXCLUSION_TEMPORARY`` is used."
+        },
+        "user_exclusion_criteria": {
+          "type": "google.analytics.data_v1alpha.types.UserSegmentCriteria",
+          "description": "If a user meets this condition, the user is excluded from membership in the segment for the ``userExclusionDuration``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SessionSegment",
+      "docstring": "Session segments are subsets of the sessions that occurred on\nyour site or app: for example, all the sessions that originated\nfrom a particular advertising campaign.\n\nAttributes:\n    session_inclusion_criteria (google.analytics.data_v1alpha.types.SessionSegmentCriteria):\n        Defines which sessions are included in this\n        segment. Optional.\n    exclusion (google.analytics.data_v1alpha.types.SessionSegmentExclusion):\n        Defines which sessions are excluded in this\n        segment. Optional.",
+      "attributes": {
+        "session_inclusion_criteria": {
+          "type": "google.analytics.data_v1alpha.types.SessionSegmentCriteria",
+          "description": "Defines which sessions are included in this segment. Optional."
+        },
+        "exclusion": {
+          "type": "google.analytics.data_v1alpha.types.SessionSegmentExclusion",
+          "description": "Defines which sessions are excluded in this segment. Optional."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SessionSegmentCriteria",
+      "docstring": "A session matches a criteria if the session's events meet the\nconditions in the criteria.\n\nAttributes:\n    and_condition_groups (MutableSequence[google.analytics.data_v1alpha.types.SessionSegmentConditionGroup]):\n        A session matches this criteria if the session matches each\n        of these ``andConditionGroups``.",
+      "attributes": {
+        "and_condition_groups": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.SessionSegmentConditionGroup]",
+          "description": "A session matches this criteria if the session matches each of these ``andConditionGroups``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SessionSegmentConditionGroup",
+      "docstring": "Conditions tell Analytics what data to include in or exclude\nfrom the segment.\n\nAttributes:\n    condition_scoping (google.analytics.data_v1alpha.types.SessionCriteriaScoping):\n        Data is included or excluded from the segment based on if it\n        matches the condition group. This scoping defines how many\n        events the ``segmentFilterExpression`` is evaluated on\n        before the condition group is determined to be matched or\n        not. For example if\n        ``conditionScoping = SESSION_CRITERIA_WITHIN_SAME_SESSION``,\n        the expression is evaluated on all events in a session, and\n        then, the condition group is determined to be matched or not\n        for this session. For example if\n        ``conditionScoping = SESSION_CRITERIA_WITHIN_SAME_EVENT``,\n        the expression is evaluated on a single event, and then, the\n        condition group is determined to be matched or not for this\n        session.\n\n        Optional. If unspecified, a ``conditionScoping`` of\n        ``WITHIN_SAME_SESS",
+      "attributes": {
+        "condition_scoping": {
+          "type": "google.analytics.data_v1alpha.types.SessionCriteriaScoping",
+          "description": "Data is included or excluded from the segment based on if it matches the condition group. This scoping defines how many events the ``segmentFilterExpression`` is evaluated on before the condition group is determined to be matched or not. For example if ``conditionScoping = SESSION_CRITERIA_WITHIN_SAME_SESSION``, the expression is evaluated on all events in a session, and then, the condition group is determined to be matched or not for this session. For example if ``conditionScoping = SESSION_CRITERIA_WITHIN_SAME_EVENT``, the expression is evaluated on a single event, and then, the condition group is determined to be matched or not for this session.  Optional. If unspecified, a ``conditionScoping`` of ``WITHIN_SAME_SESSION`` is used."
+        },
+        "segment_filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpression",
+          "description": "Data is included or excluded from the segment based on if it matches this expression. Expressions express criteria on dimension, metrics, and/or parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SessionSegmentExclusion",
+      "docstring": "Specifies which sessions are excluded in this segment.\n\nAttributes:\n    session_exclusion_duration (google.analytics.data_v1alpha.types.SessionExclusionDuration):\n        Specifies how long an exclusion will last if a session\n        matches the ``sessionExclusionCriteria``.\n\n        Optional. If unspecified, a ``sessionExclusionDuration`` of\n        ``SESSION_EXCLUSION_TEMPORARY`` is used.\n    session_exclusion_criteria (google.analytics.data_v1alpha.types.SessionSegmentCriteria):\n        If a session meets this condition, the session is excluded\n        from membership in the segment for the\n        ``sessionExclusionDuration``.",
+      "attributes": {
+        "session_exclusion_duration": {
+          "type": "google.analytics.data_v1alpha.types.SessionExclusionDuration",
+          "description": "Specifies how long an exclusion will last if a session matches the ``sessionExclusionCriteria``.  Optional. If unspecified, a ``sessionExclusionDuration`` of ``SESSION_EXCLUSION_TEMPORARY`` is used."
+        },
+        "session_exclusion_criteria": {
+          "type": "google.analytics.data_v1alpha.types.SessionSegmentCriteria",
+          "description": "If a session meets this condition, the session is excluded from membership in the segment for the ``sessionExclusionDuration``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EventSegment",
+      "docstring": "Event segments are subsets of events that were triggered on your\nsite or app. for example, all purchase events made in a particular\nlocation; app_exception events that occurred on a specific operating\nsystem.\n\nAttributes:\n    event_inclusion_criteria (google.analytics.data_v1alpha.types.EventSegmentCriteria):\n        Defines which events are included in this\n        segment. Optional.\n    exclusion (google.analytics.data_v1alpha.types.EventSegmentExclusion):\n        Defines which events are excluded in this\n        segment. Optional.",
+      "attributes": {
+        "event_inclusion_criteria": {
+          "type": "google.analytics.data_v1alpha.types.EventSegmentCriteria",
+          "description": "Defines which events are included in this segment. Optional."
+        },
+        "exclusion": {
+          "type": "google.analytics.data_v1alpha.types.EventSegmentExclusion",
+          "description": "Defines which events are excluded in this segment. Optional."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EventSegmentCriteria",
+      "docstring": "An event matches a criteria if the event meet the conditions\nin the criteria.\n\nAttributes:\n    and_condition_groups (MutableSequence[google.analytics.data_v1alpha.types.EventSegmentConditionGroup]):\n        An event matches this criteria if the event matches each of\n        these ``andConditionGroups``.",
+      "attributes": {
+        "and_condition_groups": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.EventSegmentConditionGroup]",
+          "description": "An event matches this criteria if the event matches each of these ``andConditionGroups``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EventSegmentConditionGroup",
+      "docstring": "Conditions tell Analytics what data to include in or exclude\nfrom the segment.\n\nAttributes:\n    condition_scoping (google.analytics.data_v1alpha.types.EventCriteriaScoping):\n        ``conditionScoping`` should always be\n        ``EVENT_CRITERIA_WITHIN_SAME_EVENT``.\n\n        Optional. If unspecified, a ``conditionScoping`` of\n        ``EVENT_CRITERIA_WITHIN_SAME_EVENT`` is used.\n    segment_filter_expression (google.analytics.data_v1alpha.types.SegmentFilterExpression):\n        Data is included or excluded from the segment\n        based on if it matches this expression.\n        Expressions express criteria on dimension,\n        metrics, and/or parameters.",
+      "attributes": {
+        "condition_scoping": {
+          "type": "google.analytics.data_v1alpha.types.EventCriteriaScoping",
+          "description": "``conditionScoping`` should always be ``EVENT_CRITERIA_WITHIN_SAME_EVENT``.  Optional. If unspecified, a ``conditionScoping`` of ``EVENT_CRITERIA_WITHIN_SAME_EVENT`` is used."
+        },
+        "segment_filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpression",
+          "description": "Data is included or excluded from the segment based on if it matches this expression. Expressions express criteria on dimension, metrics, and/or parameters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "EventSegmentExclusion",
+      "docstring": "Specifies which events are excluded in this segment.\n\nAttributes:\n    event_exclusion_duration (google.analytics.data_v1alpha.types.EventExclusionDuration):\n        ``eventExclusionDuration`` should always be\n        ``PERMANENTLY_EXCLUDE``.\n\n        Optional. If unspecified, an ``eventExclusionDuration`` of\n        ``EVENT_EXCLUSION_PERMANENT`` is used.\n    event_exclusion_criteria (google.analytics.data_v1alpha.types.EventSegmentCriteria):\n        If an event meets this condition, the event is excluded from\n        membership in the segment for the\n        ``eventExclusionDuration``.",
+      "attributes": {
+        "event_exclusion_duration": {
+          "type": "google.analytics.data_v1alpha.types.EventExclusionDuration",
+          "description": "``eventExclusionDuration`` should always be ``PERMANENTLY_EXCLUDE``.  Optional. If unspecified, an ``eventExclusionDuration`` of ``EVENT_EXCLUSION_PERMANENT`` is used."
+        },
+        "event_exclusion_criteria": {
+          "type": "google.analytics.data_v1alpha.types.EventSegmentCriteria",
+          "description": "If an event meets this condition, the event is excluded from membership in the segment for the ``eventExclusionDuration``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "Segment",
+      "docstring": "A segment is a subset of your Analytics data. For example, of your\nentire set of users, one segment might be users from a particular\ncountry or city. Another segment might be users who purchase a\nparticular line of products or who visit a specific part of your\nsite or trigger certain events in your app.\n\nTo learn more, see `Segment\nBuilder <https://support.google.com/analytics/answer/9304353>`__.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        The name for this segment. If unspecified, segments are\n        named \"Segment\". This name defines string value returned by\n        the ``segment`` dimension. The ``segment`` dimension\n        prefixes segment names by the 1-based index number of the\n        segment in the ",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The name for this segment. If unspecified, segments are named \"Segment\". This name defines string value returned by the ``segment`` dimension. The ``segment`` dimension prefixes segment names by the 1-based index number of the segment in the request (for example \"1. Segment\", \"2. Segment\", etc.)."
+        },
+        "user_segment": {
+          "type": "google.analytics.data_v1alpha.types.UserSegment",
+          "description": "User segments are subsets of users who engaged with your site or app.  This field is a member of `oneof`_ ``one_segment_scope``."
+        },
+        "session_segment": {
+          "type": "google.analytics.data_v1alpha.types.SessionSegment",
+          "description": "Session segments are subsets of the sessions that occurred on your site or app.  This field is a member of `oneof`_ ``one_segment_scope``."
+        },
+        "event_segment": {
+          "type": "google.analytics.data_v1alpha.types.EventSegment",
+          "description": "Event segments are subsets of events that were triggered on your site or app.  This field is a member of `oneof`_ ``one_segment_scope``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentFilterExpression",
+      "docstring": "Expresses combinations of segment filters.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    and_group (google.analytics.data_v1alpha.types.SegmentFilterExpressionList):\n        The SegmentFilterExpression in ``andGroup`` have an AND\n        relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    or_group (google.analytics.data_v1alpha.types.SegmentFilterExpressionList):\n        The SegmentFilterExpression in ``orGroup`` have an OR\n        relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    not_expression (google.analytics.data_v1alpha.types.SegmentFilterExpression):\n        The SegmentFilterExpression is NOT of ``notExpression``.\n\n        This field is a member of `oneof`_ ``expr``.\n    segment_fil",
+      "attributes": {
+        "and_group": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpressionList",
+          "description": "The SegmentFilterExpression in ``andGroup`` have an AND relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "or_group": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpressionList",
+          "description": "The SegmentFilterExpression in ``orGroup`` have an OR relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "not_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterExpression",
+          "description": "The SegmentFilterExpression is NOT of ``notExpression``.  This field is a member of `oneof`_ ``expr``."
+        },
+        "segment_filter": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilter",
+          "description": "A primitive segment filter.  This field is a member of `oneof`_ ``expr``."
+        },
+        "segment_event_filter": {
+          "type": "google.analytics.data_v1alpha.types.SegmentEventFilter",
+          "description": "Creates a filter that matches events of a single event name. If a parameter filter expression is specified, only the subset of events that match both the single event name and the parameter filter expressions match this event filter.  This field is a member of `oneof`_ ``expr``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentFilterExpressionList",
+      "docstring": "A list of segment filter expressions.\n\nAttributes:\n    expressions (MutableSequence[google.analytics.data_v1alpha.types.SegmentFilterExpression]):\n        The list of segment filter expressions",
+      "attributes": {
+        "expressions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.SegmentFilterExpression]",
+          "description": "The list of segment filter expressions"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentFilter",
+      "docstring": "An expression to filter dimension or metric values.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    field_name (str):\n        The dimension name or metric name.\n    string_filter (google.analytics.data_v1alpha.types.StringFilter):\n        Strings related filter.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    in_list_filter (google.analytics.data_v1alpha.types.InListFilter):\n        A filter for in list values.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    numeric_filter (google.analytics.data_v1alpha.types.NumericFilter):\n        A filter for numeric or date values.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    between_filter (google.analytics.data_v1alpha.types.BetweenFilter):\n  ",
+      "attributes": {
+        "field_name": {
+          "type": "str",
+          "description": "The dimension name or metric name."
+        },
+        "string_filter": {
+          "type": "google.analytics.data_v1alpha.types.StringFilter",
+          "description": "Strings related filter.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "in_list_filter": {
+          "type": "google.analytics.data_v1alpha.types.InListFilter",
+          "description": "A filter for in list values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "numeric_filter": {
+          "type": "google.analytics.data_v1alpha.types.NumericFilter",
+          "description": "A filter for numeric or date values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "between_filter": {
+          "type": "google.analytics.data_v1alpha.types.BetweenFilter",
+          "description": "A filter for between two values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "filter_scoping": {
+          "type": "google.analytics.data_v1alpha.types.SegmentFilterScoping",
+          "description": "Specifies the scope for the filter."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentFilterScoping",
+      "docstring": "Scopings specify how the dimensions & metrics of multiple\nevents should be considered when evaluating a segment filter.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    at_any_point_in_time (bool):\n        If ``atAnyPointInTime`` is true, this filter evaluates to\n        true for all events if it evaluates to true for any event in\n        the date range of the request.\n\n        This ``atAnyPointInTime`` parameter does not extend the date\n        range of events in the report. If ``atAnyPointInTime`` is\n        true, only events within the report's date range are\n        considered when evaluating this filter.\n\n        This ``atAnyPointInTime`` is only able to be specified if\n        the criteria scoping is ``ACROSS_ALL_SESSIONS`` and is not\n        able to be specified in sequences.\n\n        If the criteria scoping is ``ACROSS_ALL_SESSIONS``,\n        ``atAnyPointInTime`` = false is used if unspecified.\n\n        This field is a member",
+      "attributes": {
+        "at_any_point_in_time": {
+          "type": "bool",
+          "description": "If ``atAnyPointInTime`` is true, this filter evaluates to true for all events if it evaluates to true for any event in the date range of the request.  This ``atAnyPointInTime`` parameter does not extend the date range of events in the report. If ``atAnyPointInTime`` is true, only events within the report's date range are considered when evaluating this filter.  This ``atAnyPointInTime`` is only able to be specified if the criteria scoping is ``ACROSS_ALL_SESSIONS`` and is not able to be specified in sequences.  If the criteria scoping is ``ACROSS_ALL_SESSIONS``, ``atAnyPointInTime`` = false is used if unspecified.  This field is a member of `oneof`_ ``_at_any_point_in_time``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentEventFilter",
+      "docstring": "Creates a filter that matches events of a single event name.\nIf a parameter filter expression is specified, only the subset\nof events that match both the single event name and the\nparameter filter expressions match this event filter.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    event_name (str):\n        This filter matches events of this single\n        event name. Event name is required.\n\n        This field is a member of `oneof`_ ``_event_name``.\n    segment_parameter_filter_expression (google.analytics.data_v1alpha.types.SegmentParameterFilterExpression):\n        If specified, this filter matches events that\n        match both the single event name and the\n        parameter filter expressions.\n\n        Inside the parameter filter expression, only\n        parameter filters are available.\n\n        This field is a member of `oneof`_ ``_segment_parameter_filter_expression``.",
+      "attributes": {
+        "event_name": {
+          "type": "str",
+          "description": "This filter matches events of this single event name. Event name is required.  This field is a member of `oneof`_ ``_event_name``."
+        },
+        "segment_parameter_filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentParameterFilterExpression",
+          "description": "If specified, this filter matches events that match both the single event name and the parameter filter expressions.  Inside the parameter filter expression, only parameter filters are available.  This field is a member of `oneof`_ ``_segment_parameter_filter_expression``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentParameterFilterExpression",
+      "docstring": "Expresses combinations of segment filter on parameters.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    and_group (google.analytics.data_v1alpha.types.SegmentParameterFilterExpressionList):\n        The SegmentParameterFilterExpression in ``andGroup`` have an\n        AND relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    or_group (google.analytics.data_v1alpha.types.SegmentParameterFilterExpressionList):\n        The SegmentParameterFilterExpression in ``orGroup`` have an\n        OR relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    not_expression (google.analytics.data_v1alpha.types.SegmentParameterFilterExpression):\n        The SegmentParameterFilterExpression is NOT of\n        ``notExpressi",
+      "attributes": {
+        "and_group": {
+          "type": "google.analytics.data_v1alpha.types.SegmentParameterFilterExpressionList",
+          "description": "The SegmentParameterFilterExpression in ``andGroup`` have an AND relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "or_group": {
+          "type": "google.analytics.data_v1alpha.types.SegmentParameterFilterExpressionList",
+          "description": "The SegmentParameterFilterExpression in ``orGroup`` have an OR relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "not_expression": {
+          "type": "google.analytics.data_v1alpha.types.SegmentParameterFilterExpression",
+          "description": "The SegmentParameterFilterExpression is NOT of ``notExpression``.  This field is a member of `oneof`_ ``expr``."
+        },
+        "segment_parameter_filter": {
+          "type": "google.analytics.data_v1alpha.types.SegmentParameterFilter",
+          "description": "A primitive segment parameter filter.  This field is a member of `oneof`_ ``expr``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentParameterFilterExpressionList",
+      "docstring": "A list of segment parameter filter expressions.\n\nAttributes:\n    expressions (MutableSequence[google.analytics.data_v1alpha.types.SegmentParameterFilterExpression]):\n        The list of segment parameter filter\n        expressions.",
+      "attributes": {
+        "expressions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.SegmentParameterFilterExpression]",
+          "description": "The list of segment parameter filter expressions."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentParameterFilter",
+      "docstring": "An expression to filter parameter values in a segment.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    event_parameter_name (str):\n        This filter will be evaluated on the specified event\n        parameter. Event parameters are logged as parameters of the\n        event. Event parameters include fields like\n        \"firebase_screen\" & \"currency\".\n\n        Event parameters can only be used in segments & funnels and\n        can only be used in a descendent filter from an EventFilter.\n        In a descendent filter from an EventFilter either event or\n        item parameters should be used.\n\n        This field is a member of `oneof`_ ``one_parameter``.\n    item_parameter_name (str):\n        This filter will be evaluated on the specif",
+      "attributes": {
+        "event_parameter_name": {
+          "type": "str",
+          "description": "This filter will be evaluated on the specified event parameter. Event parameters are logged as parameters of the event. Event parameters include fields like \"firebase_screen\" & \"currency\".  Event parameters can only be used in segments & funnels and can only be used in a descendent filter from an EventFilter. In a descendent filter from an EventFilter either event or item parameters should be used.  This field is a member of `oneof`_ ``one_parameter``."
+        },
+        "item_parameter_name": {
+          "type": "str",
+          "description": "This filter will be evaluated on the specified item parameter. Item parameters are logged as parameters in the item array. Item parameters include fields like \"item_name\" & \"item_category\".  Item parameters can only be used in segments & funnels and can only be used in a descendent filter from an EventFilter. In a descendent filter from an EventFilter either event or item parameters should be used.  Item parameters are only available in ecommerce events. To learn more about ecommerce events, see the [Measure ecommerce] (https://developers.google.com/analytics/devguides/collection/ga4/ecommerce) guide.  This field is a member of `oneof`_ ``one_parameter``."
+        },
+        "string_filter": {
+          "type": "google.analytics.data_v1alpha.types.StringFilter",
+          "description": "Strings related filter.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "in_list_filter": {
+          "type": "google.analytics.data_v1alpha.types.InListFilter",
+          "description": "A filter for in list values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "numeric_filter": {
+          "type": "google.analytics.data_v1alpha.types.NumericFilter",
+          "description": "A filter for numeric or date values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "between_filter": {
+          "type": "google.analytics.data_v1alpha.types.BetweenFilter",
+          "description": "A filter for between two values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "filter_scoping": {
+          "type": "google.analytics.data_v1alpha.types.SegmentParameterFilterScoping",
+          "description": "Specifies the scope for the filter."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SegmentParameterFilterScoping",
+      "docstring": "Scopings specify how multiple events should be considered\nwhen evaluating a segment parameter filter.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    in_any_n_day_period (int):\n        Accumulates the parameter over the specified period of days\n        before applying the filter. Only supported if criteria\n        scoping is ``ACROSS_ALL_SESSIONS`` or\n        ``WITHIN_SAME_SESSION``. Only supported if the parameter is\n        ``event_count``.\n\n        For example if ``inAnyNDayPeriod`` is 3, the event_name is\n        \"purchase\", the event parameter is \"event_count\", and the\n        Filter's criteria is greater than 5, this filter will\n        accumulate the event count of purchase events over every 3\n        consecutive day period in the report's date range; a user\n        will pass this Filter's criteria to be included in this\n        segment if their count of purchase events exceeds 5 in any 3\n        consecutive day period. For e",
+      "attributes": {
+        "in_any_n_day_period": {
+          "type": "int",
+          "description": "Accumulates the parameter over the specified period of days before applying the filter. Only supported if criteria scoping is ``ACROSS_ALL_SESSIONS`` or ``WITHIN_SAME_SESSION``. Only supported if the parameter is ``event_count``.  For example if ``inAnyNDayPeriod`` is 3, the event_name is \"purchase\", the event parameter is \"event_count\", and the Filter's criteria is greater than 5, this filter will accumulate the event count of purchase events over every 3 consecutive day period in the report's date range; a user will pass this Filter's criteria to be included in this segment if their count of purchase events exceeds 5 in any 3 consecutive day period. For example, the periods 2021-11-01 to 2021-11-03, 2021-11-02 to 2021-11-04, 2021-11-03 to 2021-11-05, and etc. will be considered.  The date range is not extended for the purpose of having a full N day window near the start of the date range. For example if a report is for 2021-11-01 to 2021-11-10 and ``inAnyNDayPeriod`` = 3, the first two day period will be effectively shortened because no event data outside the report's date range will be read. For example, the first four periods will effectively be: 2021-11-01 to 2021-11-01, 2021-11-01 to 2021-11-02, 2021-11-01 to 2021-11-03, and 2021-11-02 to 2021-11-04.  ``inAnyNDayPeriod`` is optional. If not specified, the ``segmentParameterFilter`` is applied to each event individually.  This field is a member of `oneof`_ ``_in_any_n_day_period``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelFilterExpression",
+      "docstring": "Expresses combinations of funnel filters.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    and_group (google.analytics.data_v1alpha.types.FunnelFilterExpressionList):\n        The FunnelFilterExpression in ``andGroup`` have an AND\n        relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    or_group (google.analytics.data_v1alpha.types.FunnelFilterExpressionList):\n        The FunnelFilterExpression in ``orGroup`` have an OR\n        relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    not_expression (google.analytics.data_v1alpha.types.FunnelFilterExpression):\n        The FunnelFilterExpression is NOT of ``notExpression``.\n\n        This field is a member of `oneof`_ ``expr``.\n    funnel_field_filte",
+      "attributes": {
+        "and_group": {
+          "type": "google.analytics.data_v1alpha.types.FunnelFilterExpressionList",
+          "description": "The FunnelFilterExpression in ``andGroup`` have an AND relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "or_group": {
+          "type": "google.analytics.data_v1alpha.types.FunnelFilterExpressionList",
+          "description": "The FunnelFilterExpression in ``orGroup`` have an OR relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "not_expression": {
+          "type": "google.analytics.data_v1alpha.types.FunnelFilterExpression",
+          "description": "The FunnelFilterExpression is NOT of ``notExpression``.  This field is a member of `oneof`_ ``expr``."
+        },
+        "funnel_field_filter": {
+          "type": "google.analytics.data_v1alpha.types.FunnelFieldFilter",
+          "description": "A funnel filter for a dimension or metric.  This field is a member of `oneof`_ ``expr``."
+        },
+        "funnel_event_filter": {
+          "type": "google.analytics.data_v1alpha.types.FunnelEventFilter",
+          "description": "Creates a filter that matches events of a single event name. If a parameter filter expression is specified, only the subset of events that match both the single event name and the parameter filter expressions match this event filter.  This field is a member of `oneof`_ ``expr``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelFilterExpressionList",
+      "docstring": "A list of funnel filter expressions.\n\nAttributes:\n    expressions (MutableSequence[google.analytics.data_v1alpha.types.FunnelFilterExpression]):\n        The list of funnel filter expressions.",
+      "attributes": {
+        "expressions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.FunnelFilterExpression]",
+          "description": "The list of funnel filter expressions."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelFieldFilter",
+      "docstring": "An expression to filter dimension or metric values.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    field_name (str):\n        The dimension name or metric name.\n    string_filter (google.analytics.data_v1alpha.types.StringFilter):\n        Strings related filter.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    in_list_filter (google.analytics.data_v1alpha.types.InListFilter):\n        A filter for in list values.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    numeric_filter (google.analytics.data_v1alpha.types.NumericFilter):\n        A filter for numeric or date values.\n\n        This field is a member of `oneof`_ ``one_filter``.\n    between_filter (google.analytics.data_v1alpha.types.BetweenFilter):\n  ",
+      "attributes": {
+        "field_name": {
+          "type": "str",
+          "description": "The dimension name or metric name."
+        },
+        "string_filter": {
+          "type": "google.analytics.data_v1alpha.types.StringFilter",
+          "description": "Strings related filter.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "in_list_filter": {
+          "type": "google.analytics.data_v1alpha.types.InListFilter",
+          "description": "A filter for in list values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "numeric_filter": {
+          "type": "google.analytics.data_v1alpha.types.NumericFilter",
+          "description": "A filter for numeric or date values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "between_filter": {
+          "type": "google.analytics.data_v1alpha.types.BetweenFilter",
+          "description": "A filter for between two values.  This field is a member of `oneof`_ ``one_filter``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelEventFilter",
+      "docstring": "Creates a filter that matches events of a single event name.\nIf a parameter filter expression is specified, only the subset\nof events that match both the single event name and the\nparameter filter expressions match this event filter.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    event_name (str):\n        This filter matches events of this single\n        event name. Event name is required.\n\n        This field is a member of `oneof`_ ``_event_name``.\n    funnel_parameter_filter_expression (google.analytics.data_v1alpha.types.FunnelParameterFilterExpression):\n        If specified, this filter matches events that\n        match both the single event name and the\n        parameter filter expressions.\n\n        Inside the parameter filter expression, only\n        parameter filters are available.\n\n        This field is a member of `oneof`_ ``_funnel_parameter_filter_expression``.",
+      "attributes": {
+        "event_name": {
+          "type": "str",
+          "description": "This filter matches events of this single event name. Event name is required.  This field is a member of `oneof`_ ``_event_name``."
+        },
+        "funnel_parameter_filter_expression": {
+          "type": "google.analytics.data_v1alpha.types.FunnelParameterFilterExpression",
+          "description": "If specified, this filter matches events that match both the single event name and the parameter filter expressions.  Inside the parameter filter expression, only parameter filters are available.  This field is a member of `oneof`_ ``_funnel_parameter_filter_expression``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelParameterFilterExpression",
+      "docstring": "Expresses combinations of funnel filters on parameters.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    and_group (google.analytics.data_v1alpha.types.FunnelParameterFilterExpressionList):\n        The FunnelParameterFilterExpression in ``andGroup`` have an\n        AND relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    or_group (google.analytics.data_v1alpha.types.FunnelParameterFilterExpressionList):\n        The FunnelParameterFilterExpression in ``orGroup`` have an\n        OR relationship.\n\n        This field is a member of `oneof`_ ``expr``.\n    not_expression (google.analytics.data_v1alpha.types.FunnelParameterFilterExpression):\n        The FunnelParameterFilterExpression is NOT of\n        ``notExpression``.\n",
+      "attributes": {
+        "and_group": {
+          "type": "google.analytics.data_v1alpha.types.FunnelParameterFilterExpressionList",
+          "description": "The FunnelParameterFilterExpression in ``andGroup`` have an AND relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "or_group": {
+          "type": "google.analytics.data_v1alpha.types.FunnelParameterFilterExpressionList",
+          "description": "The FunnelParameterFilterExpression in ``orGroup`` have an OR relationship.  This field is a member of `oneof`_ ``expr``."
+        },
+        "not_expression": {
+          "type": "google.analytics.data_v1alpha.types.FunnelParameterFilterExpression",
+          "description": "The FunnelParameterFilterExpression is NOT of ``notExpression``.  This field is a member of `oneof`_ ``expr``."
+        },
+        "funnel_parameter_filter": {
+          "type": "google.analytics.data_v1alpha.types.FunnelParameterFilter",
+          "description": "A primitive funnel parameter filter.  This field is a member of `oneof`_ ``expr``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelParameterFilterExpressionList",
+      "docstring": "A list of funnel parameter filter expressions.\n\nAttributes:\n    expressions (MutableSequence[google.analytics.data_v1alpha.types.FunnelParameterFilterExpression]):\n        The list of funnel parameter filter\n        expressions.",
+      "attributes": {
+        "expressions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.FunnelParameterFilterExpression]",
+          "description": "The list of funnel parameter filter expressions."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelParameterFilter",
+      "docstring": "An expression to filter parameter values in a funnel.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    event_parameter_name (str):\n        This filter will be evaluated on the specified event\n        parameter. Event parameters are logged as parameters of the\n        event. Event parameters include fields like\n        \"firebase_screen\" & \"currency\".\n\n        Event parameters can only be used in segments & funnels and\n        can only be used in a descendent filter from an EventFilter.\n        In a descendent filter from an EventFilter either event or\n        item parameters should be used.\n\n        This field is a member of `oneof`_ ``one_parameter``.\n    item_parameter_name (str):\n        This filter will be evaluated on the specifi",
+      "attributes": {
+        "event_parameter_name": {
+          "type": "str",
+          "description": "This filter will be evaluated on the specified event parameter. Event parameters are logged as parameters of the event. Event parameters include fields like \"firebase_screen\" & \"currency\".  Event parameters can only be used in segments & funnels and can only be used in a descendent filter from an EventFilter. In a descendent filter from an EventFilter either event or item parameters should be used.  This field is a member of `oneof`_ ``one_parameter``."
+        },
+        "item_parameter_name": {
+          "type": "str",
+          "description": "This filter will be evaluated on the specified item parameter. Item parameters are logged as parameters in the item array. Item parameters include fields like \"item_name\" & \"item_category\".  Item parameters can only be used in segments & funnels and can only be used in a descendent filter from an EventFilter. In a descendent filter from an EventFilter either event or item parameters should be used.  Item parameters are only available in ecommerce events. To learn more about ecommerce events, see the [Measure ecommerce] (https://developers.google.com/analytics/devguides/collection/ga4/ecommerce) guide.  This field is a member of `oneof`_ ``one_parameter``."
+        },
+        "string_filter": {
+          "type": "google.analytics.data_v1alpha.types.StringFilter",
+          "description": "Strings related filter.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "in_list_filter": {
+          "type": "google.analytics.data_v1alpha.types.InListFilter",
+          "description": "A filter for in list values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "numeric_filter": {
+          "type": "google.analytics.data_v1alpha.types.NumericFilter",
+          "description": "A filter for numeric or date values.  This field is a member of `oneof`_ ``one_filter``."
+        },
+        "between_filter": {
+          "type": "google.analytics.data_v1alpha.types.BetweenFilter",
+          "description": "A filter for between two values.  This field is a member of `oneof`_ ``one_filter``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "FunnelResponseMetadata",
+      "docstring": "The funnel report's response metadata carries additional\ninformation about the funnel report.\n\nAttributes:\n    sampling_metadatas (MutableSequence[google.analytics.data_v1alpha.types.SamplingMetadata]):\n        If funnel report results are\n        `sampled <https://support.google.com/analytics/answer/13331292>`__,\n        this describes what percentage of events were used in this\n        funnel report. One ``samplingMetadatas`` is populated for\n        each date range. Each ``samplingMetadatas`` corresponds to a\n        date range in order that date ranges were specified in the\n        request.\n\n        However if the results are not sampled, this field will not\n        be defined.",
+      "attributes": {
+        "sampling_metadatas": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.SamplingMetadata]",
+          "description": "If funnel report results are `sampled <https://support.google.com/analytics/answer/13331292>`__, this describes what percentage of events were used in this funnel report. One ``samplingMetadatas`` is populated for each date range. Each ``samplingMetadatas`` corresponds to a date range in order that date ranges were specified in the request.  However if the results are not sampled, this field will not be defined."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SamplingMetadata",
+      "docstring": "If funnel report results are\n`sampled <https://support.google.com/analytics/answer/13331292>`__,\nthis metadata describes what percentage of events were used in this\nfunnel report for a date range. Sampling is the practice of\nanalyzing a subset of all data in order to uncover the meaningful\ninformation in the larger data set.\n\nAttributes:\n    samples_read_count (int):\n        The total number of events read in this\n        sampled report for a date range. This is the\n        size of the subset this property's data that was\n        analyzed in this funnel report.\n    sampling_space_size (int):\n        The total number of events present in this property's data\n        that could have been analyzed in this funnel report for a\n        date range. Sampling uncovers the meaningful information\n        about the larger data set, and this is the size of the\n        larger data set.\n\n        To calculate the percentage of available data that was used\n        in this funnel report, compute\n        ``samplesReadCount/samp",
+      "attributes": {
+        "samples_read_count": {
+          "type": "int",
+          "description": "The total number of events read in this sampled report for a date range. This is the size of the subset this property's data that was analyzed in this funnel report."
+        },
+        "sampling_space_size": {
+          "type": "int",
+          "description": "The total number of events present in this property's data that could have been analyzed in this funnel report for a date range. Sampling uncovers the meaningful information about the larger data set, and this is the size of the larger data set.  To calculate the percentage of available data that was used in this funnel report, compute ``samplesReadCount/samplingSpaceSize``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CaseExpression",
+      "docstring": "Used to convert a dimension value to a single case.\n\nAttributes:\n    dimension_name (str):\n        Name of a dimension. The name must refer back\n        to a name in dimensions field of the request.",
+      "attributes": {
+        "dimension_name": {
+          "type": "str",
+          "description": "Name of a dimension. The name must refer back to a name in dimensions field of the request."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ConcatenateExpression",
+      "docstring": "Used to combine dimension values to a single dimension.\n\nAttributes:\n    dimension_names (MutableSequence[str]):\n        Names of dimensions. The names must refer\n        back to names in the dimensions field of the\n        request.\n    delimiter (str):\n        The delimiter placed between dimension names.\n\n        Delimiters are often single characters such as \"|\" or \",\"\n        but can be longer strings. If a dimension value contains the\n        delimiter, both will be present in response with no\n        distinction. For example if dimension 1 value = \"US,FR\",\n        dimension 2 value = \"JP\", and delimiter = \",\", then the\n        response will contain \"US,FR,JP\".",
+      "attributes": {
+        "dimension_names": {
+          "type": "MutableSequence[str]",
+          "description": "Names of dimensions. The names must refer back to names in the dimensions field of the request."
+        },
+        "delimiter": {
+          "type": "str",
+          "description": "The delimiter placed between dimension names.  Delimiters are often single characters such as \"|\" or \",\" but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = \"US,FR\", dimension 2 value = \"JP\", and delimiter = \",\", then the response will contain \"US,FR,JP\"."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "MetricOrderBy",
+      "docstring": "Sorts by metric values.\n\nAttributes:\n    metric_name (str):\n        A metric name in the request to order by.",
+      "attributes": {
+        "metric_name": {
+          "type": "str",
+          "description": "A metric name in the request to order by."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DimensionOrderBy",
+      "docstring": "Sorts by dimension values.\n\nAttributes:\n    dimension_name (str):\n        A dimension name in the request to order by.\n    order_type (google.analytics.data_v1alpha.types.OrderBy.DimensionOrderBy.OrderType):\n        Controls the rule for dimension value\n        ordering.",
+      "attributes": {
+        "dimension_name": {
+          "type": "str",
+          "description": "A dimension name in the request to order by."
+        },
+        "order_type": {
+          "type": "google.analytics.data_v1alpha.types.OrderBy.DimensionOrderBy.OrderType",
+          "description": "Controls the rule for dimension value ordering."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "SchemaRestrictionResponse",
+      "docstring": "The schema restrictions actively enforced in creating this report.\nTo learn more, see `Access and data-restriction\nmanagement <https://support.google.com/analytics/answer/10851388>`__.\n\nAttributes:\n    active_metric_restrictions (MutableSequence[google.analytics.data_v1alpha.types.ResponseMetaData.SchemaRestrictionResponse.ActiveMetricRestriction]):\n        All restrictions actively enforced in creating the report.\n        For example, ``purchaseRevenue`` always has the restriction\n        type ``REVENUE_DATA``. However, this active response\n        restriction is only populated if the user's custom role\n        disallows access to ``REVENUE_DATA``.",
+      "attributes": {
+        "active_metric_restrictions": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.ResponseMetaData.SchemaRestrictionResponse.ActiveMetricRestriction]",
+          "description": "All restrictions actively enforced in creating the report. For example, ``purchaseRevenue`` always has the restriction type ``REVENUE_DATA``. However, this active response restriction is only populated if the user's custom role disallows access to ``REVENUE_DATA``."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ActiveMetricRestriction",
+      "docstring": "A metric actively restricted in creating the report.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    metric_name (str):\n        The name of the restricted metric.\n\n        This field is a member of `oneof`_ ``_metric_name``.\n    restricted_metric_types (MutableSequence[google.analytics.data_v1alpha.types.RestrictedMetricType]):\n        The reason for this metric's restriction.",
+      "attributes": {
+        "metric_name": {
+          "type": "str",
+          "description": "The name of the restricted metric.  This field is a member of `oneof`_ ``_metric_name``."
+        },
+        "restricted_metric_types": {
+          "type": "MutableSequence[google.analytics.data_v1alpha.types.RestrictedMetricType]",
+          "description": "The reason for this metric's restriction."
+        }
+      }
+    }
+  ]
+}

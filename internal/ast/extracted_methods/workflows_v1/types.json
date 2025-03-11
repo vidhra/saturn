@@ -1,0 +1,215 @@
+{
+  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-workflows\\google\\cloud\\workflows_v1\\types\\workflows.py": [
+    {
+      "type": "request_class",
+      "name": "Workflow",
+      "docstring": "Workflow program to be executed by Workflows.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        The resource name of the workflow.\n        Format:\n        projects/{project}/locations/{location}/workflows/{workflow}\n    description (str):\n        Description of the workflow provided by the\n        user. Must be at most 1000 unicode characters\n        long.\n    state (google.cloud.workflows_v1.types.Workflow.State):\n        Output only. State of the workflow\n        deployment.\n    revision_id (str):\n        Output only. The revision of the workflow. A new revision of\n        a workflow is created as a result of updating the following\n        properties of a workflow:\n\n        -  [Service\n           account][google.cloud.workflows.v1.Workflow.service_account]\n        -  [Workflow code to be\n           executed][google.cloud.workflows.v1.Workflow.source_contents]\n\n        The format is \"000001-a4d\", where the first si",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "The resource name of the workflow. Format: projects/{project}/locations/{location}/workflows/{workflow}"
+        },
+        "description": {
+          "type": "str",
+          "description": "Description of the workflow provided by the user. Must be at most 1000 unicode characters long."
+        },
+        "state": {
+          "type": "google.cloud.workflows_v1.types.Workflow.State",
+          "description": "Output only. State of the workflow deployment."
+        },
+        "revision_id": {
+          "type": "str",
+          "description": "Output only. The revision of the workflow. A new revision of a workflow is created as a result of updating the following properties of a workflow:  -  [Service account][google.cloud.workflows.v1.Workflow.service_account] -  [Workflow code to be executed][google.cloud.workflows.v1.Workflow.source_contents]  The format is \"000001-a4d\", where the first six characters define the zero-padded revision ordinal number. They are followed by a hyphen and three hexadecimal random characters."
+        },
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp for when the workflow was created."
+        },
+        "update_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp for when the workflow was last updated."
+        },
+        "revision_create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "Output only. The timestamp for the latest revision of the workflow's creation."
+        },
+        "labels": {
+          "type": "MutableMapping[str, str]",
+          "description": "Labels associated with this workflow. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed."
+        },
+        "service_account": {
+          "type": "str",
+          "description": "The service account associated with the latest workflow version. This service account represents the identity of the workflow and determines what permissions the workflow has. Format: projects/{project}/serviceAccounts/{account} or {account}  Using ``-`` as a wildcard for the ``{project}`` or not providing one at all will infer the project from the account. The ``{account}`` value can be the ``email`` address or the ``unique_id`` of the service account.  If not provided, workflow will use the project's default service account. Modifying this field for an existing workflow results in a new workflow revision."
+        },
+        "source_contents": {
+          "type": "str",
+          "description": "Workflow code to be executed. The size limit is 128KB.  This field is a member of `oneof`_ ``source_code``."
+        },
+        "crypto_key_name": {
+          "type": "str",
+          "description": "Optional. The resource name of a KMS crypto key used to encrypt or decrypt the data associated with the workflow.  Format: projects/{project}/locations/{location}/keyRings/{keyRing}/cryptoKeys/{cryptoKey}  Using ``-`` as a wildcard for the ``{project}`` or not providing one at all will infer the project from the account.  If not provided, data associated with the workflow will not be CMEK-encrypted."
+        },
+        "state_error": {
+          "type": "google.cloud.workflows_v1.types.Workflow.StateError",
+          "description": "Output only. Error regarding the state of the workflow. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions."
+        },
+        "call_log_level": {
+          "type": "google.cloud.workflows_v1.types.Workflow.CallLogLevel",
+          "description": "Optional. Describes the level of platform logging to apply to calls and call responses during executions of this workflow. If both the workflow and the execution specify a logging level, the execution level takes precedence."
+        },
+        "user_env_vars": {
+          "type": "MutableMapping[str, str]",
+          "description": "Optional. User-defined environment variables associated with this workflow revision. This map has a maximum length of 20. Each string can take up to 40KiB. Keys cannot be empty strings and cannot start with \u201cGOOGLE\u201d or \u201cWORKFLOWS\"."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListWorkflowsRequest",
+      "docstring": "Request for the\n[ListWorkflows][google.cloud.workflows.v1.Workflows.ListWorkflows]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. Project and location from which the\n        workflows should be listed. Format:\n        projects/{project}/locations/{location}\n    page_size (int):\n        Maximum number of workflows to return per\n        call. The service might return fewer than this\n        value even if not at the end of the collection.\n        If a value is not specified, a default value of\n        500 is used. The maximum permitted value is 1000\n        and values greater than 1000 are coerced down to\n        1000.\n    page_token (str):\n        A page token, received from a previous ``ListWorkflows``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListWorkflows`` must match the call that provided the page\n        token.\n    filter (str):\n        Filter to restrict results to specific\n        workflows.\n    order_by (st",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Project and location from which the workflows should be listed. Format: projects/{project}/locations/{location}"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "Maximum number of workflows to return per call. The service might return fewer than this value even if not at the end of the collection. If a value is not specified, a default value of 500 is used. The maximum permitted value is 1000 and values greater than 1000 are coerced down to 1000."
+        },
+        "page_token": {
+          "type": "str",
+          "description": "A page token, received from a previous ``ListWorkflows`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListWorkflows`` must match the call that provided the page token."
+        },
+        "filter": {
+          "type": "str",
+          "description": "Filter to restrict results to specific workflows."
+        },
+        "order_by": {
+          "type": "str",
+          "description": "Comma-separated list of fields that specify the order of the results. Default sorting order for a field is ascending. To specify descending order for a field, append a \"desc\" suffix. If not specified, the results are returned in an unspecified order."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "ListWorkflowsResponse",
+      "docstring": "Response for the\n[ListWorkflows][google.cloud.workflows.v1.Workflows.ListWorkflows]\nmethod.\n\nAttributes:\n    workflows (MutableSequence[google.cloud.workflows_v1.types.Workflow]):\n        The workflows that match the request.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.\n    unreachable (MutableSequence[str]):\n        Unreachable resources.",
+      "attributes": {
+        "workflows": {
+          "type": "MutableSequence[google.cloud.workflows_v1.types.Workflow]",
+          "description": "The workflows that match the request."
+        },
+        "next_page_token": {
+          "type": "str",
+          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages."
+        },
+        "unreachable": {
+          "type": "MutableSequence[str]",
+          "description": "Unreachable resources."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "GetWorkflowRequest",
+      "docstring": "Request for the\n[GetWorkflow][google.cloud.workflows.v1.Workflows.GetWorkflow]\nmethod.\n\nAttributes:\n    name (str):\n        Required. Name of the workflow for which\n        information should be retrieved. Format:\n        projects/{project}/locations/{location}/workflows/{workflow}\n    revision_id (str):\n        Optional. The revision of the workflow to retrieve. If the\n        revision_id is empty, the latest revision is retrieved. The\n        format is \"000001-a4d\", where the first six characters\n        define the zero-padded decimal revision number. They are\n        followed by a hyphen and three hexadecimal characters.",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the workflow for which information should be retrieved. Format: projects/{project}/locations/{location}/workflows/{workflow}"
+        },
+        "revision_id": {
+          "type": "str",
+          "description": "Optional. The revision of the workflow to retrieve. If the revision_id is empty, the latest revision is retrieved. The format is \"000001-a4d\", where the first six characters define the zero-padded decimal revision number. They are followed by a hyphen and three hexadecimal characters."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "CreateWorkflowRequest",
+      "docstring": "Request for the\n[CreateWorkflow][google.cloud.workflows.v1.Workflows.CreateWorkflow]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. Project and location in which the\n        workflow should be created. Format:\n        projects/{project}/locations/{location}\n    workflow (google.cloud.workflows_v1.types.Workflow):\n        Required. Workflow to be created.\n    workflow_id (str):\n        Required. The ID of the workflow to be created. It has to\n        fulfill the following requirements:\n\n        -  Must contain only letters, numbers, underscores and\n           hyphens.\n        -  Must start with a letter.\n        -  Must be between 1-64 characters.\n        -  Must end with a number or a letter.\n        -  Must be unique within the customer project and location.",
+      "attributes": {
+        "parent": {
+          "type": "str",
+          "description": "Required. Project and location in which the workflow should be created. Format: projects/{project}/locations/{location}"
+        },
+        "workflow": {
+          "type": "google.cloud.workflows_v1.types.Workflow",
+          "description": "Required. Workflow to be created."
+        },
+        "workflow_id": {
+          "type": "str",
+          "description": "Required. The ID of the workflow to be created. It has to fulfill the following requirements:  -  Must contain only letters, numbers, underscores and hyphens. -  Must start with a letter. -  Must be between 1-64 characters. -  Must end with a number or a letter. -  Must be unique within the customer project and location."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "DeleteWorkflowRequest",
+      "docstring": "Request for the\n[DeleteWorkflow][google.cloud.workflows.v1.Workflows.DeleteWorkflow]\nmethod.\n\nAttributes:\n    name (str):\n        Required. Name of the workflow to be deleted.\n        Format:\n        projects/{project}/locations/{location}/workflows/{workflow}",
+      "attributes": {
+        "name": {
+          "type": "str",
+          "description": "Required. Name of the workflow to be deleted. Format: projects/{project}/locations/{location}/workflows/{workflow}"
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "UpdateWorkflowRequest",
+      "docstring": "Request for the\n[UpdateWorkflow][google.cloud.workflows.v1.Workflows.UpdateWorkflow]\nmethod.\n\nAttributes:\n    workflow (google.cloud.workflows_v1.types.Workflow):\n        Required. Workflow to be updated.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        List of fields to be updated. If not present,\n        the entire workflow will be updated.",
+      "attributes": {
+        "workflow": {
+          "type": "google.cloud.workflows_v1.types.Workflow",
+          "description": "Required. Workflow to be updated."
+        },
+        "update_mask": {
+          "type": "google.protobuf.field_mask_pb2.FieldMask",
+          "description": "List of fields to be updated. If not present, the entire workflow will be updated."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "OperationMetadata",
+      "docstring": "Represents the metadata of the long-running operation.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time the operation was created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time the operation finished running.\n    target (str):\n        Server-defined resource path for the target\n        of the operation.\n    verb (str):\n        Name of the verb executed by the operation.\n    api_version (str):\n        API version used to start the operation.",
+      "attributes": {
+        "create_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "The time the operation was created."
+        },
+        "end_time": {
+          "type": "google.protobuf.timestamp_pb2.Timestamp",
+          "description": "The time the operation finished running."
+        },
+        "target": {
+          "type": "str",
+          "description": "Server-defined resource path for the target of the operation."
+        },
+        "verb": {
+          "type": "str",
+          "description": "Name of the verb executed by the operation."
+        },
+        "api_version": {
+          "type": "str",
+          "description": "API version used to start the operation."
+        }
+      }
+    },
+    {
+      "type": "request_class",
+      "name": "StateError",
+      "docstring": "Describes an error related to the current state of the\nworkflow.\n\nAttributes:\n    details (str):\n        Provides specifics about the error.\n    type_ (google.cloud.workflows_v1.types.Workflow.StateError.Type):\n        The type of this state error.",
+      "attributes": {
+        "details": {
+          "type": "str",
+          "description": "Provides specifics about the error."
+        },
+        "type_": {
+          "type": "google.cloud.workflows_v1.types.Workflow.StateError.Type",
+          "description": "The type of this state error."
+        }
+      }
+    }
+  ]
+}

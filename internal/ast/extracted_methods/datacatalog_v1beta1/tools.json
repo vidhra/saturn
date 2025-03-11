@@ -1,0 +1,1826 @@
+{
+  "DataCatalog": {
+    "methods": [
+      {
+        "type": "function",
+        "function": {
+          "name": "search_catalog",
+          "description": "Searches Data Catalog for multiple resources like entries, tags\nthat match a query.\n\nThis is a custom method\n(https://cloud.google.com/apis/design/custom_methods) and does\nnot return the complete resource, only the resource identifier\nand high level fields. Clients can subsequently call ``Get``\nmethods.\n\nNote that Data Catalog search queries do not guarantee full\nrecall. Query results that match your query may not be returned,\neven in subsequent result pages. Also note that results returned\n(and not returned) can vary across repeated search queries.\n\nSee `Data Catalog Search\nSyntax <https://cloud.google.com/data-catalog/docs/how-to/search-reference>`__\nfor more information.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   cli",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "scope": {
+                "type": "google.cloud.datacatalog_v1beta1.types.SearchCatalogRequest.Scope",
+                "description": "Required. The scope of this search request. A ``scope`` that has empty ``include_org_ids``, ``include_project_ids`` AND false ``include_gcp_public_datasets`` is considered invalid. Data Catalog will return an error in such a case.  This corresponds to the ``scope`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "query": {
+                "type": "str",
+                "description": "Optional. The query string in search query syntax. An empty query string will result in all data assets (in the specified scope) that the user has access to. Query strings can be simple as \"x\" or more qualified as:  -  name:x -  column:x -  description:y  Note: Query tokens need to have a minimum of 3 characters for substring matching to work correctly. See `Data Catalog Search Syntax <https://cloud.google.com/data-catalog/docs/how-to/search-reference>`__ for more information.  This corresponds to the ``query`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.services.data_catalog.pagers.SearchCatalogAsyncPager: Response message for [SearchCatalog][google.cloud.datacatalog.v1beta1.DataCatalog.SearchCatalog].  Iterating over this object will yield results and resolve additional pages automatically."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "scope",
+              "query",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_entry_group",
+          "description": "A maximum of 10,000 entry groups may be created per organization\nacross all locations.\n\nUsers should enable the Data Catalog API in the project\nidentified by the ``parent`` parameter (see [Data Catalog\nResource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_entry_group():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.CreateEntr",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the project this entry group is in. Example:  -  projects/{project_id}/locations/{location}  Note that this EntryGroup and its child resources may not actually be stored in the location in this name.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "entry_group_id": {
+                "type": "str",
+                "description": "Required. The id of the entry group to create. The id must begin with a letter or underscore, contain only English letters, numbers and underscores, and be at most 64 characters.  This corresponds to the ``entry_group_id`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "entry_group": {
+                "type": "google.cloud.datacatalog_v1beta1.types.EntryGroup",
+                "description": "The entry group to create. Defaults to an empty entry group.  This corresponds to the ``entry_group`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.EntryGroup: EntryGroup Metadata. An EntryGroup resource represents a logical grouping of zero or more Data Catalog [Entry][google.cloud.datacatalog.v1beta1.Entry] resources."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "entry_group_id",
+              "entry_group",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_entry_group",
+          "description": "Updates an EntryGroup. The user should enable the Data Catalog\nAPI in the project identified by the ``entry_group.name``\nparameter (see [Data Catalog Resource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_entry_group():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.UpdateEntryGroupRequest(\n        )\n\n        # Make the request",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "entry_group": {
+                "type": "google.cloud.datacatalog_v1beta1.types.EntryGroup",
+                "description": "Required. The updated entry group. \"name\" field must be set.  This corresponds to the ``entry_group`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "update_mask": {
+                "type": "google.protobuf.field_mask_pb2.FieldMask",
+                "description": "Names of fields whose values to overwrite on an entry group. If this parameter is absent or empty, all modifiable fields are overwritten. If such fields are non-required and omitted in the request body, their values are emptied.  This corresponds to the ``update_mask`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.EntryGroup: EntryGroup Metadata. An EntryGroup resource represents a logical grouping of zero or more Data Catalog [Entry][google.cloud.datacatalog.v1beta1.Entry] resources."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "entry_group",
+              "update_mask",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_entry_group",
+          "description": "Gets an EntryGroup.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_get_entry_group():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.GetEntryGroupRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        response = await client.get_entry_group(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.GetEntryGroupRequest, ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the entry group. For example, ``projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}``.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "read_mask": {
+                "type": "google.protobuf.field_mask_pb2.FieldMask",
+                "description": "The fields to return. If not set or empty, all fields are returned.  This corresponds to the ``read_mask`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.EntryGroup: EntryGroup Metadata. An EntryGroup resource represents a logical grouping of zero or more Data Catalog [Entry][google.cloud.datacatalog.v1beta1.Entry] resources."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "read_mask",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_entry_group",
+          "description": "Deletes an EntryGroup. Only entry groups that do not contain\nentries can be deleted. Users should enable the Data Catalog API\nin the project identified by the ``name`` parameter (see [Data\nCatalog Resource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_entry_group():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.DeleteEntryGrou",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the entry group. For example, ``projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}``.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "list_entry_groups",
+          "description": "Lists entry groups.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_list_entry_groups():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.ListEntryGroupsRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        page_result = client.list_entry_groups(request=request)\n\n        # Handle the response\n        async for response in page_result:\n            print(response)\n\nArgs:\n    request (Optional[Union[google.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the location that contains the entry groups, which can be provided in URL format. Example:  -  projects/{project_id}/locations/{location}  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.services.data_catalog.pagers.ListEntryGroupsAsyncPager: Response message for [ListEntryGroups][google.cloud.datacatalog.v1beta1.DataCatalog.ListEntryGroups].  Iterating over this object will yield results and resolve additional pages automatically."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_entry",
+          "description": "Creates an entry. Only entries of 'FILESET' type or\nuser-specified type can be created.\n\nUsers should enable the Data Catalog API in the project\nidentified by the ``parent`` parameter (see [Data Catalog\nResource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\nA maximum of 100,000 entries may be created per entry group.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_entry():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request arg",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the entry group this entry is in. Example:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}  Note that this Entry and its child resources may not actually be stored in the location in this name.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "entry_id": {
+                "type": "str",
+                "description": "Required. The id of the entry to create.  This corresponds to the ``entry_id`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "entry": {
+                "type": "google.cloud.datacatalog_v1beta1.types.Entry",
+                "description": "Required. The entry to create. This corresponds to the ``entry`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Entry: Entry Metadata. A Data Catalog Entry resource represents another resource in Google Cloud Platform (such as a BigQuery dataset or a Pub/Sub topic), or outside of Google Cloud Platform. Clients can use the linked_resource field in the Entry resource to refer to the original resource ID of the source system.  An Entry resource contains resource details, such as its schema. An Entry can also be used to attach flexible metadata, such as a [Tag][google.cloud.datacatalog.v1beta1.Tag]."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "entry_id",
+              "entry",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_entry",
+          "description": "Updates an existing entry. Users should enable the Data Catalog\nAPI in the project identified by the ``entry.name`` parameter\n(see [Data Catalog Resource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_entry():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        entry = datacatalog_v1beta1.Entry()\n        entry.type_ = \"FILESET\"\n        entry.integrated_system = \"",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "entry": {
+                "type": "google.cloud.datacatalog_v1beta1.types.Entry",
+                "description": "Required. The updated entry. The \"name\" field must be set.  This corresponds to the ``entry`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "update_mask": {
+                "type": "google.protobuf.field_mask_pb2.FieldMask",
+                "description": "Names of fields whose values to overwrite on an entry.  If this parameter is absent or empty, all modifiable fields are overwritten. If such fields are non-required and omitted in the request body, their values are emptied.  The following fields are modifiable:  -  For entries with type ``DATA_STREAM``:  -  ``schema``  -  For entries with type ``FILESET``:  -  ``schema`` -  ``display_name`` -  ``description`` -  ``gcs_fileset_spec`` -  ``gcs_fileset_spec.file_patterns``  -  For entries with ``user_specified_type``:  -  ``schema`` -  ``display_name`` -  ``description`` -  ``user_specified_type`` -  ``user_specified_system`` -  ``linked_resource`` -  ``source_system_timestamps``  This corresponds to the ``update_mask`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Entry: Entry Metadata. A Data Catalog Entry resource represents another resource in Google Cloud Platform (such as a BigQuery dataset or a Pub/Sub topic), or outside of Google Cloud Platform. Clients can use the linked_resource field in the Entry resource to refer to the original resource ID of the source system.  An Entry resource contains resource details, such as its schema. An Entry can also be used to attach flexible metadata, such as a [Tag][google.cloud.datacatalog.v1beta1.Tag]."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "entry",
+              "update_mask",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_entry",
+          "description": "Deletes an existing entry. Only entries created through\n[CreateEntry][google.cloud.datacatalog.v1beta1.DataCatalog.CreateEntry]\nmethod can be deleted. Users should enable the Data Catalog API\nin the project identified by the ``name`` parameter (see [Data\nCatalog Resource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_entry():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argum",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the entry. Example:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}/entries/{entry_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_entry",
+          "description": "Gets an entry.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_get_entry():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.GetEntryRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        response = await client.get_entry(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.GetEntryRequest, dict]]):\n        The reques",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the entry. Example:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}/entries/{entry_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Entry: Entry Metadata. A Data Catalog Entry resource represents another resource in Google Cloud Platform (such as a BigQuery dataset or a Pub/Sub topic), or outside of Google Cloud Platform. Clients can use the linked_resource field in the Entry resource to refer to the original resource ID of the source system.  An Entry resource contains resource details, such as its schema. An Entry can also be used to attach flexible metadata, such as a [Tag][google.cloud.datacatalog.v1beta1.Tag]."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "lookup_entry",
+          "description": "Get an entry by target resource name. This method\nallows clients to use the resource name from the source\nGoogle Cloud Platform service to get the Data Catalog\nEntry.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_lookup_entry():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.LookupEntryRequest(\n            linked_resource=\"linked_resource_value\",\n        )\n\n        # Make the request\n        response = await client.lookup_entry(request",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "list_entries",
+          "description": "Lists entries.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_list_entries():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.ListEntriesRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        page_result = client.list_entries(request=request)\n\n        # Handle the response\n        async for response in page_result:\n            print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the entry group that contains the entries, which can be provided in URL format. Example:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.services.data_catalog.pagers.ListEntriesAsyncPager: Response message for [ListEntries][google.cloud.datacatalog.v1beta1.DataCatalog.ListEntries].  Iterating over this object will yield results and resolve additional pages automatically."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_tag_template",
+          "description": "Creates a tag template. The user should enable the Data Catalog\nAPI in the project identified by the ``parent`` parameter (see\n`Data Catalog Resource\nProject <https://cloud.google.com/data-catalog/docs/concepts/resource-project>`__\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_tag_template():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.CreateTagTemplateRequest(\n            parent=\"parent_value\",\n       ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the project and the template location [region](https://cloud.google.com/data-catalog/docs/concepts/regions.  Example:  -  projects/{project_id}/locations/us-central1  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "tag_template_id": {
+                "type": "str",
+                "description": "Required. The id of the tag template to create.  This corresponds to the ``tag_template_id`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "tag_template": {
+                "type": "google.cloud.datacatalog_v1beta1.types.TagTemplate",
+                "description": "Required. The tag template to create. This corresponds to the ``tag_template`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplate: A tag template defines a tag, which can have one or more typed fields. The template is used to create and attach the tag to Google Cloud resources. [Tag template roles](\\ https://cloud.google.com/iam/docs/understanding-roles#data-catalog-roles) provide permissions to create, edit, and use the template. See, for example, the [TagTemplate User](\\ https://cloud.google.com/data-catalog/docs/how-to/template-user) role, which includes permission to use the tag template to tag resources."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "tag_template_id",
+              "tag_template",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_tag_template",
+          "description": "Gets a tag template.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_get_tag_template():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.GetTagTemplateRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        response = await client.get_tag_template(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.GetTagTemplateRequ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the tag template. Example:  -  projects/{project_id}/locations/{location}/tagTemplates/{tag_template_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplate: A tag template defines a tag, which can have one or more typed fields. The template is used to create and attach the tag to Google Cloud resources. [Tag template roles](\\ https://cloud.google.com/iam/docs/understanding-roles#data-catalog-roles) provide permissions to create, edit, and use the template. See, for example, the [TagTemplate User](\\ https://cloud.google.com/data-catalog/docs/how-to/template-user) role, which includes permission to use the tag template to tag resources."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_tag_template",
+          "description": "Updates a tag template. This method cannot be used to update the\nfields of a template. The tag template fields are represented as\nseparate resources and should be updated using their own\ncreate/update/delete methods. Users should enable the Data\nCatalog API in the project identified by the\n``tag_template.name`` parameter (see [Data Catalog Resource\nProject]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_tag_template():\n        # Create a client\n        cli",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "tag_template": {
+                "type": "google.cloud.datacatalog_v1beta1.types.TagTemplate",
+                "description": "Required. The template to update. The \"name\" field must be set.  This corresponds to the ``tag_template`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "update_mask": {
+                "type": "google.protobuf.field_mask_pb2.FieldMask",
+                "description": "Names of fields whose values to overwrite on a tag template. Currently, only ``display_name`` can be overwritten.  In general, if this parameter is absent or empty, all modifiable fields are overwritten. If such fields are non-required and omitted in the request body, their values are emptied.  This corresponds to the ``update_mask`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplate: A tag template defines a tag, which can have one or more typed fields. The template is used to create and attach the tag to Google Cloud resources. [Tag template roles](\\ https://cloud.google.com/iam/docs/understanding-roles#data-catalog-roles) provide permissions to create, edit, and use the template. See, for example, the [TagTemplate User](\\ https://cloud.google.com/data-catalog/docs/how-to/template-user) role, which includes permission to use the tag template to tag resources."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "tag_template",
+              "update_mask",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_tag_template",
+          "description": "Deletes a tag template and all tags using the template. Users\nshould enable the Data Catalog API in the project identified by\nthe ``name`` parameter (see [Data Catalog Resource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_tag_template():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.DeleteTagTemplateRequest(\n            name=",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the tag template to delete. Example:  -  projects/{project_id}/locations/{location}/tagTemplates/{tag_template_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "force": {
+                "type": "bool",
+                "description": "Required. Currently, this field must always be set to ``true``. This confirms the deletion of any possible tags using this template. ``force = false`` will be supported in the future.  This corresponds to the ``force`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "force",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_tag_template_field",
+          "description": "Creates a field in a tag template. The user should enable the\nData Catalog API in the project identified by the ``parent``\nparameter (see `Data Catalog Resource\nProject <https://cloud.google.com/data-catalog/docs/concepts/resource-project>`__\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_tag_template_field():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        tag_template_field = datacatalog_v1beta1.TagTemplateField()\n        tag_template_",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the project and the template location `region <https://cloud.google.com/data-catalog/docs/concepts/regions>`__.  Example:  -  projects/{project_id}/locations/us-central1/tagTemplates/{tag_template_id}  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "tag_template_field_id": {
+                "type": "str",
+                "description": "Required. The ID of the tag template field to create. Field ids can contain letters (both uppercase and lowercase), numbers (0-9), underscores (_) and dashes (-). Field IDs must be at least 1 character long and at most 128 characters long. Field IDs must also be unique within their template.  This corresponds to the ``tag_template_field_id`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "tag_template_field": {
+                "type": "google.cloud.datacatalog_v1beta1.types.TagTemplateField",
+                "description": "Required. The tag template field to create.  This corresponds to the ``tag_template_field`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplateField: The template for an individual field within a tag template."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "tag_template_field_id",
+              "tag_template_field",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_tag_template_field",
+          "description": "Updates a field in a tag template. This method cannot be used to\nupdate the field type. Users should enable the Data Catalog API\nin the project identified by the ``name`` parameter (see [Data\nCatalog Resource Project]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_tag_template_field():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        tag_template_field = datacatalog_v1",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the tag template field. Example:  -  projects/{project_id}/locations/{location}/tagTemplates/{tag_template_id}/fields/{tag_template_field_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "tag_template_field": {
+                "type": "google.cloud.datacatalog_v1beta1.types.TagTemplateField",
+                "description": "Required. The template to update. This corresponds to the ``tag_template_field`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "update_mask": {
+                "type": "google.protobuf.field_mask_pb2.FieldMask",
+                "description": "Optional. Names of fields whose values to overwrite on an individual field of a tag template. The following fields are modifiable:  -  ``display_name`` -  ``type.enum_type`` -  ``is_required``  If this parameter is absent or empty, all modifiable fields are overwritten. If such fields are non-required and omitted in the request body, their values are emptied with one exception: when updating an enum type, the provided values are merged with the existing values. Therefore, enum values can only be added, existing enum values cannot be deleted or renamed.  Additionally, updating a template field from optional to required is *not* allowed.  This corresponds to the ``update_mask`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplateField: The template for an individual field within a tag template."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "tag_template_field",
+              "update_mask",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "rename_tag_template_field",
+          "description": "Renames a field in a tag template. The user should enable the\nData Catalog API in the project identified by the ``name``\nparameter (see `Data Catalog Resource\nProject <https://cloud.google.com/data-catalog/docs/concepts/resource-project>`__\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_rename_tag_template_field():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.RenameTagTemplateFieldRequest(\n            name=\"name",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the tag template. Example:  -  projects/{project_id}/locations/{location}/tagTemplates/{tag_template_id}/fields/{tag_template_field_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "new_tag_template_field_id": {
+                "type": "str",
+                "description": "Required. The new ID of this tag template field. For example, ``my_new_field``.  This corresponds to the ``new_tag_template_field_id`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplateField: The template for an individual field within a tag template."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "new_tag_template_field_id",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "rename_tag_template_field_enum_value",
+          "description": "Renames an enum value in a tag template. The enum\nvalues have to be unique within one enum field. Thus, an\nenum value cannot be renamed with a name used in any\nother enum value within the same enum field.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_rename_tag_template_field_enum_value():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.RenameTagTemplateFieldEnumValueRequest(\n            name=\"name_value\",\n            new_enum_value_dis",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the enum field value. Example:  -  projects/{project_id}/locations/{location}/tagTemplates/{tag_template_id}/fields/{tag_template_field_id}/enumValues/{enum_value_display_name}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "new_enum_value_display_name": {
+                "type": "str",
+                "description": "Required. The new display name of the enum value. For example, ``my_new_enum_value``.  This corresponds to the ``new_enum_value_display_name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.TagTemplateField: The template for an individual field within a tag template."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "new_enum_value_display_name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_tag_template_field",
+          "description": "Deletes a field in a tag template and all uses of that field.\nUsers should enable the Data Catalog API in the project\nidentified by the ``name`` parameter (see [Data Catalog Resource\nProject]\n(https://cloud.google.com/data-catalog/docs/concepts/resource-project)\nfor more information).\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_tag_template_field():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.DeleteTagTemplateFieldRequest(\n",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the tag template field to delete. Example:  -  projects/{project_id}/locations/{location}/tagTemplates/{tag_template_id}/fields/{tag_template_field_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "force": {
+                "type": "bool",
+                "description": "Required. Currently, this field must always be set to ``true``. This confirms the deletion of this field from any tags using this field. ``force = false`` will be supported in the future.  This corresponds to the ``force`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "force",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_tag",
+          "description": "Creates a tag on an\n[Entry][google.cloud.datacatalog.v1beta1.Entry]. Note: The\nproject identified by the ``parent`` parameter for the\n`tag <https://cloud.google.com/data-catalog/docs/reference/rest/v1beta1/projects.locations.entryGroups.entries.tags/create#path-parameters>`__\nand the `tag\ntemplate <https://cloud.google.com/data-catalog/docs/reference/rest/v1beta1/projects.locations.tagTemplates/create#path-parameters>`__\nused to create the tag must be from the same organization.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_tag():\n        # Create",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the resource to attach this tag to. Tags can be attached to Entries. Example:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}/entries/{entry_id}  Note that this Tag and its child resources may not actually be stored in the location in this name.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "tag": {
+                "type": "google.cloud.datacatalog_v1beta1.types.Tag",
+                "description": "Required. The tag to create. This corresponds to the ``tag`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Tag: Tags are used to attach custom metadata to Data Catalog resources. Tags conform to the specifications within their tag template.  See [Data Catalog IAM](\\ https://cloud.google.com/data-catalog/docs/concepts/iam) for information on the permissions needed to create or view tags."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "tag",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_tag",
+          "description": "Updates an existing tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_tag():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        tag = datacatalog_v1beta1.Tag()\n        tag.column = \"column_value\"\n        tag.template = \"template_value\"\n\n        request = datacatalog_v1beta1.UpdateTagRequest(\n            tag=tag,\n        )\n\n        # Make the request\n        response = await client.update_tag(request=request)\n\n        # Handle the response\n        print(response",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "tag": {
+                "type": "google.cloud.datacatalog_v1beta1.types.Tag",
+                "description": "Required. The updated tag. The \"name\" field must be set.  This corresponds to the ``tag`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "update_mask": {
+                "type": "google.protobuf.field_mask_pb2.FieldMask",
+                "description": "Note: Currently, this parameter can only take ``\"fields\"`` as value.  Names of fields whose values to overwrite on a tag. Currently, a tag has the only modifiable field with the name ``fields``.  In general, if this parameter is absent or empty, all modifiable fields are overwritten. If such fields are non-required and omitted in the request body, their values are emptied.  This corresponds to the ``update_mask`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Tag: Tags are used to attach custom metadata to Data Catalog resources. Tags conform to the specifications within their tag template.  See [Data Catalog IAM](\\ https://cloud.google.com/data-catalog/docs/concepts/iam) for information on the permissions needed to create or view tags."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "tag",
+              "update_mask",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_tag",
+          "description": "Deletes a tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_tag():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.DeleteTagRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        await client.delete_tag(request=request)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.DeleteTagRequest, dict]]):\n        The request object. Request message for\n        [DeleteTag][google.cloud",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. The name of the tag to delete. Example:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}/entries/{entry_id}/tags/{tag_id}  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "list_tags",
+          "description": "Lists tags assigned to an\n[Entry][google.cloud.datacatalog.v1beta1.Entry]. The\n[columns][google.cloud.datacatalog.v1beta1.Tag.column] in the\nresponse are lowercased.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_list_tags():\n        # Create a client\n        client = datacatalog_v1beta1.DataCatalogAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.ListTagsRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        page_result = client.list_tags(request=request)\n\n        # Handle the",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. The name of the Data Catalog resource to list the tags of. The resource could be an [Entry][google.cloud.datacatalog.v1beta1.Entry] or an [EntryGroup][google.cloud.datacatalog.v1beta1.EntryGroup].  Examples:  -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id} -  projects/{project_id}/locations/{location}/entryGroups/{entry_group_id}/entries/{entry_id}  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.services.data_catalog.pagers.ListTagsAsyncPager: Response message for [ListTags][google.cloud.datacatalog.v1beta1.DataCatalog.ListTags].  Iterating over this object will yield results and resolve additional pages automatically."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "set_iam_policy",
+          "description": "Sets the access control policy for a resource. Replaces any\nexisting policy. Supported resources are:\n\n-  Tag templates.\n-  Entries.\n-  Entry groups. Note, this method cannot be used to manage\n   policies for BigQuery, Pub/Sub and any external Google Cloud\n   Platform resources synced to Data Catalog.\n\nCallers must have following Google IAM permission\n\n-  ``datacatalog.tagTemplates.setIamPolicy`` to set policies on\n   tag templates.\n-  ``datacatalog.entries.setIamPolicy`` to set policies on\n   entries.\n-  ``datacatalog.entryGroups.setIamPolicy`` to set policies on\n   entry groups.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.ht",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "resource": {
+                "type": "str",
+                "description": "REQUIRED: The resource for which the policy is being specified. See the operation documentation for the appropriate value for this field.  This corresponds to the ``resource`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.iam.v1.policy_pb2.Policy: An Identity and Access Management (IAM) policy, which specifies access controls for Google Cloud resources.  A Policy is a collection of bindings. A binding binds one or more members, or principals, to a single role. Principals can be user accounts, service accounts, Google groups, and domains (such as G Suite). A role is a named list of permissions; each role can be an IAM predefined role or a user-created custom role.  For some types of Google Cloud resources, a binding can also specify a condition, which is a logical expression that allows access to a resource only if the expression evaluates to true. A condition can add constraints based on attributes of the request, the resource, or both. To learn which resources support conditions in their IAM policies, see the [IAM documentation](\\ https://cloud.google.com/iam/help/conditions/resource-policies).  **JSON example:**  :literal:`\\`     {       \"bindings\": [         {           \"role\": \"roles/resourcemanager.organizationAdmin\",           \"members\": [             \"user:mike@example.com\",             \"group:admins@example.com\",             \"domain:google.com\",             \"serviceAccount:my-project-id@appspot.gserviceaccount.com\"           ]         },         {           \"role\": \"roles/resourcemanager.organizationViewer\",           \"members\": [             \"user:eve@example.com\"           ],           \"condition\": {             \"title\": \"expirable access\",             \"description\": \"Does not grant access after Sep 2020\",             \"expression\": \"request.time <             timestamp('2020-10-01T00:00:00.000Z')\",           }         }       ],       \"etag\": \"BwWWja0YfJA=\",       \"version\": 3     }`\\ \\`  **YAML example:**  :literal:`\\`     bindings:     - members:       - user:mike@example.com       - group:admins@example.com       - domain:google.com       - serviceAccount:my-project-id@appspot.gserviceaccount.com       role: roles/resourcemanager.organizationAdmin     - members:       - user:eve@example.com       role: roles/resourcemanager.organizationViewer       condition:         title: expirable access         description: Does not grant access after Sep 2020         expression: request.time < timestamp('2020-10-01T00:00:00.000Z')     etag: BwWWja0YfJA=     version: 3`\\ \\`  For a description of IAM and its features, see the [IAM documentation](\\ https://cloud.google.com/iam/docs/)."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "resource",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": [
+            "SetIamPolicyRequest"
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_iam_policy",
+          "description": "Gets the access control policy for a resource. A ``NOT_FOUND``\nerror is returned if the resource does not exist. An empty\npolicy is returned if the resource exists but does not have a\npolicy set on it.\n\nSupported resources are:\n\n-  Tag templates.\n-  Entries.\n-  Entry groups. Note, this method cannot be used to manage\n   policies for BigQuery, Pub/Sub and any external Google Cloud\n   Platform resources synced to Data Catalog.\n\nCallers must have following Google IAM permission\n\n-  ``datacatalog.tagTemplates.getIamPolicy`` to get policies on\n   tag templates.\n-  ``datacatalog.entries.getIamPolicy`` to get policies on\n   entries.\n-  ``datacatalog.entryGroups.getIamPolicy`` to get policies on\n   entry groups.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when c",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "resource": {
+                "type": "str",
+                "description": "REQUIRED: The resource for which the policy is being requested. See the operation documentation for the appropriate value for this field.  This corresponds to the ``resource`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.iam.v1.policy_pb2.Policy: An Identity and Access Management (IAM) policy, which specifies access controls for Google Cloud resources.  A Policy is a collection of bindings. A binding binds one or more members, or principals, to a single role. Principals can be user accounts, service accounts, Google groups, and domains (such as G Suite). A role is a named list of permissions; each role can be an IAM predefined role or a user-created custom role.  For some types of Google Cloud resources, a binding can also specify a condition, which is a logical expression that allows access to a resource only if the expression evaluates to true. A condition can add constraints based on attributes of the request, the resource, or both. To learn which resources support conditions in their IAM policies, see the [IAM documentation](\\ https://cloud.google.com/iam/help/conditions/resource-policies).  **JSON example:**  :literal:`\\`     {       \"bindings\": [         {           \"role\": \"roles/resourcemanager.organizationAdmin\",           \"members\": [             \"user:mike@example.com\",             \"group:admins@example.com\",             \"domain:google.com\",             \"serviceAccount:my-project-id@appspot.gserviceaccount.com\"           ]         },         {           \"role\": \"roles/resourcemanager.organizationViewer\",           \"members\": [             \"user:eve@example.com\"           ],           \"condition\": {             \"title\": \"expirable access\",             \"description\": \"Does not grant access after Sep 2020\",             \"expression\": \"request.time <             timestamp('2020-10-01T00:00:00.000Z')\",           }         }       ],       \"etag\": \"BwWWja0YfJA=\",       \"version\": 3     }`\\ \\`  **YAML example:**  :literal:`\\`     bindings:     - members:       - user:mike@example.com       - group:admins@example.com       - domain:google.com       - serviceAccount:my-project-id@appspot.gserviceaccount.com       role: roles/resourcemanager.organizationAdmin     - members:       - user:eve@example.com       role: roles/resourcemanager.organizationViewer       condition:         title: expirable access         description: Does not grant access after Sep 2020         expression: request.time < timestamp('2020-10-01T00:00:00.000Z')     etag: BwWWja0YfJA=     version: 3`\\ \\`  For a description of IAM and its features, see the [IAM documentation](\\ https://cloud.google.com/iam/docs/)."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "resource",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": [
+            "GetIamPolicyRequest"
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "test_iam_permissions",
+          "description": "Returns the caller's permissions on a resource. If the resource\ndoes not exist, an empty set of permissions is returned (We\ndon't return a ``NOT_FOUND`` error).\n\nSupported resources are:\n\n-  Tag templates.\n-  Entries.\n-  Entry groups. Note, this method cannot be used to manage\n   policies for BigQuery, Pub/Sub and any external Google Cloud\n   Platform resources synced to Data Catalog.\n\nA caller is not required to have Google IAM permission to make\nthis request.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    asyn",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": [
+            "TestIamPermissionsRequest"
+          ]
+        }
+      }
+    ]
+  },
+  "PolicyTagManager": {
+    "methods": [
+      {
+        "type": "function",
+        "function": {
+          "name": "create_taxonomy",
+          "description": "Creates a taxonomy in the specified project.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_taxonomy():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.CreateTaxonomyRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        response = await client.create_taxonomy(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. Resource name of the project that the taxonomy will belong to.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "taxonomy": {
+                "type": "google.cloud.datacatalog_v1beta1.types.Taxonomy",
+                "description": "The taxonomy to be created. This corresponds to the ``taxonomy`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Taxonomy: A taxonomy is a collection of policy tags that classify data along a common axis. For instance a data *sensitivity* taxonomy could contain policy tags denoting PII such as age, zipcode, and SSN. A data *origin* taxonomy could contain policy tags to distinguish user data, employee data, partner data, public data."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "taxonomy",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_taxonomy",
+          "description": "Deletes a taxonomy. This operation will also delete\nall policy tags in this taxonomy along with their\nassociated policies.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_taxonomy():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.DeleteTaxonomyRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        await client.delete_taxonomy(request=request)\n\nArgs:\n    request (Optional[Union[google.cloud.datac",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. Resource name of the taxonomy to be deleted. All policy tags in this taxonomy will also be deleted.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_taxonomy",
+          "description": "Updates a taxonomy.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_taxonomy():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.UpdateTaxonomyRequest(\n        )\n\n        # Make the request\n        response = await client.update_taxonomy(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.UpdateTaxonomyRequest, dict]]):\n        The req",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "taxonomy": {
+                "type": "google.cloud.datacatalog_v1beta1.types.Taxonomy",
+                "description": "The taxonomy to update. Only description, display_name, and activated policy types can be updated.  This corresponds to the ``taxonomy`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Taxonomy: A taxonomy is a collection of policy tags that classify data along a common axis. For instance a data *sensitivity* taxonomy could contain policy tags denoting PII such as age, zipcode, and SSN. A data *origin* taxonomy could contain policy tags to distinguish user data, employee data, partner data, public data."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "taxonomy",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "list_taxonomies",
+          "description": "Lists all taxonomies in a project in a particular\nlocation that the caller has permission to view.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_list_taxonomies():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.ListTaxonomiesRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        page_result = client.list_taxonomies(request=request)\n\n        # Handle the response\n        async for response in page",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. Resource name of the project to list the taxonomies of.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.services.policy_tag_manager.pagers.ListTaxonomiesAsyncPager: Response message for [ListTaxonomies][google.cloud.datacatalog.v1beta1.PolicyTagManager.ListTaxonomies].  Iterating over this object will yield results and resolve additional pages automatically."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_taxonomy",
+          "description": "Gets a taxonomy.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_get_taxonomy():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.GetTaxonomyRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        response = await client.get_taxonomy(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.GetTaxonomyRequest, dict]]):",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. Resource name of the requested taxonomy.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.Taxonomy: A taxonomy is a collection of policy tags that classify data along a common axis. For instance a data *sensitivity* taxonomy could contain policy tags denoting PII such as age, zipcode, and SSN. A data *origin* taxonomy could contain policy tags to distinguish user data, employee data, partner data, public data."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_policy_tag",
+          "description": "Creates a policy tag in the specified taxonomy.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_create_policy_tag():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.CreatePolicyTagRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        response = await client.create_policy_tag(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datac",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. Resource name of the taxonomy that the policy tag will belong to.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
+              },
+              "policy_tag": {
+                "type": "google.cloud.datacatalog_v1beta1.types.PolicyTag",
+                "description": "The policy tag to be created. This corresponds to the ``policy_tag`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.PolicyTag: Denotes one policy tag in a taxonomy (e.g. ssn). Policy Tags can be defined in a hierarchy. For example, consider the following hierarchy:  Geolocation -&gt; (LatLong, City, ZipCode). PolicyTag \"Geolocation\" contains three child policy tags: \"LatLong\", \"City\", and \"ZipCode\"."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "policy_tag",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "delete_policy_tag",
+          "description": "Deletes a policy tag. Also deletes all of its\ndescendant policy tags.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_delete_policy_tag():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.DeletePolicyTagRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        await client.delete_policy_tag(request=request)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.DeletePolicyTagRequest, dic",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. Resource name of the policy tag to be deleted. All of its descendant policy tags will also be deleted.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "update_policy_tag",
+          "description": "Updates a policy tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_update_policy_tag():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.UpdatePolicyTagRequest(\n        )\n\n        # Make the request\n        response = await client.update_policy_tag(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.UpdatePolicyTagRequest, dict]]):\n       ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "policy_tag": {
+                "type": "google.cloud.datacatalog_v1beta1.types.PolicyTag",
+                "description": "The policy tag to update. Only the description, display_name, and parent_policy_tag fields can be updated.  This corresponds to the ``policy_tag`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.PolicyTag: Denotes one policy tag in a taxonomy (e.g. ssn). Policy Tags can be defined in a hierarchy. For example, consider the following hierarchy:  Geolocation -&gt; (LatLong, City, ZipCode). PolicyTag \"Geolocation\" contains three child policy tags: \"LatLong\", \"City\", and \"ZipCode\"."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "policy_tag",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "list_policy_tags",
+          "description": "Lists all policy tags in a taxonomy.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_list_policy_tags():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.ListPolicyTagsRequest(\n            parent=\"parent_value\",\n        )\n\n        # Make the request\n        page_result = client.list_policy_tags(request=request)\n\n        # Handle the response\n        async for response in page_result:\n            print(response)\n\nArgs:\n    request (Opt",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "parent": {
+                "type": "str",
+                "description": "Required. Resource name of the taxonomy to list the policy tags of.  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.services.policy_tag_manager.pagers.ListPolicyTagsAsyncPager: Response message for [ListPolicyTags][google.cloud.datacatalog.v1beta1.PolicyTagManager.ListPolicyTags].  Iterating over this object will yield results and resolve additional pages automatically."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "parent",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_policy_tag",
+          "description": "Gets a policy tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_get_policy_tag():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.GetPolicyTagRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        response = await client.get_policy_tag(request=request)\n\n        # Handle the response\n        print(response)\n\nArgs:\n    request (Optional[Union[google.cloud.datacatalog_v1beta1.types.GetPolicyTagRequest, ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "name": {
+                "type": "str",
+                "description": "Required. Resource name of the requested policy tag.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.datacatalog_v1beta1.types.PolicyTag: Denotes one policy tag in a taxonomy (e.g. ssn). Policy Tags can be defined in a hierarchy. For example, consider the following hierarchy:  Geolocation -&gt; (LatLong, City, ZipCode). PolicyTag \"Geolocation\" contains three child policy tags: \"LatLong\", \"City\", and \"ZipCode\"."
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "name",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_iam_policy",
+          "description": "Gets the IAM policy for a taxonomy or a policy tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    async def sample_get_iam_policy():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = iam_policy_pb2.GetIamPolicyRequest(\n            resource=\"resource_value\",\n        )\n\n        # Make the request\n        response = await client.get_iam_policy(request=request)\n\n        # Handle the response\n        print(response",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": [
+            "GetIamPolicyRequest"
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "set_iam_policy",
+          "description": "Sets the IAM policy for a taxonomy or a policy tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    async def sample_set_iam_policy():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = iam_policy_pb2.SetIamPolicyRequest(\n            resource=\"resource_value\",\n        )\n\n        # Make the request\n        response = await client.set_iam_policy(request=request)\n\n        # Handle the response\n        print(response",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": [
+            "SetIamPolicyRequest"
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "test_iam_permissions",
+          "description": "Returns the permissions that a caller has on the\nspecified taxonomy or policy tag.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    async def sample_test_iam_permissions():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerAsyncClient()\n\n        # Initialize request argument(s)\n        request = iam_policy_pb2.TestIamPermissionsRequest(\n            resource=\"resource_value\",\n            permissions=['permissions_value1', 'permissions_value2'],\n        )\n\n        # Make the request\n    ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": [
+            "TestIamPermissionsRequest"
+          ]
+        }
+      }
+    ]
+  },
+  "PolicyTagManagerSerialization": {
+    "methods": [
+      {
+        "type": "function",
+        "function": {
+          "name": "import_taxonomies",
+          "description": "Imports all taxonomies and their policy tags to a\nproject as new taxonomies.\n\nThis method provides a bulk taxonomy / policy tag\ncreation using nested proto structure.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_import_taxonomies():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerSerializationAsyncClient()\n\n        # Initialize request argument(s)\n        inline_source = datacatalog_v1beta1.InlineSource()\n        inline_source.taxonomies.display_name = \"display_name_value\"\n\n        request = datacatalog_v1beta1.ImportTaxon",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "export_taxonomies",
+          "description": "Exports all taxonomies and their policy tags in a\nproject.\nThis method generates SerializedTaxonomy protos with\nnested policy tags that can be used as an input for\nfuture ImportTaxonomies calls.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import datacatalog_v1beta1\n\n    async def sample_export_taxonomies():\n        # Create a client\n        client = datacatalog_v1beta1.PolicyTagManagerSerializationAsyncClient()\n\n        # Initialize request argument(s)\n        request = datacatalog_v1beta1.ExportTaxonomiesRequest(\n            serialized_taxonomies=True,\n            parent=\"parent_value\",\n            ",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "request": {
+                "type": "string",
+                "description": ""
+              },
+              "retry": {
+                "type": "string",
+                "description": ""
+              },
+              "timeout": {
+                "type": "string",
+                "description": ""
+              },
+              "metadata": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "required": [
+              "request",
+              "retry",
+              "timeout",
+              "metadata"
+            ]
+          },
+          "request_types": []
+        }
+      }
+    ]
+  }
+}
