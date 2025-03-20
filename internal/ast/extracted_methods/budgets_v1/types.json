@@ -1,251 +1,658 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-billing-budgets\\google\\cloud\\billing\\budgets_v1\\types\\budget_model.py": [
-    {
-      "type": "request_class",
-      "name": "Budget",
-      "docstring": "A budget is a plan that describes what you expect to spend on\nCloud projects, plus the rules to execute as spend is tracked\nagainst that plan, (for example, send an alert when 90% of the\ntarget spend is met). The budget time period is configurable,\nwith options such as month (default), quarter, year, or custom\ntime period.\n\nAttributes:\n    name (str):\n        Output only. Resource name of the budget. The resource name\n        implies the scope of a budget. Values are of the form\n        ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.\n    display_name (str):\n        User data for display name in UI. The name\n        must be less than or equal to 60 characters.\n    budget_filter (google.cloud.billing.budgets_v1.types.Filter):\n        Optional. Filters that define which resources\n        are used to compute the actual spend against the\n        budget amount, such as projects, services, and\n        the budget's time period, as well as other\n        filters.\n    amount (google.cloud.billing.budgets_v1.t",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. Resource name of the budget. The resource name implies the scope of a budget. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "User data for display name in UI. The name must be less than or equal to 60 characters."
-        },
-        "budget_filter": {
-          "type": "google.cloud.billing.budgets_v1.types.Filter",
-          "description": "Optional. Filters that define which resources are used to compute the actual spend against the budget amount, such as projects, services, and the budget's time period, as well as other filters."
-        },
-        "amount": {
-          "type": "google.cloud.billing.budgets_v1.types.BudgetAmount",
-          "description": "Required. Budgeted amount."
-        },
-        "threshold_rules": {
-          "type": "MutableSequence[google.cloud.billing.budgets_v1.types.ThresholdRule]",
-          "description": "Optional. Rules that trigger alerts (notifications of thresholds being crossed) when spend exceeds the specified percentages of the budget.  Optional for ``pubsubTopic`` notifications.  Required if using email notifications."
-        },
-        "notifications_rule": {
-          "type": "google.cloud.billing.budgets_v1.types.NotificationsRule",
-          "description": "Optional. Rules to apply to notifications sent based on budget spend and thresholds."
-        },
-        "etag": {
-          "type": "str",
-          "description": "Optional. Etag to validate that the object is unchanged for a read-modify-write operation. An empty etag causes an update to overwrite other changes."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "BudgetAmount",
-      "docstring": "The budgeted amount for each usage period.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    specified_amount (google.type.money_pb2.Money):\n        A specified amount to use as the budget. ``currency_code``\n        is optional. If specified when creating a budget, it must\n        match the currency of the billing account. If specified when\n        updating a budget, it must match the currency_code of the\n        existing budget. The ``currency_code`` is provided on\n        output.\n\n        This field is a member of `oneof`_ ``budget_amount``.\n    last_period_amount (google.cloud.billing.budgets_v1.types.LastPeriodAmount):\n        Use the last period's actual spend as the budget for the\n        present period. LastPeriodAmount can onl",
-      "attributes": {
-        "specified_amount": {
-          "type": "google.type.money_pb2.Money",
-          "description": "A specified amount to use as the budget. ``currency_code`` is optional. If specified when creating a budget, it must match the currency of the billing account. If specified when updating a budget, it must match the currency_code of the existing budget. The ``currency_code`` is provided on output.  This field is a member of `oneof`_ ``budget_amount``."
-        },
-        "last_period_amount": {
-          "type": "google.cloud.billing.budgets_v1.types.LastPeriodAmount",
-          "description": "Use the last period's actual spend as the budget for the present period. LastPeriodAmount can only be set when the budget's time period is a [Filter.calendar_period][google.cloud.billing.budgets.v1.Filter.calendar_period]. It cannot be set in combination with [Filter.custom_period][google.cloud.billing.budgets.v1.Filter.custom_period].  This field is a member of `oneof`_ ``budget_amount``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LastPeriodAmount",
-      "docstring": "Describes a budget amount targeted to the last\n[Filter.calendar_period][google.cloud.billing.budgets.v1.Filter.calendar_period]\nspend. At this time, the amount is automatically 100% of the last\ncalendar period's spend; that is, there are no other options yet.\nLastPeriodAmount cannot be set for a budget configured with a\n[Filter.custom_period][google.cloud.billing.budgets.v1.Filter.custom_period].",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "ThresholdRule",
-      "docstring": "ThresholdRule contains the definition of a threshold. Threshold\nrules define the triggering events used to generate a budget\nnotification email. When a threshold is crossed (spend exceeds the\nspecified percentages of the budget), budget alert emails are sent\nto the email recipients you specify in the\n`NotificationsRule <#notificationsrule>`__.\n\nThreshold rules also affect the fields included in the `JSON data\nobject <https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format>`__\nsent to a Pub/Sub topic.\n\nThreshold rules are *required* if using email notifications.\n\nThreshold rules are *optional* if only setting a ```pubsubTopic``\nNotificationsRule <#NotificationsRule>`__, unless you want your JSON\ndata object to include data about the thresholds you set.\n\nFor more information, see `set budget threshold rules and\nactions <https://cloud.google.com/billing/docs/how-to/budgets#budget-actions>`__.\n\nAttributes:\n    threshold_percent (float):\n        Required. Send an alert w",
-      "attributes": {
-        "threshold_percent": {
-          "type": "float",
-          "description": "Required. Send an alert when this threshold is exceeded. This is a 1.0-based percentage, so 0.5 = 50%. Validation: non-negative number."
-        },
-        "spend_basis": {
-          "type": "google.cloud.billing.budgets_v1.types.ThresholdRule.Basis",
-          "description": "Optional. The type of basis used to determine if spend has passed the threshold. Behavior defaults to CURRENT_SPEND if not set."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NotificationsRule",
-      "docstring": "NotificationsRule defines notifications that are sent based\non budget spend and thresholds.\n\nAttributes:\n    pubsub_topic (str):\n        Optional. The name of the Pub/Sub topic where budget-related\n        messages are published, in the form\n        ``projects/{project_id}/topics/{topic_id}``. Updates are\n        sent to the topic at regular intervals; the timing of the\n        updates is not dependent on the `threshold\n        rules <#thresholdrule>`__ you've set.\n\n        Note that if you want your `Pub/Sub JSON\n        object <https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format>`__\n        to contain data for ``alertThresholdExceeded``, you need at\n        least one `alert threshold rule <#thresholdrule>`__. When\n        you set threshold rules, you must also enable at least one\n        of the email notification options, either using the default\n        IAM recipients or Cloud Monitoring email notification\n        channels.\n\n        To use Pub/Sub topics with",
-      "attributes": {
-        "pubsub_topic": {
-          "type": "str",
-          "description": "Optional. The name of the Pub/Sub topic where budget-related messages are published, in the form ``projects/{project_id}/topics/{topic_id}``. Updates are sent to the topic at regular intervals; the timing of the updates is not dependent on the `threshold rules <#thresholdrule>`__ you've set.  Note that if you want your `Pub/Sub JSON object <https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format>`__ to contain data for ``alertThresholdExceeded``, you need at least one `alert threshold rule <#thresholdrule>`__. When you set threshold rules, you must also enable at least one of the email notification options, either using the default IAM recipients or Cloud Monitoring email notification channels.  To use Pub/Sub topics with budgets, you must do the following:  1. Create the Pub/Sub topic before connecting it to your budget. For guidance, see `Manage programmatic budget alert notifications <https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications>`__.  2. Grant the API caller the ``pubsub.topics.setIamPolicy`` permission on the Pub/Sub topic. If not set, the API call fails with PERMISSION_DENIED. For additional details on Pub/Sub roles and permissions, see `Permissions required for this task <https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#permissions_required_for_this_task>`__."
-        },
-        "schema_version": {
-          "type": "str",
-          "description": "Optional. Required when [NotificationsRule.pubsub_topic][google.cloud.billing.budgets.v1.NotificationsRule.pubsub_topic] is set. The schema version of the notification sent to [NotificationsRule.pubsub_topic][google.cloud.billing.budgets.v1.NotificationsRule.pubsub_topic]. Only \"1.0\" is accepted. It represents the JSON schema as defined in https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format."
-        },
-        "monitoring_notification_channels": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. Email targets to send notifications to when a threshold is exceeded. This is in addition to the ``DefaultIamRecipients`` who receive alert emails based on their billing account IAM role. The value is the full REST resource name of a Cloud Monitoring email notification channel with the form ``projects/{project_id}/notificationChannels/{channel_id}``. A maximum of 5 email notifications are allowed.  To customize budget alert email recipients with monitoring notification channels, you *must create the monitoring notification channels before you link them to a budget*. For guidance on setting up notification channels to use with budgets, see `Customize budget alert email recipients <https://cloud.google.com/billing/docs/how-to/budgets-notification-recipients>`__.  For Cloud Billing budget alerts, you *must use email notification channels*. The other types of notification channels are *not* supported, such as Slack, SMS, or PagerDuty. If you want to `send budget notifications to Slack <https://cloud.google.com/billing/docs/how-to/notify#send_notifications_to_slack>`__, use a pubsubTopic and configure `programmatic notifications <https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications>`__."
-        },
-        "disable_default_iam_recipients": {
-          "type": "bool",
-          "description": "Optional. When set to true, disables default notifications sent when a threshold is exceeded. Default notifications are sent to those with Billing Account Administrator and Billing Account User IAM roles for the target account."
-        },
-        "enable_project_level_recipients": {
-          "type": "bool",
-          "description": "Optional. When set to true, and when the budget has a single project configured, notifications will be sent to project level recipients of that project. This field will be ignored if the budget has multiple or no project configured.  Currently, project level recipients are the users with ``Owner`` role on a cloud project."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Filter",
-      "docstring": "A filter for a budget, limiting the scope of the cost to\ncalculate.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    projects (MutableSequence[str]):\n        Optional. A set of projects of the form\n        ``projects/{project}``, specifying that usage from only this\n        set of projects should be included in the budget. If\n        omitted, the report includes all usage for the billing\n        account, regardless of which project the usage occurred on.\n    resource_ancestors (MutableSequence[str]):\n        Optional. A set of folder and organization names of the form\n        ``folders/{folderId}`` or\n        ``organizations/{organizationId}``, specifying that usage\n        from only this set of folders and organizations should be\n  ",
-      "attributes": {
-        "projects": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. A set of projects of the form ``projects/{project}``, specifying that usage from only this set of projects should be included in the budget. If omitted, the report includes all usage for the billing account, regardless of which project the usage occurred on."
-        },
-        "resource_ancestors": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. A set of folder and organization names of the form ``folders/{folderId}`` or ``organizations/{organizationId}``, specifying that usage from only this set of folders and organizations should be included in the budget. If omitted, the budget includes all usage that the billing account pays for. If the folder or organization contains projects that are paid for by a different Cloud Billing account, the budget *doesn't* apply to those projects."
-        },
-        "credit_types": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. If [Filter.credit_types_treatment][google.cloud.billing.budgets.v1.Filter.credit_types_treatment] is INCLUDE_SPECIFIED_CREDITS, this is a list of credit types to be subtracted from gross cost to determine the spend for threshold calculations. See `a list of acceptable credit type values <https://cloud.google.com/billing/docs/how-to/export-data-bigquery-tables#credits-type>`__.  If [Filter.credit_types_treatment][google.cloud.billing.budgets.v1.Filter.credit_types_treatment] is **not** INCLUDE_SPECIFIED_CREDITS, this field must be empty."
-        },
-        "credit_types_treatment": {
-          "type": "google.cloud.billing.budgets_v1.types.Filter.CreditTypesTreatment",
-          "description": "Optional. If not set, default behavior is ``INCLUDE_ALL_CREDITS``."
-        },
-        "services": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. A set of services of the form ``services/{service_id}``, specifying that usage from only this set of services should be included in the budget. If omitted, the report includes usage for all the services. The service names are available through the Catalog API: https://cloud.google.com/billing/v1/how-tos/catalog-api."
-        },
-        "subaccounts": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. A set of subaccounts of the form ``billingAccounts/{account_id}``, specifying that usage from only this set of subaccounts should be included in the budget. If a subaccount is set to the name of the parent account, usage from the parent account is included. If the field is omitted, the report includes usage from the parent account and all subaccounts, if they exist."
-        },
-        "labels": {
-          "type": "MutableMapping[str, google.protobuf.struct_pb2.ListValue]",
-          "description": "Optional. A single label and value pair specifying that usage from only this set of labeled resources should be included in the budget. If omitted, the report includes all labeled and unlabeled usage.  An object containing a single ``\"key\": value`` pair. Example: ``{ \"name\": \"wrench\" }``.  *Currently, multiple entries or multiple values per entry are not allowed.*"
-        },
-        "calendar_period": {
-          "type": "google.cloud.billing.budgets_v1.types.CalendarPeriod",
-          "description": "Optional. Specifies to track usage for recurring calendar period. For example, assume that CalendarPeriod.QUARTER is set. The budget tracks usage from April 1 to June 30, when the current calendar month is April, May, June. After that, it tracks usage from July 1 to September 30 when the current calendar month is July, August, September, so on.  This field is a member of `oneof`_ ``usage_period``."
-        },
-        "custom_period": {
-          "type": "google.cloud.billing.budgets_v1.types.CustomPeriod",
-          "description": "Optional. Specifies to track usage from any start date (required) to any end date (optional). This time period is static, it does not recur.  This field is a member of `oneof`_ ``usage_period``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CustomPeriod",
-      "docstring": "All date times begin at 12 AM US and Canadian Pacific Time\n(UTC-8).\n\nAttributes:\n    start_date (google.type.date_pb2.Date):\n        Required. The start date must be after\n        January 1, 2017.\n    end_date (google.type.date_pb2.Date):\n        Optional. The end date of the time period. Budgets with\n        elapsed end date won't be processed. If unset, specifies to\n        track all usage incurred since the start_date.",
-      "attributes": {
-        "start_date": {
-          "type": "google.type.date_pb2.Date",
-          "description": "Required. The start date must be after January 1, 2017."
-        },
-        "end_date": {
-          "type": "google.type.date_pb2.Date",
-          "description": "Optional. The end date of the time period. Budgets with elapsed end date won't be processed. If unset, specifies to track all usage incurred since the start_date."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-billing-budgets\\google\\cloud\\billing\\budgets_v1\\types\\budget_service.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateBudgetRequest",
-      "docstring": "Request for CreateBudget\n\nAttributes:\n    parent (str):\n        Required. The name of the billing account to create the\n        budget in. Values are of the form\n        ``billingAccounts/{billingAccountId}``.\n    budget (google.cloud.billing.budgets_v1.types.Budget):\n        Required. Budget to create.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The name of the billing account to create the budget in. Values are of the form ``billingAccounts/{billingAccountId}``."
+      "description": "Request for CreateBudget\n\nAttributes:\n    parent (str):\n        Required. The name of the billing account to create the\n        budget in. Values are of the form\n        ``billingAccounts/{billingAccountId}``.\n    budget (google.cloud.billing.budgets_v1.types.Budget):\n        Required. Budget to create.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The name of the billing account to create the budget in. Values are of the form ``billingAccounts/{billingAccountId}``.",
+            "type": "string"
+          },
+          "budget": {
+            "description": "Required. Budget to create.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. Resource name of the budget. The resource name implies the scope of a budget. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "User data for display name in UI. Validation: <= 60 chars.",
+                "type": "string"
+              },
+              "budget_filter": {
+                "type": "object",
+                "properties": {
+                  "location_filter": {
+                    "type": "object",
+                    "properties": {
+                      "circle": {
+                        "type": "object",
+                        "properties": {
+                          "center": {
+                            "description": "Required. Center latitude and longitude.  The range of latitude must be within [-90.0, 90.0]. The range of the longitude must be within [-180.0, 180.0].",
+                            "type": "object",
+                            "reference": "google.type.latlng_pb2.LatLng"
+                          },
+                          "radius": {
+                            "description": "Required. Radius measured in meters. The radius must be within [0.0, 50000.0].",
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "center",
+                          "radius"
+                        ]
+                      },
+                      "region": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Identifier. The resource name of the region. Format: ``accounts/{account}/regions/{region}``",
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "description": "Optional. The display name of the region.  This field is a member of `oneof`_ ``_display_name``.",
+                            "type": "string"
+                          },
+                          "postal_code_area": {
+                            "type": "object",
+                            "properties": {
+                              "region_code": {
+                                "description": "Required. `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ or the country the postal code group applies to.",
+                                "type": "string"
+                              },
+                              "postal_codes": {
+                                "description": "Required. A range of postal codes.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "begin": {
+                                      "description": "Required. A postal code or a pattern of the form prefix\\* denoting the inclusive lower bound of the range defining the area. Examples values: ``94108``, ``9410*``, ``9*``.",
+                                      "type": "string"
+                                    },
+                                    "end": {
+                                      "description": "Optional. A postal code or a pattern of the form ``prefix*`` denoting the inclusive upper bound of the range defining the area. It must have the same length as postalCodeRangeBegin: if postalCodeRangeBegin is a postal code then postalCodeRangeEnd must be a postal code too; if postalCodeRangeBegin is a pattern then postalCodeRangeEnd must be a pattern with the same prefix length. Optional: if not set, then the area is defined as being all the postal codes matching postalCodeRangeBegin.",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "begin"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "region_code",
+                              "postal_codes"
+                            ]
+                          },
+                          "geotarget_area": {
+                            "type": "object",
+                            "properties": {
+                              "geotarget_criteria_ids": {
+                                "description": "Required. A non-empty list of `location IDs <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__. They must all be of the same location type (for example, state).",
+                                "type": "array",
+                                "items": {
+                                  "type": "integer"
+                                }
+                              }
+                            },
+                            "required": [
+                              "geotarget_criteria_ids"
+                            ]
+                          },
+                          "regional_inventory_eligible": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "",
+                                "type": "boolean"
+                              }
+                            }
+                          },
+                          "shipping_eligible": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "",
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "custom_area": {
+                        "type": "object",
+                        "properties": {
+                          "polygon": {
+                            "type": "object",
+                            "properties": {
+                              "coordinates": {
+                                "description": "Optional. The coordinates that define the polygon.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.type.latlng_pb2.LatLng"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "polygon"
+                        ]
+                      }
+                    }
+                  },
+                  "type_filter": {
+                    "type": "object",
+                    "properties": {
+                      "included_types": {
+                        "description": "Optional. Included Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "excluded_types": {
+                        "description": "Optional. Excluded Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "included_primary_types": {
+                        "description": "Optional. Included primary Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "excluded_primary_types": {
+                        "description": "Optional. Excluded primary Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "operating_status": {
+                    "description": "Optional. Restricts results to places whose operating status is included on this list. If operating_status is not set, OPERATING_STATUS_OPERATIONAL is used as default.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.maps.areainsights_v1.types.OperatingStatus"
+                    }
+                  },
+                  "price_levels": {
+                    "description": "Optional. Restricts results to places whose price level is included on this list. If price_level is not set, all price levels are included in the results.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.maps.areainsights_v1.types.PriceLevel"
+                    }
+                  },
+                  "rating_filter": {
+                    "type": "object",
+                    "properties": {
+                      "min_rating": {
+                        "description": "Optional. Restricts results to places whose average user rating is greater than or equal to min_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_min_rating``.",
+                        "type": "number"
+                      },
+                      "max_rating": {
+                        "description": "Optional. Restricts results to places whose average user rating is strictly less than or equal to max_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_max_rating``.",
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "location_filter",
+                  "type_filter"
+                ]
+              },
+              "amount": {
+                "type": "object",
+                "properties": {
+                  "specified_amount": {
+                    "description": "A specified amount to use as the budget. ``currency_code`` is optional. If specified when creating a budget, it must match the currency of the billing account. If specified when updating a budget, it must match the currency_code of the existing budget. The ``currency_code`` is provided on output.  This field is a member of `oneof`_ ``budget_amount``.",
+                    "type": "object",
+                    "reference": "google.type.money_pb2.Money"
+                  },
+                  "last_period_amount": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              },
+              "threshold_rules": {
+                "description": "Optional. Rules that trigger alerts (notifications of thresholds being crossed) when spend exceeds the specified percentages of the budget.  Optional for ``pubsubTopic`` notifications.  Required if using email notifications.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "threshold_percent": {
+                      "description": "Required. Send an alert when this threshold is exceeded. This is a 1.0-based percentage, so 0.5 = 50%. Validation: non-negative number.",
+                      "type": "number"
+                    },
+                    "spend_basis": {
+                      "description": "Optional. The type of basis used to determine if spend has passed the threshold. Behavior defaults to CURRENT_SPEND if not set.",
+                      "type": "object",
+                      "reference": "google.cloud.billing.budgets_v1beta1.types.ThresholdRule.Basis"
+                    }
+                  },
+                  "required": [
+                    "threshold_percent"
+                  ]
+                }
+              },
+              "all_updates_rule": {
+                "type": "object",
+                "properties": {
+                  "pubsub_topic": {
+                    "description": "Optional. The name of the Pub/Sub topic where budget related messages will be published, in the form ``projects/{project_id}/topics/{topic_id}``. Updates are sent at regular intervals to the topic. The topic needs to be created before the budget is created; see https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications for more details. Caller is expected to have ``pubsub.topics.setIamPolicy`` permission on the topic when it's set for a budget, otherwise, the API call will fail with PERMISSION_DENIED. See https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#permissions_required_for_this_task for more details on Pub/Sub roles and permissions.",
+                    "type": "string"
+                  },
+                  "schema_version": {
+                    "description": "Optional. Required when [AllUpdatesRule.pubsub_topic][google.cloud.billing.budgets.v1beta1.AllUpdatesRule.pubsub_topic] is set. The schema version of the notification sent to [AllUpdatesRule.pubsub_topic][google.cloud.billing.budgets.v1beta1.AllUpdatesRule.pubsub_topic]. Only \"1.0\" is accepted. It represents the JSON schema as defined in https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format.",
+                    "type": "string"
+                  },
+                  "monitoring_notification_channels": {
+                    "description": "Optional. Targets to send notifications to when a threshold is exceeded. This is in addition to default recipients who have billing account IAM roles. The value is the full REST resource name of a monitoring notification channel with the form ``projects/{project_id}/notificationChannels/{channel_id}``. A maximum of 5 channels are allowed. See https://cloud.google.com/billing/docs/how-to/budgets-notification-recipients for more details.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "disable_default_iam_recipients": {
+                    "description": "Optional. When set to true, disables default notifications sent when a threshold is exceeded. Default notifications are sent to those with Billing Account Administrator and Billing Account User IAM roles for the target account.",
+                    "type": "boolean"
+                  },
+                  "enable_project_level_recipients": {
+                    "description": "Optional. When set to true, and when the budget has a single project configured, notifications will be sent to project level recipients of that project. This field will be ignored if the budget has multiple or no project configured.  Currently, project level recipients are the users with ``Owner`` role on a cloud project.",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "etag": {
+                "description": "Optional. Etag to validate that the object is unchanged for a read-modify-write operation. An empty etag will cause an update to overwrite other changes.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "amount"
+            ]
+          }
         },
-        "budget": {
-          "type": "google.cloud.billing.budgets_v1.types.Budget",
-          "description": "Required. Budget to create."
-        }
+        "required": [
+          "parent",
+          "budget"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateBudgetRequest",
-      "docstring": "Request for UpdateBudget\n\nAttributes:\n    budget (google.cloud.billing.budgets_v1.types.Budget):\n        Required. The updated budget object.\n        The budget to update is specified by the budget\n        name in the budget.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. Indicates which fields in the provided budget to\n        update. Read-only fields (such as ``name``) cannot be\n        changed. If this is not provided, then only fields with\n        non-default values from the request are updated. See\n        https://developers.google.com/protocol-buffers/docs/proto3#default\n        for more details about default values.",
-      "attributes": {
-        "budget": {
-          "type": "google.cloud.billing.budgets_v1.types.Budget",
-          "description": "Required. The updated budget object. The budget to update is specified by the budget name in the budget."
+      "description": "Request for UpdateBudget\n\nAttributes:\n    budget (google.cloud.billing.budgets_v1.types.Budget):\n        Required. The updated budget object.\n        The budget to update is specified by the budget\n        name in the budget.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. Indicates which fields in the provided budget to\n        update. Read-only fields (such as ``name``) cannot be\n        changed. If this is not provided, then only fields with\n        non-default values from the request are updated. See\n        https://developers.google.com/protocol-buffers/docs/proto3#default\n        for more details about default values.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "budget": {
+            "description": "Required. The updated budget object. The budget to update is specified by the budget name in the budget.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. Resource name of the budget. The resource name implies the scope of a budget. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "User data for display name in UI. Validation: <= 60 chars.",
+                "type": "string"
+              },
+              "budget_filter": {
+                "type": "object",
+                "properties": {
+                  "location_filter": {
+                    "type": "object",
+                    "properties": {
+                      "circle": {
+                        "type": "object",
+                        "properties": {
+                          "center": {
+                            "description": "Required. Center latitude and longitude.  The range of latitude must be within [-90.0, 90.0]. The range of the longitude must be within [-180.0, 180.0].",
+                            "type": "object",
+                            "reference": "google.type.latlng_pb2.LatLng"
+                          },
+                          "radius": {
+                            "description": "Required. Radius measured in meters. The radius must be within [0.0, 50000.0].",
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "center",
+                          "radius"
+                        ]
+                      },
+                      "region": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Identifier. The resource name of the region. Format: ``accounts/{account}/regions/{region}``",
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "description": "Optional. The display name of the region.  This field is a member of `oneof`_ ``_display_name``.",
+                            "type": "string"
+                          },
+                          "postal_code_area": {
+                            "type": "object",
+                            "properties": {
+                              "region_code": {
+                                "description": "Required. `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ or the country the postal code group applies to.",
+                                "type": "string"
+                              },
+                              "postal_codes": {
+                                "description": "Required. A range of postal codes.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "begin": {
+                                      "description": "Required. A postal code or a pattern of the form prefix\\* denoting the inclusive lower bound of the range defining the area. Examples values: ``94108``, ``9410*``, ``9*``.",
+                                      "type": "string"
+                                    },
+                                    "end": {
+                                      "description": "Optional. A postal code or a pattern of the form ``prefix*`` denoting the inclusive upper bound of the range defining the area. It must have the same length as postalCodeRangeBegin: if postalCodeRangeBegin is a postal code then postalCodeRangeEnd must be a postal code too; if postalCodeRangeBegin is a pattern then postalCodeRangeEnd must be a pattern with the same prefix length. Optional: if not set, then the area is defined as being all the postal codes matching postalCodeRangeBegin.",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "begin"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "region_code",
+                              "postal_codes"
+                            ]
+                          },
+                          "geotarget_area": {
+                            "type": "object",
+                            "properties": {
+                              "geotarget_criteria_ids": {
+                                "description": "Required. A non-empty list of `location IDs <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__. They must all be of the same location type (for example, state).",
+                                "type": "array",
+                                "items": {
+                                  "type": "integer"
+                                }
+                              }
+                            },
+                            "required": [
+                              "geotarget_criteria_ids"
+                            ]
+                          },
+                          "regional_inventory_eligible": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "",
+                                "type": "boolean"
+                              }
+                            }
+                          },
+                          "shipping_eligible": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "",
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "custom_area": {
+                        "type": "object",
+                        "properties": {
+                          "polygon": {
+                            "type": "object",
+                            "properties": {
+                              "coordinates": {
+                                "description": "Optional. The coordinates that define the polygon.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.type.latlng_pb2.LatLng"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "polygon"
+                        ]
+                      }
+                    }
+                  },
+                  "type_filter": {
+                    "type": "object",
+                    "properties": {
+                      "included_types": {
+                        "description": "Optional. Included Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "excluded_types": {
+                        "description": "Optional. Excluded Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "included_primary_types": {
+                        "description": "Optional. Included primary Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "excluded_primary_types": {
+                        "description": "Optional. Excluded primary Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "operating_status": {
+                    "description": "Optional. Restricts results to places whose operating status is included on this list. If operating_status is not set, OPERATING_STATUS_OPERATIONAL is used as default.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.maps.areainsights_v1.types.OperatingStatus"
+                    }
+                  },
+                  "price_levels": {
+                    "description": "Optional. Restricts results to places whose price level is included on this list. If price_level is not set, all price levels are included in the results.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.maps.areainsights_v1.types.PriceLevel"
+                    }
+                  },
+                  "rating_filter": {
+                    "type": "object",
+                    "properties": {
+                      "min_rating": {
+                        "description": "Optional. Restricts results to places whose average user rating is greater than or equal to min_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_min_rating``.",
+                        "type": "number"
+                      },
+                      "max_rating": {
+                        "description": "Optional. Restricts results to places whose average user rating is strictly less than or equal to max_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_max_rating``.",
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "location_filter",
+                  "type_filter"
+                ]
+              },
+              "amount": {
+                "type": "object",
+                "properties": {
+                  "specified_amount": {
+                    "description": "A specified amount to use as the budget. ``currency_code`` is optional. If specified when creating a budget, it must match the currency of the billing account. If specified when updating a budget, it must match the currency_code of the existing budget. The ``currency_code`` is provided on output.  This field is a member of `oneof`_ ``budget_amount``.",
+                    "type": "object",
+                    "reference": "google.type.money_pb2.Money"
+                  },
+                  "last_period_amount": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              },
+              "threshold_rules": {
+                "description": "Optional. Rules that trigger alerts (notifications of thresholds being crossed) when spend exceeds the specified percentages of the budget.  Optional for ``pubsubTopic`` notifications.  Required if using email notifications.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "threshold_percent": {
+                      "description": "Required. Send an alert when this threshold is exceeded. This is a 1.0-based percentage, so 0.5 = 50%. Validation: non-negative number.",
+                      "type": "number"
+                    },
+                    "spend_basis": {
+                      "description": "Optional. The type of basis used to determine if spend has passed the threshold. Behavior defaults to CURRENT_SPEND if not set.",
+                      "type": "object",
+                      "reference": "google.cloud.billing.budgets_v1beta1.types.ThresholdRule.Basis"
+                    }
+                  },
+                  "required": [
+                    "threshold_percent"
+                  ]
+                }
+              },
+              "all_updates_rule": {
+                "type": "object",
+                "properties": {
+                  "pubsub_topic": {
+                    "description": "Optional. The name of the Pub/Sub topic where budget related messages will be published, in the form ``projects/{project_id}/topics/{topic_id}``. Updates are sent at regular intervals to the topic. The topic needs to be created before the budget is created; see https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications for more details. Caller is expected to have ``pubsub.topics.setIamPolicy`` permission on the topic when it's set for a budget, otherwise, the API call will fail with PERMISSION_DENIED. See https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#permissions_required_for_this_task for more details on Pub/Sub roles and permissions.",
+                    "type": "string"
+                  },
+                  "schema_version": {
+                    "description": "Optional. Required when [AllUpdatesRule.pubsub_topic][google.cloud.billing.budgets.v1beta1.AllUpdatesRule.pubsub_topic] is set. The schema version of the notification sent to [AllUpdatesRule.pubsub_topic][google.cloud.billing.budgets.v1beta1.AllUpdatesRule.pubsub_topic]. Only \"1.0\" is accepted. It represents the JSON schema as defined in https://cloud.google.com/billing/docs/how-to/budgets-programmatic-notifications#notification_format.",
+                    "type": "string"
+                  },
+                  "monitoring_notification_channels": {
+                    "description": "Optional. Targets to send notifications to when a threshold is exceeded. This is in addition to default recipients who have billing account IAM roles. The value is the full REST resource name of a monitoring notification channel with the form ``projects/{project_id}/notificationChannels/{channel_id}``. A maximum of 5 channels are allowed. See https://cloud.google.com/billing/docs/how-to/budgets-notification-recipients for more details.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "disable_default_iam_recipients": {
+                    "description": "Optional. When set to true, disables default notifications sent when a threshold is exceeded. Default notifications are sent to those with Billing Account Administrator and Billing Account User IAM roles for the target account.",
+                    "type": "boolean"
+                  },
+                  "enable_project_level_recipients": {
+                    "description": "Optional. When set to true, and when the budget has a single project configured, notifications will be sent to project level recipients of that project. This field will be ignored if the budget has multiple or no project configured.  Currently, project level recipients are the users with ``Owner`` role on a cloud project.",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "etag": {
+                "description": "Optional. Etag to validate that the object is unchanged for a read-modify-write operation. An empty etag will cause an update to overwrite other changes.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "amount"
+            ]
+          },
+          "update_mask": {
+            "description": "Optional. Indicates which fields in the provided budget to update. Read-only fields (such as ``name``) cannot be changed. If this is not provided, then only fields with non-default values from the request are updated. See https://developers.google.com/protocol-buffers/docs/proto3#default for more details about default values.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          }
         },
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Optional. Indicates which fields in the provided budget to update. Read-only fields (such as ``name``) cannot be changed. If this is not provided, then only fields with non-default values from the request are updated. See https://developers.google.com/protocol-buffers/docs/proto3#default for more details about default values."
-        }
+        "required": [
+          "budget"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetBudgetRequest",
-      "docstring": "Request for GetBudget\n\nAttributes:\n    name (str):\n        Required. Name of budget to get. Values are of the form\n        ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of budget to get. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``."
-        }
+      "description": "Request for GetBudget\n\nAttributes:\n    name (str):\n        Required. Name of budget to get. Values are of the form\n        ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of budget to get. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListBudgetsRequest",
-      "docstring": "Request for ListBudgets\n\nAttributes:\n    parent (str):\n        Required. Name of billing account to list budgets under.\n        Values are of the form\n        ``billingAccounts/{billingAccountId}``.\n    scope (str):\n        Optional. Set the scope of the budgets to be\n        returned, in the format of the resource name.\n        The scope of a budget is the cost that it\n        tracks, such as costs for a single project, or\n        the costs for all projects in a folder. Only\n        project scope (in the format of\n        \"projects/project-id\" or \"projects/123\") is\n        supported in this field. When this field is set\n        to a project's resource name, the budgets\n        returned are tracking the costs for that\n        project.\n    page_size (int):\n        Optional. The maximum number of budgets to\n        return per page. The default and maximum value\n        are 100.\n    page_token (str):\n        Optional. The value returned by the last\n        ``ListBudgetsResponse`` which indicates that this is a\n ",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of billing account to list budgets under. Values are of the form ``billingAccounts/{billingAccountId}``."
+      "description": "Request for ListBudgets\n\nAttributes:\n    parent (str):\n        Required. Name of billing account to list budgets under.\n        Values are of the form\n        ``billingAccounts/{billingAccountId}``.\n    scope (str):\n        Optional. Set the scope of the budgets to be\n        returned, in the format of the resource name.\n        The scope of a budget is the cost that it\n        tracks, such as costs for a single project, or\n        the costs for all projects in a folder. Only\n        project scope (in the format of\n        \"projects/project-id\" or \"projects/123\") is\n        supported in this field. When this field is set\n        to a project's resource name, the budgets\n        returned are tracking the costs for that\n        project.\n    page_size (int):\n        Optional. The maximum number of budgets to\n        return per page. The default and maximum value\n        are 100.\n    page_token (str):\n        Optional. The value returned by the last\n        ``ListBudgetsResponse`` which indicates that this is a\n ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of billing account to list budgets under. Values are of the form ``billingAccounts/{billingAccountId}``.",
+            "type": "string"
+          },
+          "scope": {
+            "description": "Optional. Set the scope of the budgets to be returned, in the format of the resource name. The scope of a budget is the cost that it tracks, such as costs for a single project, or the costs for all projects in a folder. Only project scope (in the format of \"projects/project-id\" or \"projects/123\") is supported in this field. When this field is set to a project's resource name, the budgets returned are tracking the costs for that project.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of budgets to return per page. The default and maximum value are 100.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. The value returned by the last ``ListBudgetsResponse`` which indicates that this is a continuation of a prior ``ListBudgets`` call, and that the system should return the next page of data.",
+            "type": "string"
+          }
         },
-        "scope": {
-          "type": "str",
-          "description": "Optional. Set the scope of the budgets to be returned, in the format of the resource name. The scope of a budget is the cost that it tracks, such as costs for a single project, or the costs for all projects in a folder. Only project scope (in the format of \"projects/project-id\" or \"projects/123\") is supported in this field. When this field is set to a project's resource name, the budgets returned are tracking the costs for that project."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of budgets to return per page. The default and maximum value are 100."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. The value returned by the last ``ListBudgetsResponse`` which indicates that this is a continuation of a prior ``ListBudgets`` call, and that the system should return the next page of data."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListBudgetsResponse",
-      "docstring": "Response for ListBudgets\n\nAttributes:\n    budgets (MutableSequence[google.cloud.billing.budgets_v1.types.Budget]):\n        List of the budgets owned by the requested\n        billing account.\n    next_page_token (str):\n        If not empty, indicates that there may be more budgets that\n        match the request; this value should be passed in a new\n        ``ListBudgetsRequest``.",
-      "attributes": {
-        "budgets": {
-          "type": "MutableSequence[google.cloud.billing.budgets_v1.types.Budget]",
-          "description": "List of the budgets owned by the requested billing account."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "If not empty, indicates that there may be more budgets that match the request; this value should be passed in a new ``ListBudgetsRequest``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteBudgetRequest",
-      "docstring": "Request for DeleteBudget\n\nAttributes:\n    name (str):\n        Required. Name of the budget to delete. Values are of the\n        form\n        ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the budget to delete. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``."
-        }
+      "description": "Request for DeleteBudget\n\nAttributes:\n    name (str):\n        Required. Name of the budget to delete. Values are of the\n        form\n        ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the budget to delete. Values are of the form ``billingAccounts/{billingAccountId}/budgets/{budgetId}``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     }
   ]

@@ -1,1507 +1,1089 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-network-management\\google\\cloud\\network_management_v1\\types\\connectivity_test.py": [
-    {
-      "type": "request_class",
-      "name": "ConnectivityTest",
-      "docstring": "A Connectivity Test for a network reachability analysis.\n\nAttributes:\n    name (str):\n        Identifier. Unique name of the resource using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``\n    description (str):\n        The user-supplied description of the\n        Connectivity Test. Maximum of 512 characters.\n    source (google.cloud.network_management_v1.types.Endpoint):\n        Required. Source specification of the\n        Connectivity Test.\n        You can use a combination of source IP address,\n        virtual machine (VM) instance, or Compute Engine\n        network to uniquely identify the source\n        location.\n\n        Examples:\n\n        If the source IP address is an internal IP\n        address within a Google Cloud Virtual Private\n        Cloud (VPC) network, then you must also specify\n        the VPC network. Otherwise, specify the VM\n        instance, which already contains its internal IP\n        address and VPC network information.\n\n        If the source ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. Unique name of the resource using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``"
-        },
-        "description": {
-          "type": "str",
-          "description": "The user-supplied description of the Connectivity Test. Maximum of 512 characters."
-        },
-        "source": {
-          "type": "google.cloud.network_management_v1.types.Endpoint",
-          "description": "Required. Source specification of the Connectivity Test. You can use a combination of source IP address, virtual machine (VM) instance, or Compute Engine network to uniquely identify the source location.  Examples:  If the source IP address is an internal IP address within a Google Cloud Virtual Private Cloud (VPC) network, then you must also specify the VPC network. Otherwise, specify the VM instance, which already contains its internal IP address and VPC network information.  If the source of the test is within an on-premises network, then you must provide the destination VPC network.  If the source endpoint is a Compute Engine VM instance with multiple network interfaces, the instance itself is not sufficient to identify the endpoint. So, you must also specify the source IP address or VPC network.  A reachability analysis proceeds even if the source location is ambiguous. However, the test result may include endpoints that you don't intend to test."
-        },
-        "destination": {
-          "type": "google.cloud.network_management_v1.types.Endpoint",
-          "description": "Required. Destination specification of the Connectivity Test. You can use a combination of destination IP address, Compute Engine VM instance, or VPC network to uniquely identify the destination location.  Even if the destination IP address is not unique, the source IP location is unique. Usually, the analysis can infer the destination endpoint from route information.  If the destination you specify is a VM instance and the instance has multiple network interfaces, then you must also specify either a destination IP address  or VPC network to identify the destination interface.  A reachability analysis proceeds even if the destination location is ambiguous. However, the result can include endpoints that you don't intend to test."
-        },
-        "protocol": {
-          "type": "str",
-          "description": "IP Protocol of the test. When not provided, \"TCP\" is assumed."
-        },
-        "related_projects": {
-          "type": "MutableSequence[str]",
-          "description": "Other projects that may be relevant for reachability analysis. This is applicable to scenarios where a test can cross project boundaries."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Output only. The display name of a Connectivity Test."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Resource labels to represent user-provided metadata."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the test was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the test's configuration was updated."
-        },
-        "reachability_details": {
-          "type": "google.cloud.network_management_v1.types.ReachabilityDetails",
-          "description": "Output only. The reachability details of this test from the latest run. The details are updated when creating a new test, updating an existing test, or triggering a one-time rerun of an existing test."
-        },
-        "probing_details": {
-          "type": "google.cloud.network_management_v1.types.ProbingDetails",
-          "description": "Output only. The probing details of this test from the latest run, present for applicable tests only. The details are updated when creating a new test, updating an existing test, or triggering a one-time rerun of an existing test."
-        },
-        "round_trip": {
-          "type": "bool",
-          "description": "Whether run analysis for the return path from destination to source. Default value is false."
-        },
-        "return_reachability_details": {
-          "type": "google.cloud.network_management_v1.types.ReachabilityDetails",
-          "description": "Output only. The reachability details of this test from the latest run for the return path. The details are updated when creating a new test, updating an existing test, or triggering a one-time rerun of an existing test."
-        },
-        "bypass_firewall_checks": {
-          "type": "bool",
-          "description": "Whether the test should skip firewall checking. If not provided, we assume false."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Endpoint",
-      "docstring": "Source or destination of the Connectivity Test.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    ip_address (str):\n        The IP address of the endpoint, which can be\n        an external or internal IP.\n    port (int):\n        The IP protocol port of the endpoint.\n        Only applicable when protocol is TCP or UDP.\n    instance (str):\n        A Compute Engine instance URI.\n    forwarding_rule (str):\n        A forwarding rule and its corresponding IP\n        address represent the frontend configuration of\n        a Google Cloud load balancer. Forwarding rules\n        are also used for protocol forwarding, Private\n        Service Connect and other network services to\n        provide forwarding information in the control\n        plane. Format:\n\n        projects/{project}/global/forwardingRules/{id}\n        or\n        projects/{project}/regions/{region}/forwardingRules/{id}\n    forwarding_rule_target (google.cloud.network_management_v1.",
-      "attributes": {
-        "ip_address": {
-          "type": "str",
-          "description": "The IP address of the endpoint, which can be an external or internal IP."
-        },
-        "port": {
-          "type": "int",
-          "description": "The IP protocol port of the endpoint. Only applicable when protocol is TCP or UDP."
-        },
-        "instance": {
-          "type": "str",
-          "description": "A Compute Engine instance URI."
-        },
-        "forwarding_rule": {
-          "type": "str",
-          "description": "A forwarding rule and its corresponding IP address represent the frontend configuration of a Google Cloud load balancer. Forwarding rules are also used for protocol forwarding, Private Service Connect and other network services to provide forwarding information in the control plane. Format:  projects/{project}/global/forwardingRules/{id} or projects/{project}/regions/{region}/forwardingRules/{id}"
-        },
-        "forwarding_rule_target": {
-          "type": "google.cloud.network_management_v1.types.Endpoint.ForwardingRuleTarget",
-          "description": "Output only. Specifies the type of the target of the forwarding rule.  This field is a member of `oneof`_ ``_forwarding_rule_target``."
-        },
-        "load_balancer_id": {
-          "type": "str",
-          "description": "Output only. ID of the load balancer the forwarding rule points to. Empty for forwarding rules not related to load balancers.  This field is a member of `oneof`_ ``_load_balancer_id``."
-        },
-        "load_balancer_type": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerType",
-          "description": "Output only. Type of the load balancer the forwarding rule points to.  This field is a member of `oneof`_ ``_load_balancer_type``."
-        },
-        "gke_master_cluster": {
-          "type": "str",
-          "description": "A cluster URI for `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__."
-        },
-        "fqdn": {
-          "type": "str",
-          "description": "DNS endpoint of `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__. Requires gke_master_cluster to be set, can't be used simultaneoulsly with ip_address or network. Applicable only to destination endpoint."
-        },
-        "cloud_sql_instance": {
-          "type": "str",
-          "description": "A `Cloud SQL <https://cloud.google.com/sql>`__ instance URI."
-        },
-        "redis_instance": {
-          "type": "str",
-          "description": "A `Redis Instance <https://cloud.google.com/memorystore/docs/redis>`__ URI."
-        },
-        "redis_cluster": {
-          "type": "str",
-          "description": "A `Redis Cluster <https://cloud.google.com/memorystore/docs/cluster>`__ URI."
-        },
-        "cloud_function": {
-          "type": "google.cloud.network_management_v1.types.Endpoint.CloudFunctionEndpoint",
-          "description": "A `Cloud Function <https://cloud.google.com/functions>`__."
-        },
-        "app_engine_version": {
-          "type": "google.cloud.network_management_v1.types.Endpoint.AppEngineVersionEndpoint",
-          "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__."
-        },
-        "cloud_run_revision": {
-          "type": "google.cloud.network_management_v1.types.Endpoint.CloudRunRevisionEndpoint",
-          "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__"
-        },
-        "network": {
-          "type": "str",
-          "description": "A Compute Engine network URI."
-        },
-        "network_type": {
-          "type": "google.cloud.network_management_v1.types.Endpoint.NetworkType",
-          "description": "Type of the network where the endpoint is located. Applicable only to source endpoint, as destination network type can be inferred from the source."
-        },
-        "project_id": {
-          "type": "str",
-          "description": "Project ID where the endpoint is located. The Project ID can be derived from the URI if you provide a VM instance or network URI. The following are two cases where you must provide the project ID:  1. Only the IP address is specified, and the IP address is within a Google Cloud project. 2. When you are using Shared VPC and the IP address that you provide is from the service project. In this case, the network that the IP address resides in is defined in the host project."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ReachabilityDetails",
-      "docstring": "Results of the configuration analysis from the last run of\nthe test.\n\nAttributes:\n    result (google.cloud.network_management_v1.types.ReachabilityDetails.Result):\n        The overall result of the test's\n        configuration analysis.\n    verify_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time of the configuration analysis.\n    error (google.rpc.status_pb2.Status):\n        The details of a failure or a cancellation of\n        reachability analysis.\n    traces (MutableSequence[google.cloud.network_management_v1.types.Trace]):\n        Result may contain a list of traces if a test\n        has multiple possible paths in the network, such\n        as when destination endpoint is a load balancer\n        with multiple backends.",
-      "attributes": {
-        "result": {
-          "type": "google.cloud.network_management_v1.types.ReachabilityDetails.Result",
-          "description": "The overall result of the test's configuration analysis."
-        },
-        "verify_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time of the configuration analysis."
-        },
-        "error": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "The details of a failure or a cancellation of reachability analysis."
-        },
-        "traces": {
-          "type": "MutableSequence[google.cloud.network_management_v1.types.Trace]",
-          "description": "Result may contain a list of traces if a test has multiple possible paths in the network, such as when destination endpoint is a load balancer with multiple backends."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LatencyPercentile",
-      "docstring": "Latency percentile rank and value.\n\nAttributes:\n    percent (int):\n        Percentage of samples this data point applies\n        to.\n    latency_micros (int):\n        percent-th percentile of latency observed, in\n        microseconds. Fraction of percent/100 of samples\n        have latency lower or equal to the value of this\n        field.",
-      "attributes": {
-        "percent": {
-          "type": "int",
-          "description": "Percentage of samples this data point applies to."
-        },
-        "latency_micros": {
-          "type": "int",
-          "description": "percent-th percentile of latency observed, in microseconds. Fraction of percent/100 of samples have latency lower or equal to the value of this field."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LatencyDistribution",
-      "docstring": "Describes measured latency distribution.\n\nAttributes:\n    latency_percentiles (MutableSequence[google.cloud.network_management_v1.types.LatencyPercentile]):\n        Representative latency percentiles.",
-      "attributes": {
-        "latency_percentiles": {
-          "type": "MutableSequence[google.cloud.network_management_v1.types.LatencyPercentile]",
-          "description": "Representative latency percentiles."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProbingDetails",
-      "docstring": "Results of active probing from the last run of the test.\n\nAttributes:\n    result (google.cloud.network_management_v1.types.ProbingDetails.ProbingResult):\n        The overall result of active probing.\n    verify_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time that reachability was assessed\n        through active probing.\n    error (google.rpc.status_pb2.Status):\n        Details about an internal failure or the\n        cancellation of active probing.\n    abort_cause (google.cloud.network_management_v1.types.ProbingDetails.ProbingAbortCause):\n        The reason probing was aborted.\n    sent_probe_count (int):\n        Number of probes sent.\n    successful_probe_count (int):\n        Number of probes that reached the\n        destination.\n    endpoint_info (google.cloud.network_management_v1.types.EndpointInfo):\n        The source and destination endpoints derived\n        from the test input and used for active probing.\n    probing_latency (google.cloud.network_management_v1.types.LatencyDistributio",
-      "attributes": {
-        "result": {
-          "type": "google.cloud.network_management_v1.types.ProbingDetails.ProbingResult",
-          "description": "The overall result of active probing."
-        },
-        "verify_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time that reachability was assessed through active probing."
-        },
-        "error": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Details about an internal failure or the cancellation of active probing."
-        },
-        "abort_cause": {
-          "type": "google.cloud.network_management_v1.types.ProbingDetails.ProbingAbortCause",
-          "description": "The reason probing was aborted."
-        },
-        "sent_probe_count": {
-          "type": "int",
-          "description": "Number of probes sent."
-        },
-        "successful_probe_count": {
-          "type": "int",
-          "description": "Number of probes that reached the destination."
-        },
-        "endpoint_info": {
-          "type": "google.cloud.network_management_v1.types.EndpointInfo",
-          "description": "The source and destination endpoints derived from the test input and used for active probing."
-        },
-        "probing_latency": {
-          "type": "google.cloud.network_management_v1.types.LatencyDistribution",
-          "description": "Latency as measured by active probing in one direction: from the source to the destination endpoint."
-        },
-        "destination_egress_location": {
-          "type": "google.cloud.network_management_v1.types.ProbingDetails.EdgeLocation",
-          "description": "The EdgeLocation from which a packet destined for/originating from the internet will egress/ingress the Google network. This will only be populated for a connectivity test which has an internet destination/source address. The absence of this field *must not* be used as an indication that the destination/source is part of the Google network."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudFunctionEndpoint",
-      "docstring": "Wrapper for Cloud Function attributes.\n\nAttributes:\n    uri (str):\n        A `Cloud Function <https://cloud.google.com/functions>`__\n        name.",
-      "attributes": {
-        "uri": {
-          "type": "str",
-          "description": "A `Cloud Function <https://cloud.google.com/functions>`__ name."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AppEngineVersionEndpoint",
-      "docstring": "Wrapper for the App Engine service version attributes.\n\nAttributes:\n    uri (str):\n        An `App Engine <https://cloud.google.com/appengine>`__\n        `service\n        version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__\n        name.",
-      "attributes": {
-        "uri": {
-          "type": "str",
-          "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__ name."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudRunRevisionEndpoint",
-      "docstring": "Wrapper for Cloud Run revision attributes.\n\nAttributes:\n    uri (str):\n        A `Cloud Run <https://cloud.google.com/run>`__\n        `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__\n        URI. The format is:\n        projects/{project}/locations/{location}/revisions/{revision}",
-      "attributes": {
-        "uri": {
-          "type": "str",
-          "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__ URI. The format is: projects/{project}/locations/{location}/revisions/{revision}"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EdgeLocation",
-      "docstring": "Representation of a network edge location as per\nhttps://cloud.google.com/vpc/docs/edge-locations.\n\nAttributes:\n    metropolitan_area (str):\n        Name of the metropolitan area.",
-      "attributes": {
-        "metropolitan_area": {
-          "type": "str",
-          "description": "Name of the metropolitan area."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-network-management\\google\\cloud\\network_management_v1\\types\\reachability.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListConnectivityTestsRequest",
-      "docstring": "Request for the ``ListConnectivityTests`` method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource of the Connectivity Tests:\n        ``projects/{project_id}/locations/global``\n    page_size (int):\n        Number of ``ConnectivityTests`` to return.\n    page_token (str):\n        Page token from an earlier query, as returned in\n        ``next_page_token``.\n    filter (str):\n        Lists the ``ConnectivityTests`` that match the filter\n        expression. A filter expression filters the resources listed\n        in the response. The expression must be of the form\n        ``<field> <operator> <value>`` where operators: ``<``,\n        ``>``, ``<=``, ``>=``, ``!=``, ``=``, ``:`` are supported\n        (colon ``:`` represents a HAS operator which is roughly\n        synonymous with equality). can refer to a proto or JSON\n        field, or a synthetic field. Field names can be camelCase or\n        snake_case.\n\n        Examples:\n\n        -  Filter by name: name =\n           \"projects/proj-1/locations/",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource of the Connectivity Tests: ``projects/{project_id}/locations/global``"
+      "description": "Request for the ``ListConnectivityTests`` method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource of the Connectivity Tests:\n        ``projects/{project_id}/locations/global``\n    page_size (int):\n        Number of ``ConnectivityTests`` to return.\n    page_token (str):\n        Page token from an earlier query, as returned in\n        ``next_page_token``.\n    filter (str):\n        Lists the ``ConnectivityTests`` that match the filter\n        expression. A filter expression filters the resources listed\n        in the response. The expression must be of the form\n        ``<field> <operator> <value>`` where operators: ``<``,\n        ``>``, ``<=``, ``>=``, ``!=``, ``=``, ``:`` are supported\n        (colon ``:`` represents a HAS operator which is roughly\n        synonymous with equality). can refer to a proto or JSON\n        field, or a synthetic field. Field names can be camelCase or\n        snake_case.\n\n        Examples:\n\n        -  Filter by name: name =\n           \"projects/proj-1/locations/",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource of the Connectivity Tests: ``projects/{project_id}/locations/global``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Number of ``ConnectivityTests`` to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Page token from an earlier query, as returned in ``next_page_token``.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Lists the ``ConnectivityTests`` that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form ``<field> <operator> <value>`` where operators: ``<``, ``>``, ``<=``, ``>=``, ``!=``, ``=``, ``:`` are supported (colon ``:`` represents a HAS operator which is roughly synonymous with equality). can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/proj-1/locations/global/connectivityTests/test-1  -  Filter by labels:  -  Resources that have a key called ``foo`` labels.foo:\\* -  Resources that have a key called ``foo`` whose value is ``bar`` labels.foo = bar",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Field to use to sort the list.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Number of ``ConnectivityTests`` to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Page token from an earlier query, as returned in ``next_page_token``."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Lists the ``ConnectivityTests`` that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form ``<field> <operator> <value>`` where operators: ``<``, ``>``, ``<=``, ``>=``, ``!=``, ``=``, ``:`` are supported (colon ``:`` represents a HAS operator which is roughly synonymous with equality). can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/proj-1/locations/global/connectivityTests/test-1  -  Filter by labels:  -  Resources that have a key called ``foo`` labels.foo:\\* -  Resources that have a key called ``foo`` whose value is ``bar`` labels.foo = bar"
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Field to use to sort the list."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListConnectivityTestsResponse",
-      "docstring": "Response for the ``ListConnectivityTests`` method.\n\nAttributes:\n    resources (MutableSequence[google.cloud.network_management_v1.types.ConnectivityTest]):\n        List of Connectivity Tests.\n    next_page_token (str):\n        Page token to fetch the next set of\n        Connectivity Tests.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached (when querying all\n        locations with ``-``).",
-      "attributes": {
-        "resources": {
-          "type": "MutableSequence[google.cloud.network_management_v1.types.ConnectivityTest]",
-          "description": "List of Connectivity Tests."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "Page token to fetch the next set of Connectivity Tests."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached (when querying all locations with ``-``)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetConnectivityTestRequest",
-      "docstring": "Request for the ``GetConnectivityTest`` method.\n\nAttributes:\n    name (str):\n        Required. ``ConnectivityTest`` resource name using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. ``ConnectivityTest`` resource name using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``"
-        }
+      "description": "Request for the ``GetConnectivityTest`` method.\n\nAttributes:\n    name (str):\n        Required. ``ConnectivityTest`` resource name using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. ``ConnectivityTest`` resource name using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateConnectivityTestRequest",
-      "docstring": "Request for the ``CreateConnectivityTest`` method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource of the Connectivity Test to\n        create: ``projects/{project_id}/locations/global``\n    test_id (str):\n        Required. The logical name of the Connectivity Test in your\n        project with the following restrictions:\n\n        -  Must contain only lowercase letters, numbers, and\n           hyphens.\n        -  Must start with a letter.\n        -  Must be between 1-40 characters.\n        -  Must end with a number or a letter.\n        -  Must be unique within the customer project\n    resource (google.cloud.network_management_v1.types.ConnectivityTest):\n        Required. A ``ConnectivityTest`` resource",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource of the Connectivity Test to create: ``projects/{project_id}/locations/global``"
+      "description": "Request for the ``CreateConnectivityTest`` method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource of the Connectivity Test to\n        create: ``projects/{project_id}/locations/global``\n    test_id (str):\n        Required. The logical name of the Connectivity Test in your\n        project with the following restrictions:\n\n        -  Must contain only lowercase letters, numbers, and\n           hyphens.\n        -  Must start with a letter.\n        -  Must be between 1-40 characters.\n        -  Must end with a number or a letter.\n        -  Must be unique within the customer project\n    resource (google.cloud.network_management_v1.types.ConnectivityTest):\n        Required. A ``ConnectivityTest`` resource",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource of the Connectivity Test to create: ``projects/{project_id}/locations/global``",
+            "type": "string"
+          },
+          "test_id": {
+            "description": "Required. The logical name of the Connectivity Test in your project with the following restrictions:  -  Must contain only lowercase letters, numbers, and hyphens. -  Must start with a letter. -  Must be between 1-40 characters. -  Must end with a number or a letter. -  Must be unique within the customer project",
+            "type": "string"
+          },
+          "resource": {
+            "description": "Required. A ``ConnectivityTest`` resource",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. Unique name of the resource using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+                "type": "string"
+              },
+              "description": {
+                "description": "The user-supplied description of the Connectivity Test. Maximum of 512 characters.",
+                "type": "string"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Immutable. The resource name for the endpoint in the format ``projects/*/locations/*/namespaces/*/services/*/endpoints/*``.",
+                    "type": "string"
+                  },
+                  "address": {
+                    "description": "Optional. An IPv4 or IPv6 address. Service Directory rejects bad addresses like:  -  ``8.8.8`` -  ``8.8.8.8:53`` -  ``test:bad:address`` -  ``[::1]`` -  ``[::1]:8080``  Limited to 45 characters.",
+                    "type": "string"
+                  },
+                  "port": {
+                    "description": "Optional. Service Directory rejects values outside of ``[0, 65535]``.",
+                    "type": "integer"
+                  },
+                  "metadata": {
+                    "description": "Optional. Metadata for the endpoint. This data can be consumed by service clients.  Restrictions:  -  The entire metadata dictionary may contain up to 512 characters, spread accoss all key-value pairs. Metadata that goes beyond this limit are rejected -  Valid metadata keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Metadata that fails to meet these requirements are rejected  Note: This field is equivalent to the ``annotations`` field in the v1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "network": {
+                    "description": "Immutable. The Google Compute Engine network (VPC) of the endpoint in the format ``projects/<project number>/locations/global/networks/*``.  The project must be specified by project number (project id is rejected). Incorrectly formatted networks are rejected, but no other validation is performed on this field (ex. network or project existence, reachability, or permissions).",
+                    "type": "string"
+                  },
+                  "create_time": {
+                    "description": "Output only. The timestamp when the endpoint was created.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "update_time": {
+                    "description": "Output only. The timestamp when the endpoint was last updated.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "uid": {
+                    "description": "Output only. A globally unique identifier (in UUID4 format) for this endpoint.",
+                    "type": "string"
+                  }
+                }
+              },
+              "destination": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Immutable. The resource name for the endpoint in the format ``projects/*/locations/*/namespaces/*/services/*/endpoints/*``.",
+                    "type": "string"
+                  },
+                  "address": {
+                    "description": "Optional. An IPv4 or IPv6 address. Service Directory rejects bad addresses like:  -  ``8.8.8`` -  ``8.8.8.8:53`` -  ``test:bad:address`` -  ``[::1]`` -  ``[::1]:8080``  Limited to 45 characters.",
+                    "type": "string"
+                  },
+                  "port": {
+                    "description": "Optional. Service Directory rejects values outside of ``[0, 65535]``.",
+                    "type": "integer"
+                  },
+                  "metadata": {
+                    "description": "Optional. Metadata for the endpoint. This data can be consumed by service clients.  Restrictions:  -  The entire metadata dictionary may contain up to 512 characters, spread accoss all key-value pairs. Metadata that goes beyond this limit are rejected -  Valid metadata keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Metadata that fails to meet these requirements are rejected  Note: This field is equivalent to the ``annotations`` field in the v1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "network": {
+                    "description": "Immutable. The Google Compute Engine network (VPC) of the endpoint in the format ``projects/<project number>/locations/global/networks/*``.  The project must be specified by project number (project id is rejected). Incorrectly formatted networks are rejected, but no other validation is performed on this field (ex. network or project existence, reachability, or permissions).",
+                    "type": "string"
+                  },
+                  "create_time": {
+                    "description": "Output only. The timestamp when the endpoint was created.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "update_time": {
+                    "description": "Output only. The timestamp when the endpoint was last updated.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "uid": {
+                    "description": "Output only. A globally unique identifier (in UUID4 format) for this endpoint.",
+                    "type": "string"
+                  }
+                }
+              },
+              "protocol": {
+                "description": "IP Protocol of the test. When not provided, \"TCP\" is assumed.",
+                "type": "string"
+              },
+              "related_projects": {
+                "description": "Other projects that may be relevant for reachability analysis. This is applicable to scenarios where a test can cross project boundaries.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "display_name": {
+                "description": "Output only. The display name of a Connectivity Test.",
+                "type": "string"
+              },
+              "labels": {
+                "description": "Resource labels to represent user-provided metadata.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "create_time": {
+                "description": "Output only. The time the test was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. The time the test's configuration was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "reachability_details": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Name of the product.",
+                            "type": "string"
+                          },
+                          "id": {
+                            "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
+                            "type": "string"
+                          },
+                          "generic_uri": {
+                            "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "score": {
+                        "description": "A confidence level on the match, ranging from 0 (no confidence) to 1 (full confidence).",
+                        "type": "number"
+                      },
+                      "image": {
+                        "description": "The resource name of the image from the product that is the closest match to the query.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "verify_time": {
+                    "description": "The time of the configuration analysis.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State enum for status.",
+                        "type": "object",
+                        "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                      },
+                      "error_message": {
+                        "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "traces": {
+                    "description": "Result may contain a list of traces if a test has multiple possible paths in the network, such as when destination endpoint is a load balancer with multiple backends.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "project_id": {
+                          "description": "Project ID of the Cloud project where the trace data is stored.",
+                          "type": "string"
+                        },
+                        "trace_id": {
+                          "description": "Globally unique identifier for the trace. This identifier is a 128-bit numeric value formatted as a 32-byte hex string. For example, ``382d4f4c6b7bb2f4a972559d9085001d``.",
+                          "type": "string"
+                        },
+                        "spans": {
+                          "description": "Collection of spans in the trace.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "span_id": {
+                                "description": "Identifier for the span. Must be a 64-bit integer other than 0 and unique within a trace. For example, ``2205310701640571284``.",
+                                "type": "integer"
+                              },
+                              "kind": {
+                                "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span.",
+                                "type": "object",
+                                "reference": "google.cloud.trace_v1.types.TraceSpan.SpanKind"
+                              },
+                              "name": {
+                                "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans.",
+                                "type": "string"
+                              },
+                              "start_time": {
+                                "description": "Start time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "end_time": {
+                                "description": "End time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "parent_span_id": {
+                                "description": "Optional. ID of the parent span, if any.",
+                                "type": "integer"
+                              },
+                              "labels": {
+                                "description": "Collection of labels associated with the span. Label keys must be less than 128 bytes. Label values must be less than 16 kilobytes (10MB for ``/stacktrace`` values).  Some predefined label keys exist, or you may create your own. When creating your own, we recommend the following formats:  -  ``/category/product/key`` for agents of well-known products (e.g. ``/db/mongodb/read_size``). -  ``short_host/path/key`` for domain-specific keys (e.g. ``foo.com/myproduct/bar``)  Predefined labels include:  -  ``/agent`` -  ``/component`` -  ``/error/message`` -  ``/error/name`` -  ``/http/client_city`` -  ``/http/client_country`` -  ``/http/client_protocol`` -  ``/http/client_region`` -  ``/http/host`` -  ``/http/method`` -  ``/http/path`` -  ``/http/redirected_url`` -  ``/http/request/size`` -  ``/http/response/size`` -  ``/http/route`` -  ``/http/status_code`` -  ``/http/url`` -  ``/http/user_agent`` -  ``/pid`` -  ``/stacktrace`` -  ``/tid``",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "probing_details": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "description": "The overall result of active probing.",
+                    "type": "object",
+                    "reference": "google.cloud.network_management_v1.types.ProbingDetails.ProbingResult"
+                  },
+                  "verify_time": {
+                    "description": "The time that reachability was assessed through active probing.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State enum for status.",
+                        "type": "object",
+                        "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                      },
+                      "error_message": {
+                        "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "abort_cause": {
+                    "description": "The reason probing was aborted.",
+                    "type": "object",
+                    "reference": "google.cloud.network_management_v1.types.ProbingDetails.ProbingAbortCause"
+                  },
+                  "sent_probe_count": {
+                    "description": "Number of probes sent.",
+                    "type": "integer"
+                  },
+                  "successful_probe_count": {
+                    "description": "Number of probes that reached the destination.",
+                    "type": "integer"
+                  },
+                  "endpoint_info": {
+                    "type": "object",
+                    "properties": {
+                      "source_ip": {
+                        "description": "Source IP address.",
+                        "type": "string"
+                      },
+                      "destination_ip": {
+                        "description": "Destination IP address.",
+                        "type": "string"
+                      },
+                      "protocol": {
+                        "description": "IP protocol in string format, for example: \"TCP\", \"UDP\", \"ICMP\".",
+                        "type": "string"
+                      },
+                      "source_port": {
+                        "description": "Source port. Only valid when protocol is TCP or UDP.",
+                        "type": "integer"
+                      },
+                      "destination_port": {
+                        "description": "Destination port. Only valid when protocol is TCP or UDP.",
+                        "type": "integer"
+                      },
+                      "source_network_uri": {
+                        "description": "URI of the network where this packet originates from.",
+                        "type": "string"
+                      },
+                      "destination_network_uri": {
+                        "description": "URI of the network where this packet is sent to.",
+                        "type": "string"
+                      },
+                      "source_agent_uri": {
+                        "description": "URI of the source telemetry agent this packet originates from.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "probing_latency": {
+                    "type": "object",
+                    "properties": {
+                      "latency_percentiles": {
+                        "description": "Representative latency percentiles.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "percent": {
+                              "description": "Percentage of samples this data point applies to.",
+                              "type": "integer"
+                            },
+                            "latency_micros": {
+                              "description": "percent-th percentile of latency observed, in microseconds. Fraction of percent/100 of samples have latency lower or equal to the value of this field.",
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "destination_egress_location": {
+                    "type": "object",
+                    "properties": {
+                      "metropolitan_area": {
+                        "description": "Name of the metropolitan area.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "round_trip": {
+                "description": "Whether run analysis for the return path from destination to source. Default value is false.",
+                "type": "boolean"
+              },
+              "return_reachability_details": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Name of the product.",
+                            "type": "string"
+                          },
+                          "id": {
+                            "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
+                            "type": "string"
+                          },
+                          "generic_uri": {
+                            "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "score": {
+                        "description": "A confidence level on the match, ranging from 0 (no confidence) to 1 (full confidence).",
+                        "type": "number"
+                      },
+                      "image": {
+                        "description": "The resource name of the image from the product that is the closest match to the query.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "verify_time": {
+                    "description": "The time of the configuration analysis.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State enum for status.",
+                        "type": "object",
+                        "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                      },
+                      "error_message": {
+                        "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "traces": {
+                    "description": "Result may contain a list of traces if a test has multiple possible paths in the network, such as when destination endpoint is a load balancer with multiple backends.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "project_id": {
+                          "description": "Project ID of the Cloud project where the trace data is stored.",
+                          "type": "string"
+                        },
+                        "trace_id": {
+                          "description": "Globally unique identifier for the trace. This identifier is a 128-bit numeric value formatted as a 32-byte hex string. For example, ``382d4f4c6b7bb2f4a972559d9085001d``.",
+                          "type": "string"
+                        },
+                        "spans": {
+                          "description": "Collection of spans in the trace.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "span_id": {
+                                "description": "Identifier for the span. Must be a 64-bit integer other than 0 and unique within a trace. For example, ``2205310701640571284``.",
+                                "type": "integer"
+                              },
+                              "kind": {
+                                "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span.",
+                                "type": "object",
+                                "reference": "google.cloud.trace_v1.types.TraceSpan.SpanKind"
+                              },
+                              "name": {
+                                "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans.",
+                                "type": "string"
+                              },
+                              "start_time": {
+                                "description": "Start time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "end_time": {
+                                "description": "End time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "parent_span_id": {
+                                "description": "Optional. ID of the parent span, if any.",
+                                "type": "integer"
+                              },
+                              "labels": {
+                                "description": "Collection of labels associated with the span. Label keys must be less than 128 bytes. Label values must be less than 16 kilobytes (10MB for ``/stacktrace`` values).  Some predefined label keys exist, or you may create your own. When creating your own, we recommend the following formats:  -  ``/category/product/key`` for agents of well-known products (e.g. ``/db/mongodb/read_size``). -  ``short_host/path/key`` for domain-specific keys (e.g. ``foo.com/myproduct/bar``)  Predefined labels include:  -  ``/agent`` -  ``/component`` -  ``/error/message`` -  ``/error/name`` -  ``/http/client_city`` -  ``/http/client_country`` -  ``/http/client_protocol`` -  ``/http/client_region`` -  ``/http/host`` -  ``/http/method`` -  ``/http/path`` -  ``/http/redirected_url`` -  ``/http/request/size`` -  ``/http/response/size`` -  ``/http/route`` -  ``/http/status_code`` -  ``/http/url`` -  ``/http/user_agent`` -  ``/pid`` -  ``/stacktrace`` -  ``/tid``",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "bypass_firewall_checks": {
+                "description": "Whether the test should skip firewall checking. If not provided, we assume false.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "source",
+              "destination"
+            ]
+          }
         },
-        "test_id": {
-          "type": "str",
-          "description": "Required. The logical name of the Connectivity Test in your project with the following restrictions:  -  Must contain only lowercase letters, numbers, and hyphens. -  Must start with a letter. -  Must be between 1-40 characters. -  Must end with a number or a letter. -  Must be unique within the customer project"
-        },
-        "resource": {
-          "type": "google.cloud.network_management_v1.types.ConnectivityTest",
-          "description": "Required. A ``ConnectivityTest`` resource"
-        }
+        "required": [
+          "parent",
+          "test_id",
+          "resource"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateConnectivityTestRequest",
-      "docstring": "Request for the ``UpdateConnectivityTest`` method.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. Mask of fields to update. At least\n        one path must be supplied in this field.\n    resource (google.cloud.network_management_v1.types.ConnectivityTest):\n        Required. Only fields specified in update_mask are updated.",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. Mask of fields to update. At least one path must be supplied in this field."
+      "description": "Request for the ``UpdateConnectivityTest`` method.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. Mask of fields to update. At least\n        one path must be supplied in this field.\n    resource (google.cloud.network_management_v1.types.ConnectivityTest):\n        Required. Only fields specified in update_mask are updated.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Required. Mask of fields to update. At least one path must be supplied in this field.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "resource": {
+            "description": "Required. Only fields specified in update_mask are updated.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. Unique name of the resource using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+                "type": "string"
+              },
+              "description": {
+                "description": "The user-supplied description of the Connectivity Test. Maximum of 512 characters.",
+                "type": "string"
+              },
+              "source": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Immutable. The resource name for the endpoint in the format ``projects/*/locations/*/namespaces/*/services/*/endpoints/*``.",
+                    "type": "string"
+                  },
+                  "address": {
+                    "description": "Optional. An IPv4 or IPv6 address. Service Directory rejects bad addresses like:  -  ``8.8.8`` -  ``8.8.8.8:53`` -  ``test:bad:address`` -  ``[::1]`` -  ``[::1]:8080``  Limited to 45 characters.",
+                    "type": "string"
+                  },
+                  "port": {
+                    "description": "Optional. Service Directory rejects values outside of ``[0, 65535]``.",
+                    "type": "integer"
+                  },
+                  "metadata": {
+                    "description": "Optional. Metadata for the endpoint. This data can be consumed by service clients.  Restrictions:  -  The entire metadata dictionary may contain up to 512 characters, spread accoss all key-value pairs. Metadata that goes beyond this limit are rejected -  Valid metadata keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Metadata that fails to meet these requirements are rejected  Note: This field is equivalent to the ``annotations`` field in the v1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "network": {
+                    "description": "Immutable. The Google Compute Engine network (VPC) of the endpoint in the format ``projects/<project number>/locations/global/networks/*``.  The project must be specified by project number (project id is rejected). Incorrectly formatted networks are rejected, but no other validation is performed on this field (ex. network or project existence, reachability, or permissions).",
+                    "type": "string"
+                  },
+                  "create_time": {
+                    "description": "Output only. The timestamp when the endpoint was created.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "update_time": {
+                    "description": "Output only. The timestamp when the endpoint was last updated.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "uid": {
+                    "description": "Output only. A globally unique identifier (in UUID4 format) for this endpoint.",
+                    "type": "string"
+                  }
+                }
+              },
+              "destination": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Immutable. The resource name for the endpoint in the format ``projects/*/locations/*/namespaces/*/services/*/endpoints/*``.",
+                    "type": "string"
+                  },
+                  "address": {
+                    "description": "Optional. An IPv4 or IPv6 address. Service Directory rejects bad addresses like:  -  ``8.8.8`` -  ``8.8.8.8:53`` -  ``test:bad:address`` -  ``[::1]`` -  ``[::1]:8080``  Limited to 45 characters.",
+                    "type": "string"
+                  },
+                  "port": {
+                    "description": "Optional. Service Directory rejects values outside of ``[0, 65535]``.",
+                    "type": "integer"
+                  },
+                  "metadata": {
+                    "description": "Optional. Metadata for the endpoint. This data can be consumed by service clients.  Restrictions:  -  The entire metadata dictionary may contain up to 512 characters, spread accoss all key-value pairs. Metadata that goes beyond this limit are rejected -  Valid metadata keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Metadata that fails to meet these requirements are rejected  Note: This field is equivalent to the ``annotations`` field in the v1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "network": {
+                    "description": "Immutable. The Google Compute Engine network (VPC) of the endpoint in the format ``projects/<project number>/locations/global/networks/*``.  The project must be specified by project number (project id is rejected). Incorrectly formatted networks are rejected, but no other validation is performed on this field (ex. network or project existence, reachability, or permissions).",
+                    "type": "string"
+                  },
+                  "create_time": {
+                    "description": "Output only. The timestamp when the endpoint was created.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "update_time": {
+                    "description": "Output only. The timestamp when the endpoint was last updated.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "uid": {
+                    "description": "Output only. A globally unique identifier (in UUID4 format) for this endpoint.",
+                    "type": "string"
+                  }
+                }
+              },
+              "protocol": {
+                "description": "IP Protocol of the test. When not provided, \"TCP\" is assumed.",
+                "type": "string"
+              },
+              "related_projects": {
+                "description": "Other projects that may be relevant for reachability analysis. This is applicable to scenarios where a test can cross project boundaries.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "display_name": {
+                "description": "Output only. The display name of a Connectivity Test.",
+                "type": "string"
+              },
+              "labels": {
+                "description": "Resource labels to represent user-provided metadata.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "create_time": {
+                "description": "Output only. The time the test was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. The time the test's configuration was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "reachability_details": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Name of the product.",
+                            "type": "string"
+                          },
+                          "id": {
+                            "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
+                            "type": "string"
+                          },
+                          "generic_uri": {
+                            "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "score": {
+                        "description": "A confidence level on the match, ranging from 0 (no confidence) to 1 (full confidence).",
+                        "type": "number"
+                      },
+                      "image": {
+                        "description": "The resource name of the image from the product that is the closest match to the query.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "verify_time": {
+                    "description": "The time of the configuration analysis.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State enum for status.",
+                        "type": "object",
+                        "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                      },
+                      "error_message": {
+                        "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "traces": {
+                    "description": "Result may contain a list of traces if a test has multiple possible paths in the network, such as when destination endpoint is a load balancer with multiple backends.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "project_id": {
+                          "description": "Project ID of the Cloud project where the trace data is stored.",
+                          "type": "string"
+                        },
+                        "trace_id": {
+                          "description": "Globally unique identifier for the trace. This identifier is a 128-bit numeric value formatted as a 32-byte hex string. For example, ``382d4f4c6b7bb2f4a972559d9085001d``.",
+                          "type": "string"
+                        },
+                        "spans": {
+                          "description": "Collection of spans in the trace.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "span_id": {
+                                "description": "Identifier for the span. Must be a 64-bit integer other than 0 and unique within a trace. For example, ``2205310701640571284``.",
+                                "type": "integer"
+                              },
+                              "kind": {
+                                "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span.",
+                                "type": "object",
+                                "reference": "google.cloud.trace_v1.types.TraceSpan.SpanKind"
+                              },
+                              "name": {
+                                "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans.",
+                                "type": "string"
+                              },
+                              "start_time": {
+                                "description": "Start time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "end_time": {
+                                "description": "End time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "parent_span_id": {
+                                "description": "Optional. ID of the parent span, if any.",
+                                "type": "integer"
+                              },
+                              "labels": {
+                                "description": "Collection of labels associated with the span. Label keys must be less than 128 bytes. Label values must be less than 16 kilobytes (10MB for ``/stacktrace`` values).  Some predefined label keys exist, or you may create your own. When creating your own, we recommend the following formats:  -  ``/category/product/key`` for agents of well-known products (e.g. ``/db/mongodb/read_size``). -  ``short_host/path/key`` for domain-specific keys (e.g. ``foo.com/myproduct/bar``)  Predefined labels include:  -  ``/agent`` -  ``/component`` -  ``/error/message`` -  ``/error/name`` -  ``/http/client_city`` -  ``/http/client_country`` -  ``/http/client_protocol`` -  ``/http/client_region`` -  ``/http/host`` -  ``/http/method`` -  ``/http/path`` -  ``/http/redirected_url`` -  ``/http/request/size`` -  ``/http/response/size`` -  ``/http/route`` -  ``/http/status_code`` -  ``/http/url`` -  ``/http/user_agent`` -  ``/pid`` -  ``/stacktrace`` -  ``/tid``",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "probing_details": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "description": "The overall result of active probing.",
+                    "type": "object",
+                    "reference": "google.cloud.network_management_v1.types.ProbingDetails.ProbingResult"
+                  },
+                  "verify_time": {
+                    "description": "The time that reachability was assessed through active probing.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State enum for status.",
+                        "type": "object",
+                        "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                      },
+                      "error_message": {
+                        "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "abort_cause": {
+                    "description": "The reason probing was aborted.",
+                    "type": "object",
+                    "reference": "google.cloud.network_management_v1.types.ProbingDetails.ProbingAbortCause"
+                  },
+                  "sent_probe_count": {
+                    "description": "Number of probes sent.",
+                    "type": "integer"
+                  },
+                  "successful_probe_count": {
+                    "description": "Number of probes that reached the destination.",
+                    "type": "integer"
+                  },
+                  "endpoint_info": {
+                    "type": "object",
+                    "properties": {
+                      "source_ip": {
+                        "description": "Source IP address.",
+                        "type": "string"
+                      },
+                      "destination_ip": {
+                        "description": "Destination IP address.",
+                        "type": "string"
+                      },
+                      "protocol": {
+                        "description": "IP protocol in string format, for example: \"TCP\", \"UDP\", \"ICMP\".",
+                        "type": "string"
+                      },
+                      "source_port": {
+                        "description": "Source port. Only valid when protocol is TCP or UDP.",
+                        "type": "integer"
+                      },
+                      "destination_port": {
+                        "description": "Destination port. Only valid when protocol is TCP or UDP.",
+                        "type": "integer"
+                      },
+                      "source_network_uri": {
+                        "description": "URI of the network where this packet originates from.",
+                        "type": "string"
+                      },
+                      "destination_network_uri": {
+                        "description": "URI of the network where this packet is sent to.",
+                        "type": "string"
+                      },
+                      "source_agent_uri": {
+                        "description": "URI of the source telemetry agent this packet originates from.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "probing_latency": {
+                    "type": "object",
+                    "properties": {
+                      "latency_percentiles": {
+                        "description": "Representative latency percentiles.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "percent": {
+                              "description": "Percentage of samples this data point applies to.",
+                              "type": "integer"
+                            },
+                            "latency_micros": {
+                              "description": "percent-th percentile of latency observed, in microseconds. Fraction of percent/100 of samples have latency lower or equal to the value of this field.",
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "destination_egress_location": {
+                    "type": "object",
+                    "properties": {
+                      "metropolitan_area": {
+                        "description": "Name of the metropolitan area.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "round_trip": {
+                "description": "Whether run analysis for the return path from destination to source. Default value is false.",
+                "type": "boolean"
+              },
+              "return_reachability_details": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Name of the product.",
+                            "type": "string"
+                          },
+                          "id": {
+                            "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
+                            "type": "string"
+                          },
+                          "generic_uri": {
+                            "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "score": {
+                        "description": "A confidence level on the match, ranging from 0 (no confidence) to 1 (full confidence).",
+                        "type": "number"
+                      },
+                      "image": {
+                        "description": "The resource name of the image from the product that is the closest match to the query.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "verify_time": {
+                    "description": "The time of the configuration analysis.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State enum for status.",
+                        "type": "object",
+                        "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                      },
+                      "error_message": {
+                        "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "traces": {
+                    "description": "Result may contain a list of traces if a test has multiple possible paths in the network, such as when destination endpoint is a load balancer with multiple backends.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "project_id": {
+                          "description": "Project ID of the Cloud project where the trace data is stored.",
+                          "type": "string"
+                        },
+                        "trace_id": {
+                          "description": "Globally unique identifier for the trace. This identifier is a 128-bit numeric value formatted as a 32-byte hex string. For example, ``382d4f4c6b7bb2f4a972559d9085001d``.",
+                          "type": "string"
+                        },
+                        "spans": {
+                          "description": "Collection of spans in the trace.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "span_id": {
+                                "description": "Identifier for the span. Must be a 64-bit integer other than 0 and unique within a trace. For example, ``2205310701640571284``.",
+                                "type": "integer"
+                              },
+                              "kind": {
+                                "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span.",
+                                "type": "object",
+                                "reference": "google.cloud.trace_v1.types.TraceSpan.SpanKind"
+                              },
+                              "name": {
+                                "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans.",
+                                "type": "string"
+                              },
+                              "start_time": {
+                                "description": "Start time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "end_time": {
+                                "description": "End time of the span in nanoseconds from the UNIX epoch.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "parent_span_id": {
+                                "description": "Optional. ID of the parent span, if any.",
+                                "type": "integer"
+                              },
+                              "labels": {
+                                "description": "Collection of labels associated with the span. Label keys must be less than 128 bytes. Label values must be less than 16 kilobytes (10MB for ``/stacktrace`` values).  Some predefined label keys exist, or you may create your own. When creating your own, we recommend the following formats:  -  ``/category/product/key`` for agents of well-known products (e.g. ``/db/mongodb/read_size``). -  ``short_host/path/key`` for domain-specific keys (e.g. ``foo.com/myproduct/bar``)  Predefined labels include:  -  ``/agent`` -  ``/component`` -  ``/error/message`` -  ``/error/name`` -  ``/http/client_city`` -  ``/http/client_country`` -  ``/http/client_protocol`` -  ``/http/client_region`` -  ``/http/host`` -  ``/http/method`` -  ``/http/path`` -  ``/http/redirected_url`` -  ``/http/request/size`` -  ``/http/response/size`` -  ``/http/route`` -  ``/http/status_code`` -  ``/http/url`` -  ``/http/user_agent`` -  ``/pid`` -  ``/stacktrace`` -  ``/tid``",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "bypass_firewall_checks": {
+                "description": "Whether the test should skip firewall checking. If not provided, we assume false.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "source",
+              "destination"
+            ]
+          }
         },
-        "resource": {
-          "type": "google.cloud.network_management_v1.types.ConnectivityTest",
-          "description": "Required. Only fields specified in update_mask are updated."
-        }
+        "required": [
+          "update_mask",
+          "resource"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteConnectivityTestRequest",
-      "docstring": "Request for the ``DeleteConnectivityTest`` method.\n\nAttributes:\n    name (str):\n        Required. Connectivity Test resource name using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Connectivity Test resource name using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``"
-        }
+      "description": "Request for the ``DeleteConnectivityTest`` method.\n\nAttributes:\n    name (str):\n        Required. Connectivity Test resource name using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Connectivity Test resource name using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "RerunConnectivityTestRequest",
-      "docstring": "Request for the ``RerunConnectivityTest`` method.\n\nAttributes:\n    name (str):\n        Required. Connectivity Test resource name using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Connectivity Test resource name using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "OperationMetadata",
-      "docstring": "Metadata describing an [Operation][google.longrunning.Operation]\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time the operation was created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time the operation finished running.\n    target (str):\n        Target of the operation - for example\n        projects/project-1/locations/global/connectivityTests/test-1\n    verb (str):\n        Name of the verb executed by the operation.\n    status_detail (str):\n        Human-readable status of the operation, if\n        any.\n    cancel_requested (bool):\n        Specifies if cancellation was requested for\n        the operation.\n    api_version (str):\n        API version.",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time the operation was created."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time the operation finished running."
-        },
-        "target": {
-          "type": "str",
-          "description": "Target of the operation - for example projects/project-1/locations/global/connectivityTests/test-1"
-        },
-        "verb": {
-          "type": "str",
-          "description": "Name of the verb executed by the operation."
-        },
-        "status_detail": {
-          "type": "str",
-          "description": "Human-readable status of the operation, if any."
-        },
-        "cancel_requested": {
-          "type": "bool",
-          "description": "Specifies if cancellation was requested for the operation."
-        },
-        "api_version": {
-          "type": "str",
-          "description": "API version."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-network-management\\google\\cloud\\network_management_v1\\types\\trace.py": [
-    {
-      "type": "request_class",
-      "name": "Trace",
-      "docstring": "Trace represents one simulated packet forwarding path.\n\n-  Each trace contains multiple ordered steps.\n-  Each step is in a particular state with associated configuration.\n-  State is categorized as final or non-final states.\n-  Each final state has a reason associated.\n-  Each trace must end with a final state (the last step).\n\n::\n\n     |---------------------Trace----------------------|\n     Step1(State) Step2(State) ---  StepN(State(final))\n\nAttributes:\n    endpoint_info (google.cloud.network_management_v1.types.EndpointInfo):\n        Derived from the source and destination endpoints definition\n        specified by user request, and validated by the data plane\n        model. If there are multiple traces starting from different\n        source locations, then the endpoint_info may be different\n        between traces.\n    steps (MutableSequence[google.cloud.network_management_v1.types.Step]):\n        A trace of a test contains multiple steps\n        from the initial state to the final state\n        (delivered,",
-      "attributes": {
-        "endpoint_info": {
-          "type": "google.cloud.network_management_v1.types.EndpointInfo",
-          "description": "Derived from the source and destination endpoints definition specified by user request, and validated by the data plane model. If there are multiple traces starting from different source locations, then the endpoint_info may be different between traces."
-        },
-        "steps": {
-          "type": "MutableSequence[google.cloud.network_management_v1.types.Step]",
-          "description": "A trace of a test contains multiple steps from the initial state to the final state (delivered, dropped, forwarded, or aborted).  The steps are ordered by the processing sequence within the simulated network state machine. It is critical to preserve the order of the steps and avoid reordering or sorting them."
-        },
-        "forward_trace_id": {
-          "type": "int",
-          "description": "ID of trace. For forward traces, this ID is unique for each trace. For return traces, it matches ID of associated forward trace. A single forward trace can be associated with none, one or more than one return trace."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Step",
-      "docstring": "A simulated forwarding path is composed of multiple steps.\nEach step has a well-defined state and an associated\nconfiguration.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    description (str):\n        A description of the step. Usually this is a\n        summary of the state.\n    state (google.cloud.network_management_v1.types.Step.State):\n        Each step is in one of the pre-defined\n        states.\n    causes_drop (bool):\n        This is a step that leads to the final state\n        Drop.\n    project_id (str):\n        Project ID that contains the configuration\n        this step is validating.\n    instance (google.cloud.network_management_v1.types.InstanceInfo):\n        Display information of a Compute Engine\n        instance.\n\n   ",
-      "attributes": {
-        "description": {
-          "type": "str",
-          "description": "A description of the step. Usually this is a summary of the state."
-        },
-        "state": {
-          "type": "google.cloud.network_management_v1.types.Step.State",
-          "description": "Each step is in one of the pre-defined states."
-        },
-        "causes_drop": {
-          "type": "bool",
-          "description": "This is a step that leads to the final state Drop."
-        },
-        "project_id": {
-          "type": "str",
-          "description": "Project ID that contains the configuration this step is validating."
-        },
-        "instance": {
-          "type": "google.cloud.network_management_v1.types.InstanceInfo",
-          "description": "Display information of a Compute Engine instance.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "firewall": {
-          "type": "google.cloud.network_management_v1.types.FirewallInfo",
-          "description": "Display information of a Compute Engine firewall rule.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "route": {
-          "type": "google.cloud.network_management_v1.types.RouteInfo",
-          "description": "Display information of a Compute Engine route.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "endpoint": {
-          "type": "google.cloud.network_management_v1.types.EndpointInfo",
-          "description": "Display information of the source and destination under analysis. The endpoint information in an intermediate state may differ with the initial input, as it might be modified by state like NAT, or Connection Proxy.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "google_service": {
-          "type": "google.cloud.network_management_v1.types.GoogleServiceInfo",
-          "description": "Display information of a Google service  This field is a member of `oneof`_ ``step_info``."
-        },
-        "forwarding_rule": {
-          "type": "google.cloud.network_management_v1.types.ForwardingRuleInfo",
-          "description": "Display information of a Compute Engine forwarding rule.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "vpn_gateway": {
-          "type": "google.cloud.network_management_v1.types.VpnGatewayInfo",
-          "description": "Display information of a Compute Engine VPN gateway.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "vpn_tunnel": {
-          "type": "google.cloud.network_management_v1.types.VpnTunnelInfo",
-          "description": "Display information of a Compute Engine VPN tunnel.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "vpc_connector": {
-          "type": "google.cloud.network_management_v1.types.VpcConnectorInfo",
-          "description": "Display information of a VPC connector.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "deliver": {
-          "type": "google.cloud.network_management_v1.types.DeliverInfo",
-          "description": "Display information of the final state \"deliver\" and reason.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "forward": {
-          "type": "google.cloud.network_management_v1.types.ForwardInfo",
-          "description": "Display information of the final state \"forward\" and reason.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "abort": {
-          "type": "google.cloud.network_management_v1.types.AbortInfo",
-          "description": "Display information of the final state \"abort\" and reason.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "drop": {
-          "type": "google.cloud.network_management_v1.types.DropInfo",
-          "description": "Display information of the final state \"drop\" and reason.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "load_balancer": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerInfo",
-          "description": "Display information of the load balancers. Deprecated in favor of the ``load_balancer_backend_info`` field, not used in new tests.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "network": {
-          "type": "google.cloud.network_management_v1.types.NetworkInfo",
-          "description": "Display information of a Google Cloud network.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "gke_master": {
-          "type": "google.cloud.network_management_v1.types.GKEMasterInfo",
-          "description": "Display information of a Google Kubernetes Engine cluster master.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "cloud_sql_instance": {
-          "type": "google.cloud.network_management_v1.types.CloudSQLInstanceInfo",
-          "description": "Display information of a Cloud SQL instance.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "redis_instance": {
-          "type": "google.cloud.network_management_v1.types.RedisInstanceInfo",
-          "description": "Display information of a Redis Instance.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "redis_cluster": {
-          "type": "google.cloud.network_management_v1.types.RedisClusterInfo",
-          "description": "Display information of a Redis Cluster.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "cloud_function": {
-          "type": "google.cloud.network_management_v1.types.CloudFunctionInfo",
-          "description": "Display information of a Cloud Function.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "app_engine_version": {
-          "type": "google.cloud.network_management_v1.types.AppEngineVersionInfo",
-          "description": "Display information of an App Engine service version.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "cloud_run_revision": {
-          "type": "google.cloud.network_management_v1.types.CloudRunRevisionInfo",
-          "description": "Display information of a Cloud Run revision.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "nat": {
-          "type": "google.cloud.network_management_v1.types.NatInfo",
-          "description": "Display information of a NAT.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "proxy_connection": {
-          "type": "google.cloud.network_management_v1.types.ProxyConnectionInfo",
-          "description": "Display information of a ProxyConnection.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "load_balancer_backend_info": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerBackendInfo",
-          "description": "Display information of a specific load balancer backend.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "storage_bucket": {
-          "type": "google.cloud.network_management_v1.types.StorageBucketInfo",
-          "description": "Display information of a Storage Bucket. Used only for return traces.  This field is a member of `oneof`_ ``step_info``."
-        },
-        "serverless_neg": {
-          "type": "google.cloud.network_management_v1.types.ServerlessNegInfo",
-          "description": "Display information of a Serverless network endpoint group backend. Used only for return traces.  This field is a member of `oneof`_ ``step_info``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "InstanceInfo",
-      "docstring": "For display only. Metadata associated with a Compute Engine\ninstance.\n\nAttributes:\n    display_name (str):\n        Name of a Compute Engine instance.\n    uri (str):\n        URI of a Compute Engine instance.\n    interface (str):\n        Name of the network interface of a Compute\n        Engine instance.\n    network_uri (str):\n        URI of a Compute Engine network.\n    internal_ip (str):\n        Internal IP address of the network interface.\n    external_ip (str):\n        External IP address of the network interface.\n    network_tags (MutableSequence[str]):\n        Network tags configured on the instance.\n    service_account (str):\n        Service account authorized for the instance.\n    psc_network_attachment_uri (str):\n        URI of the PSC network attachment the NIC is\n        attached to (if relevant).",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Compute Engine instance."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine instance."
-        },
-        "interface": {
-          "type": "str",
-          "description": "Name of the network interface of a Compute Engine instance."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine network."
-        },
-        "internal_ip": {
-          "type": "str",
-          "description": "Internal IP address of the network interface."
-        },
-        "external_ip": {
-          "type": "str",
-          "description": "External IP address of the network interface."
-        },
-        "network_tags": {
-          "type": "MutableSequence[str]",
-          "description": "Network tags configured on the instance."
-        },
-        "service_account": {
-          "type": "str",
-          "description": "Service account authorized for the instance."
-        },
-        "psc_network_attachment_uri": {
-          "type": "str",
-          "description": "URI of the PSC network attachment the NIC is attached to (if relevant)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NetworkInfo",
-      "docstring": "For display only. Metadata associated with a Compute Engine\nnetwork. Next ID: 7\n\nAttributes:\n    display_name (str):\n        Name of a Compute Engine network.\n    uri (str):\n        URI of a Compute Engine network.\n    matched_subnet_uri (str):\n        URI of the subnet matching the source IP\n        address of the test.\n    matched_ip_range (str):\n        The IP range of the subnet matching the\n        source IP address of the test.\n    region (str):\n        The region of the subnet matching the source\n        IP address of the test.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Compute Engine network."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine network."
-        },
-        "matched_subnet_uri": {
-          "type": "str",
-          "description": "URI of the subnet matching the source IP address of the test."
-        },
-        "matched_ip_range": {
-          "type": "str",
-          "description": "The IP range of the subnet matching the source IP address of the test."
-        },
-        "region": {
-          "type": "str",
-          "description": "The region of the subnet matching the source IP address of the test."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "FirewallInfo",
-      "docstring": "For display only. Metadata associated with a VPC firewall\nrule, an implied VPC firewall rule, or a firewall policy rule.\n\nAttributes:\n    display_name (str):\n        The display name of the firewall rule. This\n        field might be empty for firewall policy rules.\n    uri (str):\n        The URI of the firewall rule. This field is\n        not applicable to implied VPC firewall rules.\n    direction (str):\n        Possible values: INGRESS, EGRESS\n    action (str):\n        Possible values: ALLOW, DENY, APPLY_SECURITY_PROFILE_GROUP\n    priority (int):\n        The priority of the firewall rule.\n    network_uri (str):\n        The URI of the VPC network that the firewall\n        rule is associated with. This field is not\n        applicable to hierarchical firewall policy\n        rules.\n    target_tags (MutableSequence[str]):\n        The target tags defined by the VPC firewall\n        rule. This field is not applicable to firewall\n        policy rules.\n    target_service_accounts (MutableSequence[str]):\n        The t",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "The display name of the firewall rule. This field might be empty for firewall policy rules."
-        },
-        "uri": {
-          "type": "str",
-          "description": "The URI of the firewall rule. This field is not applicable to implied VPC firewall rules."
-        },
-        "direction": {
-          "type": "str",
-          "description": "Possible values: INGRESS, EGRESS"
-        },
-        "action": {
-          "type": "str",
-          "description": "Possible values: ALLOW, DENY, APPLY_SECURITY_PROFILE_GROUP"
-        },
-        "priority": {
-          "type": "int",
-          "description": "The priority of the firewall rule."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "The URI of the VPC network that the firewall rule is associated with. This field is not applicable to hierarchical firewall policy rules."
-        },
-        "target_tags": {
-          "type": "MutableSequence[str]",
-          "description": "The target tags defined by the VPC firewall rule. This field is not applicable to firewall policy rules."
-        },
-        "target_service_accounts": {
-          "type": "MutableSequence[str]",
-          "description": "The target service accounts specified by the firewall rule."
-        },
-        "policy": {
-          "type": "str",
-          "description": "The name of the firewall policy that this rule is associated with. This field is not applicable to VPC firewall rules and implied VPC firewall rules."
-        },
-        "policy_uri": {
-          "type": "str",
-          "description": "The URI of the firewall policy that this rule is associated with. This field is not applicable to VPC firewall rules and implied VPC firewall rules."
-        },
-        "firewall_rule_type": {
-          "type": "google.cloud.network_management_v1.types.FirewallInfo.FirewallRuleType",
-          "description": "The firewall rule's type."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RouteInfo",
-      "docstring": "For display only. Metadata associated with a Compute Engine\nroute.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    route_type (google.cloud.network_management_v1.types.RouteInfo.RouteType):\n        Type of route.\n    next_hop_type (google.cloud.network_management_v1.types.RouteInfo.NextHopType):\n        Type of next hop.\n    route_scope (google.cloud.network_management_v1.types.RouteInfo.RouteScope):\n        Indicates where route is applicable.\n    display_name (str):\n        Name of a route.\n    uri (str):\n        URI of a route (if applicable).\n    region (str):\n        Region of the route (if applicable).\n    dest_ip_range (str):\n        Destination IP range of the route.\n    next_hop (str):\n        Next hop of the route.\n    network_uri (str):\n        URI of a Compute Engine network. NETWORK\n        routes only.\n    priority (int):\n        Priority of the route.\n    instance_tags (MutableSequence[str]):\n        Instance tags of ",
-      "attributes": {
-        "route_type": {
-          "type": "google.cloud.network_management_v1.types.RouteInfo.RouteType",
-          "description": "Type of route."
-        },
-        "next_hop_type": {
-          "type": "google.cloud.network_management_v1.types.RouteInfo.NextHopType",
-          "description": "Type of next hop."
-        },
-        "route_scope": {
-          "type": "google.cloud.network_management_v1.types.RouteInfo.RouteScope",
-          "description": "Indicates where route is applicable."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Name of a route."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a route (if applicable)."
-        },
-        "region": {
-          "type": "str",
-          "description": "Region of the route (if applicable)."
-        },
-        "dest_ip_range": {
-          "type": "str",
-          "description": "Destination IP range of the route."
-        },
-        "next_hop": {
-          "type": "str",
-          "description": "Next hop of the route."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine network. NETWORK routes only."
-        },
-        "priority": {
-          "type": "int",
-          "description": "Priority of the route."
-        },
-        "instance_tags": {
-          "type": "MutableSequence[str]",
-          "description": "Instance tags of the route."
-        },
-        "src_ip_range": {
-          "type": "str",
-          "description": "Source IP address range of the route. Policy based routes only."
-        },
-        "dest_port_ranges": {
-          "type": "MutableSequence[str]",
-          "description": "Destination port ranges of the route. Policy based routes only."
-        },
-        "src_port_ranges": {
-          "type": "MutableSequence[str]",
-          "description": "Source port ranges of the route. Policy based routes only."
-        },
-        "protocols": {
-          "type": "MutableSequence[str]",
-          "description": "Protocols of the route. Policy based routes only."
-        },
-        "ncc_hub_uri": {
-          "type": "str",
-          "description": "URI of a NCC Hub. NCC_HUB routes only.  This field is a member of `oneof`_ ``_ncc_hub_uri``."
-        },
-        "ncc_spoke_uri": {
-          "type": "str",
-          "description": "URI of a NCC Spoke. NCC_HUB routes only.  This field is a member of `oneof`_ ``_ncc_spoke_uri``."
-        },
-        "advertised_route_source_router_uri": {
-          "type": "str",
-          "description": "For advertised dynamic routes, the URI of the Cloud Router that advertised the corresponding IP prefix.  This field is a member of `oneof`_ ``_advertised_route_source_router_uri``."
-        },
-        "advertised_route_next_hop_uri": {
-          "type": "str",
-          "description": "For advertised routes, the URI of their next hop, i.e. the URI of the hybrid endpoint (VPN tunnel, Interconnect attachment, NCC router appliance) the advertised prefix is advertised through, or URI of the source peered network.  This field is a member of `oneof`_ ``_advertised_route_next_hop_uri``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GoogleServiceInfo",
-      "docstring": "For display only. Details of a Google Service sending packets to a\nVPC network. Although the source IP might be a publicly routable\naddress, some Google Services use special routes within Google\nproduction infrastructure to reach Compute Engine Instances.\nhttps://cloud.google.com/vpc/docs/routes#special_return_paths\n\nAttributes:\n    source_ip (str):\n        Source IP address.\n    google_service_type (google.cloud.network_management_v1.types.GoogleServiceInfo.GoogleServiceType):\n        Recognized type of a Google Service.",
-      "attributes": {
-        "source_ip": {
-          "type": "str",
-          "description": "Source IP address."
-        },
-        "google_service_type": {
-          "type": "google.cloud.network_management_v1.types.GoogleServiceInfo.GoogleServiceType",
-          "description": "Recognized type of a Google Service."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ForwardingRuleInfo",
-      "docstring": "For display only. Metadata associated with a Compute Engine\nforwarding rule.\n\nAttributes:\n    display_name (str):\n        Name of the forwarding rule.\n    uri (str):\n        URI of the forwarding rule.\n    matched_protocol (str):\n        Protocol defined in the forwarding rule that\n        matches the packet.\n    matched_port_range (str):\n        Port range defined in the forwarding rule\n        that matches the packet.\n    vip (str):\n        VIP of the forwarding rule.\n    target (str):\n        Target type of the forwarding rule.\n    network_uri (str):\n        Network URI.\n    region (str):\n        Region of the forwarding rule. Set only for\n        regional forwarding rules.\n    load_balancer_name (str):\n        Name of the load balancer the forwarding rule\n        belongs to. Empty for forwarding rules not\n        related to load balancers (like PSC forwarding\n        rules).\n    psc_service_attachment_uri (str):\n        URI of the PSC service attachment this\n        forwarding rule targets (if applicable)",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of the forwarding rule."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of the forwarding rule."
-        },
-        "matched_protocol": {
-          "type": "str",
-          "description": "Protocol defined in the forwarding rule that matches the packet."
-        },
-        "matched_port_range": {
-          "type": "str",
-          "description": "Port range defined in the forwarding rule that matches the packet."
-        },
-        "vip": {
-          "type": "str",
-          "description": "VIP of the forwarding rule."
-        },
-        "target": {
-          "type": "str",
-          "description": "Target type of the forwarding rule."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "Network URI."
-        },
-        "region": {
-          "type": "str",
-          "description": "Region of the forwarding rule. Set only for regional forwarding rules."
-        },
-        "load_balancer_name": {
-          "type": "str",
-          "description": "Name of the load balancer the forwarding rule belongs to. Empty for forwarding rules not related to load balancers (like PSC forwarding rules)."
-        },
-        "psc_service_attachment_uri": {
-          "type": "str",
-          "description": "URI of the PSC service attachment this forwarding rule targets (if applicable)."
-        },
-        "psc_google_api_target": {
-          "type": "str",
-          "description": "PSC Google API target this forwarding rule targets (if applicable)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LoadBalancerInfo",
-      "docstring": "For display only. Metadata associated with a load balancer.\n\nAttributes:\n    load_balancer_type (google.cloud.network_management_v1.types.LoadBalancerInfo.LoadBalancerType):\n        Type of the load balancer.\n    health_check_uri (str):\n        URI of the health check for the load\n        balancer. Deprecated and no longer populated as\n        different load balancer backends might have\n        different health checks.\n    backends (MutableSequence[google.cloud.network_management_v1.types.LoadBalancerBackend]):\n        Information for the loadbalancer backends.\n    backend_type (google.cloud.network_management_v1.types.LoadBalancerInfo.BackendType):\n        Type of load balancer's backend\n        configuration.\n    backend_uri (str):\n        Backend configuration URI.",
-      "attributes": {
-        "load_balancer_type": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerInfo.LoadBalancerType",
-          "description": "Type of the load balancer."
-        },
-        "health_check_uri": {
-          "type": "str",
-          "description": "URI of the health check for the load balancer. Deprecated and no longer populated as different load balancer backends might have different health checks."
-        },
-        "backends": {
-          "type": "MutableSequence[google.cloud.network_management_v1.types.LoadBalancerBackend]",
-          "description": "Information for the loadbalancer backends."
-        },
-        "backend_type": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerInfo.BackendType",
-          "description": "Type of load balancer's backend configuration."
-        },
-        "backend_uri": {
-          "type": "str",
-          "description": "Backend configuration URI."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LoadBalancerBackend",
-      "docstring": "For display only. Metadata associated with a specific load\nbalancer backend.\n\nAttributes:\n    display_name (str):\n        Name of a Compute Engine instance or network\n        endpoint.\n    uri (str):\n        URI of a Compute Engine instance or network\n        endpoint.\n    health_check_firewall_state (google.cloud.network_management_v1.types.LoadBalancerBackend.HealthCheckFirewallState):\n        State of the health check firewall\n        configuration.\n    health_check_allowing_firewall_rules (MutableSequence[str]):\n        A list of firewall rule URIs allowing probes\n        from health check IP ranges.\n    health_check_blocking_firewall_rules (MutableSequence[str]):\n        A list of firewall rule URIs blocking probes\n        from health check IP ranges.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Compute Engine instance or network endpoint."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine instance or network endpoint."
-        },
-        "health_check_firewall_state": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerBackend.HealthCheckFirewallState",
-          "description": "State of the health check firewall configuration."
-        },
-        "health_check_allowing_firewall_rules": {
-          "type": "MutableSequence[str]",
-          "description": "A list of firewall rule URIs allowing probes from health check IP ranges."
-        },
-        "health_check_blocking_firewall_rules": {
-          "type": "MutableSequence[str]",
-          "description": "A list of firewall rule URIs blocking probes from health check IP ranges."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VpnGatewayInfo",
-      "docstring": "For display only. Metadata associated with a Compute Engine\nVPN gateway.\n\nAttributes:\n    display_name (str):\n        Name of a VPN gateway.\n    uri (str):\n        URI of a VPN gateway.\n    network_uri (str):\n        URI of a Compute Engine network where the VPN\n        gateway is configured.\n    ip_address (str):\n        IP address of the VPN gateway.\n    vpn_tunnel_uri (str):\n        A VPN tunnel that is associated with this VPN\n        gateway. There may be multiple VPN tunnels\n        configured on a VPN gateway, and only the one\n        relevant to the test is displayed.\n    region (str):\n        Name of a Google Cloud region where this VPN\n        gateway is configured.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a VPN gateway."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a VPN gateway."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine network where the VPN gateway is configured."
-        },
-        "ip_address": {
-          "type": "str",
-          "description": "IP address of the VPN gateway."
-        },
-        "vpn_tunnel_uri": {
-          "type": "str",
-          "description": "A VPN tunnel that is associated with this VPN gateway. There may be multiple VPN tunnels configured on a VPN gateway, and only the one relevant to the test is displayed."
-        },
-        "region": {
-          "type": "str",
-          "description": "Name of a Google Cloud region where this VPN gateway is configured."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VpnTunnelInfo",
-      "docstring": "For display only. Metadata associated with a Compute Engine\nVPN tunnel.\n\nAttributes:\n    display_name (str):\n        Name of a VPN tunnel.\n    uri (str):\n        URI of a VPN tunnel.\n    source_gateway (str):\n        URI of the VPN gateway at local end of the\n        tunnel.\n    remote_gateway (str):\n        URI of a VPN gateway at remote end of the\n        tunnel.\n    remote_gateway_ip (str):\n        Remote VPN gateway's IP address.\n    source_gateway_ip (str):\n        Local VPN gateway's IP address.\n    network_uri (str):\n        URI of a Compute Engine network where the VPN\n        tunnel is configured.\n    region (str):\n        Name of a Google Cloud region where this VPN\n        tunnel is configured.\n    routing_type (google.cloud.network_management_v1.types.VpnTunnelInfo.RoutingType):\n        Type of the routing policy.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a VPN tunnel."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a VPN tunnel."
-        },
-        "source_gateway": {
-          "type": "str",
-          "description": "URI of the VPN gateway at local end of the tunnel."
-        },
-        "remote_gateway": {
-          "type": "str",
-          "description": "URI of a VPN gateway at remote end of the tunnel."
-        },
-        "remote_gateway_ip": {
-          "type": "str",
-          "description": "Remote VPN gateway's IP address."
-        },
-        "source_gateway_ip": {
-          "type": "str",
-          "description": "Local VPN gateway's IP address."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Compute Engine network where the VPN tunnel is configured."
-        },
-        "region": {
-          "type": "str",
-          "description": "Name of a Google Cloud region where this VPN tunnel is configured."
-        },
-        "routing_type": {
-          "type": "google.cloud.network_management_v1.types.VpnTunnelInfo.RoutingType",
-          "description": "Type of the routing policy."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EndpointInfo",
-      "docstring": "For display only. The specification of the endpoints for the\ntest. EndpointInfo is derived from source and destination\nEndpoint and validated by the backend data plane model.\n\nAttributes:\n    source_ip (str):\n        Source IP address.\n    destination_ip (str):\n        Destination IP address.\n    protocol (str):\n        IP protocol in string format, for example:\n        \"TCP\", \"UDP\", \"ICMP\".\n    source_port (int):\n        Source port. Only valid when protocol is TCP\n        or UDP.\n    destination_port (int):\n        Destination port. Only valid when protocol is\n        TCP or UDP.\n    source_network_uri (str):\n        URI of the network where this packet\n        originates from.\n    destination_network_uri (str):\n        URI of the network where this packet is sent\n        to.\n    source_agent_uri (str):\n        URI of the source telemetry agent this packet\n        originates from.",
-      "attributes": {
-        "source_ip": {
-          "type": "str",
-          "description": "Source IP address."
-        },
-        "destination_ip": {
-          "type": "str",
-          "description": "Destination IP address."
-        },
-        "protocol": {
-          "type": "str",
-          "description": "IP protocol in string format, for example: \"TCP\", \"UDP\", \"ICMP\"."
-        },
-        "source_port": {
-          "type": "int",
-          "description": "Source port. Only valid when protocol is TCP or UDP."
-        },
-        "destination_port": {
-          "type": "int",
-          "description": "Destination port. Only valid when protocol is TCP or UDP."
-        },
-        "source_network_uri": {
-          "type": "str",
-          "description": "URI of the network where this packet originates from."
-        },
-        "destination_network_uri": {
-          "type": "str",
-          "description": "URI of the network where this packet is sent to."
-        },
-        "source_agent_uri": {
-          "type": "str",
-          "description": "URI of the source telemetry agent this packet originates from."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DeliverInfo",
-      "docstring": "Details of the final state \"deliver\" and associated resource.\n\nAttributes:\n    target (google.cloud.network_management_v1.types.DeliverInfo.Target):\n        Target type where the packet is delivered to.\n    resource_uri (str):\n        URI of the resource that the packet is\n        delivered to.\n    ip_address (str):\n        IP address of the target (if applicable).\n    storage_bucket (str):\n        Name of the Cloud Storage Bucket the packet\n        is delivered to (if applicable).\n    psc_google_api_target (str):\n        PSC Google API target the packet is delivered\n        to (if applicable).",
-      "attributes": {
-        "target": {
-          "type": "google.cloud.network_management_v1.types.DeliverInfo.Target",
-          "description": "Target type where the packet is delivered to."
-        },
-        "resource_uri": {
-          "type": "str",
-          "description": "URI of the resource that the packet is delivered to."
-        },
-        "ip_address": {
-          "type": "str",
-          "description": "IP address of the target (if applicable)."
-        },
-        "storage_bucket": {
-          "type": "str",
-          "description": "Name of the Cloud Storage Bucket the packet is delivered to (if applicable)."
-        },
-        "psc_google_api_target": {
-          "type": "str",
-          "description": "PSC Google API target the packet is delivered to (if applicable)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ForwardInfo",
-      "docstring": "Details of the final state \"forward\" and associated resource.\n\nAttributes:\n    target (google.cloud.network_management_v1.types.ForwardInfo.Target):\n        Target type where this packet is forwarded\n        to.\n    resource_uri (str):\n        URI of the resource that the packet is\n        forwarded to.\n    ip_address (str):\n        IP address of the target (if applicable).",
-      "attributes": {
-        "target": {
-          "type": "google.cloud.network_management_v1.types.ForwardInfo.Target",
-          "description": "Target type where this packet is forwarded to."
-        },
-        "resource_uri": {
-          "type": "str",
-          "description": "URI of the resource that the packet is forwarded to."
-        },
-        "ip_address": {
-          "type": "str",
-          "description": "IP address of the target (if applicable)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AbortInfo",
-      "docstring": "Details of the final state \"abort\" and associated resource.\n\nAttributes:\n    cause (google.cloud.network_management_v1.types.AbortInfo.Cause):\n        Causes that the analysis is aborted.\n    resource_uri (str):\n        URI of the resource that caused the abort.\n    ip_address (str):\n        IP address that caused the abort.\n    projects_missing_permission (MutableSequence[str]):\n        List of project IDs the user specified in the request but\n        lacks access to. In this case, analysis is aborted with the\n        PERMISSION_DENIED cause.",
-      "attributes": {
-        "cause": {
-          "type": "google.cloud.network_management_v1.types.AbortInfo.Cause",
-          "description": "Causes that the analysis is aborted."
-        },
-        "resource_uri": {
-          "type": "str",
-          "description": "URI of the resource that caused the abort."
-        },
-        "ip_address": {
-          "type": "str",
-          "description": "IP address that caused the abort."
-        },
-        "projects_missing_permission": {
-          "type": "MutableSequence[str]",
-          "description": "List of project IDs the user specified in the request but lacks access to. In this case, analysis is aborted with the PERMISSION_DENIED cause."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DropInfo",
-      "docstring": "Details of the final state \"drop\" and associated resource.\n\nAttributes:\n    cause (google.cloud.network_management_v1.types.DropInfo.Cause):\n        Cause that the packet is dropped.\n    resource_uri (str):\n        URI of the resource that caused the drop.\n    source_ip (str):\n        Source IP address of the dropped packet (if\n        relevant).\n    destination_ip (str):\n        Destination IP address of the dropped packet\n        (if relevant).\n    region (str):\n        Region of the dropped packet (if relevant).",
-      "attributes": {
-        "cause": {
-          "type": "google.cloud.network_management_v1.types.DropInfo.Cause",
-          "description": "Cause that the packet is dropped."
-        },
-        "resource_uri": {
-          "type": "str",
-          "description": "URI of the resource that caused the drop."
-        },
-        "source_ip": {
-          "type": "str",
-          "description": "Source IP address of the dropped packet (if relevant)."
-        },
-        "destination_ip": {
-          "type": "str",
-          "description": "Destination IP address of the dropped packet (if relevant)."
-        },
-        "region": {
-          "type": "str",
-          "description": "Region of the dropped packet (if relevant)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GKEMasterInfo",
-      "docstring": "For display only. Metadata associated with a Google\nKubernetes Engine (GKE) cluster master.\n\nAttributes:\n    cluster_uri (str):\n        URI of a GKE cluster.\n    cluster_network_uri (str):\n        URI of a GKE cluster network.\n    internal_ip (str):\n        Internal IP address of a GKE cluster control\n        plane.\n    external_ip (str):\n        External IP address of a GKE cluster control\n        plane.\n    dns_endpoint (str):\n        DNS endpoint of a GKE cluster control plane.",
-      "attributes": {
-        "cluster_uri": {
-          "type": "str",
-          "description": "URI of a GKE cluster."
-        },
-        "cluster_network_uri": {
-          "type": "str",
-          "description": "URI of a GKE cluster network."
-        },
-        "internal_ip": {
-          "type": "str",
-          "description": "Internal IP address of a GKE cluster control plane."
-        },
-        "external_ip": {
-          "type": "str",
-          "description": "External IP address of a GKE cluster control plane."
-        },
-        "dns_endpoint": {
-          "type": "str",
-          "description": "DNS endpoint of a GKE cluster control plane."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudSQLInstanceInfo",
-      "docstring": "For display only. Metadata associated with a Cloud SQL\ninstance.\n\nAttributes:\n    display_name (str):\n        Name of a Cloud SQL instance.\n    uri (str):\n        URI of a Cloud SQL instance.\n    network_uri (str):\n        URI of a Cloud SQL instance network or empty\n        string if the instance does not have one.\n    internal_ip (str):\n        Internal IP address of a Cloud SQL instance.\n    external_ip (str):\n        External IP address of a Cloud SQL instance.\n    region (str):\n        Region in which the Cloud SQL instance is\n        running.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Cloud SQL instance."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Cloud SQL instance."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Cloud SQL instance network or empty string if the instance does not have one."
-        },
-        "internal_ip": {
-          "type": "str",
-          "description": "Internal IP address of a Cloud SQL instance."
-        },
-        "external_ip": {
-          "type": "str",
-          "description": "External IP address of a Cloud SQL instance."
-        },
-        "region": {
-          "type": "str",
-          "description": "Region in which the Cloud SQL instance is running."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RedisInstanceInfo",
-      "docstring": "For display only. Metadata associated with a Cloud Redis\nInstance.\n\nAttributes:\n    display_name (str):\n        Name of a Cloud Redis Instance.\n    uri (str):\n        URI of a Cloud Redis Instance.\n    network_uri (str):\n        URI of a Cloud Redis Instance network.\n    primary_endpoint_ip (str):\n        Primary endpoint IP address of a Cloud Redis\n        Instance.\n    read_endpoint_ip (str):\n        Read endpoint IP address of a Cloud Redis\n        Instance (if applicable).\n    region (str):\n        Region in which the Cloud Redis Instance is\n        defined.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Cloud Redis Instance."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Cloud Redis Instance."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Cloud Redis Instance network."
-        },
-        "primary_endpoint_ip": {
-          "type": "str",
-          "description": "Primary endpoint IP address of a Cloud Redis Instance."
-        },
-        "read_endpoint_ip": {
-          "type": "str",
-          "description": "Read endpoint IP address of a Cloud Redis Instance (if applicable)."
-        },
-        "region": {
-          "type": "str",
-          "description": "Region in which the Cloud Redis Instance is defined."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RedisClusterInfo",
-      "docstring": "For display only. Metadata associated with a Redis Cluster.\n\nAttributes:\n    display_name (str):\n        Name of a Redis Cluster.\n    uri (str):\n        URI of a Redis Cluster in format\n        \"projects/{project_id}/locations/{location}/clusters/{cluster_id}\".\n    network_uri (str):\n        URI of a Redis Cluster network in format\n        \"projects/{project_id}/global/networks/{network_id}\".\n    discovery_endpoint_ip_address (str):\n        Discovery endpoint IP address of a Redis\n        Cluster.\n    secondary_endpoint_ip_address (str):\n        Secondary endpoint IP address of a Redis\n        Cluster.\n    location (str):\n        Name of the region in which the Redis Cluster\n        is defined. For example, \"us-central1\".",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Redis Cluster."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Redis Cluster in format \"projects/{project_id}/locations/{location}/clusters/{cluster_id}\"."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of a Redis Cluster network in format \"projects/{project_id}/global/networks/{network_id}\"."
-        },
-        "discovery_endpoint_ip_address": {
-          "type": "str",
-          "description": "Discovery endpoint IP address of a Redis Cluster."
-        },
-        "secondary_endpoint_ip_address": {
-          "type": "str",
-          "description": "Secondary endpoint IP address of a Redis Cluster."
-        },
-        "location": {
-          "type": "str",
-          "description": "Name of the region in which the Redis Cluster is defined. For example, \"us-central1\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudFunctionInfo",
-      "docstring": "For display only. Metadata associated with a Cloud Function.\n\nAttributes:\n    display_name (str):\n        Name of a Cloud Function.\n    uri (str):\n        URI of a Cloud Function.\n    location (str):\n        Location in which the Cloud Function is\n        deployed.\n    version_id (int):\n        Latest successfully deployed version id of\n        the Cloud Function.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Cloud Function."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Cloud Function."
-        },
-        "location": {
-          "type": "str",
-          "description": "Location in which the Cloud Function is deployed."
-        },
-        "version_id": {
-          "type": "int",
-          "description": "Latest successfully deployed version id of the Cloud Function."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudRunRevisionInfo",
-      "docstring": "For display only. Metadata associated with a Cloud Run\nrevision.\n\nAttributes:\n    display_name (str):\n        Name of a Cloud Run revision.\n    uri (str):\n        URI of a Cloud Run revision.\n    location (str):\n        Location in which this revision is deployed.\n    service_uri (str):\n        URI of Cloud Run service this revision\n        belongs to.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a Cloud Run revision."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a Cloud Run revision."
-        },
-        "location": {
-          "type": "str",
-          "description": "Location in which this revision is deployed."
-        },
-        "service_uri": {
-          "type": "str",
-          "description": "URI of Cloud Run service this revision belongs to."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AppEngineVersionInfo",
-      "docstring": "For display only. Metadata associated with an App Engine\nversion.\n\nAttributes:\n    display_name (str):\n        Name of an App Engine version.\n    uri (str):\n        URI of an App Engine version.\n    runtime (str):\n        Runtime of the App Engine version.\n    environment (str):\n        App Engine execution environment for a\n        version.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of an App Engine version."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of an App Engine version."
-        },
-        "runtime": {
-          "type": "str",
-          "description": "Runtime of the App Engine version."
-        },
-        "environment": {
-          "type": "str",
-          "description": "App Engine execution environment for a version."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VpcConnectorInfo",
-      "docstring": "For display only. Metadata associated with a VPC connector.\n\nAttributes:\n    display_name (str):\n        Name of a VPC connector.\n    uri (str):\n        URI of a VPC connector.\n    location (str):\n        Location in which the VPC connector is\n        deployed.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "Name of a VPC connector."
-        },
-        "uri": {
-          "type": "str",
-          "description": "URI of a VPC connector."
-        },
-        "location": {
-          "type": "str",
-          "description": "Location in which the VPC connector is deployed."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NatInfo",
-      "docstring": "For display only. Metadata associated with NAT.\n\nAttributes:\n    type_ (google.cloud.network_management_v1.types.NatInfo.Type):\n        Type of NAT.\n    protocol (str):\n        IP protocol in string format, for example:\n        \"TCP\", \"UDP\", \"ICMP\".\n    network_uri (str):\n        URI of the network where NAT translation\n        takes place.\n    old_source_ip (str):\n        Source IP address before NAT translation.\n    new_source_ip (str):\n        Source IP address after NAT translation.\n    old_destination_ip (str):\n        Destination IP address before NAT\n        translation.\n    new_destination_ip (str):\n        Destination IP address after NAT translation.\n    old_source_port (int):\n        Source port before NAT translation. Only\n        valid when protocol is TCP or UDP.\n    new_source_port (int):\n        Source port after NAT translation. Only valid\n        when protocol is TCP or UDP.\n    old_destination_port (int):\n        Destination port before NAT translation. Only\n        valid when protocol is T",
-      "attributes": {
-        "type_": {
-          "type": "google.cloud.network_management_v1.types.NatInfo.Type",
-          "description": "Type of NAT."
-        },
-        "protocol": {
-          "type": "str",
-          "description": "IP protocol in string format, for example: \"TCP\", \"UDP\", \"ICMP\"."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of the network where NAT translation takes place."
-        },
-        "old_source_ip": {
-          "type": "str",
-          "description": "Source IP address before NAT translation."
-        },
-        "new_source_ip": {
-          "type": "str",
-          "description": "Source IP address after NAT translation."
-        },
-        "old_destination_ip": {
-          "type": "str",
-          "description": "Destination IP address before NAT translation."
-        },
-        "new_destination_ip": {
-          "type": "str",
-          "description": "Destination IP address after NAT translation."
-        },
-        "old_source_port": {
-          "type": "int",
-          "description": "Source port before NAT translation. Only valid when protocol is TCP or UDP."
-        },
-        "new_source_port": {
-          "type": "int",
-          "description": "Source port after NAT translation. Only valid when protocol is TCP or UDP."
-        },
-        "old_destination_port": {
-          "type": "int",
-          "description": "Destination port before NAT translation. Only valid when protocol is TCP or UDP."
-        },
-        "new_destination_port": {
-          "type": "int",
-          "description": "Destination port after NAT translation. Only valid when protocol is TCP or UDP."
-        },
-        "router_uri": {
-          "type": "str",
-          "description": "Uri of the Cloud Router. Only valid when type is CLOUD_NAT."
-        },
-        "nat_gateway_name": {
-          "type": "str",
-          "description": "The name of Cloud NAT Gateway. Only valid when type is CLOUD_NAT."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProxyConnectionInfo",
-      "docstring": "For display only. Metadata associated with ProxyConnection.\n\nAttributes:\n    protocol (str):\n        IP protocol in string format, for example:\n        \"TCP\", \"UDP\", \"ICMP\".\n    old_source_ip (str):\n        Source IP address of an original connection.\n    new_source_ip (str):\n        Source IP address of a new connection.\n    old_destination_ip (str):\n        Destination IP address of an original\n        connection\n    new_destination_ip (str):\n        Destination IP address of a new connection.\n    old_source_port (int):\n        Source port of an original connection. Only\n        valid when protocol is TCP or UDP.\n    new_source_port (int):\n        Source port of a new connection. Only valid\n        when protocol is TCP or UDP.\n    old_destination_port (int):\n        Destination port of an original connection.\n        Only valid when protocol is TCP or UDP.\n    new_destination_port (int):\n        Destination port of a new connection. Only\n        valid when protocol is TCP or UDP.\n    subnet_uri (str):\n     ",
-      "attributes": {
-        "protocol": {
-          "type": "str",
-          "description": "IP protocol in string format, for example: \"TCP\", \"UDP\", \"ICMP\"."
-        },
-        "old_source_ip": {
-          "type": "str",
-          "description": "Source IP address of an original connection."
-        },
-        "new_source_ip": {
-          "type": "str",
-          "description": "Source IP address of a new connection."
-        },
-        "old_destination_ip": {
-          "type": "str",
-          "description": "Destination IP address of an original connection"
-        },
-        "new_destination_ip": {
-          "type": "str",
-          "description": "Destination IP address of a new connection."
-        },
-        "old_source_port": {
-          "type": "int",
-          "description": "Source port of an original connection. Only valid when protocol is TCP or UDP."
-        },
-        "new_source_port": {
-          "type": "int",
-          "description": "Source port of a new connection. Only valid when protocol is TCP or UDP."
-        },
-        "old_destination_port": {
-          "type": "int",
-          "description": "Destination port of an original connection. Only valid when protocol is TCP or UDP."
-        },
-        "new_destination_port": {
-          "type": "int",
-          "description": "Destination port of a new connection. Only valid when protocol is TCP or UDP."
-        },
-        "subnet_uri": {
-          "type": "str",
-          "description": "Uri of proxy subnet."
-        },
-        "network_uri": {
-          "type": "str",
-          "description": "URI of the network where connection is proxied."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LoadBalancerBackendInfo",
-      "docstring": "For display only. Metadata associated with the load balancer\nbackend.\n\nAttributes:\n    name (str):\n        Display name of the backend. For example, it\n        might be an instance name for the instance group\n        backends, or an IP address and port for zonal\n        network endpoint group backends.\n    instance_uri (str):\n        URI of the backend instance (if applicable).\n        Populated for instance group backends, and zonal\n        NEG backends.\n    backend_service_uri (str):\n        URI of the backend service this backend\n        belongs to (if applicable).\n    instance_group_uri (str):\n        URI of the instance group this backend\n        belongs to (if applicable).\n    network_endpoint_group_uri (str):\n        URI of the network endpoint group this\n        backend belongs to (if applicable).\n    backend_bucket_uri (str):\n        URI of the backend bucket this backend\n        targets (if applicable).\n    psc_service_attachment_uri (str):\n        URI of the PSC service attachment this PSC\n        ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Display name of the backend. For example, it might be an instance name for the instance group backends, or an IP address and port for zonal network endpoint group backends."
-        },
-        "instance_uri": {
-          "type": "str",
-          "description": "URI of the backend instance (if applicable). Populated for instance group backends, and zonal NEG backends."
-        },
-        "backend_service_uri": {
-          "type": "str",
-          "description": "URI of the backend service this backend belongs to (if applicable)."
-        },
-        "instance_group_uri": {
-          "type": "str",
-          "description": "URI of the instance group this backend belongs to (if applicable)."
-        },
-        "network_endpoint_group_uri": {
-          "type": "str",
-          "description": "URI of the network endpoint group this backend belongs to (if applicable)."
-        },
-        "backend_bucket_uri": {
-          "type": "str",
-          "description": "URI of the backend bucket this backend targets (if applicable)."
-        },
-        "psc_service_attachment_uri": {
-          "type": "str",
-          "description": "URI of the PSC service attachment this PSC NEG backend targets (if applicable)."
-        },
-        "psc_google_api_target": {
-          "type": "str",
-          "description": "PSC Google API target this PSC NEG backend targets (if applicable)."
-        },
-        "health_check_uri": {
-          "type": "str",
-          "description": "URI of the health check attached to this backend (if applicable)."
-        },
-        "health_check_firewalls_config_state": {
-          "type": "google.cloud.network_management_v1.types.LoadBalancerBackendInfo.HealthCheckFirewallsConfigState",
-          "description": "Output only. Health check firewalls configuration state for the backend. This is a result of the static firewall analysis (verifying that health check traffic from required IP ranges to the backend is allowed or not). The backend might still be unhealthy even if these firewalls are configured. Please refer to the documentation for more information:  https://cloud.google.com/load-balancing/docs/firewall-rules"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StorageBucketInfo",
-      "docstring": "For display only. Metadata associated with Storage Bucket.\n\nAttributes:\n    bucket (str):\n        Cloud Storage Bucket name.",
-      "attributes": {
-        "bucket": {
-          "type": "str",
-          "description": "Cloud Storage Bucket name."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ServerlessNegInfo",
-      "docstring": "For display only. Metadata associated with the serverless\nnetwork endpoint group backend.\n\nAttributes:\n    neg_uri (str):\n        URI of the serverless network endpoint group.",
-      "attributes": {
-        "neg_uri": {
-          "type": "str",
-          "description": "URI of the serverless network endpoint group."
-        }
+      "description": "Request for the ``RerunConnectivityTest`` method.\n\nAttributes:\n    name (str):\n        Required. Connectivity Test resource name using the form:\n        ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Connectivity Test resource name using the form: ``projects/{project_id}/locations/global/connectivityTests/{test_id}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     }
   ]

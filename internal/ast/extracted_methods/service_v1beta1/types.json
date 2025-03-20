@@ -1,1480 +1,689 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-orchestration-airflow\\google\\cloud\\orchestration\\airflow\\service_v1beta1\\types\\environments.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateEnvironmentRequest",
-      "docstring": "Create a new environment.\n\nAttributes:\n    parent (str):\n        The parent must be of the form\n        \"projects/{projectId}/locations/{locationId}\".\n    environment (google.cloud.orchestration.airflow.service_v1beta1.types.Environment):\n        The environment to create.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "The parent must be of the form \"projects/{projectId}/locations/{locationId}\"."
-        },
-        "environment": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.Environment",
-          "description": "The environment to create."
+      "description": "Create a new environment.\n\nAttributes:\n    parent (str):\n        The parent must be of the form\n        \"projects/{projectId}/locations/{locationId}\".\n    environment (google.cloud.orchestration.airflow.service_v1beta1.types.Environment):\n        The environment to create.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "The parent must be of the form \"projects/{projectId}/locations/{locationId}\".",
+            "type": "string"
+          },
+          "environment": {
+            "description": "The environment to create.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Immutable. Full name of this resource, in the format ``users/{owner_email}/environments/{environment_id}``. ``{owner_email}`` is the email address of the user to whom this environment belongs, and ``{environment_id}`` is the identifier of this environment. For example, ``users/someone@example.com/environments/default``.",
+                "type": "string"
+              },
+              "id": {
+                "description": "Output only. The environment's identifier, unique among the user's environments.",
+                "type": "string"
+              },
+              "docker_image": {
+                "description": "Required. Immutable. Full path to the Docker image used to run this environment, e.g. \"gcr.io/dev-con/cloud-devshell:latest\".",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. Current execution state of this environment.",
+                "type": "object",
+                "reference": "google.cloud.shell_v1.types.Environment.State"
+              },
+              "web_host": {
+                "description": "Output only. Host to which clients can connect to initiate HTTPS or WSS connections with the environment.",
+                "type": "string"
+              },
+              "ssh_username": {
+                "description": "Output only. Username that clients should use when initiating SSH sessions with the environment.",
+                "type": "string"
+              },
+              "ssh_host": {
+                "description": "Output only. Host to which clients can connect to initiate SSH sessions with the environment.",
+                "type": "string"
+              },
+              "ssh_port": {
+                "description": "Output only. Port to which clients can connect to initiate SSH sessions with the environment.",
+                "type": "integer"
+              },
+              "public_keys": {
+                "description": "Output only. Public keys associated with the environment. Clients can connect to this environment via SSH only if they possess a private key corresponding to at least one of these public keys. Keys can be added to or removed from the environment using the AddPublicKey and RemovePublicKey methods.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "docker_image"
+            ]
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetEnvironmentRequest",
-      "docstring": "Get an environment.\n\nAttributes:\n    name (str):\n        The resource name of the environment to get,\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name of the environment to get, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Get an environment.\n\nAttributes:\n    name (str):\n        The resource name of the environment to get,\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The resource name of the environment to get, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListEnvironmentsRequest",
-      "docstring": "List environments in a project and location.\n\nAttributes:\n    parent (str):\n        List environments in the given project and\n        location, in the form:\n        \"projects/{projectId}/locations/{locationId}\".\n    page_size (int):\n        The maximum number of environments to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "List environments in the given project and location, in the form: \"projects/{projectId}/locations/{locationId}\"."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of environments to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The next_page_token value returned from a previous List request, if any."
+      "description": "List environments in a project and location.\n\nAttributes:\n    parent (str):\n        List environments in the given project and\n        location, in the form:\n        \"projects/{projectId}/locations/{locationId}\".\n    page_size (int):\n        The maximum number of environments to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "List environments in the given project and location, in the form: \"projects/{projectId}/locations/{locationId}\".",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of environments to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "ListEnvironmentsResponse",
-      "docstring": "The environments in a project and location.\n\nAttributes:\n    environments (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.Environment]):\n        The list of environments returned by a\n        ListEnvironmentsRequest.\n    next_page_token (str):\n        The page token used to query for the next\n        page if one exists.",
-      "attributes": {
-        "environments": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.Environment]",
-          "description": "The list of environments returned by a ListEnvironmentsRequest."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The page token used to query for the next page if one exists."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteEnvironmentRequest",
-      "docstring": "Delete an environment.\n\nAttributes:\n    name (str):\n        The environment to delete, in the form:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The environment to delete, in the form:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Delete an environment.\n\nAttributes:\n    name (str):\n        The environment to delete, in the form:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The environment to delete, in the form:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateEnvironmentRequest",
-      "docstring": "Update an environment.\n\nAttributes:\n    name (str):\n        The relative resource name of the environment\n        to update, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    environment (google.cloud.orchestration.airflow.service_v1beta1.types.Environment):\n        A patch environment. Fields specified by the ``updateMask``\n        will be copied from the patch environment into the\n        environment under update.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. A comma-separated list of paths, relative to\n        ``Environment``, of fields to update. For example, to set\n        the version of scikit-learn to install in the environment to\n        0.19.0 and to remove an existing installation of argparse,\n        the ``updateMask`` parameter would include the following two\n        ``paths`` values:\n        \"config.softwareConfig.pypiPackages.scikit-learn\" and\n        \"config.softwareConfig.pypiPackages.argparse\". The included\n   ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The relative resource name of the environment to update, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Update an environment.\n\nAttributes:\n    name (str):\n        The relative resource name of the environment\n        to update, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    environment (google.cloud.orchestration.airflow.service_v1beta1.types.Environment):\n        A patch environment. Fields specified by the ``updateMask``\n        will be copied from the patch environment into the\n        environment under update.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. A comma-separated list of paths, relative to\n        ``Environment``, of fields to update. For example, to set\n        the version of scikit-learn to install in the environment to\n        0.19.0 and to remove an existing installation of argparse,\n        the ``updateMask`` parameter would include the following two\n        ``paths`` values:\n        \"config.softwareConfig.pypiPackages.scikit-learn\" and\n        \"config.softwareConfig.pypiPackages.argparse\". The included\n   ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The relative resource name of the environment to update, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "environment": {
+            "description": "A patch environment. Fields specified by the ``updateMask`` will be copied from the patch environment into the environment under update.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Immutable. Full name of this resource, in the format ``users/{owner_email}/environments/{environment_id}``. ``{owner_email}`` is the email address of the user to whom this environment belongs, and ``{environment_id}`` is the identifier of this environment. For example, ``users/someone@example.com/environments/default``.",
+                "type": "string"
+              },
+              "id": {
+                "description": "Output only. The environment's identifier, unique among the user's environments.",
+                "type": "string"
+              },
+              "docker_image": {
+                "description": "Required. Immutable. Full path to the Docker image used to run this environment, e.g. \"gcr.io/dev-con/cloud-devshell:latest\".",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. Current execution state of this environment.",
+                "type": "object",
+                "reference": "google.cloud.shell_v1.types.Environment.State"
+              },
+              "web_host": {
+                "description": "Output only. Host to which clients can connect to initiate HTTPS or WSS connections with the environment.",
+                "type": "string"
+              },
+              "ssh_username": {
+                "description": "Output only. Username that clients should use when initiating SSH sessions with the environment.",
+                "type": "string"
+              },
+              "ssh_host": {
+                "description": "Output only. Host to which clients can connect to initiate SSH sessions with the environment.",
+                "type": "string"
+              },
+              "ssh_port": {
+                "description": "Output only. Port to which clients can connect to initiate SSH sessions with the environment.",
+                "type": "integer"
+              },
+              "public_keys": {
+                "description": "Output only. Public keys associated with the environment. Clients can connect to this environment via SSH only if they possess a private key corresponding to at least one of these public keys. Keys can be added to or removed from the environment using the AddPublicKey and RemovePublicKey methods.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "docker_image"
+            ]
+          },
+          "update_mask": {
+            "description": "Required. A comma-separated list of paths, relative to ``Environment``, of fields to update. For example, to set the version of scikit-learn to install in the environment to 0.19.0 and to remove an existing installation of argparse, the ``updateMask`` parameter would include the following two ``paths`` values: \"config.softwareConfig.pypiPackages.scikit-learn\" and \"config.softwareConfig.pypiPackages.argparse\". The included patch environment would specify the scikit-learn version as follows:  ::  { \"config\":{ \"softwareConfig\":{ \"pypiPackages\":{ \"scikit-learn\":\"==0.19.0\" } } } }  Note that in the above example, any existing PyPI packages other than scikit-learn and argparse will be unaffected.  Only one update type may be included in a single request's ``updateMask``. For example, one cannot update both the PyPI packages and labels in the same request. However, it is possible to update multiple members of a map field simultaneously in the same request. For example, to set the labels \"label1\" and \"label2\" while clearing \"label3\" (assuming it already exists), one can provide the paths \"labels.label1\", \"labels.label2\", and \"labels.label3\" and populate the patch environment as follows:  ::  { \"labels\":{ \"label1\":\"new-label1-value\" \"label2\":\"new-label2-value\" } }  Note that in the above example, any existing labels that are not included in the ``updateMask`` will be unaffected.  It is also possible to replace an entire map field by providing the map field's path in the ``updateMask``. The new value of the field will be that which is provided in the patch environment. For example, to delete all pre-existing user-specified PyPI packages and install botocore at version 1.7.14, the ``updateMask`` would contain the path \"config.softwareConfig.pypiPackages\", and the patch environment would be the following:  ::  { \"config\":{ \"softwareConfig\":{ \"pypiPackages\":{ \"botocore\":\"==1.7.14\" } } } }  **Note:** Only the following fields can be updated:  -  ``config.softwareConfig.pypiPackages``  -  Replace all custom custom PyPI packages. If a replacement package map is not included in ``environment``, all custom PyPI packages are cleared. It is an error to provide both this mask and a mask specifying an individual package.  -  ``config.softwareConfig.pypiPackages.``\\ packagename  -  Update the custom PyPI package *packagename*, preserving other packages. To delete the package, include it in ``updateMask``, and omit the mapping for it in ``environment.config.softwareConfig.pypiPackages``. It is an error to provide both a mask of this form and the ``config.softwareConfig.pypiPackages`` mask.  -  ``labels``  -  Replace all environment labels. If a replacement labels map is not included in ``environment``, all labels are cleared. It is an error to provide both this mask and a mask specifying one or more individual labels.  -  ``labels.``\\ labelName  -  Set the label named *labelName*, while preserving other labels. To delete the label, include it in ``updateMask`` and omit its mapping in ``environment.labels``. It is an error to provide both a mask of this form and the ``labels`` mask.  -  ``config.nodeCount``  -  Horizontally scale the number of nodes in the environment. An integer greater than or equal to 3 must be provided in the ``config.nodeCount`` field. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.webServerNetworkAccessControl``  -  Replace the environment's current WebServerNetworkAccessControl.  -  ``config.softwareConfig.airflowConfigOverrides``  -  Replace all Apache Airflow config overrides. If a replacement config overrides map is not included in ``environment``, all config overrides are cleared. It is an error to provide both this mask and a mask specifying one or more individual config overrides.  -  ``config.softwareConfig.airflowConfigOverrides.``\\ section-name  -  Override the Apache Airflow config property *name* in the section named *section*, preserving other properties. To delete the property override, include it in ``updateMask`` and omit its mapping in ``environment.config.softwareConfig.airflowConfigOverrides``. It is an error to provide both a mask of this form and the ``config.softwareConfig.airflowConfigOverrides`` mask.  -  ``config.softwareConfig.envVariables``  -  Replace all environment variables. If a replacement environment variable map is not included in ``environment``, all custom environment variables are cleared.  -  ``config.softwareConfig.imageVersion``  -  Upgrade the version of the environment in-place. Refer to ``SoftwareConfig.image_version`` for information on how to format the new image version. Additionally, the new image version cannot effect a version downgrade, and must match the current image version's Composer and Airflow major versions. Consult the `Cloud Composer version list </composer/docs/concepts/versioning/composer-versions>`__ for valid values.  -  ``config.softwareConfig.schedulerCount``  -  Horizontally scale the number of schedulers in Airflow. A positive integer not greater than the number of nodes must be provided in the ``config.softwareConfig.schedulerCount`` field. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-2.*.*.  -  ``config.softwareConfig.cloudDataLineageIntegration``  -  Configuration for Cloud Data Lineage integration.  -  ``config.databaseConfig.machineType``  -  Cloud SQL machine type used by Airflow database. It has to be one of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.webServerConfig.machineType``  -  Machine type on which Airflow web server is running. It has to be one of: composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.maintenanceWindow``  -  Maintenance window during which Cloud Composer components may be under maintenance.  -  ``config.workloadsConfig``  -  The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer.  -  ``config.environmentSize``  -  The size of the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          }
         },
-        "environment": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.Environment",
-          "description": "A patch environment. Fields specified by the ``updateMask`` will be copied from the patch environment into the environment under update."
-        },
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. A comma-separated list of paths, relative to ``Environment``, of fields to update. For example, to set the version of scikit-learn to install in the environment to 0.19.0 and to remove an existing installation of argparse, the ``updateMask`` parameter would include the following two ``paths`` values: \"config.softwareConfig.pypiPackages.scikit-learn\" and \"config.softwareConfig.pypiPackages.argparse\". The included patch environment would specify the scikit-learn version as follows:  ::  { \"config\":{ \"softwareConfig\":{ \"pypiPackages\":{ \"scikit-learn\":\"==0.19.0\" } } } }  Note that in the above example, any existing PyPI packages other than scikit-learn and argparse will be unaffected.  Only one update type may be included in a single request's ``updateMask``. For example, one cannot update both the PyPI packages and labels in the same request. However, it is possible to update multiple members of a map field simultaneously in the same request. For example, to set the labels \"label1\" and \"label2\" while clearing \"label3\" (assuming it already exists), one can provide the paths \"labels.label1\", \"labels.label2\", and \"labels.label3\" and populate the patch environment as follows:  ::  { \"labels\":{ \"label1\":\"new-label1-value\" \"label2\":\"new-label2-value\" } }  Note that in the above example, any existing labels that are not included in the ``updateMask`` will be unaffected.  It is also possible to replace an entire map field by providing the map field's path in the ``updateMask``. The new value of the field will be that which is provided in the patch environment. For example, to delete all pre-existing user-specified PyPI packages and install botocore at version 1.7.14, the ``updateMask`` would contain the path \"config.softwareConfig.pypiPackages\", and the patch environment would be the following:  ::  { \"config\":{ \"softwareConfig\":{ \"pypiPackages\":{ \"botocore\":\"==1.7.14\" } } } }  **Note:** Only the following fields can be updated:  -  ``config.softwareConfig.pypiPackages``  -  Replace all custom custom PyPI packages. If a replacement package map is not included in ``environment``, all custom PyPI packages are cleared. It is an error to provide both this mask and a mask specifying an individual package.  -  ``config.softwareConfig.pypiPackages.``\\ packagename  -  Update the custom PyPI package *packagename*, preserving other packages. To delete the package, include it in ``updateMask``, and omit the mapping for it in ``environment.config.softwareConfig.pypiPackages``. It is an error to provide both a mask of this form and the ``config.softwareConfig.pypiPackages`` mask.  -  ``labels``  -  Replace all environment labels. If a replacement labels map is not included in ``environment``, all labels are cleared. It is an error to provide both this mask and a mask specifying one or more individual labels.  -  ``labels.``\\ labelName  -  Set the label named *labelName*, while preserving other labels. To delete the label, include it in ``updateMask`` and omit its mapping in ``environment.labels``. It is an error to provide both a mask of this form and the ``labels`` mask.  -  ``config.nodeCount``  -  Horizontally scale the number of nodes in the environment. An integer greater than or equal to 3 must be provided in the ``config.nodeCount`` field. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.webServerNetworkAccessControl``  -  Replace the environment's current WebServerNetworkAccessControl.  -  ``config.softwareConfig.airflowConfigOverrides``  -  Replace all Apache Airflow config overrides. If a replacement config overrides map is not included in ``environment``, all config overrides are cleared. It is an error to provide both this mask and a mask specifying one or more individual config overrides.  -  ``config.softwareConfig.airflowConfigOverrides.``\\ section-name  -  Override the Apache Airflow config property *name* in the section named *section*, preserving other properties. To delete the property override, include it in ``updateMask`` and omit its mapping in ``environment.config.softwareConfig.airflowConfigOverrides``. It is an error to provide both a mask of this form and the ``config.softwareConfig.airflowConfigOverrides`` mask.  -  ``config.softwareConfig.envVariables``  -  Replace all environment variables. If a replacement environment variable map is not included in ``environment``, all custom environment variables are cleared.  -  ``config.softwareConfig.imageVersion``  -  Upgrade the version of the environment in-place. Refer to ``SoftwareConfig.image_version`` for information on how to format the new image version. Additionally, the new image version cannot effect a version downgrade, and must match the current image version's Composer and Airflow major versions. Consult the `Cloud Composer version list </composer/docs/concepts/versioning/composer-versions>`__ for valid values.  -  ``config.softwareConfig.schedulerCount``  -  Horizontally scale the number of schedulers in Airflow. A positive integer not greater than the number of nodes must be provided in the ``config.softwareConfig.schedulerCount`` field. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-2.*.*.  -  ``config.softwareConfig.cloudDataLineageIntegration``  -  Configuration for Cloud Data Lineage integration.  -  ``config.databaseConfig.machineType``  -  Cloud SQL machine type used by Airflow database. It has to be one of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.webServerConfig.machineType``  -  Machine type on which Airflow web server is running. It has to be one of: composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.maintenanceWindow``  -  Maintenance window during which Cloud Composer components may be under maintenance.  -  ``config.workloadsConfig``  -  The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer.  -  ``config.environmentSize``  -  The size of the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer."
-        }
+        "required": [
+          "update_mask"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "RestartWebServerRequest",
-      "docstring": "Restart Airflow web server.\n\nAttributes:\n    name (str):\n        The resource name of the environment to\n        restart the web server for, in the form:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name of the environment to restart the web server for, in the form:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Restart Airflow web server.\n\nAttributes:\n    name (str):\n        The resource name of the environment to\n        restart the web server for, in the form:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The resource name of the environment to restart the web server for, in the form:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ExecuteAirflowCommandRequest",
-      "docstring": "Execute Airflow Command request.\n\nAttributes:\n    environment (str):\n        The resource name of the environment in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    command (str):\n        Airflow command.\n    subcommand (str):\n        Airflow subcommand.\n    parameters (MutableSequence[str]):\n        Parameters for the Airflow command/subcommand as an array of\n        arguments. It may contain positional arguments like\n        ``[\"my-dag-id\"]``, key-value parameters like\n        ``[\"--foo=bar\"]`` or ``[\"--foo\",\"bar\"]``, or other flags\n        like ``[\"-f\"]``.",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "The resource name of the environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        },
-        "command": {
-          "type": "str",
-          "description": "Airflow command."
-        },
-        "subcommand": {
-          "type": "str",
-          "description": "Airflow subcommand."
-        },
-        "parameters": {
-          "type": "MutableSequence[str]",
-          "description": "Parameters for the Airflow command/subcommand as an array of arguments. It may contain positional arguments like ``[\"my-dag-id\"]``, key-value parameters like ``[\"--foo=bar\"]`` or ``[\"--foo\",\"bar\"]``, or other flags like ``[\"-f\"]``."
+      "description": "Execute Airflow Command request.\n\nAttributes:\n    environment (str):\n        The resource name of the environment in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    command (str):\n        Airflow command.\n    subcommand (str):\n        Airflow subcommand.\n    parameters (MutableSequence[str]):\n        Parameters for the Airflow command/subcommand as an array of\n        arguments. It may contain positional arguments like\n        ``[\"my-dag-id\"]``, key-value parameters like\n        ``[\"--foo=bar\"]`` or ``[\"--foo\",\"bar\"]``, or other flags\n        like ``[\"-f\"]``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "The resource name of the environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "command": {
+            "description": "Airflow command.",
+            "type": "string"
+          },
+          "subcommand": {
+            "description": "Airflow subcommand.",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "Parameters for the Airflow command/subcommand as an array of arguments. It may contain positional arguments like ``[\"my-dag-id\"]``, key-value parameters like ``[\"--foo=bar\"]`` or ``[\"--foo\",\"bar\"]``, or other flags like ``[\"-f\"]``.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "ExecuteAirflowCommandResponse",
-      "docstring": "Response to ExecuteAirflowCommandRequest.\n\nAttributes:\n    execution_id (str):\n        The unique ID of the command execution for\n        polling.\n    pod (str):\n        The name of the pod where the command is\n        executed.\n    pod_namespace (str):\n        The namespace of the pod where the command is\n        executed.\n    error (str):\n        Error message. Empty if there was no error.",
-      "attributes": {
-        "execution_id": {
-          "type": "str",
-          "description": "The unique ID of the command execution for polling."
-        },
-        "pod": {
-          "type": "str",
-          "description": "The name of the pod where the command is executed."
-        },
-        "pod_namespace": {
-          "type": "str",
-          "description": "The namespace of the pod where the command is executed."
-        },
-        "error": {
-          "type": "str",
-          "description": "Error message. Empty if there was no error."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "StopAirflowCommandRequest",
-      "docstring": "Stop Airflow Command request.\n\nAttributes:\n    environment (str):\n        The resource name of the environment in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    execution_id (str):\n        The unique ID of the command execution.\n    pod (str):\n        The name of the pod where the command is\n        executed.\n    pod_namespace (str):\n        The namespace of the pod where the command is\n        executed.\n    force (bool):\n        If true, the execution is terminated\n        forcefully (SIGKILL). If false, the execution is\n        stopped gracefully, giving it time for cleanup.",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "The resource name of the environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        },
-        "execution_id": {
-          "type": "str",
-          "description": "The unique ID of the command execution."
-        },
-        "pod": {
-          "type": "str",
-          "description": "The name of the pod where the command is executed."
-        },
-        "pod_namespace": {
-          "type": "str",
-          "description": "The namespace of the pod where the command is executed."
-        },
-        "force": {
-          "type": "bool",
-          "description": "If true, the execution is terminated forcefully (SIGKILL). If false, the execution is stopped gracefully, giving it time for cleanup."
+      "description": "Stop Airflow Command request.\n\nAttributes:\n    environment (str):\n        The resource name of the environment in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    execution_id (str):\n        The unique ID of the command execution.\n    pod (str):\n        The name of the pod where the command is\n        executed.\n    pod_namespace (str):\n        The namespace of the pod where the command is\n        executed.\n    force (bool):\n        If true, the execution is terminated\n        forcefully (SIGKILL). If false, the execution is\n        stopped gracefully, giving it time for cleanup.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "The resource name of the environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "The unique ID of the command execution.",
+            "type": "string"
+          },
+          "pod": {
+            "description": "The name of the pod where the command is executed.",
+            "type": "string"
+          },
+          "pod_namespace": {
+            "description": "The namespace of the pod where the command is executed.",
+            "type": "string"
+          },
+          "force": {
+            "description": "If true, the execution is terminated forcefully (SIGKILL). If false, the execution is stopped gracefully, giving it time for cleanup.",
+            "type": "boolean"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "StopAirflowCommandResponse",
-      "docstring": "Response to StopAirflowCommandRequest.\n\nAttributes:\n    is_done (bool):\n        Whether the execution is still running.\n    output (MutableSequence[str]):\n        Output message from stopping execution\n        request.",
-      "attributes": {
-        "is_done": {
-          "type": "bool",
-          "description": "Whether the execution is still running."
-        },
-        "output": {
-          "type": "MutableSequence[str]",
-          "description": "Output message from stopping execution request."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "PollAirflowCommandRequest",
-      "docstring": "Poll Airflow Command request.\n\nAttributes:\n    environment (str):\n        The resource name of the environment in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    execution_id (str):\n        The unique ID of the command execution.\n    pod (str):\n        The name of the pod where the command is\n        executed.\n    pod_namespace (str):\n        The namespace of the pod where the command is\n        executed.\n    next_line_number (int):\n        Line number from which new logs should be\n        fetched.",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "The resource name of the environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        },
-        "execution_id": {
-          "type": "str",
-          "description": "The unique ID of the command execution."
-        },
-        "pod": {
-          "type": "str",
-          "description": "The name of the pod where the command is executed."
-        },
-        "pod_namespace": {
-          "type": "str",
-          "description": "The namespace of the pod where the command is executed."
-        },
-        "next_line_number": {
-          "type": "int",
-          "description": "Line number from which new logs should be fetched."
+      "description": "Poll Airflow Command request.\n\nAttributes:\n    environment (str):\n        The resource name of the environment in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    execution_id (str):\n        The unique ID of the command execution.\n    pod (str):\n        The name of the pod where the command is\n        executed.\n    pod_namespace (str):\n        The namespace of the pod where the command is\n        executed.\n    next_line_number (int):\n        Line number from which new logs should be\n        fetched.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "The resource name of the environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "The unique ID of the command execution.",
+            "type": "string"
+          },
+          "pod": {
+            "description": "The name of the pod where the command is executed.",
+            "type": "string"
+          },
+          "pod_namespace": {
+            "description": "The namespace of the pod where the command is executed.",
+            "type": "string"
+          },
+          "next_line_number": {
+            "description": "Line number from which new logs should be fetched.",
+            "type": "integer"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "PollAirflowCommandResponse",
-      "docstring": "Response to PollAirflowCommandRequest.\n\nAttributes:\n    output (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.PollAirflowCommandResponse.Line]):\n        Output from the command execution. It may not\n        contain the full output and the caller may need\n        to poll for more lines.\n    output_end (bool):\n        Whether the command execution has finished\n        and there is no more output.\n    exit_info (google.cloud.orchestration.airflow.service_v1beta1.types.PollAirflowCommandResponse.ExitInfo):\n        The result exit status of the command.",
-      "attributes": {
-        "output": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.PollAirflowCommandResponse.Line]",
-          "description": "Output from the command execution. It may not contain the full output and the caller may need to poll for more lines."
-        },
-        "output_end": {
-          "type": "bool",
-          "description": "Whether the command execution has finished and there is no more output."
-        },
-        "exit_info": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.PollAirflowCommandResponse.ExitInfo",
-          "description": "The result exit status of the command."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateUserWorkloadsSecretRequest",
-      "docstring": "Create user workloads Secret request.\n\nAttributes:\n    parent (str):\n        Required. The environment name to create a\n        Secret for, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    user_workloads_secret (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret):\n        Required. User workloads Secret to create.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The environment name to create a Secret for, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Create user workloads Secret request.\n\nAttributes:\n    parent (str):\n        Required. The environment name to create a\n        Secret for, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    user_workloads_secret (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret):\n        Required. User workloads Secret to create.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The environment name to create a Secret for, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "user_workloads_secret": {
+            "description": "Required. User workloads Secret to create.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
+                "type": "string"
+              },
+              "data": {
+                "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         },
-        "user_workloads_secret": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret",
-          "description": "Required. User workloads Secret to create."
-        }
+        "required": [
+          "parent",
+          "user_workloads_secret"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetUserWorkloadsSecretRequest",
-      "docstring": "Get user workloads Secret request.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Secret to\n        get, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Secret to get, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\"."
-        }
+      "description": "Get user workloads Secret request.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Secret to\n        get, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Secret to get, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListUserWorkloadsSecretsRequest",
-      "docstring": "List user workloads Secrets request.\n\nAttributes:\n    parent (str):\n        Required. List Secrets in the given\n        environment, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    page_size (int):\n        Optional. The maximum number of Secrets to\n        return.\n    page_token (str):\n        Optional. The next_page_token value returned from a previous\n        List request, if any.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. List Secrets in the given environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "List user workloads Secrets request.\n\nAttributes:\n    parent (str):\n        Required. List Secrets in the given\n        environment, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    page_size (int):\n        Optional. The maximum number of Secrets to\n        return.\n    page_token (str):\n        Optional. The next_page_token value returned from a previous\n        List request, if any.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. List Secrets in the given environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of Secrets to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of Secrets to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. The next_page_token value returned from a previous List request, if any."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateUserWorkloadsSecretRequest",
-      "docstring": "Update user workloads Secret request.\n\nAttributes:\n    user_workloads_secret (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret):\n        Optional. User workloads Secret to override.",
-      "attributes": {
-        "user_workloads_secret": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret",
-          "description": "Optional. User workloads Secret to override."
+      "description": "Update user workloads Secret request.\n\nAttributes:\n    user_workloads_secret (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret):\n        Optional. User workloads Secret to override.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "user_workloads_secret": {
+            "description": "Optional. User workloads Secret to override.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
+                "type": "string"
+              },
+              "data": {
+                "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteUserWorkloadsSecretRequest",
-      "docstring": "Delete user workloads Secret request.\n\nAttributes:\n    name (str):\n        Required. The Secret to delete, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The Secret to delete, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\"."
-        }
+      "description": "Delete user workloads Secret request.\n\nAttributes:\n    name (str):\n        Required. The Secret to delete, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The Secret to delete, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateUserWorkloadsConfigMapRequest",
-      "docstring": "Create user workloads ConfigMap request.\n\nAttributes:\n    parent (str):\n        Required. The environment name to create a\n        ConfigMap for, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    user_workloads_config_map (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap):\n        Required. User workloads ConfigMap to create.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The environment name to create a ConfigMap for, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Create user workloads ConfigMap request.\n\nAttributes:\n    parent (str):\n        Required. The environment name to create a\n        ConfigMap for, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    user_workloads_config_map (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap):\n        Required. User workloads ConfigMap to create.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The environment name to create a ConfigMap for, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "user_workloads_config_map": {
+            "description": "Required. User workloads ConfigMap to create.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
+                "type": "string"
+              },
+              "data": {
+                "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         },
-        "user_workloads_config_map": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap",
-          "description": "Required. User workloads ConfigMap to create."
-        }
+        "required": [
+          "parent",
+          "user_workloads_config_map"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetUserWorkloadsConfigMapRequest",
-      "docstring": "Get user workloads ConfigMap request.\n\nAttributes:\n    name (str):\n        Required. The resource name of the ConfigMap\n        to get, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the ConfigMap to get, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\"."
-        }
+      "description": "Get user workloads ConfigMap request.\n\nAttributes:\n    name (str):\n        Required. The resource name of the ConfigMap\n        to get, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the ConfigMap to get, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListUserWorkloadsConfigMapsRequest",
-      "docstring": "List user workloads ConfigMaps request.\n\nAttributes:\n    parent (str):\n        Required. List ConfigMaps in the given\n        environment, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    page_size (int):\n        Optional. The maximum number of ConfigMaps to\n        return.\n    page_token (str):\n        Optional. The next_page_token value returned from a previous\n        List request, if any.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. List ConfigMaps in the given environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "List user workloads ConfigMaps request.\n\nAttributes:\n    parent (str):\n        Required. List ConfigMaps in the given\n        environment, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    page_size (int):\n        Optional. The maximum number of ConfigMaps to\n        return.\n    page_token (str):\n        Optional. The next_page_token value returned from a previous\n        List request, if any.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. List ConfigMaps in the given environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of ConfigMaps to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of ConfigMaps to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. The next_page_token value returned from a previous List request, if any."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateUserWorkloadsConfigMapRequest",
-      "docstring": "Update user workloads ConfigMap request.\n\nAttributes:\n    user_workloads_config_map (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap):\n        Optional. User workloads ConfigMap to\n        override.",
-      "attributes": {
-        "user_workloads_config_map": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap",
-          "description": "Optional. User workloads ConfigMap to override."
+      "description": "Update user workloads ConfigMap request.\n\nAttributes:\n    user_workloads_config_map (google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap):\n        Optional. User workloads ConfigMap to\n        override.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "user_workloads_config_map": {
+            "description": "Optional. User workloads ConfigMap to override.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
+                "type": "string"
+              },
+              "data": {
+                "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteUserWorkloadsConfigMapRequest",
-      "docstring": "Delete user workloads ConfigMap request.\n\nAttributes:\n    name (str):\n        Required. The ConfigMap to delete, in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The ConfigMap to delete, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UserWorkloadsSecret",
-      "docstring": "User workloads Secret used by Airflow tasks that run with\nKubernetes executor or KubernetesPodOperator.\n\nAttributes:\n    name (str):\n        Identifier. The resource name of the Secret,\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".\n    data (MutableMapping[str, str]):\n        Optional. The \"data\" field of Kubernetes\n        Secret, organized in key-value pairs, which can\n        contain sensitive values such as a password, a\n        token, or a key. The values for all keys have to\n        be base64-encoded strings. For details see:\n        https://kubernetes.io/docs/concepts/configuration/secret/",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\"."
+      "description": "Delete user workloads ConfigMap request.\n\nAttributes:\n    name (str):\n        Required. The ConfigMap to delete, in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The ConfigMap to delete, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
+            "type": "string"
+          }
         },
-        "data": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/"
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListUserWorkloadsSecretsResponse",
-      "docstring": "The user workloads Secrets for a given environment.\n\nAttributes:\n    user_workloads_secrets (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret]):\n        The list of Secrets returned by a\n        ListUserWorkloadsSecretsRequest.\n    next_page_token (str):\n        The page token used to query for the next\n        page if one exists.",
-      "attributes": {
-        "user_workloads_secrets": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsSecret]",
-          "description": "The list of Secrets returned by a ListUserWorkloadsSecretsRequest."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The page token used to query for the next page if one exists."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UserWorkloadsConfigMap",
-      "docstring": "User workloads ConfigMap used by Airflow tasks that run with\nKubernetes executor or KubernetesPodOperator.\n\nAttributes:\n    name (str):\n        Identifier. The resource name of the\n        ConfigMap, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".\n    data (MutableMapping[str, str]):\n        Optional. The \"data\" field of Kubernetes\n        ConfigMap, organized in key-value pairs. For\n        details see:\n\n        https://kubernetes.io/docs/concepts/configuration/configmap/",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\"."
-        },
-        "data": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListUserWorkloadsConfigMapsResponse",
-      "docstring": "The user workloads ConfigMaps for a given environment.\n\nAttributes:\n    user_workloads_config_maps (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap]):\n        The list of ConfigMaps returned by a\n        ListUserWorkloadsConfigMapsRequest.\n    next_page_token (str):\n        The page token used to query for the next\n        page if one exists.",
-      "attributes": {
-        "user_workloads_config_maps": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.UserWorkloadsConfigMap]",
-          "description": "The list of ConfigMaps returned by a ListUserWorkloadsConfigMapsRequest."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The page token used to query for the next page if one exists."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListWorkloadsRequest",
-      "docstring": "Request for listing workloads in a Cloud Composer\nenvironment.\n\nAttributes:\n    parent (str):\n        Required. The environment name to get\n        workloads for, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    page_size (int):\n        Optional. The maximum number of environments\n        to return.\n    page_token (str):\n        Optional. The next_page_token value returned from a previous\n        List request, if any.\n    filter (str):\n        Optional. The list filter. Currently only supports equality\n        on the type field. The value of a field specified in the\n        filter expression must be one ComposerWorkloadType enum\n        option. It's possible to get multiple types using \"OR\"\n        operator, e.g.: \"type=SCHEDULER OR type=CELERY_WORKER\". If\n        not specified, all items are returned.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The environment name to get workloads for, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Request for listing workloads in a Cloud Composer\nenvironment.\n\nAttributes:\n    parent (str):\n        Required. The environment name to get\n        workloads for, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    page_size (int):\n        Optional. The maximum number of environments\n        to return.\n    page_token (str):\n        Optional. The next_page_token value returned from a previous\n        List request, if any.\n    filter (str):\n        Optional. The list filter. Currently only supports equality\n        on the type field. The value of a field specified in the\n        filter expression must be one ComposerWorkloadType enum\n        option. It's possible to get multiple types using \"OR\"\n        operator, e.g.: \"type=SCHEDULER OR type=CELERY_WORKER\". If\n        not specified, all items are returned.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The environment name to get workloads for, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of environments to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Optional. The list filter. Currently only supports equality on the type field. The value of a field specified in the filter expression must be one ComposerWorkloadType enum option. It's possible to get multiple types using \"OR\" operator, e.g.: \"type=SCHEDULER OR type=CELERY_WORKER\". If not specified, all items are returned.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of environments to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. The next_page_token value returned from a previous List request, if any."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. The list filter. Currently only supports equality on the type field. The value of a field specified in the filter expression must be one ComposerWorkloadType enum option. It's possible to get multiple types using \"OR\" operator, e.g.: \"type=SCHEDULER OR type=CELERY_WORKER\". If not specified, all items are returned."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListWorkloadsResponse",
-      "docstring": "Response to ListWorkloadsRequest.\n\nAttributes:\n    workloads (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkload]):\n        The list of environment workloads.\n    next_page_token (str):\n        The page token used to query for the next\n        page if one exists.",
-      "attributes": {
-        "workloads": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkload]",
-          "description": "The list of environment workloads."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The page token used to query for the next page if one exists."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "SaveSnapshotRequest",
-      "docstring": "Request to create a snapshot of a Cloud Composer environment.\n\nAttributes:\n    environment (str):\n        The resource name of the source environment\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    snapshot_location (str):\n        Location in a Cloud Storage where the\n        snapshot is going to be stored, e.g.:\n        \"gs://my-bucket/snapshots\".",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "The resource name of the source environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        },
-        "snapshot_location": {
-          "type": "str",
-          "description": "Location in a Cloud Storage where the snapshot is going to be stored, e.g.: \"gs://my-bucket/snapshots\"."
+      "description": "Request to create a snapshot of a Cloud Composer environment.\n\nAttributes:\n    environment (str):\n        The resource name of the source environment\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    snapshot_location (str):\n        Location in a Cloud Storage where the\n        snapshot is going to be stored, e.g.:\n        \"gs://my-bucket/snapshots\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "The resource name of the source environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "snapshot_location": {
+            "description": "Location in a Cloud Storage where the snapshot is going to be stored, e.g.: \"gs://my-bucket/snapshots\".",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "SaveSnapshotResponse",
-      "docstring": "Response to SaveSnapshotRequest.\n\nAttributes:\n    snapshot_path (str):\n        The fully-resolved Cloud Storage path of the created\n        snapshot, e.g.:\n        \"gs://my-bucket/snapshots/project_location_environment_timestamp\".\n        This field is populated only if the snapshot creation was\n        successful.",
-      "attributes": {
-        "snapshot_path": {
-          "type": "str",
-          "description": "The fully-resolved Cloud Storage path of the created snapshot, e.g.: \"gs://my-bucket/snapshots/project_location_environment_timestamp\". This field is populated only if the snapshot creation was successful."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "LoadSnapshotRequest",
-      "docstring": "Request to load a snapshot into a Cloud Composer environment.\n\nAttributes:\n    environment (str):\n        The resource name of the target environment\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    snapshot_path (str):\n        A Cloud Storage path to a snapshot to load, e.g.:\n        \"gs://my-bucket/snapshots/project_location_environment_timestamp\".\n    skip_pypi_packages_installation (bool):\n        Whether or not to skip installing Pypi\n        packages when loading the environment's state.\n    skip_environment_variables_setting (bool):\n        Whether or not to skip setting environment\n        variables when loading the environment's state.\n    skip_airflow_overrides_setting (bool):\n        Whether or not to skip setting Airflow\n        overrides when loading the environment's state.\n    skip_gcs_data_copying (bool):\n        Whether or not to skip copying Cloud Storage\n        data when loading the environment's state.",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "The resource name of the target environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        },
-        "snapshot_path": {
-          "type": "str",
-          "description": "A Cloud Storage path to a snapshot to load, e.g.: \"gs://my-bucket/snapshots/project_location_environment_timestamp\"."
-        },
-        "skip_pypi_packages_installation": {
-          "type": "bool",
-          "description": "Whether or not to skip installing Pypi packages when loading the environment's state."
-        },
-        "skip_environment_variables_setting": {
-          "type": "bool",
-          "description": "Whether or not to skip setting environment variables when loading the environment's state."
-        },
-        "skip_airflow_overrides_setting": {
-          "type": "bool",
-          "description": "Whether or not to skip setting Airflow overrides when loading the environment's state."
-        },
-        "skip_gcs_data_copying": {
-          "type": "bool",
-          "description": "Whether or not to skip copying Cloud Storage data when loading the environment's state."
+      "description": "Request to load a snapshot into a Cloud Composer environment.\n\nAttributes:\n    environment (str):\n        The resource name of the target environment\n        in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    snapshot_path (str):\n        A Cloud Storage path to a snapshot to load, e.g.:\n        \"gs://my-bucket/snapshots/project_location_environment_timestamp\".\n    skip_pypi_packages_installation (bool):\n        Whether or not to skip installing Pypi\n        packages when loading the environment's state.\n    skip_environment_variables_setting (bool):\n        Whether or not to skip setting environment\n        variables when loading the environment's state.\n    skip_airflow_overrides_setting (bool):\n        Whether or not to skip setting Airflow\n        overrides when loading the environment's state.\n    skip_gcs_data_copying (bool):\n        Whether or not to skip copying Cloud Storage\n        data when loading the environment's state.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "The resource name of the target environment in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "snapshot_path": {
+            "description": "A Cloud Storage path to a snapshot to load, e.g.: \"gs://my-bucket/snapshots/project_location_environment_timestamp\".",
+            "type": "string"
+          },
+          "skip_pypi_packages_installation": {
+            "description": "Whether or not to skip installing Pypi packages when loading the environment's state.",
+            "type": "boolean"
+          },
+          "skip_environment_variables_setting": {
+            "description": "Whether or not to skip setting environment variables when loading the environment's state.",
+            "type": "boolean"
+          },
+          "skip_airflow_overrides_setting": {
+            "description": "Whether or not to skip setting Airflow overrides when loading the environment's state.",
+            "type": "boolean"
+          },
+          "skip_gcs_data_copying": {
+            "description": "Whether or not to skip copying Cloud Storage data when loading the environment's state.",
+            "type": "boolean"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "LoadSnapshotResponse",
-      "docstring": "Response to LoadSnapshotRequest.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "DatabaseFailoverRequest",
-      "docstring": "Request to trigger database failover (only for highly\nresilient environments).\n\nAttributes:\n    environment (str):\n        Target environment:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "Target environment:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
+      "description": "Request to trigger database failover (only for highly\nresilient environments).\n\nAttributes:\n    environment (str):\n        Target environment:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "Target environment:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "DatabaseFailoverResponse",
-      "docstring": "Response for DatabaseFailoverRequest.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "FetchDatabasePropertiesRequest",
-      "docstring": "Request to fetch properties of environment's database.\n\nAttributes:\n    environment (str):\n        Required. The resource name of the\n        environment, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "Required. The resource name of the environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        }
+      "description": "Request to fetch properties of environment's database.\n\nAttributes:\n    environment (str):\n        Required. The resource name of the\n        environment, in the form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "Required. The resource name of the environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          }
+        },
+        "required": [
+          "environment"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "FetchDatabasePropertiesResponse",
-      "docstring": "Response for FetchDatabasePropertiesRequest.\n\nAttributes:\n    primary_gce_zone (str):\n        The Compute Engine zone that the instance is\n        currently serving from.\n    secondary_gce_zone (str):\n        The Compute Engine zone that the failover\n        instance is currently serving from for a\n        regional Cloud SQL instance.\n    is_failover_replica_available (bool):\n        The availability status of the failover\n        replica. A false status indicates that the\n        failover replica is out of sync. The primary\n        instance can only fail over to the failover\n        replica when the status is true.",
-      "attributes": {
-        "primary_gce_zone": {
-          "type": "str",
-          "description": "The Compute Engine zone that the instance is currently serving from."
-        },
-        "secondary_gce_zone": {
-          "type": "str",
-          "description": "The Compute Engine zone that the failover instance is currently serving from for a regional Cloud SQL instance."
-        },
-        "is_failover_replica_available": {
-          "type": "bool",
-          "description": "The availability status of the failover replica. A false status indicates that the failover replica is out of sync. The primary instance can only fail over to the failover replica when the status is true."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EnvironmentConfig",
-      "docstring": "Configuration information for an environment.\n\nAttributes:\n    gke_cluster (str):\n        Output only. The Kubernetes Engine cluster\n        used to run this environment.\n    dag_gcs_prefix (str):\n        Output only. The Cloud Storage prefix of the\n        DAGs for this environment. Although Cloud\n        Storage objects reside in a flat namespace, a\n        hierarchical file tree can be simulated using\n        \"/\"-delimited object name prefixes. DAG objects\n        for this environment reside in a simulated\n        directory with the given prefix.\n    node_count (int):\n        The number of nodes in the Kubernetes Engine cluster that\n        will be used to run this environment.\n\n        This field is supported for Cloud Composer environments in\n        versions composer-1.\\ *.*-airflow-*.*.*.\n    software_config (google.cloud.orchestration.airflow.service_v1beta1.types.SoftwareConfig):\n        The configuration settings for software\n        inside the environment.\n    node_config (google.cloud.orchestratio",
-      "attributes": {
-        "gke_cluster": {
-          "type": "str",
-          "description": "Output only. The Kubernetes Engine cluster used to run this environment."
-        },
-        "dag_gcs_prefix": {
-          "type": "str",
-          "description": "Output only. The Cloud Storage prefix of the DAGs for this environment. Although Cloud Storage objects reside in a flat namespace, a hierarchical file tree can be simulated using \"/\"-delimited object name prefixes. DAG objects for this environment reside in a simulated directory with the given prefix."
-        },
-        "node_count": {
-          "type": "int",
-          "description": "The number of nodes in the Kubernetes Engine cluster that will be used to run this environment.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "software_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.SoftwareConfig",
-          "description": "The configuration settings for software inside the environment."
-        },
-        "node_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.NodeConfig",
-          "description": "The configuration used for the Kubernetes Engine cluster."
-        },
-        "private_environment_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.PrivateEnvironmentConfig",
-          "description": "The configuration used for the Private IP Cloud Composer environment."
-        },
-        "web_server_network_access_control": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WebServerNetworkAccessControl",
-          "description": "Optional. The network-level access control policy for the Airflow web server. If unspecified, no network-level access restrictions will be applied."
-        },
-        "database_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.DatabaseConfig",
-          "description": "Optional. The configuration settings for Cloud SQL instance used internally by Apache Airflow software."
-        },
-        "web_server_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WebServerConfig",
-          "description": "Optional. The configuration settings for the Airflow web server App Engine instance.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "airflow_uri": {
-          "type": "str",
-          "description": "Output only. The URI of the Apache Airflow Web UI hosted within this environment (see `Airflow web interface </composer/docs/how-to/accessing/airflow-web-interface>`__)."
-        },
-        "airflow_byoid_uri": {
-          "type": "str",
-          "description": "Output only. The 'bring your own identity' variant of the URI of the Apache Airflow Web UI hosted within this environment, to be accessed with external identities using workforce identity federation (see `Access environments with workforce identity federation </composer/docs/composer-2/access-environments-with-workforce-identity-federation>`__)."
-        },
-        "encryption_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.EncryptionConfig",
-          "description": "Optional. The encryption options for the Cloud Composer environment and its dependencies. Cannot be updated."
-        },
-        "maintenance_window": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.MaintenanceWindow",
-          "description": "Optional. The maintenance window is the period when Cloud Composer components may undergo maintenance. It is defined so that maintenance is not executed during peak hours or critical time periods.  The system will not be under maintenance for every occurrence of this window, but when maintenance is planned, it will be scheduled during the window.  The maintenance window period must encompass at least 12 hours per week. This may be split into multiple chunks, each with a size of at least 4 hours.  If this value is omitted, the default value for maintenance window is applied. By default, maintenance windows are from 00:00:00 to 04:00:00 (GMT) on Friday, Saturday, and Sunday every week."
-        },
-        "workloads_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig",
-          "description": "Optional. The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. The GKE cluster runs Airflow scheduler, web server and workers workloads.  This field is supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "environment_size": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.EnvironmentConfig.EnvironmentSize",
-          "description": "Optional. The size of the Cloud Composer environment.  This field is supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "master_authorized_networks_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.MasterAuthorizedNetworksConfig",
-          "description": "Optional. The configuration options for GKE cluster master authorized networks. By default master authorized networks feature is:  - in case of private environment: enabled with no external networks allowlisted. - in case of public environment: disabled."
-        },
-        "recovery_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.RecoveryConfig",
-          "description": "Optional. The Recovery settings configuration of an environment.  This field is supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "data_retention_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.DataRetentionConfig",
-          "description": "Optional. The configuration setting for Airflow database data retention mechanism."
-        },
-        "resilience_mode": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.EnvironmentConfig.ResilienceMode",
-          "description": "Optional. Resilience mode of the Cloud Composer Environment.  This field is supported for Cloud Composer environments in versions composer-2.2.0-airflow-\\ *.*.\\* and newer."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "WebServerNetworkAccessControl",
-      "docstring": "Network-level access control policy for the Airflow web\nserver.\n\nAttributes:\n    allowed_ip_ranges (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.WebServerNetworkAccessControl.AllowedIpRange]):\n        A collection of allowed IP ranges with\n        descriptions.",
-      "attributes": {
-        "allowed_ip_ranges": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.WebServerNetworkAccessControl.AllowedIpRange]",
-          "description": "A collection of allowed IP ranges with descriptions."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SoftwareConfig",
-      "docstring": "Specifies the selection and configuration of software inside\nthe environment.\n\nAttributes:\n    image_version (str):\n        The version of the software running in the environment. This\n        encapsulates both the version of Cloud Composer\n        functionality and the version of Apache Airflow. It must\n        match the regular expression\n        ``composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)``.\n        When used as input, the server also checks if the provided\n        version is supported and denies the request for an\n        unsupported version.\n\n        The Cloud Composer portion of the image version is a full\n        `semantic version <https://semver.org>`__, or an alias in\n        the form of major version number or ``latest``. When an\n        alias is provided, the server replaces it with the current\n        Cloud Composer version that satisfies the alias.\n\n        The Apache Airflow portion of the image version is a full\n        semantic versio",
-      "attributes": {
-        "image_version": {
-          "type": "str",
-          "description": "The version of the software running in the environment. This encapsulates both the version of Cloud Composer functionality and the version of Apache Airflow. It must match the regular expression ``composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)``. When used as input, the server also checks if the provided version is supported and denies the request for an unsupported version.  The Cloud Composer portion of the image version is a full `semantic version <https://semver.org>`__, or an alias in the form of major version number or ``latest``. When an alias is provided, the server replaces it with the current Cloud Composer version that satisfies the alias.  The Apache Airflow portion of the image version is a full semantic version that points to one of the supported Apache Airflow versions, or an alias in the form of only major or major.minor versions specified. When an alias is provided, the server replaces it with the latest Apache Airflow version that satisfies the alias and is supported in the given Cloud Composer version.  In all cases, the resolved image version is stored in the same field.  See also `version list </composer/docs/concepts/versioning/composer-versions>`__ and `versioning overview </composer/docs/concepts/versioning/composer-versioning-overview>`__."
-        },
-        "airflow_config_overrides": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Apache Airflow configuration properties to override.  Property keys contain the section and property names, separated by a hyphen, for example \"core-dags_are_paused_at_creation\". Section names must not contain hyphens (\"-\"), opening square brackets (\"[\"), or closing square brackets (\"]\"). The property name must not be empty and must not contain an equals sign (\"=\") or semicolon (\";\"). Section and property names must not contain a period (\".\"). Apache Airflow configuration property names must be written in `snake_case <https://en.wikipedia.org/wiki/Snake_case>`__. Property values can contain any character, and can be written in any lower/upper case format.  Certain Apache Airflow configuration property values are `blocked </composer/docs/concepts/airflow-configurations>`__, and cannot be overridden."
-        },
-        "pypi_packages": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Custom Python Package Index (PyPI) packages to be installed in the environment.  Keys refer to the lowercase package name such as \"numpy\" and values are the lowercase extras and version specifier such as \"==1.12.0\", \"[devel,gcp_api]\", or \"[devel]>=1.8.2, <1.9.2\". To specify a package without pinning it to a version specifier, use the empty string as the value."
-        },
-        "env_variables": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes.  Environment variable names must match the regular expression ``[a-zA-Z_][a-zA-Z0-9_]*``. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression ``AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+``), and they cannot match any of the following reserved names:  -  ``AIRFLOW_HOME`` -  ``C_FORCE_ROOT`` -  ``CONTAINER_NAME`` -  ``DAGS_FOLDER`` -  ``GCP_PROJECT`` -  ``GCS_BUCKET`` -  ``GKE_CLUSTER_NAME`` -  ``SQL_DATABASE`` -  ``SQL_INSTANCE`` -  ``SQL_PASSWORD`` -  ``SQL_PROJECT`` -  ``SQL_REGION`` -  ``SQL_USER``"
-        },
-        "python_version": {
-          "type": "str",
-          "description": "Optional. The major version of Python used to run the Apache Airflow scheduler, worker, and webserver processes.  Can be set to '2' or '3'. If not specified, the default is '3'. Cannot be updated.  This field is only supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*. Environments in newer versions always use Python major version 3."
-        },
-        "scheduler_count": {
-          "type": "int",
-          "description": "Optional. The number of schedulers for Airflow.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-2.*.*."
-        },
-        "cloud_data_lineage_integration": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.CloudDataLineageIntegration",
-          "description": "Optional. The configuration for Cloud Data Lineage integration."
-        },
-        "web_server_plugins_mode": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.SoftwareConfig.WebServerPluginsMode",
-          "description": "Optional. Whether or not the web server uses custom plugins. If unspecified, the field defaults to ``PLUGINS_ENABLED``.  This field is supported for Cloud Composer environments in versions composer-3.\\ *.*-airflow-*.*.\\* and newer."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "IPAllocationPolicy",
-      "docstring": "Configuration for controlling how IPs are allocated in the\nGKE cluster.\n\nAttributes:\n    use_ip_aliases (bool):\n        Optional. Whether or not to enable Alias IPs in the GKE\n        cluster. If ``true``, a VPC-native cluster is created.\n\n        This field is only supported for Cloud Composer environments\n        in versions composer-1.\\ *.*-airflow-*.*.*. Environments in\n        newer versions always use VPC-native GKE clusters.\n    cluster_secondary_range_name (str):\n        Optional. The name of the cluster's secondary range used to\n        allocate IP addresses to pods. Specify either\n        ``cluster_secondary_range_name`` or\n        ``cluster_ipv4_cidr_block`` but not both.\n\n        For Cloud Composer environments in versions\n        composer-1.\\ *.*-airflow-*.*.*, this field is applicable\n        only when ``use_ip_aliases`` is true.\n    services_secondary_range_name (str):\n        Optional. The name of the services' secondary range used to\n        allocate IP addresses to the cluster. Specify eithe",
-      "attributes": {
-        "use_ip_aliases": {
-          "type": "bool",
-          "description": "Optional. Whether or not to enable Alias IPs in the GKE cluster. If ``true``, a VPC-native cluster is created.  This field is only supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*. Environments in newer versions always use VPC-native GKE clusters."
-        },
-        "cluster_secondary_range_name": {
-          "type": "str",
-          "description": "Optional. The name of the cluster's secondary range used to allocate IP addresses to pods. Specify either ``cluster_secondary_range_name`` or ``cluster_ipv4_cidr_block`` but not both.  For Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*, this field is applicable only when ``use_ip_aliases`` is true."
-        },
-        "services_secondary_range_name": {
-          "type": "str",
-          "description": "Optional. The name of the services' secondary range used to allocate IP addresses to the cluster. Specify either ``services_secondary_range_name`` or ``services_ipv4_cidr_block`` but not both.  For Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*, this field is applicable only when ``use_ip_aliases`` is true."
-        },
-        "cluster_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The IP address range used to allocate IP addresses to pods in the cluster.  For Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*, this field is applicable only when ``use_ip_aliases`` is true.  Set to blank to have GKE choose a range with the default size.  Set to /netmask (e.g. ``/14``) to have GKE choose a range with a specific netmask.  Set to a `CIDR <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`__ notation (e.g. ``10.96.0.0/14``) from the RFC-1918 private networks (e.g. ``10.0.0.0/8``, ``172.16.0.0/12``, ``192.168.0.0/16``) to pick a specific range to use. Specify ``cluster_secondary_range_name`` or ``cluster_ipv4_cidr_block`` but not both."
-        },
-        "services_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The IP address range of the services IP addresses in this cluster.  For Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*, this field is applicable only when ``use_ip_aliases`` is true.  Set to blank to have GKE choose a range with the default size.  Set to /netmask (e.g. ``/14``) to have GKE choose a range with a specific netmask.  Set to a `CIDR <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`__ notation (e.g. ``10.96.0.0/14``) from the RFC-1918 private networks (e.g. ``10.0.0.0/8``, ``172.16.0.0/12``, ``192.168.0.0/16``) to pick a specific range to use. Specify ``services_secondary_range_name`` or ``services_ipv4_cidr_block`` but not both."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NodeConfig",
-      "docstring": "The configuration information for the Kubernetes Engine nodes\nrunning the Apache Airflow software.\n\nAttributes:\n    location (str):\n        Optional. The Compute Engine\n        `zone </compute/docs/regions-zones>`__ in which to deploy\n        the VMs used to run the Apache Airflow software, specified\n        as a `relative resource\n        name </apis/design/resource_names#relative_resource_name>`__.\n        For example: \"projects/{projectId}/zones/{zoneId}\".\n\n        This ``location`` must belong to the enclosing environment's\n        project and location. If both this field and\n        ``nodeConfig.machineType`` are specified,\n        ``nodeConfig.machineType`` must belong to this ``location``;\n        if both are unspecified, the service will pick a zone in the\n        Compute Engine region corresponding to the Cloud Composer\n        location, and propagate that choice to both fields. If only\n        one field (``location`` or ``nodeConfig.machineType``) is\n        specified, the location information from ",
-      "attributes": {
-        "location": {
-          "type": "str",
-          "description": "Optional. The Compute Engine `zone </compute/docs/regions-zones>`__ in which to deploy the VMs used to run the Apache Airflow software, specified as a `relative resource name </apis/design/resource_names#relative_resource_name>`__. For example: \"projects/{projectId}/zones/{zoneId}\".  This ``location`` must belong to the enclosing environment's project and location. If both this field and ``nodeConfig.machineType`` are specified, ``nodeConfig.machineType`` must belong to this ``location``; if both are unspecified, the service will pick a zone in the Compute Engine region corresponding to the Cloud Composer location, and propagate that choice to both fields. If only one field (``location`` or ``nodeConfig.machineType``) is specified, the location information from the specified field will be propagated to the unspecified field.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "machine_type": {
-          "type": "str",
-          "description": "Optional. The Compute Engine `machine type </compute/docs/machine-types>`__ used for cluster instances, specified as a `relative resource name </apis/design/resource_names#relative_resource_name>`__. For example: \"projects/{projectId}/zones/{zoneId}/machineTypes/{machineTypeId}\".  The ``machineType`` must belong to the enclosing environment's project and location. If both this field and ``nodeConfig.location`` are specified, this ``machineType`` must belong to the ``nodeConfig.location``; if both are unspecified, the service will pick a zone in the Compute Engine region corresponding to the Cloud Composer location, and propagate that choice to both fields. If exactly one of this field and ``nodeConfig.location`` is specified, the location information from the specified field will be propagated to the unspecified field.  The ``machineTypeId`` must not be a `shared-core machine type </compute/docs/machine-types#sharedcore>`__.  If this field is unspecified, the ``machineTypeId`` defaults to \"n1-standard-1\".  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "network": {
-          "type": "str",
-          "description": "Optional. The Compute Engine network to be used for machine communications, specified as a `relative resource name </apis/design/resource_names#relative_resource_name>`__. For example: \"projects/{projectId}/global/networks/{networkId}\".  If unspecified, the default network in the environment's project is used. If a `Custom Subnet Network </vpc/docs/vpc#vpc_networks_and_subnets>`__ is provided, ``nodeConfig.subnetwork`` must also be provided. For `Shared VPC </vpc/docs/shared-vpc>`__ subnetwork requirements, see ``nodeConfig.subnetwork``."
-        },
-        "subnetwork": {
-          "type": "str",
-          "description": "Optional. The Compute Engine subnetwork to be used for machine communications, specified as a `relative resource name </apis/design/resource_names#relative_resource_name>`__. For example: \"projects/{projectId}/regions/{regionId}/subnetworks/{subnetworkId}\"  If a subnetwork is provided, ``nodeConfig.network`` must also be provided, and the subnetwork must belong to the enclosing environment's project and location."
-        },
-        "disk_size_gb": {
-          "type": "int",
-          "description": "Optional. The disk size in GB used for node VMs. Minimum size is 30GB. If unspecified, defaults to 100GB. Cannot be updated.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "oauth_scopes": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. The set of Google API scopes to be made available on all node VMs. If ``oauth_scopes`` is empty, defaults to [\"https://www.googleapis.com/auth/cloud-platform\"]. Cannot be updated.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "service_account": {
-          "type": "str",
-          "description": "Optional. The Google Cloud Platform Service Account to be used by the workloads. If a service account is not specified, the \"default\" Compute Engine service account is used. Cannot be updated."
-        },
-        "tags": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. The list of instance tags applied to all node VMs. Tags are used to identify valid sources or targets for network firewalls. Each tag within the list must comply with `RFC1035 <https://www.ietf.org/rfc/rfc1035.txt>`__. Cannot be updated."
-        },
-        "ip_allocation_policy": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.IPAllocationPolicy",
-          "description": "Optional. The IPAllocationPolicy fields for the GKE cluster."
-        },
-        "max_pods_per_node": {
-          "type": "int",
-          "description": "Optional. The maximum number of pods per node in the Cloud Composer GKE cluster. The value must be between 8 and 110 and it can be set only if the environment is VPC-native. The default value is 32. Values of this field will be propagated both to the ``default-pool`` node pool of the newly created GKE cluster, and to the default \"Maximum Pods per Node\" value which is used for newly created node pools if their value is not explicitly set during node pool creation. For more information, see [Optimizing IP address allocation] (https://cloud.google.com/kubernetes-engine/docs/how-to/flexible-pod-cidr). Cannot be updated.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "enable_ip_masq_agent": {
-          "type": "bool",
-          "description": "Optional. Deploys 'ip-masq-agent' daemon set in the GKE cluster and defines nonMasqueradeCIDRs equals to pod IP range so IP masquerading is used for all destination addresses, except between pods traffic.  See:  https://cloud.google.com/kubernetes-engine/docs/how-to/ip-masquerade-agent"
-        },
-        "composer_network_attachment": {
-          "type": "str",
-          "description": "Optional. Network Attachment that Cloud Composer environment is connected to, which provides connectivity with a user's VPC network. Takes precedence over network and subnetwork settings. If not provided, but network and subnetwork are defined during environment, it will be provisioned. If not provided and network and subnetwork are also empty, then connectivity to user's VPC network is disabled. Network attachment must be provided in format projects/{project}/regions/{region}/networkAttachments/{networkAttachment}.  This field is supported for Cloud Composer environments in versions composer-3.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "composer_internal_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The IP range in CIDR notation to use internally by Cloud Composer. IP addresses are not reserved - and the same range can be used by multiple Cloud Composer environments. In case of overlap, IPs from this range will not be accessible in the user's VPC network. Cannot be updated. If not specified, the default value of '100.64.128.0/20' is used.  This field is supported for Cloud Composer environments in versions composer-3.\\ *.*-airflow-*.*.\\* and newer."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PrivateClusterConfig",
-      "docstring": "Configuration options for the private GKE cluster in a Cloud\nComposer environment.\n\nAttributes:\n    enable_private_endpoint (bool):\n        Optional. If ``true``, access to the public endpoint of the\n        GKE cluster is denied.\n    master_ipv4_cidr_block (str):\n        Optional. The CIDR block from which IPv4\n        range for GKE master will be reserved. If left\n        blank, the default value of '172.16.0.0/23' is\n        used.\n    master_ipv4_reserved_range (str):\n        Output only. The IP range in CIDR notation to\n        use for the hosted master network. This range is\n        used for assigning internal IP addresses to the\n        cluster master or set of masters and to the\n        internal load balancer virtual IP. This range\n        must not overlap with any other ranges in use\n        within the cluster's network.",
-      "attributes": {
-        "enable_private_endpoint": {
-          "type": "bool",
-          "description": "Optional. If ``true``, access to the public endpoint of the GKE cluster is denied."
-        },
-        "master_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The CIDR block from which IPv4 range for GKE master will be reserved. If left blank, the default value of '172.16.0.0/23' is used."
-        },
-        "master_ipv4_reserved_range": {
-          "type": "str",
-          "description": "Output only. The IP range in CIDR notation to use for the hosted master network. This range is used for assigning internal IP addresses to the cluster master or set of masters and to the internal load balancer virtual IP. This range must not overlap with any other ranges in use within the cluster's network."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NetworkingConfig",
-      "docstring": "Configuration options for networking connections in the\nComposer 2 environment.\n\nAttributes:\n    connection_type (google.cloud.orchestration.airflow.service_v1beta1.types.NetworkingConfig.ConnectionType):\n        Optional. Indicates the user requested\n        specifc connection type between Tenant and\n        Customer projects. You cannot set networking\n        connection type in public IP environment.",
-      "attributes": {
-        "connection_type": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.NetworkingConfig.ConnectionType",
-          "description": "Optional. Indicates the user requested specifc connection type between Tenant and Customer projects. You cannot set networking connection type in public IP environment."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PrivateEnvironmentConfig",
-      "docstring": "The configuration information for configuring a Private IP\nCloud Composer environment.\n\nAttributes:\n    enable_private_environment (bool):\n        Optional. If ``true``, a Private IP Cloud Composer\n        environment is created. If this field is set to true,\n        ``IPAllocationPolicy.use_ip_aliases`` must be set to true\n        for Cloud Composer environments in versions\n        composer-1.\\ *.*-airflow-*.*.*.\n    enable_private_builds_only (bool):\n        Optional. If ``true``, builds performed during operations\n        that install Python packages have only private connectivity\n        to Google services (including Artifact Registry) and VPC\n        network (if either ``NodeConfig.network`` and\n        ``NodeConfig.subnetwork`` fields or\n        ``NodeConfig.composer_network_attachment`` field are\n        specified). If ``false``, the builds also have access to the\n        internet.\n\n        This field is supported for Cloud Composer environments in\n        versions composer-3.\\ *.*-airflow-*.*.\\* and n",
-      "attributes": {
-        "enable_private_environment": {
-          "type": "bool",
-          "description": "Optional. If ``true``, a Private IP Cloud Composer environment is created. If this field is set to true, ``IPAllocationPolicy.use_ip_aliases`` must be set to true for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "enable_private_builds_only": {
-          "type": "bool",
-          "description": "Optional. If ``true``, builds performed during operations that install Python packages have only private connectivity to Google services (including Artifact Registry) and VPC network (if either ``NodeConfig.network`` and ``NodeConfig.subnetwork`` fields or ``NodeConfig.composer_network_attachment`` field are specified). If ``false``, the builds also have access to the internet.  This field is supported for Cloud Composer environments in versions composer-3.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "private_cluster_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.PrivateClusterConfig",
-          "description": "Optional. Configuration for the private GKE cluster for a Private IP Cloud Composer environment."
-        },
-        "web_server_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The CIDR block from which IP range for web server will be reserved. Needs to be disjoint from private_cluster_config.master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "cloud_sql_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The CIDR block from which IP range in tenant project will be reserved for Cloud SQL. Needs to be disjoint from web_server_ipv4_cidr_block"
-        },
-        "web_server_ipv4_reserved_range": {
-          "type": "str",
-          "description": "Output only. The IP range reserved for the tenant project's App Engine VMs.  This field is supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "cloud_composer_network_ipv4_cidr_block": {
-          "type": "str",
-          "description": "Optional. The CIDR block from which IP range for Cloud Composer Network in tenant project will be reserved. Needs to be disjoint from private_cluster_config.master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block.  This field is supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "cloud_composer_network_ipv4_reserved_range": {
-          "type": "str",
-          "description": "Output only. The IP range reserved for the tenant project's Cloud Composer network.  This field is supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer."
-        },
-        "enable_privately_used_public_ips": {
-          "type": "bool",
-          "description": "Optional. When enabled, IPs from public (non-RFC1918) ranges can be used for ``IPAllocationPolicy.cluster_ipv4_cidr_block`` and ``IPAllocationPolicy.service_ipv4_cidr_block``."
-        },
-        "cloud_composer_connection_subnetwork": {
-          "type": "str",
-          "description": "Optional. When specified, the environment will use Private Service Connect instead of VPC peerings to connect to Cloud SQL in the Tenant Project, and the PSC endpoint in the Customer Project will use an IP address from this subnetwork."
-        },
-        "networking_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.NetworkingConfig",
-          "description": "Optional. Configuration for the network connections configuration in the environment."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DatabaseConfig",
-      "docstring": "The configuration of Cloud SQL instance that is used by the\nApache Airflow software.\n\nAttributes:\n    machine_type (str):\n        Optional. Cloud SQL machine type used by Airflow database.\n        It has to be one of: db-n1-standard-2, db-n1-standard-4,\n        db-n1-standard-8 or db-n1-standard-16. If not specified,\n        db-n1-standard-2 will be used. Supported for Cloud Composer\n        environments in versions composer-1.\\ *.*-airflow-*.*.*.\n    zone (str):\n        Optional. The Compute Engine zone where the Airflow database\n        is created. If zone is provided, it must be in the region\n        selected for the environment. If zone is not provided, a\n        zone is automatically selected. The zone can only be set\n        during environment creation. Supported for Cloud Composer\n        environments in versions composer-2.\\ *.*-airflow-*.*.*.",
-      "attributes": {
-        "machine_type": {
-          "type": "str",
-          "description": "Optional. Cloud SQL machine type used by Airflow database. It has to be one of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16. If not specified, db-n1-standard-2 will be used. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*."
-        },
-        "zone": {
-          "type": "str",
-          "description": "Optional. The Compute Engine zone where the Airflow database is created. If zone is provided, it must be in the region selected for the environment. If zone is not provided, a zone is automatically selected. The zone can only be set during environment creation. Supported for Cloud Composer environments in versions composer-2.\\ *.*-airflow-*.*.*."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "WebServerConfig",
-      "docstring": "The configuration settings for the Airflow web server App Engine\ninstance. Supported for Cloud Composer environments in versions\ncomposer-1.\\ *.*-airflow-*.*.*.\n\nAttributes:\n    machine_type (str):\n        Optional. Machine type on which Airflow web\n        server is running. It has to be one of:\n        composer-n1-webserver-2, composer-n1-webserver-4\n        or composer-n1-webserver-8.\n        If not specified, composer-n1-webserver-2 will\n        be used. Value custom is returned only in\n        response, if Airflow web server parameters were\n        manually changed to a non-standard values.",
-      "attributes": {
-        "machine_type": {
-          "type": "str",
-          "description": "Optional. Machine type on which Airflow web server is running. It has to be one of: composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8. If not specified, composer-n1-webserver-2 will be used. Value custom is returned only in response, if Airflow web server parameters were manually changed to a non-standard values."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EncryptionConfig",
-      "docstring": "The encryption options for the Cloud Composer environment and its\ndependencies. Supported for Cloud Composer environments in versions\ncomposer-1.\\ *.*-airflow-*.*.*.\n\nAttributes:\n    kms_key_name (str):\n        Optional. Customer-managed Encryption Key\n        available through Google's Key Management\n        Service. Cannot be updated. If not specified,\n        Google-managed key will be used.",
-      "attributes": {
-        "kms_key_name": {
-          "type": "str",
-          "description": "Optional. Customer-managed Encryption Key available through Google's Key Management Service. Cannot be updated. If not specified, Google-managed key will be used."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MaintenanceWindow",
-      "docstring": "The configuration settings for Cloud Composer maintenance window.\nThe following example:\n\n::\n\n      {\n        \"startTime\":\"2019-08-01T01:00:00Z\"\n        \"endTime\":\"2019-08-01T07:00:00Z\"\n        \"recurrence\":\"FREQ=WEEKLY;BYDAY=TU,WE\"\n      }\n\nwould define a maintenance window between 01 and 07 hours UTC during\neach Tuesday and Wednesday.\n\nAttributes:\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Required. Start time of the first recurrence\n        of the maintenance window.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Required. Maintenance window end time. It is used only to\n        calculate the duration of the maintenance window. The value\n        for end_time must be in the future, relative to\n        ``start_time``.\n    recurrence (str):\n        Required. Maintenance window recurrence. Format is a subset\n        of `RFC-5545 <https://tools.ietf.org/html/rfc5545>`__\n        ``RRULE``. The only allowed values for ``FREQ`` field are\n        ``FREQ=DAILY`` and ``FREQ=WEEK",
-      "attributes": {
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. Start time of the first recurrence of the maintenance window."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. Maintenance window end time. It is used only to calculate the duration of the maintenance window. The value for end_time must be in the future, relative to ``start_time``."
-        },
-        "recurrence": {
-          "type": "str",
-          "description": "Required. Maintenance window recurrence. Format is a subset of `RFC-5545 <https://tools.ietf.org/html/rfc5545>`__ ``RRULE``. The only allowed values for ``FREQ`` field are ``FREQ=DAILY`` and ``FREQ=WEEKLY;BYDAY=...`` Example values: ``FREQ=WEEKLY;BYDAY=TU,WE``, ``FREQ=DAILY``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "WorkloadsConfig",
-      "docstring": "The Kubernetes workloads configuration for GKE cluster associated\nwith the Cloud Composer environment. Supported for Cloud Composer\nenvironments in versions composer-2.\\ *.*-airflow-*.*.\\* and newer.\n\nAttributes:\n    scheduler (google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.SchedulerResource):\n        Optional. Resources used by Airflow\n        schedulers.\n    web_server (google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.WebServerResource):\n        Optional. Resources used by Airflow web\n        server.\n    worker (google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.WorkerResource):\n        Optional. Resources used by Airflow workers.\n    triggerer (google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.TriggererResource):\n        Optional. Resources used by Airflow\n        triggerers.\n    dag_processor (google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.DagProcessorResource):\n        Optional. Resour",
-      "attributes": {
-        "scheduler": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.SchedulerResource",
-          "description": "Optional. Resources used by Airflow schedulers."
-        },
-        "web_server": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.WebServerResource",
-          "description": "Optional. Resources used by Airflow web server."
-        },
-        "worker": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.WorkerResource",
-          "description": "Optional. Resources used by Airflow workers."
-        },
-        "triggerer": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.TriggererResource",
-          "description": "Optional. Resources used by Airflow triggerers."
-        },
-        "dag_processor": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.WorkloadsConfig.DagProcessorResource",
-          "description": "Optional. Resources used by Airflow DAG processors.  This field is supported for Cloud Composer environments in versions composer-3.\\ *.*-airflow-*.*.\\* and newer."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DataRetentionConfig",
-      "docstring": "The configuration setting for Airflow database data retention\nmechanism.\n\nAttributes:\n    airflow_database_retention_days (int):\n        Optional. The number of days describing for\n        how long to store event-based records in airflow\n        database. If the retention mechanism is enabled\n        this value must be a positive integer otherwise,\n        value should be set to 0.\n    task_logs_retention_config (google.cloud.orchestration.airflow.service_v1beta1.types.TaskLogsRetentionConfig):\n        Optional. The configuration settings for task\n        logs retention\n    airflow_metadata_retention_config (google.cloud.orchestration.airflow.service_v1beta1.types.AirflowMetadataRetentionPolicyConfig):\n        Optional. The retention policy for airflow\n        metadata database.",
-      "attributes": {
-        "airflow_database_retention_days": {
-          "type": "int",
-          "description": "Optional. The number of days describing for how long to store event-based records in airflow database. If the retention mechanism is enabled this value must be a positive integer otherwise, value should be set to 0."
-        },
-        "task_logs_retention_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.TaskLogsRetentionConfig",
-          "description": "Optional. The configuration settings for task logs retention"
-        },
-        "airflow_metadata_retention_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.AirflowMetadataRetentionPolicyConfig",
-          "description": "Optional. The retention policy for airflow metadata database."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TaskLogsRetentionConfig",
-      "docstring": "The configuration setting for Task Logs.\n\nAttributes:\n    storage_mode (google.cloud.orchestration.airflow.service_v1beta1.types.TaskLogsRetentionConfig.TaskLogsStorageMode):\n        Optional. The mode of storage for Airflow\n        workers task logs.",
-      "attributes": {
-        "storage_mode": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.TaskLogsRetentionConfig.TaskLogsStorageMode",
-          "description": "Optional. The mode of storage for Airflow workers task logs."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AirflowMetadataRetentionPolicyConfig",
-      "docstring": "The policy for airflow metadata database retention.\n\nAttributes:\n    retention_mode (google.cloud.orchestration.airflow.service_v1beta1.types.AirflowMetadataRetentionPolicyConfig.RetentionMode):\n        Optional. Retention can be either enabled or\n        disabled.\n    retention_days (int):\n        Optional. How many days data should be\n        retained for.",
-      "attributes": {
-        "retention_mode": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.AirflowMetadataRetentionPolicyConfig.RetentionMode",
-          "description": "Optional. Retention can be either enabled or disabled."
-        },
-        "retention_days": {
-          "type": "int",
-          "description": "Optional. How many days data should be retained for."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StorageConfig",
-      "docstring": "The configuration for data storage in the environment.\n\nAttributes:\n    bucket (str):\n        Optional. The name of the Cloud Storage bucket used by the\n        environment. No ``gs://`` prefix.",
-      "attributes": {
-        "bucket": {
-          "type": "str",
-          "description": "Optional. The name of the Cloud Storage bucket used by the environment. No ``gs://`` prefix."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RecoveryConfig",
-      "docstring": "The Recovery settings of an environment.\n\nAttributes:\n    scheduled_snapshots_config (google.cloud.orchestration.airflow.service_v1beta1.types.ScheduledSnapshotsConfig):\n        Optional. The configuration for scheduled\n        snapshot creation mechanism.",
-      "attributes": {
-        "scheduled_snapshots_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.ScheduledSnapshotsConfig",
-          "description": "Optional. The configuration for scheduled snapshot creation mechanism."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ScheduledSnapshotsConfig",
-      "docstring": "The configuration for scheduled snapshot creation mechanism.\n\nAttributes:\n    enabled (bool):\n        Optional. Whether scheduled snapshots\n        creation is enabled.\n    snapshot_location (str):\n        Optional. The Cloud Storage location for\n        storing automatically created snapshots.\n    snapshot_creation_schedule (str):\n        Optional. The cron expression representing\n        the time when snapshots creation mechanism runs.\n        This field is subject to additional validation\n        around frequency of execution.\n    time_zone (str):\n        Optional. Time zone that sets the context to interpret\n        snapshot_creation_schedule.",
-      "attributes": {
-        "enabled": {
-          "type": "bool",
-          "description": "Optional. Whether scheduled snapshots creation is enabled."
-        },
-        "snapshot_location": {
-          "type": "str",
-          "description": "Optional. The Cloud Storage location for storing automatically created snapshots."
-        },
-        "snapshot_creation_schedule": {
-          "type": "str",
-          "description": "Optional. The cron expression representing the time when snapshots creation mechanism runs. This field is subject to additional validation around frequency of execution."
-        },
-        "time_zone": {
-          "type": "str",
-          "description": "Optional. Time zone that sets the context to interpret snapshot_creation_schedule."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MasterAuthorizedNetworksConfig",
-      "docstring": "Configuration options for the master authorized networks\nfeature. Enabled master authorized networks will disallow all\nexternal traffic to access Kubernetes master through HTTPS\nexcept traffic from the given CIDR blocks, Google Compute Engine\nPublic IPs and Google Prod IPs.\n\nAttributes:\n    enabled (bool):\n        Whether or not master authorized networks\n        feature is enabled.\n    cidr_blocks (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.MasterAuthorizedNetworksConfig.CidrBlock]):\n        Up to 50 external networks that could access\n        Kubernetes master through HTTPS.",
-      "attributes": {
-        "enabled": {
-          "type": "bool",
-          "description": "Whether or not master authorized networks feature is enabled."
-        },
-        "cidr_blocks": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.MasterAuthorizedNetworksConfig.CidrBlock]",
-          "description": "Up to 50 external networks that could access Kubernetes master through HTTPS."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudDataLineageIntegration",
-      "docstring": "Configuration for Cloud Data Lineage integration.\n\nAttributes:\n    enabled (bool):\n        Optional. Whether or not Cloud Data Lineage\n        integration is enabled.",
-      "attributes": {
-        "enabled": {
-          "type": "bool",
-          "description": "Optional. Whether or not Cloud Data Lineage integration is enabled."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Environment",
-      "docstring": "An environment for running orchestration tasks.\n\nAttributes:\n    name (str):\n        The resource name of the environment, in the\n        form:\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"\n\n        EnvironmentId must start with a lowercase letter\n        followed by up to 63 lowercase letters, numbers,\n        or hyphens, and cannot end with a hyphen.\n    config (google.cloud.orchestration.airflow.service_v1beta1.types.EnvironmentConfig):\n        Configuration parameters for this\n        environment.\n    uuid (str):\n        Output only. The UUID (Universally Unique\n        IDentifier) associated with this environment.\n        This value is generated when the environment is\n        created.\n    state (google.cloud.orchestration.airflow.service_v1beta1.types.Environment.State):\n        The current state of the environment.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time at which this\n        environment was created.\n    update_time (",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name of the environment, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"  EnvironmentId must start with a lowercase letter followed by up to 63 lowercase letters, numbers, or hyphens, and cannot end with a hyphen."
-        },
-        "config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.EnvironmentConfig",
-          "description": "Configuration parameters for this environment."
-        },
-        "uuid": {
-          "type": "str",
-          "description": "Output only. The UUID (Universally Unique IDentifier) associated with this environment. This value is generated when the environment is created."
-        },
-        "state": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.Environment.State",
-          "description": "The current state of the environment."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time at which this environment was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time at which this environment was last modified."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. User-defined labels for this environment. The labels map can contain no more than 64 entries. Entries of the labels map are UTF8 strings that comply with the following restrictions:  -  Keys must conform to regexp: [\\p{Ll}\\p{Lo}][\\p{Ll}\\p{Lo}\\p{N}_-]{0,62} -  Values must conform to regexp: [\\p{Ll}\\p{Lo}\\p{N}_-]{0,63} -  Both keys and values are additionally constrained to be <= 128 bytes in size."
-        },
-        "satisfies_pzs": {
-          "type": "bool",
-          "description": "Output only. Reserved for future use."
-        },
-        "satisfies_pzi": {
-          "type": "bool",
-          "description": "Output only. Reserved for future use."
-        },
-        "storage_config": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.StorageConfig",
-          "description": "Optional. Storage configuration for this environment."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "CheckUpgradeRequest",
-      "docstring": "Request to check whether image upgrade will succeed.\n\nAttributes:\n    environment (str):\n        The resource name of the environment to check\n        upgrade for, in the form:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    image_version (str):\n        The version of the software running in the environment. This\n        encapsulates both the version of Cloud Composer\n        functionality and the version of Apache Airflow. It must\n        match the regular expression\n        ``composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)``.\n        When used as input, the server also checks if the provided\n        version is supported and denies the request for an\n        unsupported version.\n\n        The Cloud Composer portion of the image version is a full\n        `semantic version <https://semver.org>`__, or an alias in\n        the form of major version number or ``latest``. When an\n        alias is provided, the server repla",
-      "attributes": {
-        "environment": {
-          "type": "str",
-          "description": "The resource name of the environment to check upgrade for, in the form:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\"."
-        },
-        "image_version": {
-          "type": "str",
-          "description": "The version of the software running in the environment. This encapsulates both the version of Cloud Composer functionality and the version of Apache Airflow. It must match the regular expression ``composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)``. When used as input, the server also checks if the provided version is supported and denies the request for an unsupported version.  The Cloud Composer portion of the image version is a full `semantic version <https://semver.org>`__, or an alias in the form of major version number or ``latest``. When an alias is provided, the server replaces it with the current Cloud Composer version that satisfies the alias.  The Apache Airflow portion of the image version is a full semantic version that points to one of the supported Apache Airflow versions, or an alias in the form of only major or major.minor versions specified. When an alias is provided, the server replaces it with the latest Apache Airflow version that satisfies the alias and is supported in the given Cloud Composer version.  In all cases, the resolved image version is stored in the same field.  See also `version list </composer/docs/concepts/versioning/composer-versions>`__ and `versioning overview </composer/docs/concepts/versioning/composer-versioning-overview>`__."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CheckUpgradeResponse",
-      "docstring": "Message containing information about the result of an upgrade\ncheck operation.\n\nAttributes:\n    build_log_uri (str):\n        Output only. Url for a docker build log of an\n        upgraded image.\n    contains_pypi_modules_conflict (google.cloud.orchestration.airflow.service_v1beta1.types.CheckUpgradeResponse.ConflictResult):\n        Output only. Whether build has succeeded or\n        failed on modules conflicts.\n    pypi_conflict_build_log_extract (str):\n        Output only. Extract from a docker image\n        build log containing information about pypi\n        modules conflicts.\n    image_version (str):\n        Composer image for which the build was\n        happening.\n    pypi_dependencies (MutableMapping[str, str]):\n        Pypi dependencies specified in the\n        environment configuration, at the time when the\n        build was triggered.",
-      "attributes": {
-        "build_log_uri": {
-          "type": "str",
-          "description": "Output only. Url for a docker build log of an upgraded image."
-        },
-        "contains_pypi_modules_conflict": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.CheckUpgradeResponse.ConflictResult",
-          "description": "Output only. Whether build has succeeded or failed on modules conflicts."
-        },
-        "pypi_conflict_build_log_extract": {
-          "type": "str",
-          "description": "Output only. Extract from a docker image build log containing information about pypi modules conflicts."
-        },
-        "image_version": {
-          "type": "str",
-          "description": "Composer image for which the build was happening."
-        },
-        "pypi_dependencies": {
-          "type": "MutableMapping[str, str]",
-          "description": "Pypi dependencies specified in the environment configuration, at the time when the build was triggered."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Line",
-      "docstring": "Contains information about a single line from logs.\n\nAttributes:\n    line_number (int):\n        Number of the line.\n    content (str):\n        Text content of the log line.",
-      "attributes": {
-        "line_number": {
-          "type": "int",
-          "description": "Number of the line."
-        },
-        "content": {
-          "type": "str",
-          "description": "Text content of the log line."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExitInfo",
-      "docstring": "Information about how a command ended.\n\nAttributes:\n    exit_code (int):\n        The exit code from the command execution.\n    error (str):\n        Error message. Empty if there was no error.",
-      "attributes": {
-        "exit_code": {
-          "type": "int",
-          "description": "The exit code from the command execution."
-        },
-        "error": {
-          "type": "str",
-          "description": "Error message. Empty if there was no error."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ComposerWorkload",
-      "docstring": "Information about a single workload.\n\nAttributes:\n    name (str):\n        Name of a workload.\n    type_ (google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkloadType):\n        Type of a workload.\n    status (google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkloadStatus):\n        Output only. Status of a workload.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Name of a workload."
-        },
-        "type_": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkloadType",
-          "description": "Type of a workload."
-        },
-        "status": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkloadStatus",
-          "description": "Output only. Status of a workload."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ComposerWorkloadStatus",
-      "docstring": "Workload status.\n\nAttributes:\n    state (google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkloadState):\n        Output only. Workload state.\n    status_message (str):\n        Output only. Text to provide more descriptive\n        status.\n    detailed_status_message (str):\n        Output only. Detailed message of the status.",
-      "attributes": {
-        "state": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.ListWorkloadsResponse.ComposerWorkloadState",
-          "description": "Output only. Workload state."
-        },
-        "status_message": {
-          "type": "str",
-          "description": "Output only. Text to provide more descriptive status."
-        },
-        "detailed_status_message": {
-          "type": "str",
-          "description": "Output only. Detailed message of the status."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AllowedIpRange",
-      "docstring": "Allowed IP range with user-provided description.\n\nAttributes:\n    value (str):\n        IP address or range, defined using CIDR notation, of\n        requests that this rule applies to. Examples:\n        ``192.168.1.1`` or ``192.168.0.0/16`` or ``2001:db8::/32``\n        or ``2001:0db8:0000:0042:0000:8a2e:0370:7334``.\n\n        IP range prefixes should be properly truncated. For example,\n        ``1.2.3.4/24`` should be truncated to ``1.2.3.0/24``.\n        Similarly, for IPv6, ``2001:db8::1/32`` should be truncated\n        to ``2001:db8::/32``.\n    description (str):\n        Optional. User-provided description. It must\n        contain at most 300 characters.",
-      "attributes": {
-        "value": {
-          "type": "str",
-          "description": "IP address or range, defined using CIDR notation, of requests that this rule applies to. Examples: ``192.168.1.1`` or ``192.168.0.0/16`` or ``2001:db8::/32`` or ``2001:0db8:0000:0042:0000:8a2e:0370:7334``.  IP range prefixes should be properly truncated. For example, ``1.2.3.4/24`` should be truncated to ``1.2.3.0/24``. Similarly, for IPv6, ``2001:db8::1/32`` should be truncated to ``2001:db8::/32``."
-        },
-        "description": {
-          "type": "str",
-          "description": "Optional. User-provided description. It must contain at most 300 characters."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SchedulerResource",
-      "docstring": "Configuration for resources used by Airflow schedulers.\n\nAttributes:\n    cpu (float):\n        Optional. CPU request and limit for a single\n        Airflow scheduler replica.\n    memory_gb (float):\n        Optional. Memory (GB) request and limit for a\n        single Airflow scheduler replica.\n    storage_gb (float):\n        Optional. Storage (GB) request and limit for\n        a single Airflow scheduler replica.\n    count (int):\n        Optional. The number of schedulers.",
-      "attributes": {
-        "cpu": {
-          "type": "float",
-          "description": "Optional. CPU request and limit for a single Airflow scheduler replica."
-        },
-        "memory_gb": {
-          "type": "float",
-          "description": "Optional. Memory (GB) request and limit for a single Airflow scheduler replica."
-        },
-        "storage_gb": {
-          "type": "float",
-          "description": "Optional. Storage (GB) request and limit for a single Airflow scheduler replica."
-        },
-        "count": {
-          "type": "int",
-          "description": "Optional. The number of schedulers."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "WebServerResource",
-      "docstring": "Configuration for resources used by Airflow web server.\n\nAttributes:\n    cpu (float):\n        Optional. CPU request and limit for Airflow\n        web server.\n    memory_gb (float):\n        Optional. Memory (GB) request and limit for\n        Airflow web server.\n    storage_gb (float):\n        Optional. Storage (GB) request and limit for\n        Airflow web server.",
-      "attributes": {
-        "cpu": {
-          "type": "float",
-          "description": "Optional. CPU request and limit for Airflow web server."
-        },
-        "memory_gb": {
-          "type": "float",
-          "description": "Optional. Memory (GB) request and limit for Airflow web server."
-        },
-        "storage_gb": {
-          "type": "float",
-          "description": "Optional. Storage (GB) request and limit for Airflow web server."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "WorkerResource",
-      "docstring": "Configuration for resources used by Airflow workers.\n\nAttributes:\n    cpu (float):\n        Optional. CPU request and limit for a single\n        Airflow worker replica.\n    memory_gb (float):\n        Optional. Memory (GB) request and limit for a\n        single Airflow worker replica.\n    storage_gb (float):\n        Optional. Storage (GB) request and limit for\n        a single Airflow worker replica.\n    min_count (int):\n        Optional. Minimum number of workers for\n        autoscaling.\n    max_count (int):\n        Optional. Maximum number of workers for\n        autoscaling.",
-      "attributes": {
-        "cpu": {
-          "type": "float",
-          "description": "Optional. CPU request and limit for a single Airflow worker replica."
-        },
-        "memory_gb": {
-          "type": "float",
-          "description": "Optional. Memory (GB) request and limit for a single Airflow worker replica."
-        },
-        "storage_gb": {
-          "type": "float",
-          "description": "Optional. Storage (GB) request and limit for a single Airflow worker replica."
-        },
-        "min_count": {
-          "type": "int",
-          "description": "Optional. Minimum number of workers for autoscaling."
-        },
-        "max_count": {
-          "type": "int",
-          "description": "Optional. Maximum number of workers for autoscaling."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TriggererResource",
-      "docstring": "Configuration for resources used by Airflow triggerers.\n\nAttributes:\n    count (int):\n        Optional. The number of triggerers.\n    cpu (float):\n        Optional. CPU request and limit for a single\n        Airflow triggerer replica.\n    memory_gb (float):\n        Optional. Memory (GB) request and limit for a\n        single Airflow triggerer replica.",
-      "attributes": {
-        "count": {
-          "type": "int",
-          "description": "Optional. The number of triggerers."
-        },
-        "cpu": {
-          "type": "float",
-          "description": "Optional. CPU request and limit for a single Airflow triggerer replica."
-        },
-        "memory_gb": {
-          "type": "float",
-          "description": "Optional. Memory (GB) request and limit for a single Airflow triggerer replica."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DagProcessorResource",
-      "docstring": "Configuration for resources used by Airflow DAG processors.\n\nThis field is supported for Cloud Composer environments in versions\ncomposer-3.\\ *.*-airflow-*.*.\\* and newer.\n\nAttributes:\n    cpu (float):\n        Optional. CPU request and limit for a single\n        Airflow DAG processor replica.\n    memory_gb (float):\n        Optional. Memory (GB) request and limit for a\n        single Airflow DAG processor replica.\n    storage_gb (float):\n        Optional. Storage (GB) request and limit for\n        a single Airflow DAG processor replica.\n    count (int):\n        Optional. The number of DAG processors. If\n        not provided or set to 0, a single DAG processor\n        instance will be created.",
-      "attributes": {
-        "cpu": {
-          "type": "float",
-          "description": "Optional. CPU request and limit for a single Airflow DAG processor replica."
-        },
-        "memory_gb": {
-          "type": "float",
-          "description": "Optional. Memory (GB) request and limit for a single Airflow DAG processor replica."
-        },
-        "storage_gb": {
-          "type": "float",
-          "description": "Optional. Storage (GB) request and limit for a single Airflow DAG processor replica."
-        },
-        "count": {
-          "type": "int",
-          "description": "Optional. The number of DAG processors. If not provided or set to 0, a single DAG processor instance will be created."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CidrBlock",
-      "docstring": "CIDR block with an optional name.\n\nAttributes:\n    display_name (str):\n        User-defined name that identifies the CIDR\n        block.\n    cidr_block (str):\n        CIDR block that must be specified in CIDR\n        notation.",
-      "attributes": {
-        "display_name": {
-          "type": "str",
-          "description": "User-defined name that identifies the CIDR block."
-        },
-        "cidr_block": {
-          "type": "str",
-          "description": "CIDR block that must be specified in CIDR notation."
+      "description": "Request to check whether image upgrade will succeed.\n\nAttributes:\n    environment (str):\n        The resource name of the environment to check\n        upgrade for, in the form:\n\n        \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".\n    image_version (str):\n        The version of the software running in the environment. This\n        encapsulates both the version of Cloud Composer\n        functionality and the version of Apache Airflow. It must\n        match the regular expression\n        ``composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)``.\n        When used as input, the server also checks if the provided\n        version is supported and denies the request for an\n        unsupported version.\n\n        The Cloud Composer portion of the image version is a full\n        `semantic version <https://semver.org>`__, or an alias in\n        the form of major version number or ``latest``. When an\n        alias is provided, the server repla",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "description": "The resource name of the environment to check upgrade for, in the form:  \"projects/{projectId}/locations/{locationId}/environments/{environmentId}\".",
+            "type": "string"
+          },
+          "image_version": {
+            "description": "The version of the software running in the environment. This encapsulates both the version of Cloud Composer functionality and the version of Apache Airflow. It must match the regular expression ``composer-([0-9]+(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-([0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)``. When used as input, the server also checks if the provided version is supported and denies the request for an unsupported version.  The Cloud Composer portion of the image version is a full `semantic version <https://semver.org>`__, or an alias in the form of major version number or ``latest``. When an alias is provided, the server replaces it with the current Cloud Composer version that satisfies the alias.  The Apache Airflow portion of the image version is a full semantic version that points to one of the supported Apache Airflow versions, or an alias in the form of only major or major.minor versions specified. When an alias is provided, the server replaces it with the latest Apache Airflow version that satisfies the alias and is supported in the given Cloud Composer version.  In all cases, the resolved image version is stored in the same field.  See also `version list </composer/docs/concepts/versioning/composer-versions>`__ and `versioning overview </composer/docs/concepts/versioning/composer-versioning-overview>`__.",
+            "type": "string"
+          }
         }
       }
     }
   ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-orchestration-airflow\\google\\cloud\\orchestration\\airflow\\service_v1beta1\\types\\image_versions.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListImageVersionsRequest",
-      "docstring": "List ImageVersions in a project and location.\n\nAttributes:\n    parent (str):\n        List ImageVersions in the given project and\n        location, in the form:\n        \"projects/{projectId}/locations/{locationId}\".\n    page_size (int):\n        The maximum number of image_versions to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    include_past_releases (bool):\n        Whether or not image versions from old\n        releases should be included.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "List ImageVersions in the given project and location, in the form: \"projects/{projectId}/locations/{locationId}\"."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of image_versions to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The next_page_token value returned from a previous List request, if any."
-        },
-        "include_past_releases": {
-          "type": "bool",
-          "description": "Whether or not image versions from old releases should be included."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListImageVersionsResponse",
-      "docstring": "The ImageVersions in a project and location.\n\nAttributes:\n    image_versions (MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.ImageVersion]):\n        The list of supported ImageVersions in a\n        location.\n    next_page_token (str):\n        The page token used to query for the next\n        page if one exists.",
-      "attributes": {
-        "image_versions": {
-          "type": "MutableSequence[google.cloud.orchestration.airflow.service_v1beta1.types.ImageVersion]",
-          "description": "The list of supported ImageVersions in a location."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The page token used to query for the next page if one exists."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ImageVersion",
-      "docstring": "Image Version information\n\nAttributes:\n    image_version_id (str):\n        The string identifier of the ImageVersion, in\n        the form: \"composer-x.y.z-airflow-a.b.c\".\n    is_default (bool):\n        Whether this is the default ImageVersion used\n        by Composer during environment creation if no\n        input ImageVersion is specified.\n    supported_python_versions (MutableSequence[str]):\n        supported python versions\n    release_date (google.type.date_pb2.Date):\n        The date of the version release.\n    creation_disabled (bool):\n        Whether it is impossible to create an\n        environment with the image version.\n    upgrade_disabled (bool):\n        Whether it is impossible to upgrade an\n        environment running with the image version.",
-      "attributes": {
-        "image_version_id": {
-          "type": "str",
-          "description": "The string identifier of the ImageVersion, in the form: \"composer-x.y.z-airflow-a.b.c\"."
-        },
-        "is_default": {
-          "type": "bool",
-          "description": "Whether this is the default ImageVersion used by Composer during environment creation if no input ImageVersion is specified."
-        },
-        "supported_python_versions": {
-          "type": "MutableSequence[str]",
-          "description": "supported python versions"
-        },
-        "release_date": {
-          "type": "google.type.date_pb2.Date",
-          "description": "The date of the version release."
-        },
-        "creation_disabled": {
-          "type": "bool",
-          "description": "Whether it is impossible to create an environment with the image version."
-        },
-        "upgrade_disabled": {
-          "type": "bool",
-          "description": "Whether it is impossible to upgrade an environment running with the image version."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-orchestration-airflow\\google\\cloud\\orchestration\\airflow\\service_v1beta1\\types\\operations.py": [
-    {
-      "type": "request_class",
-      "name": "OperationMetadata",
-      "docstring": "Metadata describing an operation.\n\nAttributes:\n    state (google.cloud.orchestration.airflow.service_v1beta1.types.OperationMetadata.State):\n        Output only. The current operation state.\n    operation_type (google.cloud.orchestration.airflow.service_v1beta1.types.OperationMetadata.Type):\n        Output only. The type of operation being\n        performed.\n    resource (str):\n        Output only. The resource being operated on, as a `relative\n        resource\n        name </apis/design/resource_names#relative_resource_name>`__.\n    resource_uuid (str):\n        Output only. The UUID of the resource being\n        operated on.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation was\n        submitted to the server.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time when the operation\n        terminated, regardless of its success. This\n        field is unset if the operation is still\n        ongoing.",
-      "attributes": {
-        "state": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.OperationMetadata.State",
-          "description": "Output only. The current operation state."
-        },
-        "operation_type": {
-          "type": "google.cloud.orchestration.airflow.service_v1beta1.types.OperationMetadata.Type",
-          "description": "Output only. The type of operation being performed."
-        },
-        "resource": {
-          "type": "str",
-          "description": "Output only. The resource being operated on, as a `relative resource name </apis/design/resource_names#relative_resource_name>`__."
-        },
-        "resource_uuid": {
-          "type": "str",
-          "description": "Output only. The UUID of the resource being operated on."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the operation was submitted to the server."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when the operation terminated, regardless of its success. This field is unset if the operation is still ongoing."
+      "description": "List ImageVersions in a project and location.\n\nAttributes:\n    parent (str):\n        List ImageVersions in the given project and\n        location, in the form:\n        \"projects/{projectId}/locations/{locationId}\".\n    page_size (int):\n        The maximum number of image_versions to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    include_past_releases (bool):\n        Whether or not image versions from old\n        releases should be included.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "List ImageVersions in the given project and location, in the form: \"projects/{projectId}/locations/{locationId}\".",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of image_versions to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          },
+          "include_past_releases": {
+            "description": "Whether or not image versions from old releases should be included.",
+            "type": "boolean"
+          }
         }
       }
     }

@@ -1,260 +1,1281 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-commerce-consumer-procurement\\google\\cloud\\commerce_consumer_procurement_v1alpha1\\types\\order.py": [
-    {
-      "type": "request_class",
-      "name": "Order",
-      "docstring": "Represents a purchase made by a customer on Cloud\nMarketplace. Creating an order makes sure that both the Google\nbackend systems as well as external service provider's systems\n(if needed) allow use of purchased products and ensures the\nappropriate billing events occur.\n\nAn Order can be made against one Product with multiple add-ons\n(optional) or one Quote which might reference multiple products.\n\nCustomers typically choose a price plan for each Product\npurchased when they create an order and can change their plan\nlater, if the product allows.\n\nAttributes:\n    name (str):\n        Output only. The resource name of the order. Has the form\n        ``billingAccounts/{billing_account}/orders/{order}``.\n    display_name (str):\n        Required. The user-specified name of the\n        order.\n    line_items (MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItem]):\n        Output only. The items being purchased.\n    cancelled_line_items (MutableSequence[google.cloud.commerce_consumer_procure",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. The resource name of the order. Has the form ``billingAccounts/{billing_account}/orders/{order}``."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Required. The user-specified name of the order."
-        },
-        "line_items": {
-          "type": "MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItem]",
-          "description": "Output only. The items being purchased."
-        },
-        "cancelled_line_items": {
-          "type": "MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItem]",
-          "description": "Output only. Line items that were cancelled."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The creation timestamp."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The last update timestamp."
-        },
-        "etag": {
-          "type": "str",
-          "description": "The weak etag of the order."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LineItem",
-      "docstring": "A single item within an order.\n\nAttributes:\n    line_item_id (str):\n        Output only. Line item ID.\n    line_item_info (google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo):\n        Output only. Current state and information of\n        this item. It tells what, e.g. which offer, is\n        currently effective.\n    pending_change (google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChange):\n        Output only. A change made on the item which\n        is pending and not yet effective. Absence of\n        this field indicates the line item is not\n        undergoing a change.\n    change_history (MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChange]):\n        Output only. Changes made on the item that\n        are not pending anymore which might be because\n        they already took effect, were reverted by the\n        customer, or were rejected by the partner. No\n        more operations are allowed on these changes.",
-      "attributes": {
-        "line_item_id": {
-          "type": "str",
-          "description": "Output only. Line item ID."
-        },
-        "line_item_info": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo",
-          "description": "Output only. Current state and information of this item. It tells what, e.g. which offer, is currently effective."
-        },
-        "pending_change": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChange",
-          "description": "Output only. A change made on the item which is pending and not yet effective. Absence of this field indicates the line item is not undergoing a change."
-        },
-        "change_history": {
-          "type": "MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChange]",
-          "description": "Output only. Changes made on the item that are not pending anymore which might be because they already took effect, were reverted by the customer, or were rejected by the partner. No more operations are allowed on these changes."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LineItemChange",
-      "docstring": "A change made on a line item.\n\nAttributes:\n    change_id (str):\n        Output only. Change ID. All changes made within one order\n        update operation have the same change_id.\n    change_type (google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChangeType):\n        Required. Type of the change to make.\n    old_line_item_info (google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo):\n        Output only. Line item info before the\n        change.\n    new_line_item_info (google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo):\n        Line item info after the change.\n    change_state (google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChangeState):\n        Output only. State of the change.\n    state_reason (str):\n        Output only. Provider-supplied message explaining the\n        LineItemChange's state. Mainly used to communicate progress\n        and ETA for provisioning in the case of\n        ``PENDING_APPROVAL``, and to explain why the change re",
-      "attributes": {
-        "change_id": {
-          "type": "str",
-          "description": "Output only. Change ID. All changes made within one order update operation have the same change_id."
-        },
-        "change_type": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChangeType",
-          "description": "Required. Type of the change to make."
-        },
-        "old_line_item_info": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo",
-          "description": "Output only. Line item info before the change."
-        },
-        "new_line_item_info": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo",
-          "description": "Line item info after the change."
-        },
-        "change_state": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChangeState",
-          "description": "Output only. State of the change."
-        },
-        "state_reason": {
-          "type": "str",
-          "description": "Output only. Provider-supplied message explaining the LineItemChange's state. Mainly used to communicate progress and ETA for provisioning in the case of ``PENDING_APPROVAL``, and to explain why the change request was denied or canceled in the case of ``REJECTED`` and ``CANCELED`` states."
-        },
-        "change_state_reason_type": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemChangeStateReasonType",
-          "description": "Output only. Predefined enum types for why this line item change is in current state. For example, a line item change's state could be ``LINE_ITEM_CHANGE_STATE_COMPLETED`` because of end-of-term expiration, immediate cancellation initiated by the user, or system-initiated cancellation."
-        },
-        "change_effective_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. A time at which the change became or will become (in case of pending change) effective."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when change was initiated."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when change was updated, e.g. approved/rejected by partners or cancelled by the user."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LineItemInfo",
-      "docstring": "Line item information.\n\nAttributes:\n    offer (str):\n        Optional. The name of the offer can have either of these\n        formats: 'billingAccounts/{billing_account}/offers/{offer}',\n        or 'services/{service}/standardOffers/{offer}'.\n    parameters (MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.Parameter]):\n        Optional. User-provided parameters.\n    subscription (google.cloud.commerce_consumer_procurement_v1alpha1.types.Subscription):\n        Output only. Information about the\n        subscription created, if applicable.",
-      "attributes": {
-        "offer": {
-          "type": "str",
-          "description": "Optional. The name of the offer can have either of these formats: 'billingAccounts/{billing_account}/offers/{offer}', or 'services/{service}/standardOffers/{offer}'."
-        },
-        "parameters": {
-          "type": "MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.Parameter]",
-          "description": "Optional. User-provided parameters."
-        },
-        "subscription": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.Subscription",
-          "description": "Output only. Information about the subscription created, if applicable."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Parameter",
-      "docstring": "User-provided Parameters.\n\nAttributes:\n    name (str):\n        Name of the parameter.\n    value (google.cloud.commerce_consumer_procurement_v1alpha1.types.Parameter.Value):\n        Value of parameter.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Name of the parameter."
-        },
-        "value": {
-          "type": "google.cloud.commerce_consumer_procurement_v1alpha1.types.Parameter.Value",
-          "description": "Value of parameter."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Subscription",
-      "docstring": "Subscription information.\n\nAttributes:\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        The timestamp when the subscription begins,\n        if applicable.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        The timestamp when the subscription ends, if\n        applicable.\n    auto_renewal_enabled (bool):\n        Whether auto renewal is enabled by user\n        choice on current subscription. This field\n        indicates order/subscription status after\n        pending plan change is cancelled or rejected.",
-      "attributes": {
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The timestamp when the subscription begins, if applicable."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The timestamp when the subscription ends, if applicable."
-        },
-        "auto_renewal_enabled": {
-          "type": "bool",
-          "description": "Whether auto renewal is enabled by user choice on current subscription. This field indicates order/subscription status after pending plan change is cancelled or rejected."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Value",
-      "docstring": "This message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    int64_value (int):\n        Represents an int64 value.\n\n        This field is a member of `oneof`_ ``kind``.\n    string_value (str):\n        Represents a string value.\n\n        This field is a member of `oneof`_ ``kind``.\n    double_value (float):\n        Represents a double value.\n\n        This field is a member of `oneof`_ ``kind``.",
-      "attributes": {
-        "int64_value": {
-          "type": "int",
-          "description": "Represents an int64 value.  This field is a member of `oneof`_ ``kind``."
-        },
-        "string_value": {
-          "type": "str",
-          "description": "Represents a string value.  This field is a member of `oneof`_ ``kind``."
-        },
-        "double_value": {
-          "type": "float",
-          "description": "Represents a double value.  This field is a member of `oneof`_ ``kind``."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-commerce-consumer-procurement\\google\\cloud\\commerce_consumer_procurement_v1alpha1\\types\\procurement_service.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "PlaceOrderRequest",
-      "docstring": "Request message for\n[ConsumerProcurementService.PlaceOrder][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.PlaceOrder].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the parent resource. This\n        field has the form ``billingAccounts/{billing-account-id}``.\n    display_name (str):\n        Required. The user-specified name of the\n        order being placed.\n    line_item_info (MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo]):\n        Optional. Places order for offer. Required\n        when an offer-based order is being placed.\n    request_id (str):\n        Optional. A unique identifier for this request. The server\n        will ignore subsequent requests that provide a duplicate\n        request ID for at least 120 minutes after the first request.\n\n        The request ID must be a valid\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier#Format>`__.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The resource name of the parent resource. This field has the form ``billingAccounts/{billing-account-id}``."
+      "description": "Request message for\n[ConsumerProcurementService.PlaceOrder][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.PlaceOrder].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the parent resource. This\n        field has the form ``billingAccounts/{billing-account-id}``.\n    display_name (str):\n        Required. The user-specified name of the\n        order being placed.\n    line_item_info (MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo]):\n        Optional. Places order for offer. Required\n        when an offer-based order is being placed.\n    request_id (str):\n        Optional. A unique identifier for this request. The server\n        will ignore subsequent requests that provide a duplicate\n        request ID for at least 120 minutes after the first request.\n\n        The request ID must be a valid\n        `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier#Format>`__.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource name of the parent resource. This field has the form ``billingAccounts/{billing-account-id}``.",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "Required. The user-specified name of the order being placed.",
+            "type": "string"
+          },
+          "line_item_info": {
+            "description": "Optional. Places order for offer. Required when an offer-based order is being placed.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "offer": {
+                  "description": "Optional. The name of the offer can have either of these formats: 'billingAccounts/{billing_account}/offers/{offer}', or 'services/{service}/standardOffers/{offer}'.",
+                  "type": "string"
+                },
+                "parameters": {
+                  "description": "Optional. User-provided parameters.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "display_name": {
+                        "description": "Required. The human-readable name of the parameter, unique within the form.",
+                        "type": "string"
+                      },
+                      "required": {
+                        "description": "Indicates whether the parameter is required. Optional parameters will not trigger prompts; however, they are filled if the user specifies them. Required parameters must be filled before form filling concludes.",
+                        "type": "boolean"
+                      },
+                      "entity_type": {
+                        "description": "Required. The entity type of the parameter. Format: ``projects/-/locations/-/agents/-/entityTypes/<SystemEntityTypeID>`` for system entity types (for example, ``projects/-/locations/-/agents/-/entityTypes/sys.date``), or ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/entityTypes/<EntityTypeID>`` for developer entity types.",
+                        "type": "string"
+                      },
+                      "is_list": {
+                        "description": "Indicates whether the parameter represents a list of values.",
+                        "type": "boolean"
+                      },
+                      "fill_behavior": {
+                        "type": "object",
+                        "properties": {
+                          "initial_prompt_fulfillment": {
+                            "type": "object",
+                            "properties": {
+                              "messages": {
+                                "description": "The list of rich message responses to present to the user.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "text": {
+                                      "type": "object",
+                                      "properties": {
+                                        "content": {
+                                          "description": "The text content to be displayed.",
+                                          "type": "string"
+                                        },
+                                        "format_": {
+                                          "description": "How the text content is formatted.",
+                                          "type": "object",
+                                          "reference": "google.cloud.monitoring_dashboard_v1.types.Text.Format"
+                                        },
+                                        "style": {
+                                          "type": "object",
+                                          "properties": {
+                                            "background_color": {
+                                              "description": "The background color as a hex string. \"#RRGGBB\" or \"#RGB\".",
+                                              "type": "string"
+                                            },
+                                            "text_color": {
+                                              "description": "The text color as a hex string. \"#RRGGBB\" or \"#RGB\".",
+                                              "type": "string"
+                                            },
+                                            "horizontal_alignment": {
+                                              "description": "The horizontal alignment of both the title and content",
+                                              "type": "object",
+                                              "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.HorizontalAlignment"
+                                            },
+                                            "vertical_alignment": {
+                                              "description": "The vertical alignment of both the title and content",
+                                              "type": "object",
+                                              "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.VerticalAlignment"
+                                            },
+                                            "padding": {
+                                              "description": "The amount of padding around the widget",
+                                              "type": "object",
+                                              "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PaddingSize"
+                                            },
+                                            "font_size": {
+                                              "type": "object",
+                                              "properties": {
+                                                "size": {
+                                                  "description": "Font size for the text.",
+                                                  "type": "number"
+                                                },
+                                                "unit": {
+                                                  "description": "Unit for the font size. Follows CSS naming (such as ``in``, ``px``, and ``pt``).",
+                                                  "type": "string"
+                                                }
+                                              }
+                                            },
+                                            "pointer_location": {
+                                              "description": "The pointer location for this widget (also sometimes called a \"tail\")",
+                                              "type": "object",
+                                              "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PointerLocation"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "payload": {
+                                      "description": "Returns a response containing a custom, platform-specific payload.  This field is a member of `oneof`_ ``message``.",
+                                      "type": "object",
+                                      "reference": "google.protobuf.struct_pb2.Struct"
+                                    },
+                                    "conversation_success": {
+                                      "type": "object",
+                                      "properties": {
+                                        "metadata": {
+                                          "description": "Custom metadata. Dialogflow doesn't impose any structure on this.",
+                                          "type": "object",
+                                          "reference": "google.protobuf.struct_pb2.Struct"
+                                        }
+                                      }
+                                    },
+                                    "output_audio_text": {
+                                      "type": "object",
+                                      "properties": {
+                                        "text": {
+                                          "description": "The raw text to be synthesized.  This field is a member of `oneof`_ ``source``.",
+                                          "type": "string"
+                                        },
+                                        "ssml": {
+                                          "description": "The SSML text to be synthesized. For more information, see `SSML </speech/text-to-speech/docs/ssml>`__.  This field is a member of `oneof`_ ``source``.",
+                                          "type": "string"
+                                        },
+                                        "allow_playback_interruption": {
+                                          "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    },
+                                    "live_agent_handoff": {
+                                      "type": "object",
+                                      "properties": {
+                                        "metadata": {
+                                          "description": "Custom metadata for your handoff procedure. Dialogflow doesn't impose any structure on this.",
+                                          "type": "object",
+                                          "reference": "google.protobuf.struct_pb2.Struct"
+                                        }
+                                      }
+                                    },
+                                    "end_interaction": {
+                                      "type": "object",
+                                      "properties": {}
+                                    },
+                                    "play_audio": {
+                                      "type": "object",
+                                      "properties": {
+                                        "audio_uri": {
+                                          "description": "Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.",
+                                          "type": "string"
+                                        },
+                                        "allow_playback_interruption": {
+                                          "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
+                                          "type": "boolean"
+                                        }
+                                      },
+                                      "required": [
+                                        "audio_uri"
+                                      ]
+                                    },
+                                    "mixed_audio": {
+                                      "type": "object",
+                                      "properties": {
+                                        "segments": {
+                                          "description": "Segments this audio response is composed of.",
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "audio": {
+                                                "description": "Raw audio synthesized from the Dialogflow agent's response using the output config specified in the request.  This field is a member of `oneof`_ ``content``.",
+                                                "type": "object",
+                                                "reference": "bytes"
+                                              },
+                                              "uri": {
+                                                "description": "Client-specific URI that points to an audio clip accessible to the client. Dialogflow does not impose any validation on it.  This field is a member of `oneof`_ ``content``.",
+                                                "type": "string"
+                                              },
+                                              "allow_playback_interruption": {
+                                                "description": "Output only. Whether the playback of this segment can be interrupted by the end user's speech and the client should then start the next Dialogflow request.",
+                                                "type": "boolean"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "telephony_transfer_call": {
+                                      "type": "object",
+                                      "properties": {
+                                        "phone_number": {
+                                          "description": "Transfer the call to a phone number in `E.164 format <https://en.wikipedia.org/wiki/E.164>`__.  This field is a member of `oneof`_ ``endpoint``.",
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "knowledge_info_card": {
+                                      "type": "object",
+                                      "properties": {}
+                                    },
+                                    "tool_call": {
+                                      "type": "object",
+                                      "properties": {
+                                        "tool": {
+                                          "description": "The [tool][Tool] associated with this call. Format: ``projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/tools/<Tool ID>``.",
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "description": "The name of the tool's action associated with this call.",
+                                          "type": "string"
+                                        },
+                                        "input_parameters": {
+                                          "description": "The action's input parameters.",
+                                          "type": "object",
+                                          "reference": "google.protobuf.struct_pb2.Struct"
+                                        }
+                                      }
+                                    },
+                                    "channel": {
+                                      "description": "The channel which the response is associated with. Clients can specify the channel via [QueryParameters.channel][google.cloud.dialogflow.cx.v3beta1.QueryParameters.channel], and only associated channel response will be returned.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "webhook": {
+                                "description": "The webhook to call. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/webhooks/<WebhookID>``.",
+                                "type": "string"
+                              },
+                              "return_partial_responses": {
+                                "description": "Whether Dialogflow should return currently queued fulfillment response messages in streaming APIs. If a webhook is specified, it happens before Dialogflow invokes webhook. Warning:  1) This flag only affects streaming API. Responses are still queued and returned once in non-streaming API. 2) The flag can be enabled in any fulfillment but only the first 3 partial responses will be returned. You may only want to apply it to fulfillments that have slow webhooks.",
+                                "type": "boolean"
+                              },
+                              "tag": {
+                                "description": "The value of this field will be populated in the [WebhookRequest][google.cloud.dialogflow.cx.v3beta1.WebhookRequest] ``fulfillmentInfo.tag`` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if ``webhook`` is specified.",
+                                "type": "string"
+                              },
+                              "set_parameter_actions": {
+                                "description": "Set parameter values before executing the webhook.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "parameter": {
+                                      "description": "Display name of the parameter.",
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "object",
+                                      "properties": {
+                                        "no_shipping": {
+                                          "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
+                                          "type": "boolean"
+                                        },
+                                        "flat_rate": {
+                                          "type": "object",
+                                          "properties": {
+                                            "amount_micros": {
+                                              "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                              "type": "integer"
+                                            },
+                                            "currency_code": {
+                                              "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "price_percentage": {
+                                          "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
+                                          "type": "string"
+                                        },
+                                        "carrier_rate": {
+                                          "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
+                                          "type": "string"
+                                        },
+                                        "subtable": {
+                                          "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "conditional_cases": {
+                                "description": "Conditional cases for this fulfillment.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "cases": {
+                                      "description": "A list of cascading if-else conditions.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "name": {
+                                            "description": "The resource name for the case.",
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "description": "The short summary of the issue reported in this case.",
+                                            "type": "string"
+                                          },
+                                          "description": {
+                                            "description": "A broad description of the issue.",
+                                            "type": "string"
+                                          },
+                                          "classification": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "description": "The unique ID for a classification. Must be specified for case creation.  To retrieve valid classification IDs for case creation, use ``caseClassifications.search``.",
+                                                "type": "string"
+                                              },
+                                              "display_name": {
+                                                "description": "The display name of the classification.",
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "time_zone": {
+                                            "description": "The timezone of the user who created the support case. It should be in a format IANA recognizes: https://www.iana.org/time-zones. There is no additional validation done by the API.",
+                                            "type": "string"
+                                          },
+                                          "subscriber_email_addresses": {
+                                            "description": "The email addresses to receive updates on this case.",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "state": {
+                                            "description": "Output only. The current status of the support case.",
+                                            "type": "object",
+                                            "reference": "google.cloud.support_v2.types.Case.State"
+                                          },
+                                          "create_time": {
+                                            "description": "Output only. The time this case was created.",
+                                            "type": "object",
+                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                          },
+                                          "update_time": {
+                                            "description": "Output only. The time this case was last updated.",
+                                            "type": "object",
+                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                          },
+                                          "creator": {
+                                            "type": "object",
+                                            "properties": {
+                                              "display_name": {
+                                                "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                                                "type": "string"
+                                              },
+                                              "email": {
+                                                "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                                                "type": "string"
+                                              },
+                                              "google_support": {
+                                                "description": "Output only. Whether the actor is a Google support actor.",
+                                                "type": "boolean"
+                                              }
+                                            }
+                                          },
+                                          "contact_email": {
+                                            "description": "A user-supplied email address to send case update notifications for. This should only be used in BYOID flows, where we cannot infer the user's email address directly from their EUCs.",
+                                            "type": "string"
+                                          },
+                                          "escalated": {
+                                            "description": "Whether the case is currently escalated.",
+                                            "type": "boolean"
+                                          },
+                                          "test_case": {
+                                            "description": "Whether this case was created for internal API testing and should not be acted on by the support team.",
+                                            "type": "boolean"
+                                          },
+                                          "language_code": {
+                                            "description": "The language the user has requested to receive support in. This should be a BCP 47 language code (e.g., ``\"en\"``, ``\"zh-CN\"``, ``\"zh-TW\"``, ``\"ja\"``, ``\"ko\"``). If no language or an unsupported language is specified, this field defaults to English (en).  Language selection during case creation may affect your available support options. For a list of supported languages and their support working hours, see: https://cloud.google.com/support/docs/language-working-hours",
+                                            "type": "string"
+                                          },
+                                          "priority": {
+                                            "description": "The priority of this case.",
+                                            "type": "object",
+                                            "reference": "google.cloud.support_v2.types.Case.Priority"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "advanced_settings": {
+                                "type": "object",
+                                "properties": {
+                                  "audio_export_gcs_destination": {
+                                    "type": "object",
+                                    "properties": {
+                                      "uri": {
+                                        "description": "Required. Google Cloud Storage URI.",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "uri"
+                                    ]
+                                  },
+                                  "speech_settings": {
+                                    "type": "object",
+                                    "properties": {
+                                      "endpointer_sensitivity": {
+                                        "description": "Sensitivity of the speech model that detects the end of speech. Scale from 0 to 100.",
+                                        "type": "integer"
+                                      },
+                                      "no_speech_timeout": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nanos": {
+                                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                            "type": "integer"
+                                          },
+                                          "seconds": {
+                                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                            "type": "integer"
+                                          }
+                                        }
+                                      },
+                                      "use_timeout_based_endpointing": {
+                                        "description": "Use timeout based endpointing, interpreting endpointer sensitivy as seconds of timeout value.",
+                                        "type": "boolean"
+                                      },
+                                      "models": {
+                                        "description": "Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see `Speech models <https://cloud.google.com/dialogflow/cx/docs/concept/speech-models>`__.",
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "dtmf_settings": {
+                                    "type": "object",
+                                    "properties": {
+                                      "enabled": {
+                                        "description": "If true, incoming audio is processed for DTMF (dual tone multi frequency) events. For example, if the caller presses a button on their telephone keypad and DTMF processing is enabled, Dialogflow will detect the event (e.g. a \"3\" was pressed) in the incoming audio and pass the event to the bot to drive business logic (e.g. when 3 is pressed, return the account balance).",
+                                        "type": "boolean"
+                                      },
+                                      "max_digits": {
+                                        "description": "Max length of DTMF digits.",
+                                        "type": "integer"
+                                      },
+                                      "finish_digit": {
+                                        "description": "The digit that terminates a DTMF digit sequence.",
+                                        "type": "string"
+                                      },
+                                      "interdigit_timeout_duration": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nanos": {
+                                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                            "type": "integer"
+                                          },
+                                          "seconds": {
+                                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                            "type": "integer"
+                                          }
+                                        }
+                                      },
+                                      "endpointing_timeout_duration": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nanos": {
+                                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                            "type": "integer"
+                                          },
+                                          "seconds": {
+                                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                            "type": "integer"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "logging_settings": {
+                                    "type": "object",
+                                    "properties": {
+                                      "enable_stackdriver_logging": {
+                                        "description": "Enables Google Cloud Logging.",
+                                        "type": "boolean"
+                                      },
+                                      "enable_interaction_logging": {
+                                        "description": "Enables DF Interaction logging.",
+                                        "type": "boolean"
+                                      },
+                                      "enable_consent_based_redaction": {
+                                        "description": "Enables consent-based end-user input redaction, if true, a pre-defined session parameter ``$session.params.conversation-redaction`` will be used to determine if the utterance should be redacted.",
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "enable_generative_fallback": {
+                                "description": "If the flag is true, the agent will utilize LLM to generate a text response. If LLM generation fails, the defined [responses][google.cloud.dialogflow.cx.v3beta1.Fulfillment.messages] in the fulfillment will be respected. This flag is only useful for fulfillments associated with no-match event handlers.",
+                                "type": "boolean"
+                              }
+                            }
+                          },
+                          "reprompt_event_handlers": {
+                            "description": "The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are:  -  ``sys.no-match-<N>``, where N can be from 1 to 6 -  ``sys.no-match-default`` -  ``sys.no-input-<N>``, where N can be from 1 to 6 -  ``sys.no-input-default`` -  ``sys.invalid-parameter``  ``initial_prompt_fulfillment`` provides the first prompt for the parameter.  If the user's response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the ``sys.no-match-1``/``sys.no-input-1`` handler (if defined) will be called to provide a prompt. The ``sys.no-match-2``/``sys.no-input-2`` handler (if defined) will respond to the next no-match/no-input event, and so on.  A ``sys.no-match-default`` or ``sys.no-input-default`` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed.  A ``sys.invalid-parameter`` handler can be defined to handle the case where the parameter values have been ``invalidated`` by webhook. For example, if the user's response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the ``sys.invalid-parameter`` handler (if defined) will be called to provide a prompt.  If the event handler for the corresponding event can't be found on the parameter, ``initial_prompt_fulfillment`` will be re-prompted.",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "description": "Output only. The unique identifier of this event handler.",
+                                  "type": "string"
+                                },
+                                "event": {
+                                  "description": "Required. The name of the event to handle.",
+                                  "type": "string"
+                                },
+                                "trigger_fulfillment": {
+                                  "type": "object",
+                                  "properties": {
+                                    "messages": {
+                                      "description": "The list of rich message responses to present to the user.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "object",
+                                            "properties": {
+                                              "content": {
+                                                "description": "The text content to be displayed.",
+                                                "type": "string"
+                                              },
+                                              "format_": {
+                                                "description": "How the text content is formatted.",
+                                                "type": "object",
+                                                "reference": "google.cloud.monitoring_dashboard_v1.types.Text.Format"
+                                              },
+                                              "style": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "background_color": {
+                                                    "description": "The background color as a hex string. \"#RRGGBB\" or \"#RGB\".",
+                                                    "type": "string"
+                                                  },
+                                                  "text_color": {
+                                                    "description": "The text color as a hex string. \"#RRGGBB\" or \"#RGB\".",
+                                                    "type": "string"
+                                                  },
+                                                  "horizontal_alignment": {
+                                                    "description": "The horizontal alignment of both the title and content",
+                                                    "type": "object",
+                                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.HorizontalAlignment"
+                                                  },
+                                                  "vertical_alignment": {
+                                                    "description": "The vertical alignment of both the title and content",
+                                                    "type": "object",
+                                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.VerticalAlignment"
+                                                  },
+                                                  "padding": {
+                                                    "description": "The amount of padding around the widget",
+                                                    "type": "object",
+                                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PaddingSize"
+                                                  },
+                                                  "font_size": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "size": {
+                                                        "description": "Font size for the text.",
+                                                        "type": "number"
+                                                      },
+                                                      "unit": {
+                                                        "description": "Unit for the font size. Follows CSS naming (such as ``in``, ``px``, and ``pt``).",
+                                                        "type": "string"
+                                                      }
+                                                    }
+                                                  },
+                                                  "pointer_location": {
+                                                    "description": "The pointer location for this widget (also sometimes called a \"tail\")",
+                                                    "type": "object",
+                                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PointerLocation"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "payload": {
+                                            "description": "Returns a response containing a custom, platform-specific payload.  This field is a member of `oneof`_ ``message``.",
+                                            "type": "object",
+                                            "reference": "google.protobuf.struct_pb2.Struct"
+                                          },
+                                          "conversation_success": {
+                                            "type": "object",
+                                            "properties": {
+                                              "metadata": {
+                                                "description": "Custom metadata. Dialogflow doesn't impose any structure on this.",
+                                                "type": "object",
+                                                "reference": "google.protobuf.struct_pb2.Struct"
+                                              }
+                                            }
+                                          },
+                                          "output_audio_text": {
+                                            "type": "object",
+                                            "properties": {
+                                              "text": {
+                                                "description": "The raw text to be synthesized.  This field is a member of `oneof`_ ``source``.",
+                                                "type": "string"
+                                              },
+                                              "ssml": {
+                                                "description": "The SSML text to be synthesized. For more information, see `SSML </speech/text-to-speech/docs/ssml>`__.  This field is a member of `oneof`_ ``source``.",
+                                                "type": "string"
+                                              },
+                                              "allow_playback_interruption": {
+                                                "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
+                                                "type": "boolean"
+                                              }
+                                            }
+                                          },
+                                          "live_agent_handoff": {
+                                            "type": "object",
+                                            "properties": {
+                                              "metadata": {
+                                                "description": "Custom metadata for your handoff procedure. Dialogflow doesn't impose any structure on this.",
+                                                "type": "object",
+                                                "reference": "google.protobuf.struct_pb2.Struct"
+                                              }
+                                            }
+                                          },
+                                          "end_interaction": {
+                                            "type": "object",
+                                            "properties": {}
+                                          },
+                                          "play_audio": {
+                                            "type": "object",
+                                            "properties": {
+                                              "audio_uri": {
+                                                "description": "Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.",
+                                                "type": "string"
+                                              },
+                                              "allow_playback_interruption": {
+                                                "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
+                                                "type": "boolean"
+                                              }
+                                            },
+                                            "required": [
+                                              "audio_uri"
+                                            ]
+                                          },
+                                          "mixed_audio": {
+                                            "type": "object",
+                                            "properties": {
+                                              "segments": {
+                                                "description": "Segments this audio response is composed of.",
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "audio": {
+                                                      "description": "Raw audio synthesized from the Dialogflow agent's response using the output config specified in the request.  This field is a member of `oneof`_ ``content``.",
+                                                      "type": "object",
+                                                      "reference": "bytes"
+                                                    },
+                                                    "uri": {
+                                                      "description": "Client-specific URI that points to an audio clip accessible to the client. Dialogflow does not impose any validation on it.  This field is a member of `oneof`_ ``content``.",
+                                                      "type": "string"
+                                                    },
+                                                    "allow_playback_interruption": {
+                                                      "description": "Output only. Whether the playback of this segment can be interrupted by the end user's speech and the client should then start the next Dialogflow request.",
+                                                      "type": "boolean"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "telephony_transfer_call": {
+                                            "type": "object",
+                                            "properties": {
+                                              "phone_number": {
+                                                "description": "Transfer the call to a phone number in `E.164 format <https://en.wikipedia.org/wiki/E.164>`__.  This field is a member of `oneof`_ ``endpoint``.",
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "knowledge_info_card": {
+                                            "type": "object",
+                                            "properties": {}
+                                          },
+                                          "tool_call": {
+                                            "type": "object",
+                                            "properties": {
+                                              "tool": {
+                                                "description": "The [tool][Tool] associated with this call. Format: ``projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/tools/<Tool ID>``.",
+                                                "type": "string"
+                                              },
+                                              "action": {
+                                                "description": "The name of the tool's action associated with this call.",
+                                                "type": "string"
+                                              },
+                                              "input_parameters": {
+                                                "description": "The action's input parameters.",
+                                                "type": "object",
+                                                "reference": "google.protobuf.struct_pb2.Struct"
+                                              }
+                                            }
+                                          },
+                                          "channel": {
+                                            "description": "The channel which the response is associated with. Clients can specify the channel via [QueryParameters.channel][google.cloud.dialogflow.cx.v3beta1.QueryParameters.channel], and only associated channel response will be returned.",
+                                            "type": "string"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "webhook": {
+                                      "description": "The webhook to call. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/webhooks/<WebhookID>``.",
+                                      "type": "string"
+                                    },
+                                    "return_partial_responses": {
+                                      "description": "Whether Dialogflow should return currently queued fulfillment response messages in streaming APIs. If a webhook is specified, it happens before Dialogflow invokes webhook. Warning:  1) This flag only affects streaming API. Responses are still queued and returned once in non-streaming API. 2) The flag can be enabled in any fulfillment but only the first 3 partial responses will be returned. You may only want to apply it to fulfillments that have slow webhooks.",
+                                      "type": "boolean"
+                                    },
+                                    "tag": {
+                                      "description": "The value of this field will be populated in the [WebhookRequest][google.cloud.dialogflow.cx.v3beta1.WebhookRequest] ``fulfillmentInfo.tag`` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if ``webhook`` is specified.",
+                                      "type": "string"
+                                    },
+                                    "set_parameter_actions": {
+                                      "description": "Set parameter values before executing the webhook.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "parameter": {
+                                            "description": "Display name of the parameter.",
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "type": "object",
+                                            "properties": {
+                                              "no_shipping": {
+                                                "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
+                                                "type": "boolean"
+                                              },
+                                              "flat_rate": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "amount_micros": {
+                                                    "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                                    "type": "integer"
+                                                  },
+                                                  "currency_code": {
+                                                    "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                                    "type": "string"
+                                                  }
+                                                }
+                                              },
+                                              "price_percentage": {
+                                                "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
+                                                "type": "string"
+                                              },
+                                              "carrier_rate": {
+                                                "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
+                                                "type": "string"
+                                              },
+                                              "subtable": {
+                                                "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "conditional_cases": {
+                                      "description": "Conditional cases for this fulfillment.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "cases": {
+                                            "description": "A list of cascading if-else conditions.",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "name": {
+                                                  "description": "The resource name for the case.",
+                                                  "type": "string"
+                                                },
+                                                "display_name": {
+                                                  "description": "The short summary of the issue reported in this case.",
+                                                  "type": "string"
+                                                },
+                                                "description": {
+                                                  "description": "A broad description of the issue.",
+                                                  "type": "string"
+                                                },
+                                                "classification": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "id": {
+                                                      "description": "The unique ID for a classification. Must be specified for case creation.  To retrieve valid classification IDs for case creation, use ``caseClassifications.search``.",
+                                                      "type": "string"
+                                                    },
+                                                    "display_name": {
+                                                      "description": "The display name of the classification.",
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                },
+                                                "time_zone": {
+                                                  "description": "The timezone of the user who created the support case. It should be in a format IANA recognizes: https://www.iana.org/time-zones. There is no additional validation done by the API.",
+                                                  "type": "string"
+                                                },
+                                                "subscriber_email_addresses": {
+                                                  "description": "The email addresses to receive updates on this case.",
+                                                  "type": "array",
+                                                  "items": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "state": {
+                                                  "description": "Output only. The current status of the support case.",
+                                                  "type": "object",
+                                                  "reference": "google.cloud.support_v2.types.Case.State"
+                                                },
+                                                "create_time": {
+                                                  "description": "Output only. The time this case was created.",
+                                                  "type": "object",
+                                                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                                },
+                                                "update_time": {
+                                                  "description": "Output only. The time this case was last updated.",
+                                                  "type": "object",
+                                                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                                },
+                                                "creator": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "display_name": {
+                                                      "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                                                      "type": "string"
+                                                    },
+                                                    "email": {
+                                                      "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                                                      "type": "string"
+                                                    },
+                                                    "google_support": {
+                                                      "description": "Output only. Whether the actor is a Google support actor.",
+                                                      "type": "boolean"
+                                                    }
+                                                  }
+                                                },
+                                                "contact_email": {
+                                                  "description": "A user-supplied email address to send case update notifications for. This should only be used in BYOID flows, where we cannot infer the user's email address directly from their EUCs.",
+                                                  "type": "string"
+                                                },
+                                                "escalated": {
+                                                  "description": "Whether the case is currently escalated.",
+                                                  "type": "boolean"
+                                                },
+                                                "test_case": {
+                                                  "description": "Whether this case was created for internal API testing and should not be acted on by the support team.",
+                                                  "type": "boolean"
+                                                },
+                                                "language_code": {
+                                                  "description": "The language the user has requested to receive support in. This should be a BCP 47 language code (e.g., ``\"en\"``, ``\"zh-CN\"``, ``\"zh-TW\"``, ``\"ja\"``, ``\"ko\"``). If no language or an unsupported language is specified, this field defaults to English (en).  Language selection during case creation may affect your available support options. For a list of supported languages and their support working hours, see: https://cloud.google.com/support/docs/language-working-hours",
+                                                  "type": "string"
+                                                },
+                                                "priority": {
+                                                  "description": "The priority of this case.",
+                                                  "type": "object",
+                                                  "reference": "google.cloud.support_v2.types.Case.Priority"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "advanced_settings": {
+                                      "type": "object",
+                                      "properties": {
+                                        "audio_export_gcs_destination": {
+                                          "type": "object",
+                                          "properties": {
+                                            "uri": {
+                                              "description": "Required. Google Cloud Storage URI.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "uri"
+                                          ]
+                                        },
+                                        "speech_settings": {
+                                          "type": "object",
+                                          "properties": {
+                                            "endpointer_sensitivity": {
+                                              "description": "Sensitivity of the speech model that detects the end of speech. Scale from 0 to 100.",
+                                              "type": "integer"
+                                            },
+                                            "no_speech_timeout": {
+                                              "type": "object",
+                                              "properties": {
+                                                "nanos": {
+                                                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                                  "type": "integer"
+                                                },
+                                                "seconds": {
+                                                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                                  "type": "integer"
+                                                }
+                                              }
+                                            },
+                                            "use_timeout_based_endpointing": {
+                                              "description": "Use timeout based endpointing, interpreting endpointer sensitivy as seconds of timeout value.",
+                                              "type": "boolean"
+                                            },
+                                            "models": {
+                                              "description": "Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see `Speech models <https://cloud.google.com/dialogflow/cx/docs/concept/speech-models>`__.",
+                                              "type": "object",
+                                              "additionalProperties": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "dtmf_settings": {
+                                          "type": "object",
+                                          "properties": {
+                                            "enabled": {
+                                              "description": "If true, incoming audio is processed for DTMF (dual tone multi frequency) events. For example, if the caller presses a button on their telephone keypad and DTMF processing is enabled, Dialogflow will detect the event (e.g. a \"3\" was pressed) in the incoming audio and pass the event to the bot to drive business logic (e.g. when 3 is pressed, return the account balance).",
+                                              "type": "boolean"
+                                            },
+                                            "max_digits": {
+                                              "description": "Max length of DTMF digits.",
+                                              "type": "integer"
+                                            },
+                                            "finish_digit": {
+                                              "description": "The digit that terminates a DTMF digit sequence.",
+                                              "type": "string"
+                                            },
+                                            "interdigit_timeout_duration": {
+                                              "type": "object",
+                                              "properties": {
+                                                "nanos": {
+                                                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                                  "type": "integer"
+                                                },
+                                                "seconds": {
+                                                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                                  "type": "integer"
+                                                }
+                                              }
+                                            },
+                                            "endpointing_timeout_duration": {
+                                              "type": "object",
+                                              "properties": {
+                                                "nanos": {
+                                                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                                  "type": "integer"
+                                                },
+                                                "seconds": {
+                                                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                                  "type": "integer"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "logging_settings": {
+                                          "type": "object",
+                                          "properties": {
+                                            "enable_stackdriver_logging": {
+                                              "description": "Enables Google Cloud Logging.",
+                                              "type": "boolean"
+                                            },
+                                            "enable_interaction_logging": {
+                                              "description": "Enables DF Interaction logging.",
+                                              "type": "boolean"
+                                            },
+                                            "enable_consent_based_redaction": {
+                                              "description": "Enables consent-based end-user input redaction, if true, a pre-defined session parameter ``$session.params.conversation-redaction`` will be used to determine if the utterance should be redacted.",
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "enable_generative_fallback": {
+                                      "description": "If the flag is true, the agent will utilize LLM to generate a text response. If LLM generation fails, the defined [responses][google.cloud.dialogflow.cx.v3beta1.Fulfillment.messages] in the fulfillment will be respected. This flag is only useful for fulfillments associated with no-match event handlers.",
+                                      "type": "boolean"
+                                    }
+                                  }
+                                },
+                                "target_page": {
+                                  "description": "The target page to transition to. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/flows/<FlowID>/pages/<PageID>``.  This field is a member of `oneof`_ ``target``.",
+                                  "type": "string"
+                                },
+                                "target_flow": {
+                                  "description": "The target flow to transition to. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/flows/<FlowID>``.  This field is a member of `oneof`_ ``target``.",
+                                  "type": "string"
+                                },
+                                "target_playbook": {
+                                  "description": "The target playbook to transition to. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/playbooks/<PlaybookID>``.  This field is a member of `oneof`_ ``target``.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "event"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "initial_prompt_fulfillment"
+                        ]
+                      },
+                      "default_value": {
+                        "type": "object",
+                        "properties": {
+                          "no_shipping": {
+                            "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
+                            "type": "boolean"
+                          },
+                          "flat_rate": {
+                            "type": "object",
+                            "properties": {
+                              "amount_micros": {
+                                "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                "type": "integer"
+                              },
+                              "currency_code": {
+                                "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "price_percentage": {
+                            "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
+                            "type": "string"
+                          },
+                          "carrier_rate": {
+                            "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
+                            "type": "string"
+                          },
+                          "subtable": {
+                            "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "redact": {
+                        "description": "Indicates whether the parameter content should be redacted in log. If redaction is enabled, the parameter content will be replaced by parameter name during logging. Note: the parameter content is subject to redaction if either parameter level redaction or [entity type level redaction][google.cloud.dialogflow.cx.v3beta1.EntityType.redact] is enabled.",
+                        "type": "boolean"
+                      },
+                      "advanced_settings": {
+                        "type": "object",
+                        "properties": {
+                          "audio_export_gcs_destination": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "Required. Google Cloud Storage URI.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "uri"
+                            ]
+                          },
+                          "speech_settings": {
+                            "type": "object",
+                            "properties": {
+                              "endpointer_sensitivity": {
+                                "description": "Sensitivity of the speech model that detects the end of speech. Scale from 0 to 100.",
+                                "type": "integer"
+                              },
+                              "no_speech_timeout": {
+                                "type": "object",
+                                "properties": {
+                                  "nanos": {
+                                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                    "type": "integer"
+                                  },
+                                  "seconds": {
+                                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                    "type": "integer"
+                                  }
+                                }
+                              },
+                              "use_timeout_based_endpointing": {
+                                "description": "Use timeout based endpointing, interpreting endpointer sensitivy as seconds of timeout value.",
+                                "type": "boolean"
+                              },
+                              "models": {
+                                "description": "Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see `Speech models <https://cloud.google.com/dialogflow/cx/docs/concept/speech-models>`__.",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "dtmf_settings": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "description": "If true, incoming audio is processed for DTMF (dual tone multi frequency) events. For example, if the caller presses a button on their telephone keypad and DTMF processing is enabled, Dialogflow will detect the event (e.g. a \"3\" was pressed) in the incoming audio and pass the event to the bot to drive business logic (e.g. when 3 is pressed, return the account balance).",
+                                "type": "boolean"
+                              },
+                              "max_digits": {
+                                "description": "Max length of DTMF digits.",
+                                "type": "integer"
+                              },
+                              "finish_digit": {
+                                "description": "The digit that terminates a DTMF digit sequence.",
+                                "type": "string"
+                              },
+                              "interdigit_timeout_duration": {
+                                "type": "object",
+                                "properties": {
+                                  "nanos": {
+                                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                    "type": "integer"
+                                  },
+                                  "seconds": {
+                                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                    "type": "integer"
+                                  }
+                                }
+                              },
+                              "endpointing_timeout_duration": {
+                                "type": "object",
+                                "properties": {
+                                  "nanos": {
+                                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                    "type": "integer"
+                                  },
+                                  "seconds": {
+                                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                    "type": "integer"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "logging_settings": {
+                            "type": "object",
+                            "properties": {
+                              "enable_stackdriver_logging": {
+                                "description": "Enables Google Cloud Logging.",
+                                "type": "boolean"
+                              },
+                              "enable_interaction_logging": {
+                                "description": "Enables DF Interaction logging.",
+                                "type": "boolean"
+                              },
+                              "enable_consent_based_redaction": {
+                                "description": "Enables consent-based end-user input redaction, if true, a pre-defined session parameter ``$session.params.conversation-redaction`` will be used to determine if the utterance should be redacted.",
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "entity_type",
+                      "fill_behavior"
+                    ]
+                  }
+                },
+                "subscription": {
+                  "type": "object",
+                  "properties": {
+                    "start_time": {
+                      "description": "The timestamp when the subscription begins, if applicable.",
+                      "type": "object",
+                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                    },
+                    "end_time": {
+                      "description": "The timestamp when the subscription ends, if applicable.",
+                      "type": "object",
+                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                    },
+                    "auto_renewal_enabled": {
+                      "description": "Whether auto renewal is enabled by user choice on current subscription. This field indicates order/subscription status after pending plan change is cancelled or rejected.",
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "request_id": {
+            "description": "Optional. A unique identifier for this request. The server will ignore subsequent requests that provide a duplicate request ID for at least 120 minutes after the first request.  The request ID must be a valid `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier#Format>`__.",
+            "type": "string"
+          }
         },
-        "display_name": {
-          "type": "str",
-          "description": "Required. The user-specified name of the order being placed."
-        },
-        "line_item_info": {
-          "type": "MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.LineItemInfo]",
-          "description": "Optional. Places order for offer. Required when an offer-based order is being placed."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A unique identifier for this request. The server will ignore subsequent requests that provide a duplicate request ID for at least 120 minutes after the first request.  The request ID must be a valid `UUID <https://en.wikipedia.org/wiki/Universally_unique_identifier#Format>`__."
-        }
+        "required": [
+          "parent",
+          "display_name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "PlaceOrderMetadata",
-      "docstring": "Message stored in the metadata field of the Operation returned by\n[ConsumerProcurementService.PlaceOrder][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.PlaceOrder].",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetOrderRequest",
-      "docstring": "Request message for\n[ConsumerProcurementService.GetOrder][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.GetOrder]\n\nAttributes:\n    name (str):\n        Required. The name of the order to retrieve.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the order to retrieve."
-        }
+      "description": "Request message for\n[ConsumerProcurementService.GetOrder][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.GetOrder]\n\nAttributes:\n    name (str):\n        Required. The name of the order to retrieve.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the order to retrieve.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListOrdersRequest",
-      "docstring": "Request message for\n[ConsumerProcurementService.ListOrders][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.ListOrders].\n\nAttributes:\n    parent (str):\n        Required. The parent resource to query for orders. This\n        field has the form ``billingAccounts/{billing-account-id}``.\n    page_size (int):\n        The maximum number of entries requested.\n        The default page size is 25 and the maximum page\n        size is 200.\n    page_token (str):\n        The token for fetching the next page.\n    filter (str):\n        Filter that you can use to limit the list request.\n\n        A query string that can match a selected set of attributes\n        with string values. For example, ``display_name=abc``.\n        Supported query attributes are\n\n        -  ``display_name``\n\n        If the query contains special characters other than letters,\n        underscore, or digits, the phrase must be quoted with double\n        quotes. For example, ``display_name=\"foo:bar\"``, where the\n        di",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource to query for orders. This field has the form ``billingAccounts/{billing-account-id}``."
+      "description": "Request message for\n[ConsumerProcurementService.ListOrders][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.ListOrders].\n\nAttributes:\n    parent (str):\n        Required. The parent resource to query for orders. This\n        field has the form ``billingAccounts/{billing-account-id}``.\n    page_size (int):\n        The maximum number of entries requested.\n        The default page size is 25 and the maximum page\n        size is 200.\n    page_token (str):\n        The token for fetching the next page.\n    filter (str):\n        Filter that you can use to limit the list request.\n\n        A query string that can match a selected set of attributes\n        with string values. For example, ``display_name=abc``.\n        Supported query attributes are\n\n        -  ``display_name``\n\n        If the query contains special characters other than letters,\n        underscore, or digits, the phrase must be quoted with double\n        quotes. For example, ``display_name=\"foo:bar\"``, where the\n        di",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource to query for orders. This field has the form ``billingAccounts/{billing-account-id}``.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of entries requested. The default page size is 25 and the maximum page size is 200.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The token for fetching the next page.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Filter that you can use to limit the list request.  A query string that can match a selected set of attributes with string values. For example, ``display_name=abc``. Supported query attributes are  -  ``display_name``  If the query contains special characters other than letters, underscore, or digits, the phrase must be quoted with double quotes. For example, ``display_name=\"foo:bar\"``, where the display name needs to be quoted because it contains special character colon.  Queries can be combined with ``OR``, and ``NOT`` to form more complex queries. You can also group them to force a desired evaluation order. For example, ``display_name=abc OR display_name=def``.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of entries requested. The default page size is 25 and the maximum page size is 200."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The token for fetching the next page."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Filter that you can use to limit the list request.  A query string that can match a selected set of attributes with string values. For example, ``display_name=abc``. Supported query attributes are  -  ``display_name``  If the query contains special characters other than letters, underscore, or digits, the phrase must be quoted with double quotes. For example, ``display_name=\"foo:bar\"``, where the display name needs to be quoted because it contains special character colon.  Queries can be combined with ``OR``, and ``NOT`` to form more complex queries. You can also group them to force a desired evaluation order. For example, ``display_name=abc OR display_name=def``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListOrdersResponse",
-      "docstring": "Response message for\n[ConsumerProcurementService.ListOrders][google.cloud.commerce.consumer.procurement.v1alpha1.ConsumerProcurementService.ListOrders].\n\nAttributes:\n    orders (MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.Order]):\n        The list of orders in this response.\n    next_page_token (str):\n        The token for fetching the next page.",
-      "attributes": {
-        "orders": {
-          "type": "MutableSequence[google.cloud.commerce_consumer_procurement_v1alpha1.types.Order]",
-          "description": "The list of orders in this response."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for fetching the next page."
-        }
+        "required": [
+          "parent"
+        ]
       }
     }
   ]

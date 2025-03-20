@@ -1,633 +1,916 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\check_error.py": [
-    {
-      "type": "request_class",
-      "name": "CheckError",
-      "docstring": "Defines the errors to be returned in\n[google.api.servicecontrol.v1.CheckResponse.check_errors][google.api.servicecontrol.v1.CheckResponse.check_errors].\n\nAttributes:\n    code (google.cloud.servicecontrol_v1.types.CheckError.Code):\n        The error code.\n    subject (str):\n        Subject to whom this error applies. See the\n        specific code enum for more details on this\n        field. For example:\n\n        - \"project:<project-id or project-number>\"\n        - \"folder:<folder-id>\"\n        - \"organization:<organization-id>\".\n    detail (str):\n        Free-form text providing details on the error\n        cause of the error.\n    status (google.rpc.status_pb2.Status):\n        Contains public information about the check error. If\n        available, ``status.code`` will be non zero and client can\n        propagate it out as public error.",
-      "attributes": {
-        "code": {
-          "type": "google.cloud.servicecontrol_v1.types.CheckError.Code",
-          "description": "The error code."
-        },
-        "subject": {
-          "type": "str",
-          "description": "Subject to whom this error applies. See the specific code enum for more details on this field. For example:  - \"project:<project-id or project-number>\" - \"folder:<folder-id>\" - \"organization:<organization-id>\"."
-        },
-        "detail": {
-          "type": "str",
-          "description": "Free-form text providing details on the error cause of the error."
-        },
-        "status": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Contains public information about the check error. If available, ``status.code`` will be non zero and client can propagate it out as public error."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\distribution.py": [
-    {
-      "type": "request_class",
-      "name": "Distribution",
-      "docstring": "Distribution represents a frequency distribution of double-valued\nsample points. It contains the size of the population of sample\npoints plus additional optional information:\n\n-  the arithmetic mean of the samples\n-  the minimum and maximum of the samples\n-  the sum-squared-deviation of the samples, used to compute\n   variance\n-  a histogram of the values of the sample points\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    count (int):\n        The total number of samples in the\n        distribution. Must be >= 0.\n    mean (float):\n        The arithmetic mean of the samples in the distribution. If\n        ``count`` is zero then this field must be zero.\n    minimum (float):\n        The minimum of the population of values. Ignored if\n ",
-      "attributes": {
-        "count": {
-          "type": "int",
-          "description": "The total number of samples in the distribution. Must be >= 0."
-        },
-        "mean": {
-          "type": "float",
-          "description": "The arithmetic mean of the samples in the distribution. If ``count`` is zero then this field must be zero."
-        },
-        "minimum": {
-          "type": "float",
-          "description": "The minimum of the population of values. Ignored if ``count`` is zero."
-        },
-        "maximum": {
-          "type": "float",
-          "description": "The maximum of the population of values. Ignored if ``count`` is zero."
-        },
-        "sum_of_squared_deviation": {
-          "type": "float",
-          "description": "The sum of squared deviations from the mean: Sum[i=1..count]((x_i - mean)^2) where each x_i is a sample values. If ``count`` is zero then this field must be zero, otherwise validation of the request fails."
-        },
-        "bucket_counts": {
-          "type": "MutableSequence[int]",
-          "description": "The number of samples in each histogram bucket. ``bucket_counts`` are optional. If present, they must sum to the ``count`` value.  The buckets are defined below in ``bucket_option``. There are N buckets. ``bucket_counts[0]`` is the number of samples in the underflow bucket. ``bucket_counts[1]`` to ``bucket_counts[N-1]`` are the numbers of samples in each of the finite buckets. And ``bucket_counts[N] is the number of samples in the overflow bucket. See the comments of``\\ bucket_option\\` below for more details.  Any suffix of trailing zeros may be omitted."
-        },
-        "linear_buckets": {
-          "type": "google.cloud.servicecontrol_v1.types.Distribution.LinearBuckets",
-          "description": "Buckets with constant width.  This field is a member of `oneof`_ ``bucket_option``."
-        },
-        "exponential_buckets": {
-          "type": "google.cloud.servicecontrol_v1.types.Distribution.ExponentialBuckets",
-          "description": "Buckets with exponentially growing width.  This field is a member of `oneof`_ ``bucket_option``."
-        },
-        "explicit_buckets": {
-          "type": "google.cloud.servicecontrol_v1.types.Distribution.ExplicitBuckets",
-          "description": "Buckets with arbitrary user-provided width.  This field is a member of `oneof`_ ``bucket_option``."
-        },
-        "exemplars": {
-          "type": "MutableSequence[google.api.distribution_pb2.Exemplar]",
-          "description": "Example points. Must be in increasing order of ``value`` field."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LinearBuckets",
-      "docstring": "Describing buckets with constant width.\n\nAttributes:\n    num_finite_buckets (int):\n        The number of finite buckets. With the underflow and\n        overflow buckets, the total number of buckets is\n        ``num_finite_buckets`` + 2. See comments on\n        ``bucket_options`` for details.\n    width (float):\n        The i'th linear bucket covers the interval [offset + (i-1)\n        \\* width, offset + i \\* width) where i ranges from 1 to\n        num_finite_buckets, inclusive. Must be strictly positive.\n    offset (float):\n        The i'th linear bucket covers the interval [offset + (i-1)\n        \\* width, offset + i \\* width) where i ranges from 1 to\n        num_finite_buckets, inclusive.",
-      "attributes": {
-        "num_finite_buckets": {
-          "type": "int",
-          "description": "The number of finite buckets. With the underflow and overflow buckets, the total number of buckets is ``num_finite_buckets`` + 2. See comments on ``bucket_options`` for details."
-        },
-        "width": {
-          "type": "float",
-          "description": "The i'th linear bucket covers the interval [offset + (i-1) \\* width, offset + i \\* width) where i ranges from 1 to num_finite_buckets, inclusive. Must be strictly positive."
-        },
-        "offset": {
-          "type": "float",
-          "description": "The i'th linear bucket covers the interval [offset + (i-1) \\* width, offset + i \\* width) where i ranges from 1 to num_finite_buckets, inclusive."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExponentialBuckets",
-      "docstring": "Describing buckets with exponentially growing width.\n\nAttributes:\n    num_finite_buckets (int):\n        The number of finite buckets. With the underflow and\n        overflow buckets, the total number of buckets is\n        ``num_finite_buckets`` + 2. See comments on\n        ``bucket_options`` for details.\n    growth_factor (float):\n        The i'th exponential bucket covers the interval [scale \\*\n        growth_factor^(i-1), scale \\* growth_factor^i) where i\n        ranges from 1 to num_finite_buckets inclusive. Must be\n        larger than 1.0.\n    scale (float):\n        The i'th exponential bucket covers the interval [scale \\*\n        growth_factor^(i-1), scale \\* growth_factor^i) where i\n        ranges from 1 to num_finite_buckets inclusive. Must be > 0.",
-      "attributes": {
-        "num_finite_buckets": {
-          "type": "int",
-          "description": "The number of finite buckets. With the underflow and overflow buckets, the total number of buckets is ``num_finite_buckets`` + 2. See comments on ``bucket_options`` for details."
-        },
-        "growth_factor": {
-          "type": "float",
-          "description": "The i'th exponential bucket covers the interval [scale \\* growth_factor^(i-1), scale \\* growth_factor^i) where i ranges from 1 to num_finite_buckets inclusive. Must be larger than 1.0."
-        },
-        "scale": {
-          "type": "float",
-          "description": "The i'th exponential bucket covers the interval [scale \\* growth_factor^(i-1), scale \\* growth_factor^i) where i ranges from 1 to num_finite_buckets inclusive. Must be > 0."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExplicitBuckets",
-      "docstring": "Describing buckets with arbitrary user-provided width.\n\nAttributes:\n    bounds (MutableSequence[float]):\n        'bound' is a list of strictly increasing boundaries between\n        buckets. Note that a list of length N-1 defines N buckets\n        because of fenceposting. See comments on ``bucket_options``\n        for details.\n\n        The i'th finite bucket covers the interval [bound[i-1],\n        bound[i]) where i ranges from 1 to bound_size() - 1. Note\n        that there are no finite buckets at all if 'bound' only\n        contains a single element; in that special case the single\n        bound defines the boundary between the underflow and\n        overflow buckets.\n\n        bucket number lower bound upper bound i == 0 (underflow)\n        -inf bound[i] 0 < i < bound_size() bound[i-1] bound[i] i ==\n        bound_size() (overflow) bound[i-1] +inf",
-      "attributes": {
-        "bounds": {
-          "type": "MutableSequence[float]",
-          "description": "'bound' is a list of strictly increasing boundaries between buckets. Note that a list of length N-1 defines N buckets because of fenceposting. See comments on ``bucket_options`` for details.  The i'th finite bucket covers the interval [bound[i-1], bound[i]) where i ranges from 1 to bound_size() - 1. Note that there are no finite buckets at all if 'bound' only contains a single element; in that special case the single bound defines the boundary between the underflow and overflow buckets.  bucket number lower bound upper bound i == 0 (underflow) -inf bound[i] 0 < i < bound_size() bound[i-1] bound[i] i == bound_size() (overflow) bound[i-1] +inf"
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\http_request.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "HttpRequest",
-      "docstring": "A common proto for logging HTTP requests. Only contains\nsemantics defined by the HTTP specification. Product-specific\nlogging information MUST be defined in a separate message.\n\nAttributes:\n    request_method (str):\n        The request method. Examples: ``\"GET\"``, ``\"HEAD\"``,\n        ``\"PUT\"``, ``\"POST\"``.\n    request_url (str):\n        The scheme (http, https), the host name, the path, and the\n        query portion of the URL that was requested. Example:\n        ``\"http://example.com/some/info?color=red\"``.\n    request_size (int):\n        The size of the HTTP request message in\n        bytes, including the request headers and the\n        request body.\n    status (int):\n        The response code indicating the status of\n        the response. Examples: 200, 404.\n    response_size (int):\n        The size of the HTTP response message sent\n        back to the client, in bytes, including the\n        response headers and the response body.\n    user_agent (str):\n        The user agent sent by the client. Example:\n  ",
-      "attributes": {
-        "request_method": {
-          "type": "str",
-          "description": "The request method. Examples: ``\"GET\"``, ``\"HEAD\"``, ``\"PUT\"``, ``\"POST\"``."
-        },
-        "request_url": {
-          "type": "str",
-          "description": "The scheme (http, https), the host name, the path, and the query portion of the URL that was requested. Example: ``\"http://example.com/some/info?color=red\"``."
-        },
-        "request_size": {
-          "type": "int",
-          "description": "The size of the HTTP request message in bytes, including the request headers and the request body."
-        },
-        "status": {
-          "type": "int",
-          "description": "The response code indicating the status of the response. Examples: 200, 404."
-        },
-        "response_size": {
-          "type": "int",
-          "description": "The size of the HTTP response message sent back to the client, in bytes, including the response headers and the response body."
-        },
-        "user_agent": {
-          "type": "str",
-          "description": "The user agent sent by the client. Example: ``\"Mozilla/4.0 (compatible; MSIE 6.0; Windows 98; Q312461; .NET CLR 1.0.3705)\"``."
-        },
-        "remote_ip": {
-          "type": "str",
-          "description": "The IP address (IPv4 or IPv6) of the client that issued the HTTP request. Examples: ``\"192.168.1.1\"``, ``\"FE80::0202:B3FF:FE1E:8329\"``."
-        },
-        "server_ip": {
-          "type": "str",
-          "description": "The IP address (IPv4 or IPv6) of the origin server that the request was sent to."
-        },
-        "referer": {
-          "type": "str",
-          "description": "The referer URL of the request, as defined in `HTTP/1.1 Header Field Definitions <http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html>`__."
-        },
-        "latency": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "The request processing latency on the server, from the time the request was received until the response was sent."
-        },
-        "cache_lookup": {
-          "type": "bool",
-          "description": "Whether or not a cache lookup was attempted."
-        },
-        "cache_hit": {
-          "type": "bool",
-          "description": "Whether or not an entity was served from cache (with or without validation)."
-        },
-        "cache_validated_with_origin_server": {
-          "type": "bool",
-          "description": "Whether or not the response was validated with the origin server before being served from cache. This field is only meaningful if ``cache_hit`` is True."
-        },
-        "cache_fill_bytes": {
-          "type": "int",
-          "description": "The number of HTTP response bytes inserted into cache. Set only when a cache fill was attempted."
-        },
-        "protocol": {
-          "type": "str",
-          "description": "Protocol used for the request. Examples: \"HTTP/1.1\", \"HTTP/2\", \"websocket\"."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\log_entry.py": [
-    {
-      "type": "request_class",
-      "name": "LogEntry",
-      "docstring": "An individual log entry.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Required. The log to which this log entry belongs. Examples:\n        ``\"syslog\"``, ``\"book_log\"``.\n    timestamp (google.protobuf.timestamp_pb2.Timestamp):\n        The time the event described by the log entry\n        occurred. If omitted, defaults to operation\n        start time.\n    severity (google.logging.type.log_severity_pb2.LogSeverity):\n        The severity of the log entry. The default value is\n        ``LogSeverity.DEFAULT``.\n    http_request (google.cloud.servicecontrol_v1.types.HttpRequest):\n        Optional. Information about the HTTP request\n        associated with this log entry, if applicable.\n    trace (str):\n        Optiona",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The log to which this log entry belongs. Examples: ``\"syslog\"``, ``\"book_log\"``."
-        },
-        "timestamp": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time the event described by the log entry occurred. If omitted, defaults to operation start time."
-        },
-        "severity": {
-          "type": "google.logging.type.log_severity_pb2.LogSeverity",
-          "description": "The severity of the log entry. The default value is ``LogSeverity.DEFAULT``."
-        },
-        "http_request": {
-          "type": "google.cloud.servicecontrol_v1.types.HttpRequest",
-          "description": "Optional. Information about the HTTP request associated with this log entry, if applicable."
-        },
-        "trace": {
-          "type": "str",
-          "description": "Optional. Resource name of the trace associated with the log entry, if any. If this field contains a relative resource name, you can assume the name is relative to ``//tracing.googleapis.com``. Example: ``projects/my-projectid/traces/06796866738c859f2f19b7cfb3214824``"
-        },
-        "insert_id": {
-          "type": "str",
-          "description": "A unique ID for the log entry used for deduplication. If omitted, the implementation will generate one based on operation_id."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "A set of user-defined (key, value) data that provides additional information about the log entry."
-        },
-        "proto_payload": {
-          "type": "google.protobuf.any_pb2.Any",
-          "description": "The log entry payload, represented as a protocol buffer that is expressed as a JSON object. The only accepted type currently is [AuditLog][google.cloud.audit.AuditLog].  This field is a member of `oneof`_ ``payload``."
-        },
-        "text_payload": {
-          "type": "str",
-          "description": "The log entry payload, represented as a Unicode string (UTF-8).  This field is a member of `oneof`_ ``payload``."
-        },
-        "struct_payload": {
-          "type": "google.protobuf.struct_pb2.Struct",
-          "description": "The log entry payload, represented as a structure that is expressed as a JSON object.  This field is a member of `oneof`_ ``payload``."
-        },
-        "operation": {
-          "type": "google.cloud.servicecontrol_v1.types.LogEntryOperation",
-          "description": "Optional. Information about an operation associated with the log entry, if applicable."
-        },
-        "source_location": {
-          "type": "google.cloud.servicecontrol_v1.types.LogEntrySourceLocation",
-          "description": "Optional. Source code location information associated with the log entry, if any."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LogEntryOperation",
-      "docstring": "Additional information about a potentially long-running\noperation with which a log entry is associated.\n\nAttributes:\n    id (str):\n        Optional. An arbitrary operation identifier.\n        Log entries with the same identifier are assumed\n        to be part of the same operation.\n    producer (str):\n        Optional. An arbitrary producer identifier. The combination\n        of ``id`` and ``producer`` must be globally unique. Examples\n        for ``producer``: ``\"MyDivision.MyBigCompany.com\"``,\n        ``\"github.com/MyProject/MyApplication\"``.\n    first (bool):\n        Optional. Set this to True if this is the\n        first log entry in the operation.\n    last (bool):\n        Optional. Set this to True if this is the\n        last log entry in the operation.",
-      "attributes": {
-        "id": {
-          "type": "str",
-          "description": "Optional. An arbitrary operation identifier. Log entries with the same identifier are assumed to be part of the same operation."
-        },
-        "producer": {
-          "type": "str",
-          "description": "Optional. An arbitrary producer identifier. The combination of ``id`` and ``producer`` must be globally unique. Examples for ``producer``: ``\"MyDivision.MyBigCompany.com\"``, ``\"github.com/MyProject/MyApplication\"``."
-        },
-        "first": {
-          "type": "bool",
-          "description": "Optional. Set this to True if this is the first log entry in the operation."
-        },
-        "last": {
-          "type": "bool",
-          "description": "Optional. Set this to True if this is the last log entry in the operation."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LogEntrySourceLocation",
-      "docstring": "Additional information about the source code location that\nproduced the log entry.\n\nAttributes:\n    file (str):\n        Optional. Source file name. Depending on the\n        runtime environment, this might be a simple name\n        or a fully-qualified name.\n    line (int):\n        Optional. Line within the source file.\n        1-based; 0 indicates no line number available.\n    function (str):\n        Optional. Human-readable name of the function or method\n        being invoked, with optional context such as the class or\n        package name. This information may be used in contexts such\n        as the logs viewer, where a file and line number are less\n        meaningful. The format can vary by language. For example:\n        ``qual.if.ied.Class.method`` (Java), ``dir/package.func``\n        (Go), ``function`` (Python).",
-      "attributes": {
-        "file": {
-          "type": "str",
-          "description": "Optional. Source file name. Depending on the runtime environment, this might be a simple name or a fully-qualified name."
-        },
-        "line": {
-          "type": "int",
-          "description": "Optional. Line within the source file. 1-based; 0 indicates no line number available."
-        },
-        "function": {
-          "type": "str",
-          "description": "Optional. Human-readable name of the function or method being invoked, with optional context such as the class or package name. This information may be used in contexts such as the logs viewer, where a file and line number are less meaningful. The format can vary by language. For example: ``qual.if.ied.Class.method`` (Java), ``dir/package.func`` (Go), ``function`` (Python)."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\metric_value.py": [
-    {
-      "type": "request_class",
-      "name": "MetricValue",
-      "docstring": "Represents a single metric value.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    labels (MutableMapping[str, str]):\n        The labels describing the metric value. See comments on\n        [google.api.servicecontrol.v1.Operation.labels][google.api.servicecontrol.v1.Operation.labels]\n        for the overriding relationship. Note that this map must not\n        contain monitored resource labels.\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        The start of the time period over which this metric value's\n        measurement applies. The time period has different semantics\n        for different metric types (cumulative, delta, and gauge).\n        See the metric definition documentation in the service\n        configuration",
-      "attributes": {
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "The labels describing the metric value. See comments on [google.api.servicecontrol.v1.Operation.labels][google.api.servicecontrol.v1.Operation.labels] for the overriding relationship. Note that this map must not contain monitored resource labels."
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The start of the time period over which this metric value's measurement applies. The time period has different semantics for different metric types (cumulative, delta, and gauge). See the metric definition documentation in the service configuration for details. If not specified, [google.api.servicecontrol.v1.Operation.start_time][google.api.servicecontrol.v1.Operation.start_time] will be used."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The end of the time period over which this metric value's measurement applies. If not specified, [google.api.servicecontrol.v1.Operation.end_time][google.api.servicecontrol.v1.Operation.end_time] will be used."
-        },
-        "bool_value": {
-          "type": "bool",
-          "description": "A boolean value.  This field is a member of `oneof`_ ``value``."
-        },
-        "int64_value": {
-          "type": "int",
-          "description": "A signed 64-bit integer value.  This field is a member of `oneof`_ ``value``."
-        },
-        "double_value": {
-          "type": "float",
-          "description": "A double precision floating point value.  This field is a member of `oneof`_ ``value``."
-        },
-        "string_value": {
-          "type": "str",
-          "description": "A text string value.  This field is a member of `oneof`_ ``value``."
-        },
-        "distribution_value": {
-          "type": "google.cloud.servicecontrol_v1.types.Distribution",
-          "description": "A distribution value.  This field is a member of `oneof`_ ``value``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MetricValueSet",
-      "docstring": "Represents a set of metric values in the same metric.\nEach metric value in the set should have a unique combination of\nstart time, end time, and label values.\n\nAttributes:\n    metric_name (str):\n        The metric name defined in the service\n        configuration.\n    metric_values (MutableSequence[google.cloud.servicecontrol_v1.types.MetricValue]):\n        The values in this metric.",
-      "attributes": {
-        "metric_name": {
-          "type": "str",
-          "description": "The metric name defined in the service configuration."
-        },
-        "metric_values": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.MetricValue]",
-          "description": "The values in this metric."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\operation.py": [
-    {
-      "type": "request_class",
-      "name": "Operation",
-      "docstring": "Represents information regarding an operation.\n\nAttributes:\n    operation_id (str):\n        Identity of the operation. This must be\n        unique within the scope of the service that\n        generated the operation. If the service calls\n        Check() and Report() on the same operation, the\n        two calls should carry the same id.\n\n        UUID version 4 is recommended, though not\n        required. In scenarios where an operation is\n        computed from existing information and an\n        idempotent id is desirable for deduplication\n        purpose, UUID version 5 is recommended. See RFC\n        4122 for details.\n    operation_name (str):\n        Fully qualified name of the operation.\n        Reserved for future use.\n    consumer_id (str):\n        Identity of the consumer who is using the service. This\n        field should be filled in for the operations initiated by a\n        consumer, but not for service-initiated operations that are\n        not related to a specific consumer.\n\n        -  This can be ",
-      "attributes": {
-        "operation_id": {
-          "type": "str",
-          "description": "Identity of the operation. This must be unique within the scope of the service that generated the operation. If the service calls Check() and Report() on the same operation, the two calls should carry the same id.  UUID version 4 is recommended, though not required. In scenarios where an operation is computed from existing information and an idempotent id is desirable for deduplication purpose, UUID version 5 is recommended. See RFC 4122 for details."
-        },
-        "operation_name": {
-          "type": "str",
-          "description": "Fully qualified name of the operation. Reserved for future use."
-        },
-        "consumer_id": {
-          "type": "str",
-          "description": "Identity of the consumer who is using the service. This field should be filled in for the operations initiated by a consumer, but not for service-initiated operations that are not related to a specific consumer.  -  This can be in one of the following formats:  -  project:PROJECT_ID, -  project\\ ``_``\\ number:PROJECT_NUMBER, -  projects/PROJECT_ID or PROJECT_NUMBER, -  folders/FOLDER_NUMBER, -  organizations/ORGANIZATION_NUMBER, -  api\\ ``_``\\ key:API_KEY."
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. Start time of the operation."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "End time of the operation. Required when the operation is used in [ServiceController.Report][google.api.servicecontrol.v1.ServiceController.Report], but optional when the operation is used in [ServiceController.Check][google.api.servicecontrol.v1.ServiceController.Check]."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Labels describing the operation. Only the following labels are allowed:  -  Labels describing monitored resources as defined in the service configuration. -  Default labels of metric values. When specified, labels defined in the metric value override these default. -  The following labels defined by Google Cloud Platform:  -  ``cloud.googleapis.com/location`` describing the location where the operation happened, -  ``servicecontrol.googleapis.com/user_agent`` describing the user agent of the API request, -  ``servicecontrol.googleapis.com/service_agent`` describing the service used to handle the API request (e.g. ESP), -  ``servicecontrol.googleapis.com/platform`` describing the platform where the API is served, such as App Engine, Compute Engine, or Kubernetes Engine."
-        },
-        "metric_value_sets": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.MetricValueSet]",
-          "description": "Represents information about this operation. Each MetricValueSet corresponds to a metric defined in the service configuration. The data type used in the MetricValueSet must agree with the data type specified in the metric definition.  Within a single operation, it is not allowed to have more than one MetricValue instances that have the same metric names and identical label value combinations. If a request has such duplicated MetricValue instances, the entire request is rejected with an invalid argument error."
-        },
-        "log_entries": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.LogEntry]",
-          "description": "Represents information to be logged."
-        },
-        "importance": {
-          "type": "google.cloud.servicecontrol_v1.types.Operation.Importance",
-          "description": "DO NOT USE. This is an experimental field."
-        },
-        "extensions": {
-          "type": "MutableSequence[google.protobuf.any_pb2.Any]",
-          "description": "Unimplemented."
+      "description": "A common proto for logging HTTP requests. Only contains\nsemantics defined by the HTTP specification. Product-specific\nlogging information MUST be defined in a separate message.\n\nAttributes:\n    request_method (str):\n        The request method. Examples: ``\"GET\"``, ``\"HEAD\"``,\n        ``\"PUT\"``, ``\"POST\"``.\n    request_url (str):\n        The scheme (http, https), the host name, the path, and the\n        query portion of the URL that was requested. Example:\n        ``\"http://example.com/some/info?color=red\"``.\n    request_size (int):\n        The size of the HTTP request message in\n        bytes, including the request headers and the\n        request body.\n    status (int):\n        The response code indicating the status of\n        the response. Examples: 200, 404.\n    response_size (int):\n        The size of the HTTP response message sent\n        back to the client, in bytes, including the\n        response headers and the response body.\n    user_agent (str):\n        The user agent sent by the client. Example:\n  ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "request_method": {
+            "description": "The request method. Examples: ``\"GET\"``, ``\"HEAD\"``, ``\"PUT\"``, ``\"POST\"``.",
+            "type": "string"
+          },
+          "request_url": {
+            "description": "The scheme (http, https), the host name, the path, and the query portion of the URL that was requested. Example: ``\"http://example.com/some/info?color=red\"``.",
+            "type": "string"
+          },
+          "request_size": {
+            "description": "The size of the HTTP request message in bytes, including the request headers and the request body.",
+            "type": "integer"
+          },
+          "status": {
+            "description": "The response code indicating the status of the response. Examples: 200, 404.",
+            "type": "integer"
+          },
+          "response_size": {
+            "description": "The size of the HTTP response message sent back to the client, in bytes, including the response headers and the response body.",
+            "type": "integer"
+          },
+          "user_agent": {
+            "description": "The user agent sent by the client. Example: ``\"Mozilla/4.0 (compatible; MSIE 6.0; Windows 98; Q312461; .NET CLR 1.0.3705)\"``.",
+            "type": "string"
+          },
+          "remote_ip": {
+            "description": "The IP address (IPv4 or IPv6) of the client that issued the HTTP request. Examples: ``\"192.168.1.1\"``, ``\"FE80::0202:B3FF:FE1E:8329\"``.",
+            "type": "string"
+          },
+          "server_ip": {
+            "description": "The IP address (IPv4 or IPv6) of the origin server that the request was sent to.",
+            "type": "string"
+          },
+          "referer": {
+            "description": "The referer URL of the request, as defined in `HTTP/1.1 Header Field Definitions <http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html>`__.",
+            "type": "string"
+          },
+          "latency": {
+            "description": "The request processing latency on the server, from the time the request was received until the response was sent.",
+            "type": "object",
+            "properties": {
+              "nanos": {
+                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                "type": "integer"
+              }
+            }
+          },
+          "cache_lookup": {
+            "description": "Whether or not a cache lookup was attempted.",
+            "type": "boolean"
+          },
+          "cache_hit": {
+            "description": "Whether or not an entity was served from cache (with or without validation).",
+            "type": "boolean"
+          },
+          "cache_validated_with_origin_server": {
+            "description": "Whether or not the response was validated with the origin server before being served from cache. This field is only meaningful if ``cache_hit`` is True.",
+            "type": "boolean"
+          },
+          "cache_fill_bytes": {
+            "description": "The number of HTTP response bytes inserted into cache. Set only when a cache fill was attempted.",
+            "type": "integer"
+          },
+          "protocol": {
+            "description": "Protocol used for the request. Examples: \"HTTP/1.1\", \"HTTP/2\", \"websocket\".",
+            "type": "string"
+          }
         }
       }
     }
   ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\quota_controller.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "AllocateQuotaRequest",
-      "docstring": "Request message for the AllocateQuota method.\n\nAttributes:\n    service_name (str):\n        Name of the service as specified in the service\n        configuration. For example, ``\"pubsub.googleapis.com\"``.\n\n        See [google.api.Service][google.api.Service] for the\n        definition of a service name.\n    allocate_operation (google.cloud.servicecontrol_v1.types.QuotaOperation):\n        Operation that describes the quota\n        allocation.\n    service_config_id (str):\n        Specifies which version of service\n        configuration should be used to process the\n        request. If unspecified or no matching version\n        can be found, the latest one will be used.",
-      "attributes": {
-        "service_name": {
-          "type": "str",
-          "description": "Name of the service as specified in the service configuration. For example, ``\"pubsub.googleapis.com\"``.  See [google.api.Service][google.api.Service] for the definition of a service name."
-        },
-        "allocate_operation": {
-          "type": "google.cloud.servicecontrol_v1.types.QuotaOperation",
-          "description": "Operation that describes the quota allocation."
-        },
-        "service_config_id": {
-          "type": "str",
-          "description": "Specifies which version of service configuration should be used to process the request. If unspecified or no matching version can be found, the latest one will be used."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "QuotaOperation",
-      "docstring": "Represents information regarding a quota operation.\n\nAttributes:\n    operation_id (str):\n        Identity of the operation. This is expected to be unique\n        within the scope of the service that generated the\n        operation, and guarantees idempotency in case of retries.\n\n        In order to ensure best performance and latency in the Quota\n        backends, operation_ids are optimally associated with time,\n        so that related operations can be accessed fast in storage.\n        For this reason, the recommended token for services that\n        intend to operate at a high QPS is Unix time in nanos + UUID\n    method_name (str):\n        Fully qualified name of the API method for which this quota\n        operation is requested. This name is used for matching quota\n        rules or metric rules and billing status rules defined in\n        service configuration.\n\n        This field should not be set if any of the following is\n        true: (1) the quota operation is performed on non-API\n        resources. (2",
-      "attributes": {
-        "operation_id": {
-          "type": "str",
-          "description": "Identity of the operation. This is expected to be unique within the scope of the service that generated the operation, and guarantees idempotency in case of retries.  In order to ensure best performance and latency in the Quota backends, operation_ids are optimally associated with time, so that related operations can be accessed fast in storage. For this reason, the recommended token for services that intend to operate at a high QPS is Unix time in nanos + UUID"
-        },
-        "method_name": {
-          "type": "str",
-          "description": "Fully qualified name of the API method for which this quota operation is requested. This name is used for matching quota rules or metric rules and billing status rules defined in service configuration.  This field should not be set if any of the following is true: (1) the quota operation is performed on non-API resources. (2) quota_metrics is set because the caller is doing quota override.  Example of an RPC method name: google.example.library.v1.LibraryService.CreateShelf"
-        },
-        "consumer_id": {
-          "type": "str",
-          "description": "Identity of the consumer for whom this quota operation is being performed.  This can be in one of the following formats: project:<project_id>, project_number:<project_number>, api_key:<api_key>."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Labels describing the operation."
-        },
-        "quota_metrics": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.MetricValueSet]",
-          "description": "Represents information about this operation. Each MetricValueSet corresponds to a metric defined in the service configuration. The data type used in the MetricValueSet must agree with the data type specified in the metric definition.  Within a single operation, it is not allowed to have more than one MetricValue instances that have the same metric names and identical label value combinations. If a request has such duplicated MetricValue instances, the entire request is rejected with an invalid argument error.  This field is mutually exclusive with method_name."
-        },
-        "quota_mode": {
-          "type": "google.cloud.servicecontrol_v1.types.QuotaOperation.QuotaMode",
-          "description": "Quota mode for this operation."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AllocateQuotaResponse",
-      "docstring": "Response message for the AllocateQuota method.\n\nAttributes:\n    operation_id (str):\n        The same operation_id value used in the\n        AllocateQuotaRequest. Used for logging and diagnostics\n        purposes.\n    allocate_errors (MutableSequence[google.cloud.servicecontrol_v1.types.QuotaError]):\n        Indicates the decision of the allocate.\n    quota_metrics (MutableSequence[google.cloud.servicecontrol_v1.types.MetricValueSet]):\n        Quota metrics to indicate the result of allocation.\n        Depending on the request, one or more of the following\n        metrics will be included:\n\n        1. Per quota group or per quota metric incremental usage\n           will be specified using the following delta metric :\n           \"serviceruntime.googleapis.com/api/consumer/quota_used_count\"\n\n        2. The quota limit reached condition will be specified using\n           the following boolean metric :\n           \"serviceruntime.googleapis.com/quota/exceeded\".\n    service_config_id (str):\n        ID of the actual ",
-      "attributes": {
-        "operation_id": {
-          "type": "str",
-          "description": "The same operation_id value used in the AllocateQuotaRequest. Used for logging and diagnostics purposes."
-        },
-        "allocate_errors": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.QuotaError]",
-          "description": "Indicates the decision of the allocate."
-        },
-        "quota_metrics": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.MetricValueSet]",
-          "description": "Quota metrics to indicate the result of allocation. Depending on the request, one or more of the following metrics will be included:  1. Per quota group or per quota metric incremental usage will be specified using the following delta metric : \"serviceruntime.googleapis.com/api/consumer/quota_used_count\"  2. The quota limit reached condition will be specified using the following boolean metric : \"serviceruntime.googleapis.com/quota/exceeded\"."
-        },
-        "service_config_id": {
-          "type": "str",
-          "description": "ID of the actual config used to process the request."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "QuotaError",
-      "docstring": "Represents error information for\n[QuotaOperation][google.api.servicecontrol.v1.QuotaOperation].\n\nAttributes:\n    code (google.cloud.servicecontrol_v1.types.QuotaError.Code):\n        Error code.\n    subject (str):\n        Subject to whom this error applies. See the\n        specific enum for more details on this field.\n        For example, \"clientip:<ip address of client>\"\n        or \"project:<Google developer project id>\".\n    description (str):\n        Free-form text that provides details on the\n        cause of the error.\n    status (google.rpc.status_pb2.Status):\n        Contains additional information about the quota error. If\n        available, ``status.code`` will be non zero.",
-      "attributes": {
-        "code": {
-          "type": "google.cloud.servicecontrol_v1.types.QuotaError.Code",
-          "description": "Error code."
-        },
-        "subject": {
-          "type": "str",
-          "description": "Subject to whom this error applies. See the specific enum for more details on this field. For example, \"clientip:<ip address of client>\" or \"project:<Google developer project id>\"."
-        },
-        "description": {
-          "type": "str",
-          "description": "Free-form text that provides details on the cause of the error."
-        },
-        "status": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Contains additional information about the quota error. If available, ``status.code`` will be non zero."
+      "description": "Request message for the AllocateQuota method.\n\nAttributes:\n    service_name (str):\n        Name of the service as specified in the service\n        configuration. For example, ``\"pubsub.googleapis.com\"``.\n\n        See [google.api.Service][google.api.Service] for the\n        definition of a service name.\n    allocate_operation (google.cloud.servicecontrol_v1.types.QuotaOperation):\n        Operation that describes the quota\n        allocation.\n    service_config_id (str):\n        Specifies which version of service\n        configuration should be used to process the\n        request. If unspecified or no matching version\n        can be found, the latest one will be used.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "service_name": {
+            "description": "Name of the service as specified in the service configuration. For example, ``\"pubsub.googleapis.com\"``.  See [google.api.Service][google.api.Service] for the definition of a service name.",
+            "type": "string"
+          },
+          "allocate_operation": {
+            "description": "Operation that describes the quota allocation.",
+            "type": "object",
+            "properties": {
+              "operation_id": {
+                "description": "Identity of the operation. This is expected to be unique within the scope of the service that generated the operation, and guarantees idempotency in case of retries.  In order to ensure best performance and latency in the Quota backends, operation_ids are optimally associated with time, so that related operations can be accessed fast in storage. For this reason, the recommended token for services that intend to operate at a high QPS is Unix time in nanos + UUID",
+                "type": "string"
+              },
+              "method_name": {
+                "description": "Fully qualified name of the API method for which this quota operation is requested. This name is used for matching quota rules or metric rules and billing status rules defined in service configuration.  This field should not be set if any of the following is true: (1) the quota operation is performed on non-API resources. (2) quota_metrics is set because the caller is doing quota override.  Example of an RPC method name: google.example.library.v1.LibraryService.CreateShelf",
+                "type": "string"
+              },
+              "consumer_id": {
+                "description": "Identity of the consumer for whom this quota operation is being performed.  This can be in one of the following formats: project:<project_id>, project_number:<project_number>, api_key:<api_key>.",
+                "type": "string"
+              },
+              "labels": {
+                "description": "Labels describing the operation.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "quota_metrics": {
+                "description": "Represents information about this operation. Each MetricValueSet corresponds to a metric defined in the service configuration. The data type used in the MetricValueSet must agree with the data type specified in the metric definition.  Within a single operation, it is not allowed to have more than one MetricValue instances that have the same metric names and identical label value combinations. If a request has such duplicated MetricValue instances, the entire request is rejected with an invalid argument error.  This field is mutually exclusive with method_name.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "metric_name": {
+                      "description": "The metric name defined in the service configuration.",
+                      "type": "string"
+                    },
+                    "metric_values": {
+                      "description": "The values in this metric.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "labels": {
+                            "description": "The labels describing the metric value. See comments on [google.api.servicecontrol.v1.Operation.labels][google.api.servicecontrol.v1.Operation.labels] for the overriding relationship. Note that this map must not contain monitored resource labels.",
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "start_time": {
+                            "description": "The start of the time period over which this metric value's measurement applies. The time period has different semantics for different metric types (cumulative, delta, and gauge). See the metric definition documentation in the service configuration for details. If not specified, [google.api.servicecontrol.v1.Operation.start_time][google.api.servicecontrol.v1.Operation.start_time] will be used.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "end_time": {
+                            "description": "The end of the time period over which this metric value's measurement applies. If not specified, [google.api.servicecontrol.v1.Operation.end_time][google.api.servicecontrol.v1.Operation.end_time] will be used.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "bool_value": {
+                            "description": "A boolean value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "boolean"
+                          },
+                          "int64_value": {
+                            "description": "A signed 64-bit integer value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "integer"
+                          },
+                          "double_value": {
+                            "description": "A double precision floating point value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "number"
+                          },
+                          "string_value": {
+                            "description": "A text string value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "string"
+                          },
+                          "distribution_value": {
+                            "type": "object",
+                            "properties": {
+                              "cpe_uri": {
+                                "description": "The cpe_uri in `CPE format <https://cpe.mitre.org/specification/>`__ denoting the package manager version distributing a package.",
+                                "type": "string"
+                              },
+                              "architecture": {
+                                "description": "The CPU architecture for which packages in this distribution channel were built.",
+                                "type": "object",
+                                "reference": "grafeas.grafeas_v1.types.Architecture"
+                              },
+                              "latest_version": {
+                                "type": "object",
+                                "properties": {
+                                  "epoch": {
+                                    "description": "Used to correct mistakes in the version numbering scheme.",
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "description": "Required only when version kind is NORMAL. The main part of the version name.",
+                                    "type": "string"
+                                  },
+                                  "revision": {
+                                    "description": "The iteration of the package build from the above version.",
+                                    "type": "string"
+                                  },
+                                  "inclusive": {
+                                    "description": "Whether this version is specifying part of an inclusive range. Grafeas does not have the capability to specify version ranges; instead we have fields that specify start version and end versions. At times this is insufficient - we also need to specify whether the version is included in the range or is excluded from the range. This boolean is expected to be set to true when the version is included in a range.",
+                                    "type": "boolean"
+                                  },
+                                  "kind": {
+                                    "description": "Required. Distinguishes between sentinel MIN/MAX versions and normal versions.",
+                                    "type": "object",
+                                    "reference": "grafeas.grafeas_v1.types.Version.VersionKind"
+                                  },
+                                  "full_name": {
+                                    "description": "Human readable version string. This string is of the form <epoch>:<name>-<revision> and is only set when kind is NORMAL.",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "kind"
+                                ]
+                              },
+                              "maintainer": {
+                                "description": "A freeform string denoting the maintainer of this package.",
+                                "type": "string"
+                              },
+                              "url": {
+                                "description": "The distribution channel-specific homepage for this package.",
+                                "type": "string"
+                              },
+                              "description": {
+                                "description": "The distribution channel-specific description of this package.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "quota_mode": {
+                "description": "Quota mode for this operation.",
+                "type": "object",
+                "reference": "google.cloud.servicecontrol_v1.types.QuotaOperation.QuotaMode"
+              }
+            }
+          },
+          "service_config_id": {
+            "description": "Specifies which version of service configuration should be used to process the request. If unspecified or no matching version can be found, the latest one will be used.",
+            "type": "string"
+          }
         }
       }
     }
   ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-service-control\\google\\cloud\\servicecontrol_v1\\types\\service_controller.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CheckRequest",
-      "docstring": "Request message for the Check method.\n\nAttributes:\n    service_name (str):\n        The service name as specified in its service configuration.\n        For example, ``\"pubsub.googleapis.com\"``.\n\n        See\n        `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__\n        for the definition of a service name.\n    operation (google.cloud.servicecontrol_v1.types.Operation):\n        The operation to be checked.\n    service_config_id (str):\n        Specifies which version of service\n        configuration should be used to process the\n        request.\n\n        If unspecified or no matching version can be\n        found, the latest one will be used.",
-      "attributes": {
-        "service_name": {
-          "type": "str",
-          "description": "The service name as specified in its service configuration. For example, ``\"pubsub.googleapis.com\"``.  See `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__ for the definition of a service name."
-        },
-        "operation": {
-          "type": "google.cloud.servicecontrol_v1.types.Operation",
-          "description": "The operation to be checked."
-        },
-        "service_config_id": {
-          "type": "str",
-          "description": "Specifies which version of service configuration should be used to process the request.  If unspecified or no matching version can be found, the latest one will be used."
+      "description": "Request message for the Check method.\n\nAttributes:\n    service_name (str):\n        The service name as specified in its service configuration.\n        For example, ``\"pubsub.googleapis.com\"``.\n\n        See\n        `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__\n        for the definition of a service name.\n    operation (google.cloud.servicecontrol_v1.types.Operation):\n        The operation to be checked.\n    service_config_id (str):\n        Specifies which version of service\n        configuration should be used to process the\n        request.\n\n        If unspecified or no matching version can be\n        found, the latest one will be used.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "service_name": {
+            "description": "The service name as specified in its service configuration. For example, ``\"pubsub.googleapis.com\"``.  See `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__ for the definition of a service name.",
+            "type": "string"
+          },
+          "operation": {
+            "description": "The operation to be checked.",
+            "type": "object",
+            "properties": {
+              "operation_id": {
+                "description": "Identity of the operation. This must be unique within the scope of the service that generated the operation. If the service calls Check() and Report() on the same operation, the two calls should carry the same id.  UUID version 4 is recommended, though not required. In scenarios where an operation is computed from existing information and an idempotent id is desirable for deduplication purpose, UUID version 5 is recommended. See RFC 4122 for details.",
+                "type": "string"
+              },
+              "operation_name": {
+                "description": "Fully qualified name of the operation. Reserved for future use.",
+                "type": "string"
+              },
+              "consumer_id": {
+                "description": "Identity of the consumer who is using the service. This field should be filled in for the operations initiated by a consumer, but not for service-initiated operations that are not related to a specific consumer.  -  This can be in one of the following formats:  -  project:PROJECT_ID, -  project\\ ``_``\\ number:PROJECT_NUMBER, -  projects/PROJECT_ID or PROJECT_NUMBER, -  folders/FOLDER_NUMBER, -  organizations/ORGANIZATION_NUMBER, -  api\\ ``_``\\ key:API_KEY.",
+                "type": "string"
+              },
+              "start_time": {
+                "description": "Required. Start time of the operation.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "end_time": {
+                "description": "End time of the operation. Required when the operation is used in [ServiceController.Report][google.api.servicecontrol.v1.ServiceController.Report], but optional when the operation is used in [ServiceController.Check][google.api.servicecontrol.v1.ServiceController.Check].",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "Labels describing the operation. Only the following labels are allowed:  -  Labels describing monitored resources as defined in the service configuration. -  Default labels of metric values. When specified, labels defined in the metric value override these default. -  The following labels defined by Google Cloud Platform:  -  ``cloud.googleapis.com/location`` describing the location where the operation happened, -  ``servicecontrol.googleapis.com/user_agent`` describing the user agent of the API request, -  ``servicecontrol.googleapis.com/service_agent`` describing the service used to handle the API request (e.g. ESP), -  ``servicecontrol.googleapis.com/platform`` describing the platform where the API is served, such as App Engine, Compute Engine, or Kubernetes Engine.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "metric_value_sets": {
+                "description": "Represents information about this operation. Each MetricValueSet corresponds to a metric defined in the service configuration. The data type used in the MetricValueSet must agree with the data type specified in the metric definition.  Within a single operation, it is not allowed to have more than one MetricValue instances that have the same metric names and identical label value combinations. If a request has such duplicated MetricValue instances, the entire request is rejected with an invalid argument error.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "metric_name": {
+                      "description": "The metric name defined in the service configuration.",
+                      "type": "string"
+                    },
+                    "metric_values": {
+                      "description": "The values in this metric.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "labels": {
+                            "description": "The labels describing the metric value. See comments on [google.api.servicecontrol.v1.Operation.labels][google.api.servicecontrol.v1.Operation.labels] for the overriding relationship. Note that this map must not contain monitored resource labels.",
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "start_time": {
+                            "description": "The start of the time period over which this metric value's measurement applies. The time period has different semantics for different metric types (cumulative, delta, and gauge). See the metric definition documentation in the service configuration for details. If not specified, [google.api.servicecontrol.v1.Operation.start_time][google.api.servicecontrol.v1.Operation.start_time] will be used.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "end_time": {
+                            "description": "The end of the time period over which this metric value's measurement applies. If not specified, [google.api.servicecontrol.v1.Operation.end_time][google.api.servicecontrol.v1.Operation.end_time] will be used.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "bool_value": {
+                            "description": "A boolean value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "boolean"
+                          },
+                          "int64_value": {
+                            "description": "A signed 64-bit integer value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "integer"
+                          },
+                          "double_value": {
+                            "description": "A double precision floating point value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "number"
+                          },
+                          "string_value": {
+                            "description": "A text string value.  This field is a member of `oneof`_ ``value``.",
+                            "type": "string"
+                          },
+                          "distribution_value": {
+                            "type": "object",
+                            "properties": {
+                              "cpe_uri": {
+                                "description": "The cpe_uri in `CPE format <https://cpe.mitre.org/specification/>`__ denoting the package manager version distributing a package.",
+                                "type": "string"
+                              },
+                              "architecture": {
+                                "description": "The CPU architecture for which packages in this distribution channel were built.",
+                                "type": "object",
+                                "reference": "grafeas.grafeas_v1.types.Architecture"
+                              },
+                              "latest_version": {
+                                "type": "object",
+                                "properties": {
+                                  "epoch": {
+                                    "description": "Used to correct mistakes in the version numbering scheme.",
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "description": "Required only when version kind is NORMAL. The main part of the version name.",
+                                    "type": "string"
+                                  },
+                                  "revision": {
+                                    "description": "The iteration of the package build from the above version.",
+                                    "type": "string"
+                                  },
+                                  "inclusive": {
+                                    "description": "Whether this version is specifying part of an inclusive range. Grafeas does not have the capability to specify version ranges; instead we have fields that specify start version and end versions. At times this is insufficient - we also need to specify whether the version is included in the range or is excluded from the range. This boolean is expected to be set to true when the version is included in a range.",
+                                    "type": "boolean"
+                                  },
+                                  "kind": {
+                                    "description": "Required. Distinguishes between sentinel MIN/MAX versions and normal versions.",
+                                    "type": "object",
+                                    "reference": "grafeas.grafeas_v1.types.Version.VersionKind"
+                                  },
+                                  "full_name": {
+                                    "description": "Human readable version string. This string is of the form <epoch>:<name>-<revision> and is only set when kind is NORMAL.",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "kind"
+                                ]
+                              },
+                              "maintainer": {
+                                "description": "A freeform string denoting the maintainer of this package.",
+                                "type": "string"
+                              },
+                              "url": {
+                                "description": "The distribution channel-specific homepage for this package.",
+                                "type": "string"
+                              },
+                              "description": {
+                                "description": "The distribution channel-specific description of this package.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "log_entries": {
+                "description": "Represents information to be logged.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "Required. The log to which this log entry belongs. Examples: ``\"syslog\"``, ``\"book_log\"``.",
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "description": "The time the event described by the log entry occurred. If omitted, defaults to operation start time.",
+                      "type": "object",
+                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                    },
+                    "severity": {
+                      "description": "The severity of the log entry. The default value is ``LogSeverity.DEFAULT``.",
+                      "type": "object",
+                      "reference": "google.logging.type.log_severity_pb2.LogSeverity"
+                    },
+                    "http_request": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "description": "Required. The full url path that the request will be sent to.  This string must begin with either \"http://\" or \"https://\". Some examples are: ``http://acme.com`` and ``https://acme.com/sales:8080``. Cloud Tasks will encode some characters for safety and compatibility. The maximum allowed URL length is 2083 characters after encoding.  The ``Location`` header response from a redirect response [``300`` - ``399``] may be followed. The redirect is not counted as a separate attempt.",
+                          "type": "string"
+                        },
+                        "http_method": {
+                          "description": "The HTTP method to use for the request. The default is POST.",
+                          "type": "object",
+                          "reference": "google.cloud.tasks_v2beta3.types.HttpMethod"
+                        },
+                        "headers": {
+                          "description": "HTTP request headers.  This map contains the header field names and values. Headers can be set when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask].  These headers represent a subset of the headers that will accompany the task's HTTP request. Some HTTP request headers will be ignored or replaced.  A partial list of headers that will be ignored or replaced is:  -  Any header that is prefixed with \"X-CloudTasks-\" will be treated as service header. Service headers define properties of the task and are predefined in CloudTask. -  Host: This will be computed by Cloud Tasks and derived from [HttpRequest.url][google.cloud.tasks.v2beta3.HttpRequest.url]. -  Content-Length: This will be computed by Cloud Tasks. -  User-Agent: This will be set to ``\"Google-Cloud-Tasks\"``. -  ``X-Google-*``: Google use only. -  ``X-AppEngine-*``: Google use only.  ``Content-Type`` won't be set by Cloud Tasks. You can explicitly set ``Content-Type`` to a media type when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask]. For example, ``Content-Type`` can be set to ``\"application/octet-stream\"`` or ``\"application/json\"``.  Headers which can have multiple values (according to RFC2616) can be specified using comma-separated values.  The size of the headers must be less than 80KB.",
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "body": {
+                          "description": "HTTP request body.  A request body is allowed only if the [HTTP method][google.cloud.tasks.v2beta3.HttpRequest.http_method] is POST, PUT, or PATCH. It is an error to set body on a task with an incompatible [HttpMethod][google.cloud.tasks.v2beta3.HttpMethod].",
+                          "type": "object",
+                          "reference": "bytes"
+                        },
+                        "oauth_token": {
+                          "type": "object",
+                          "properties": {
+                            "service_account_email": {
+                              "description": "`Service account email <https://cloud.google.com/iam/docs/service-accounts>`__ to be used for generating OAuth token. The service account must be within the same project as the queue. The caller must have iam.serviceAccounts.actAs permission for the service account.",
+                              "type": "string"
+                            },
+                            "scope": {
+                              "description": "OAuth scope to be used for generating OAuth access token. If not specified, \"https://www.googleapis.com/auth/cloud-platform\" will be used.",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "oidc_token": {
+                          "type": "object",
+                          "properties": {
+                            "service_account_email": {
+                              "description": "`Service account email <https://cloud.google.com/iam/docs/service-accounts>`__ to be used for generating OIDC token. The service account must be within the same project as the queue. The caller must have iam.serviceAccounts.actAs permission for the service account.",
+                              "type": "string"
+                            },
+                            "audience": {
+                              "description": "Audience to be used when generating OIDC token. If not specified, the URI specified in target will be used.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "url"
+                      ]
+                    },
+                    "trace": {
+                      "description": "Optional. Resource name of the trace associated with the log entry, if any. If this field contains a relative resource name, you can assume the name is relative to ``//tracing.googleapis.com``. Example: ``projects/my-projectid/traces/06796866738c859f2f19b7cfb3214824``",
+                      "type": "string"
+                    },
+                    "insert_id": {
+                      "description": "A unique ID for the log entry used for deduplication. If omitted, the implementation will generate one based on operation_id.",
+                      "type": "string"
+                    },
+                    "labels": {
+                      "description": "A set of user-defined (key, value) data that provides additional information about the log entry.",
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "proto_payload": {
+                      "description": "The log entry payload, represented as a protocol buffer that is expressed as a JSON object. The only accepted type currently is [AuditLog][google.cloud.audit.AuditLog].  This field is a member of `oneof`_ ``payload``.",
+                      "type": "object",
+                      "reference": "google.protobuf.any_pb2.Any"
+                    },
+                    "text_payload": {
+                      "description": "The log entry payload, represented as a Unicode string (UTF-8).  This field is a member of `oneof`_ ``payload``.",
+                      "type": "string"
+                    },
+                    "struct_payload": {
+                      "description": "The log entry payload, represented as a structure that is expressed as a JSON object.  This field is a member of `oneof`_ ``payload``.",
+                      "type": "object",
+                      "reference": "google.protobuf.struct_pb2.Struct"
+                    },
+                    "operation": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "description": "Optional. An arbitrary operation identifier. Log entries with the same identifier are assumed to be part of the same operation.",
+                          "type": "string"
+                        },
+                        "producer": {
+                          "description": "Optional. An arbitrary producer identifier. The combination of ``id`` and ``producer`` must be globally unique. Examples for ``producer``: ``\"MyDivision.MyBigCompany.com\"``, ``\"github.com/MyProject/MyApplication\"``.",
+                          "type": "string"
+                        },
+                        "first": {
+                          "description": "Optional. Set this to True if this is the first log entry in the operation.",
+                          "type": "boolean"
+                        },
+                        "last": {
+                          "description": "Optional. Set this to True if this is the last log entry in the operation.",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "source_location": {
+                      "type": "object",
+                      "properties": {
+                        "file": {
+                          "description": "Optional. Source file name. Depending on the runtime environment, this might be a simple name or a fully-qualified name.",
+                          "type": "string"
+                        },
+                        "line": {
+                          "description": "Optional. Line within the source file. 1-based; 0 indicates no line number available.",
+                          "type": "integer"
+                        },
+                        "function": {
+                          "description": "Optional. Human-readable name of the function or method being invoked, with optional context such as the class or package name. This information may be used in contexts such as the logs viewer, where a file and line number are less meaningful. The format can vary by language. For example: ``qual.if.ied.Class.method`` (Java), ``dir/package.func`` (Go), ``function`` (Python).",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              },
+              "importance": {
+                "description": "DO NOT USE. This is an experimental field.",
+                "type": "object",
+                "reference": "google.cloud.servicecontrol_v1.types.Operation.Importance"
+              },
+              "extensions": {
+                "description": "Unimplemented.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "reference": "google.protobuf.any_pb2.Any"
+                }
+              }
+            },
+            "required": [
+              "start_time"
+            ]
+          },
+          "service_config_id": {
+            "description": "Specifies which version of service configuration should be used to process the request.  If unspecified or no matching version can be found, the latest one will be used.",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "CheckResponse",
-      "docstring": "Response message for the Check method.\n\nAttributes:\n    operation_id (str):\n        The same operation_id value used in the\n        [CheckRequest][google.api.servicecontrol.v1.CheckRequest].\n        Used for logging and diagnostics purposes.\n    check_errors (MutableSequence[google.cloud.servicecontrol_v1.types.CheckError]):\n        Indicate the decision of the check.\n\n        If no check errors are present, the service\n        should process the operation. Otherwise the\n        service should use the list of errors to\n        determine the appropriate action.\n    service_config_id (str):\n        The actual config id used to process the\n        request.\n    service_rollout_id (str):\n        The current service rollout id used to\n        process the request.\n    check_info (google.cloud.servicecontrol_v1.types.CheckResponse.CheckInfo):\n        Feedback data returned from the server during\n        processing a Check request.",
-      "attributes": {
-        "operation_id": {
-          "type": "str",
-          "description": "The same operation_id value used in the [CheckRequest][google.api.servicecontrol.v1.CheckRequest]. Used for logging and diagnostics purposes."
-        },
-        "check_errors": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.CheckError]",
-          "description": "Indicate the decision of the check.  If no check errors are present, the service should process the operation. Otherwise the service should use the list of errors to determine the appropriate action."
-        },
-        "service_config_id": {
-          "type": "str",
-          "description": "The actual config id used to process the request."
-        },
-        "service_rollout_id": {
-          "type": "str",
-          "description": "The current service rollout id used to process the request."
-        },
-        "check_info": {
-          "type": "google.cloud.servicecontrol_v1.types.CheckResponse.CheckInfo",
-          "description": "Feedback data returned from the server during processing a Check request."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ReportRequest",
-      "docstring": "Request message for the Report method.\n\nAttributes:\n    service_name (str):\n        The service name as specified in its service configuration.\n        For example, ``\"pubsub.googleapis.com\"``.\n\n        See\n        `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__\n        for the definition of a service name.\n    operations (MutableSequence[google.cloud.servicecontrol_v1.types.Operation]):\n        Operations to be reported.\n\n        Typically the service should report one operation per\n        request. Putting multiple operations into a single request\n        is allowed, but should be used only when multiple operations\n        are natually available at the time of the report.\n\n        There is no limit on the number of operations in the same\n        ReportRequest, however the ReportRequest size should be no\n        larger than 1MB. See\n        [ReportResponse.report_errors][google.api.servicecontrol.v1.ReportResponse.report_errors]\n        for par",
-      "attributes": {
-        "service_name": {
-          "type": "str",
-          "description": "The service name as specified in its service configuration. For example, ``\"pubsub.googleapis.com\"``.  See `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__ for the definition of a service name."
-        },
-        "operations": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.Operation]",
-          "description": "Operations to be reported.  Typically the service should report one operation per request. Putting multiple operations into a single request is allowed, but should be used only when multiple operations are natually available at the time of the report.  There is no limit on the number of operations in the same ReportRequest, however the ReportRequest size should be no larger than 1MB. See [ReportResponse.report_errors][google.api.servicecontrol.v1.ReportResponse.report_errors] for partial failure behavior."
-        },
-        "service_config_id": {
-          "type": "str",
-          "description": "Specifies which version of service config should be used to process the request.  If unspecified or no matching version can be found, the latest one will be used."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ReportResponse",
-      "docstring": "Response message for the Report method.\n\nAttributes:\n    report_errors (MutableSequence[google.cloud.servicecontrol_v1.types.ReportResponse.ReportError]):\n        Partial failures, one for each ``Operation`` in the request\n        that failed processing. There are three possible\n        combinations of the RPC status:\n\n        1. The combination of a successful RPC status and an empty\n           ``report_errors`` list indicates a complete success where\n           all ``Operations`` in the request are processed\n           successfully.\n        2. The combination of a successful RPC status and a\n           non-empty ``report_errors`` list indicates a partial\n           success where some ``Operations`` in the request\n           succeeded. Each ``Operation`` that failed processing has\n           a corresponding item in this list.\n        3. A failed RPC status indicates a general non-deterministic\n           failure. When this happens, it's impossible to know which\n           of the 'Operations' in the request s",
-      "attributes": {
-        "report_errors": {
-          "type": "MutableSequence[google.cloud.servicecontrol_v1.types.ReportResponse.ReportError]",
-          "description": "Partial failures, one for each ``Operation`` in the request that failed processing. There are three possible combinations of the RPC status:  1. The combination of a successful RPC status and an empty ``report_errors`` list indicates a complete success where all ``Operations`` in the request are processed successfully. 2. The combination of a successful RPC status and a non-empty ``report_errors`` list indicates a partial success where some ``Operations`` in the request succeeded. Each ``Operation`` that failed processing has a corresponding item in this list. 3. A failed RPC status indicates a general non-deterministic failure. When this happens, it's impossible to know which of the 'Operations' in the request succeeded or failed."
-        },
-        "service_config_id": {
-          "type": "str",
-          "description": "The actual config id used to process the request."
-        },
-        "service_rollout_id": {
-          "type": "str",
-          "description": "The current service rollout id used to process the request."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CheckInfo",
-      "docstring": "Contains additional information about the check operation.\n\nAttributes:\n    unused_arguments (MutableSequence[str]):\n        A list of fields and label keys that are\n        ignored by the server. The client doesn't need\n        to send them for following requests to improve\n        performance and allow better aggregation.\n    consumer_info (google.cloud.servicecontrol_v1.types.CheckResponse.ConsumerInfo):\n        Consumer info of this check.\n    api_key_uid (str):\n        The unique id of the api key in the format of\n        \"apikey:<UID>\". This field will be populated\n        when the consumer passed to Service Control is\n        an API key and all the API key related\n        validations are successful.",
-      "attributes": {
-        "unused_arguments": {
-          "type": "MutableSequence[str]",
-          "description": "A list of fields and label keys that are ignored by the server. The client doesn't need to send them for following requests to improve performance and allow better aggregation."
-        },
-        "consumer_info": {
-          "type": "google.cloud.servicecontrol_v1.types.CheckResponse.ConsumerInfo",
-          "description": "Consumer info of this check."
-        },
-        "api_key_uid": {
-          "type": "str",
-          "description": "The unique id of the api key in the format of \"apikey:<UID>\". This field will be populated when the consumer passed to Service Control is an API key and all the API key related validations are successful."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ConsumerInfo",
-      "docstring": "``ConsumerInfo`` provides information about the consumer.\n\nAttributes:\n    project_number (int):\n        The Google cloud project number, e.g.\n        1234567890. A value of 0 indicates no project\n        number is found.\n\n        NOTE: This field is deprecated after we support\n        flexible consumer id. New code should not depend\n        on this field anymore.\n    type_ (google.cloud.servicecontrol_v1.types.CheckResponse.ConsumerInfo.ConsumerType):\n        The type of the consumer which should have been defined in\n        `Google Resource\n        Manager <https://cloud.google.com/resource-manager/>`__.\n    consumer_number (int):\n        The consumer identity number, can be Google\n        cloud project number, folder number or\n        organization number e.g. 1234567890. A value of\n        0 indicates no consumer number is found.",
-      "attributes": {
-        "project_number": {
-          "type": "int",
-          "description": "The Google cloud project number, e.g. 1234567890. A value of 0 indicates no project number is found.  NOTE: This field is deprecated after we support flexible consumer id. New code should not depend on this field anymore."
-        },
-        "type_": {
-          "type": "google.cloud.servicecontrol_v1.types.CheckResponse.ConsumerInfo.ConsumerType",
-          "description": "The type of the consumer which should have been defined in `Google Resource Manager <https://cloud.google.com/resource-manager/>`__."
-        },
-        "consumer_number": {
-          "type": "int",
-          "description": "The consumer identity number, can be Google cloud project number, folder number or organization number e.g. 1234567890. A value of 0 indicates no consumer number is found."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ReportError",
-      "docstring": "Represents the processing error of one\n[Operation][google.api.servicecontrol.v1.Operation] in the request.\n\nAttributes:\n    operation_id (str):\n        The\n        [Operation.operation_id][google.api.servicecontrol.v1.Operation.operation_id]\n        value from the request.\n    status (google.rpc.status_pb2.Status):\n        Details of the error when processing the\n        [Operation][google.api.servicecontrol.v1.Operation].",
-      "attributes": {
-        "operation_id": {
-          "type": "str",
-          "description": "The [Operation.operation_id][google.api.servicecontrol.v1.Operation.operation_id] value from the request."
-        },
-        "status": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Details of the error when processing the [Operation][google.api.servicecontrol.v1.Operation]."
+      "description": "Request message for the Report method.\n\nAttributes:\n    service_name (str):\n        The service name as specified in its service configuration.\n        For example, ``\"pubsub.googleapis.com\"``.\n\n        See\n        `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__\n        for the definition of a service name.\n    operations (MutableSequence[google.cloud.servicecontrol_v1.types.Operation]):\n        Operations to be reported.\n\n        Typically the service should report one operation per\n        request. Putting multiple operations into a single request\n        is allowed, but should be used only when multiple operations\n        are natually available at the time of the report.\n\n        There is no limit on the number of operations in the same\n        ReportRequest, however the ReportRequest size should be no\n        larger than 1MB. See\n        [ReportResponse.report_errors][google.api.servicecontrol.v1.ReportResponse.report_errors]\n        for par",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "service_name": {
+            "description": "The service name as specified in its service configuration. For example, ``\"pubsub.googleapis.com\"``.  See `google.api.Service <https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service>`__ for the definition of a service name.",
+            "type": "string"
+          },
+          "operations": {
+            "description": "Operations to be reported.  Typically the service should report one operation per request. Putting multiple operations into a single request is allowed, but should be used only when multiple operations are natually available at the time of the report.  There is no limit on the number of operations in the same ReportRequest, however the ReportRequest size should be no larger than 1MB. See [ReportResponse.report_errors][google.api.servicecontrol.v1.ReportResponse.report_errors] for partial failure behavior.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "operation_id": {
+                  "description": "Identity of the operation. This must be unique within the scope of the service that generated the operation. If the service calls Check() and Report() on the same operation, the two calls should carry the same id.  UUID version 4 is recommended, though not required. In scenarios where an operation is computed from existing information and an idempotent id is desirable for deduplication purpose, UUID version 5 is recommended. See RFC 4122 for details.",
+                  "type": "string"
+                },
+                "operation_name": {
+                  "description": "Fully qualified name of the operation. Reserved for future use.",
+                  "type": "string"
+                },
+                "consumer_id": {
+                  "description": "Identity of the consumer who is using the service. This field should be filled in for the operations initiated by a consumer, but not for service-initiated operations that are not related to a specific consumer.  -  This can be in one of the following formats:  -  project:PROJECT_ID, -  project\\ ``_``\\ number:PROJECT_NUMBER, -  projects/PROJECT_ID or PROJECT_NUMBER, -  folders/FOLDER_NUMBER, -  organizations/ORGANIZATION_NUMBER, -  api\\ ``_``\\ key:API_KEY.",
+                  "type": "string"
+                },
+                "start_time": {
+                  "description": "Required. Start time of the operation.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "End time of the operation. Required when the operation is used in [ServiceController.Report][google.api.servicecontrol.v1.ServiceController.Report], but optional when the operation is used in [ServiceController.Check][google.api.servicecontrol.v1.ServiceController.Check].",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "labels": {
+                  "description": "Labels describing the operation. Only the following labels are allowed:  -  Labels describing monitored resources as defined in the service configuration. -  Default labels of metric values. When specified, labels defined in the metric value override these default. -  The following labels defined by Google Cloud Platform:  -  ``cloud.googleapis.com/location`` describing the location where the operation happened, -  ``servicecontrol.googleapis.com/user_agent`` describing the user agent of the API request, -  ``servicecontrol.googleapis.com/service_agent`` describing the service used to handle the API request (e.g. ESP), -  ``servicecontrol.googleapis.com/platform`` describing the platform where the API is served, such as App Engine, Compute Engine, or Kubernetes Engine.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "metric_value_sets": {
+                  "description": "Represents information about this operation. Each MetricValueSet corresponds to a metric defined in the service configuration. The data type used in the MetricValueSet must agree with the data type specified in the metric definition.  Within a single operation, it is not allowed to have more than one MetricValue instances that have the same metric names and identical label value combinations. If a request has such duplicated MetricValue instances, the entire request is rejected with an invalid argument error.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "metric_name": {
+                        "description": "The metric name defined in the service configuration.",
+                        "type": "string"
+                      },
+                      "metric_values": {
+                        "description": "The values in this metric.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "labels": {
+                              "description": "The labels describing the metric value. See comments on [google.api.servicecontrol.v1.Operation.labels][google.api.servicecontrol.v1.Operation.labels] for the overriding relationship. Note that this map must not contain monitored resource labels.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "start_time": {
+                              "description": "The start of the time period over which this metric value's measurement applies. The time period has different semantics for different metric types (cumulative, delta, and gauge). See the metric definition documentation in the service configuration for details. If not specified, [google.api.servicecontrol.v1.Operation.start_time][google.api.servicecontrol.v1.Operation.start_time] will be used.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            },
+                            "end_time": {
+                              "description": "The end of the time period over which this metric value's measurement applies. If not specified, [google.api.servicecontrol.v1.Operation.end_time][google.api.servicecontrol.v1.Operation.end_time] will be used.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            },
+                            "bool_value": {
+                              "description": "A boolean value.  This field is a member of `oneof`_ ``value``.",
+                              "type": "boolean"
+                            },
+                            "int64_value": {
+                              "description": "A signed 64-bit integer value.  This field is a member of `oneof`_ ``value``.",
+                              "type": "integer"
+                            },
+                            "double_value": {
+                              "description": "A double precision floating point value.  This field is a member of `oneof`_ ``value``.",
+                              "type": "number"
+                            },
+                            "string_value": {
+                              "description": "A text string value.  This field is a member of `oneof`_ ``value``.",
+                              "type": "string"
+                            },
+                            "distribution_value": {
+                              "type": "object",
+                              "properties": {
+                                "cpe_uri": {
+                                  "description": "The cpe_uri in `CPE format <https://cpe.mitre.org/specification/>`__ denoting the package manager version distributing a package.",
+                                  "type": "string"
+                                },
+                                "architecture": {
+                                  "description": "The CPU architecture for which packages in this distribution channel were built.",
+                                  "type": "object",
+                                  "reference": "grafeas.grafeas_v1.types.Architecture"
+                                },
+                                "latest_version": {
+                                  "type": "object",
+                                  "properties": {
+                                    "epoch": {
+                                      "description": "Used to correct mistakes in the version numbering scheme.",
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "description": "Required only when version kind is NORMAL. The main part of the version name.",
+                                      "type": "string"
+                                    },
+                                    "revision": {
+                                      "description": "The iteration of the package build from the above version.",
+                                      "type": "string"
+                                    },
+                                    "inclusive": {
+                                      "description": "Whether this version is specifying part of an inclusive range. Grafeas does not have the capability to specify version ranges; instead we have fields that specify start version and end versions. At times this is insufficient - we also need to specify whether the version is included in the range or is excluded from the range. This boolean is expected to be set to true when the version is included in a range.",
+                                      "type": "boolean"
+                                    },
+                                    "kind": {
+                                      "description": "Required. Distinguishes between sentinel MIN/MAX versions and normal versions.",
+                                      "type": "object",
+                                      "reference": "grafeas.grafeas_v1.types.Version.VersionKind"
+                                    },
+                                    "full_name": {
+                                      "description": "Human readable version string. This string is of the form <epoch>:<name>-<revision> and is only set when kind is NORMAL.",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "kind"
+                                  ]
+                                },
+                                "maintainer": {
+                                  "description": "A freeform string denoting the maintainer of this package.",
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "description": "The distribution channel-specific homepage for this package.",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "description": "The distribution channel-specific description of this package.",
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "log_entries": {
+                  "description": "Represents information to be logged.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "Required. The log to which this log entry belongs. Examples: ``\"syslog\"``, ``\"book_log\"``.",
+                        "type": "string"
+                      },
+                      "timestamp": {
+                        "description": "The time the event described by the log entry occurred. If omitted, defaults to operation start time.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "severity": {
+                        "description": "The severity of the log entry. The default value is ``LogSeverity.DEFAULT``.",
+                        "type": "object",
+                        "reference": "google.logging.type.log_severity_pb2.LogSeverity"
+                      },
+                      "http_request": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "description": "Required. The full url path that the request will be sent to.  This string must begin with either \"http://\" or \"https://\". Some examples are: ``http://acme.com`` and ``https://acme.com/sales:8080``. Cloud Tasks will encode some characters for safety and compatibility. The maximum allowed URL length is 2083 characters after encoding.  The ``Location`` header response from a redirect response [``300`` - ``399``] may be followed. The redirect is not counted as a separate attempt.",
+                            "type": "string"
+                          },
+                          "http_method": {
+                            "description": "The HTTP method to use for the request. The default is POST.",
+                            "type": "object",
+                            "reference": "google.cloud.tasks_v2beta3.types.HttpMethod"
+                          },
+                          "headers": {
+                            "description": "HTTP request headers.  This map contains the header field names and values. Headers can be set when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask].  These headers represent a subset of the headers that will accompany the task's HTTP request. Some HTTP request headers will be ignored or replaced.  A partial list of headers that will be ignored or replaced is:  -  Any header that is prefixed with \"X-CloudTasks-\" will be treated as service header. Service headers define properties of the task and are predefined in CloudTask. -  Host: This will be computed by Cloud Tasks and derived from [HttpRequest.url][google.cloud.tasks.v2beta3.HttpRequest.url]. -  Content-Length: This will be computed by Cloud Tasks. -  User-Agent: This will be set to ``\"Google-Cloud-Tasks\"``. -  ``X-Google-*``: Google use only. -  ``X-AppEngine-*``: Google use only.  ``Content-Type`` won't be set by Cloud Tasks. You can explicitly set ``Content-Type`` to a media type when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask]. For example, ``Content-Type`` can be set to ``\"application/octet-stream\"`` or ``\"application/json\"``.  Headers which can have multiple values (according to RFC2616) can be specified using comma-separated values.  The size of the headers must be less than 80KB.",
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "body": {
+                            "description": "HTTP request body.  A request body is allowed only if the [HTTP method][google.cloud.tasks.v2beta3.HttpRequest.http_method] is POST, PUT, or PATCH. It is an error to set body on a task with an incompatible [HttpMethod][google.cloud.tasks.v2beta3.HttpMethod].",
+                            "type": "object",
+                            "reference": "bytes"
+                          },
+                          "oauth_token": {
+                            "type": "object",
+                            "properties": {
+                              "service_account_email": {
+                                "description": "`Service account email <https://cloud.google.com/iam/docs/service-accounts>`__ to be used for generating OAuth token. The service account must be within the same project as the queue. The caller must have iam.serviceAccounts.actAs permission for the service account.",
+                                "type": "string"
+                              },
+                              "scope": {
+                                "description": "OAuth scope to be used for generating OAuth access token. If not specified, \"https://www.googleapis.com/auth/cloud-platform\" will be used.",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "oidc_token": {
+                            "type": "object",
+                            "properties": {
+                              "service_account_email": {
+                                "description": "`Service account email <https://cloud.google.com/iam/docs/service-accounts>`__ to be used for generating OIDC token. The service account must be within the same project as the queue. The caller must have iam.serviceAccounts.actAs permission for the service account.",
+                                "type": "string"
+                              },
+                              "audience": {
+                                "description": "Audience to be used when generating OIDC token. If not specified, the URI specified in target will be used.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "url"
+                        ]
+                      },
+                      "trace": {
+                        "description": "Optional. Resource name of the trace associated with the log entry, if any. If this field contains a relative resource name, you can assume the name is relative to ``//tracing.googleapis.com``. Example: ``projects/my-projectid/traces/06796866738c859f2f19b7cfb3214824``",
+                        "type": "string"
+                      },
+                      "insert_id": {
+                        "description": "A unique ID for the log entry used for deduplication. If omitted, the implementation will generate one based on operation_id.",
+                        "type": "string"
+                      },
+                      "labels": {
+                        "description": "A set of user-defined (key, value) data that provides additional information about the log entry.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "proto_payload": {
+                        "description": "The log entry payload, represented as a protocol buffer that is expressed as a JSON object. The only accepted type currently is [AuditLog][google.cloud.audit.AuditLog].  This field is a member of `oneof`_ ``payload``.",
+                        "type": "object",
+                        "reference": "google.protobuf.any_pb2.Any"
+                      },
+                      "text_payload": {
+                        "description": "The log entry payload, represented as a Unicode string (UTF-8).  This field is a member of `oneof`_ ``payload``.",
+                        "type": "string"
+                      },
+                      "struct_payload": {
+                        "description": "The log entry payload, represented as a structure that is expressed as a JSON object.  This field is a member of `oneof`_ ``payload``.",
+                        "type": "object",
+                        "reference": "google.protobuf.struct_pb2.Struct"
+                      },
+                      "operation": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "description": "Optional. An arbitrary operation identifier. Log entries with the same identifier are assumed to be part of the same operation.",
+                            "type": "string"
+                          },
+                          "producer": {
+                            "description": "Optional. An arbitrary producer identifier. The combination of ``id`` and ``producer`` must be globally unique. Examples for ``producer``: ``\"MyDivision.MyBigCompany.com\"``, ``\"github.com/MyProject/MyApplication\"``.",
+                            "type": "string"
+                          },
+                          "first": {
+                            "description": "Optional. Set this to True if this is the first log entry in the operation.",
+                            "type": "boolean"
+                          },
+                          "last": {
+                            "description": "Optional. Set this to True if this is the last log entry in the operation.",
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "source_location": {
+                        "type": "object",
+                        "properties": {
+                          "file": {
+                            "description": "Optional. Source file name. Depending on the runtime environment, this might be a simple name or a fully-qualified name.",
+                            "type": "string"
+                          },
+                          "line": {
+                            "description": "Optional. Line within the source file. 1-based; 0 indicates no line number available.",
+                            "type": "integer"
+                          },
+                          "function": {
+                            "description": "Optional. Human-readable name of the function or method being invoked, with optional context such as the class or package name. This information may be used in contexts such as the logs viewer, where a file and line number are less meaningful. The format can vary by language. For example: ``qual.if.ied.Class.method`` (Java), ``dir/package.func`` (Go), ``function`` (Python).",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
+                  }
+                },
+                "importance": {
+                  "description": "DO NOT USE. This is an experimental field.",
+                  "type": "object",
+                  "reference": "google.cloud.servicecontrol_v1.types.Operation.Importance"
+                },
+                "extensions": {
+                  "description": "Unimplemented.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.protobuf.any_pb2.Any"
+                  }
+                }
+              },
+              "required": [
+                "start_time"
+              ]
+            }
+          },
+          "service_config_id": {
+            "description": "Specifies which version of service config should be used to process the request.  If unspecified or no matching version can be found, the latest one will be used.",
+            "type": "string"
+          }
         }
       }
     }

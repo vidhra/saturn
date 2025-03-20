@@ -1,382 +1,258 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-videointelligence\\google\\cloud\\videointelligence_v1beta2\\types\\video_intelligence.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "AnnotateVideoRequest",
-      "docstring": "Video annotation request.\n\nAttributes:\n    input_uri (str):\n        Input video location. Currently, only `Google Cloud\n        Storage <https://cloud.google.com/storage/>`__ URIs are\n        supported, which must be specified in the following format:\n        ``gs://bucket-id/object-id`` (other URI formats return\n        [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]).\n        For more information, see `Request\n        URIs <https://cloud.google.com/storage/docs/request-endpoints>`__.\n        A video URI may include wildcards in ``object-id``, and thus\n        identify multiple videos. Supported wildcards: '*' to match\n        0 or more characters; '?' to match 1 character. If unset,\n        the input video should be embedded in the request as\n        ``input_content``. If set, ``input_content`` should be\n        unset.\n    input_content (bytes):\n        The video data bytes. If unset, the input video(s) should be\n        specified via ``input_uri``. If set, ``input_uri`` should be\n     ",
-      "attributes": {
-        "input_uri": {
-          "type": "str",
-          "description": "Input video location. Currently, only `Google Cloud Storage <https://cloud.google.com/storage/>`__ URIs are supported, which must be specified in the following format: ``gs://bucket-id/object-id`` (other URI formats return [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For more information, see `Request URIs <https://cloud.google.com/storage/docs/request-endpoints>`__. A video URI may include wildcards in ``object-id``, and thus identify multiple videos. Supported wildcards: '*' to match 0 or more characters; '?' to match 1 character. If unset, the input video should be embedded in the request as ``input_content``. If set, ``input_content`` should be unset."
+      "description": "Video annotation request.\n\nAttributes:\n    input_uri (str):\n        Input video location. Currently, only `Google Cloud\n        Storage <https://cloud.google.com/storage/>`__ URIs are\n        supported, which must be specified in the following format:\n        ``gs://bucket-id/object-id`` (other URI formats return\n        [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]).\n        For more information, see `Request\n        URIs <https://cloud.google.com/storage/docs/request-endpoints>`__.\n        A video URI may include wildcards in ``object-id``, and thus\n        identify multiple videos. Supported wildcards: '*' to match\n        0 or more characters; '?' to match 1 character. If unset,\n        the input video should be embedded in the request as\n        ``input_content``. If set, ``input_content`` should be\n        unset.\n    input_content (bytes):\n        The video data bytes. If unset, the input video(s) should be\n        specified via ``input_uri``. If set, ``input_uri`` should be\n     ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "input_uri": {
+            "description": "Input video location. Currently, only `Google Cloud Storage <https://cloud.google.com/storage/>`__ URIs are supported, which must be specified in the following format: ``gs://bucket-id/object-id`` (other URI formats return [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For more information, see `Request URIs <https://cloud.google.com/storage/docs/request-endpoints>`__. A video URI may include wildcards in ``object-id``, and thus identify multiple videos. Supported wildcards: '*' to match 0 or more characters; '?' to match 1 character. If unset, the input video should be embedded in the request as ``input_content``. If set, ``input_content`` should be unset.",
+            "type": "string"
+          },
+          "input_content": {
+            "description": "The video data bytes. If unset, the input video(s) should be specified via ``input_uri``. If set, ``input_uri`` should be unset.",
+            "type": "object",
+            "reference": "bytes"
+          },
+          "features": {
+            "description": "Required. Requested video annotation features.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type_": {
+                  "description": "The feature type.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p4beta1.types.Feature.Type"
+                },
+                "max_results": {
+                  "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
+                  "type": "integer"
+                },
+                "model": {
+                  "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "video_context": {
+            "description": "Additional video context and/or feature-specific parameters.",
+            "type": "object",
+            "properties": {
+              "segments": {
+                "description": "Video segments to annotate. The segments may overlap and are not required to be contiguous or span the whole video. If unspecified, each video is treated as a single segment.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "start_time_offset": {
+                      "type": "object",
+                      "properties": {
+                        "nanos": {
+                          "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                          "type": "integer"
+                        },
+                        "seconds": {
+                          "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "end_time_offset": {
+                      "type": "object",
+                      "properties": {
+                        "nanos": {
+                          "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                          "type": "integer"
+                        },
+                        "seconds": {
+                          "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "label_detection_config": {
+                "type": "object",
+                "properties": {
+                  "label_detection_mode": {
+                    "description": "What labels should be detected with LABEL_DETECTION, in addition to video-level labels or segment-level labels. If unspecified, defaults to ``SHOT_MODE``.",
+                    "type": "object",
+                    "reference": "google.cloud.videointelligence_v1p3beta1.types.LabelDetectionMode"
+                  },
+                  "stationary_camera": {
+                    "description": "Whether the video has been shot from a stationary (i.e., non-moving) camera. When set to true, might improve detection accuracy for moving objects. Should be used with ``SHOT_AND_FRAME_MODE`` enabled.",
+                    "type": "boolean"
+                  },
+                  "model": {
+                    "description": "Model to use for label detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                    "type": "string"
+                  },
+                  "frame_confidence_threshold": {
+                    "description": "The confidence threshold we perform filtering on the labels from frame-level detection. If not set, it is set to 0.4 by default. The valid range for this threshold is [0.1, 0.9]. Any value set outside of this range will be clipped. Note: For best results, follow the default threshold. We will update the default threshold everytime when we release a new model.",
+                    "type": "number"
+                  },
+                  "video_confidence_threshold": {
+                    "description": "The confidence threshold we perform filtering on the labels from video-level and shot-level detections. If not set, it's set to 0.3 by default. The valid range for this threshold is [0.1, 0.9]. Any value set outside of this range will be clipped. Note: For best results, follow the default threshold. We will update the default threshold everytime when we release a new model.",
+                    "type": "number"
+                  }
+                }
+              },
+              "shot_change_detection_config": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "description": "Model to use for shot change detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                    "type": "string"
+                  }
+                }
+              },
+              "explicit_content_detection_config": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "description": "Model to use for explicit content detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                    "type": "string"
+                  }
+                }
+              },
+              "face_detection_config": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "description": "Model to use for face detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                    "type": "string"
+                  },
+                  "include_bounding_boxes": {
+                    "description": "Whether bounding boxes are included in the face annotation output.",
+                    "type": "boolean"
+                  },
+                  "include_attributes": {
+                    "description": "Whether to enable face attributes detection, such as glasses, dark_glasses, mouth_open etc. Ignored if 'include_bounding_boxes' is set to false.",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "speech_transcription_config": {
+                "type": "object",
+                "properties": {
+                  "language_code": {
+                    "description": "Required. *Required* The language of the supplied audio as a `BCP-47 <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>`__ language tag. Example: \"en-US\". See `Language Support <https://cloud.google.com/speech/docs/languages>`__ for a list of the currently supported language codes.",
+                    "type": "string"
+                  },
+                  "max_alternatives": {
+                    "description": "Optional. Maximum number of recognition hypotheses to be returned. Specifically, the maximum number of ``SpeechRecognitionAlternative`` messages within each ``SpeechTranscription``. The server may return fewer than ``max_alternatives``. Valid values are ``0``-``30``. A value of ``0`` or ``1`` will return a maximum of one. If omitted, will return a maximum of one.",
+                    "type": "integer"
+                  },
+                  "filter_profanity": {
+                    "description": "Optional. If set to ``true``, the server will attempt to filter out profanities, replacing all but the initial character in each filtered word with asterisks, e.g. \"f***\". If set to ``false`` or omitted, profanities won't be filtered out.",
+                    "type": "boolean"
+                  },
+                  "speech_contexts": {
+                    "description": "Optional. A means to provide context to assist the speech recognition.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "phrases": {
+                          "description": "Optional. A list of strings containing words and phrases \"hints\" so that the speech recognition is more likely to recognize them. This can be used to improve the accuracy for specific words and phrases, for example, if specific commands are typically spoken by the user. This can also be used to add additional words to the vocabulary of the recognizer. See `usage limits <https://cloud.google.com/speech/limits#content>`__.",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "enable_automatic_punctuation": {
+                    "description": "Optional. If 'true', adds punctuation to recognition result hypotheses. This feature is only available in select languages. Setting this for requests in other languages has no effect at all. The default 'false' value does not add punctuation to result hypotheses. NOTE: \"This is currently offered as an experimental service, complimentary to all users. In the future this may be exclusively available as a premium feature.\".",
+                    "type": "boolean"
+                  },
+                  "audio_tracks": {
+                    "description": "Optional. For file formats, such as MXF or MKV, supporting multiple audio tracks, specify up to two tracks. Default: track 0.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "enable_speaker_diarization": {
+                    "description": "Optional. If 'true', enables speaker detection for each recognized word in the top alternative of the recognition result using a speaker_tag provided in the WordInfo. Note: When this is true, we send all the words from the beginning of the audio for the top alternative in every consecutive response. This is done in order to improve our speaker tags as our models learn to identify the speakers in the conversation over time.",
+                    "type": "boolean"
+                  },
+                  "diarization_speaker_count": {
+                    "description": "Optional. If set, specifies the estimated number of speakers in the conversation. If not set, defaults to '2'. Ignored unless enable_speaker_diarization is set to true.",
+                    "type": "integer"
+                  },
+                  "enable_word_confidence": {
+                    "description": "Optional. If ``true``, the top result includes a list of words and the confidence for those words. If ``false``, no word-level confidence information is returned. The default is ``false``.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "language_code"
+                ]
+              },
+              "text_detection_config": {
+                "type": "object",
+                "properties": {
+                  "language_hints": {
+                    "description": "Language hint can be specified if the language to be detected is known a priori. It can increase the accuracy of the detection. Language hint must be language code in BCP-47 format.  Automatic language detection is performed if no hint is provided.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "model": {
+                    "description": "Model to use for text detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                    "type": "string"
+                  }
+                }
+              },
+              "person_detection_config": {
+                "type": "object",
+                "properties": {
+                  "include_bounding_boxes": {
+                    "description": "Whether bounding boxes are included in the person detection annotation output.",
+                    "type": "boolean"
+                  },
+                  "include_pose_landmarks": {
+                    "description": "Whether to enable pose landmarks detection. Ignored if 'include_bounding_boxes' is set to false.",
+                    "type": "boolean"
+                  },
+                  "include_attributes": {
+                    "description": "Whether to enable person attributes detection, such as cloth color (black, blue, etc), type (coat, dress, etc), pattern (plain, floral, etc), hair, etc. Ignored if 'include_bounding_boxes' is set to false.",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "object_tracking_config": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "description": "Model to use for object tracking. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "output_uri": {
+            "description": "Optional. Location where the output (in JSON format) should be stored. Currently, only `Google Cloud Storage <https://cloud.google.com/storage/>`__ URIs are supported, which must be specified in the following format: ``gs://bucket-id/object-id`` (other URI formats return [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For more information, see `Request URIs <https://cloud.google.com/storage/docs/request-endpoints>`__.",
+            "type": "string"
+          },
+          "location_id": {
+            "description": "Optional. Cloud region where annotation should take place. Supported cloud regions: ``us-east1``, ``us-west1``, ``europe-west1``, ``asia-east1``. If no region is specified, a region will be determined based on video file location.",
+            "type": "string"
+          }
         },
-        "input_content": {
-          "type": "bytes",
-          "description": "The video data bytes. If unset, the input video(s) should be specified via ``input_uri``. If set, ``input_uri`` should be unset."
-        },
-        "features": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.Feature]",
-          "description": "Required. Requested video annotation features."
-        },
-        "video_context": {
-          "type": "google.cloud.videointelligence_v1beta2.types.VideoContext",
-          "description": "Additional video context and/or feature-specific parameters."
-        },
-        "output_uri": {
-          "type": "str",
-          "description": "Optional. Location where the output (in JSON format) should be stored. Currently, only `Google Cloud Storage <https://cloud.google.com/storage/>`__ URIs are supported, which must be specified in the following format: ``gs://bucket-id/object-id`` (other URI formats return [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For more information, see `Request URIs <https://cloud.google.com/storage/docs/request-endpoints>`__."
-        },
-        "location_id": {
-          "type": "str",
-          "description": "Optional. Cloud region where annotation should take place. Supported cloud regions: ``us-east1``, ``us-west1``, ``europe-west1``, ``asia-east1``. If no region is specified, a region will be determined based on video file location."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VideoContext",
-      "docstring": "Video context and/or feature-specific parameters.\n\nAttributes:\n    segments (MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoSegment]):\n        Video segments to annotate. The segments may\n        overlap and are not required to be contiguous or\n        span the whole video. If unspecified, each video\n        is treated as a single segment.\n    label_detection_config (google.cloud.videointelligence_v1beta2.types.LabelDetectionConfig):\n        Config for LABEL_DETECTION.\n    shot_change_detection_config (google.cloud.videointelligence_v1beta2.types.ShotChangeDetectionConfig):\n        Config for SHOT_CHANGE_DETECTION.\n    explicit_content_detection_config (google.cloud.videointelligence_v1beta2.types.ExplicitContentDetectionConfig):\n        Config for EXPLICIT_CONTENT_DETECTION.\n    face_detection_config (google.cloud.videointelligence_v1beta2.types.FaceDetectionConfig):\n        Config for FACE_DETECTION.",
-      "attributes": {
-        "segments": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoSegment]",
-          "description": "Video segments to annotate. The segments may overlap and are not required to be contiguous or span the whole video. If unspecified, each video is treated as a single segment."
-        },
-        "label_detection_config": {
-          "type": "google.cloud.videointelligence_v1beta2.types.LabelDetectionConfig",
-          "description": "Config for LABEL_DETECTION."
-        },
-        "shot_change_detection_config": {
-          "type": "google.cloud.videointelligence_v1beta2.types.ShotChangeDetectionConfig",
-          "description": "Config for SHOT_CHANGE_DETECTION."
-        },
-        "explicit_content_detection_config": {
-          "type": "google.cloud.videointelligence_v1beta2.types.ExplicitContentDetectionConfig",
-          "description": "Config for EXPLICIT_CONTENT_DETECTION."
-        },
-        "face_detection_config": {
-          "type": "google.cloud.videointelligence_v1beta2.types.FaceDetectionConfig",
-          "description": "Config for FACE_DETECTION."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LabelDetectionConfig",
-      "docstring": "Config for LABEL_DETECTION.\n\nAttributes:\n    label_detection_mode (google.cloud.videointelligence_v1beta2.types.LabelDetectionMode):\n        What labels should be detected with LABEL_DETECTION, in\n        addition to video-level labels or segment-level labels. If\n        unspecified, defaults to ``SHOT_MODE``.\n    stationary_camera (bool):\n        Whether the video has been shot from a stationary (i.e.\n        non-moving) camera. When set to true, might improve\n        detection accuracy for moving objects. Should be used with\n        ``SHOT_AND_FRAME_MODE`` enabled.\n    model (str):\n        Model to use for label detection.\n        Supported values: \"builtin/stable\" (the default\n        if unset) and \"builtin/latest\".",
-      "attributes": {
-        "label_detection_mode": {
-          "type": "google.cloud.videointelligence_v1beta2.types.LabelDetectionMode",
-          "description": "What labels should be detected with LABEL_DETECTION, in addition to video-level labels or segment-level labels. If unspecified, defaults to ``SHOT_MODE``."
-        },
-        "stationary_camera": {
-          "type": "bool",
-          "description": "Whether the video has been shot from a stationary (i.e. non-moving) camera. When set to true, might improve detection accuracy for moving objects. Should be used with ``SHOT_AND_FRAME_MODE`` enabled."
-        },
-        "model": {
-          "type": "str",
-          "description": "Model to use for label detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ShotChangeDetectionConfig",
-      "docstring": "Config for SHOT_CHANGE_DETECTION.\n\nAttributes:\n    model (str):\n        Model to use for shot change detection.\n        Supported values: \"builtin/stable\" (the default\n        if unset) and \"builtin/latest\".",
-      "attributes": {
-        "model": {
-          "type": "str",
-          "description": "Model to use for shot change detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExplicitContentDetectionConfig",
-      "docstring": "Config for EXPLICIT_CONTENT_DETECTION.\n\nAttributes:\n    model (str):\n        Model to use for explicit content detection.\n        Supported values: \"builtin/stable\" (the default\n        if unset) and \"builtin/latest\".",
-      "attributes": {
-        "model": {
-          "type": "str",
-          "description": "Model to use for explicit content detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "FaceDetectionConfig",
-      "docstring": "Config for FACE_DETECTION.\n\nAttributes:\n    model (str):\n        Model to use for face detection.\n        Supported values: \"builtin/stable\" (the default\n        if unset) and \"builtin/latest\".\n    include_bounding_boxes (bool):\n        Whether bounding boxes be included in the\n        face annotation output.",
-      "attributes": {
-        "model": {
-          "type": "str",
-          "description": "Model to use for face detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\"."
-        },
-        "include_bounding_boxes": {
-          "type": "bool",
-          "description": "Whether bounding boxes be included in the face annotation output."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VideoSegment",
-      "docstring": "Video segment.\n\nAttributes:\n    start_time_offset (google.protobuf.duration_pb2.Duration):\n        Time-offset, relative to the beginning of the\n        video, corresponding to the start of the segment\n        (inclusive).\n    end_time_offset (google.protobuf.duration_pb2.Duration):\n        Time-offset, relative to the beginning of the\n        video, corresponding to the end of the segment\n        (inclusive).",
-      "attributes": {
-        "start_time_offset": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Time-offset, relative to the beginning of the video, corresponding to the start of the segment (inclusive)."
-        },
-        "end_time_offset": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Time-offset, relative to the beginning of the video, corresponding to the end of the segment (inclusive)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LabelSegment",
-      "docstring": "Video segment level annotation results for label detection.\n\nAttributes:\n    segment (google.cloud.videointelligence_v1beta2.types.VideoSegment):\n        Video segment where a label was detected.\n    confidence (float):\n        Confidence that the label is accurate. Range: [0, 1].",
-      "attributes": {
-        "segment": {
-          "type": "google.cloud.videointelligence_v1beta2.types.VideoSegment",
-          "description": "Video segment where a label was detected."
-        },
-        "confidence": {
-          "type": "float",
-          "description": "Confidence that the label is accurate. Range: [0, 1]."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LabelFrame",
-      "docstring": "Video frame level annotation results for label detection.\n\nAttributes:\n    time_offset (google.protobuf.duration_pb2.Duration):\n        Time-offset, relative to the beginning of the\n        video, corresponding to the video frame for this\n        location.\n    confidence (float):\n        Confidence that the label is accurate. Range: [0, 1].",
-      "attributes": {
-        "time_offset": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Time-offset, relative to the beginning of the video, corresponding to the video frame for this location."
-        },
-        "confidence": {
-          "type": "float",
-          "description": "Confidence that the label is accurate. Range: [0, 1]."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Entity",
-      "docstring": "Detected entity from video analysis.\n\nAttributes:\n    entity_id (str):\n        Opaque entity ID. Some IDs may be available in `Google\n        Knowledge Graph Search\n        API <https://developers.google.com/knowledge-graph/>`__.\n    description (str):\n        Textual description, e.g. ``Fixed-gear bicycle``.\n    language_code (str):\n        Language code for ``description`` in BCP-47 format.",
-      "attributes": {
-        "entity_id": {
-          "type": "str",
-          "description": "Opaque entity ID. Some IDs may be available in `Google Knowledge Graph Search API <https://developers.google.com/knowledge-graph/>`__."
-        },
-        "description": {
-          "type": "str",
-          "description": "Textual description, e.g. ``Fixed-gear bicycle``."
-        },
-        "language_code": {
-          "type": "str",
-          "description": "Language code for ``description`` in BCP-47 format."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LabelAnnotation",
-      "docstring": "Label annotation.\n\nAttributes:\n    entity (google.cloud.videointelligence_v1beta2.types.Entity):\n        Detected entity.\n    category_entities (MutableSequence[google.cloud.videointelligence_v1beta2.types.Entity]):\n        Common categories for the detected entity. E.g. when the\n        label is ``Terrier`` the category is likely ``dog``. And in\n        some cases there might be more than one categories e.g.\n        ``Terrier`` could also be a ``pet``.\n    segments (MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelSegment]):\n        All video segments where a label was\n        detected.\n    frames (MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelFrame]):\n        All video frames where a label was detected.",
-      "attributes": {
-        "entity": {
-          "type": "google.cloud.videointelligence_v1beta2.types.Entity",
-          "description": "Detected entity."
-        },
-        "category_entities": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.Entity]",
-          "description": "Common categories for the detected entity. E.g. when the label is ``Terrier`` the category is likely ``dog``. And in some cases there might be more than one categories e.g. ``Terrier`` could also be a ``pet``."
-        },
-        "segments": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelSegment]",
-          "description": "All video segments where a label was detected."
-        },
-        "frames": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelFrame]",
-          "description": "All video frames where a label was detected."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExplicitContentFrame",
-      "docstring": "Video frame level annotation results for explicit content.\n\nAttributes:\n    time_offset (google.protobuf.duration_pb2.Duration):\n        Time-offset, relative to the beginning of the\n        video, corresponding to the video frame for this\n        location.\n    pornography_likelihood (google.cloud.videointelligence_v1beta2.types.Likelihood):\n        Likelihood of the pornography content..",
-      "attributes": {
-        "time_offset": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Time-offset, relative to the beginning of the video, corresponding to the video frame for this location."
-        },
-        "pornography_likelihood": {
-          "type": "google.cloud.videointelligence_v1beta2.types.Likelihood",
-          "description": "Likelihood of the pornography content.."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExplicitContentAnnotation",
-      "docstring": "Explicit content annotation (based on per-frame visual\nsignals only). If no explicit content has been detected in a\nframe, no annotations are present for that frame.\n\nAttributes:\n    frames (MutableSequence[google.cloud.videointelligence_v1beta2.types.ExplicitContentFrame]):\n        All video frames where explicit content was\n        detected.",
-      "attributes": {
-        "frames": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.ExplicitContentFrame]",
-          "description": "All video frames where explicit content was detected."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NormalizedBoundingBox",
-      "docstring": "Normalized bounding box. The normalized vertex coordinates are\nrelative to the original image. Range: [0, 1].\n\nAttributes:\n    left (float):\n        Left X coordinate.\n    top (float):\n        Top Y coordinate.\n    right (float):\n        Right X coordinate.\n    bottom (float):\n        Bottom Y coordinate.",
-      "attributes": {
-        "left": {
-          "type": "float",
-          "description": "Left X coordinate."
-        },
-        "top": {
-          "type": "float",
-          "description": "Top Y coordinate."
-        },
-        "right": {
-          "type": "float",
-          "description": "Right X coordinate."
-        },
-        "bottom": {
-          "type": "float",
-          "description": "Bottom Y coordinate."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "FaceSegment",
-      "docstring": "Video segment level annotation results for face detection.\n\nAttributes:\n    segment (google.cloud.videointelligence_v1beta2.types.VideoSegment):\n        Video segment where a face was detected.",
-      "attributes": {
-        "segment": {
-          "type": "google.cloud.videointelligence_v1beta2.types.VideoSegment",
-          "description": "Video segment where a face was detected."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "FaceFrame",
-      "docstring": "Video frame level annotation results for face detection.\n\nAttributes:\n    normalized_bounding_boxes (MutableSequence[google.cloud.videointelligence_v1beta2.types.NormalizedBoundingBox]):\n        Normalized Bounding boxes in a frame.\n        There can be more than one boxes if the same\n        face is detected in multiple locations within\n        the current frame.\n    time_offset (google.protobuf.duration_pb2.Duration):\n        Time-offset, relative to the beginning of the\n        video, corresponding to the video frame for this\n        location.",
-      "attributes": {
-        "normalized_bounding_boxes": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.NormalizedBoundingBox]",
-          "description": "Normalized Bounding boxes in a frame. There can be more than one boxes if the same face is detected in multiple locations within the current frame."
-        },
-        "time_offset": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Time-offset, relative to the beginning of the video, corresponding to the video frame for this location."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "FaceAnnotation",
-      "docstring": "Face annotation.\n\nAttributes:\n    thumbnail (bytes):\n        Thumbnail of a representative face view (in\n        JPEG format).\n    segments (MutableSequence[google.cloud.videointelligence_v1beta2.types.FaceSegment]):\n        All video segments where a face was detected.\n    frames (MutableSequence[google.cloud.videointelligence_v1beta2.types.FaceFrame]):\n        All video frames where a face was detected.",
-      "attributes": {
-        "thumbnail": {
-          "type": "bytes",
-          "description": "Thumbnail of a representative face view (in JPEG format)."
-        },
-        "segments": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.FaceSegment]",
-          "description": "All video segments where a face was detected."
-        },
-        "frames": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.FaceFrame]",
-          "description": "All video frames where a face was detected."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VideoAnnotationResults",
-      "docstring": "Annotation results for a single video.\n\nAttributes:\n    input_uri (str):\n        Video file location in `Google Cloud\n        Storage <https://cloud.google.com/storage/>`__.\n    segment_label_annotations (MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelAnnotation]):\n        Label annotations on video level or user\n        specified segment level. There is exactly one\n        element for each unique label.\n    shot_label_annotations (MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelAnnotation]):\n        Label annotations on shot level.\n        There is exactly one element for each unique\n        label.\n    frame_label_annotations (MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelAnnotation]):\n        Label annotations on frame level.\n        There is exactly one element for each unique\n        label.\n    face_annotations (MutableSequence[google.cloud.videointelligence_v1beta2.types.FaceAnnotation]):\n        Face annotations. There is exactly one\n        eleme",
-      "attributes": {
-        "input_uri": {
-          "type": "str",
-          "description": "Video file location in `Google Cloud Storage <https://cloud.google.com/storage/>`__."
-        },
-        "segment_label_annotations": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelAnnotation]",
-          "description": "Label annotations on video level or user specified segment level. There is exactly one element for each unique label."
-        },
-        "shot_label_annotations": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelAnnotation]",
-          "description": "Label annotations on shot level. There is exactly one element for each unique label."
-        },
-        "frame_label_annotations": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.LabelAnnotation]",
-          "description": "Label annotations on frame level. There is exactly one element for each unique label."
-        },
-        "face_annotations": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.FaceAnnotation]",
-          "description": "Face annotations. There is exactly one element for each unique face."
-        },
-        "shot_annotations": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoSegment]",
-          "description": "Shot annotations. Each shot is represented as a video segment."
-        },
-        "explicit_annotation": {
-          "type": "google.cloud.videointelligence_v1beta2.types.ExplicitContentAnnotation",
-          "description": "Explicit content annotation."
-        },
-        "error": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "If set, indicates an error. Note that for a single ``AnnotateVideoRequest`` some videos may succeed and some may fail."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AnnotateVideoResponse",
-      "docstring": "Video annotation response. Included in the ``response`` field of the\n``Operation`` returned by the ``GetOperation`` call of the\n``google::longrunning::Operations`` service.\n\nAttributes:\n    annotation_results (MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoAnnotationResults]):\n        Annotation results for all videos specified in\n        ``AnnotateVideoRequest``.",
-      "attributes": {
-        "annotation_results": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoAnnotationResults]",
-          "description": "Annotation results for all videos specified in ``AnnotateVideoRequest``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VideoAnnotationProgress",
-      "docstring": "Annotation progress for a single video.\n\nAttributes:\n    input_uri (str):\n        Video file location in `Google Cloud\n        Storage <https://cloud.google.com/storage/>`__.\n    progress_percent (int):\n        Approximate percentage processed thus far.\n        Guaranteed to be 100 when fully processed.\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Time when the request was received.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Time of the most recent update.",
-      "attributes": {
-        "input_uri": {
-          "type": "str",
-          "description": "Video file location in `Google Cloud Storage <https://cloud.google.com/storage/>`__."
-        },
-        "progress_percent": {
-          "type": "int",
-          "description": "Approximate percentage processed thus far. Guaranteed to be 100 when fully processed."
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the request was received."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time of the most recent update."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AnnotateVideoProgress",
-      "docstring": "Video annotation progress. Included in the ``metadata`` field of the\n``Operation`` returned by the ``GetOperation`` call of the\n``google::longrunning::Operations`` service.\n\nAttributes:\n    annotation_progress (MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoAnnotationProgress]):\n        Progress metadata for all videos specified in\n        ``AnnotateVideoRequest``.",
-      "attributes": {
-        "annotation_progress": {
-          "type": "MutableSequence[google.cloud.videointelligence_v1beta2.types.VideoAnnotationProgress]",
-          "description": "Progress metadata for all videos specified in ``AnnotateVideoRequest``."
-        }
+        "required": [
+          "features"
+        ]
       }
     }
   ]

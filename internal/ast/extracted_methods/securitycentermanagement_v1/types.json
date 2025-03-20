@@ -1,854 +1,939 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-securitycentermanagement\\google\\cloud\\securitycentermanagement_v1\\types\\security_center_management.py": [
     {
-      "type": "request_class",
-      "name": "SecurityCenterService",
-      "docstring": "Represents a particular Security Command Center service. This\nincludes settings information such as top-level enablement in\naddition to individual module settings. Service settings can be\nconfigured at the organization, folder, or project level.\nService settings at the organization or folder level are\ninherited by those in descendant folders and projects.\n\nAttributes:\n    name (str):\n        Identifier. The name of the service, in one of the following\n        formats:\n\n        -  ``organizations/{organization}/locations/{location}/securityCenterServices/{service}``\n        -  ``folders/{folder}/locations/{location}/securityCenterServices/{service}``\n        -  ``projects/{project}/locations/{location}/securityCenterServices/{service}``\n\n        The following values are valid for ``{service}``:\n\n        -  ``container-threat-detection``\n        -  ``event-threat-detection``\n        -  ``security-health-analytics``\n        -  ``vm-threat-detection``\n        -  ``web-security-scanner``\n    intended_enablement_st",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The name of the service, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityCenterServices/{service}`` -  ``folders/{folder}/locations/{location}/securityCenterServices/{service}`` -  ``projects/{project}/locations/{location}/securityCenterServices/{service}``  The following values are valid for ``{service}``:  -  ``container-threat-detection`` -  ``event-threat-detection`` -  ``security-health-analytics`` -  ``vm-threat-detection`` -  ``web-security-scanner``"
-        },
-        "intended_enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState",
-          "description": "Optional. The intended enablement state for the service at its level of the resource hierarchy. A ``DISABLED`` state will override all module enablement states to ``DISABLED``."
-        },
-        "effective_enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState",
-          "description": "Output only. The effective enablement state for the service at its level of the resource hierarchy. If the intended state is set to ``INHERITED``, the effective state will be inherited from the enablement state of an ancestor. This state may differ from the intended enablement state due to billing eligibility or onboarding status."
-        },
-        "modules": {
-          "type": "MutableMapping[str, google.cloud.securitycentermanagement_v1.types.SecurityCenterService.ModuleSettings]",
-          "description": "Optional. The module configurations, including the enablement state for the service's modules. The absence of a module in the map implies that its configuration is inherited from its parents."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the service was last updated. This could be due to an explicit user update or due to a side effect of another system change, such as billing subscription expiry."
-        },
-        "service_config": {
-          "type": "google.protobuf.struct_pb2.Struct",
-          "description": "Optional. Additional service-specific configuration. Not all services will utilize this field."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EffectiveSecurityHealthAnalyticsCustomModule",
-      "docstring": "The representation of a Security Health Analytics custom module at a\nspecified level of the resource hierarchy: organization, folder, or\nproject. If a custom module is inherited from an ancestor\norganization or folder, then the enablement state is set to the\nvalue that is effective in the parent, not to ``INHERITED``. For\nexample, if the module is enabled in an organization or folder, then\nthe effective enablement state for the module is ``ENABLED`` in all\ndescendant folders or projects.\n\nAttributes:\n    name (str):\n        Identifier. The full resource name of the custom module, in\n        one of the following formats:\n\n        -  ``organizations/organization/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``folders/folder/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``projects/project/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n    custom_config (google.cloud.securitycentermanagement_v1.types.Custom",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The full resource name of the custom module, in one of the following formats:  -  ``organizations/organization/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/folder/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/project/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``"
-        },
-        "custom_config": {
-          "type": "google.cloud.securitycentermanagement_v1.types.CustomConfig",
-          "description": "Output only. The user-specified configuration for the module."
-        },
-        "enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.EffectiveSecurityHealthAnalyticsCustomModule.EnablementState",
-          "description": "Output only. The effective enablement state for the module at the given level of the hierarchy."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Output only. The display name for the custom module. The name must be between 1 and 128 characters, start with a lowercase letter, and contain alphanumeric characters or underscores only."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListEffectiveSecurityHealthAnalyticsCustomModulesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListEffectiveSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEffectiveSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list effective custom modules,\n        in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of parent to list effective custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListEffectiveSecurityHealthAnalyticsCustomModulesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListEffectiveSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEffectiveSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    effective_security_health_analytics_custom_modules (MutableSequence[google.cloud.securitycentermanagement_v1.types.EffectiveSecurityHealthAnalyticsCustomModule]):\n        The list of effective Security Health\n        Analytics custom modules.\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "effective_security_health_analytics_custom_modules": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.EffectiveSecurityHealthAnalyticsCustomModule]",
-          "description": "The list of effective Security Health Analytics custom modules."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GetEffectiveSecurityHealthAnalyticsCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.GetEffectiveSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetEffectiveSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    name (str):\n        Required. The full resource name of the custom module,\n        specified in one of the following formats:\n\n        -  ``organizations/organization/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``folders/folder/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``projects/project/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The full resource name of the custom module, specified in one of the following formats:  -  ``organizations/organization/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/folder/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/project/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SecurityHealthAnalyticsCustomModule",
-      "docstring": "Represents an instance of a Security Health Analytics custom\nmodule, including its full module name, display name, enablement\nstate, and last updated time. You can create a custom module at\nthe organization, folder, or project level. Custom modules that\nyou create at the organization or folder level are inherited by\nthe descendant folders and projects.\n\nAttributes:\n    name (str):\n        Identifier. The full resource name of the custom module, in\n        one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n    display_name (str):\n        Optional. The display name of the Security\n        Health Analytics custom module. This display\n        name becomes the finding category for all\n        findings that a",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The full resource name of the custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``"
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Optional. The display name of the Security Health Analytics custom module. This display name becomes the finding category for all findings that are returned by this custom module. The display name must be between 1 and 128 characters, start with a lowercase letter, and contain alphanumeric characters or underscores only."
-        },
-        "enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule.EnablementState",
-          "description": "Optional. The enablement state of the custom module."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time at which the custom module was last updated."
-        },
-        "last_editor": {
-          "type": "str",
-          "description": "Output only. The editor that last updated the custom module."
-        },
-        "ancestor_module": {
-          "type": "str",
-          "description": "Output only. Specifies the organization or folder from which the custom module is inherited. If empty, indicates that the custom module was created in the organization, folder, or project in which you are viewing the custom module."
-        },
-        "custom_config": {
-          "type": "google.cloud.securitycentermanagement_v1.types.CustomConfig",
-          "description": "Optional. The user-specified custom configuration for the module."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CustomConfig",
-      "docstring": "Defines the properties in a custom module configuration for\nSecurity Health Analytics. Use the custom module configuration\nto create custom detectors that generate custom findings for\nresources that you specify.\n\nAttributes:\n    predicate (google.type.expr_pb2.Expr):\n        Optional. The Common Expression Language (CEL) expression to\n        evaluate to produce findings. When the expression evaluates\n        to ``true`` against a resource, a finding is generated.\n    custom_output (google.cloud.securitycentermanagement_v1.types.CustomConfig.CustomOutputSpec):\n        Optional. Custom output properties.\n    resource_selector (google.cloud.securitycentermanagement_v1.types.CustomConfig.ResourceSelector):\n        Optional. The Cloud Asset Inventory resource types that the\n        custom module operates on. For information about resource\n        types, see `Supported asset\n        types <https://cloud.google.com/asset-inventory/docs/supported-asset-types>`__.\n        Each custom module can specify up to 5 resour",
-      "attributes": {
-        "predicate": {
-          "type": "google.type.expr_pb2.Expr",
-          "description": "Optional. The Common Expression Language (CEL) expression to evaluate to produce findings. When the expression evaluates to ``true`` against a resource, a finding is generated."
-        },
-        "custom_output": {
-          "type": "google.cloud.securitycentermanagement_v1.types.CustomConfig.CustomOutputSpec",
-          "description": "Optional. Custom output properties."
-        },
-        "resource_selector": {
-          "type": "google.cloud.securitycentermanagement_v1.types.CustomConfig.ResourceSelector",
-          "description": "Optional. The Cloud Asset Inventory resource types that the custom module operates on. For information about resource types, see `Supported asset types <https://cloud.google.com/asset-inventory/docs/supported-asset-types>`__. Each custom module can specify up to 5 resource types."
-        },
-        "severity": {
-          "type": "google.cloud.securitycentermanagement_v1.types.CustomConfig.Severity",
-          "description": "Optional. The severity to assign to findings generated by the module."
-        },
-        "description": {
-          "type": "str",
-          "description": "Optional. Text that describes the vulnerability or misconfiguration that the custom module detects. This explanation is returned with each finding instance to help investigators understand the detected issue. The text must be enclosed in quotation marks."
-        },
-        "recommendation": {
-          "type": "str",
-          "description": "Optional. An explanation of the recommended steps that security teams can take to resolve the detected issue. This explanation is returned with each finding generated by this module."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListSecurityHealthAnalyticsCustomModulesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of the parent organization, folder, or\n        project in which to list custom modules, in one of the\n        following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the parent organization, folder, or project in which to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListSecurityHealthAnalyticsCustomModulesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    security_health_analytics_custom_modules (MutableSequence[google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule]):\n        The list of Security Health Analytics custom\n        modules.\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "security_health_analytics_custom_modules": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule]",
-          "description": "The list of Security Health Analytics custom modules."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListDescendantSecurityHealthAnalyticsCustomModulesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListDescendantSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListDescendantSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of the parent organization, folder, or\n        project in which to list custom modules, in one of the\n        following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the parent organization, folder, or project in which to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListDescendantSecurityHealthAnalyticsCustomModulesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListDescendantSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListDescendantSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    security_health_analytics_custom_modules (MutableSequence[google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule]):\n        The list of\n        SecurityHealthAnalyticsCustomModules\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "security_health_analytics_custom_modules": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule]",
-          "description": "The list of SecurityHealthAnalyticsCustomModules"
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GetSecurityHealthAnalyticsCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.GetSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    name (str):\n        Required. Name of the resource, in the format\n        ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the resource, in the format ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CreateSecurityHealthAnalyticsCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.CreateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.CreateSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    parent (str):\n        Required. Name of the parent organization, folder, or\n        project of the module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    security_health_analytics_custom_module (google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule):\n        Required. The resource being created.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        created. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the ",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the parent organization, folder, or project of the module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "security_health_analytics_custom_module": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule",
-          "description": "Required. The resource being created."
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be created. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to create the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UpdateSecurityHealthAnalyticsCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.UpdateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.UpdateSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The fields to update. The following values are\n        valid:\n\n        -  ``custom_config``\n        -  ``enablement_state``\n\n        If you omit this field or set it to the wildcard value\n        ``*``, then all eligible fields are updated.\n    security_health_analytics_custom_module (google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule):\n        Required. The resource being updated.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        updated. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. The fields to update. The following values are valid:  -  ``custom_config`` -  ``enablement_state``  If you omit this field or set it to the wildcard value ``*``, then all eligible fields are updated."
-        },
-        "security_health_analytics_custom_module": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule",
-          "description": "Required. The resource being updated."
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be updated. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to update the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DeleteSecurityHealthAnalyticsCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.DeleteSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.DeleteSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the SHA custom module, in one\n        of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        deleted. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request to ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the SHA custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``"
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be deleted. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to delete the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during deletion of the module  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SimulateSecurityHealthAnalyticsCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.SimulateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.SimulateSecurityHealthAnalyticsCustomModule].\nThe maximum size of the request is 4 MiB.\n\nAttributes:\n    parent (str):\n        Required. The relative resource name of the organization,\n        project, or folder. For more information about relative\n        resource names, see `AIP-122: Resource\n        names <https://google.aip.dev/122>`__. Example:\n        ``organizations/{organization_id}``.\n    custom_config (google.cloud.securitycentermanagement_v1.types.CustomConfig):\n        Required. The custom configuration that you\n        need to test.\n    resource (google.cloud.securitycentermanagement_v1.types.SimulateSecurityHealthAnalyticsCustomModuleRequest.SimulatedResource):\n        Required. Resource data to simulate custom\n        module against.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The relative resource name of the organization, project, or folder. For more information about relative resource names, see `AIP-122: Resource names <https://google.aip.dev/122>`__. Example: ``organizations/{organization_id}``."
-        },
-        "custom_config": {
-          "type": "google.cloud.securitycentermanagement_v1.types.CustomConfig",
-          "description": "Required. The custom configuration that you need to test."
-        },
-        "resource": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SimulateSecurityHealthAnalyticsCustomModuleRequest.SimulatedResource",
-          "description": "Required. Resource data to simulate custom module against."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SimulatedFinding",
-      "docstring": "The minimum set of fields needed to represent a simulated\nfinding from a Security Health Analytics custom module.\n\nAttributes:\n    name (str):\n        Identifier. The `relative resource\n        name <https://google.aip.dev/122>`__ of the finding, in one\n        of the following formats:\n\n        -  ``organizations/{organization_id}/sources/{source_id}/findings/{finding_id}``\n        -  ``folders/{folder_id}/sources/{source_id}/findings/{finding_id}``\n        -  ``projects/{project_id}/sources/{source_id}/findings/{finding_id}``\n    parent (str):\n        The `relative resource name <https://google.aip.dev/122>`__\n        of the source the finding belongs to. For example,\n        ``organizations/{organization_id}/sources/{source_id}``.\n        This field is immutable after creation time.\n    resource_name (str):\n        For findings on Google Cloud resources, the `full resource\n        name <https://google.aip.dev/122#full-resource-names>`__ of\n        the Google Cloud resource this finding is for. When the\n   ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The `relative resource name <https://google.aip.dev/122>`__ of the finding, in one of the following formats:  -  ``organizations/{organization_id}/sources/{source_id}/findings/{finding_id}`` -  ``folders/{folder_id}/sources/{source_id}/findings/{finding_id}`` -  ``projects/{project_id}/sources/{source_id}/findings/{finding_id}``"
-        },
-        "parent": {
-          "type": "str",
-          "description": "The `relative resource name <https://google.aip.dev/122>`__ of the source the finding belongs to. For example, ``organizations/{organization_id}/sources/{source_id}``. This field is immutable after creation time."
-        },
-        "resource_name": {
-          "type": "str",
-          "description": "For findings on Google Cloud resources, the `full resource name <https://google.aip.dev/122#full-resource-names>`__ of the Google Cloud resource this finding is for. When the finding is for a non-Google Cloud resource, the value can be a customer or partner defined string. This field is immutable after creation time."
-        },
-        "category": {
-          "type": "str",
-          "description": "The additional taxonomy group within findings from a given source. For example, ``XSS_FLASH_INJECTION``. This field is immutable after creation time."
-        },
-        "state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SimulatedFinding.State",
-          "description": "Output only. The state of the finding."
-        },
-        "source_properties": {
-          "type": "MutableMapping[str, google.protobuf.struct_pb2.Value]",
-          "description": "Source-specific properties. These properties are managed by the source that writes the finding. The key names must be between 1 and 255 characters; they must start with a letter and contain alphanumeric characters or underscores only."
-        },
-        "event_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time the finding was first detected. If an existing finding is updated, then this is the time the update occurred. If the finding is later resolved, then this time reflects when the finding was resolved.  For example, if the finding represents an open firewall, this property captures the time the detector believes the firewall became open. The accuracy is determined by the detector.  The event time must not be set to a value greater than the current timestamp."
-        },
-        "severity": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SimulatedFinding.Severity",
-          "description": "The severity of the finding. This field is managed by the source that writes the finding."
-        },
-        "finding_class": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SimulatedFinding.FindingClass",
-          "description": "The class of the finding."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SimulateSecurityHealthAnalyticsCustomModuleResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.SimulateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.SimulateSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    result (google.cloud.securitycentermanagement_v1.types.SimulateSecurityHealthAnalyticsCustomModuleResponse.SimulatedResult):\n        Result for test case in the corresponding\n        request.",
-      "attributes": {
-        "result": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SimulateSecurityHealthAnalyticsCustomModuleResponse.SimulatedResult",
-          "description": "Result for test case in the corresponding request."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EffectiveEventThreatDetectionCustomModule",
-      "docstring": "The representation of an\n[EventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.EventThreatDetectionCustomModule]\nat a given level, taking hierarchy into account and resolving\nvarious fields accordingly. For example, if the module is enabled at\nthe ancestor level, then effective modules at all descendant levels\nwill have their enablement state set to ``ENABLED``. Similarly, if\n``module.inherited`` is set, then the effective module's\nconfiguration will reflect the ancestor's configuration.\n\nAttributes:\n    name (str):\n        Identifier. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n    c",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``"
-        },
-        "config": {
-          "type": "google.protobuf.struct_pb2.Struct",
-          "description": "Output only. Configuration for the effective module."
-        },
-        "enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.EffectiveEventThreatDetectionCustomModule.EnablementState",
-          "description": "Output only. The effective state of enablement for the module at the given level of the hierarchy."
-        },
-        "type_": {
-          "type": "str",
-          "description": "Output only. Type for the module (for example, ``CONFIGURABLE_BAD_IP``)."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Output only. The human-readable name of the module."
-        },
-        "description": {
-          "type": "str",
-          "description": "Output only. A description of the module."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListEffectiveEventThreatDetectionCustomModulesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListEffectiveEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEffectiveEventThreatDetectionCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list effective custom modules,\n        in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of parent to list effective custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListEffectiveEventThreatDetectionCustomModulesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListEffectiveEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEffectiveEventThreatDetectionCustomModules].\n\nAttributes:\n    effective_event_threat_detection_custom_modules (MutableSequence[google.cloud.securitycentermanagement_v1.types.EffectiveEventThreatDetectionCustomModule]):\n        The list of effective Event Threat Detection\n        custom modules.\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "effective_event_threat_detection_custom_modules": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.EffectiveEventThreatDetectionCustomModule]",
-          "description": "The list of effective Event Threat Detection custom modules."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GetEffectiveEventThreatDetectionCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.GetEffectiveEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetEffectiveEventThreatDetectionCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EventThreatDetectionCustomModule",
-      "docstring": "A Security Command Center resource that contains the\nconfiguration and enablement state of a custom module, which\nenables Event Threat Detection to write certain findings to\nSecurity Command Center.\n\nAttributes:\n    name (str):\n        Identifier. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n    config (google.protobuf.struct_pb2.Struct):\n        Optional. Configuration for the module. For\n        the resident module, its configuration value is\n        defined at this level. For the inherited module,\n        its configuration value is inherited from the\n        ancestor module.\n    ancestor_module (str):\n        Output only. The clos",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``"
-        },
-        "config": {
-          "type": "google.protobuf.struct_pb2.Struct",
-          "description": "Optional. Configuration for the module. For the resident module, its configuration value is defined at this level. For the inherited module, its configuration value is inherited from the ancestor module."
-        },
-        "ancestor_module": {
-          "type": "str",
-          "description": "Output only. The closest ancestor module that this module inherits the enablement state from. If empty, indicates that the custom module was created in the requesting parent organization, folder, or project. The format is the same as the custom module's resource name."
-        },
-        "enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule.EnablementState",
-          "description": "Optional. The state of enablement for the module at the given level of the hierarchy."
-        },
-        "type_": {
-          "type": "str",
-          "description": "Optional. Type for the module. For example, ``CONFIGURABLE_BAD_IP``."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Optional. The human-readable name of the module."
-        },
-        "description": {
-          "type": "str",
-          "description": "Optional. A description of the module."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the module was last updated."
-        },
-        "last_editor": {
-          "type": "str",
-          "description": "Output only. The editor the module was last updated by."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListEventThreatDetectionCustomModulesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEventThreatDetectionCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list custom modules, in one of\n        the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of modules to\n        return. The service may return fewer than this\n        value. If unspecified, at most 10 modules will\n        be returned. The maximum value is 1000; values\n        above 1000 will be coerced to 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request th",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of parent to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of modules to return. The service may return fewer than this value. If unspecified, at most 10 modules will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListEventThreatDetectionCustomModulesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEventThreatDetectionCustomModules].\n\nAttributes:\n    event_threat_detection_custom_modules (MutableSequence[google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule]):\n        The list of custom modules.\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "event_threat_detection_custom_modules": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule]",
-          "description": "The list of custom modules."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListDescendantEventThreatDetectionCustomModulesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListDescendantEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListDescendantEventThreatDetectionCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list custom modules, in one of\n        the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of modules to\n        return. The service may return fewer than this\n        value. If unspecified, at most 10 configs will\n        be returned. The maximum value is 1000; values\n        above 1000 will be coerced to 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        ",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of parent to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of modules to return. The service may return fewer than this value. If unspecified, at most 10 configs will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListDescendantEventThreatDetectionCustomModulesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListDescendantEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListDescendantEventThreatDetectionCustomModules].\n\nAttributes:\n    event_threat_detection_custom_modules (MutableSequence[google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule]):\n        The list of custom modules.\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "event_threat_detection_custom_modules": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule]",
-          "description": "The list of custom modules."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GetEventThreatDetectionCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.GetEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetEventThreatDetectionCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CreateEventThreatDetectionCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.CreateEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.CreateEventThreatDetectionCustomModule].\n\nAttributes:\n    parent (str):\n        Required. Name of parent for the module, in one of the\n        following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    event_threat_detection_custom_module (google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule):\n        Required. The module to create. The\n        [EventThreatDetectionCustomModule.name][google.cloud.securitycentermanagement.v1.EventThreatDetectionCustomModule.name]\n        field is ignored; Security Command Center generates the\n        name.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        crea",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of parent for the module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "event_threat_detection_custom_module": {
-          "type": "google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule",
-          "description": "Required. The module to create. The [EventThreatDetectionCustomModule.name][google.cloud.securitycentermanagement.v1.EventThreatDetectionCustomModule.name] field is ignored; Security Command Center generates the name."
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be created. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to create the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UpdateEventThreatDetectionCustomModuleRequest",
-      "docstring": "Message for updating a EventThreatDetectionCustomModule\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The fields to update. If omitted,\n        then all fields are updated.\n    event_threat_detection_custom_module (google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule):\n        Required. The module being updated.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        updated. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request to update the\n        module could still fail for one of the following reasons:\n\n        -  The state of your cloud resources changed; for example,\n           you lost a required IAM permission\n        -  An error occurred during creation of the module\n\n        Defaults to ``false",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. The fields to update. If omitted, then all fields are updated."
-        },
-        "event_threat_detection_custom_module": {
-          "type": "google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule",
-          "description": "Required. The module being updated."
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be updated. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to update the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DeleteEventThreatDetectionCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.DeleteEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.DeleteEventThreatDetectionCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        deleted. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``"
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be deleted. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to delete the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ValidateEventThreatDetectionCustomModuleRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ValidateEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ValidateEventThreatDetectionCustomModule].\n\nAttributes:\n    parent (str):\n        Required. Resource name of the parent to validate the custom\n        modules under, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n    raw_text (str):\n        Required. The raw text of the module's\n        contents. Used to generate error messages.\n    type_ (str):\n        Required. The type of the module. For example,\n        ``CONFIGURABLE_BAD_IP``.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Resource name of the parent to validate the custom modules under, in one of the following formats:  -  ``organizations/{organization}/locations/{location}``"
-        },
-        "raw_text": {
-          "type": "str",
-          "description": "Required. The raw text of the module's contents. Used to generate error messages."
-        },
-        "type_": {
-          "type": "str",
-          "description": "Required. The type of the module. For example, ``CONFIGURABLE_BAD_IP``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ValidateEventThreatDetectionCustomModuleResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ValidateEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ValidateEventThreatDetectionCustomModule].\n\nAttributes:\n    errors (MutableSequence[google.cloud.securitycentermanagement_v1.types.ValidateEventThreatDetectionCustomModuleResponse.CustomModuleValidationError]):\n        A list of errors returned by the validator.\n        If the list is empty, there were no errors.",
-      "attributes": {
-        "errors": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.ValidateEventThreatDetectionCustomModuleResponse.CustomModuleValidationError]",
-          "description": "A list of errors returned by the validator. If the list is empty, there were no errors."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GetSecurityCenterServiceRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.GetSecurityCenterService][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetSecurityCenterService].\n\nAttributes:\n    name (str):\n        Required. The Security Command Center service to retrieve,\n        in one of the following formats:\n\n        -  organizations/{organization}/locations/{location}/securityCenterServices/{service}\n        -  folders/{folder}/locations/{location}/securityCenterServices/{service}\n        -  projects/{project}/locations/{location}/securityCenterServices/{service}\n\n        The following values are valid for ``{service}``:\n\n        -  ``container-threat-detection``\n        -  ``event-threat-detection``\n        -  ``security-health-analytics``\n        -  ``vm-threat-detection``\n        -  ``web-security-scanner``\n    show_eligible_modules_only (bool):\n        Set to ``true`` to show only modules that are in scope. By\n        default, all modules are shown.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The Security Command Center service to retrieve, in one of the following formats:  -  organizations/{organization}/locations/{location}/securityCenterServices/{service} -  folders/{folder}/locations/{location}/securityCenterServices/{service} -  projects/{project}/locations/{location}/securityCenterServices/{service}  The following values are valid for ``{service}``:  -  ``container-threat-detection`` -  ``event-threat-detection`` -  ``security-health-analytics`` -  ``vm-threat-detection`` -  ``web-security-scanner``"
-        },
-        "show_eligible_modules_only": {
-          "type": "bool",
-          "description": "Set to ``true`` to show only modules that are in scope. By default, all modules are shown."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListSecurityCenterServicesRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.ListSecurityCenterServices][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListSecurityCenterServices].\n\nAttributes:\n    parent (str):\n        Required. The name of the parent to list Security Command\n        Center services, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.\n    show_eligible_modules_only (bool):\n        Flag that, when set, is used to filter",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The name of the parent to list Security Command Center services, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token."
-        },
-        "show_eligible_modules_only": {
-          "type": "bool",
-          "description": "Flag that, when set, is used to filter the module settings that are shown. The default setting is that all modules are shown."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListSecurityCenterServicesResponse",
-      "docstring": "Response message for\n[SecurityCenterManagement.ListSecurityCenterServices][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListSecurityCenterServices].\n\nAttributes:\n    security_center_services (MutableSequence[google.cloud.securitycentermanagement_v1.types.SecurityCenterService]):\n        The list of services.\n    next_page_token (str):\n        A pagination token. To retrieve the next page\n        of results, call the method again with this\n        token.",
-      "attributes": {
-        "security_center_services": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.SecurityCenterService]",
-          "description": "The list of services."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A pagination token. To retrieve the next page of results, call the method again with this token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UpdateSecurityCenterServiceRequest",
-      "docstring": "Request message for\n[SecurityCenterManagement.UpdateSecurityCenterService][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.UpdateSecurityCenterService].\n\nAttributes:\n    security_center_service (google.cloud.securitycentermanagement_v1.types.SecurityCenterService):\n        Required. The updated service.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The fields to update. Accepts the following\n        values:\n\n        -  ``intended_enablement_state``\n        -  ``modules``\n\n        If omitted, then all eligible fields are updated.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no service will be\n        updated. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request to update the\n        service could still fail for one of the following reasons:\n",
-      "attributes": {
-        "security_center_service": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService",
-          "description": "Required. The updated service."
-        },
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. The fields to update. Accepts the following values:  -  ``intended_enablement_state`` -  ``modules``  If omitted, then all eligible fields are updated."
-        },
-        "validate_only": {
-          "type": "bool",
-          "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no service will be updated. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to update the service could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during update of the service  Defaults to ``false``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ModuleSettings",
-      "docstring": "The settings for individual modules.\n\nAttributes:\n    intended_enablement_state (google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState):\n        Optional. The intended enablement state for\n        the module at its level of the resource\n        hierarchy.\n    effective_enablement_state (google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState):\n        Output only. The effective enablement state for the module\n        at its level of the resource hierarchy. If the intended\n        state is set to ``INHERITED``, the effective state will be\n        inherited from the enablement state of an ancestor. This\n        state may differ from the intended enablement state due to\n        billing eligibility or onboarding status.",
-      "attributes": {
-        "intended_enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState",
-          "description": "Optional. The intended enablement state for the module at its level of the resource hierarchy."
-        },
-        "effective_enablement_state": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState",
-          "description": "Output only. The effective enablement state for the module at its level of the resource hierarchy. If the intended state is set to ``INHERITED``, the effective state will be inherited from the enablement state of an ancestor. This state may differ from the intended enablement state due to billing eligibility or onboarding status."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CustomOutputSpec",
-      "docstring": "A set of optional name-value pairs that define custom source\nproperties to return with each finding that is generated by the\ncustom module. The custom source properties that are defined\nhere are included in the finding.\n\nAttributes:\n    properties (MutableSequence[google.cloud.securitycentermanagement_v1.types.CustomConfig.CustomOutputSpec.Property]):\n        Optional. A list of custom output properties\n        to add to the finding.",
-      "attributes": {
+      "description": "Request message for\n[SecurityCenterManagement.ListEffectiveSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEffectiveSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list effective custom modules,\n        in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
+      "parameters": {
+        "type": "object",
         "properties": {
-          "type": "MutableSequence[google.cloud.securitycentermanagement_v1.types.CustomConfig.CustomOutputSpec.Property]",
-          "description": "Optional. A list of custom output properties to add to the finding."
-        }
+          "parent": {
+            "description": "Required. Name of parent to list effective custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ResourceSelector",
-      "docstring": "Resource for selecting resource type.\n\nAttributes:\n    resource_types (MutableSequence[str]):\n        Optional. The resource types to run the\n        detector on.",
-      "attributes": {
-        "resource_types": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. The resource types to run the detector on."
-        }
+      "type": "function",
+      "name": "GetEffectiveSecurityHealthAnalyticsCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.GetEffectiveSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetEffectiveSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    name (str):\n        Required. The full resource name of the custom module,\n        specified in one of the following formats:\n\n        -  ``organizations/organization/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``folders/folder/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``projects/project/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full resource name of the custom module, specified in one of the following formats:  -  ``organizations/organization/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/folder/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/project/{location}/effectiveSecurityHealthAnalyticsCustomModules/{custom_module}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "SimulatedResource",
-      "docstring": "Manually constructed information about a resource.\n\nAttributes:\n    resource_type (str):\n        Required. The type of the resource. For example,\n        ``compute.googleapis.com/Disk``.\n    resource_data (google.protobuf.struct_pb2.Struct):\n        Optional. A representation of the Google\n        Cloud resource. Should match the Google Cloud\n        resource JSON format.\n\n        If the custom module evaluates only the IAM\n        allow policy, then you can omit this field.\n    iam_policy_data (google.iam.v1.policy_pb2.Policy):\n        Optional. A representation of the IAM allow\n        policy.\n        If the custom module evaluates only the resource\n        data, then you can omit this field.",
-      "attributes": {
-        "resource_type": {
-          "type": "str",
-          "description": "Required. The type of the resource. For example, ``compute.googleapis.com/Disk``."
+      "type": "function",
+      "name": "ListSecurityHealthAnalyticsCustomModulesRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ListSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of the parent organization, folder, or\n        project in which to list custom modules, in one of the\n        following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the parent organization, folder, or project in which to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          }
         },
-        "resource_data": {
-          "type": "google.protobuf.struct_pb2.Struct",
-          "description": "Optional. A representation of the Google Cloud resource. Should match the Google Cloud resource JSON format.  If the custom module evaluates only the IAM allow policy, then you can omit this field."
-        },
-        "iam_policy_data": {
-          "type": "google.iam.v1.policy_pb2.Policy",
-          "description": "Optional. A representation of the IAM allow policy. If the custom module evaluates only the resource data, then you can omit this field."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "SimulatedResult",
-      "docstring": "Possible test result.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    finding (google.cloud.securitycentermanagement_v1.types.SimulatedFinding):\n        Finding that would be published for the test\n        case if a violation is detected.\n\n        This field is a member of `oneof`_ ``result``.\n    no_violation (google.protobuf.empty_pb2.Empty):\n        Indicates that the test case does not trigger\n        any violation.\n\n        This field is a member of `oneof`_ ``result``.\n    error (google.rpc.status_pb2.Status):\n        Error encountered during the test.\n\n        This field is a member of `oneof`_ ``result``.",
-      "attributes": {
-        "finding": {
-          "type": "google.cloud.securitycentermanagement_v1.types.SimulatedFinding",
-          "description": "Finding that would be published for the test case if a violation is detected.  This field is a member of `oneof`_ ``result``."
+      "type": "function",
+      "name": "ListDescendantSecurityHealthAnalyticsCustomModulesRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ListDescendantSecurityHealthAnalyticsCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListDescendantSecurityHealthAnalyticsCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of the parent organization, folder, or\n        project in which to list custom modules, in one of the\n        following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the parent organization, folder, or project in which to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          }
         },
-        "no_violation": {
-          "type": "google.protobuf.empty_pb2.Empty",
-          "description": "Indicates that the test case does not trigger any violation.  This field is a member of `oneof`_ ``result``."
-        },
-        "error": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Error encountered during the test.  This field is a member of `oneof`_ ``result``."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "CustomModuleValidationError",
-      "docstring": "An error encountered while validating the uploaded\nconfiguration of an Event Threat Detection custom module.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    description (str):\n        A human-readable description of the error.\n    field_path (str):\n        The path, in `RFC 6901: JSON\n        Pointer <https://datatracker.ietf.org/doc/html/rfc6901>`__\n        format, to the field that failed validation. Omitted if no\n        specific field is affected.\n    start (google.cloud.securitycentermanagement_v1.types.ValidateEventThreatDetectionCustomModuleResponse.Position):\n        The initial position of the error in the\n        uploaded text version of the module. Omitted if\n        no specific position applies, or if the position\n        could not be computed.\n\n        This field is a member of `oneof`_ ``_start``.\n    end (google.cloud.securitycentermanagement_v1.types.ValidateEventThreatDetectionCustomModuleResponse.Position):\n       ",
-      "attributes": {
-        "description": {
-          "type": "str",
-          "description": "A human-readable description of the error."
+      "type": "function",
+      "name": "GetSecurityHealthAnalyticsCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.GetSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    name (str):\n        Required. Name of the resource, in the format\n        ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the resource, in the format ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``.",
+            "type": "string"
+          }
         },
-        "field_path": {
-          "type": "str",
-          "description": "The path, in `RFC 6901: JSON Pointer <https://datatracker.ietf.org/doc/html/rfc6901>`__ format, to the field that failed validation. Omitted if no specific field is affected."
-        },
-        "start": {
-          "type": "google.cloud.securitycentermanagement_v1.types.ValidateEventThreatDetectionCustomModuleResponse.Position",
-          "description": "The initial position of the error in the uploaded text version of the module. Omitted if no specific position applies, or if the position could not be computed.  This field is a member of `oneof`_ ``_start``."
-        },
-        "end": {
-          "type": "google.cloud.securitycentermanagement_v1.types.ValidateEventThreatDetectionCustomModuleResponse.Position",
-          "description": "The end position of the error in the uploaded text version of the module. Omitted if no specific position applies, or if the position could not be computed.  This field is a member of `oneof`_ ``_end``."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "Position",
-      "docstring": "A position in the uploaded text version of a module.\n\nAttributes:\n    line_number (int):\n        The line position in the text.\n    column_number (int):\n        The column position in the line.",
-      "attributes": {
-        "line_number": {
-          "type": "int",
-          "description": "The line position in the text."
+      "type": "function",
+      "name": "CreateSecurityHealthAnalyticsCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.CreateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.CreateSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    parent (str):\n        Required. Name of the parent organization, folder, or\n        project of the module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    security_health_analytics_custom_module (google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule):\n        Required. The resource being created.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        created. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the parent organization, folder, or project of the module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "security_health_analytics_custom_module": {
+            "description": "Required. The resource being created.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The full resource name of the custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Optional. The display name of the Security Health Analytics custom module. This display name becomes the finding category for all findings that are returned by this custom module. The display name must be between 1 and 128 characters, start with a lowercase letter, and contain alphanumeric characters or underscores only.",
+                "type": "string"
+              },
+              "enablement_state": {
+                "description": "Optional. The enablement state of the custom module.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule.EnablementState"
+              },
+              "update_time": {
+                "description": "Output only. The time at which the custom module was last updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "last_editor": {
+                "description": "Output only. The editor that last updated the custom module.",
+                "type": "string"
+              },
+              "ancestor_module": {
+                "description": "Output only. Specifies the organization or folder from which the custom module is inherited. If empty, indicates that the custom module was created in the organization, folder, or project in which you are viewing the custom module.",
+                "type": "string"
+              },
+              "custom_config": {
+                "type": "object",
+                "properties": {
+                  "predicate": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "description": "Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.  This field is a member of `oneof`_ ``_description``.",
+                        "type": "string"
+                      },
+                      "expression": {
+                        "description": "Textual representation of an expression in Common Expression Language syntax.  This field is a member of `oneof`_ ``_expression``.",
+                        "type": "string"
+                      },
+                      "location": {
+                        "description": "Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.  This field is a member of `oneof`_ ``_location``.",
+                        "type": "string"
+                      },
+                      "title": {
+                        "description": "Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.  This field is a member of `oneof`_ ``_title``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "custom_output": {
+                    "type": "object",
+                    "properties": {
+                      "properties": {
+                        "description": "Optional. A list of custom output properties to add to the finding.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "description": "Name of the property.",
+                              "type": "string"
+                            },
+                            "value": {
+                              "description": "Value of the property.",
+                              "type": "string"
+                            },
+                            "uint64_value": {
+                              "description": "Value of numeric properties.",
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "resource_selector": {
+                    "type": "object",
+                    "properties": {
+                      "resource_types": {
+                        "description": "Optional. The resource types to run the detector on.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "severity": {
+                    "description": "Optional. The severity to assign to findings generated by the module.",
+                    "type": "object",
+                    "reference": "google.cloud.securitycentermanagement_v1.types.CustomConfig.Severity"
+                  },
+                  "description": {
+                    "description": "Optional. Text that describes the vulnerability or misconfiguration that the custom module detects. This explanation is returned with each finding instance to help investigators understand the detected issue. The text must be enclosed in quotation marks.",
+                    "type": "string"
+                  },
+                  "recommendation": {
+                    "description": "Optional. An explanation of the recommended steps that security teams can take to resolve the detected issue. This explanation is returned with each finding generated by this module.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be created. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to create the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``.",
+            "type": "boolean"
+          }
         },
-        "column_number": {
-          "type": "int",
-          "description": "The column position in the line."
-        }
+        "required": [
+          "parent",
+          "security_health_analytics_custom_module"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "Property",
-      "docstring": "An individual name-value pair that defines a custom source\nproperty.\n\nAttributes:\n    name (str):\n        Optional. Name of the property for the custom\n        output.\n    value_expression (google.type.expr_pb2.Expr):\n        Optional. The CEL expression for the custom\n        output. A resource property can be specified to\n        return the value of the property or a text\n        string enclosed in quotation marks.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Optional. Name of the property for the custom output."
+      "type": "function",
+      "name": "UpdateSecurityHealthAnalyticsCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.UpdateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.UpdateSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The fields to update. The following values are\n        valid:\n\n        -  ``custom_config``\n        -  ``enablement_state``\n\n        If you omit this field or set it to the wildcard value\n        ``*``, then all eligible fields are updated.\n    security_health_analytics_custom_module (google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule):\n        Required. The resource being updated.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        updated. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Required. The fields to update. The following values are valid:  -  ``custom_config`` -  ``enablement_state``  If you omit this field or set it to the wildcard value ``*``, then all eligible fields are updated.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "security_health_analytics_custom_module": {
+            "description": "Required. The resource being updated.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The full resource name of the custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Optional. The display name of the Security Health Analytics custom module. This display name becomes the finding category for all findings that are returned by this custom module. The display name must be between 1 and 128 characters, start with a lowercase letter, and contain alphanumeric characters or underscores only.",
+                "type": "string"
+              },
+              "enablement_state": {
+                "description": "Optional. The enablement state of the custom module.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.SecurityHealthAnalyticsCustomModule.EnablementState"
+              },
+              "update_time": {
+                "description": "Output only. The time at which the custom module was last updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "last_editor": {
+                "description": "Output only. The editor that last updated the custom module.",
+                "type": "string"
+              },
+              "ancestor_module": {
+                "description": "Output only. Specifies the organization or folder from which the custom module is inherited. If empty, indicates that the custom module was created in the organization, folder, or project in which you are viewing the custom module.",
+                "type": "string"
+              },
+              "custom_config": {
+                "type": "object",
+                "properties": {
+                  "predicate": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "description": "Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.  This field is a member of `oneof`_ ``_description``.",
+                        "type": "string"
+                      },
+                      "expression": {
+                        "description": "Textual representation of an expression in Common Expression Language syntax.  This field is a member of `oneof`_ ``_expression``.",
+                        "type": "string"
+                      },
+                      "location": {
+                        "description": "Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.  This field is a member of `oneof`_ ``_location``.",
+                        "type": "string"
+                      },
+                      "title": {
+                        "description": "Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.  This field is a member of `oneof`_ ``_title``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "custom_output": {
+                    "type": "object",
+                    "properties": {
+                      "properties": {
+                        "description": "Optional. A list of custom output properties to add to the finding.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "description": "Name of the property.",
+                              "type": "string"
+                            },
+                            "value": {
+                              "description": "Value of the property.",
+                              "type": "string"
+                            },
+                            "uint64_value": {
+                              "description": "Value of numeric properties.",
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "resource_selector": {
+                    "type": "object",
+                    "properties": {
+                      "resource_types": {
+                        "description": "Optional. The resource types to run the detector on.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "severity": {
+                    "description": "Optional. The severity to assign to findings generated by the module.",
+                    "type": "object",
+                    "reference": "google.cloud.securitycentermanagement_v1.types.CustomConfig.Severity"
+                  },
+                  "description": {
+                    "description": "Optional. Text that describes the vulnerability or misconfiguration that the custom module detects. This explanation is returned with each finding instance to help investigators understand the detected issue. The text must be enclosed in quotation marks.",
+                    "type": "string"
+                  },
+                  "recommendation": {
+                    "description": "Optional. An explanation of the recommended steps that security teams can take to resolve the detected issue. This explanation is returned with each finding generated by this module.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be updated. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to update the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``.",
+            "type": "boolean"
+          }
         },
-        "value_expression": {
-          "type": "google.type.expr_pb2.Expr",
-          "description": "Optional. The CEL expression for the custom output. A resource property can be specified to return the value of the property or a text string enclosed in quotation marks."
-        }
+        "required": [
+          "update_mask",
+          "security_health_analytics_custom_module"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "DeleteSecurityHealthAnalyticsCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.DeleteSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.DeleteSecurityHealthAnalyticsCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the SHA custom module, in one\n        of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        deleted. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request to ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the SHA custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/securityHealthAnalyticsCustomModules/{custom_module}``",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be deleted. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to delete the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during deletion of the module  Defaults to ``false``.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "SimulateSecurityHealthAnalyticsCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.SimulateSecurityHealthAnalyticsCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.SimulateSecurityHealthAnalyticsCustomModule].\nThe maximum size of the request is 4 MiB.\n\nAttributes:\n    parent (str):\n        Required. The relative resource name of the organization,\n        project, or folder. For more information about relative\n        resource names, see `AIP-122: Resource\n        names <https://google.aip.dev/122>`__. Example:\n        ``organizations/{organization_id}``.\n    custom_config (google.cloud.securitycentermanagement_v1.types.CustomConfig):\n        Required. The custom configuration that you\n        need to test.\n    resource (google.cloud.securitycentermanagement_v1.types.SimulateSecurityHealthAnalyticsCustomModuleRequest.SimulatedResource):\n        Required. Resource data to simulate custom\n        module against.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The relative resource name of the organization, project, or folder. For more information about relative resource names, see `AIP-122: Resource names <https://google.aip.dev/122>`__. Example: ``organizations/{organization_id}``.",
+            "type": "string"
+          },
+          "custom_config": {
+            "description": "Required. The custom configuration that you need to test.",
+            "type": "object",
+            "properties": {
+              "predicate": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "description": "Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.  This field is a member of `oneof`_ ``_description``.",
+                    "type": "string"
+                  },
+                  "expression": {
+                    "description": "Textual representation of an expression in Common Expression Language syntax.  This field is a member of `oneof`_ ``_expression``.",
+                    "type": "string"
+                  },
+                  "location": {
+                    "description": "Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.  This field is a member of `oneof`_ ``_location``.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.  This field is a member of `oneof`_ ``_title``.",
+                    "type": "string"
+                  }
+                }
+              },
+              "custom_output": {
+                "type": "object",
+                "properties": {
+                  "properties": {
+                    "description": "Optional. A list of custom output properties to add to the finding.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "Name of the property.",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "Value of the property.",
+                          "type": "string"
+                        },
+                        "uint64_value": {
+                          "description": "Value of numeric properties.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "resource_selector": {
+                "type": "object",
+                "properties": {
+                  "resource_types": {
+                    "description": "Optional. The resource types to run the detector on.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "severity": {
+                "description": "Optional. The severity to assign to findings generated by the module.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.CustomConfig.Severity"
+              },
+              "description": {
+                "description": "Optional. Text that describes the vulnerability or misconfiguration that the custom module detects. This explanation is returned with each finding instance to help investigators understand the detected issue. The text must be enclosed in quotation marks.",
+                "type": "string"
+              },
+              "recommendation": {
+                "description": "Optional. An explanation of the recommended steps that security teams can take to resolve the detected issue. This explanation is returned with each finding generated by this module.",
+                "type": "string"
+              }
+            }
+          },
+          "resource": {
+            "description": "Required. Resource data to simulate custom module against.",
+            "type": "object",
+            "properties": {
+              "resource_type": {
+                "description": "Required. The type of the resource. For example, ``compute.googleapis.com/Disk``.",
+                "type": "string"
+              },
+              "resource_data": {
+                "description": "Optional. A representation of the Google Cloud resource. Should match the Google Cloud resource JSON format.  If the custom module evaluates only the IAM allow policy, then you can omit this field.",
+                "type": "object",
+                "reference": "google.protobuf.struct_pb2.Struct"
+              },
+              "iam_policy_data": {
+                "type": "object",
+                "properties": {
+                  "type_": {
+                    "description": "Policy type.",
+                    "type": "object",
+                    "reference": "google.shopping.merchant_accounts_v1beta.types.OnlineReturnPolicy.Policy.Type"
+                  },
+                  "days": {
+                    "description": "The number of days items can be returned after delivery, where one day is defined as 24 hours after the delivery timestamp. Required for ``NUMBER_OF_DAYS_AFTER_DELIVERY`` returns.",
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "required": [
+              "resource_type"
+            ]
+          }
+        },
+        "required": [
+          "parent",
+          "custom_config",
+          "resource"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListEffectiveEventThreatDetectionCustomModulesRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ListEffectiveEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEffectiveEventThreatDetectionCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list effective custom modules,\n        in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of parent to list effective custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "GetEffectiveEventThreatDetectionCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.GetEffectiveEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetEffectiveEventThreatDetectionCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/effectiveEventThreatDetectionCustomModules/{custom_module}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListEventThreatDetectionCustomModulesRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ListEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListEventThreatDetectionCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list custom modules, in one of\n        the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of modules to\n        return. The service may return fewer than this\n        value. If unspecified, at most 10 modules will\n        be returned. The maximum value is 1000; values\n        above 1000 will be coerced to 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request th",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of parent to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of modules to return. The service may return fewer than this value. If unspecified, at most 10 modules will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListDescendantEventThreatDetectionCustomModulesRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ListDescendantEventThreatDetectionCustomModules][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListDescendantEventThreatDetectionCustomModules].\n\nAttributes:\n    parent (str):\n        Required. Name of parent to list custom modules, in one of\n        the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of modules to\n        return. The service may return fewer than this\n        value. If unspecified, at most 10 configs will\n        be returned. The maximum value is 1000; values\n        above 1000 will be coerced to 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of parent to list custom modules, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of modules to return. The service may return fewer than this value. If unspecified, at most 10 configs will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "GetEventThreatDetectionCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.GetEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetEventThreatDetectionCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "CreateEventThreatDetectionCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.CreateEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.CreateEventThreatDetectionCustomModule].\n\nAttributes:\n    parent (str):\n        Required. Name of parent for the module, in one of the\n        following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    event_threat_detection_custom_module (google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule):\n        Required. The module to create. The\n        [EventThreatDetectionCustomModule.name][google.cloud.securitycentermanagement.v1.EventThreatDetectionCustomModule.name]\n        field is ignored; Security Command Center generates the\n        name.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        crea",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of parent for the module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "event_threat_detection_custom_module": {
+            "description": "Required. The module to create. The [EventThreatDetectionCustomModule.name][google.cloud.securitycentermanagement.v1.EventThreatDetectionCustomModule.name] field is ignored; Security Command Center generates the name.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``",
+                "type": "string"
+              },
+              "config": {
+                "description": "Optional. Configuration for the module. For the resident module, its configuration value is defined at this level. For the inherited module, its configuration value is inherited from the ancestor module.",
+                "type": "object",
+                "reference": "google.protobuf.struct_pb2.Struct"
+              },
+              "ancestor_module": {
+                "description": "Output only. The closest ancestor module that this module inherits the enablement state from. If empty, indicates that the custom module was created in the requesting parent organization, folder, or project. The format is the same as the custom module's resource name.",
+                "type": "string"
+              },
+              "enablement_state": {
+                "description": "Optional. The state of enablement for the module at the given level of the hierarchy.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule.EnablementState"
+              },
+              "type_": {
+                "description": "Optional. Type for the module. For example, ``CONFIGURABLE_BAD_IP``.",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Optional. The human-readable name of the module.",
+                "type": "string"
+              },
+              "description": {
+                "description": "Optional. A description of the module.",
+                "type": "string"
+              },
+              "update_time": {
+                "description": "Output only. The time the module was last updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "last_editor": {
+                "description": "Output only. The editor the module was last updated by.",
+                "type": "string"
+              }
+            }
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be created. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to create the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent",
+          "event_threat_detection_custom_module"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "UpdateEventThreatDetectionCustomModuleRequest",
+      "description": "Message for updating a EventThreatDetectionCustomModule\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The fields to update. If omitted,\n        then all fields are updated.\n    event_threat_detection_custom_module (google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule):\n        Required. The module being updated.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        updated. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request to update the\n        module could still fail for one of the following reasons:\n\n        -  The state of your cloud resources changed; for example,\n           you lost a required IAM permission\n        -  An error occurred during creation of the module\n\n        Defaults to ``false",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Required. The fields to update. If omitted, then all fields are updated.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "event_threat_detection_custom_module": {
+            "description": "Required. The module being updated.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``",
+                "type": "string"
+              },
+              "config": {
+                "description": "Optional. Configuration for the module. For the resident module, its configuration value is defined at this level. For the inherited module, its configuration value is inherited from the ancestor module.",
+                "type": "object",
+                "reference": "google.protobuf.struct_pb2.Struct"
+              },
+              "ancestor_module": {
+                "description": "Output only. The closest ancestor module that this module inherits the enablement state from. If empty, indicates that the custom module was created in the requesting parent organization, folder, or project. The format is the same as the custom module's resource name.",
+                "type": "string"
+              },
+              "enablement_state": {
+                "description": "Optional. The state of enablement for the module at the given level of the hierarchy.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.EventThreatDetectionCustomModule.EnablementState"
+              },
+              "type_": {
+                "description": "Optional. Type for the module. For example, ``CONFIGURABLE_BAD_IP``.",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Optional. The human-readable name of the module.",
+                "type": "string"
+              },
+              "description": {
+                "description": "Optional. A description of the module.",
+                "type": "string"
+              },
+              "update_time": {
+                "description": "Output only. The time the module was last updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "last_editor": {
+                "description": "Output only. The editor the module was last updated by.",
+                "type": "string"
+              }
+            }
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be updated. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to update the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "update_mask",
+          "event_threat_detection_custom_module"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "DeleteEventThreatDetectionCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.DeleteEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.DeleteEventThreatDetectionCustomModule].\n\nAttributes:\n    name (str):\n        Required. The resource name of the Event Threat Detection\n        custom module, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n        -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no module will be\n        deleted. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Event Threat Detection custom module, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``folders/{folder}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}`` -  ``projects/{project}/locations/{location}/eventThreatDetectionCustomModules/{custom_module}``",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no module will be deleted. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to delete the module could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during creation of the module  Defaults to ``false``.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ValidateEventThreatDetectionCustomModuleRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ValidateEventThreatDetectionCustomModule][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ValidateEventThreatDetectionCustomModule].\n\nAttributes:\n    parent (str):\n        Required. Resource name of the parent to validate the custom\n        modules under, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n    raw_text (str):\n        Required. The raw text of the module's\n        contents. Used to generate error messages.\n    type_ (str):\n        Required. The type of the module. For example,\n        ``CONFIGURABLE_BAD_IP``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Resource name of the parent to validate the custom modules under, in one of the following formats:  -  ``organizations/{organization}/locations/{location}``",
+            "type": "string"
+          },
+          "raw_text": {
+            "description": "Required. The raw text of the module's contents. Used to generate error messages.",
+            "type": "string"
+          },
+          "type_": {
+            "description": "Required. The type of the module. For example, ``CONFIGURABLE_BAD_IP``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent",
+          "raw_text",
+          "type_"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "GetSecurityCenterServiceRequest",
+      "description": "Request message for\n[SecurityCenterManagement.GetSecurityCenterService][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.GetSecurityCenterService].\n\nAttributes:\n    name (str):\n        Required. The Security Command Center service to retrieve,\n        in one of the following formats:\n\n        -  organizations/{organization}/locations/{location}/securityCenterServices/{service}\n        -  folders/{folder}/locations/{location}/securityCenterServices/{service}\n        -  projects/{project}/locations/{location}/securityCenterServices/{service}\n\n        The following values are valid for ``{service}``:\n\n        -  ``container-threat-detection``\n        -  ``event-threat-detection``\n        -  ``security-health-analytics``\n        -  ``vm-threat-detection``\n        -  ``web-security-scanner``\n    show_eligible_modules_only (bool):\n        Set to ``true`` to show only modules that are in scope. By\n        default, all modules are shown.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The Security Command Center service to retrieve, in one of the following formats:  -  organizations/{organization}/locations/{location}/securityCenterServices/{service} -  folders/{folder}/locations/{location}/securityCenterServices/{service} -  projects/{project}/locations/{location}/securityCenterServices/{service}  The following values are valid for ``{service}``:  -  ``container-threat-detection`` -  ``event-threat-detection`` -  ``security-health-analytics`` -  ``vm-threat-detection`` -  ``web-security-scanner``",
+            "type": "string"
+          },
+          "show_eligible_modules_only": {
+            "description": "Set to ``true`` to show only modules that are in scope. By default, all modules are shown.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListSecurityCenterServicesRequest",
+      "description": "Request message for\n[SecurityCenterManagement.ListSecurityCenterServices][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.ListSecurityCenterServices].\n\nAttributes:\n    parent (str):\n        Required. The name of the parent to list Security Command\n        Center services, in one of the following formats:\n\n        -  ``organizations/{organization}/locations/{location}``\n        -  ``folders/{folder}/locations/{location}``\n        -  ``projects/{project}/locations/{location}``\n    page_size (int):\n        Optional. The maximum number of results to\n        return in a single response. Default is 10,\n        minimum is 1, maximum is 1000.\n    page_token (str):\n        Optional. A pagination token returned from a\n        previous request. Provide this token to retrieve\n        the next page of results.\n\n        When paginating, the rest of the request must\n        match the request that generated the page token.\n    show_eligible_modules_only (bool):\n        Flag that, when set, is used to filter",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The name of the parent to list Security Command Center services, in one of the following formats:  -  ``organizations/{organization}/locations/{location}`` -  ``folders/{folder}/locations/{location}`` -  ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of results to return in a single response. Default is 10, minimum is 1, maximum is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A pagination token returned from a previous request. Provide this token to retrieve the next page of results.  When paginating, the rest of the request must match the request that generated the page token.",
+            "type": "string"
+          },
+          "show_eligible_modules_only": {
+            "description": "Flag that, when set, is used to filter the module settings that are shown. The default setting is that all modules are shown.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "UpdateSecurityCenterServiceRequest",
+      "description": "Request message for\n[SecurityCenterManagement.UpdateSecurityCenterService][google.cloud.securitycentermanagement.v1.SecurityCenterManagement.UpdateSecurityCenterService].\n\nAttributes:\n    security_center_service (google.cloud.securitycentermanagement_v1.types.SecurityCenterService):\n        Required. The updated service.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The fields to update. Accepts the following\n        values:\n\n        -  ``intended_enablement_state``\n        -  ``modules``\n\n        If omitted, then all eligible fields are updated.\n    validate_only (bool):\n        Optional. When set to ``true``, the request will be\n        validated (including IAM checks), but no service will be\n        updated. An ``OK`` response indicates that the request is\n        valid, while an error response indicates that the request is\n        invalid.\n\n        If the request is valid, a subsequent request to update the\n        service could still fail for one of the following reasons:\n",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "security_center_service": {
+            "description": "Required. The updated service.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The name of the service, in one of the following formats:  -  ``organizations/{organization}/locations/{location}/securityCenterServices/{service}`` -  ``folders/{folder}/locations/{location}/securityCenterServices/{service}`` -  ``projects/{project}/locations/{location}/securityCenterServices/{service}``  The following values are valid for ``{service}``:  -  ``container-threat-detection`` -  ``event-threat-detection`` -  ``security-health-analytics`` -  ``vm-threat-detection`` -  ``web-security-scanner``",
+                "type": "string"
+              },
+              "intended_enablement_state": {
+                "description": "Optional. The intended enablement state for the service at its level of the resource hierarchy. A ``DISABLED`` state will override all module enablement states to ``DISABLED``.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState"
+              },
+              "effective_enablement_state": {
+                "description": "Output only. The effective enablement state for the service at its level of the resource hierarchy. If the intended state is set to ``INHERITED``, the effective state will be inherited from the enablement state of an ancestor. This state may differ from the intended enablement state due to billing eligibility or onboarding status.",
+                "type": "object",
+                "reference": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState"
+              },
+              "modules": {
+                "description": "Optional. The module configurations, including the enablement state for the service's modules. The absence of a module in the map implies that its configuration is inherited from its parents.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "intended_enablement_state": {
+                      "description": "Optional. The intended enablement state for the module at its level of the resource hierarchy.",
+                      "type": "object",
+                      "reference": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState"
+                    },
+                    "effective_enablement_state": {
+                      "description": "Output only. The effective enablement state for the module at its level of the resource hierarchy. If the intended state is set to ``INHERITED``, the effective state will be inherited from the enablement state of an ancestor. This state may differ from the intended enablement state due to billing eligibility or onboarding status.",
+                      "type": "object",
+                      "reference": "google.cloud.securitycentermanagement_v1.types.SecurityCenterService.EnablementState"
+                    }
+                  }
+                }
+              },
+              "update_time": {
+                "description": "Output only. The time the service was last updated. This could be due to an explicit user update or due to a side effect of another system change, such as billing subscription expiry.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "service_config": {
+                "description": "Optional. Additional service-specific configuration. Not all services will utilize this field.",
+                "type": "object",
+                "reference": "google.protobuf.struct_pb2.Struct"
+              }
+            }
+          },
+          "update_mask": {
+            "description": "Required. The fields to update. Accepts the following values:  -  ``intended_enablement_state`` -  ``modules``  If omitted, then all eligible fields are updated.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "validate_only": {
+            "description": "Optional. When set to ``true``, the request will be validated (including IAM checks), but no service will be updated. An ``OK`` response indicates that the request is valid, while an error response indicates that the request is invalid.  If the request is valid, a subsequent request to update the service could still fail for one of the following reasons:  -  The state of your cloud resources changed; for example, you lost a required IAM permission -  An error occurred during update of the service  Defaults to ``false``.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "security_center_service",
+          "update_mask"
+        ]
       }
     }
   ]

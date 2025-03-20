@@ -1,321 +1,140 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-policysimulator\\google\\cloud\\policysimulator_v1\\types\\explanations.py": [
-    {
-      "type": "request_class",
-      "name": "AccessTuple",
-      "docstring": "Information about the principal, resource, and permission to\ncheck.\n\nAttributes:\n    principal (str):\n        Required. The principal whose access you want to check, in\n        the form of the email address that represents that\n        principal. For example, ``alice@example.com`` or\n        ``my-service-account@my-project.iam.gserviceaccount.com``.\n\n        The principal must be a Google Account or a service account.\n        Other types of principals are not supported.\n    full_resource_name (str):\n        Required. The full resource name that identifies the\n        resource. For example,\n        ``//compute.googleapis.com/projects/my-project/zones/us-central1-a/instances/my-instance``.\n\n        For examples of full resource names for Google Cloud\n        services, see\n        https://cloud.google.com/iam/help/troubleshooter/full-resource-names.\n    permission (str):\n        Required. The IAM permission to check for the\n        specified principal and resource.\n\n        For a complete list of IAM permissions",
-      "attributes": {
-        "principal": {
-          "type": "str",
-          "description": "Required. The principal whose access you want to check, in the form of the email address that represents that principal. For example, ``alice@example.com`` or ``my-service-account@my-project.iam.gserviceaccount.com``.  The principal must be a Google Account or a service account. Other types of principals are not supported."
-        },
-        "full_resource_name": {
-          "type": "str",
-          "description": "Required. The full resource name that identifies the resource. For example, ``//compute.googleapis.com/projects/my-project/zones/us-central1-a/instances/my-instance``.  For examples of full resource names for Google Cloud services, see https://cloud.google.com/iam/help/troubleshooter/full-resource-names."
-        },
-        "permission": {
-          "type": "str",
-          "description": "Required. The IAM permission to check for the specified principal and resource.  For a complete list of IAM permissions, see https://cloud.google.com/iam/help/permissions/reference.  For a complete list of predefined IAM roles and the permissions in each role, see https://cloud.google.com/iam/help/roles/reference."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExplainedPolicy",
-      "docstring": "Details about how a specific IAM [Policy][google.iam.v1.Policy]\ncontributed to the access check.\n\nAttributes:\n    access (google.cloud.policysimulator_v1.types.AccessState):\n        Indicates whether *this policy* provides the specified\n        permission to the specified principal for the specified\n        resource.\n\n        This field does *not* indicate whether the principal\n        actually has the permission for the resource. There might be\n        another policy that overrides this policy. To determine\n        whether the principal actually has the permission, use the\n        ``access`` field in the\n        [TroubleshootIamPolicyResponse][IamChecker.TroubleshootIamPolicyResponse].\n    full_resource_name (str):\n        The full resource name that identifies the resource. For\n        example,\n        ``//compute.googleapis.com/projects/my-project/zones/us-central1-a/instances/my-instance``.\n\n        If the user who created the\n        [Replay][google.cloud.policysimulator.v1.Replay] does not\n        have ",
-      "attributes": {
-        "access": {
-          "type": "google.cloud.policysimulator_v1.types.AccessState",
-          "description": "Indicates whether *this policy* provides the specified permission to the specified principal for the specified resource.  This field does *not* indicate whether the principal actually has the permission for the resource. There might be another policy that overrides this policy. To determine whether the principal actually has the permission, use the ``access`` field in the [TroubleshootIamPolicyResponse][IamChecker.TroubleshootIamPolicyResponse]."
-        },
-        "full_resource_name": {
-          "type": "str",
-          "description": "The full resource name that identifies the resource. For example, ``//compute.googleapis.com/projects/my-project/zones/us-central1-a/instances/my-instance``.  If the user who created the [Replay][google.cloud.policysimulator.v1.Replay] does not have access to the policy, this field is omitted.  For examples of full resource names for Google Cloud services, see https://cloud.google.com/iam/help/troubleshooter/full-resource-names."
-        },
-        "policy": {
-          "type": "google.iam.v1.policy_pb2.Policy",
-          "description": "The IAM policy attached to the resource.  If the user who created the [Replay][google.cloud.policysimulator.v1.Replay] does not have access to the policy, this field is empty."
-        },
-        "binding_explanations": {
-          "type": "MutableSequence[google.cloud.policysimulator_v1.types.BindingExplanation]",
-          "description": "Details about how each binding in the policy affects the principal's ability, or inability, to use the permission for the resource.  If the user who created the [Replay][google.cloud.policysimulator.v1.Replay] does not have access to the policy, this field is omitted."
-        },
-        "relevance": {
-          "type": "google.cloud.policysimulator_v1.types.HeuristicRelevance",
-          "description": "The relevance of this policy to the overall determination in the [TroubleshootIamPolicyResponse][IamChecker.TroubleshootIamPolicyResponse].  If the user who created the [Replay][google.cloud.policysimulator.v1.Replay] does not have access to the policy, this field is omitted."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "BindingExplanation",
-      "docstring": "Details about how a binding in a policy affects a principal's\nability to use a permission.\n\nAttributes:\n    access (google.cloud.policysimulator_v1.types.AccessState):\n        Required. Indicates whether *this binding* provides the\n        specified permission to the specified principal for the\n        specified resource.\n\n        This field does *not* indicate whether the principal\n        actually has the permission for the resource. There might be\n        another binding that overrides this binding. To determine\n        whether the principal actually has the permission, use the\n        ``access`` field in the\n        [TroubleshootIamPolicyResponse][IamChecker.TroubleshootIamPolicyResponse].\n    role (str):\n        The role that this binding grants. For example,\n        ``roles/compute.serviceAgent``.\n\n        For a complete list of predefined IAM roles, as well as the\n        permissions in each role, see\n        https://cloud.google.com/iam/help/roles/reference.\n    role_permission (google.cloud.policysim",
-      "attributes": {
-        "access": {
-          "type": "google.cloud.policysimulator_v1.types.AccessState",
-          "description": "Required. Indicates whether *this binding* provides the specified permission to the specified principal for the specified resource.  This field does *not* indicate whether the principal actually has the permission for the resource. There might be another binding that overrides this binding. To determine whether the principal actually has the permission, use the ``access`` field in the [TroubleshootIamPolicyResponse][IamChecker.TroubleshootIamPolicyResponse]."
-        },
-        "role": {
-          "type": "str",
-          "description": "The role that this binding grants. For example, ``roles/compute.serviceAgent``.  For a complete list of predefined IAM roles, as well as the permissions in each role, see https://cloud.google.com/iam/help/roles/reference."
-        },
-        "role_permission": {
-          "type": "google.cloud.policysimulator_v1.types.BindingExplanation.RolePermission",
-          "description": "Indicates whether the role granted by this binding contains the specified permission."
-        },
-        "role_permission_relevance": {
-          "type": "google.cloud.policysimulator_v1.types.HeuristicRelevance",
-          "description": "The relevance of the permission's existence, or nonexistence, in the role to the overall determination for the entire policy."
-        },
-        "memberships": {
-          "type": "MutableMapping[str, google.cloud.policysimulator_v1.types.BindingExplanation.AnnotatedMembership]",
-          "description": "Indicates whether each principal in the binding includes the principal specified in the request, either directly or indirectly. Each key identifies a principal in the binding, and each value indicates whether the principal in the binding includes the principal in the request.  For example, suppose that a binding includes the following principals:  -  ``user:alice@example.com`` -  ``group:product-eng@example.com``  The principal in the replayed access tuple is ``user:bob@example.com``. This user is a principal of the group ``group:product-eng@example.com``.  For the first principal in the binding, the key is ``user:alice@example.com``, and the ``membership`` field in the value is set to ``MEMBERSHIP_NOT_INCLUDED``.  For the second principal in the binding, the key is ``group:product-eng@example.com``, and the ``membership`` field in the value is set to ``MEMBERSHIP_INCLUDED``."
-        },
-        "relevance": {
-          "type": "google.cloud.policysimulator_v1.types.HeuristicRelevance",
-          "description": "The relevance of this binding to the overall determination for the entire policy."
-        },
-        "condition": {
-          "type": "google.type.expr_pb2.Expr",
-          "description": "A condition expression that prevents this binding from granting access unless the expression evaluates to ``true``.  To learn about IAM Conditions, see https://cloud.google.com/iam/docs/conditions-overview."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AnnotatedMembership",
-      "docstring": "Details about whether the binding includes the principal.\n\nAttributes:\n    membership (google.cloud.policysimulator_v1.types.BindingExplanation.Membership):\n        Indicates whether the binding includes the\n        principal.\n    relevance (google.cloud.policysimulator_v1.types.HeuristicRelevance):\n        The relevance of the principal's status to\n        the overall determination for the binding.",
-      "attributes": {
-        "membership": {
-          "type": "google.cloud.policysimulator_v1.types.BindingExplanation.Membership",
-          "description": "Indicates whether the binding includes the principal."
-        },
-        "relevance": {
-          "type": "google.cloud.policysimulator_v1.types.HeuristicRelevance",
-          "description": "The relevance of the principal's status to the overall determination for the binding."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-policysimulator\\google\\cloud\\policysimulator_v1\\types\\simulator.py": [
     {
-      "type": "request_class",
-      "name": "Replay",
-      "docstring": "A resource describing a ``Replay``, or simulation.\n\nAttributes:\n    name (str):\n        Output only. The resource name of the ``Replay``, which has\n        the following format:\n\n        ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``,\n        where ``{resource-id}`` is the ID of the project, folder, or\n        organization that owns the Replay.\n\n        Example:\n        ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``\n    state (google.cloud.policysimulator_v1.types.Replay.State):\n        Output only. The current state of the ``Replay``.\n    config (google.cloud.policysimulator_v1.types.ReplayConfig):\n        Required. The configuration used for the ``Replay``.\n    results_summary (google.cloud.policysimulator_v1.types.Replay.ResultsSummary):\n        Output only. Summary statistics about the\n        replayed log entries.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. The resource name of the ``Replay``, which has the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``, where ``{resource-id}`` is the ID of the project, folder, or organization that owns the Replay.  Example: ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``"
-        },
-        "state": {
-          "type": "google.cloud.policysimulator_v1.types.Replay.State",
-          "description": "Output only. The current state of the ``Replay``."
-        },
-        "config": {
-          "type": "google.cloud.policysimulator_v1.types.ReplayConfig",
-          "description": "Required. The configuration used for the ``Replay``."
-        },
-        "results_summary": {
-          "type": "google.cloud.policysimulator_v1.types.Replay.ResultsSummary",
-          "description": "Output only. Summary statistics about the replayed log entries."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ReplayResult",
-      "docstring": "The result of replaying a single access tuple against a\nsimulated state.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    diff (google.cloud.policysimulator_v1.types.ReplayDiff):\n        The difference between the principal's access\n        under the current (baseline) policies and the\n        principal's access under the proposed\n        (simulated) policies.\n\n        This field is only included for access tuples\n        that were successfully replayed and had\n        different results under the current policies and\n        the proposed policies.\n\n        This field is a member of `oneof`_ ``result``.\n    error (google.rpc.status_pb2.Status):\n        The error that caused the access tuple replay\n        to fail.\n        This field i",
-      "attributes": {
-        "diff": {
-          "type": "google.cloud.policysimulator_v1.types.ReplayDiff",
-          "description": "The difference between the principal's access under the current (baseline) policies and the principal's access under the proposed (simulated) policies.  This field is only included for access tuples that were successfully replayed and had different results under the current policies and the proposed policies.  This field is a member of `oneof`_ ``result``."
-        },
-        "error": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "The error that caused the access tuple replay to fail. This field is only included for access tuples that were not replayed successfully.  This field is a member of `oneof`_ ``result``."
-        },
-        "name": {
-          "type": "str",
-          "description": "The resource name of the ``ReplayResult``, in the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}/results/{replay-result-id}``, where ``{resource-id}`` is the ID of the project, folder, or organization that owns the [Replay][google.cloud.policysimulator.v1.Replay].  Example: ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36/results/1234``"
-        },
-        "parent": {
-          "type": "str",
-          "description": "The [Replay][google.cloud.policysimulator.v1.Replay] that the access tuple was included in."
-        },
-        "access_tuple": {
-          "type": "google.cloud.policysimulator_v1.types.AccessTuple",
-          "description": "The access tuple that was replayed. This field includes information about the principal, resource, and permission that were involved in the access attempt."
-        },
-        "last_seen_date": {
-          "type": "google.type.date_pb2.Date",
-          "description": "The latest date this access tuple was seen in the logs."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateReplayRequest",
-      "docstring": "Request message for\n[Simulator.CreateReplay][google.cloud.policysimulator.v1.Simulator.CreateReplay].\n\nAttributes:\n    parent (str):\n        Required. The parent resource where this\n        [Replay][google.cloud.policysimulator.v1.Replay] will be\n        created. This resource must be a project, folder, or\n        organization with a location.\n\n        Example: ``projects/my-example-project/locations/global``\n    replay (google.cloud.policysimulator_v1.types.Replay):\n        Required. The\n        [Replay][google.cloud.policysimulator.v1.Replay] to create.\n        Set ``Replay.ReplayConfig`` to configure the replay.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource where this [Replay][google.cloud.policysimulator.v1.Replay] will be created. This resource must be a project, folder, or organization with a location.  Example: ``projects/my-example-project/locations/global``"
+      "description": "Request message for\n[Simulator.CreateReplay][google.cloud.policysimulator.v1.Simulator.CreateReplay].\n\nAttributes:\n    parent (str):\n        Required. The parent resource where this\n        [Replay][google.cloud.policysimulator.v1.Replay] will be\n        created. This resource must be a project, folder, or\n        organization with a location.\n\n        Example: ``projects/my-example-project/locations/global``\n    replay (google.cloud.policysimulator_v1.types.Replay):\n        Required. The\n        [Replay][google.cloud.policysimulator.v1.Replay] to create.\n        Set ``Replay.ReplayConfig`` to configure the replay.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource where this [Replay][google.cloud.policysimulator.v1.Replay] will be created. This resource must be a project, folder, or organization with a location.  Example: ``projects/my-example-project/locations/global``",
+            "type": "string"
+          },
+          "replay": {
+            "description": "Required. The [Replay][google.cloud.policysimulator.v1.Replay] to create. Set ``Replay.ReplayConfig`` to configure the replay.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. The resource name of the ``Replay``, which has the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``, where ``{resource-id}`` is the ID of the project, folder, or organization that owns the Replay.  Example: ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. The current state of the ``Replay``.",
+                "type": "object",
+                "reference": "google.cloud.policysimulator_v1.types.Replay.State"
+              },
+              "config": {
+                "type": "object",
+                "properties": {
+                  "policy_overlay": {
+                    "description": "A mapping of the resources that you want to simulate policies for and the policies that you want to simulate.  Keys are the full resource names for the resources. For example, ``//cloudresourcemanager.googleapis.com/projects/my-project``. For examples of full resource names for Google Cloud services, see https://cloud.google.com/iam/help/troubleshooter/full-resource-names.  Values are [Policy][google.iam.v1.Policy] objects representing the policies that you want to simulate.  Replays automatically take into account any IAM policies inherited through the resource hierarchy, and any policies set on descendant resources. You do not need to include these policies in the policy overlay.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "type_": {
+                          "description": "Policy type.",
+                          "type": "object",
+                          "reference": "google.shopping.merchant_accounts_v1beta.types.OnlineReturnPolicy.Policy.Type"
+                        },
+                        "days": {
+                          "description": "The number of days items can be returned after delivery, where one day is defined as 24 hours after the delivery timestamp. Required for ``NUMBER_OF_DAYS_AFTER_DELIVERY`` returns.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "log_source": {
+                    "description": "The logs to use as input for the [Replay][google.cloud.policysimulator.v1.Replay].",
+                    "type": "object",
+                    "reference": "google.cloud.policysimulator_v1.types.ReplayConfig.LogSource"
+                  }
+                }
+              },
+              "results_summary": {
+                "type": "object",
+                "properties": {
+                  "log_count": {
+                    "description": "The total number of log entries replayed.",
+                    "type": "integer"
+                  },
+                  "unchanged_count": {
+                    "description": "The number of replayed log entries with no difference between baseline and simulated policies.",
+                    "type": "integer"
+                  },
+                  "difference_count": {
+                    "description": "The number of replayed log entries with a difference between baseline and simulated policies.",
+                    "type": "integer"
+                  },
+                  "error_count": {
+                    "description": "The number of log entries that could not be replayed.",
+                    "type": "integer"
+                  },
+                  "oldest_date": {
+                    "description": "The date of the oldest log entry replayed.",
+                    "type": "object",
+                    "reference": "google.type.date_pb2.Date"
+                  },
+                  "newest_date": {
+                    "description": "The date of the newest log entry replayed.",
+                    "type": "object",
+                    "reference": "google.type.date_pb2.Date"
+                  }
+                }
+              }
+            },
+            "required": [
+              "config"
+            ]
+          }
         },
-        "replay": {
-          "type": "google.cloud.policysimulator_v1.types.Replay",
-          "description": "Required. The [Replay][google.cloud.policysimulator.v1.Replay] to create. Set ``Replay.ReplayConfig`` to configure the replay."
-        }
+        "required": [
+          "parent",
+          "replay"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ReplayOperationMetadata",
-      "docstring": "Metadata about a Replay operation.\n\nAttributes:\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Time when the request was received.",
-      "attributes": {
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the request was received."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetReplayRequest",
-      "docstring": "Request message for\n[Simulator.GetReplay][google.cloud.policysimulator.v1.Simulator.GetReplay].\n\nAttributes:\n    name (str):\n        Required. The name of the\n        [Replay][google.cloud.policysimulator.v1.Replay] to\n        retrieve, in the following format:\n\n        ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``,\n        where ``{resource-id}`` is the ID of the project, folder, or\n        organization that owns the ``Replay``.\n\n        Example:\n        ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the [Replay][google.cloud.policysimulator.v1.Replay] to retrieve, in the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``, where ``{resource-id}`` is the ID of the project, folder, or organization that owns the ``Replay``.  Example: ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``"
-        }
+      "description": "Request message for\n[Simulator.GetReplay][google.cloud.policysimulator.v1.Simulator.GetReplay].\n\nAttributes:\n    name (str):\n        Required. The name of the\n        [Replay][google.cloud.policysimulator.v1.Replay] to\n        retrieve, in the following format:\n\n        ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``,\n        where ``{resource-id}`` is the ID of the project, folder, or\n        organization that owns the ``Replay``.\n\n        Example:\n        ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the [Replay][google.cloud.policysimulator.v1.Replay] to retrieve, in the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``, where ``{resource-id}`` is the ID of the project, folder, or organization that owns the ``Replay``.  Example: ``projects/my-example-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListReplayResultsRequest",
-      "docstring": "Request message for\n[Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults].\n\nAttributes:\n    parent (str):\n        Required. The\n        [Replay][google.cloud.policysimulator.v1.Replay] whose\n        results are listed, in the following format:\n\n        ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``\n\n        Example:\n        ``projects/my-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``\n    page_size (int):\n        The maximum number of\n        [ReplayResult][google.cloud.policysimulator.v1.ReplayResult]\n        objects to return. Defaults to 5000.\n\n        The maximum value is 5000; values above 5000 are rounded\n        down to 5000.\n    page_token (str):\n        A page token, received from a previous\n        [Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults]\n        call. Provide this token to retrieve the next page of\n        results.\n\n        When paginating, all othe",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The [Replay][google.cloud.policysimulator.v1.Replay] whose results are listed, in the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``  Example: ``projects/my-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``"
+      "description": "Request message for\n[Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults].\n\nAttributes:\n    parent (str):\n        Required. The\n        [Replay][google.cloud.policysimulator.v1.Replay] whose\n        results are listed, in the following format:\n\n        ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``\n\n        Example:\n        ``projects/my-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``\n    page_size (int):\n        The maximum number of\n        [ReplayResult][google.cloud.policysimulator.v1.ReplayResult]\n        objects to return. Defaults to 5000.\n\n        The maximum value is 5000; values above 5000 are rounded\n        down to 5000.\n    page_token (str):\n        A page token, received from a previous\n        [Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults]\n        call. Provide this token to retrieve the next page of\n        results.\n\n        When paginating, all othe",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The [Replay][google.cloud.policysimulator.v1.Replay] whose results are listed, in the following format:  ``{projects|folders|organizations}/{resource-id}/locations/global/replays/{replay-id}``  Example: ``projects/my-project/locations/global/replays/506a5f7f-38ce-4d7d-8e03-479ce1833c36``",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of [ReplayResult][google.cloud.policysimulator.v1.ReplayResult] objects to return. Defaults to 5000.  The maximum value is 5000; values above 5000 are rounded down to 5000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token, received from a previous [Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults] call. Provide this token to retrieve the next page of results.  When paginating, all other parameters provided to [Simulator.ListReplayResults[] must match the call that provided the page token.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of [ReplayResult][google.cloud.policysimulator.v1.ReplayResult] objects to return. Defaults to 5000.  The maximum value is 5000; values above 5000 are rounded down to 5000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "A page token, received from a previous [Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults] call. Provide this token to retrieve the next page of results.  When paginating, all other parameters provided to [Simulator.ListReplayResults[] must match the call that provided the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListReplayResultsResponse",
-      "docstring": "Response message for\n[Simulator.ListReplayResults][google.cloud.policysimulator.v1.Simulator.ListReplayResults].\n\nAttributes:\n    replay_results (MutableSequence[google.cloud.policysimulator_v1.types.ReplayResult]):\n        The results of running a\n        [Replay][google.cloud.policysimulator.v1.Replay].\n    next_page_token (str):\n        A token that you can use to retrieve the next page of\n        [ReplayResult][google.cloud.policysimulator.v1.ReplayResult]\n        objects. If this field is omitted, there are no subsequent\n        pages.",
-      "attributes": {
-        "replay_results": {
-          "type": "MutableSequence[google.cloud.policysimulator_v1.types.ReplayResult]",
-          "description": "The results of running a [Replay][google.cloud.policysimulator.v1.Replay]."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token that you can use to retrieve the next page of [ReplayResult][google.cloud.policysimulator.v1.ReplayResult] objects. If this field is omitted, there are no subsequent pages."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ReplayConfig",
-      "docstring": "The configuration used for a\n[Replay][google.cloud.policysimulator.v1.Replay].\n\nAttributes:\n    policy_overlay (MutableMapping[str, google.iam.v1.policy_pb2.Policy]):\n        A mapping of the resources that you want to simulate\n        policies for and the policies that you want to simulate.\n\n        Keys are the full resource names for the resources. For\n        example,\n        ``//cloudresourcemanager.googleapis.com/projects/my-project``.\n        For examples of full resource names for Google Cloud\n        services, see\n        https://cloud.google.com/iam/help/troubleshooter/full-resource-names.\n\n        Values are [Policy][google.iam.v1.Policy] objects\n        representing the policies that you want to simulate.\n\n        Replays automatically take into account any IAM policies\n        inherited through the resource hierarchy, and any policies\n        set on descendant resources. You do not need to include\n        these policies in the policy overlay.\n    log_source (google.cloud.policysimulator_v1.types.",
-      "attributes": {
-        "policy_overlay": {
-          "type": "MutableMapping[str, google.iam.v1.policy_pb2.Policy]",
-          "description": "A mapping of the resources that you want to simulate policies for and the policies that you want to simulate.  Keys are the full resource names for the resources. For example, ``//cloudresourcemanager.googleapis.com/projects/my-project``. For examples of full resource names for Google Cloud services, see https://cloud.google.com/iam/help/troubleshooter/full-resource-names.  Values are [Policy][google.iam.v1.Policy] objects representing the policies that you want to simulate.  Replays automatically take into account any IAM policies inherited through the resource hierarchy, and any policies set on descendant resources. You do not need to include these policies in the policy overlay."
-        },
-        "log_source": {
-          "type": "google.cloud.policysimulator_v1.types.ReplayConfig.LogSource",
-          "description": "The logs to use as input for the [Replay][google.cloud.policysimulator.v1.Replay]."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ReplayDiff",
-      "docstring": "The difference between the results of evaluating an access\ntuple under the current (baseline) policies and under the\nproposed (simulated) policies. This difference explains how a\nprincipal's access could change if the proposed policies were\napplied.\n\nAttributes:\n    access_diff (google.cloud.policysimulator_v1.types.AccessStateDiff):\n        A summary and comparison of the principal's access under the\n        current (baseline) policies and the proposed (simulated)\n        policies for a single access tuple.\n\n        The evaluation of the principal's access is reported in the\n        [AccessState][google.cloud.policysimulator.v1.AccessState]\n        field.",
-      "attributes": {
-        "access_diff": {
-          "type": "google.cloud.policysimulator_v1.types.AccessStateDiff",
-          "description": "A summary and comparison of the principal's access under the current (baseline) policies and the proposed (simulated) policies for a single access tuple.  The evaluation of the principal's access is reported in the [AccessState][google.cloud.policysimulator.v1.AccessState] field."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AccessStateDiff",
-      "docstring": "A summary and comparison of the principal's access under the\ncurrent (baseline) policies and the proposed (simulated)\npolicies for a single access tuple.\n\nAttributes:\n    baseline (google.cloud.policysimulator_v1.types.ExplainedAccess):\n        The results of evaluating the access tuple under the current\n        (baseline) policies.\n\n        If the\n        [AccessState][google.cloud.policysimulator.v1.AccessState]\n        couldn't be fully evaluated, this field explains why.\n    simulated (google.cloud.policysimulator_v1.types.ExplainedAccess):\n        The results of evaluating the access tuple\n        under the proposed (simulated) policies.\n\n        If the AccessState couldn't be fully evaluated,\n        this field explains why.\n    access_change (google.cloud.policysimulator_v1.types.AccessStateDiff.AccessChangeType):\n        How the principal's access, specified in the\n        AccessState field, changed between the current\n        (baseline) policies and proposed (simulated)\n        policies.",
-      "attributes": {
-        "baseline": {
-          "type": "google.cloud.policysimulator_v1.types.ExplainedAccess",
-          "description": "The results of evaluating the access tuple under the current (baseline) policies.  If the [AccessState][google.cloud.policysimulator.v1.AccessState] couldn't be fully evaluated, this field explains why."
-        },
-        "simulated": {
-          "type": "google.cloud.policysimulator_v1.types.ExplainedAccess",
-          "description": "The results of evaluating the access tuple under the proposed (simulated) policies.  If the AccessState couldn't be fully evaluated, this field explains why."
-        },
-        "access_change": {
-          "type": "google.cloud.policysimulator_v1.types.AccessStateDiff.AccessChangeType",
-          "description": "How the principal's access, specified in the AccessState field, changed between the current (baseline) policies and proposed (simulated) policies."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExplainedAccess",
-      "docstring": "Details about how a set of policies, listed in\n[ExplainedPolicy][google.cloud.policysimulator.v1.ExplainedPolicy],\nresulted in a certain\n[AccessState][google.cloud.policysimulator.v1.AccessState] when\nreplaying an access tuple.\n\nAttributes:\n    access_state (google.cloud.policysimulator_v1.types.AccessState):\n        Whether the principal in the access tuple has\n        permission to access the resource in the access\n        tuple under the given policies.\n    policies (MutableSequence[google.cloud.policysimulator_v1.types.ExplainedPolicy]):\n        If the\n        [AccessState][google.cloud.policysimulator.v1.AccessState]\n        is ``UNKNOWN``, this field contains the policies that led to\n        that result.\n\n        If the ``AccessState`` is ``GRANTED`` or ``NOT_GRANTED``,\n        this field is omitted.\n    errors (MutableSequence[google.rpc.status_pb2.Status]):\n        If the\n        [AccessState][google.cloud.policysimulator.v1.AccessState]\n        is ``UNKNOWN``, this field contains a list of errors\n   ",
-      "attributes": {
-        "access_state": {
-          "type": "google.cloud.policysimulator_v1.types.AccessState",
-          "description": "Whether the principal in the access tuple has permission to access the resource in the access tuple under the given policies."
-        },
-        "policies": {
-          "type": "MutableSequence[google.cloud.policysimulator_v1.types.ExplainedPolicy]",
-          "description": "If the [AccessState][google.cloud.policysimulator.v1.AccessState] is ``UNKNOWN``, this field contains the policies that led to that result.  If the ``AccessState`` is ``GRANTED`` or ``NOT_GRANTED``, this field is omitted."
-        },
-        "errors": {
-          "type": "MutableSequence[google.rpc.status_pb2.Status]",
-          "description": "If the [AccessState][google.cloud.policysimulator.v1.AccessState] is ``UNKNOWN``, this field contains a list of errors explaining why the result is ``UNKNOWN``.  If the ``AccessState`` is ``GRANTED`` or ``NOT_GRANTED``, this field is omitted."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ResultsSummary",
-      "docstring": "Summary statistics about the replayed log entries.\n\nAttributes:\n    log_count (int):\n        The total number of log entries replayed.\n    unchanged_count (int):\n        The number of replayed log entries with no\n        difference between baseline and simulated\n        policies.\n    difference_count (int):\n        The number of replayed log entries with a\n        difference between baseline and simulated\n        policies.\n    error_count (int):\n        The number of log entries that could not be\n        replayed.\n    oldest_date (google.type.date_pb2.Date):\n        The date of the oldest log entry replayed.\n    newest_date (google.type.date_pb2.Date):\n        The date of the newest log entry replayed.",
-      "attributes": {
-        "log_count": {
-          "type": "int",
-          "description": "The total number of log entries replayed."
-        },
-        "unchanged_count": {
-          "type": "int",
-          "description": "The number of replayed log entries with no difference between baseline and simulated policies."
-        },
-        "difference_count": {
-          "type": "int",
-          "description": "The number of replayed log entries with a difference between baseline and simulated policies."
-        },
-        "error_count": {
-          "type": "int",
-          "description": "The number of log entries that could not be replayed."
-        },
-        "oldest_date": {
-          "type": "google.type.date_pb2.Date",
-          "description": "The date of the oldest log entry replayed."
-        },
-        "newest_date": {
-          "type": "google.type.date_pb2.Date",
-          "description": "The date of the newest log entry replayed."
-        }
+        "required": [
+          "parent"
+        ]
       }
     }
   ]

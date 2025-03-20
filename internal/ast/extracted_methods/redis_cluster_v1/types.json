@@ -1,418 +1,515 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-redis-cluster\\google\\cloud\\redis_cluster_v1\\types\\cloud_redis_cluster.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateClusterRequest",
-      "docstring": "Request for [CreateCluster][CloudRedis.CreateCluster].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the cluster location using\n        the form: ``projects/{project_id}/locations/{location_id}``\n        where ``location_id`` refers to a GCP region.\n    cluster_id (str):\n        Required. The logical name of the Redis cluster in the\n        customer project with the following restrictions:\n\n        -  Must contain only lowercase letters, numbers, and\n           hyphens.\n        -  Must start with a letter.\n        -  Must be between 1-63 characters.\n        -  Must end with a number or a letter.\n        -  Must be unique within the customer project / location\n    cluster (google.cloud.redis_cluster_v1.types.Cluster):\n        Required. The cluster that is to be created.\n    request_id (str):\n        Idempotent request UUID.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The resource name of the cluster location using the form: ``projects/{project_id}/locations/{location_id}`` where ``location_id`` refers to a GCP region."
+      "description": "Request for [CreateCluster][CloudRedis.CreateCluster].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the cluster location using\n        the form: ``projects/{project_id}/locations/{location_id}``\n        where ``location_id`` refers to a GCP region.\n    cluster_id (str):\n        Required. The logical name of the Redis cluster in the\n        customer project with the following restrictions:\n\n        -  Must contain only lowercase letters, numbers, and\n           hyphens.\n        -  Must start with a letter.\n        -  Must be between 1-63 characters.\n        -  Must end with a number or a letter.\n        -  Must be unique within the customer project / location\n    cluster (google.cloud.redis_cluster_v1.types.Cluster):\n        Required. The cluster that is to be created.\n    request_id (str):\n        Idempotent request UUID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource name of the cluster location using the form: ``projects/{project_id}/locations/{location_id}`` where ``location_id`` refers to a GCP region.",
+            "type": "string"
+          },
+          "cluster_id": {
+            "description": "Required. The logical name of the Redis cluster in the customer project with the following restrictions:  -  Must contain only lowercase letters, numbers, and hyphens. -  Must start with a letter. -  Must be between 1-63 characters. -  Must end with a number or a letter. -  Must be unique within the customer project / location",
+            "type": "string"
+          },
+          "cluster": {
+            "description": "Required. The cluster that is to be created.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. The resource name of this cluster. Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names. For example: ``projects/my-project/locations/us-central1-a/privateClouds/my-cloud/clusters/my-cluster``",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Output only. Creation time of this resource.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. Last update time of this resource.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. State of the resource.",
+                "type": "object",
+                "reference": "google.cloud.vmwareengine_v1.types.Cluster.State"
+              },
+              "management": {
+                "description": "Output only. True if the cluster is a management cluster; false otherwise. There can only be one management cluster in a private cloud and it has to be the first one.",
+                "type": "boolean"
+              },
+              "autoscaling_settings": {
+                "type": "object",
+                "properties": {
+                  "autoscaling_policies": {
+                    "description": "Required. The map with autoscaling policies applied to the cluster. The key is the identifier of the policy. It must meet the following requirements:  -  Only contains 1-63 alphanumeric characters and hyphens -  Begins with an alphabetical character -  Ends with a non-hyphen character -  Not formatted as a UUID -  Complies with `RFC 1034 <https://datatracker.ietf.org/doc/html/rfc1034>`__ (section 3.5)  Currently there map must contain only one element that describes the autoscaling policy for compute nodes.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "node_type_id": {
+                          "description": "Required. The canonical identifier of the node type to add or remove. Corresponds to the ``NodeType``.",
+                          "type": "string"
+                        },
+                        "scale_out_size": {
+                          "description": "Required. Number of nodes to add to a cluster during a scale-out operation. Must be divisible by 2 for stretched clusters. During a scale-in operation only one node (or 2 for stretched clusters) are removed in a single iteration.",
+                          "type": "integer"
+                        },
+                        "cpu_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        },
+                        "granted_memory_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        },
+                        "consumed_memory_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        },
+                        "storage_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "node_type_id",
+                        "scale_out_size"
+                      ]
+                    }
+                  },
+                  "min_cluster_node_count": {
+                    "description": "Optional. Minimum number of nodes of any type in a cluster. If not specified the default limits apply.",
+                    "type": "integer"
+                  },
+                  "max_cluster_node_count": {
+                    "description": "Optional. Maximum number of nodes of any type in a cluster. If not specified the default limits apply.",
+                    "type": "integer"
+                  },
+                  "cool_down_period": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "autoscaling_policies"
+                ]
+              },
+              "uid": {
+                "description": "Output only. System-generated unique identifier for the resource.",
+                "type": "string"
+              },
+              "node_type_configs": {
+                "description": "Required. The map of cluster node types in this cluster, where the key is canonical identifier of the node type (corresponds to the ``NodeType``).",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "node_count": {
+                      "description": "Required. The number of nodes of this type in the cluster",
+                      "type": "integer"
+                    },
+                    "custom_core_count": {
+                      "description": "Optional. Customized number of cores available to each node of the type. This number must always be one of ``nodeType.availableCustomCoreCounts``. If zero is provided max value from ``nodeType.availableCustomCoreCounts`` will be used.",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "node_count"
+                  ]
+                }
+              },
+              "stretched_cluster_config": {
+                "type": "object",
+                "properties": {
+                  "preferred_location": {
+                    "description": "Required. Zone that will remain operational when connection between the two zones is lost. Specify the resource name of a zone that belongs to the region of the private cloud. For example: ``projects/{project}/locations/europe-west3-a`` where ``{project}`` can either be a project number or a project ID.",
+                    "type": "string"
+                  },
+                  "secondary_location": {
+                    "description": "Required. Additional zone for a higher level of availability and load balancing. Specify the resource name of a zone that belongs to the region of the private cloud. For example: ``projects/{project}/locations/europe-west3-b`` where ``{project}`` can either be a project number or a project ID.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "preferred_location",
+                  "secondary_location"
+                ]
+              }
+            },
+            "required": [
+              "node_type_configs"
+            ]
+          },
+          "request_id": {
+            "description": "Idempotent request UUID.",
+            "type": "string"
+          }
         },
-        "cluster_id": {
-          "type": "str",
-          "description": "Required. The logical name of the Redis cluster in the customer project with the following restrictions:  -  Must contain only lowercase letters, numbers, and hyphens. -  Must start with a letter. -  Must be between 1-63 characters. -  Must end with a number or a letter. -  Must be unique within the customer project / location"
-        },
-        "cluster": {
-          "type": "google.cloud.redis_cluster_v1.types.Cluster",
-          "description": "Required. The cluster that is to be created."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Idempotent request UUID."
-        }
+        "required": [
+          "parent",
+          "cluster_id",
+          "cluster"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListClustersRequest",
-      "docstring": "Request for [ListClusters][CloudRedis.ListClusters].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the cluster location using\n        the form: ``projects/{project_id}/locations/{location_id}``\n        where ``location_id`` refers to a GCP region.\n    page_size (int):\n        The maximum number of items to return.\n\n        If not specified, a default value of 1000 will be used by\n        the service. Regardless of the page_size value, the response\n        may include a partial list and a caller should only rely on\n        response's\n        [``next_page_token``][google.cloud.redis.cluster.v1.ListClustersResponse.next_page_token]\n        to determine if there are more clusters left to be queried.\n    page_token (str):\n        The ``next_page_token`` value returned from a previous\n        [ListClusters][CloudRedis.ListClusters] request, if any.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The resource name of the cluster location using the form: ``projects/{project_id}/locations/{location_id}`` where ``location_id`` refers to a GCP region."
+      "description": "Request for [ListClusters][CloudRedis.ListClusters].\n\nAttributes:\n    parent (str):\n        Required. The resource name of the cluster location using\n        the form: ``projects/{project_id}/locations/{location_id}``\n        where ``location_id`` refers to a GCP region.\n    page_size (int):\n        The maximum number of items to return.\n\n        If not specified, a default value of 1000 will be used by\n        the service. Regardless of the page_size value, the response\n        may include a partial list and a caller should only rely on\n        response's\n        [``next_page_token``][google.cloud.redis.cluster.v1.ListClustersResponse.next_page_token]\n        to determine if there are more clusters left to be queried.\n    page_token (str):\n        The ``next_page_token`` value returned from a previous\n        [ListClusters][CloudRedis.ListClusters] request, if any.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource name of the cluster location using the form: ``projects/{project_id}/locations/{location_id}`` where ``location_id`` refers to a GCP region.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of items to return.  If not specified, a default value of 1000 will be used by the service. Regardless of the page_size value, the response may include a partial list and a caller should only rely on response's [``next_page_token``][google.cloud.redis.cluster.v1.ListClustersResponse.next_page_token] to determine if there are more clusters left to be queried.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The ``next_page_token`` value returned from a previous [ListClusters][CloudRedis.ListClusters] request, if any.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of items to return.  If not specified, a default value of 1000 will be used by the service. Regardless of the page_size value, the response may include a partial list and a caller should only rely on response's [``next_page_token``][google.cloud.redis.cluster.v1.ListClustersResponse.next_page_token] to determine if there are more clusters left to be queried."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The ``next_page_token`` value returned from a previous [ListClusters][CloudRedis.ListClusters] request, if any."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListClustersResponse",
-      "docstring": "Response for [ListClusters][CloudRedis.ListClusters].\n\nAttributes:\n    clusters (MutableSequence[google.cloud.redis_cluster_v1.types.Cluster]):\n        A list of Redis clusters in the project in the specified\n        location, or across all locations.\n\n        If the ``location_id`` in the parent field of the request is\n        \"-\", all regions available to the project are queried, and\n        the results aggregated. If in such an aggregated query a\n        location is unavailable, a placeholder Redis entry is\n        included in the response with the ``name`` field set to a\n        value of the form\n        ``projects/{project_id}/locations/{location_id}/clusters/``-\n        and the ``status`` field set to ERROR and ``status_message``\n        field set to \"location not available for ListClusters\".\n    next_page_token (str):\n        Token to retrieve the next page of results,\n        or empty if there are no more results in the\n        list.\n    unreachable (MutableSequence[str]):\n        Locations that could",
-      "attributes": {
-        "clusters": {
-          "type": "MutableSequence[google.cloud.redis_cluster_v1.types.Cluster]",
-          "description": "A list of Redis clusters in the project in the specified location, or across all locations.  If the ``location_id`` in the parent field of the request is \"-\", all regions available to the project are queried, and the results aggregated. If in such an aggregated query a location is unavailable, a placeholder Redis entry is included in the response with the ``name`` field set to a value of the form ``projects/{project_id}/locations/{location_id}/clusters/``- and the ``status`` field set to ERROR and ``status_message`` field set to \"location not available for ListClusters\"."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateClusterRequest",
-      "docstring": "Request for [UpdateCluster][CloudRedis.UpdateCluster].\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. Mask of fields to update. At least one path must\n        be supplied in this field. The elements of the repeated\n        paths field may only include these fields from\n        [Cluster][google.cloud.redis.cluster.v1.Cluster]:\n\n        -  ``size_gb``\n        -  ``replica_count``\n    cluster (google.cloud.redis_cluster_v1.types.Cluster):\n        Required. Update description. Only fields specified in\n        update_mask are updated.\n    request_id (str):\n        Idempotent request UUID.",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. Mask of fields to update. At least one path must be supplied in this field. The elements of the repeated paths field may only include these fields from [Cluster][google.cloud.redis.cluster.v1.Cluster]:  -  ``size_gb`` -  ``replica_count``"
+      "description": "Request for [UpdateCluster][CloudRedis.UpdateCluster].\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. Mask of fields to update. At least one path must\n        be supplied in this field. The elements of the repeated\n        paths field may only include these fields from\n        [Cluster][google.cloud.redis.cluster.v1.Cluster]:\n\n        -  ``size_gb``\n        -  ``replica_count``\n    cluster (google.cloud.redis_cluster_v1.types.Cluster):\n        Required. Update description. Only fields specified in\n        update_mask are updated.\n    request_id (str):\n        Idempotent request UUID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Required. Mask of fields to update. At least one path must be supplied in this field. The elements of the repeated paths field may only include these fields from [Cluster][google.cloud.redis.cluster.v1.Cluster]:  -  ``size_gb`` -  ``replica_count``",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "cluster": {
+            "description": "Required. Update description. Only fields specified in update_mask are updated.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. The resource name of this cluster. Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names. For example: ``projects/my-project/locations/us-central1-a/privateClouds/my-cloud/clusters/my-cluster``",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Output only. Creation time of this resource.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. Last update time of this resource.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. State of the resource.",
+                "type": "object",
+                "reference": "google.cloud.vmwareengine_v1.types.Cluster.State"
+              },
+              "management": {
+                "description": "Output only. True if the cluster is a management cluster; false otherwise. There can only be one management cluster in a private cloud and it has to be the first one.",
+                "type": "boolean"
+              },
+              "autoscaling_settings": {
+                "type": "object",
+                "properties": {
+                  "autoscaling_policies": {
+                    "description": "Required. The map with autoscaling policies applied to the cluster. The key is the identifier of the policy. It must meet the following requirements:  -  Only contains 1-63 alphanumeric characters and hyphens -  Begins with an alphabetical character -  Ends with a non-hyphen character -  Not formatted as a UUID -  Complies with `RFC 1034 <https://datatracker.ietf.org/doc/html/rfc1034>`__ (section 3.5)  Currently there map must contain only one element that describes the autoscaling policy for compute nodes.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "node_type_id": {
+                          "description": "Required. The canonical identifier of the node type to add or remove. Corresponds to the ``NodeType``.",
+                          "type": "string"
+                        },
+                        "scale_out_size": {
+                          "description": "Required. Number of nodes to add to a cluster during a scale-out operation. Must be divisible by 2 for stretched clusters. During a scale-in operation only one node (or 2 for stretched clusters) are removed in a single iteration.",
+                          "type": "integer"
+                        },
+                        "cpu_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        },
+                        "granted_memory_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        },
+                        "consumed_memory_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        },
+                        "storage_thresholds": {
+                          "type": "object",
+                          "properties": {
+                            "scale_out": {
+                              "description": "Required. The utilization triggering the scale-out operation in percent.",
+                              "type": "integer"
+                            },
+                            "scale_in": {
+                              "description": "Required. The utilization triggering the scale-in operation in percent.",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "scale_out",
+                            "scale_in"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "node_type_id",
+                        "scale_out_size"
+                      ]
+                    }
+                  },
+                  "min_cluster_node_count": {
+                    "description": "Optional. Minimum number of nodes of any type in a cluster. If not specified the default limits apply.",
+                    "type": "integer"
+                  },
+                  "max_cluster_node_count": {
+                    "description": "Optional. Maximum number of nodes of any type in a cluster. If not specified the default limits apply.",
+                    "type": "integer"
+                  },
+                  "cool_down_period": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "autoscaling_policies"
+                ]
+              },
+              "uid": {
+                "description": "Output only. System-generated unique identifier for the resource.",
+                "type": "string"
+              },
+              "node_type_configs": {
+                "description": "Required. The map of cluster node types in this cluster, where the key is canonical identifier of the node type (corresponds to the ``NodeType``).",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "node_count": {
+                      "description": "Required. The number of nodes of this type in the cluster",
+                      "type": "integer"
+                    },
+                    "custom_core_count": {
+                      "description": "Optional. Customized number of cores available to each node of the type. This number must always be one of ``nodeType.availableCustomCoreCounts``. If zero is provided max value from ``nodeType.availableCustomCoreCounts`` will be used.",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "node_count"
+                  ]
+                }
+              },
+              "stretched_cluster_config": {
+                "type": "object",
+                "properties": {
+                  "preferred_location": {
+                    "description": "Required. Zone that will remain operational when connection between the two zones is lost. Specify the resource name of a zone that belongs to the region of the private cloud. For example: ``projects/{project}/locations/europe-west3-a`` where ``{project}`` can either be a project number or a project ID.",
+                    "type": "string"
+                  },
+                  "secondary_location": {
+                    "description": "Required. Additional zone for a higher level of availability and load balancing. Specify the resource name of a zone that belongs to the region of the private cloud. For example: ``projects/{project}/locations/europe-west3-b`` where ``{project}`` can either be a project number or a project ID.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "preferred_location",
+                  "secondary_location"
+                ]
+              }
+            },
+            "required": [
+              "node_type_configs"
+            ]
+          },
+          "request_id": {
+            "description": "Idempotent request UUID.",
+            "type": "string"
+          }
         },
-        "cluster": {
-          "type": "google.cloud.redis_cluster_v1.types.Cluster",
-          "description": "Required. Update description. Only fields specified in update_mask are updated."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Idempotent request UUID."
-        }
+        "required": [
+          "update_mask",
+          "cluster"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetClusterRequest",
-      "docstring": "Request for [GetCluster][CloudRedis.GetCluster].\n\nAttributes:\n    name (str):\n        Required. Redis cluster resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``\n        where ``location_id`` refers to a GCP region.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Redis cluster resource name using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}`` where ``location_id`` refers to a GCP region."
-        }
+      "description": "Request for [GetCluster][CloudRedis.GetCluster].\n\nAttributes:\n    name (str):\n        Required. Redis cluster resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``\n        where ``location_id`` refers to a GCP region.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Redis cluster resource name using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}`` where ``location_id`` refers to a GCP region.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteClusterRequest",
-      "docstring": "Request for [DeleteCluster][CloudRedis.DeleteCluster].\n\nAttributes:\n    name (str):\n        Required. Redis cluster resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``\n        where ``location_id`` refers to a GCP region.\n    request_id (str):\n        Idempotent request UUID.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Redis cluster resource name using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}`` where ``location_id`` refers to a GCP region."
+      "description": "Request for [DeleteCluster][CloudRedis.DeleteCluster].\n\nAttributes:\n    name (str):\n        Required. Redis cluster resource name using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``\n        where ``location_id`` refers to a GCP region.\n    request_id (str):\n        Idempotent request UUID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Redis cluster resource name using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}`` where ``location_id`` refers to a GCP region.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Idempotent request UUID.",
+            "type": "string"
+          }
         },
-        "request_id": {
-          "type": "str",
-          "description": "Idempotent request UUID."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetClusterCertificateAuthorityRequest",
-      "docstring": "Request for\n[GetClusterCertificateAuthorityRequest][CloudRedis.GetClusterCertificateAuthorityRequest].\n\nAttributes:\n    name (str):\n        Required. Redis cluster certificate authority resource name\n        using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}/certificateAuthority``\n        where ``location_id`` refers to a GCP region.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Redis cluster certificate authority resource name using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}/certificateAuthority`` where ``location_id`` refers to a GCP region."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Cluster",
-      "docstring": "A cluster instance.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Required. Unique name of the resource in this scope\n        including project and location using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The timestamp associated with\n        the cluster creation request.\n    state (google.cloud.redis_cluster_v1.types.Cluster.State):\n        Output only. The current state of this\n        cluster. Can be CREATING, READY, UPDATING,\n        DELETING and SUSPENDED\n    uid (str):\n        Output only. System assigned, unique\n        identifier for the cluster.\n    replica_count (int):\n        Optional. The number of replica nodes per\n        shard.\n\n        This field is a member of `oneof`_ ``_replica_count``.\n    authorization_mode (google.cloud.redis_cluster_v1.types.AuthorizationMode):\n  ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Unique name of the resource in this scope including project and location using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``"
+      "description": "Request for\n[GetClusterCertificateAuthorityRequest][CloudRedis.GetClusterCertificateAuthorityRequest].\n\nAttributes:\n    name (str):\n        Required. Redis cluster certificate authority resource name\n        using the form:\n        ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}/certificateAuthority``\n        where ``location_id`` refers to a GCP region.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Redis cluster certificate authority resource name using the form: ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}/certificateAuthority`` where ``location_id`` refers to a GCP region.",
+            "type": "string"
+          }
         },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The timestamp associated with the cluster creation request."
-        },
-        "state": {
-          "type": "google.cloud.redis_cluster_v1.types.Cluster.State",
-          "description": "Output only. The current state of this cluster. Can be CREATING, READY, UPDATING, DELETING and SUSPENDED"
-        },
-        "uid": {
-          "type": "str",
-          "description": "Output only. System assigned, unique identifier for the cluster."
-        },
-        "replica_count": {
-          "type": "int",
-          "description": "Optional. The number of replica nodes per shard.  This field is a member of `oneof`_ ``_replica_count``."
-        },
-        "authorization_mode": {
-          "type": "google.cloud.redis_cluster_v1.types.AuthorizationMode",
-          "description": "Optional. The authorization mode of the Redis cluster. If not provided, auth feature is disabled for the cluster."
-        },
-        "transit_encryption_mode": {
-          "type": "google.cloud.redis_cluster_v1.types.TransitEncryptionMode",
-          "description": "Optional. The in-transit encryption for the Redis cluster. If not provided, encryption  is disabled for the cluster."
-        },
-        "size_gb": {
-          "type": "int",
-          "description": "Output only. Redis memory size in GB for the entire cluster rounded up to the next integer.  This field is a member of `oneof`_ ``_size_gb``."
-        },
-        "shard_count": {
-          "type": "int",
-          "description": "Required. Number of shards for the Redis cluster.  This field is a member of `oneof`_ ``_shard_count``."
-        },
-        "psc_configs": {
-          "type": "MutableSequence[google.cloud.redis_cluster_v1.types.PscConfig]",
-          "description": "Required. Each PscConfig configures the consumer network where IPs will be designated to the cluster for client access through Private Service Connect Automation. Currently, only one PscConfig is supported."
-        },
-        "discovery_endpoints": {
-          "type": "MutableSequence[google.cloud.redis_cluster_v1.types.DiscoveryEndpoint]",
-          "description": "Output only. Endpoints created on each given network, for Redis clients to connect to the cluster. Currently only one discovery endpoint is supported."
-        },
-        "psc_connections": {
-          "type": "MutableSequence[google.cloud.redis_cluster_v1.types.PscConnection]",
-          "description": "Output only. PSC connections for discovery of the cluster topology and accessing the cluster."
-        },
-        "state_info": {
-          "type": "google.cloud.redis_cluster_v1.types.Cluster.StateInfo",
-          "description": "Output only. Additional information about the current state of the cluster."
-        },
-        "node_type": {
-          "type": "google.cloud.redis_cluster_v1.types.NodeType",
-          "description": "Optional. The type of a redis node in the cluster. NodeType determines the underlying machine-type of a redis node."
-        },
-        "persistence_config": {
-          "type": "google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig",
-          "description": "Optional. Persistence config (RDB, AOF) for the cluster."
-        },
-        "redis_configs": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Key/Value pairs of customer overrides for mutable Redis Configs"
-        },
-        "precise_size_gb": {
-          "type": "float",
-          "description": "Output only. Precise value of redis memory size in GB for the entire cluster.  This field is a member of `oneof`_ ``_precise_size_gb``."
-        },
-        "zone_distribution_config": {
-          "type": "google.cloud.redis_cluster_v1.types.ZoneDistributionConfig",
-          "description": "Optional. This config will be used to determine how the customer wants us to distribute cluster resources within the region."
-        },
-        "deletion_protection_enabled": {
-          "type": "bool",
-          "description": "Optional. The delete operation will fail when the value is set to true.  This field is a member of `oneof`_ ``_deletion_protection_enabled``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PscConfig",
-      "docstring": "Attributes:\n    network (str):\n        Required. The network where the IP address of the discovery\n        endpoint will be reserved, in the form of\n        projects/{network_project}/global/networks/{network_id}.",
-      "attributes": {
-        "network": {
-          "type": "str",
-          "description": "Required. The network where the IP address of the discovery endpoint will be reserved, in the form of projects/{network_project}/global/networks/{network_id}."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DiscoveryEndpoint",
-      "docstring": "Endpoints on each network, for Redis clients to connect to\nthe cluster.\n\nAttributes:\n    address (str):\n        Output only. Address of the exposed Redis\n        endpoint used by clients to connect to the\n        service. The address could be either IP or\n        hostname.\n    port (int):\n        Output only. The port number of the exposed\n        Redis endpoint.\n    psc_config (google.cloud.redis_cluster_v1.types.PscConfig):\n        Output only. Customer configuration for where\n        the endpoint is created and accessed from.",
-      "attributes": {
-        "address": {
-          "type": "str",
-          "description": "Output only. Address of the exposed Redis endpoint used by clients to connect to the service. The address could be either IP or hostname."
-        },
-        "port": {
-          "type": "int",
-          "description": "Output only. The port number of the exposed Redis endpoint."
-        },
-        "psc_config": {
-          "type": "google.cloud.redis_cluster_v1.types.PscConfig",
-          "description": "Output only. Customer configuration for where the endpoint is created and accessed from."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PscConnection",
-      "docstring": "Details of consumer resources in a PSC connection.\n\nAttributes:\n    psc_connection_id (str):\n        Output only. The PSC connection id of the\n        forwarding rule connected to the service\n        attachment.\n    address (str):\n        Output only. The IP allocated on the consumer\n        network for the PSC forwarding rule.\n    forwarding_rule (str):\n        Output only. The URI of the consumer side\n        forwarding rule. Example:\n\n        projects/{projectNumOrId}/regions/us-east1/forwardingRules/{resourceId}.\n    project_id (str):\n        Output only. The consumer project_id where the forwarding\n        rule is created from.\n    network (str):\n        The consumer network where the IP address resides, in the\n        form of projects/{project_id}/global/networks/{network_id}.",
-      "attributes": {
-        "psc_connection_id": {
-          "type": "str",
-          "description": "Output only. The PSC connection id of the forwarding rule connected to the service attachment."
-        },
-        "address": {
-          "type": "str",
-          "description": "Output only. The IP allocated on the consumer network for the PSC forwarding rule."
-        },
-        "forwarding_rule": {
-          "type": "str",
-          "description": "Output only. The URI of the consumer side forwarding rule. Example:  projects/{projectNumOrId}/regions/us-east1/forwardingRules/{resourceId}."
-        },
-        "project_id": {
-          "type": "str",
-          "description": "Output only. The consumer project_id where the forwarding rule is created from."
-        },
-        "network": {
-          "type": "str",
-          "description": "The consumer network where the IP address resides, in the form of projects/{project_id}/global/networks/{network_id}."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "OperationMetadata",
-      "docstring": "Pre-defined metadata fields.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation was\n        created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation finished\n        running.\n    target (str):\n        Output only. Server-defined resource path for\n        the target of the operation.\n    verb (str):\n        Output only. Name of the verb executed by the\n        operation.\n    status_message (str):\n        Output only. Human-readable status of the\n        operation, if any.\n    requested_cancellation (bool):\n        Output only. Identifies whether the user has requested\n        cancellation of the operation. Operations that have\n        successfully been cancelled have [Operation.error][] value\n        with a [google.rpc.Status.code][google.rpc.Status.code] of\n        1, corresponding to ``Code.CANCELLED``.\n    api_version (str):\n        Output only. API version used to start the\n        operation",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the operation was created."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the operation finished running."
-        },
-        "target": {
-          "type": "str",
-          "description": "Output only. Server-defined resource path for the target of the operation."
-        },
-        "verb": {
-          "type": "str",
-          "description": "Output only. Name of the verb executed by the operation."
-        },
-        "status_message": {
-          "type": "str",
-          "description": "Output only. Human-readable status of the operation, if any."
-        },
-        "requested_cancellation": {
-          "type": "bool",
-          "description": "Output only. Identifies whether the user has requested cancellation of the operation. Operations that have successfully been cancelled have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding to ``Code.CANCELLED``."
-        },
-        "api_version": {
-          "type": "str",
-          "description": "Output only. API version used to start the operation."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CertificateAuthority",
-      "docstring": "Redis cluster certificate authority\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    managed_server_ca (google.cloud.redis_cluster_v1.types.CertificateAuthority.ManagedCertificateAuthority):\n\n        This field is a member of `oneof`_ ``server_ca``.\n    name (str):\n        Identifier. Unique name of the resource in this scope\n        including project, location and cluster using the form:\n        ``projects/{project}/locations/{location}/clusters/{cluster}/certificateAuthority``",
-      "attributes": {
-        "managed_server_ca": {
-          "type": "google.cloud.redis_cluster_v1.types.CertificateAuthority.ManagedCertificateAuthority",
-          "description": "This field is a member of `oneof`_ ``server_ca``."
-        },
-        "name": {
-          "type": "str",
-          "description": "Identifier. Unique name of the resource in this scope including project, location and cluster using the form: ``projects/{project}/locations/{location}/clusters/{cluster}/certificateAuthority``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ClusterPersistenceConfig",
-      "docstring": "Configuration of the persistence functionality.\n\nAttributes:\n    mode (google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.PersistenceMode):\n        Optional. The mode of persistence.\n    rdb_config (google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.RDBConfig):\n        Optional. RDB configuration. This field will\n        be ignored if mode is not RDB.\n    aof_config (google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.AOFConfig):\n        Optional. AOF configuration. This field will\n        be ignored if mode is not AOF.",
-      "attributes": {
-        "mode": {
-          "type": "google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.PersistenceMode",
-          "description": "Optional. The mode of persistence."
-        },
-        "rdb_config": {
-          "type": "google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.RDBConfig",
-          "description": "Optional. RDB configuration. This field will be ignored if mode is not RDB."
-        },
-        "aof_config": {
-          "type": "google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.AOFConfig",
-          "description": "Optional. AOF configuration. This field will be ignored if mode is not AOF."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ZoneDistributionConfig",
-      "docstring": "Zone distribution config for allocation of cluster resources.\n\nAttributes:\n    mode (google.cloud.redis_cluster_v1.types.ZoneDistributionConfig.ZoneDistributionMode):\n        Optional. The mode of zone distribution. Defaults to\n        MULTI_ZONE, when not specified.\n    zone (str):\n        Optional. When SINGLE ZONE distribution is selected, zone\n        field would be used to allocate all resources in that zone.\n        This is not applicable to MULTI_ZONE, and would be ignored\n        for MULTI_ZONE clusters.",
-      "attributes": {
-        "mode": {
-          "type": "google.cloud.redis_cluster_v1.types.ZoneDistributionConfig.ZoneDistributionMode",
-          "description": "Optional. The mode of zone distribution. Defaults to MULTI_ZONE, when not specified."
-        },
-        "zone": {
-          "type": "str",
-          "description": "Optional. When SINGLE ZONE distribution is selected, zone field would be used to allocate all resources in that zone. This is not applicable to MULTI_ZONE, and would be ignored for MULTI_ZONE clusters."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StateInfo",
-      "docstring": "Represents additional information about the state of the\ncluster.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    update_info (google.cloud.redis_cluster_v1.types.Cluster.StateInfo.UpdateInfo):\n        Describes ongoing update on the cluster when\n        cluster state is UPDATING.\n\n        This field is a member of `oneof`_ ``info``.",
-      "attributes": {
-        "update_info": {
-          "type": "google.cloud.redis_cluster_v1.types.Cluster.StateInfo.UpdateInfo",
-          "description": "Describes ongoing update on the cluster when cluster state is UPDATING.  This field is a member of `oneof`_ ``info``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ManagedCertificateAuthority",
-      "docstring": "Attributes:\n    ca_certs (MutableSequence[google.cloud.redis_cluster_v1.types.CertificateAuthority.ManagedCertificateAuthority.CertChain]):\n        The PEM encoded CA certificate chains for\n        redis managed server authentication",
-      "attributes": {
-        "ca_certs": {
-          "type": "MutableSequence[google.cloud.redis_cluster_v1.types.CertificateAuthority.ManagedCertificateAuthority.CertChain]",
-          "description": "The PEM encoded CA certificate chains for redis managed server authentication"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RDBConfig",
-      "docstring": "Configuration of the RDB based persistence.\n\nAttributes:\n    rdb_snapshot_period (google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.RDBConfig.SnapshotPeriod):\n        Optional. Period between RDB snapshots.\n    rdb_snapshot_start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Optional. The time that the first snapshot\n        was/will be attempted, and to which future\n        snapshots will be aligned. If not provided, the\n        current time will be used.",
-      "attributes": {
-        "rdb_snapshot_period": {
-          "type": "google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.RDBConfig.SnapshotPeriod",
-          "description": "Optional. Period between RDB snapshots."
-        },
-        "rdb_snapshot_start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Optional. The time that the first snapshot was/will be attempted, and to which future snapshots will be aligned. If not provided, the current time will be used."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AOFConfig",
-      "docstring": "Configuration of the AOF based persistence.\n\nAttributes:\n    append_fsync (google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.AOFConfig.AppendFsync):\n        Optional. fsync configuration.",
-      "attributes": {
-        "append_fsync": {
-          "type": "google.cloud.redis_cluster_v1.types.ClusterPersistenceConfig.AOFConfig.AppendFsync",
-          "description": "Optional. fsync configuration."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UpdateInfo",
-      "docstring": "Represents information about an updating cluster.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    target_shard_count (int):\n        Target number of shards for redis cluster\n\n        This field is a member of `oneof`_ ``_target_shard_count``.\n    target_replica_count (int):\n        Target number of replica nodes per shard.\n\n        This field is a member of `oneof`_ ``_target_replica_count``.",
-      "attributes": {
-        "target_shard_count": {
-          "type": "int",
-          "description": "Target number of shards for redis cluster  This field is a member of `oneof`_ ``_target_shard_count``."
-        },
-        "target_replica_count": {
-          "type": "int",
-          "description": "Target number of replica nodes per shard.  This field is a member of `oneof`_ ``_target_replica_count``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CertChain",
-      "docstring": "Attributes:\n    certificates (MutableSequence[str]):\n        The certificates that form the CA chain, from\n        leaf to root order.",
-      "attributes": {
-        "certificates": {
-          "type": "MutableSequence[str]",
-          "description": "The certificates that form the CA chain, from leaf to root order."
-        }
+        "required": [
+          "name"
+        ]
       }
     }
   ]

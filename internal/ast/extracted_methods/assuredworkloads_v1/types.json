@@ -1,508 +1,688 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-assured-workloads\\google\\cloud\\assuredworkloads_v1\\types\\assuredworkloads.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateWorkloadRequest",
-      "docstring": "Request for creating a workload.\n\nAttributes:\n    parent (str):\n        Required. The resource name of the new Workload's parent.\n        Must be of the form\n        ``organizations/{org_id}/locations/{location_id}``.\n    workload (google.cloud.assuredworkloads_v1.types.Workload):\n        Required. Assured Workload to create\n    external_id (str):\n        Optional. A identifier associated with the\n        workload and underlying projects which allows\n        for the break down of billing costs for a\n        workload. The value provided for the identifier\n        will add a label to the workload and contained\n        projects with the identifier as the value.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The resource name of the new Workload's parent. Must be of the form ``organizations/{org_id}/locations/{location_id}``."
+      "description": "Request for creating a workload.\n\nAttributes:\n    parent (str):\n        Required. The resource name of the new Workload's parent.\n        Must be of the form\n        ``organizations/{org_id}/locations/{location_id}``.\n    workload (google.cloud.assuredworkloads_v1.types.Workload):\n        Required. Assured Workload to create\n    external_id (str):\n        Optional. A identifier associated with the\n        workload and underlying projects which allows\n        for the break down of billing costs for a\n        workload. The value provided for the identifier\n        will add a label to the workload and contained\n        projects with the identifier as the value.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource name of the new Workload's parent. Must be of the form ``organizations/{org_id}/locations/{location_id}``.",
+            "type": "string"
+          },
+          "workload": {
+            "description": "Required. Assured Workload to create",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. Format: ``organizations/{organization}/locations/{location}/customers/{customer}/workloads/{workload}``",
+                "type": "string"
+              },
+              "folder_id": {
+                "description": "Output only. Folder id this workload is associated with",
+                "type": "integer"
+              },
+              "create_time": {
+                "description": "Output only. Time the resource was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "folder": {
+                "description": "Output only. The name of container folder of the assured workload",
+                "type": "string"
+              },
+              "workload_onboarding_state": {
+                "type": "object",
+                "properties": {
+                  "onboarding_steps": {
+                    "description": "List of workload onboarding steps.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "step": {
+                          "type": "object",
+                          "properties": {
+                            "routine": {
+                              "description": "Name of a routine within the workflow.",
+                              "type": "string"
+                            },
+                            "step": {
+                              "description": "Name of a step within the routine.",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "start_time": {
+                          "description": "The starting time of the onboarding step.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "completion_time": {
+                          "description": "The completion time of the onboarding step.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "completion_state": {
+                          "description": "Output only. The completion state of the onboarding step.",
+                          "type": "object",
+                          "reference": "google.cloud.cloudcontrolspartner_v1beta.types.CompletionState"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "is_onboarded": {
+                "description": "Indicates whether a workload is fully onboarded.",
+                "type": "boolean"
+              },
+              "key_management_project_id": {
+                "description": "The project id of the key management project for the workload",
+                "type": "string"
+              },
+              "location": {
+                "description": "The Google Cloud location of the workload",
+                "type": "string"
+              },
+              "partner": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Identifier. The resource name of the partner. Format: ``organizations/{organization}/locations/{location}/partner`` Example: \"organizations/123456/locations/us-central1/partner\".",
+                    "type": "string"
+                  },
+                  "skus": {
+                    "description": "List of SKUs the partner is offering",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "Identifier. Name of this SKU. Format: ``projects/{project}/locations/{location}/skus/{sku}``",
+                          "type": "string"
+                        },
+                        "display_name": {
+                          "description": "Output only. Display name of this SKU.",
+                          "type": "string"
+                        },
+                        "create_time": {
+                          "description": "Output only. Time when this SKU was created.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "update_time": {
+                          "description": "Output only. Time when this SKU was last updated.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "config": {
+                          "type": "object",
+                          "properties": {
+                            "cpu": {
+                              "description": "Information about CPU configuration.",
+                              "type": "string"
+                            },
+                            "gpu": {
+                              "description": "Information about GPU configuration.",
+                              "type": "string"
+                            },
+                            "ram": {
+                              "description": "Information about RAM configuration.",
+                              "type": "string"
+                            },
+                            "storage": {
+                              "description": "Information about storage configuration.",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "instances": {
+                          "description": "Output only. Available instances of this SKU. This field should be used for checking availability of a SKU.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "region_code": {
+                                "description": "The `Unicode CLDR <https://cldr.unicode.org>`__ region code where this instance is available.",
+                                "type": "string"
+                              },
+                              "power_supply": {
+                                "description": "Power supply type for this instance.",
+                                "type": "object",
+                                "reference": "google.cloud.gdchardwaremanagement_v1alpha.types.PowerSupply"
+                              },
+                              "billing_sku": {
+                                "description": "Reference to the corresponding SKU in the Cloud Billing API. The estimated price information can be retrieved using that API. Format: ``services/{service}/skus/{sku}``",
+                                "type": "string"
+                              },
+                              "billing_sku_per_vcpu": {
+                                "description": "Reference to the corresponding SKU per vCPU in the Cloud Billing API. The estimated price information can be retrieved using that API. Format: ``services/{service}/skus/{sku}``",
+                                "type": "string"
+                              },
+                              "subscription_duration_months": {
+                                "description": "Subscription duration for the hardware in months.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        },
+                        "description": {
+                          "description": "Output only. Description of this SKU.",
+                          "type": "string"
+                        },
+                        "revision_id": {
+                          "description": "Output only. The SKU revision ID. A new revision is created whenever ``config`` is updated. The format is an 8-character hexadecimal string.",
+                          "type": "string"
+                        },
+                        "is_active": {
+                          "description": "Output only. Flag to indicate whether or not this revision is active. Only an active revision can be used in a new Order.",
+                          "type": "boolean"
+                        },
+                        "type_": {
+                          "description": "Output only. Type of this SKU.",
+                          "type": "object",
+                          "reference": "google.cloud.gdchardwaremanagement_v1alpha.types.Sku.Type"
+                        },
+                        "vcpu_count": {
+                          "description": "Output only. The vCPU count associated with this SKU.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "ekm_solutions": {
+                    "description": "List of Google Cloud supported EKM partners supported by the partner",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "ekm_solution": {
+                          "description": "The Cloud EKM partner.",
+                          "type": "object",
+                          "reference": "google.cloud.cloudcontrolspartner_v1beta.types.EkmMetadata.EkmSolution"
+                        },
+                        "ekm_endpoint_uri": {
+                          "description": "Endpoint for sending requests to the EKM for key provisioning during Assured Workload creation.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "operated_cloud_regions": {
+                    "description": "List of Google Cloud regions that the partner sells services to customers. Valid Google Cloud regions found here:  https://cloud.google.com/compute/docs/regions-zones",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "partner_project_id": {
+                    "description": "Google Cloud project ID in the partner's Google Cloud organization for receiving enhanced Logs for Partners.",
+                    "type": "string"
+                  },
+                  "create_time": {
+                    "description": "Output only. Time the resource was created",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "update_time": {
+                    "description": "Output only. The last time the resource was updated",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  }
+                }
+              }
+            }
+          },
+          "external_id": {
+            "description": "Optional. A identifier associated with the workload and underlying projects which allows for the break down of billing costs for a workload. The value provided for the identifier will add a label to the workload and contained projects with the identifier as the value.",
+            "type": "string"
+          }
         },
-        "workload": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload",
-          "description": "Required. Assured Workload to create"
-        },
-        "external_id": {
-          "type": "str",
-          "description": "Optional. A identifier associated with the workload and underlying projects which allows for the break down of billing costs for a workload. The value provided for the identifier will add a label to the workload and contained projects with the identifier as the value."
-        }
+        "required": [
+          "parent",
+          "workload"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateWorkloadRequest",
-      "docstring": "Request for Updating a workload.\n\nAttributes:\n    workload (google.cloud.assuredworkloads_v1.types.Workload):\n        Required. The workload to update. The workload's ``name``\n        field is used to identify the workload to be updated.\n        Format:\n        organizations/{org_id}/locations/{location_id}/workloads/{workload_id}\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The list of fields to be updated.",
-      "attributes": {
-        "workload": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload",
-          "description": "Required. The workload to update. The workload's ``name`` field is used to identify the workload to be updated. Format: organizations/{org_id}/locations/{location_id}/workloads/{workload_id}"
+      "description": "Request for Updating a workload.\n\nAttributes:\n    workload (google.cloud.assuredworkloads_v1.types.Workload):\n        Required. The workload to update. The workload's ``name``\n        field is used to identify the workload to be updated.\n        Format:\n        organizations/{org_id}/locations/{location_id}/workloads/{workload_id}\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Required. The list of fields to be updated.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "workload": {
+            "description": "Required. The workload to update. The workload's ``name`` field is used to identify the workload to be updated. Format: organizations/{org_id}/locations/{location_id}/workloads/{workload_id}",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. Format: ``organizations/{organization}/locations/{location}/customers/{customer}/workloads/{workload}``",
+                "type": "string"
+              },
+              "folder_id": {
+                "description": "Output only. Folder id this workload is associated with",
+                "type": "integer"
+              },
+              "create_time": {
+                "description": "Output only. Time the resource was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "folder": {
+                "description": "Output only. The name of container folder of the assured workload",
+                "type": "string"
+              },
+              "workload_onboarding_state": {
+                "type": "object",
+                "properties": {
+                  "onboarding_steps": {
+                    "description": "List of workload onboarding steps.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "step": {
+                          "type": "object",
+                          "properties": {
+                            "routine": {
+                              "description": "Name of a routine within the workflow.",
+                              "type": "string"
+                            },
+                            "step": {
+                              "description": "Name of a step within the routine.",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "start_time": {
+                          "description": "The starting time of the onboarding step.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "completion_time": {
+                          "description": "The completion time of the onboarding step.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "completion_state": {
+                          "description": "Output only. The completion state of the onboarding step.",
+                          "type": "object",
+                          "reference": "google.cloud.cloudcontrolspartner_v1beta.types.CompletionState"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "is_onboarded": {
+                "description": "Indicates whether a workload is fully onboarded.",
+                "type": "boolean"
+              },
+              "key_management_project_id": {
+                "description": "The project id of the key management project for the workload",
+                "type": "string"
+              },
+              "location": {
+                "description": "The Google Cloud location of the workload",
+                "type": "string"
+              },
+              "partner": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Identifier. The resource name of the partner. Format: ``organizations/{organization}/locations/{location}/partner`` Example: \"organizations/123456/locations/us-central1/partner\".",
+                    "type": "string"
+                  },
+                  "skus": {
+                    "description": "List of SKUs the partner is offering",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "Identifier. Name of this SKU. Format: ``projects/{project}/locations/{location}/skus/{sku}``",
+                          "type": "string"
+                        },
+                        "display_name": {
+                          "description": "Output only. Display name of this SKU.",
+                          "type": "string"
+                        },
+                        "create_time": {
+                          "description": "Output only. Time when this SKU was created.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "update_time": {
+                          "description": "Output only. Time when this SKU was last updated.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "config": {
+                          "type": "object",
+                          "properties": {
+                            "cpu": {
+                              "description": "Information about CPU configuration.",
+                              "type": "string"
+                            },
+                            "gpu": {
+                              "description": "Information about GPU configuration.",
+                              "type": "string"
+                            },
+                            "ram": {
+                              "description": "Information about RAM configuration.",
+                              "type": "string"
+                            },
+                            "storage": {
+                              "description": "Information about storage configuration.",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "instances": {
+                          "description": "Output only. Available instances of this SKU. This field should be used for checking availability of a SKU.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "region_code": {
+                                "description": "The `Unicode CLDR <https://cldr.unicode.org>`__ region code where this instance is available.",
+                                "type": "string"
+                              },
+                              "power_supply": {
+                                "description": "Power supply type for this instance.",
+                                "type": "object",
+                                "reference": "google.cloud.gdchardwaremanagement_v1alpha.types.PowerSupply"
+                              },
+                              "billing_sku": {
+                                "description": "Reference to the corresponding SKU in the Cloud Billing API. The estimated price information can be retrieved using that API. Format: ``services/{service}/skus/{sku}``",
+                                "type": "string"
+                              },
+                              "billing_sku_per_vcpu": {
+                                "description": "Reference to the corresponding SKU per vCPU in the Cloud Billing API. The estimated price information can be retrieved using that API. Format: ``services/{service}/skus/{sku}``",
+                                "type": "string"
+                              },
+                              "subscription_duration_months": {
+                                "description": "Subscription duration for the hardware in months.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        },
+                        "description": {
+                          "description": "Output only. Description of this SKU.",
+                          "type": "string"
+                        },
+                        "revision_id": {
+                          "description": "Output only. The SKU revision ID. A new revision is created whenever ``config`` is updated. The format is an 8-character hexadecimal string.",
+                          "type": "string"
+                        },
+                        "is_active": {
+                          "description": "Output only. Flag to indicate whether or not this revision is active. Only an active revision can be used in a new Order.",
+                          "type": "boolean"
+                        },
+                        "type_": {
+                          "description": "Output only. Type of this SKU.",
+                          "type": "object",
+                          "reference": "google.cloud.gdchardwaremanagement_v1alpha.types.Sku.Type"
+                        },
+                        "vcpu_count": {
+                          "description": "Output only. The vCPU count associated with this SKU.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "ekm_solutions": {
+                    "description": "List of Google Cloud supported EKM partners supported by the partner",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "ekm_solution": {
+                          "description": "The Cloud EKM partner.",
+                          "type": "object",
+                          "reference": "google.cloud.cloudcontrolspartner_v1beta.types.EkmMetadata.EkmSolution"
+                        },
+                        "ekm_endpoint_uri": {
+                          "description": "Endpoint for sending requests to the EKM for key provisioning during Assured Workload creation.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "operated_cloud_regions": {
+                    "description": "List of Google Cloud regions that the partner sells services to customers. Valid Google Cloud regions found here:  https://cloud.google.com/compute/docs/regions-zones",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "partner_project_id": {
+                    "description": "Google Cloud project ID in the partner's Google Cloud organization for receiving enhanced Logs for Partners.",
+                    "type": "string"
+                  },
+                  "create_time": {
+                    "description": "Output only. Time the resource was created",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "update_time": {
+                    "description": "Output only. The last time the resource was updated",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  }
+                }
+              }
+            }
+          },
+          "update_mask": {
+            "description": "Required. The list of fields to be updated.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          }
         },
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Required. The list of fields to be updated."
-        }
+        "required": [
+          "workload",
+          "update_mask"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteWorkloadRequest",
-      "docstring": "Request for deleting a Workload.\n\nAttributes:\n    name (str):\n        Required. The ``name`` field is used to identify the\n        workload. Format:\n        organizations/{org_id}/locations/{location_id}/workloads/{workload_id}\n    etag (str):\n        Optional. The etag of the workload.\n        If this is provided, it must match the server's\n        etag.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The ``name`` field is used to identify the workload. Format: organizations/{org_id}/locations/{location_id}/workloads/{workload_id}"
+      "description": "Request for deleting a Workload.\n\nAttributes:\n    name (str):\n        Required. The ``name`` field is used to identify the\n        workload. Format:\n        organizations/{org_id}/locations/{location_id}/workloads/{workload_id}\n    etag (str):\n        Optional. The etag of the workload.\n        If this is provided, it must match the server's\n        etag.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The ``name`` field is used to identify the workload. Format: organizations/{org_id}/locations/{location_id}/workloads/{workload_id}",
+            "type": "string"
+          },
+          "etag": {
+            "description": "Optional. The etag of the workload. If this is provided, it must match the server's etag.",
+            "type": "string"
+          }
         },
-        "etag": {
-          "type": "str",
-          "description": "Optional. The etag of the workload. If this is provided, it must match the server's etag."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetWorkloadRequest",
-      "docstring": "Request for fetching a workload.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Workload to fetch. This\n        is the workload's relative path in the API, formatted as\n        \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\".\n        For example,\n        \"organizations/123/locations/us-east1/workloads/assured-workload-1\".",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Workload to fetch. This is the workload's relative path in the API, formatted as \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\". For example, \"organizations/123/locations/us-east1/workloads/assured-workload-1\"."
-        }
+      "description": "Request for fetching a workload.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Workload to fetch. This\n        is the workload's relative path in the API, formatted as\n        \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\".\n        For example,\n        \"organizations/123/locations/us-east1/workloads/assured-workload-1\".",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Workload to fetch. This is the workload's relative path in the API, formatted as \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\". For example, \"organizations/123/locations/us-east1/workloads/assured-workload-1\".",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListWorkloadsRequest",
-      "docstring": "Request for fetching workloads in an organization.\n\nAttributes:\n    parent (str):\n        Required. Parent Resource to list workloads from. Must be of\n        the form ``organizations/{org_id}/locations/{location}``.\n    page_size (int):\n        Page size.\n    page_token (str):\n        Page token returned from previous request.\n        Page token contains context from previous\n        request. Page token needs to be passed in the\n        second and following requests.\n    filter (str):\n        A custom filter for filtering by properties\n        of a workload. At this time, only filtering by\n        labels is supported.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Parent Resource to list workloads from. Must be of the form ``organizations/{org_id}/locations/{location}``."
+      "description": "Request for fetching workloads in an organization.\n\nAttributes:\n    parent (str):\n        Required. Parent Resource to list workloads from. Must be of\n        the form ``organizations/{org_id}/locations/{location}``.\n    page_size (int):\n        Page size.\n    page_token (str):\n        Page token returned from previous request.\n        Page token contains context from previous\n        request. Page token needs to be passed in the\n        second and following requests.\n    filter (str):\n        A custom filter for filtering by properties\n        of a workload. At this time, only filtering by\n        labels is supported.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Parent Resource to list workloads from. Must be of the form ``organizations/{org_id}/locations/{location}``.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Page size.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Page token returned from previous request. Page token contains context from previous request. Page token needs to be passed in the second and following requests.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "A custom filter for filtering by properties of a workload. At this time, only filtering by labels is supported.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Page size."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Page token returned from previous request. Page token contains context from previous request. Page token needs to be passed in the second and following requests."
-        },
-        "filter": {
-          "type": "str",
-          "description": "A custom filter for filtering by properties of a workload. At this time, only filtering by labels is supported."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListWorkloadsResponse",
-      "docstring": "Response of ListWorkloads endpoint.\n\nAttributes:\n    workloads (MutableSequence[google.cloud.assuredworkloads_v1.types.Workload]):\n        List of Workloads under a given parent.\n    next_page_token (str):\n        The next page token. Return empty if reached\n        the last page.",
-      "attributes": {
-        "workloads": {
-          "type": "MutableSequence[google.cloud.assuredworkloads_v1.types.Workload]",
-          "description": "List of Workloads under a given parent."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The next page token. Return empty if reached the last page."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Workload",
-      "docstring": "A Workload object for managing highly regulated workloads of\ncloud customers.\n\nAttributes:\n    name (str):\n        Optional. The resource name of the workload.\n        Format:\n\n        organizations/{organization}/locations/{location}/workloads/{workload}\n\n        Read-only.\n    display_name (str):\n        Required. The user-assigned display name of\n        the Workload. When present it must be between 4\n        to 30 characters. Allowed characters are:\n        lowercase and uppercase letters, numbers,\n        hyphen, and spaces.\n\n        Example: My Workload\n    resources (MutableSequence[google.cloud.assuredworkloads_v1.types.Workload.ResourceInfo]):\n        Output only. The resources associated with\n        this workload. These resources will be created\n        when creating the workload. If any of the\n        projects already exist, the workload creation\n        will fail. Always read only.\n    compliance_regime (google.cloud.assuredworkloads_v1.types.Workload.ComplianceRegime):\n        Required. Immutabl",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Optional. The resource name of the workload. Format:  organizations/{organization}/locations/{location}/workloads/{workload}  Read-only."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces.  Example: My Workload"
-        },
-        "resources": {
-          "type": "MutableSequence[google.cloud.assuredworkloads_v1.types.Workload.ResourceInfo]",
-          "description": "Output only. The resources associated with this workload. These resources will be created when creating the workload. If any of the projects already exist, the workload creation will fail. Always read only."
-        },
-        "compliance_regime": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.ComplianceRegime",
-          "description": "Required. Immutable. Compliance Regime associated with this workload."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Immutable. The Workload creation timestamp."
-        },
-        "billing_account": {
-          "type": "str",
-          "description": "Optional. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form ``billingAccounts/{billing_account_id}``. For example, ``billingAccounts/012345-567890-ABCDEF``."
-        },
-        "etag": {
-          "type": "str",
-          "description": "Optional. ETag of the workload, it is calculated on the basis of the Workload contents. It will be used in Update & Delete operations."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Labels applied to the workload."
-        },
-        "provisioned_resources_parent": {
-          "type": "str",
-          "description": "Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}"
-        },
-        "kms_settings": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.KMSSettings",
-          "description": "Input only. Settings used to create a CMEK crypto key. When set, a project with a KMS CMEK key is provisioned. This field is deprecated as of Feb 28, 2022. In order to create a Keyring, callers should specify, ENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type field."
-        },
-        "resource_settings": {
-          "type": "MutableSequence[google.cloud.assuredworkloads_v1.types.Workload.ResourceSettings]",
-          "description": "Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional."
-        },
-        "kaj_enrollment_state": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.KajEnrollmentState",
-          "description": "Output only. Represents the KAJ enrollment state of the given workload."
-        },
-        "enable_sovereign_controls": {
-          "type": "bool",
-          "description": "Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers."
-        },
-        "saa_enrollment_response": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.SaaEnrollmentResponse",
-          "description": "Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page."
-        },
-        "compliant_but_disallowed_services": {
-          "type": "MutableSequence[str]",
-          "description": "Output only. Urls for services which are compliant for this Assured Workload, but which are currently disallowed by the ResourceUsageRestriction org policy. Invoke RestrictAllowedResources endpoint to allow your project developers to use these services in their environment.\"."
-        },
-        "partner": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.Partner",
-          "description": "Optional. Compliance Regime associated with this workload."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CreateWorkloadOperationMetadata",
-      "docstring": "Operation metadata to give request details of CreateWorkload.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Optional. Time when the operation was\n        created.\n    display_name (str):\n        Optional. The display name of the workload.\n    parent (str):\n        Optional. The parent of the workload.\n    compliance_regime (google.cloud.assuredworkloads_v1.types.Workload.ComplianceRegime):\n        Optional. Compliance controls that should be\n        applied to the resources managed by the\n        workload.",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Optional. Time when the operation was created."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "Optional. The display name of the workload."
-        },
-        "parent": {
-          "type": "str",
-          "description": "Optional. The parent of the workload."
-        },
-        "compliance_regime": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.ComplianceRegime",
-          "description": "Optional. Compliance controls that should be applied to the resources managed by the workload."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "RestrictAllowedResourcesRequest",
-      "docstring": "Request for restricting list of available resources in\nWorkload environment.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Workload. This is the\n        workloads's relative path in the API, formatted as\n        \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\".\n        For example,\n        \"organizations/123/locations/us-east1/workloads/assured-workload-1\".\n    restriction_type (google.cloud.assuredworkloads_v1.types.RestrictAllowedResourcesRequest.RestrictionType):\n        Required. The type of restriction for using\n        gcp products in the Workload environment.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Workload. This is the workloads's relative path in the API, formatted as \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\". For example, \"organizations/123/locations/us-east1/workloads/assured-workload-1\"."
+      "description": "Request for restricting list of available resources in\nWorkload environment.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Workload. This is the\n        workloads's relative path in the API, formatted as\n        \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\".\n        For example,\n        \"organizations/123/locations/us-east1/workloads/assured-workload-1\".\n    restriction_type (google.cloud.assuredworkloads_v1.types.RestrictAllowedResourcesRequest.RestrictionType):\n        Required. The type of restriction for using\n        gcp products in the Workload environment.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Workload. This is the workloads's relative path in the API, formatted as \"organizations/{organization_id}/locations/{location_id}/workloads/{workload_id}\". For example, \"organizations/123/locations/us-east1/workloads/assured-workload-1\".",
+            "type": "string"
+          },
+          "restriction_type": {
+            "description": "Required. The type of restriction for using gcp products in the Workload environment.",
+            "type": "object",
+            "reference": "google.cloud.assuredworkloads_v1.types.RestrictAllowedResourcesRequest.RestrictionType"
+          }
         },
-        "restriction_type": {
-          "type": "google.cloud.assuredworkloads_v1.types.RestrictAllowedResourcesRequest.RestrictionType",
-          "description": "Required. The type of restriction for using gcp products in the Workload environment."
-        }
+        "required": [
+          "name",
+          "restriction_type"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "RestrictAllowedResourcesResponse",
-      "docstring": "Response for restricting the list of allowed resources.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "AcknowledgeViolationRequest",
-      "docstring": "Request for acknowledging the violation\nNext Id: 4\n\nAttributes:\n    name (str):\n        Required. The resource name of the Violation\n        to acknowledge. Format:\n\n        organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}\n    comment (str):\n        Required. Business justification explaining\n        the need for violation acknowledgement\n    non_compliant_org_policy (str):\n        Optional. This field is deprecated and will be removed in\n        future version of the API. Name of the OrgPolicy which was\n        modified with non-compliant change and resulted in this\n        violation. Format:\n        projects/{project_number}/policies/{constraint_name}\n        folders/{folder_id}/policies/{constraint_name}\n        organizations/{organization_id}/policies/{constraint_name}",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Violation to acknowledge. Format:  organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}"
+      "description": "Request for acknowledging the violation\nNext Id: 4\n\nAttributes:\n    name (str):\n        Required. The resource name of the Violation\n        to acknowledge. Format:\n\n        organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}\n    comment (str):\n        Required. Business justification explaining\n        the need for violation acknowledgement\n    non_compliant_org_policy (str):\n        Optional. This field is deprecated and will be removed in\n        future version of the API. Name of the OrgPolicy which was\n        modified with non-compliant change and resulted in this\n        violation. Format:\n        projects/{project_number}/policies/{constraint_name}\n        folders/{folder_id}/policies/{constraint_name}\n        organizations/{organization_id}/policies/{constraint_name}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Violation to acknowledge. Format:  organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}",
+            "type": "string"
+          },
+          "comment": {
+            "description": "Required. Business justification explaining the need for violation acknowledgement",
+            "type": "string"
+          },
+          "non_compliant_org_policy": {
+            "description": "Optional. This field is deprecated and will be removed in future version of the API. Name of the OrgPolicy which was modified with non-compliant change and resulted in this violation. Format: projects/{project_number}/policies/{constraint_name} folders/{folder_id}/policies/{constraint_name} organizations/{organization_id}/policies/{constraint_name}",
+            "type": "string"
+          }
         },
-        "comment": {
-          "type": "str",
-          "description": "Required. Business justification explaining the need for violation acknowledgement"
-        },
-        "non_compliant_org_policy": {
-          "type": "str",
-          "description": "Optional. This field is deprecated and will be removed in future version of the API. Name of the OrgPolicy which was modified with non-compliant change and resulted in this violation. Format: projects/{project_number}/policies/{constraint_name} folders/{folder_id}/policies/{constraint_name} organizations/{organization_id}/policies/{constraint_name}"
-        }
+        "required": [
+          "name",
+          "comment"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "AcknowledgeViolationResponse",
-      "docstring": "Response for violation acknowledgement",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "TimeWindow",
-      "docstring": "Interval defining a time window.\n\nAttributes:\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        The start of the time window.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        The end of the time window.",
-      "attributes": {
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The start of the time window."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The end of the time window."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListViolationsRequest",
-      "docstring": "Request for fetching violations in an organization.\n\nAttributes:\n    parent (str):\n        Required. The Workload name. Format\n        ``organizations/{org_id}/locations/{location}/workloads/{workload}``.\n    interval (google.cloud.assuredworkloads_v1.types.TimeWindow):\n        Optional. Specifies the time window for retrieving active\n        Violations. When specified, retrieves Violations that were\n        active between start_time and end_time.\n    page_size (int):\n        Optional. Page size.\n    page_token (str):\n        Optional. Page token returned from previous\n        request.\n    filter (str):\n        Optional. A custom filter for filtering by\n        the Violations properties.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The Workload name. Format ``organizations/{org_id}/locations/{location}/workloads/{workload}``."
+      "description": "Request for fetching violations in an organization.\n\nAttributes:\n    parent (str):\n        Required. The Workload name. Format\n        ``organizations/{org_id}/locations/{location}/workloads/{workload}``.\n    interval (google.cloud.assuredworkloads_v1.types.TimeWindow):\n        Optional. Specifies the time window for retrieving active\n        Violations. When specified, retrieves Violations that were\n        active between start_time and end_time.\n    page_size (int):\n        Optional. Page size.\n    page_token (str):\n        Optional. Page token returned from previous\n        request.\n    filter (str):\n        Optional. A custom filter for filtering by\n        the Violations properties.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The Workload name. Format ``organizations/{org_id}/locations/{location}/workloads/{workload}``.",
+            "type": "string"
+          },
+          "interval": {
+            "description": "Optional. Specifies the time window for retrieving active Violations. When specified, retrieves Violations that were active between start_time and end_time.",
+            "type": "object",
+            "properties": {
+              "start_time": {
+                "description": "The hard time window start time. If unspecified it will be set to ``ShipmentModel.global_start_time``.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "end_time": {
+                "description": "The hard time window end time. If unspecified it will be set to ``ShipmentModel.global_end_time``.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "soft_start_time": {
+                "description": "The soft start time of the time window.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "soft_end_time": {
+                "description": "The soft end time of the time window.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "cost_per_hour_before_soft_start_time": {
+                "description": "A cost per hour added to other costs in the model if the event occurs before soft_start_time, computed as:  ::  max(0, soft_start_time - t.seconds) * cost_per_hour_before_soft_start_time / 3600, t being the time of the event.  This cost must be positive, and the field can only be set if soft_start_time has been set.  This field is a member of `oneof`_ ``_cost_per_hour_before_soft_start_time``.",
+                "type": "number"
+              },
+              "cost_per_hour_after_soft_end_time": {
+                "description": "A cost per hour added to other costs in the model if the event occurs after ``soft_end_time``, computed as:  ::  max(0, t.seconds - soft_end_time.seconds) * cost_per_hour_after_soft_end_time / 3600, t being the time of the event.  This cost must be positive, and the field can only be set if ``soft_end_time`` has been set.  This field is a member of `oneof`_ ``_cost_per_hour_after_soft_end_time``.",
+                "type": "number"
+              }
+            }
+          },
+          "page_size": {
+            "description": "Optional. Page size.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. Page token returned from previous request.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Optional. A custom filter for filtering by the Violations properties.",
+            "type": "string"
+          }
         },
-        "interval": {
-          "type": "google.cloud.assuredworkloads_v1.types.TimeWindow",
-          "description": "Optional. Specifies the time window for retrieving active Violations. When specified, retrieves Violations that were active between start_time and end_time."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. Page size."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. Page token returned from previous request."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. A custom filter for filtering by the Violations properties."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListViolationsResponse",
-      "docstring": "Response of ListViolations endpoint.\n\nAttributes:\n    violations (MutableSequence[google.cloud.assuredworkloads_v1.types.Violation]):\n        List of Violations under a Workload.\n    next_page_token (str):\n        The next page token. Returns empty if reached\n        the last page.",
-      "attributes": {
-        "violations": {
-          "type": "MutableSequence[google.cloud.assuredworkloads_v1.types.Violation]",
-          "description": "List of Violations under a Workload."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The next page token. Returns empty if reached the last page."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetViolationRequest",
-      "docstring": "Request for fetching a Workload Violation.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Violation\n        to fetch (ie. Violation.name). Format:\n\n        organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the Violation to fetch (ie. Violation.name). Format:  organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Violation",
-      "docstring": "Workload monitoring Violation.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Output only. Immutable. Name of the Violation. Format:\n        organizations/{organization}/locations/{location}/workloads/{workload_id}/violations/{violations_id}\n    description (str):\n        Output only. Description for the Violation.\n        e.g. OrgPolicy gcp.resourceLocations has non\n        compliant value.\n    begin_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time of the event which\n        triggered the Violation.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The last time when the Violation\n        record was updated.\n    resolve_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time of the event which fixed\n        the Violation. If the violation is ACTIVE this\n        will be empty.\n    category (str):\n        Output only. Category under which thi",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. Immutable. Name of the Violation. Format: organizations/{organization}/locations/{location}/workloads/{workload_id}/violations/{violations_id}"
+      "description": "Request for fetching a Workload Violation.\n\nAttributes:\n    name (str):\n        Required. The resource name of the Violation\n        to fetch (ie. Violation.name). Format:\n\n        organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the Violation to fetch (ie. Violation.name). Format:  organizations/{organization}/locations/{location}/workloads/{workload}/violations/{violation}",
+            "type": "string"
+          }
         },
-        "description": {
-          "type": "str",
-          "description": "Output only. Description for the Violation. e.g. OrgPolicy gcp.resourceLocations has non compliant value."
-        },
-        "begin_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time of the event which triggered the Violation."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The last time when the Violation record was updated."
-        },
-        "resolve_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time of the event which fixed the Violation. If the violation is ACTIVE this will be empty."
-        },
-        "category": {
-          "type": "str",
-          "description": "Output only. Category under which this violation is mapped. e.g. Location, Service Usage, Access, Encryption, etc."
-        },
-        "state": {
-          "type": "google.cloud.assuredworkloads_v1.types.Violation.State",
-          "description": "Output only. State of the violation"
-        },
-        "org_policy_constraint": {
-          "type": "str",
-          "description": "Output only. Immutable. The org-policy-constraint that was incorrectly changed, which resulted in this violation."
-        },
-        "audit_log_link": {
-          "type": "str",
-          "description": "Output only. Immutable. Audit Log Link for violated resource Format:  https://console.cloud.google.com/logs/query;query={logName}{protoPayload.resourceName}{timeRange}{folder}"
-        },
-        "non_compliant_org_policy": {
-          "type": "str",
-          "description": "Output only. Immutable. Name of the OrgPolicy which was modified with non-compliant change and resulted this violation. Format: projects/{project_number}/policies/{constraint_name} folders/{folder_id}/policies/{constraint_name} organizations/{organization_id}/policies/{constraint_name}"
-        },
-        "remediation": {
-          "type": "google.cloud.assuredworkloads_v1.types.Violation.Remediation",
-          "description": "Output only. Compliance violation remediation"
-        },
-        "acknowledged": {
-          "type": "bool",
-          "description": "Output only. A boolean that indicates if the violation is acknowledged"
-        },
-        "acknowledgement_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Optional. Timestamp when this violation was acknowledged last. This will be absent when acknowledged field is marked as false.  This field is a member of `oneof`_ ``_acknowledgement_time``."
-        },
-        "exception_audit_log_link": {
-          "type": "str",
-          "description": "Output only. Immutable. Audit Log link to find business justification provided for violation exception. Format:  https://console.cloud.google.com/logs/query;query={logName}{protoPayload.resourceName}{protoPayload.methodName}{timeRange}{organization}"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ResourceInfo",
-      "docstring": "Represent the resources that are children of this Workload.\n\nAttributes:\n    resource_id (int):\n        Resource identifier. For a project this represents\n        project_number.\n    resource_type (google.cloud.assuredworkloads_v1.types.Workload.ResourceInfo.ResourceType):\n        Indicates the type of resource.",
-      "attributes": {
-        "resource_id": {
-          "type": "int",
-          "description": "Resource identifier. For a project this represents project_number."
-        },
-        "resource_type": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.ResourceInfo.ResourceType",
-          "description": "Indicates the type of resource."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "KMSSettings",
-      "docstring": "Settings specific to the Key Management Service. This message is\ndeprecated. In order to create a Keyring, callers should specify,\nENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type\nfield.\n\nAttributes:\n    next_rotation_time (google.protobuf.timestamp_pb2.Timestamp):\n        Required. Input only. Immutable. The time at\n        which the Key Management Service will\n        automatically create a new version of the crypto\n        key and mark it as the primary.\n    rotation_period (google.protobuf.duration_pb2.Duration):\n        Required. Input only. Immutable. [next_rotation_time] will\n        be advanced by this period when the Key Management Service\n        automatically rotates a key. Must be at least 24 hours and\n        at most 876,000 hours.",
-      "attributes": {
-        "next_rotation_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. Input only. Immutable. The time at which the Key Management Service will automatically create a new version of the crypto key and mark it as the primary."
-        },
-        "rotation_period": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ResourceSettings",
-      "docstring": "Represent the custom settings for the resources to be\ncreated.\n\nAttributes:\n    resource_id (str):\n        Resource identifier. For a project this represents\n        project_id. If the project is already taken, the workload\n        creation will fail. For KeyRing, this represents the\n        keyring_id. For a folder, don't set this value as folder_id\n        is assigned by Google.\n    resource_type (google.cloud.assuredworkloads_v1.types.Workload.ResourceInfo.ResourceType):\n        Indicates the type of resource. This field should be\n        specified to correspond the id to the right resource type\n        (CONSUMER_FOLDER or ENCRYPTION_KEYS_PROJECT)\n    display_name (str):\n        User-assigned resource display name.\n        If not empty it will be used to create a\n        resource with the specified name.",
-      "attributes": {
-        "resource_id": {
-          "type": "str",
-          "description": "Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail. For KeyRing, this represents the keyring_id. For a folder, don't set this value as folder_id is assigned by Google."
-        },
-        "resource_type": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.ResourceInfo.ResourceType",
-          "description": "Indicates the type of resource. This field should be specified to correspond the id to the right resource type (CONSUMER_FOLDER or ENCRYPTION_KEYS_PROJECT)"
-        },
-        "display_name": {
-          "type": "str",
-          "description": "User-assigned resource display name. If not empty it will be used to create a resource with the specified name."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SaaEnrollmentResponse",
-      "docstring": "Signed Access Approvals (SAA) enrollment response.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    setup_status (google.cloud.assuredworkloads_v1.types.Workload.SaaEnrollmentResponse.SetupState):\n        Indicates SAA enrollment status of a given\n        workload.\n\n        This field is a member of `oneof`_ ``_setup_status``.\n    setup_errors (MutableSequence[google.cloud.assuredworkloads_v1.types.Workload.SaaEnrollmentResponse.SetupError]):\n        Indicates SAA enrollment setup error if any.",
-      "attributes": {
-        "setup_status": {
-          "type": "google.cloud.assuredworkloads_v1.types.Workload.SaaEnrollmentResponse.SetupState",
-          "description": "Indicates SAA enrollment status of a given workload.  This field is a member of `oneof`_ ``_setup_status``."
-        },
-        "setup_errors": {
-          "type": "MutableSequence[google.cloud.assuredworkloads_v1.types.Workload.SaaEnrollmentResponse.SetupError]",
-          "description": "Indicates SAA enrollment setup error if any."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Remediation",
-      "docstring": "Represents remediation guidance to resolve compliance\nviolation for AssuredWorkload\n\nAttributes:\n    instructions (google.cloud.assuredworkloads_v1.types.Violation.Remediation.Instructions):\n        Required. Remediation instructions to resolve\n        violations\n    compliant_values (MutableSequence[str]):\n        Values that can resolve the violation\n        For example: for list org policy violations,\n        this will either be the list of allowed or\n        denied values\n    remediation_type (google.cloud.assuredworkloads_v1.types.Violation.Remediation.RemediationType):\n        Output only. Reemediation type based on the\n        type of org policy values violated",
-      "attributes": {
-        "instructions": {
-          "type": "google.cloud.assuredworkloads_v1.types.Violation.Remediation.Instructions",
-          "description": "Required. Remediation instructions to resolve violations"
-        },
-        "compliant_values": {
-          "type": "MutableSequence[str]",
-          "description": "Values that can resolve the violation For example: for list org policy violations, this will either be the list of allowed or denied values"
-        },
-        "remediation_type": {
-          "type": "google.cloud.assuredworkloads_v1.types.Violation.Remediation.RemediationType",
-          "description": "Output only. Reemediation type based on the type of org policy values violated"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Instructions",
-      "docstring": "Instructions to remediate violation\n\nAttributes:\n    gcloud_instructions (google.cloud.assuredworkloads_v1.types.Violation.Remediation.Instructions.Gcloud):\n        Remediation instructions to resolve violation\n        via gcloud cli\n    console_instructions (google.cloud.assuredworkloads_v1.types.Violation.Remediation.Instructions.Console):\n        Remediation instructions to resolve violation\n        via cloud console",
-      "attributes": {
-        "gcloud_instructions": {
-          "type": "google.cloud.assuredworkloads_v1.types.Violation.Remediation.Instructions.Gcloud",
-          "description": "Remediation instructions to resolve violation via gcloud cli"
-        },
-        "console_instructions": {
-          "type": "google.cloud.assuredworkloads_v1.types.Violation.Remediation.Instructions.Console",
-          "description": "Remediation instructions to resolve violation via cloud console"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Gcloud",
-      "docstring": "Remediation instructions to resolve violation via gcloud cli\n\nAttributes:\n    gcloud_commands (MutableSequence[str]):\n        Gcloud command to resolve violation\n    steps (MutableSequence[str]):\n        Steps to resolve violation via gcloud cli\n    additional_links (MutableSequence[str]):\n        Additional urls for more information about\n        steps",
-      "attributes": {
-        "gcloud_commands": {
-          "type": "MutableSequence[str]",
-          "description": "Gcloud command to resolve violation"
-        },
-        "steps": {
-          "type": "MutableSequence[str]",
-          "description": "Steps to resolve violation via gcloud cli"
-        },
-        "additional_links": {
-          "type": "MutableSequence[str]",
-          "description": "Additional urls for more information about steps"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Console",
-      "docstring": "Remediation instructions to resolve violation via cloud\nconsole\n\nAttributes:\n    console_uris (MutableSequence[str]):\n        Link to console page where violations can be\n        resolved\n    steps (MutableSequence[str]):\n        Steps to resolve violation via cloud console\n    additional_links (MutableSequence[str]):\n        Additional urls for more information about\n        steps",
-      "attributes": {
-        "console_uris": {
-          "type": "MutableSequence[str]",
-          "description": "Link to console page where violations can be resolved"
-        },
-        "steps": {
-          "type": "MutableSequence[str]",
-          "description": "Steps to resolve violation via cloud console"
-        },
-        "additional_links": {
-          "type": "MutableSequence[str]",
-          "description": "Additional urls for more information about steps"
-        }
+        "required": [
+          "name"
+        ]
       }
     }
   ]

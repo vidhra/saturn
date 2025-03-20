@@ -1,434 +1,265 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-tpu\\google\\cloud\\tpu_v1\\types\\cloud_tpu.py": [
     {
-      "type": "request_class",
-      "name": "SchedulingConfig",
-      "docstring": "Sets the scheduling options for this node.\n\nAttributes:\n    preemptible (bool):\n        Defines whether the node is preemptible.\n    reserved (bool):\n        Whether the node is created under a\n        reservation.",
-      "attributes": {
-        "preemptible": {
-          "type": "bool",
-          "description": "Defines whether the node is preemptible."
-        },
-        "reserved": {
-          "type": "bool",
-          "description": "Whether the node is created under a reservation."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NetworkEndpoint",
-      "docstring": "A network endpoint over which a TPU worker can be reached.\n\nAttributes:\n    ip_address (str):\n        The IP address of this network endpoint.\n    port (int):\n        The port of this network endpoint.",
-      "attributes": {
-        "ip_address": {
-          "type": "str",
-          "description": "The IP address of this network endpoint."
-        },
-        "port": {
-          "type": "int",
-          "description": "The port of this network endpoint."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Node",
-      "docstring": "A TPU instance.\n\nAttributes:\n    name (str):\n        Output only. Immutable. The name of the TPU\n    description (str):\n        The user-supplied description of the TPU.\n        Maximum of 512 characters.\n    accelerator_type (str):\n        Required. The type of hardware accelerators\n        associated with this node.\n    ip_address (str):\n        Output only. DEPRECATED! Use network_endpoints instead. The\n        network address for the TPU Node as visible to Compute\n        Engine instances.\n    port (str):\n        Output only. DEPRECATED! Use network_endpoints instead. The\n        network port for the TPU Node as visible to Compute Engine\n        instances.\n    state (google.cloud.tpu_v1.types.Node.State):\n        Output only. The current state for the TPU\n        Node.\n    health_description (str):\n        Output only. If this field is populated, it\n        contains a description of why the TPU Node is\n        unhealthy.\n    tensorflow_version (str):\n        Required. The version of Tensorflow running\n   ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. Immutable. The name of the TPU"
-        },
-        "description": {
-          "type": "str",
-          "description": "The user-supplied description of the TPU. Maximum of 512 characters."
-        },
-        "accelerator_type": {
-          "type": "str",
-          "description": "Required. The type of hardware accelerators associated with this node."
-        },
-        "ip_address": {
-          "type": "str",
-          "description": "Output only. DEPRECATED! Use network_endpoints instead. The network address for the TPU Node as visible to Compute Engine instances."
-        },
-        "port": {
-          "type": "str",
-          "description": "Output only. DEPRECATED! Use network_endpoints instead. The network port for the TPU Node as visible to Compute Engine instances."
-        },
-        "state": {
-          "type": "google.cloud.tpu_v1.types.Node.State",
-          "description": "Output only. The current state for the TPU Node."
-        },
-        "health_description": {
-          "type": "str",
-          "description": "Output only. If this field is populated, it contains a description of why the TPU Node is unhealthy."
-        },
-        "tensorflow_version": {
-          "type": "str",
-          "description": "Required. The version of Tensorflow running in the Node."
-        },
-        "network": {
-          "type": "str",
-          "description": "The name of a network they wish to peer the TPU node to. It must be a preexisting Compute Engine network inside of the project on which this API has been activated. If none is provided, \"default\" will be used."
-        },
-        "cidr_block": {
-          "type": "str",
-          "description": "The CIDR block that the TPU node will use when selecting an IP address. This CIDR block must be a /29 block; the Compute Engine networks API forbids a smaller block, and using a larger block would be wasteful (a node can only consume one IP address). Errors will occur if the CIDR block has already been used for a currently existing TPU node, the CIDR block conflicts with any subnetworks in the user's provided network, or the provided network is peered with another network that is using that CIDR block."
-        },
-        "service_account": {
-          "type": "str",
-          "description": "Output only. The service account used to run the tensor flow services within the node. To share resources, including Google Cloud Storage data, with the Tensorflow job running in the Node, this account must have permissions to that data."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when the node was created."
-        },
-        "scheduling_config": {
-          "type": "google.cloud.tpu_v1.types.SchedulingConfig",
-          "description": "The scheduling options for this node."
-        },
-        "network_endpoints": {
-          "type": "MutableSequence[google.cloud.tpu_v1.types.NetworkEndpoint]",
-          "description": "Output only. The network endpoints where TPU workers can be accessed and sent work. It is recommended that Tensorflow clients of the node reach out to the 0th entry in this map first."
-        },
-        "health": {
-          "type": "google.cloud.tpu_v1.types.Node.Health",
-          "description": "The health status of the TPU node."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Resource labels to represent user-provided metadata."
-        },
-        "use_service_networking": {
-          "type": "bool",
-          "description": "Whether the VPC peering for the node is set up through Service Networking API. The VPC Peering should be set up before provisioning the node. If this field is set, cidr_block field should not be specified. If the network, that you want to peer the TPU Node to, is Shared VPC networks, the node must be created with this this field enabled."
-        },
-        "api_version": {
-          "type": "google.cloud.tpu_v1.types.Node.ApiVersion",
-          "description": "Output only. The API version that created this Node."
-        },
-        "symptoms": {
-          "type": "MutableSequence[google.cloud.tpu_v1.types.Symptom]",
-          "description": "Output only. The Symptoms that have occurred to the TPU Node."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListNodesRequest",
-      "docstring": "Request for [ListNodes][google.cloud.tpu.v1.Tpu.ListNodes].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource name."
+      "description": "Request for [ListNodes][google.cloud.tpu.v1.Tpu.ListNodes].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of items to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of items to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The next_page_token value returned from a previous List request, if any."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListNodesResponse",
-      "docstring": "Response for [ListNodes][google.cloud.tpu.v1.Tpu.ListNodes].\n\nAttributes:\n    nodes (MutableSequence[google.cloud.tpu_v1.types.Node]):\n        The listed nodes.\n    next_page_token (str):\n        The next page token or empty if none.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "nodes": {
-          "type": "MutableSequence[google.cloud.tpu_v1.types.Node]",
-          "description": "The listed nodes."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The next page token or empty if none."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetNodeRequest",
-      "docstring": "Request for [GetNode][google.cloud.tpu.v1.Tpu.GetNode].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name."
-        }
+      "description": "Request for [GetNode][google.cloud.tpu.v1.Tpu.GetNode].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateNodeRequest",
-      "docstring": "Request for [CreateNode][google.cloud.tpu.v1.Tpu.CreateNode].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    node_id (str):\n        The unqualified resource name.\n    node (google.cloud.tpu_v1.types.Node):\n        Required. The node.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource name."
+      "description": "Request for [CreateNode][google.cloud.tpu.v1.Tpu.CreateNode].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    node_id (str):\n        The unqualified resource name.\n    node (google.cloud.tpu_v1.types.Node):\n        Required. The node.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource name.",
+            "type": "string"
+          },
+          "node_id": {
+            "description": "The unqualified resource name.",
+            "type": "string"
+          },
+          "node": {
+            "description": "Required. The node.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. The resource name of this node. Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names. For example: projects/my-project/locations/us-central1-a/privateClouds/my-cloud/clusters/my-cluster/nodes/my-node",
+                "type": "string"
+              },
+              "fqdn": {
+                "description": "Output only. Fully qualified domain name of the node.",
+                "type": "string"
+              },
+              "internal_ip": {
+                "description": "Output only. Internal IP address of the node.",
+                "type": "string"
+              },
+              "node_type_id": {
+                "description": "Output only. The canonical identifier of the node type (corresponds to the ``NodeType``). For example: standard-72.",
+                "type": "string"
+              },
+              "version": {
+                "description": "Output only. The version number of the VMware ESXi management component in this cluster.",
+                "type": "string"
+              },
+              "custom_core_count": {
+                "description": "Output only. Customized number of cores",
+                "type": "integer"
+              },
+              "state": {
+                "description": "Output only. The state of the appliance.",
+                "type": "object",
+                "reference": "google.cloud.vmwareengine_v1.types.Node.State"
+              }
+            }
+          }
         },
-        "node_id": {
-          "type": "str",
-          "description": "The unqualified resource name."
-        },
-        "node": {
-          "type": "google.cloud.tpu_v1.types.Node",
-          "description": "Required. The node."
-        }
+        "required": [
+          "parent",
+          "node"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteNodeRequest",
-      "docstring": "Request for [DeleteNode][google.cloud.tpu.v1.Tpu.DeleteNode].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name."
-        }
+      "description": "Request for [DeleteNode][google.cloud.tpu.v1.Tpu.DeleteNode].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ReimageNodeRequest",
-      "docstring": "Request for [ReimageNode][google.cloud.tpu.v1.Tpu.ReimageNode].\n\nAttributes:\n    name (str):\n        The resource name.\n    tensorflow_version (str):\n        The version for reimage to create.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name."
-        },
-        "tensorflow_version": {
-          "type": "str",
-          "description": "The version for reimage to create."
+      "description": "Request for [ReimageNode][google.cloud.tpu.v1.Tpu.ReimageNode].\n\nAttributes:\n    name (str):\n        The resource name.\n    tensorflow_version (str):\n        The version for reimage to create.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The resource name.",
+            "type": "string"
+          },
+          "tensorflow_version": {
+            "description": "The version for reimage to create.",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "StopNodeRequest",
-      "docstring": "Request for [StopNode][google.cloud.tpu.v1.Tpu.StopNode].\n\nAttributes:\n    name (str):\n        The resource name.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name."
+      "description": "Request for [StopNode][google.cloud.tpu.v1.Tpu.StopNode].\n\nAttributes:\n    name (str):\n        The resource name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The resource name.",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "StartNodeRequest",
-      "docstring": "Request for [StartNode][google.cloud.tpu.v1.Tpu.StartNode].\n\nAttributes:\n    name (str):\n        The resource name.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name."
+      "description": "Request for [StartNode][google.cloud.tpu.v1.Tpu.StartNode].\n\nAttributes:\n    name (str):\n        The resource name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The resource name.",
+            "type": "string"
+          }
         }
       }
     },
     {
-      "type": "request_class",
-      "name": "TensorFlowVersion",
-      "docstring": "A tensorflow version that a Node can be configured with.\n\nAttributes:\n    name (str):\n        The resource name.\n    version (str):\n        the tensorflow version.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name."
-        },
-        "version": {
-          "type": "str",
-          "description": "the tensorflow version."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetTensorFlowVersionRequest",
-      "docstring": "Request for\n[GetTensorFlowVersion][google.cloud.tpu.v1.Tpu.GetTensorFlowVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name."
-        }
+      "description": "Request for\n[GetTensorFlowVersion][google.cloud.tpu.v1.Tpu.GetTensorFlowVersion].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListTensorFlowVersionsRequest",
-      "docstring": "Request for\n[ListTensorFlowVersions][google.cloud.tpu.v1.Tpu.ListTensorFlowVersions].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    filter (str):\n        List filter.\n    order_by (str):\n        Sort results.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource name."
+      "description": "Request for\n[ListTensorFlowVersions][google.cloud.tpu.v1.Tpu.ListTensorFlowVersions].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    filter (str):\n        List filter.\n    order_by (str):\n        Sort results.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of items to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "List filter.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort results.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of items to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The next_page_token value returned from a previous List request, if any."
-        },
-        "filter": {
-          "type": "str",
-          "description": "List filter."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort results."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListTensorFlowVersionsResponse",
-      "docstring": "Response for\n[ListTensorFlowVersions][google.cloud.tpu.v1.Tpu.ListTensorFlowVersions].\n\nAttributes:\n    tensorflow_versions (MutableSequence[google.cloud.tpu_v1.types.TensorFlowVersion]):\n        The listed nodes.\n    next_page_token (str):\n        The next page token or empty if none.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "tensorflow_versions": {
-          "type": "MutableSequence[google.cloud.tpu_v1.types.TensorFlowVersion]",
-          "description": "The listed nodes."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The next page token or empty if none."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AcceleratorType",
-      "docstring": "A accelerator type that a Node can be configured with.\n\nAttributes:\n    name (str):\n        The resource name.\n    type_ (str):\n        the accelerator type.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The resource name."
-        },
-        "type_": {
-          "type": "str",
-          "description": "the accelerator type."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetAcceleratorTypeRequest",
-      "docstring": "Request for\n[GetAcceleratorType][google.cloud.tpu.v1.Tpu.GetAcceleratorType].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name."
-        }
+      "description": "Request for\n[GetAcceleratorType][google.cloud.tpu.v1.Tpu.GetAcceleratorType].\n\nAttributes:\n    name (str):\n        Required. The resource name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListAcceleratorTypesRequest",
-      "docstring": "Request for\n[ListAcceleratorTypes][google.cloud.tpu.v1.Tpu.ListAcceleratorTypes].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    filter (str):\n        List filter.\n    order_by (str):\n        Sort results.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource name."
+      "description": "Request for\n[ListAcceleratorTypes][google.cloud.tpu.v1.Tpu.ListAcceleratorTypes].\n\nAttributes:\n    parent (str):\n        Required. The parent resource name.\n    page_size (int):\n        The maximum number of items to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    filter (str):\n        List filter.\n    order_by (str):\n        Sort results.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of items to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "List filter.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort results.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of items to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The next_page_token value returned from a previous List request, if any."
-        },
-        "filter": {
-          "type": "str",
-          "description": "List filter."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort results."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListAcceleratorTypesResponse",
-      "docstring": "Response for\n[ListAcceleratorTypes][google.cloud.tpu.v1.Tpu.ListAcceleratorTypes].\n\nAttributes:\n    accelerator_types (MutableSequence[google.cloud.tpu_v1.types.AcceleratorType]):\n        The listed nodes.\n    next_page_token (str):\n        The next page token or empty if none.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "accelerator_types": {
-          "type": "MutableSequence[google.cloud.tpu_v1.types.AcceleratorType]",
-          "description": "The listed nodes."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The next page token or empty if none."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "OperationMetadata",
-      "docstring": "Metadata describing an [Operation][google.longrunning.Operation]\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time the operation was created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        The time the operation finished running.\n    target (str):\n        Target of the operation - for example\n        projects/project-1/connectivityTests/test-1\n    verb (str):\n        Name of the verb executed by the operation.\n    status_detail (str):\n        Human-readable status of the operation, if\n        any.\n    cancel_requested (bool):\n        Specifies if cancellation was requested for\n        the operation.\n    api_version (str):\n        API version.",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time the operation was created."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The time the operation finished running."
-        },
-        "target": {
-          "type": "str",
-          "description": "Target of the operation - for example projects/project-1/connectivityTests/test-1"
-        },
-        "verb": {
-          "type": "str",
-          "description": "Name of the verb executed by the operation."
-        },
-        "status_detail": {
-          "type": "str",
-          "description": "Human-readable status of the operation, if any."
-        },
-        "cancel_requested": {
-          "type": "bool",
-          "description": "Specifies if cancellation was requested for the operation."
-        },
-        "api_version": {
-          "type": "str",
-          "description": "API version."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Symptom",
-      "docstring": "A Symptom instance.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Timestamp when the Symptom is created.\n    symptom_type (google.cloud.tpu_v1.types.Symptom.SymptomType):\n        Type of the Symptom.\n    details (str):\n        Detailed information of the current Symptom.\n    worker_id (str):\n        A string used to uniquely distinguish a\n        worker within a TPU node.",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Timestamp when the Symptom is created."
-        },
-        "symptom_type": {
-          "type": "google.cloud.tpu_v1.types.Symptom.SymptomType",
-          "description": "Type of the Symptom."
-        },
-        "details": {
-          "type": "str",
-          "description": "Detailed information of the current Symptom."
-        },
-        "worker_id": {
-          "type": "str",
-          "description": "A string used to uniquely distinguish a worker within a TPU node."
-        }
+        "required": [
+          "parent"
+        ]
       }
     }
   ]
