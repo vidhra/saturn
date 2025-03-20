@@ -1,964 +1,582 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\migration_entities.py": [
-    {
-      "type": "request_class",
-      "name": "MigrationWorkflow",
-      "docstring": "A migration workflow which specifies what needs to be done\nfor an EDW migration.\n\nAttributes:\n    name (str):\n        Output only. Immutable. Identifier. The unique identifier\n        for the migration workflow. The ID is server-generated.\n\n        Example: ``projects/123/locations/us/workflows/345``\n    display_name (str):\n        The display name of the workflow. This can be\n        set to give a workflow a descriptive name. There\n        is no guarantee or enforcement of uniqueness.\n    tasks (MutableMapping[str, google.cloud.bigquery_migration_v2.types.MigrationTask]):\n        The tasks in a workflow in a named map. The\n        name (i.e. key) has no meaning and is merely a\n        convenient way to address a specific task in a\n        workflow.\n    state (google.cloud.bigquery_migration_v2.types.MigrationWorkflow.State):\n        Output only. That status of the workflow.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Time when the workflow was created.\n    last_update_time (google.prot",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. Immutable. Identifier. The unique identifier for the migration workflow. The ID is server-generated.  Example: ``projects/123/locations/us/workflows/345``"
-        },
-        "display_name": {
-          "type": "str",
-          "description": "The display name of the workflow. This can be set to give a workflow a descriptive name. There is no guarantee or enforcement of uniqueness."
-        },
-        "tasks": {
-          "type": "MutableMapping[str, google.cloud.bigquery_migration_v2.types.MigrationTask]",
-          "description": "The tasks in a workflow in a named map. The name (i.e. key) has no meaning and is merely a convenient way to address a specific task in a workflow."
-        },
-        "state": {
-          "type": "google.cloud.bigquery_migration_v2.types.MigrationWorkflow.State",
-          "description": "Output only. That status of the workflow."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the workflow was created."
-        },
-        "last_update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the workflow was last updated."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MigrationTask",
-      "docstring": "A single task for a migration which has details about the\nconfiguration of the task.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    translation_config_details (google.cloud.bigquery_migration_v2.types.TranslationConfigDetails):\n        Task configuration for CW Batch/Offline SQL\n        Translation.\n\n        This field is a member of `oneof`_ ``task_details``.\n    translation_details (google.cloud.bigquery_migration_v2.types.TranslationDetails):\n        Task details for unified SQL Translation.\n\n        This field is a member of `oneof`_ ``task_details``.\n    id (str):\n        Output only. Immutable. The unique identifier\n        for the migration task. The ID is\n        server-generated.\n    type_ (str):\n        The type of the ta",
-      "attributes": {
-        "translation_config_details": {
-          "type": "google.cloud.bigquery_migration_v2.types.TranslationConfigDetails",
-          "description": "Task configuration for CW Batch/Offline SQL Translation.  This field is a member of `oneof`_ ``task_details``."
-        },
-        "translation_details": {
-          "type": "google.cloud.bigquery_migration_v2.types.TranslationDetails",
-          "description": "Task details for unified SQL Translation.  This field is a member of `oneof`_ ``task_details``."
-        },
-        "id": {
-          "type": "str",
-          "description": "Output only. Immutable. The unique identifier for the migration task. The ID is server-generated."
-        },
-        "type_": {
-          "type": "str",
-          "description": "The type of the task. This must be one of the supported task types: Translation_Teradata2BQ, Translation_Redshift2BQ, Translation_Bteq2BQ, Translation_Oracle2BQ, Translation_HiveQL2BQ, Translation_SparkSQL2BQ, Translation_Snowflake2BQ, Translation_Netezza2BQ, Translation_AzureSynapse2BQ, Translation_Vertica2BQ, Translation_SQLServer2BQ, Translation_Presto2BQ, Translation_MySQL2BQ, Translation_Postgresql2BQ, Translation_SQLite2BQ, Translation_Greenplum2BQ."
-        },
-        "state": {
-          "type": "google.cloud.bigquery_migration_v2.types.MigrationTask.State",
-          "description": "Output only. The current state of the task."
-        },
-        "processing_error": {
-          "type": "google.rpc.error_details_pb2.ErrorInfo",
-          "description": "Output only. An explanation that may be populated when the task is in FAILED state."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the task was created."
-        },
-        "last_update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the task was last updated."
-        },
-        "resource_error_details": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.ResourceErrorDetail]",
-          "description": "Output only. Provides details to errors and issues encountered while processing the task. Presence of error details does not mean that the task failed."
-        },
-        "resource_error_count": {
-          "type": "int",
-          "description": "The number or resources with errors. Note: This is not the total number of errors as each resource can have more than one error. This is used to indicate truncation by having a ``resource_error_count`` that is higher than the size of ``resource_error_details``."
-        },
-        "metrics": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.TimeSeries]",
-          "description": "The metrics for the task."
-        },
-        "task_result": {
-          "type": "google.cloud.bigquery_migration_v2.types.MigrationTaskResult",
-          "description": "Output only. The result of the task."
-        },
-        "total_processing_error_count": {
-          "type": "int",
-          "description": "Count of all the processing errors in this task and its subtasks."
-        },
-        "total_resource_error_count": {
-          "type": "int",
-          "description": "Count of all the resource errors in this task and its subtasks."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MigrationSubtask",
-      "docstring": "A subtask for a migration which carries details about the\nconfiguration of the subtask. The content of the details should\nnot matter to the end user, but is a contract between the\nsubtask creator and subtask worker.\n\nAttributes:\n    name (str):\n        Output only. Immutable. The resource name for the migration\n        subtask. The ID is server-generated.\n\n        Example:\n        ``projects/123/locations/us/workflows/345/subtasks/678``\n    task_id (str):\n        The unique ID of the task to which this\n        subtask belongs.\n    type_ (str):\n        The type of the Subtask. The migration\n        service does not check whether this is a known\n        type. It is up to the task creator (i.e.\n        orchestrator or worker) to ensure it only\n        creates subtasks for which there are compatible\n        workers polling for Subtasks.\n    state (google.cloud.bigquery_migration_v2.types.MigrationSubtask.State):\n        Output only. The current state of the\n        subtask.\n    processing_error (google.rpc.error_",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. Immutable. The resource name for the migration subtask. The ID is server-generated.  Example: ``projects/123/locations/us/workflows/345/subtasks/678``"
-        },
-        "task_id": {
-          "type": "str",
-          "description": "The unique ID of the task to which this subtask belongs."
-        },
-        "type_": {
-          "type": "str",
-          "description": "The type of the Subtask. The migration service does not check whether this is a known type. It is up to the task creator (i.e. orchestrator or worker) to ensure it only creates subtasks for which there are compatible workers polling for Subtasks."
-        },
-        "state": {
-          "type": "google.cloud.bigquery_migration_v2.types.MigrationSubtask.State",
-          "description": "Output only. The current state of the subtask."
-        },
-        "processing_error": {
-          "type": "google.rpc.error_details_pb2.ErrorInfo",
-          "description": "Output only. An explanation that may be populated when the task is in FAILED state."
-        },
-        "resource_error_details": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.ResourceErrorDetail]",
-          "description": "Output only. Provides details to errors and issues encountered while processing the subtask. Presence of error details does not mean that the subtask failed."
-        },
-        "resource_error_count": {
-          "type": "int",
-          "description": "The number or resources with errors. Note: This is not the total number of errors as each resource can have more than one error. This is used to indicate truncation by having a ``resource_error_count`` that is higher than the size of ``resource_error_details``."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the subtask was created."
-        },
-        "last_update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time when the subtask was last updated."
-        },
-        "metrics": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.TimeSeries]",
-          "description": "The metrics for the subtask."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MigrationTaskResult",
-      "docstring": "The migration task result.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    translation_task_result (google.cloud.bigquery_migration_v2.types.TranslationTaskResult):\n        Details specific to translation task types.\n\n        This field is a member of `oneof`_ ``details``.",
-      "attributes": {
-        "translation_task_result": {
-          "type": "google.cloud.bigquery_migration_v2.types.TranslationTaskResult",
-          "description": "Details specific to translation task types.  This field is a member of `oneof`_ ``details``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TranslationTaskResult",
-      "docstring": "Translation specific result details from the migration task.\n\nAttributes:\n    translated_literals (MutableSequence[google.cloud.bigquery_migration_v2.types.Literal]):\n        The list of the translated literals.\n    report_log_messages (MutableSequence[google.cloud.bigquery_migration_v2.types.GcsReportLogMessage]):\n        The records from the aggregate CSV report for\n        a migration workflow.",
-      "attributes": {
-        "translated_literals": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.Literal]",
-          "description": "The list of the translated literals."
-        },
-        "report_log_messages": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.GcsReportLogMessage]",
-          "description": "The records from the aggregate CSV report for a migration workflow."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\migration_error_details.py": [
-    {
-      "type": "request_class",
-      "name": "ResourceErrorDetail",
-      "docstring": "Provides details for errors and the corresponding resources.\n\nAttributes:\n    resource_info (google.rpc.error_details_pb2.ResourceInfo):\n        Required. Information about the resource\n        where the error is located.\n    error_details (MutableSequence[google.cloud.bigquery_migration_v2.types.ErrorDetail]):\n        Required. The error details for the resource.\n    error_count (int):\n        Required. How many errors there are in total for the\n        resource. Truncation can be indicated by having an\n        ``error_count`` that is higher than the size of\n        ``error_details``.",
-      "attributes": {
-        "resource_info": {
-          "type": "google.rpc.error_details_pb2.ResourceInfo",
-          "description": "Required. Information about the resource where the error is located."
-        },
-        "error_details": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.ErrorDetail]",
-          "description": "Required. The error details for the resource."
-        },
-        "error_count": {
-          "type": "int",
-          "description": "Required. How many errors there are in total for the resource. Truncation can be indicated by having an ``error_count`` that is higher than the size of ``error_details``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ErrorDetail",
-      "docstring": "Provides details for errors, e.g. issues that where\nencountered when processing a subtask.\n\nAttributes:\n    location (google.cloud.bigquery_migration_v2.types.ErrorLocation):\n        Optional. The exact location within the\n        resource (if applicable).\n    error_info (google.rpc.error_details_pb2.ErrorInfo):\n        Required. Describes the cause of the error\n        with structured detail.",
-      "attributes": {
-        "location": {
-          "type": "google.cloud.bigquery_migration_v2.types.ErrorLocation",
-          "description": "Optional. The exact location within the resource (if applicable)."
-        },
-        "error_info": {
-          "type": "google.rpc.error_details_pb2.ErrorInfo",
-          "description": "Required. Describes the cause of the error with structured detail."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ErrorLocation",
-      "docstring": "Holds information about where the error is located.\n\nAttributes:\n    line (int):\n        Optional. If applicable, denotes the line\n        where the error occurred. A zero value means\n        that there is no line information.\n    column (int):\n        Optional. If applicable, denotes the column\n        where the error occurred. A zero value means\n        that there is no columns information.",
-      "attributes": {
-        "line": {
-          "type": "int",
-          "description": "Optional. If applicable, denotes the line where the error occurred. A zero value means that there is no line information."
-        },
-        "column": {
-          "type": "int",
-          "description": "Optional. If applicable, denotes the column where the error occurred. A zero value means that there is no columns information."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\migration_metrics.py": [
-    {
-      "type": "request_class",
-      "name": "TimeSeries",
-      "docstring": "The metrics object for a SubTask.\n\nAttributes:\n    metric (str):\n        Required. The name of the metric.\n\n        If the metric is not known by the service yet,\n        it will be auto-created.\n    value_type (google.api.metric_pb2.ValueType):\n        Required. The value type of the time series.\n    metric_kind (google.api.metric_pb2.MetricKind):\n        Optional. The metric kind of the time series.\n\n        If present, it must be the same as the metric kind of the\n        associated metric. If the associated metric's descriptor\n        must be auto-created, then this field specifies the metric\n        kind of the new descriptor and must be either ``GAUGE`` (the\n        default) or ``CUMULATIVE``.\n    points (MutableSequence[google.cloud.bigquery_migration_v2.types.Point]):\n        Required. The data points of this time series. When listing\n        time series, points are returned in reverse time order.\n\n        When creating a time series, this field must contain exactly\n        one point and the point's t",
-      "attributes": {
-        "metric": {
-          "type": "str",
-          "description": "Required. The name of the metric.  If the metric is not known by the service yet, it will be auto-created."
-        },
-        "value_type": {
-          "type": "google.api.metric_pb2.ValueType",
-          "description": "Required. The value type of the time series."
-        },
-        "metric_kind": {
-          "type": "google.api.metric_pb2.MetricKind",
-          "description": "Optional. The metric kind of the time series.  If present, it must be the same as the metric kind of the associated metric. If the associated metric's descriptor must be auto-created, then this field specifies the metric kind of the new descriptor and must be either ``GAUGE`` (the default) or ``CUMULATIVE``."
-        },
-        "points": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.Point]",
-          "description": "Required. The data points of this time series. When listing time series, points are returned in reverse time order.  When creating a time series, this field must contain exactly one point and the point's type must be the same as the value type of the associated metric. If the associated metric's descriptor must be auto-created, then the value type of the descriptor is determined by the point's type, which must be ``BOOL``, ``INT64``, ``DOUBLE``, or ``DISTRIBUTION``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Point",
-      "docstring": "A single data point in a time series.\n\nAttributes:\n    interval (google.cloud.bigquery_migration_v2.types.TimeInterval):\n        The time interval to which the data point applies. For\n        ``GAUGE`` metrics, the start time does not need to be\n        supplied, but if it is supplied, it must equal the end time.\n        For ``DELTA`` metrics, the start and end time should specify\n        a non-zero interval, with subsequent points specifying\n        contiguous and non-overlapping intervals. For ``CUMULATIVE``\n        metrics, the start and end time should specify a non-zero\n        interval, with subsequent points specifying the same start\n        time and increasing end times, until an event resets the\n        cumulative value to zero and sets a new start time for the\n        following points.\n    value (google.cloud.bigquery_migration_v2.types.TypedValue):\n        The value of the data point.",
-      "attributes": {
-        "interval": {
-          "type": "google.cloud.bigquery_migration_v2.types.TimeInterval",
-          "description": "The time interval to which the data point applies. For ``GAUGE`` metrics, the start time does not need to be supplied, but if it is supplied, it must equal the end time. For ``DELTA`` metrics, the start and end time should specify a non-zero interval, with subsequent points specifying contiguous and non-overlapping intervals. For ``CUMULATIVE`` metrics, the start and end time should specify a non-zero interval, with subsequent points specifying the same start time and increasing end times, until an event resets the cumulative value to zero and sets a new start time for the following points."
-        },
-        "value": {
-          "type": "google.cloud.bigquery_migration_v2.types.TypedValue",
-          "description": "The value of the data point."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TimeInterval",
-      "docstring": "A time interval extending just after a start time through an\nend time. If the start time is the same as the end time, then\nthe interval represents a single point in time.\n\nAttributes:\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Optional. The beginning of the time interval.\n        The default value for the start time is the end\n        time. The start time must not be later than the\n        end time.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Required. The end of the time interval.",
-      "attributes": {
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Optional. The beginning of the time interval. The default value for the start time is the end time. The start time must not be later than the end time."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. The end of the time interval."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TypedValue",
-      "docstring": "A single strongly-typed value.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    bool_value (bool):\n        A Boolean value: ``true`` or ``false``.\n\n        This field is a member of `oneof`_ ``value``.\n    int64_value (int):\n        A 64-bit integer. Its range is approximately\n        ``+/-9.2x10^18``.\n\n        This field is a member of `oneof`_ ``value``.\n    double_value (float):\n        A 64-bit double-precision floating-point number. Its\n        magnitude is approximately ``+/-10^(+/-300)`` and it has 16\n        significant digits of precision.\n\n        This field is a member of `oneof`_ ``value``.\n    string_value (str):\n        A variable-length string value.\n\n        This field is a member of `oneof`_ ``value``.\n    distributi",
-      "attributes": {
-        "bool_value": {
-          "type": "bool",
-          "description": "A Boolean value: ``true`` or ``false``.  This field is a member of `oneof`_ ``value``."
-        },
-        "int64_value": {
-          "type": "int",
-          "description": "A 64-bit integer. Its range is approximately ``+/-9.2x10^18``.  This field is a member of `oneof`_ ``value``."
-        },
-        "double_value": {
-          "type": "float",
-          "description": "A 64-bit double-precision floating-point number. Its magnitude is approximately ``+/-10^(+/-300)`` and it has 16 significant digits of precision.  This field is a member of `oneof`_ ``value``."
-        },
-        "string_value": {
-          "type": "str",
-          "description": "A variable-length string value.  This field is a member of `oneof`_ ``value``."
-        },
-        "distribution_value": {
-          "type": "google.api.distribution_pb2.Distribution",
-          "description": "A distribution value.  This field is a member of `oneof`_ ``value``."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\migration_service.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateMigrationWorkflowRequest",
-      "docstring": "Request to create a migration workflow resource.\n\nAttributes:\n    parent (str):\n        Required. The name of the project to which this migration\n        workflow belongs. Example: ``projects/foo/locations/bar``\n    migration_workflow (google.cloud.bigquery_migration_v2.types.MigrationWorkflow):\n        Required. The migration workflow to create.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The name of the project to which this migration workflow belongs. Example: ``projects/foo/locations/bar``"
+      "description": "Request to create a migration workflow resource.\n\nAttributes:\n    parent (str):\n        Required. The name of the project to which this migration\n        workflow belongs. Example: ``projects/foo/locations/bar``\n    migration_workflow (google.cloud.bigquery_migration_v2.types.MigrationWorkflow):\n        Required. The migration workflow to create.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The name of the project to which this migration workflow belongs. Example: ``projects/foo/locations/bar``",
+            "type": "string"
+          },
+          "migration_workflow": {
+            "description": "Required. The migration workflow to create.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. Immutable. The unique identifier for the migration workflow. The ID is server-generated.  Example: ``projects/123/locations/us/workflows/345``",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "The display name of the workflow. This can be set to give a workflow a descriptive name. There is no guarantee or enforcement of uniqueness.",
+                "type": "string"
+              },
+              "tasks": {
+                "description": "The tasks in a workflow in a named map. The name (i.e. key) has no meaning and is merely a convenient way to address a specific task in a workflow.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "assessment_task_details": {
+                      "type": "object",
+                      "properties": {
+                        "input_path": {
+                          "description": "Required. The Cloud Storage path for assessment input files.",
+                          "type": "string"
+                        },
+                        "output_dataset": {
+                          "description": "Required. The BigQuery dataset for output.",
+                          "type": "string"
+                        },
+                        "querylogs_path": {
+                          "description": "Optional. An optional Cloud Storage path to write the query logs (which is then used as an input path on the translation task)",
+                          "type": "string"
+                        },
+                        "data_source": {
+                          "description": "Required. The data source or data warehouse type (eg: TERADATA/REDSHIFT) from which the input data is extracted.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "input_path",
+                        "output_dataset",
+                        "data_source"
+                      ]
+                    },
+                    "translation_task_details": {
+                      "type": "object",
+                      "properties": {
+                        "teradata_options": {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        "bteq_options": {
+                          "type": "object",
+                          "properties": {
+                            "project_dataset": {
+                              "type": "object",
+                              "properties": {
+                                "dataset_id": {
+                                  "description": "A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.",
+                                  "type": "string"
+                                },
+                                "project_id": {
+                                  "description": "The ID of the project containing this dataset.",
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "default_path_uri": {
+                              "description": "The Cloud Storage location to be used as the default path for files that are not otherwise specified in the file replacement map.",
+                              "type": "string"
+                            },
+                            "file_replacement_map": {
+                              "description": "Maps the local paths that are used in BTEQ scripts (the keys) to the paths in Cloud Storage that should be used in their stead in the translation (the value).",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "input_path": {
+                          "description": "The Cloud Storage path for translation input files.",
+                          "type": "string"
+                        },
+                        "output_path": {
+                          "description": "The Cloud Storage path for translation output files.",
+                          "type": "string"
+                        },
+                        "file_paths": {
+                          "description": "Cloud Storage files to be processed for translation.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "input_path": {
+                                "description": "The Cloud Storage path for a file to translation in a subtask.",
+                                "type": "string"
+                              },
+                              "output_path": {
+                                "description": "The Cloud Storage path to write back the corresponding input file to.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "schema_path": {
+                          "description": "The Cloud Storage path to DDL files as table schema to assist semantic translation.",
+                          "type": "string"
+                        },
+                        "file_encoding": {
+                          "description": "The file encoding type.",
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_migration_v2alpha.types.TranslationTaskDetails.FileEncoding"
+                        },
+                        "identifier_settings": {
+                          "type": "object",
+                          "properties": {
+                            "output_identifier_case": {
+                              "description": "The setting to control output queries' identifier case.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_migration_v2alpha.types.IdentifierSettings.IdentifierCase"
+                            },
+                            "identifier_rewrite_mode": {
+                              "description": "Specifies the rewrite mode for SQL identifiers.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_migration_v2alpha.types.IdentifierSettings.IdentifierRewriteMode"
+                            }
+                          }
+                        },
+                        "special_token_map": {
+                          "description": "The map capturing special tokens to be replaced during translation. The key is special token in string. The value is the token data type. This is used to translate SQL query template which contains special token as place holder. The special token makes a query invalid to parse. This map will be applied to annotate those special token with types to let parser understand how to parse them into proper structure with type information.",
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "object",
+                            "reference": "google.cloud.bigquery_migration_v2alpha.types.TranslationTaskDetails.TokenType"
+                          }
+                        },
+                        "filter": {
+                          "type": "object",
+                          "properties": {
+                            "location_filter": {
+                              "type": "object",
+                              "properties": {
+                                "circle": {
+                                  "type": "object",
+                                  "properties": {
+                                    "center": {
+                                      "description": "Required. Center latitude and longitude.  The range of latitude must be within [-90.0, 90.0]. The range of the longitude must be within [-180.0, 180.0].",
+                                      "type": "object",
+                                      "reference": "google.type.latlng_pb2.LatLng"
+                                    },
+                                    "radius": {
+                                      "description": "Required. Radius measured in meters. The radius must be within [0.0, 50000.0].",
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "center",
+                                    "radius"
+                                  ]
+                                },
+                                "region": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "description": "Identifier. The resource name of the region. Format: ``accounts/{account}/regions/{region}``",
+                                      "type": "string"
+                                    },
+                                    "display_name": {
+                                      "description": "Optional. The display name of the region.  This field is a member of `oneof`_ ``_display_name``.",
+                                      "type": "string"
+                                    },
+                                    "postal_code_area": {
+                                      "type": "object",
+                                      "properties": {
+                                        "region_code": {
+                                          "description": "Required. `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ or the country the postal code group applies to.",
+                                          "type": "string"
+                                        },
+                                        "postal_codes": {
+                                          "description": "Required. A range of postal codes.",
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "begin": {
+                                                "description": "Required. A postal code or a pattern of the form prefix\\* denoting the inclusive lower bound of the range defining the area. Examples values: ``94108``, ``9410*``, ``9*``.",
+                                                "type": "string"
+                                              },
+                                              "end": {
+                                                "description": "Optional. A postal code or a pattern of the form ``prefix*`` denoting the inclusive upper bound of the range defining the area. It must have the same length as postalCodeRangeBegin: if postalCodeRangeBegin is a postal code then postalCodeRangeEnd must be a postal code too; if postalCodeRangeBegin is a pattern then postalCodeRangeEnd must be a pattern with the same prefix length. Optional: if not set, then the area is defined as being all the postal codes matching postalCodeRangeBegin.",
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "begin"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "required": [
+                                        "region_code",
+                                        "postal_codes"
+                                      ]
+                                    },
+                                    "geotarget_area": {
+                                      "type": "object",
+                                      "properties": {
+                                        "geotarget_criteria_ids": {
+                                          "description": "Required. A non-empty list of `location IDs <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__. They must all be of the same location type (for example, state).",
+                                          "type": "array",
+                                          "items": {
+                                            "type": "integer"
+                                          }
+                                        }
+                                      },
+                                      "required": [
+                                        "geotarget_criteria_ids"
+                                      ]
+                                    },
+                                    "regional_inventory_eligible": {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "description": "",
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    },
+                                    "shipping_eligible": {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "description": "",
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "custom_area": {
+                                  "type": "object",
+                                  "properties": {
+                                    "polygon": {
+                                      "type": "object",
+                                      "properties": {
+                                        "coordinates": {
+                                          "description": "Optional. The coordinates that define the polygon.",
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "reference": "google.type.latlng_pb2.LatLng"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "polygon"
+                                  ]
+                                }
+                              }
+                            },
+                            "type_filter": {
+                              "type": "object",
+                              "properties": {
+                                "included_types": {
+                                  "description": "Optional. Included Place types.",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "excluded_types": {
+                                  "description": "Optional. Excluded Place types.",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "included_primary_types": {
+                                  "description": "Optional. Included primary Place types.",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "excluded_primary_types": {
+                                  "description": "Optional. Excluded primary Place types.",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "operating_status": {
+                              "description": "Optional. Restricts results to places whose operating status is included on this list. If operating_status is not set, OPERATING_STATUS_OPERATIONAL is used as default.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.maps.areainsights_v1.types.OperatingStatus"
+                              }
+                            },
+                            "price_levels": {
+                              "description": "Optional. Restricts results to places whose price level is included on this list. If price_level is not set, all price levels are included in the results.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.maps.areainsights_v1.types.PriceLevel"
+                              }
+                            },
+                            "rating_filter": {
+                              "type": "object",
+                              "properties": {
+                                "min_rating": {
+                                  "description": "Optional. Restricts results to places whose average user rating is greater than or equal to min_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_min_rating``.",
+                                  "type": "number"
+                                },
+                                "max_rating": {
+                                  "description": "Optional. Restricts results to places whose average user rating is strictly less than or equal to max_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_max_rating``.",
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "location_filter",
+                            "type_filter"
+                          ]
+                        },
+                        "translation_exception_table": {
+                          "description": "Specifies the exact name of the bigquery table (\"dataset.table\") to be used for surfacing raw translation errors. If the table does not exist, we will create it. If it already exists and the schema is the same, we will re-use. If the table exists and the schema is different, we will throw an error.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "id": {
+                      "description": "Output only. Immutable. The unique identifier for the migration task. The ID is server-generated.",
+                      "type": "string"
+                    },
+                    "type_": {
+                      "description": "The type of the task. This must be a supported task type.",
+                      "type": "string"
+                    },
+                    "details": {
+                      "description": "DEPRECATED! Use one of the task_details below. The details of the task. The type URL must be one of the supported task details messages and correspond to the Task's type.",
+                      "type": "object",
+                      "reference": "google.protobuf.any_pb2.Any"
+                    },
+                    "state": {
+                      "description": "Output only. The current state of the task.",
+                      "type": "object",
+                      "reference": "google.cloud.bigquery_migration_v2alpha.types.MigrationTask.State"
+                    },
+                    "processing_error": {
+                      "type": "object",
+                      "properties": {
+                        "domain": {
+                          "description": "The logical grouping to which the \"reason\" belongs. The error domain is typically the registered service name of the tool or product that generates the error. Example: \"pubsub.googleapis.com\". If the error is generated by some common infrastructure, the error domain must be a globally unique value that identifies the infrastructure. For Google API infrastructure, the error domain is \"googleapis.com\".  This field is a member of `oneof`_ ``_domain``.",
+                          "type": "string"
+                        },
+                        "metadatas": {
+                          "description": "Additional structured details about this error. Keys must match /a-z+/ but should ideally be lowerCamelCase. Also they must be limited to 64 characters in length. When identifying the current value of an exceeded limit, the units should be contained in the key, not the value. For example, rather than {\"instanceLimit\": \"100/request\"}, should be returned as, {\"instanceLimitPerRequest\": \"100\"}, if the client exceeds the number of instances that can be created in a single (batch) request.",
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "reason": {
+                          "description": "The reason of the error. This is a constant value that identifies the proximate cause of the error. Error reasons are unique within a particular domain of errors. This should be at most 63 characters and match a regular expression of ``A-Z+[A-Z0-9]``, which represents UPPER_SNAKE_CASE.  This field is a member of `oneof`_ ``_reason``.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "create_time": {
+                      "description": "Time when the task was created.",
+                      "type": "object",
+                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                    },
+                    "last_update_time": {
+                      "description": "Time when the task was last updated.",
+                      "type": "object",
+                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                    },
+                    "orchestration_result": {
+                      "type": "object",
+                      "properties": {
+                        "assessment_details": {
+                          "type": "object",
+                          "properties": {
+                            "output_tables_schema_version": {
+                              "description": "Optional. The version used for the output table schemas.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "state": {
+                "description": "Output only. That status of the workflow.",
+                "type": "object",
+                "reference": "google.cloud.bigquery_migration_v2alpha.types.MigrationWorkflow.State"
+              },
+              "create_time": {
+                "description": "Time when the workflow was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "last_update_time": {
+                "description": "Time when the workflow was last updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              }
+            }
+          }
         },
-        "migration_workflow": {
-          "type": "google.cloud.bigquery_migration_v2.types.MigrationWorkflow",
-          "description": "Required. The migration workflow to create."
-        }
+        "required": [
+          "parent",
+          "migration_workflow"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetMigrationWorkflowRequest",
-      "docstring": "A request to get a previously created migration workflow.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration workflow.\n        Example: ``projects/123/locations/us/workflows/1234``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        The list of fields to be retrieved.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The unique identifier for the migration workflow. Example: ``projects/123/locations/us/workflows/1234``"
+      "description": "A request to get a previously created migration workflow.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration workflow.\n        Example: ``projects/123/locations/us/workflows/1234``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        The list of fields to be retrieved.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The unique identifier for the migration workflow. Example: ``projects/123/locations/us/workflows/1234``",
+            "type": "string"
+          },
+          "read_mask": {
+            "description": "The list of fields to be retrieved.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          }
         },
-        "read_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "The list of fields to be retrieved."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListMigrationWorkflowsRequest",
-      "docstring": "A request to list previously created migration workflows.\n\nAttributes:\n    parent (str):\n        Required. The project and location of the migration\n        workflows to list. Example: ``projects/123/locations/us``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        The list of fields to be retrieved.\n    page_size (int):\n        The maximum number of migration workflows to\n        return. The service may return fewer than this\n        number.\n    page_token (str):\n        A page token, received from previous\n        ``ListMigrationWorkflows`` call. Provide this to retrieve\n        the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListMigrationWorkflows`` must match the call that provided\n        the page token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The project and location of the migration workflows to list. Example: ``projects/123/locations/us``"
+      "description": "A request to list previously created migration workflows.\n\nAttributes:\n    parent (str):\n        Required. The project and location of the migration\n        workflows to list. Example: ``projects/123/locations/us``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        The list of fields to be retrieved.\n    page_size (int):\n        The maximum number of migration workflows to\n        return. The service may return fewer than this\n        number.\n    page_token (str):\n        A page token, received from previous\n        ``ListMigrationWorkflows`` call. Provide this to retrieve\n        the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListMigrationWorkflows`` must match the call that provided\n        the page token.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The project and location of the migration workflows to list. Example: ``projects/123/locations/us``",
+            "type": "string"
+          },
+          "read_mask": {
+            "description": "The list of fields to be retrieved.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "page_size": {
+            "description": "The maximum number of migration workflows to return. The service may return fewer than this number.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token, received from previous ``ListMigrationWorkflows`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListMigrationWorkflows`` must match the call that provided the page token.",
+            "type": "string"
+          }
         },
-        "read_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "The list of fields to be retrieved."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of migration workflows to return. The service may return fewer than this number."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "A page token, received from previous ``ListMigrationWorkflows`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListMigrationWorkflows`` must match the call that provided the page token."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListMigrationWorkflowsResponse",
-      "docstring": "Response object for a ``ListMigrationWorkflows`` call.\n\nAttributes:\n    migration_workflows (MutableSequence[google.cloud.bigquery_migration_v2.types.MigrationWorkflow]):\n        The migration workflows for the specified\n        project / location.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.",
-      "attributes": {
-        "migration_workflows": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.MigrationWorkflow]",
-          "description": "The migration workflows for the specified project / location."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteMigrationWorkflowRequest",
-      "docstring": "A request to delete a previously created migration workflow.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration workflow.\n        Example: ``projects/123/locations/us/workflows/1234``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The unique identifier for the migration workflow. Example: ``projects/123/locations/us/workflows/1234``"
-        }
+      "description": "A request to delete a previously created migration workflow.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration workflow.\n        Example: ``projects/123/locations/us/workflows/1234``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The unique identifier for the migration workflow. Example: ``projects/123/locations/us/workflows/1234``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "StartMigrationWorkflowRequest",
-      "docstring": "A request to start a previously created migration workflow.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration workflow.\n        Example: ``projects/123/locations/us/workflows/1234``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The unique identifier for the migration workflow. Example: ``projects/123/locations/us/workflows/1234``"
-        }
+      "description": "A request to start a previously created migration workflow.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration workflow.\n        Example: ``projects/123/locations/us/workflows/1234``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The unique identifier for the migration workflow. Example: ``projects/123/locations/us/workflows/1234``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetMigrationSubtaskRequest",
-      "docstring": "A request to get a previously created migration subtasks.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration subtask.\n        Example:\n        ``projects/123/locations/us/workflows/1234/subtasks/543``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. The list of fields to be retrieved.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The unique identifier for the migration subtask. Example: ``projects/123/locations/us/workflows/1234/subtasks/543``"
+      "description": "A request to get a previously created migration subtasks.\n\nAttributes:\n    name (str):\n        Required. The unique identifier for the migration subtask.\n        Example:\n        ``projects/123/locations/us/workflows/1234/subtasks/543``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. The list of fields to be retrieved.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The unique identifier for the migration subtask. Example: ``projects/123/locations/us/workflows/1234/subtasks/543``",
+            "type": "string"
+          },
+          "read_mask": {
+            "description": "Optional. The list of fields to be retrieved.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          }
         },
-        "read_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Optional. The list of fields to be retrieved."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListMigrationSubtasksRequest",
-      "docstring": "A request to list previously created migration subtasks.\n\nAttributes:\n    parent (str):\n        Required. The migration task of the subtasks to list.\n        Example: ``projects/123/locations/us/workflows/1234``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. The list of fields to be retrieved.\n    page_size (int):\n        Optional. The maximum number of migration\n        tasks to return. The service may return fewer\n        than this number.\n    page_token (str):\n        Optional. A page token, received from previous\n        ``ListMigrationSubtasks`` call. Provide this to retrieve the\n        subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListMigrationSubtasks`` must match the call that provided\n        the page token.\n    filter (str):\n        Optional. The filter to apply. This can be used to get the\n        subtasks of a specific tasks in a workflow, e.g.\n        ``migration_task = \"ab012\"`` where ``\"ab012\"`` is the task\n        ID (not th",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The migration task of the subtasks to list. Example: ``projects/123/locations/us/workflows/1234``"
+      "description": "A request to list previously created migration subtasks.\n\nAttributes:\n    parent (str):\n        Required. The migration task of the subtasks to list.\n        Example: ``projects/123/locations/us/workflows/1234``\n    read_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. The list of fields to be retrieved.\n    page_size (int):\n        Optional. The maximum number of migration\n        tasks to return. The service may return fewer\n        than this number.\n    page_token (str):\n        Optional. A page token, received from previous\n        ``ListMigrationSubtasks`` call. Provide this to retrieve the\n        subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListMigrationSubtasks`` must match the call that provided\n        the page token.\n    filter (str):\n        Optional. The filter to apply. This can be used to get the\n        subtasks of a specific tasks in a workflow, e.g.\n        ``migration_task = \"ab012\"`` where ``\"ab012\"`` is the task\n        ID (not th",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The migration task of the subtasks to list. Example: ``projects/123/locations/us/workflows/1234``",
+            "type": "string"
+          },
+          "read_mask": {
+            "description": "Optional. The list of fields to be retrieved.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "page_size": {
+            "description": "Optional. The maximum number of migration tasks to return. The service may return fewer than this number.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. A page token, received from previous ``ListMigrationSubtasks`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListMigrationSubtasks`` must match the call that provided the page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Optional. The filter to apply. This can be used to get the subtasks of a specific tasks in a workflow, e.g. ``migration_task = \"ab012\"`` where ``\"ab012\"`` is the task ID (not the name in the named map).",
+            "type": "string"
+          }
         },
-        "read_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Optional. The list of fields to be retrieved."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. The maximum number of migration tasks to return. The service may return fewer than this number."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. A page token, received from previous ``ListMigrationSubtasks`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListMigrationSubtasks`` must match the call that provided the page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. The filter to apply. This can be used to get the subtasks of a specific tasks in a workflow, e.g. ``migration_task = \"ab012\"`` where ``\"ab012\"`` is the task ID (not the name in the named map)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListMigrationSubtasksResponse",
-      "docstring": "Response object for a ``ListMigrationSubtasks`` call.\n\nAttributes:\n    migration_subtasks (MutableSequence[google.cloud.bigquery_migration_v2.types.MigrationSubtask]):\n        The migration subtasks for the specified\n        task.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.",
-      "attributes": {
-        "migration_subtasks": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.MigrationSubtask]",
-          "description": "The migration subtasks for the specified task."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\translation_config.py": [
-    {
-      "type": "request_class",
-      "name": "TranslationConfigDetails",
-      "docstring": "The translation config to capture necessary settings for a\ntranslation task and subtask.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    gcs_source_path (str):\n        The Cloud Storage path for a directory of\n        files to translate in a task.\n\n        This field is a member of `oneof`_ ``source_location``.\n    gcs_target_path (str):\n        The Cloud Storage path to write back the\n        corresponding input files to.\n\n        This field is a member of `oneof`_ ``target_location``.\n    name_mapping_list (google.cloud.bigquery_migration_v2.types.ObjectNameMappingList):\n        The mapping of objects to their desired\n        output names in list form.\n\n        This field is a member of `oneof`_ ``output_name_mapping``.\n    source_dialect (google.cloud.bigquery_migration_v2.types.Dialect):\n        The dialect of the input files.\n    target_dialect (google.cloud.bigquery_migration_v2.types.Dialect):\n        The target dialect for t",
-      "attributes": {
-        "gcs_source_path": {
-          "type": "str",
-          "description": "The Cloud Storage path for a directory of files to translate in a task.  This field is a member of `oneof`_ ``source_location``."
-        },
-        "gcs_target_path": {
-          "type": "str",
-          "description": "The Cloud Storage path to write back the corresponding input files to.  This field is a member of `oneof`_ ``target_location``."
-        },
-        "name_mapping_list": {
-          "type": "google.cloud.bigquery_migration_v2.types.ObjectNameMappingList",
-          "description": "The mapping of objects to their desired output names in list form.  This field is a member of `oneof`_ ``output_name_mapping``."
-        },
-        "source_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.Dialect",
-          "description": "The dialect of the input files."
-        },
-        "target_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.Dialect",
-          "description": "The target dialect for the engine to translate the input to."
-        },
-        "source_env": {
-          "type": "google.cloud.bigquery_migration_v2.types.SourceEnv",
-          "description": "The default source environment values for the translation."
-        },
-        "request_source": {
-          "type": "str",
-          "description": "The indicator to show translation request initiator."
-        },
-        "target_types": {
-          "type": "MutableSequence[str]",
-          "description": "The types of output to generate, e.g. sql, metadata etc. If not specified, a default set of targets will be generated. Some additional target types may be slower to generate. See the documentation for the set of available target types."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Dialect",
-      "docstring": "The possible dialect options for translation.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    bigquery_dialect (google.cloud.bigquery_migration_v2.types.BigQueryDialect):\n        The BigQuery dialect\n\n        This field is a member of `oneof`_ ``dialect_value``.\n    hiveql_dialect (google.cloud.bigquery_migration_v2.types.HiveQLDialect):\n        The HiveQL dialect\n\n        This field is a member of `oneof`_ ``dialect_value``.\n    redshift_dialect (google.cloud.bigquery_migration_v2.types.RedshiftDialect):\n        The Redshift dialect\n\n        This field is a member of `oneof`_ ``dialect_value``.\n    teradata_dialect (google.cloud.bigquery_migration_v2.types.TeradataDialect):\n        The Teradata dialect\n\n        This field is a memb",
-      "attributes": {
-        "bigquery_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.BigQueryDialect",
-          "description": "The BigQuery dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "hiveql_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.HiveQLDialect",
-          "description": "The HiveQL dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "redshift_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.RedshiftDialect",
-          "description": "The Redshift dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "teradata_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.TeradataDialect",
-          "description": "The Teradata dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "oracle_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.OracleDialect",
-          "description": "The Oracle dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "sparksql_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.SparkSQLDialect",
-          "description": "The SparkSQL dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "snowflake_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.SnowflakeDialect",
-          "description": "The Snowflake dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "netezza_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.NetezzaDialect",
-          "description": "The Netezza dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "azure_synapse_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.AzureSynapseDialect",
-          "description": "The Azure Synapse dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "vertica_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.VerticaDialect",
-          "description": "The Vertica dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "sql_server_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.SQLServerDialect",
-          "description": "The SQL Server dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "postgresql_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.PostgresqlDialect",
-          "description": "The Postgresql dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "presto_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.PrestoDialect",
-          "description": "The Presto dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "mysql_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.MySQLDialect",
-          "description": "The MySQL dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "db2_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.DB2Dialect",
-          "description": "DB2 dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "sqlite_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.SQLiteDialect",
-          "description": "SQLite dialect  This field is a member of `oneof`_ ``dialect_value``."
-        },
-        "greenplum_dialect": {
-          "type": "google.cloud.bigquery_migration_v2.types.GreenplumDialect",
-          "description": "Greenplum dialect  This field is a member of `oneof`_ ``dialect_value``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "BigQueryDialect",
-      "docstring": "The dialect definition for BigQuery.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "HiveQLDialect",
-      "docstring": "The dialect definition for HiveQL.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "RedshiftDialect",
-      "docstring": "The dialect definition for Redshift.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "TeradataDialect",
-      "docstring": "The dialect definition for Teradata.\n\nAttributes:\n    mode (google.cloud.bigquery_migration_v2.types.TeradataDialect.Mode):\n        Which Teradata sub-dialect mode the user\n        specifies.",
-      "attributes": {
-        "mode": {
-          "type": "google.cloud.bigquery_migration_v2.types.TeradataDialect.Mode",
-          "description": "Which Teradata sub-dialect mode the user specifies."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "OracleDialect",
-      "docstring": "The dialect definition for Oracle.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "SparkSQLDialect",
-      "docstring": "The dialect definition for SparkSQL.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "SnowflakeDialect",
-      "docstring": "The dialect definition for Snowflake.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "NetezzaDialect",
-      "docstring": "The dialect definition for Netezza.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "AzureSynapseDialect",
-      "docstring": "The dialect definition for Azure Synapse.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "VerticaDialect",
-      "docstring": "The dialect definition for Vertica.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "SQLServerDialect",
-      "docstring": "The dialect definition for SQL Server.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "PostgresqlDialect",
-      "docstring": "The dialect definition for Postgresql.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "PrestoDialect",
-      "docstring": "The dialect definition for Presto.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "MySQLDialect",
-      "docstring": "The dialect definition for MySQL.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "DB2Dialect",
-      "docstring": "The dialect definition for DB2.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "SQLiteDialect",
-      "docstring": "The dialect definition for SQLite.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "GreenplumDialect",
-      "docstring": "The dialect definition for Greenplum.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "ObjectNameMappingList",
-      "docstring": "Represents a map of name mappings using a list of key:value\nproto messages of existing name to desired output name.\n\nAttributes:\n    name_map (MutableSequence[google.cloud.bigquery_migration_v2.types.ObjectNameMapping]):\n        The elements of the object name map.",
-      "attributes": {
-        "name_map": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.ObjectNameMapping]",
-          "description": "The elements of the object name map."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ObjectNameMapping",
-      "docstring": "Represents a key-value pair of NameMappingKey to\nNameMappingValue to represent the mapping of SQL names from the\ninput value to desired output.\n\nAttributes:\n    source (google.cloud.bigquery_migration_v2.types.NameMappingKey):\n        The name of the object in source that is\n        being mapped.\n    target (google.cloud.bigquery_migration_v2.types.NameMappingValue):\n        The desired target name of the object that is\n        being mapped.",
-      "attributes": {
-        "source": {
-          "type": "google.cloud.bigquery_migration_v2.types.NameMappingKey",
-          "description": "The name of the object in source that is being mapped."
-        },
-        "target": {
-          "type": "google.cloud.bigquery_migration_v2.types.NameMappingValue",
-          "description": "The desired target name of the object that is being mapped."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NameMappingKey",
-      "docstring": "The potential components of a full name mapping that will be\nmapped during translation in the source data warehouse.\n\nAttributes:\n    type_ (google.cloud.bigquery_migration_v2.types.NameMappingKey.Type):\n        The type of object that is being mapped.\n    database (str):\n        The database name (BigQuery project ID\n        equivalent in the source data warehouse).\n    schema (str):\n        The schema name (BigQuery dataset equivalent\n        in the source data warehouse).\n    relation (str):\n        The relation name (BigQuery table or view\n        equivalent in the source data warehouse).\n    attribute (str):\n        The attribute name (BigQuery column\n        equivalent in the source data warehouse).",
-      "attributes": {
-        "type_": {
-          "type": "google.cloud.bigquery_migration_v2.types.NameMappingKey.Type",
-          "description": "The type of object that is being mapped."
-        },
-        "database": {
-          "type": "str",
-          "description": "The database name (BigQuery project ID equivalent in the source data warehouse)."
-        },
-        "schema": {
-          "type": "str",
-          "description": "The schema name (BigQuery dataset equivalent in the source data warehouse)."
-        },
-        "relation": {
-          "type": "str",
-          "description": "The relation name (BigQuery table or view equivalent in the source data warehouse)."
-        },
-        "attribute": {
-          "type": "str",
-          "description": "The attribute name (BigQuery column equivalent in the source data warehouse)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NameMappingValue",
-      "docstring": "The potential components of a full name mapping that will be\nmapped during translation in the target data warehouse.\n\nAttributes:\n    database (str):\n        The database name (BigQuery project ID\n        equivalent in the target data warehouse).\n    schema (str):\n        The schema name (BigQuery dataset equivalent\n        in the target data warehouse).\n    relation (str):\n        The relation name (BigQuery table or view\n        equivalent in the target data warehouse).\n    attribute (str):\n        The attribute name (BigQuery column\n        equivalent in the target data warehouse).",
-      "attributes": {
-        "database": {
-          "type": "str",
-          "description": "The database name (BigQuery project ID equivalent in the target data warehouse)."
-        },
-        "schema": {
-          "type": "str",
-          "description": "The schema name (BigQuery dataset equivalent in the target data warehouse)."
-        },
-        "relation": {
-          "type": "str",
-          "description": "The relation name (BigQuery table or view equivalent in the target data warehouse)."
-        },
-        "attribute": {
-          "type": "str",
-          "description": "The attribute name (BigQuery column equivalent in the target data warehouse)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SourceEnv",
-      "docstring": "Represents the default source environment values for the\ntranslation.\n\nAttributes:\n    default_database (str):\n        The default database name to fully qualify\n        SQL objects when their database name is missing.\n    schema_search_path (MutableSequence[str]):\n        The schema search path. When SQL objects are\n        missing schema name, translation engine will\n        search through this list to find the value.\n    metadata_store_dataset (str):\n        Optional. Expects a valid BigQuery dataset ID that exists,\n        e.g., project-123.metadata_store_123. If specified,\n        translation will search and read the required schema\n        information from a metadata store in this dataset. If\n        metadata store doesn't exist, translation will parse the\n        metadata file and upload the schema info to a temp table in\n        the dataset to speed up future translation jobs.",
-      "attributes": {
-        "default_database": {
-          "type": "str",
-          "description": "The default database name to fully qualify SQL objects when their database name is missing."
-        },
-        "schema_search_path": {
-          "type": "MutableSequence[str]",
-          "description": "The schema search path. When SQL objects are missing schema name, translation engine will search through this list to find the value."
-        },
-        "metadata_store_dataset": {
-          "type": "str",
-          "description": "Optional. Expects a valid BigQuery dataset ID that exists, e.g., project-123.metadata_store_123. If specified, translation will search and read the required schema information from a metadata store in this dataset. If metadata store doesn't exist, translation will parse the metadata file and upload the schema info to a temp table in the dataset to speed up future translation jobs."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\translation_details.py": [
-    {
-      "type": "request_class",
-      "name": "TranslationDetails",
-      "docstring": "The translation details to capture the necessary settings for\na translation job.\n\nAttributes:\n    source_target_mapping (MutableSequence[google.cloud.bigquery_migration_v2.types.SourceTargetMapping]):\n        The mapping from source to target SQL.\n    target_base_uri (str):\n        The base URI for all writes to persistent\n        storage.\n    source_environment (google.cloud.bigquery_migration_v2.types.SourceEnvironment):\n        The default source environment values for the\n        translation.\n    target_return_literals (MutableSequence[str]):\n        The list of literal targets that will be directly returned\n        to the response. Each entry consists of the constructed\n        path, EXCLUDING the base path. Not providing a\n        target_base_uri will prevent writing to persistent storage.\n    target_types (MutableSequence[str]):\n        The types of output to generate, e.g. sql, metadata,\n        lineage_from_sql_scripts, etc. If not specified, a default\n        set of targets will be generated. Some a",
-      "attributes": {
-        "source_target_mapping": {
-          "type": "MutableSequence[google.cloud.bigquery_migration_v2.types.SourceTargetMapping]",
-          "description": "The mapping from source to target SQL."
-        },
-        "target_base_uri": {
-          "type": "str",
-          "description": "The base URI for all writes to persistent storage."
-        },
-        "source_environment": {
-          "type": "google.cloud.bigquery_migration_v2.types.SourceEnvironment",
-          "description": "The default source environment values for the translation."
-        },
-        "target_return_literals": {
-          "type": "MutableSequence[str]",
-          "description": "The list of literal targets that will be directly returned to the response. Each entry consists of the constructed path, EXCLUDING the base path. Not providing a target_base_uri will prevent writing to persistent storage."
-        },
-        "target_types": {
-          "type": "MutableSequence[str]",
-          "description": "The types of output to generate, e.g. sql, metadata, lineage_from_sql_scripts, etc. If not specified, a default set of targets will be generated. Some additional target types may be slower to generate. See the documentation for the set of available target types."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SourceTargetMapping",
-      "docstring": "Represents one mapping from a source SQL to a target SQL.\n\nAttributes:\n    source_spec (google.cloud.bigquery_migration_v2.types.SourceSpec):\n        The source SQL or the path to it.\n    target_spec (google.cloud.bigquery_migration_v2.types.TargetSpec):\n        The target SQL or the path for it.",
-      "attributes": {
-        "source_spec": {
-          "type": "google.cloud.bigquery_migration_v2.types.SourceSpec",
-          "description": "The source SQL or the path to it."
-        },
-        "target_spec": {
-          "type": "google.cloud.bigquery_migration_v2.types.TargetSpec",
-          "description": "The target SQL or the path for it."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SourceSpec",
-      "docstring": "Represents one path to the location that holds source data.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    base_uri (str):\n        The base URI for all files to be read in as\n        sources for translation.\n\n        This field is a member of `oneof`_ ``source``.\n    literal (google.cloud.bigquery_migration_v2.types.Literal):\n        Source literal.\n\n        This field is a member of `oneof`_ ``source``.\n    encoding (str):\n        Optional. The optional field to specify the\n        encoding of the sql bytes.",
-      "attributes": {
-        "base_uri": {
-          "type": "str",
-          "description": "The base URI for all files to be read in as sources for translation.  This field is a member of `oneof`_ ``source``."
-        },
-        "literal": {
-          "type": "google.cloud.bigquery_migration_v2.types.Literal",
-          "description": "Source literal.  This field is a member of `oneof`_ ``source``."
-        },
-        "encoding": {
-          "type": "str",
-          "description": "Optional. The optional field to specify the encoding of the sql bytes."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TargetSpec",
-      "docstring": "Represents one path to the location that holds target data.\n\nAttributes:\n    relative_path (str):\n        The relative path for the target data. Given source file\n        ``base_uri/input/sql``, the output would be\n        ``target_base_uri/sql/relative_path/input.sql``.",
-      "attributes": {
-        "relative_path": {
-          "type": "str",
-          "description": "The relative path for the target data. Given source file ``base_uri/input/sql``, the output would be ``target_base_uri/sql/relative_path/input.sql``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Literal",
-      "docstring": "Literal data.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    literal_string (str):\n        Literal string data.\n\n        This field is a member of `oneof`_ ``literal_data``.\n    literal_bytes (bytes):\n        Literal byte data.\n\n        This field is a member of `oneof`_ ``literal_data``.\n    relative_path (str):\n        Required. The identifier of the literal\n        entry.",
-      "attributes": {
-        "literal_string": {
-          "type": "str",
-          "description": "Literal string data.  This field is a member of `oneof`_ ``literal_data``."
-        },
-        "literal_bytes": {
-          "type": "bytes",
-          "description": "Literal byte data.  This field is a member of `oneof`_ ``literal_data``."
-        },
-        "relative_path": {
-          "type": "str",
-          "description": "Required. The identifier of the literal entry."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SourceEnvironment",
-      "docstring": "Represents the default source environment values for the\ntranslation.\n\nAttributes:\n    default_database (str):\n        The default database name to fully qualify\n        SQL objects when their database name is missing.\n    schema_search_path (MutableSequence[str]):\n        The schema search path. When SQL objects are\n        missing schema name, translation engine will\n        search through this list to find the value.\n    metadata_store_dataset (str):\n        Optional. Expects a validQ BigQuery dataset ID that exists,\n        e.g., project-123.metadata_store_123. If specified,\n        translation will search and read the required schema\n        information from a metadata store in this dataset. If\n        metadata store doesn't exist, translation will parse the\n        metadata file and upload the schema info to a temp table in\n        the dataset to speed up future translation jobs.",
-      "attributes": {
-        "default_database": {
-          "type": "str",
-          "description": "The default database name to fully qualify SQL objects when their database name is missing."
-        },
-        "schema_search_path": {
-          "type": "MutableSequence[str]",
-          "description": "The schema search path. When SQL objects are missing schema name, translation engine will search through this list to find the value."
-        },
-        "metadata_store_dataset": {
-          "type": "str",
-          "description": "Optional. Expects a validQ BigQuery dataset ID that exists, e.g., project-123.metadata_store_123. If specified, translation will search and read the required schema information from a metadata store in this dataset. If metadata store doesn't exist, translation will parse the metadata file and upload the schema info to a temp table in the dataset to speed up future translation jobs."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\translation_suggestion.py": [
-    {
-      "type": "request_class",
-      "name": "TranslationReportRecord",
-      "docstring": "Details about a record.\n\nAttributes:\n    severity (google.cloud.bigquery_migration_v2.types.TranslationReportRecord.Severity):\n        Severity of the translation record.\n    script_line (int):\n        Specifies the row from the source text where\n        the error occurred (0 based). Example: 2\n    script_column (int):\n        Specifies the column from the source texts\n        where the error occurred. (0 based) example: 6\n    category (str):\n        Category of the error/warning. Example:\n        SyntaxError\n    message (str):\n        Detailed message of the record.",
-      "attributes": {
-        "severity": {
-          "type": "google.cloud.bigquery_migration_v2.types.TranslationReportRecord.Severity",
-          "description": "Severity of the translation record."
-        },
-        "script_line": {
-          "type": "int",
-          "description": "Specifies the row from the source text where the error occurred (0 based). Example: 2"
-        },
-        "script_column": {
-          "type": "int",
-          "description": "Specifies the column from the source texts where the error occurred. (0 based) example: 6"
-        },
-        "category": {
-          "type": "str",
-          "description": "Category of the error/warning. Example: SyntaxError"
-        },
-        "message": {
-          "type": "str",
-          "description": "Detailed message of the record."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-bigquery-migration\\google\\cloud\\bigquery_migration_v2\\types\\translation_usability.py": [
-    {
-      "type": "request_class",
-      "name": "GcsReportLogMessage",
-      "docstring": "A record in the aggregate CSV report for a migration workflow\n\nAttributes:\n    severity (str):\n        Severity of the translation record.\n    category (str):\n        Category of the error/warning. Example:\n        SyntaxError\n    file_path (str):\n        The file path in which the error occurred\n    filename (str):\n        The file name in which the error occurred\n    source_script_line (int):\n        Specifies the row from the source text where\n        the error occurred (0 based, -1 for messages\n        without line location). Example: 2\n    source_script_column (int):\n        Specifies the column from the source texts\n        where the error occurred. (0 based, -1 for\n        messages without column location) example: 6\n    message (str):\n        Detailed message of the record.\n    script_context (str):\n        The script context (obfuscated) in which the\n        error occurred\n    action (str):\n        Category of the error/warning. Example:\n        SyntaxError\n    effect (str):\n        Effect of the err",
-      "attributes": {
-        "severity": {
-          "type": "str",
-          "description": "Severity of the translation record."
-        },
-        "category": {
-          "type": "str",
-          "description": "Category of the error/warning. Example: SyntaxError"
-        },
-        "file_path": {
-          "type": "str",
-          "description": "The file path in which the error occurred"
-        },
-        "filename": {
-          "type": "str",
-          "description": "The file name in which the error occurred"
-        },
-        "source_script_line": {
-          "type": "int",
-          "description": "Specifies the row from the source text where the error occurred (0 based, -1 for messages without line location). Example: 2"
-        },
-        "source_script_column": {
-          "type": "int",
-          "description": "Specifies the column from the source texts where the error occurred. (0 based, -1 for messages without column location) example: 6"
-        },
-        "message": {
-          "type": "str",
-          "description": "Detailed message of the record."
-        },
-        "script_context": {
-          "type": "str",
-          "description": "The script context (obfuscated) in which the error occurred"
-        },
-        "action": {
-          "type": "str",
-          "description": "Category of the error/warning. Example: SyntaxError"
-        },
-        "effect": {
-          "type": "str",
-          "description": "Effect of the error/warning. Example: COMPATIBILITY"
-        },
-        "object_name": {
-          "type": "str",
-          "description": "Name of the affected object in the log message."
-        }
+        "required": [
+          "parent"
+        ]
       }
     }
   ]

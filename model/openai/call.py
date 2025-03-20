@@ -26,7 +26,7 @@ Please don't forget the request type in the function call. The request type is m
 """.strip()
 
 # Define the user query
-query = "can you update the billing info of the project vidhra to vidhra-ai"
+query = "can you update the billing account info of the project vidhra to vidhra-ai"
 
 
 
@@ -34,484 +34,247 @@ client = OpenAI(
     api_key=api_key,  # This is the default and can be omitted
 )
 
-openai_format_tools = [    {
-        "type": "function",
-        
-          "name": "get_billing_account",
-          "description": "Gets information about a billing account. The current\nauthenticated user must be a `viewer of the billing\naccount <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n\n    async def sample_get_billing_account():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = billing_v1.GetBillingAccountRequest(\n            name=\"name_value\",\n        )\n\n        # Make the request\n        response = await client.get_billing_account(request=request)\n\n    ",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "name": {
-                "type": "string",
-                "description": "Required. The resource name of the billing account to retrieve. For example, ``billingAccounts/012345-567890-ABCDEF``.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.types.BillingAccount: A billing account in the [Google Cloud Console](\\ https://console.cloud.google.com/). You can assign a billing account to one or more projects."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "name",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "GetBillingAccountRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-       
-          "name": "list_billing_accounts",
-          "description": "Lists the billing accounts that the current authenticated user\nhas permission to\n`view <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n\n    async def sample_list_billing_accounts():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = billing_v1.ListBillingAccountsRequest(\n        )\n\n        # Make the request\n        page_result = client.list_billing_accounts(request=request)\n\n        # Handle the response\n        async for response in",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "parent": {
-                "type": "string",
-                "description": "Optional. The parent resource to list billing accounts from. Format:  -  ``organizations/{organization_id}``, for example, ``organizations/12345678`` -  ``billingAccounts/{billing_account_id}``, for example, ``billingAccounts/012345-567890-ABCDEF``  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.services.cloud_billing.pagers.ListBillingAccountsAsyncPager: Response message for ListBillingAccounts.  Iterating over this object will yield results and resolve additional pages automatically."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "parent",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "ListBillingAccountsRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-       
-          "name": "update_billing_account",
-          "description": "Updates a billing account's fields. Currently the only field\nthat can be edited is ``display_name``. The current\nauthenticated user must have the ``billing.accounts.update`` IAM\npermission, which is typically given to the\n`administrator <https://cloud.google.com/billing/docs/how-to/billing-access>`__\nof the billing account.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n\n    async def sample_update_billing_account():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = billing_v1.UpdateBillingAccount",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "name": {
-                "type": "string",
-                "description": "Required. The name of the billing account resource to be updated.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
-              },
-              "account": {
-                "type": "string",
-                "description": "Required. The billing account resource to replace the resource on the server.  This corresponds to the ``account`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.types.BillingAccount: A billing account in the [Google Cloud Console](\\ https://console.cloud.google.com/). You can assign a billing account to one or more projects."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "name",
-              "account",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "UpdateBillingAccountRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "create_billing_account",
-          "description": "This method creates `billing\nsubaccounts <https://cloud.google.com/billing/docs/concepts#subaccounts>`__.\n\nGoogle Cloud resellers should use the Channel Services APIs,\n`accounts.customers.create <https://cloud.google.com/channel/docs/reference/rest/v1/accounts.customers/create>`__\nand\n`accounts.customers.entitlements.create <https://cloud.google.com/channel/docs/reference/rest/v1/accounts.customers.entitlements/create>`__.\n\nWhen creating a subaccount, the current authenticated user must\nhave the ``billing.accounts.update`` IAM permission on the\nparent account, which is typically given to billing account\n`administrators <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\nThis method will return an error if the parent account has not\nbeen provisioned for subaccounts.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "billing_account": {
-                "type": "string",
-                "description": "Required. The billing account resource to create. Currently CreateBillingAccount only supports subaccount creation, so any created billing accounts must be under a provided parent billing account.  This corresponds to the ``billing_account`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
-              },
-              "parent": {
-                "type": "string",
-                "description": "Optional. The parent to create a billing account from. Format:  -  ``billingAccounts/{billing_account_id}``, for example, ``billingAccounts/012345-567890-ABCDEF``  This corresponds to the ``parent`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.types.BillingAccount: A billing account in the [Google Cloud Console](\\ https://console.cloud.google.com/). You can assign a billing account to one or more projects."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "billing_account",
-              "parent",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "CreateBillingAccountRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-       
-          "name": "list_project_billing_info",
-          "description": "Lists the projects associated with a billing account. The\ncurrent authenticated user must have the\n``billing.resourceAssociations.list`` IAM permission, which is\noften given to billing account\n`viewers <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n\n    async def sample_list_project_billing_info():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = billing_v1.ListProjectBillingInfoRequest(\n            name=\"name_value\",\n        )\n\n  ",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "name": {
-                "type": "string",
-                "description": "Required. The resource name of the billing account associated with the projects that you want to list. For example, ``billingAccounts/012345-567890-ABCDEF``.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.services.cloud_billing.pagers.ListProjectBillingInfoAsyncPager: Request message for ListProjectBillingInfoResponse.  Iterating over this object will yield results and resolve additional pages automatically."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "name",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "ListProjectBillingInfoRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "get_project_billing_info",
-          "description": "Gets the billing information for a project. The current\nauthenticated user must have the\n``resourcemanager.projects.get`` permission for the project,\nwhich can be granted by assigning the `Project\nViewer <https://cloud.google.com/iam/docs/understanding-roles#predefined_roles>`__\nrole.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n\n    async def sample_get_project_billing_info():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = billing_v1.GetProjectBillingInfoRequest(\n            name=\"name_value",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "name": {
-                "type": "string",
-                "description": "Required. The resource name of the project for which billing information is retrieved. For example, ``projects/tokyo-rain-123``.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.types.ProjectBillingInfo: Encapsulation of billing information for a Google Cloud Console project. A project has at most one associated billing account at a time (but a billing account can be assigned to multiple projects)."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "name",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "GetProjectBillingInfoRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "update_project_billing_info",
-          "description": "Sets or updates the billing account associated with a project.\nYou specify the new billing account by setting the\n``billing_account_name`` in the ``ProjectBillingInfo`` resource\nto the resource name of a billing account. Associating a project\nwith an open billing account enables billing on the project and\nallows charges for resource usage. If the project already had a\nbilling account, this method changes the billing account used\nfor resource usage charges.\n\n*Note:* Incurred charges that have not yet been reported in the\ntransaction history of the Google Cloud Console might be billed\nto the new billing account, even if the charge occurred before\nthe new billing account was assigned to the project.\n\nThe current authenticated user must have ownership privileges\nfor both the\n`project <https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo>`__\nand the `billing\naccount <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\n\nYou can disable billing on the project by setting the\n``billing_accoun",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "name": {
-                "type": "string",
-                "description": "Required. The resource name of the project associated with the billing information that you want to update. For example, ``projects/tokyo-rain-123``.  This corresponds to the ``name`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
-              },
-              "project_billing_info": {
-                "type": "string",
-                "description": "The new billing information for the project. Output-only fields are ignored; thus, you can leave empty all fields except ``billing_account_name``.  This corresponds to the ``project_billing_info`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.cloud.billing_v1.types.ProjectBillingInfo: Encapsulation of billing information for a Google Cloud Console project. A project has at most one associated billing account at a time (but a billing account can be assigned to multiple projects)."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "name",
-              "project_billing_info",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "UpdateProjectBillingInfoRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "get_iam_policy",
-          "description": "Gets the access control policy for a billing account. The caller\nmust have the ``billing.accounts.getIamPolicy`` permission on\nthe account, which is often given to billing account\n`viewers <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    async def sample_get_iam_policy():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = iam_policy_pb2.GetIamPolicyRequest(\n            r",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "resource": {
-                "type": "string",
-                "description": "REQUIRED: The resource for which the policy is being requested. See the operation documentation for the appropriate value for this field.  This corresponds to the ``resource`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.iam.v1.policy_pb2.Policy: An Identity and Access Management (IAM) policy, which specifies access controls for Google Cloud resources.  A Policy is a collection of bindings. A binding binds one or more members, or principals, to a single role. Principals can be user accounts, service accounts, Google groups, and domains (such as G Suite). A role is a named list of permissions; each role can be an IAM predefined role or a user-created custom role.  For some types of Google Cloud resources, a binding can also specify a condition, which is a logical expression that allows access to a resource only if the expression evaluates to true. A condition can add constraints based on attributes of the request, the resource, or both. To learn which resources support conditions in their IAM policies, see the [IAM documentation](\\ https://cloud.google.com/iam/help/conditions/resource-policies).  **JSON example:**  :literal:`\\`     {       \"bindings\": [         {           \"role\": \"roles/resourcemanager.organizationAdmin\",           \"members\": [             \"user:mike@example.com\",             \"group:admins@example.com\",             \"domain:google.com\",             \"serviceAccount:my-project-id@appspot.gserviceaccount.com\"           ]         },         {           \"role\": \"roles/resourcemanager.organizationViewer\",           \"members\": [             \"user:eve@example.com\"           ],           \"condition\": {             \"title\": \"expirable access\",             \"description\": \"Does not grant access after Sep 2020\",             \"expression\": \"request.time <             timestamp('2020-10-01T00:00:00.000Z')\",           }         }       ],       \"etag\": \"BwWWja0YfJA=\",       \"version\": 3     }`\\ \\`  **YAML example:**  :literal:`\\`     bindings:     - members:       - user:mike@example.com       - group:admins@example.com       - domain:google.com       - serviceAccount:my-project-id@appspot.gserviceaccount.com       role: roles/resourcemanager.organizationAdmin     - members:       - user:eve@example.com       role: roles/resourcemanager.organizationViewer       condition:         title: expirable access         description: Does not grant access after Sep 2020         expression: request.time < timestamp('2020-10-01T00:00:00.000Z')     etag: BwWWja0YfJA=     version: 3`\\ \\`  For a description of IAM and its features, see the [IAM documentation](\\ https://cloud.google.com/iam/docs/)."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "resource",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "GetIamPolicyRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "set_iam_policy",
-          "description": "Sets the access control policy for a billing account. Replaces\nany existing policy. The caller must have the\n``billing.accounts.setIamPolicy`` permission on the account,\nwhich is often given to billing account\n`administrators <https://cloud.google.com/billing/docs/how-to/billing-access>`__.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    async def sample_set_iam_policy():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = iam_policy_p",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "resource": {
-                "type": "string",
-                "description": "REQUIRED: The resource for which the policy is being specified. See the operation documentation for the appropriate value for this field.  This corresponds to the ``resource`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.iam.v1.policy_pb2.Policy: An Identity and Access Management (IAM) policy, which specifies access controls for Google Cloud resources.  A Policy is a collection of bindings. A binding binds one or more members, or principals, to a single role. Principals can be user accounts, service accounts, Google groups, and domains (such as G Suite). A role is a named list of permissions; each role can be an IAM predefined role or a user-created custom role.  For some types of Google Cloud resources, a binding can also specify a condition, which is a logical expression that allows access to a resource only if the expression evaluates to true. A condition can add constraints based on attributes of the request, the resource, or both. To learn which resources support conditions in their IAM policies, see the [IAM documentation](\\ https://cloud.google.com/iam/help/conditions/resource-policies).  **JSON example:**  :literal:`\\`     {       \"bindings\": [         {           \"role\": \"roles/resourcemanager.organizationAdmin\",           \"members\": [             \"user:mike@example.com\",             \"group:admins@example.com\",             \"domain:google.com\",             \"serviceAccount:my-project-id@appspot.gserviceaccount.com\"           ]         },         {           \"role\": \"roles/resourcemanager.organizationViewer\",           \"members\": [             \"user:eve@example.com\"           ],           \"condition\": {             \"title\": \"expirable access\",             \"description\": \"Does not grant access after Sep 2020\",             \"expression\": \"request.time <             timestamp('2020-10-01T00:00:00.000Z')\",           }         }       ],       \"etag\": \"BwWWja0YfJA=\",       \"version\": 3     }`\\ \\`  **YAML example:**  :literal:`\\`     bindings:     - members:       - user:mike@example.com       - group:admins@example.com       - domain:google.com       - serviceAccount:my-project-id@appspot.gserviceaccount.com       role: roles/resourcemanager.organizationAdmin     - members:       - user:eve@example.com       role: roles/resourcemanager.organizationViewer       condition:         title: expirable access         description: Does not grant access after Sep 2020         expression: request.time < timestamp('2020-10-01T00:00:00.000Z')     etag: BwWWja0YfJA=     version: 3`\\ \\`  For a description of IAM and its features, see the [IAM documentation](\\ https://cloud.google.com/iam/docs/)."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "resource",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "SetIamPolicyRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "test_iam_permissions",
-          "description": "Tests the access control policy for a billing\naccount. This method takes the resource and a set of\npermissions as input and returns the subset of the input\npermissions that the caller is allowed for that\nresource.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n    from google.iam.v1 import iam_policy_pb2  # type: ignore\n\n    async def sample_test_iam_permissions():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = iam_policy_pb2.TestIamPermissionsRequest(\n            resource=\"resource_value\",\n   ",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "resource": {
-                "type": "string",
-                "description": "REQUIRED: The resource for which the policy detail is being requested. See the operation documentation for the appropriate value for this field.  This corresponds to the ``resource`` field on the ``request`` instance; if ``request`` is provided, this should not be set."
-              },
-              "permissions": {
-                "type": "string",
-                "description": "The set of permissions to check for the ``resource``. Permissions with wildcards (such as '*' or 'storage.*') are not allowed. For more information see `IAM Overview <https://cloud.google.com/iam/docs/overview#permissions>`__.  This corresponds to the ``permissions`` field on the ``request`` instance; if ``request`` is provided, this should not be set. retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any, should be retried. timeout (float): The timeout for this request. metadata (Sequence[Tuple[str, str]]): Strings which should be sent along with the request as metadata.  Returns: google.iam.v1.iam_policy_pb2.TestIamPermissionsResponse: Response message for TestIamPermissions method."
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "resource",
-              "permissions",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "TestIamPermissionsRequest"
-          ]
-        
-      },
-      {
-        "type": "function",
-        
-          "name": "move_billing_account",
-          "description": "Changes which parent organization a billing account\nbelongs to.\n\n.. code-block:: python\n\n    # This snippet has been automatically generated and should be regarded as a\n    # code template only.\n    # It will require modifications to work:\n    # - It may require correct/in-range values for request initialization.\n    # - It may require specifying regional endpoints when creating the service\n    #   client as shown in:\n    #   https://googleapis.dev/python/google-api-core/latest/client_options.html\n    from google.cloud import billing_v1\n\n    async def sample_move_billing_account():\n        # Create a client\n        client = billing_v1.CloudBillingAsyncClient()\n\n        # Initialize request argument(s)\n        request = billing_v1.MoveBillingAccountRequest(\n            name=\"name_value\",\n            destination_parent=\"destination_parent_value\",\n        )\n\n        # Make the request\n        response = await client.move_billing_account(request=request)\n\n        # Handle the response\n        print(response)\n\nArg",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "request": {
-                "type": "string",
-                "description": ""
-              },
-              "retry": {
-                "type": "string",
-                "description": ""
-              },
-              "timeout": {
-                "type": "string",
-                "description": ""
-              },
-              "metadata": {
-                "type": "string",
-                "description": ""
-              }
-            },
-            "required": [
-              "request",
-              "retry",
-              "timeout",
-              "metadata"
-            ]
-          },
-          "request_types": [
-            "MoveBillingAccountRequest"
-          ]
-        
+openai_format_tools = [{
+      "type": "function",
+      "name": "GetBillingAccountRequest",
+      "description": "Request message for ``GetBillingAccount``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the billing account to\n        retrieve. For example,\n        ``billingAccounts/012345-567890-ABCDEF``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the billing account to retrieve. For example, ``billingAccounts/012345-567890-ABCDEF``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
-      ]
+    },
+    {
+      "type": "function",
+      "name": "ListBillingAccountsRequest",
+      "description": "Request message for ``ListBillingAccounts``.\n\nAttributes:\n    page_size (int):\n        Requested page size. The maximum page size is\n        100; this is also the default.\n    page_token (str):\n        A token identifying a page of results to return. This should\n        be a ``next_page_token`` value returned from a previous\n        ``ListBillingAccounts`` call. If unspecified, the first page\n        of results is returned.\n    filter (str):\n        Options for how to filter the returned billing accounts.\n        This only supports filtering for\n        `subaccounts <https://cloud.google.com/billing/docs/concepts>`__\n        under a single provided parent billing account. (for\n        example,\n        ``master_billing_account=billingAccounts/012345-678901-ABCDEF``).\n        Boolean algebra and other fields are not currently\n        supported.\n    parent (str):\n        Optional. The parent resource to list billing accounts from.\n        Format:\n\n        -  ``organizations/{organization_id}``, for example,\n    ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "page_size": {
+            "description": "Requested page size. The maximum page size is 100; this is also the default.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A token identifying a page of results to return. This should be a ``next_page_token`` value returned from a previous ``ListBillingAccounts`` call. If unspecified, the first page of results is returned.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Options for how to filter the returned billing accounts. This only supports filtering for `subaccounts <https://cloud.google.com/billing/docs/concepts>`__ under a single provided parent billing account. (for example, ``master_billing_account=billingAccounts/012345-678901-ABCDEF``). Boolean algebra and other fields are not currently supported.",
+            "type": "string"
+          },
+          "parent": {
+            "description": "Optional. The parent resource to list billing accounts from. Format:  -  ``organizations/{organization_id}``, for example, ``organizations/12345678`` -  ``billingAccounts/{billing_account_id}``, for example, ``billingAccounts/012345-567890-ABCDEF``",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "name": "CreateBillingAccountRequest",
+      "description": "Request message for ``CreateBillingAccount``.\n\nAttributes:\n    billing_account (google.cloud.billing_v1.types.BillingAccount):\n        Required. The billing account resource to\n        create. Currently CreateBillingAccount only\n        supports subaccount creation, so any created\n        billing accounts must be under a provided parent\n        billing account.\n    parent (str):\n        Optional. The parent to create a billing account from.\n        Format:\n\n        -  ``billingAccounts/{billing_account_id}``, for example,\n           ``billingAccounts/012345-567890-ABCDEF``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "billing_account": {
+            "description": "Required. The billing account resource to create. Currently CreateBillingAccount only supports subaccount creation, so any created billing accounts must be under a provided parent billing account.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. Resource name of the billing account. Format: accounts/{account_id}/billingAccounts/{billing_account_id}.",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Display name of the billing account.",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Output only. The time when this billing account was created.",
+                "type": "string",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "currency_code": {
+                "description": "Output only. The 3-letter currency code defined in ISO 4217.",
+                "type": "string"
+              },
+              "region_code": {
+                "description": "Output only. The CLDR region code.",
+                "type": "string"
+              }
+            }
+          },
+          "parent": {
+            "description": "Optional. The parent to create a billing account from. Format:  -  ``billingAccounts/{billing_account_id}``, for example, ``billingAccounts/012345-567890-ABCDEF``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "billing_account"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "UpdateBillingAccountRequest",
+      "description": "Request message for ``UpdateBillingAccount``.\n\nAttributes:\n    name (str):\n        Required. The name of the billing account\n        resource to be updated.\n    account (google.cloud.billing_v1.types.BillingAccount):\n        Required. The billing account resource to\n        replace the resource on the server.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        The update mask applied to the resource. Only \"display_name\"\n        is currently supported.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the billing account resource to be updated.",
+            "type": "string"
+          },
+          "account": {
+            "description": "Required. The billing account resource to replace the resource on the server.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. Resource name of the billing account. Format: accounts/{account_id}/billingAccounts/{billing_account_id}.",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Display name of the billing account.",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Output only. The time when this billing account was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "currency_code": {
+                "description": "Output only. The 3-letter currency code defined in ISO 4217.",
+                "type": "string"
+              },
+              "region_code": {
+                "description": "Output only. The CLDR region code.",
+                "type": "string"
+              }
+            }
+          },
+          "update_mask": {
+            "description": "The update mask applied to the resource. Only \"display_name\" is currently supported.",
+            "type": "string",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          }
+        },
+        "required": [
+          "name",
+          "account"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListProjectBillingInfoRequest",
+      "description": "Request message for ``ListProjectBillingInfo``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the billing account\n        associated with the projects that you want to list. For\n        example, ``billingAccounts/012345-567890-ABCDEF``.\n    page_size (int):\n        Requested page size. The maximum page size is\n        100; this is also the default.\n    page_token (str):\n        A token identifying a page of results to be returned. This\n        should be a ``next_page_token`` value returned from a\n        previous ``ListProjectBillingInfo`` call. If unspecified,\n        the first page of results is returned.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the billing account associated with the projects that you want to list. For example, ``billingAccounts/012345-567890-ABCDEF``.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Requested page size. The maximum page size is 100; this is also the default.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A token identifying a page of results to be returned. This should be a ``next_page_token`` value returned from a previous ``ListProjectBillingInfo`` call. If unspecified, the first page of results is returned.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "GetProjectBillingInfoRequest",
+      "description": "Request message for ``GetProjectBillingInfo``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the project for which billing\n        information is retrieved. For example,\n        ``projects/tokyo-rain-123``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the project for which billing information is retrieved. For example, ``projects/tokyo-rain-123``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "UpdateProjectBillingInfoRequest",
+      "description": "Request message for ``UpdateProjectBillingInfo``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the project associated with\n        the billing information that you want to update. For\n        example, ``projects/tokyo-rain-123``.\n    project_billing_info (google.cloud.billing_v1.types.ProjectBillingInfo):\n        The new billing information for the project. Output-only\n        fields are ignored; thus, you can leave empty all fields\n        except ``billing_account_name``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the project associated with the billing information that you want to update. For example, ``projects/tokyo-rain-123``.",
+            "type": "string"
+          },
+          "project_billing_info": {
+            "description": "The new billing information for the project. Output-only fields are ignored; thus, you can leave empty all fields except ``billing_account_name``.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. The resource name for the ``ProjectBillingInfo``; has the form ``projects/{project_id}/billingInfo``. For example, the resource name for the billing information for project ``tokyo-rain-123`` would be ``projects/tokyo-rain-123/billingInfo``.",
+                "type": "string"
+              },
+              "project_id": {
+                "description": "Output only. The ID of the project that this ``ProjectBillingInfo`` represents, such as ``tokyo-rain-123``. This is a convenience field so that you don't need to parse the ``name`` field to obtain a project ID.",
+                "type": "string"
+              },
+              "billing_account_name": {
+                "description": "The resource name of the billing account associated with the project, if any. For example, ``billingAccounts/012345-567890-ABCDEF``.",
+                "type": "string"
+              },
+              "billing_enabled": {
+                "description": "Output only. True if the project is associated with an open billing account, to which usage on the project is charged. False if the project is associated with a closed billing account, or no billing account at all, and therefore cannot use paid services.",
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "MoveBillingAccountRequest",
+      "description": "Request message for ``MoveBillingAccount`` RPC.\n\nAttributes:\n    name (str):\n        Required. The resource name of the billing account to move.\n        Must be of the form\n        ``billingAccounts/{billing_account_id}``. The specified\n        billing account cannot be a subaccount, since a subaccount\n        always belongs to the same organization as its parent\n        account.\n    destination_parent (str):\n        Required. The resource name of the Organization to move the\n        billing account under. Must be of the form\n        ``organizations/{organization_id}``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the billing account to move. Must be of the form ``billingAccounts/{billing_account_id}``. The specified billing account cannot be a subaccount, since a subaccount always belongs to the same organization as its parent account.",
+            "type": "string"
+          },
+          "destination_parent": {
+            "description": "Required. The resource name of the Organization to move the billing account under. Must be of the form ``organizations/{organization_id}``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "destination_parent"
+        ]
+      }
+    }]
+
 def build_prompt(task_instruction: str, format_instruction: str, tools: list, query: str):
     prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
     prompt += f"[BEGIN OF AVAILABLE TOOLS]\n{json.dumps(openai_format_tools)}\n[END OF AVAILABLE TOOLS]\n\n"

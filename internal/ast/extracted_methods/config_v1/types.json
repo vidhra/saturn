@@ -1,1130 +1,956 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-config\\google\\cloud\\config_v1\\types\\config.py": [
     {
-      "type": "request_class",
-      "name": "Deployment",
-      "docstring": "A Deployment is a group of resources and configs managed and\nprovisioned by Infra Manager.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    terraform_blueprint (google.cloud.config_v1.types.TerraformBlueprint):\n        A blueprint described using Terraform's\n        HashiCorp Configuration Language as a root\n        module.\n\n        This field is a member of `oneof`_ ``blueprint``.\n    name (str):\n        Resource name of the deployment. Format:\n        ``projects/{project}/locations/{location}/deployments/{deployment}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time when the deployment was\n        created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time when the deployment was\n        last modified.\n    labels (MutableMapping[str, str]):\n        User-defined metadata for the deployment.\n    state (google.cloud.config_v1.types.Deployment.State):\n        Output",
-      "attributes": {
-        "terraform_blueprint": {
-          "type": "google.cloud.config_v1.types.TerraformBlueprint",
-          "description": "A blueprint described using Terraform's HashiCorp Configuration Language as a root module.  This field is a member of `oneof`_ ``blueprint``."
-        },
-        "name": {
-          "type": "str",
-          "description": "Resource name of the deployment. Format: ``projects/{project}/locations/{location}/deployments/{deployment}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the deployment was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the deployment was last modified."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "User-defined metadata for the deployment."
-        },
-        "state": {
-          "type": "google.cloud.config_v1.types.Deployment.State",
-          "description": "Output only. Current state of the deployment."
-        },
-        "latest_revision": {
-          "type": "str",
-          "description": "Output only. Revision name that was most recently applied. Format: ``projects/{project}/locations/{location}/deployments/{deployment}/ revisions/{revision}``"
-        },
-        "state_detail": {
-          "type": "str",
-          "description": "Output only. Additional information regarding the current state."
-        },
-        "error_code": {
-          "type": "google.cloud.config_v1.types.Deployment.ErrorCode",
-          "description": "Output only. Error code describing errors that may have occurred."
-        },
-        "delete_results": {
-          "type": "google.cloud.config_v1.types.ApplyResults",
-          "description": "Output only. Location of artifacts from a DeleteDeployment operation."
-        },
-        "delete_build": {
-          "type": "str",
-          "description": "Output only. Cloud Build instance UUID associated with deleting this deployment."
-        },
-        "delete_logs": {
-          "type": "str",
-          "description": "Output only. Location of Cloud Build logs in Google Cloud Storage, populated when deleting this deployment. Format: ``gs://{bucket}/{object}``."
-        },
-        "tf_errors": {
-          "type": "MutableSequence[google.cloud.config_v1.types.TerraformError]",
-          "description": "Output only. Errors encountered when deleting this deployment. Errors are truncated to 10 entries, see ``delete_results`` and ``error_logs`` for full details."
-        },
-        "error_logs": {
-          "type": "str",
-          "description": "Output only. Location of Terraform error logs in Google Cloud Storage. Format: ``gs://{bucket}/{object}``."
-        },
-        "artifacts_gcs_bucket": {
-          "type": "str",
-          "description": "Optional. User-defined location of Cloud Build logs and artifacts in Google Cloud Storage. Format: ``gs://{bucket}/{folder}``  A default bucket will be bootstrapped if the field is not set or empty. Default bucket format: ``gs://<project number>-<region>-blueprint-config`` Constraints:  -  The bucket needs to be in the same project as the deployment -  The path cannot be within the path of ``gcs_source`` -  The field cannot be updated, including changing its presence  This field is a member of `oneof`_ ``_artifacts_gcs_bucket``."
-        },
-        "service_account": {
-          "type": "str",
-          "description": "Optional. User-specified Service Account (SA) credentials to be used when actuating resources. Format: ``projects/{projectID}/serviceAccounts/{serviceAccount}``  This field is a member of `oneof`_ ``_service_account``."
-        },
-        "import_existing_resources": {
-          "type": "bool",
-          "description": "By default, Infra Manager will return a failure when Terraform encounters a 409 code (resource conflict error) during actuation. If this flag is set to true, Infra Manager will instead attempt to automatically import the resource into the Terraform state (for supported resource types) and continue actuation.  Not all resource types are supported, refer to documentation.  This field is a member of `oneof`_ ``_import_existing_resources``."
-        },
-        "worker_pool": {
-          "type": "str",
-          "description": "Optional. The user-specified Cloud Build worker pool resource in which the Cloud Build job will execute. Format: ``projects/{project}/locations/{location}/workerPools/{workerPoolId}``. If this field is unspecified, the default Cloud Build worker pool will be used.  This field is a member of `oneof`_ ``_worker_pool``."
-        },
-        "lock_state": {
-          "type": "google.cloud.config_v1.types.Deployment.LockState",
-          "description": "Output only. Current lock state of the deployment."
-        },
-        "tf_version_constraint": {
-          "type": "str",
-          "description": "Optional. The user-specified Terraform version constraint. Example: \"=1.3.10\".  This field is a member of `oneof`_ ``_tf_version_constraint``."
-        },
-        "tf_version": {
-          "type": "str",
-          "description": "Output only. The current Terraform version set on the deployment. It is in the format of \"Major.Minor.Patch\", for example, \"1.3.10\"."
-        },
-        "quota_validation": {
-          "type": "google.cloud.config_v1.types.QuotaValidation",
-          "description": "Optional. Input to control quota checks for resources in terraform configuration files. There are limited resources on which quota validation applies."
-        },
-        "annotations": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Arbitrary key-value metadata storage e.g. to help client tools identify deployments during automation. See https://google.aip.dev/148#annotations for details on format and size limitations."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TerraformBlueprint",
-      "docstring": "TerraformBlueprint describes the source of a Terraform root\nmodule which describes the resources and configs to be deployed.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    gcs_source (str):\n        Required. URI of an object in Google Cloud Storage. Format:\n        ``gs://{bucket}/{object}``\n\n        URI may also specify an object version for zipped objects.\n        Format: ``gs://{bucket}/{object}#{version}``\n\n        This field is a member of `oneof`_ ``source``.\n    git_source (google.cloud.config_v1.types.GitSource):\n        Required. URI of a public Git repo.\n\n        This field is a member of `oneof`_ ``source``.\n    input_values (MutableMapping[str, google.cloud.config_v1.types.TerraformVariable]):\n        Input variable val",
-      "attributes": {
-        "gcs_source": {
-          "type": "str",
-          "description": "Required. URI of an object in Google Cloud Storage. Format: ``gs://{bucket}/{object}``  URI may also specify an object version for zipped objects. Format: ``gs://{bucket}/{object}#{version}``  This field is a member of `oneof`_ ``source``."
-        },
-        "git_source": {
-          "type": "google.cloud.config_v1.types.GitSource",
-          "description": "Required. URI of a public Git repo.  This field is a member of `oneof`_ ``source``."
-        },
-        "input_values": {
-          "type": "MutableMapping[str, google.cloud.config_v1.types.TerraformVariable]",
-          "description": "Input variable values for the Terraform blueprint."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TerraformVariable",
-      "docstring": "A Terraform input variable.\n\nAttributes:\n    input_value (google.protobuf.struct_pb2.Value):\n        Input variable value.",
-      "attributes": {
-        "input_value": {
-          "type": "google.protobuf.struct_pb2.Value",
-          "description": "Input variable value."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ApplyResults",
-      "docstring": "Outputs and artifacts from applying a deployment.\n\nAttributes:\n    content (str):\n        Location of a blueprint copy and other manifests in Google\n        Cloud Storage. Format: ``gs://{bucket}/{object}``\n    artifacts (str):\n        Location of artifacts (e.g. logs) in Google Cloud Storage.\n        Format: ``gs://{bucket}/{object}``\n    outputs (MutableMapping[str, google.cloud.config_v1.types.TerraformOutput]):\n        Map of output name to output info.",
-      "attributes": {
-        "content": {
-          "type": "str",
-          "description": "Location of a blueprint copy and other manifests in Google Cloud Storage. Format: ``gs://{bucket}/{object}``"
-        },
-        "artifacts": {
-          "type": "str",
-          "description": "Location of artifacts (e.g. logs) in Google Cloud Storage. Format: ``gs://{bucket}/{object}``"
-        },
-        "outputs": {
-          "type": "MutableMapping[str, google.cloud.config_v1.types.TerraformOutput]",
-          "description": "Map of output name to output info."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TerraformOutput",
-      "docstring": "Describes a Terraform output.\n\nAttributes:\n    sensitive (bool):\n        Identifies whether Terraform has set this\n        output as a potential sensitive value.\n    value (google.protobuf.struct_pb2.Value):\n        Value of output.",
-      "attributes": {
-        "sensitive": {
-          "type": "bool",
-          "description": "Identifies whether Terraform has set this output as a potential sensitive value."
-        },
-        "value": {
-          "type": "google.protobuf.struct_pb2.Value",
-          "description": "Value of output."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListDeploymentsRequest",
-      "docstring": "Attributes:\n    parent (str):\n        Required. The parent in whose context the Deployments are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    page_size (int):\n        When requesting a page of resources, 'page_size' specifies\n        number of resources to return. If unspecified, at most 500\n        will be returned. The maximum value is 1000.\n    page_token (str):\n        Token returned by previous call to\n        'ListDeployments' which specifies the position\n        in the list from where to continue listing the\n        resources.\n    filter (str):\n        Lists the Deployments that match the filter expression. A\n        filter expression filters the resources listed in the\n        response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon ':' represents a HAS\n        operator which is roughly synonymous with equality). {field}\n        can ",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the Deployments are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}'."
+      "description": "Attributes:\n    parent (str):\n        Required. The parent in whose context the Deployments are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    page_size (int):\n        When requesting a page of resources, 'page_size' specifies\n        number of resources to return. If unspecified, at most 500\n        will be returned. The maximum value is 1000.\n    page_token (str):\n        Token returned by previous call to\n        'ListDeployments' which specifies the position\n        in the list from where to continue listing the\n        resources.\n    filter (str):\n        Lists the Deployments that match the filter expression. A\n        filter expression filters the resources listed in the\n        response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon ':' represents a HAS\n        operator which is roughly synonymous with equality). {field}\n        can ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the Deployments are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}'.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Token returned by previous call to 'ListDeployments' which specifies the position in the list from where to continue listing the resources.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Lists the Deployments that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/bar  -  Filter by labels:  -  Resources that have a key called 'foo' labels.foo:\\* -  Resources that have a key called 'foo' whose value is 'bar' labels.foo = bar  -  Filter by state:  -  Deployments in CREATING state. state=CREATING",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Field to use to sort the list.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Token returned by previous call to 'ListDeployments' which specifies the position in the list from where to continue listing the resources."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Lists the Deployments that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/bar  -  Filter by labels:  -  Resources that have a key called 'foo' labels.foo:\\* -  Resources that have a key called 'foo' whose value is 'bar' labels.foo = bar  -  Filter by state:  -  Deployments in CREATING state. state=CREATING"
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Field to use to sort the list."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListDeploymentsResponse",
-      "docstring": "Attributes:\n    deployments (MutableSequence[google.cloud.config_v1.types.Deployment]):\n        List of [Deployment][google.cloud.config.v1.Deployment]s.\n    next_page_token (str):\n        Token to be supplied to the next ListDeployments request via\n        ``page_token`` to obtain the next set of results.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "deployments": {
-          "type": "MutableSequence[google.cloud.config_v1.types.Deployment]",
-          "description": "List of [Deployment][google.cloud.config.v1.Deployment]s."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "Token to be supplied to the next ListDeployments request via ``page_token`` to obtain the next set of results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetDeploymentRequest",
-      "docstring": "Attributes:\n    name (str):\n        Required. The name of the deployment. Format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the deployment. Format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
-        }
+      "description": "Attributes:\n    name (str):\n        Required. The name of the deployment. Format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the deployment. Format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListRevisionsRequest",
-      "docstring": "A request to list Revisions passed to a 'ListRevisions' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Revisions are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    page_size (int):\n        When requesting a page of resources, ``page_size`` specifies\n        number of resources to return. If unspecified, at most 500\n        will be returned. The maximum value is 1000.\n    page_token (str):\n        Token returned by previous call to\n        'ListRevisions' which specifies the position in\n        the list from where to continue listing the\n        resources.\n    filter (str):\n        Lists the Revisions that match the filter expression. A\n        filter expression filters the resources listed in the\n        response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon ':' represents a H",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the Revisions are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
+      "description": "A request to list Revisions passed to a 'ListRevisions' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Revisions are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    page_size (int):\n        When requesting a page of resources, ``page_size`` specifies\n        number of resources to return. If unspecified, at most 500\n        will be returned. The maximum value is 1000.\n    page_token (str):\n        Token returned by previous call to\n        'ListRevisions' which specifies the position in\n        the list from where to continue listing the\n        resources.\n    filter (str):\n        Lists the Revisions that match the filter expression. A\n        filter expression filters the resources listed in the\n        response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon ':' represents a H",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the Revisions are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "When requesting a page of resources, ``page_size`` specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Token returned by previous call to 'ListRevisions' which specifies the position in the list from where to continue listing the resources.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Lists the Revisions that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/dep/revisions/bar  -  Filter by labels:  -  Resources that have a key called 'foo' labels.foo:\\* -  Resources that have a key called 'foo' whose value is 'bar' labels.foo = bar  -  Filter by state:  -  Revisions in CREATING state. state=CREATING",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Field to use to sort the list.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "When requesting a page of resources, ``page_size`` specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Token returned by previous call to 'ListRevisions' which specifies the position in the list from where to continue listing the resources."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Lists the Revisions that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/dep/revisions/bar  -  Filter by labels:  -  Resources that have a key called 'foo' labels.foo:\\* -  Resources that have a key called 'foo' whose value is 'bar' labels.foo = bar  -  Filter by state:  -  Revisions in CREATING state. state=CREATING"
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Field to use to sort the list."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListRevisionsResponse",
-      "docstring": "A response to a 'ListRevisions' call. Contains a list of\nRevisions.\n\nAttributes:\n    revisions (MutableSequence[google.cloud.config_v1.types.Revision]):\n        List of [Revision][google.cloud.config.v1.Revision]s.\n    next_page_token (str):\n        A token to request the next page of resources\n        from the 'ListRevisions' method. The value of an\n        empty string means that there are no more\n        resources to return.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "revisions": {
-          "type": "MutableSequence[google.cloud.config_v1.types.Revision]",
-          "description": "List of [Revision][google.cloud.config.v1.Revision]s."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token to request the next page of resources from the 'ListRevisions' method. The value of an empty string means that there are no more resources to return."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetRevisionRequest",
-      "docstring": "A request to get a Revision from a 'GetRevision' call.\n\nAttributes:\n    name (str):\n        Required. The name of the Revision in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the Revision in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'."
-        }
+      "description": "A request to get a Revision from a 'GetRevision' call.\n\nAttributes:\n    name (str):\n        Required. The name of the Revision in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Revision in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateDeploymentRequest",
-      "docstring": "Attributes:\n    parent (str):\n        Required. The parent in whose context the Deployment is\n        created. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    deployment_id (str):\n        Required. The Deployment ID.\n    deployment (google.cloud.config_v1.types.Deployment):\n        Required. [Deployment][google.cloud.config.v1.Deployment]\n        resource to be created.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes since the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the Deployment is created. The parent value is in the format: 'projects/{project_id}/locations/{location}'."
+      "description": "Attributes:\n    parent (str):\n        Required. The parent in whose context the Deployment is\n        created. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    deployment_id (str):\n        Required. The Deployment ID.\n    deployment (google.cloud.config_v1.types.Deployment):\n        Required. [Deployment][google.cloud.config.v1.Deployment]\n        resource to be created.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes since the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the Deployment is created. The parent value is in the format: 'projects/{project_id}/locations/{location}'.",
+            "type": "string"
+          },
+          "deployment_id": {
+            "description": "Required. The Deployment ID.",
+            "type": "string"
+          },
+          "deployment": {
+            "description": "Required. [Deployment][google.cloud.config.v1.Deployment] resource to be created.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The name of the deployment.",
+                "type": "string"
+              },
+              "revision_id": {
+                "description": "Output only. Immutable. The revision ID of the deployment. A new revision is committed whenever a change in deployment is applied.",
+                "type": "string"
+              },
+              "source_blueprint_revision": {
+                "description": "Required. The blueprint revision from which this deployment was created.",
+                "type": "string"
+              },
+              "revision_create_time": {
+                "description": "Output only. The timestamp that the revision was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. State of the deployment (DRAFT, APPLIED, DELETING).",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.Deployment.State"
+              },
+              "display_name": {
+                "description": "Optional. Human readable name of a Deployment.",
+                "type": "string"
+              },
+              "repository": {
+                "description": "Output only. Name of the repository where the deployment package files are stored.",
+                "type": "string"
+              },
+              "files": {
+                "description": "Optional. Files present in a deployment. When invoking UpdateDeployment API, only the modified files should be included in this. Files that are not included in the update of a deployment will not be changed.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "description": "Required. Path of the file in package. e.g. ``gdce/v1/cluster.yaml``",
+                      "type": "string"
+                    },
+                    "content": {
+                      "description": "Optional. The contents of a file in string format.",
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "description": "Optional. Signifies whether a file is marked for deletion.",
+                      "type": "boolean"
+                    },
+                    "editable": {
+                      "description": "Optional. Indicates whether changes are allowed to a file. If the field is not set, the file cannot be edited.",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              },
+              "labels": {
+                "description": "Optional. Labels are key-value attributes that can be set on a deployment resource by the user.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "create_time": {
+                "description": "Output only. Deployment creation time.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. The timestamp when the deployment was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "source_provider": {
+                "description": "Output only. Source provider is the author of a public blueprint, from which this deployment is created.",
+                "type": "string"
+              },
+              "workload_cluster": {
+                "description": "Optional. Immutable. The WorkloadCluster on which to create the Deployment. This field should only be passed when the deployment_level of the source blueprint specifies deployments on workload clusters e.g. WORKLOAD_CLUSTER_DEPLOYMENT.",
+                "type": "string"
+              },
+              "deployment_level": {
+                "description": "Output only. Attributes to where the deployment can inflict changes. The value can only be [SINGLE_DEPLOYMENT, MULTI_DEPLOYMENT].",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.DeploymentLevel"
+              },
+              "rollback_support": {
+                "description": "Output only. Indicates if the deployment can be rolled back, exported from public blueprint.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "source_blueprint_revision"
+            ]
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "deployment_id": {
-          "type": "str",
-          "description": "Required. The Deployment ID."
-        },
-        "deployment": {
-          "type": "google.cloud.config_v1.types.Deployment",
-          "description": "Required. [Deployment][google.cloud.config.v1.Deployment] resource to be created."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "parent",
+          "deployment_id",
+          "deployment"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateDeploymentRequest",
-      "docstring": "Attributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. Field mask used to specify the fields to be\n        overwritten in the Deployment resource by the update.\n\n        The fields specified in the update_mask are relative to the\n        resource, not the full request. A field will be overwritten\n        if it is in the mask. If the user does not provide a mask\n        then all fields will be overwritten.\n    deployment (google.cloud.config_v1.types.Deployment):\n        Required. [Deployment][google.cloud.config.v1.Deployment] to\n        update.\n\n        The deployment's ``name`` field is used to identify the\n        resource to be updated. Format:\n        ``projects/{project}/locations/{location}/deployments/{deployment}``\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been comp",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Optional. Field mask used to specify the fields to be overwritten in the Deployment resource by the update.  The fields specified in the update_mask are relative to the resource, not the full request. A field will be overwritten if it is in the mask. If the user does not provide a mask then all fields will be overwritten."
+      "description": "Attributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. Field mask used to specify the fields to be\n        overwritten in the Deployment resource by the update.\n\n        The fields specified in the update_mask are relative to the\n        resource, not the full request. A field will be overwritten\n        if it is in the mask. If the user does not provide a mask\n        then all fields will be overwritten.\n    deployment (google.cloud.config_v1.types.Deployment):\n        Required. [Deployment][google.cloud.config.v1.Deployment] to\n        update.\n\n        The deployment's ``name`` field is used to identify the\n        resource to be updated. Format:\n        ``projects/{project}/locations/{location}/deployments/{deployment}``\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been comp",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Optional. Field mask used to specify the fields to be overwritten in the Deployment resource by the update.  The fields specified in the update_mask are relative to the resource, not the full request. A field will be overwritten if it is in the mask. If the user does not provide a mask then all fields will be overwritten.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "deployment": {
+            "description": "Required. [Deployment][google.cloud.config.v1.Deployment] to update.  The deployment's ``name`` field is used to identify the resource to be updated. Format: ``projects/{project}/locations/{location}/deployments/{deployment}``",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The name of the deployment.",
+                "type": "string"
+              },
+              "revision_id": {
+                "description": "Output only. Immutable. The revision ID of the deployment. A new revision is committed whenever a change in deployment is applied.",
+                "type": "string"
+              },
+              "source_blueprint_revision": {
+                "description": "Required. The blueprint revision from which this deployment was created.",
+                "type": "string"
+              },
+              "revision_create_time": {
+                "description": "Output only. The timestamp that the revision was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. State of the deployment (DRAFT, APPLIED, DELETING).",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.Deployment.State"
+              },
+              "display_name": {
+                "description": "Optional. Human readable name of a Deployment.",
+                "type": "string"
+              },
+              "repository": {
+                "description": "Output only. Name of the repository where the deployment package files are stored.",
+                "type": "string"
+              },
+              "files": {
+                "description": "Optional. Files present in a deployment. When invoking UpdateDeployment API, only the modified files should be included in this. Files that are not included in the update of a deployment will not be changed.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "description": "Required. Path of the file in package. e.g. ``gdce/v1/cluster.yaml``",
+                      "type": "string"
+                    },
+                    "content": {
+                      "description": "Optional. The contents of a file in string format.",
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "description": "Optional. Signifies whether a file is marked for deletion.",
+                      "type": "boolean"
+                    },
+                    "editable": {
+                      "description": "Optional. Indicates whether changes are allowed to a file. If the field is not set, the file cannot be edited.",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              },
+              "labels": {
+                "description": "Optional. Labels are key-value attributes that can be set on a deployment resource by the user.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "create_time": {
+                "description": "Output only. Deployment creation time.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. The timestamp when the deployment was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "source_provider": {
+                "description": "Output only. Source provider is the author of a public blueprint, from which this deployment is created.",
+                "type": "string"
+              },
+              "workload_cluster": {
+                "description": "Optional. Immutable. The WorkloadCluster on which to create the Deployment. This field should only be passed when the deployment_level of the source blueprint specifies deployments on workload clusters e.g. WORKLOAD_CLUSTER_DEPLOYMENT.",
+                "type": "string"
+              },
+              "deployment_level": {
+                "description": "Output only. Attributes to where the deployment can inflict changes. The value can only be [SINGLE_DEPLOYMENT, MULTI_DEPLOYMENT].",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.DeploymentLevel"
+              },
+              "rollback_support": {
+                "description": "Output only. Indicates if the deployment can be rolled back, exported from public blueprint.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "source_blueprint_revision"
+            ]
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "deployment": {
-          "type": "google.cloud.config_v1.types.Deployment",
-          "description": "Required. [Deployment][google.cloud.config.v1.Deployment] to update.  The deployment's ``name`` field is used to identify the resource to be updated. Format: ``projects/{project}/locations/{location}/deployments/{deployment}``"
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "deployment"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteDeploymentRequest",
-      "docstring": "Attributes:\n    name (str):\n        Required. The name of the Deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes after the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request ID was received, and if\n        so, will ignore the second request. This\n        prevents clients from accidentally creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID with the\n        exception that zero UUID is not ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the Deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
+      "description": "Attributes:\n    name (str):\n        Required. The name of the Deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes after the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request ID was received, and if\n        so, will ignore the second request. This\n        prevents clients from accidentally creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID with the\n        exception that zero UUID is not ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          },
+          "force": {
+            "description": "Optional. If set to true, any revisions for this deployment will also be deleted. (Otherwise, the request will only work if the deployment has no revisions.)",
+            "type": "boolean"
+          },
+          "delete_policy": {
+            "description": "Optional. Policy on how resources actuated by the deployment should be deleted. If unspecified, the default behavior is to delete the underlying resources.",
+            "type": "object",
+            "reference": "google.cloud.config_v1.types.DeleteDeploymentRequest.DeletePolicy"
+          }
         },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        },
-        "force": {
-          "type": "bool",
-          "description": "Optional. If set to true, any revisions for this deployment will also be deleted. (Otherwise, the request will only work if the deployment has no revisions.)"
-        },
-        "delete_policy": {
-          "type": "google.cloud.config_v1.types.DeleteDeploymentRequest.DeletePolicy",
-          "description": "Optional. Policy on how resources actuated by the deployment should be deleted. If unspecified, the default behavior is to delete the underlying resources."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "OperationMetadata",
-      "docstring": "Represents the metadata of the long-running operation.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    deployment_metadata (google.cloud.config_v1.types.DeploymentOperationMetadata):\n        Output only. Metadata about the deployment\n        operation state.\n\n        This field is a member of `oneof`_ ``resource_metadata``.\n    preview_metadata (google.cloud.config_v1.types.PreviewOperationMetadata):\n        Output only. Metadata about the preview\n        operation state.\n\n        This field is a member of `oneof`_ ``resource_metadata``.\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time when the operation was\n        created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output on",
-      "attributes": {
-        "deployment_metadata": {
-          "type": "google.cloud.config_v1.types.DeploymentOperationMetadata",
-          "description": "Output only. Metadata about the deployment operation state.  This field is a member of `oneof`_ ``resource_metadata``."
-        },
-        "preview_metadata": {
-          "type": "google.cloud.config_v1.types.PreviewOperationMetadata",
-          "description": "Output only. Metadata about the preview operation state.  This field is a member of `oneof`_ ``resource_metadata``."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the operation was created."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the operation finished running."
-        },
-        "target": {
-          "type": "str",
-          "description": "Output only. Server-defined resource path for the target of the operation."
-        },
-        "verb": {
-          "type": "str",
-          "description": "Output only. Name of the verb executed by the operation."
-        },
-        "status_message": {
-          "type": "str",
-          "description": "Output only. Human-readable status of the operation, if any."
-        },
-        "requested_cancellation": {
-          "type": "bool",
-          "description": "Output only. Identifies whether the user has requested cancellation of the operation. Operations that have successfully been cancelled have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding to ``Code.CANCELLED``."
-        },
-        "api_version": {
-          "type": "str",
-          "description": "Output only. API version used to start the operation."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Revision",
-      "docstring": "A child resource of a Deployment generated by a\n'CreateDeployment' or 'UpdateDeployment' call. Each Revision\ncontains metadata pertaining to a snapshot of a particular\nDeployment.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    terraform_blueprint (google.cloud.config_v1.types.TerraformBlueprint):\n        Output only. A blueprint described using\n        Terraform's HashiCorp Configuration Language as\n        a root module.\n\n        This field is a member of `oneof`_ ``blueprint``.\n    name (str):\n        Revision name. Format:\n        ``projects/{project}/locations/{location}/deployments/{deployment}/ revisions/{revision}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time when the revision was\n        created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time when the revision was last\n        modified.\n    action (google.cloud.config_v1.types.Revision.Action):\n ",
-      "attributes": {
-        "terraform_blueprint": {
-          "type": "google.cloud.config_v1.types.TerraformBlueprint",
-          "description": "Output only. A blueprint described using Terraform's HashiCorp Configuration Language as a root module.  This field is a member of `oneof`_ ``blueprint``."
-        },
-        "name": {
-          "type": "str",
-          "description": "Revision name. Format: ``projects/{project}/locations/{location}/deployments/{deployment}/ revisions/{revision}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the revision was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the revision was last modified."
-        },
-        "action": {
-          "type": "google.cloud.config_v1.types.Revision.Action",
-          "description": "Output only. The action which created this revision"
-        },
-        "state": {
-          "type": "google.cloud.config_v1.types.Revision.State",
-          "description": "Output only. Current state of the revision."
-        },
-        "apply_results": {
-          "type": "google.cloud.config_v1.types.ApplyResults",
-          "description": "Output only. Outputs and artifacts from applying a deployment."
-        },
-        "state_detail": {
-          "type": "str",
-          "description": "Output only. Additional info regarding the current state."
-        },
-        "error_code": {
-          "type": "google.cloud.config_v1.types.Revision.ErrorCode",
-          "description": "Output only. Code describing any errors that may have occurred."
-        },
-        "build": {
-          "type": "str",
-          "description": "Output only. Cloud Build instance UUID associated with this revision."
-        },
-        "logs": {
-          "type": "str",
-          "description": "Output only. Location of Revision operation logs in ``gs://{bucket}/{object}`` format."
-        },
-        "tf_errors": {
-          "type": "MutableSequence[google.cloud.config_v1.types.TerraformError]",
-          "description": "Output only. Errors encountered when creating or updating this deployment. Errors are truncated to 10 entries, see ``delete_results`` and ``error_logs`` for full details."
-        },
-        "error_logs": {
-          "type": "str",
-          "description": "Output only. Location of Terraform error logs in Google Cloud Storage. Format: ``gs://{bucket}/{object}``."
-        },
-        "service_account": {
-          "type": "str",
-          "description": "Output only. User-specified Service Account (SA) to be used as credential to manage resources. Format: ``projects/{projectID}/serviceAccounts/{serviceAccount}``"
-        },
-        "import_existing_resources": {
-          "type": "bool",
-          "description": "Output only. By default, Infra Manager will return a failure when Terraform encounters a 409 code (resource conflict error) during actuation. If this flag is set to true, Infra Manager will instead attempt to automatically import the resource into the Terraform state (for supported resource types) and continue actuation.  Not all resource types are supported, refer to documentation."
-        },
-        "worker_pool": {
-          "type": "str",
-          "description": "Output only. The user-specified Cloud Build worker pool resource in which the Cloud Build job will execute. Format: ``projects/{project}/locations/{location}/workerPools/{workerPoolId}``. If this field is unspecified, the default Cloud Build worker pool will be used."
-        },
-        "tf_version_constraint": {
-          "type": "str",
-          "description": "Output only. The user-specified Terraform version constraint. Example: \"=1.3.10\"."
-        },
-        "tf_version": {
-          "type": "str",
-          "description": "Output only. The version of Terraform used to create the Revision. It is in the format of \"Major.Minor.Patch\", for example, \"1.3.10\"."
-        },
-        "quota_validation_results": {
-          "type": "str",
-          "description": "Output only. Cloud Storage path containing quota validation results. This field is set when a user sets Deployment.quota_validation field to ENABLED or ENFORCED. Format: ``gs://{bucket}/{object}``."
-        },
-        "quota_validation": {
-          "type": "google.cloud.config_v1.types.QuotaValidation",
-          "description": "Optional. Input to control quota checks for resources in terraform configuration files. There are limited resources on which quota validation applies."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TerraformError",
-      "docstring": "Errors encountered during actuation using Terraform\n\nAttributes:\n    resource_address (str):\n        Address of the resource associated with the error, e.g.\n        ``google_compute_network.vpc_network``.\n    http_response_code (int):\n        HTTP response code returned from Google Cloud\n        Platform APIs when Terraform fails to provision\n        the resource. If unset or 0, no HTTP response\n        code was returned by Terraform.\n    error_description (str):\n        A human-readable error description.\n    error (google.rpc.status_pb2.Status):\n        Original error response from underlying\n        Google API, if available.",
-      "attributes": {
-        "resource_address": {
-          "type": "str",
-          "description": "Address of the resource associated with the error, e.g. ``google_compute_network.vpc_network``."
-        },
-        "http_response_code": {
-          "type": "int",
-          "description": "HTTP response code returned from Google Cloud Platform APIs when Terraform fails to provision the resource. If unset or 0, no HTTP response code was returned by Terraform."
-        },
-        "error_description": {
-          "type": "str",
-          "description": "A human-readable error description."
-        },
-        "error": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Original error response from underlying Google API, if available."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "GitSource",
-      "docstring": "A set of files in a Git repository.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    repo (str):\n        Optional. Repository URL.\n        Example:\n        'https://github.com/kubernetes/examples.git'\n\n        This field is a member of `oneof`_ ``_repo``.\n    directory (str):\n        Optional. Subdirectory inside the repository.\n        Example: 'staging/my-package'\n\n        This field is a member of `oneof`_ ``_directory``.\n    ref (str):\n        Optional. Git reference (e.g. branch or tag).\n\n        This field is a member of `oneof`_ ``_ref``.",
-      "attributes": {
-        "repo": {
-          "type": "str",
-          "description": "Optional. Repository URL. Example: 'https://github.com/kubernetes/examples.git'  This field is a member of `oneof`_ ``_repo``."
-        },
-        "directory": {
-          "type": "str",
-          "description": "Optional. Subdirectory inside the repository. Example: 'staging/my-package'  This field is a member of `oneof`_ ``_directory``."
-        },
-        "ref": {
-          "type": "str",
-          "description": "Optional. Git reference (e.g. branch or tag).  This field is a member of `oneof`_ ``_ref``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DeploymentOperationMetadata",
-      "docstring": "Ephemeral metadata content describing the state of a\ndeployment operation.\n\nAttributes:\n    step (google.cloud.config_v1.types.DeploymentOperationMetadata.DeploymentStep):\n        The current step the deployment operation is\n        running.\n    apply_results (google.cloud.config_v1.types.ApplyResults):\n        Outputs and artifacts from applying a\n        deployment.\n    build (str):\n        Output only. Cloud Build instance UUID\n        associated with this operation.\n    logs (str):\n        Output only. Location of Deployment operations logs in\n        ``gs://{bucket}/{object}`` format.",
-      "attributes": {
-        "step": {
-          "type": "google.cloud.config_v1.types.DeploymentOperationMetadata.DeploymentStep",
-          "description": "The current step the deployment operation is running."
-        },
-        "apply_results": {
-          "type": "google.cloud.config_v1.types.ApplyResults",
-          "description": "Outputs and artifacts from applying a deployment."
-        },
-        "build": {
-          "type": "str",
-          "description": "Output only. Cloud Build instance UUID associated with this operation."
-        },
-        "logs": {
-          "type": "str",
-          "description": "Output only. Location of Deployment operations logs in ``gs://{bucket}/{object}`` format."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Resource",
-      "docstring": "Resource represents a Google Cloud Platform resource actuated\nby IM. Resources are child resources of Revisions.\n\nAttributes:\n    name (str):\n        Output only. Resource name. Format:\n        ``projects/{project}/locations/{location}/deployments/{deployment}/revisions/{revision}/resources/{resource}``\n    terraform_info (google.cloud.config_v1.types.ResourceTerraformInfo):\n        Output only. Terraform-specific info if this\n        resource was created using Terraform.\n    cai_assets (MutableMapping[str, google.cloud.config_v1.types.ResourceCAIInfo]):\n        Output only. Map of Cloud Asset Inventory\n        (CAI) type to CAI info (e.g. CAI ID). CAI type\n        format follows\n        https://cloud.google.com/asset-inventory/docs/supported-asset-types\n    intent (google.cloud.config_v1.types.Resource.Intent):\n        Output only. Intent of the resource.\n    state (google.cloud.config_v1.types.Resource.State):\n        Output only. Current state of the resource.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. Resource name. Format: ``projects/{project}/locations/{location}/deployments/{deployment}/revisions/{revision}/resources/{resource}``"
-        },
-        "terraform_info": {
-          "type": "google.cloud.config_v1.types.ResourceTerraformInfo",
-          "description": "Output only. Terraform-specific info if this resource was created using Terraform."
-        },
-        "cai_assets": {
-          "type": "MutableMapping[str, google.cloud.config_v1.types.ResourceCAIInfo]",
-          "description": "Output only. Map of Cloud Asset Inventory (CAI) type to CAI info (e.g. CAI ID). CAI type format follows https://cloud.google.com/asset-inventory/docs/supported-asset-types"
-        },
-        "intent": {
-          "type": "google.cloud.config_v1.types.Resource.Intent",
-          "description": "Output only. Intent of the resource."
-        },
-        "state": {
-          "type": "google.cloud.config_v1.types.Resource.State",
-          "description": "Output only. Current state of the resource."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ResourceTerraformInfo",
-      "docstring": "Terraform info of a Resource.\n\nAttributes:\n    address (str):\n        TF resource address that uniquely identifies\n        this resource within this deployment.\n    type_ (str):\n        TF resource type\n    id (str):\n        ID attribute of the TF resource",
-      "attributes": {
-        "address": {
-          "type": "str",
-          "description": "TF resource address that uniquely identifies this resource within this deployment."
-        },
-        "type_": {
-          "type": "str",
-          "description": "TF resource type"
-        },
-        "id": {
-          "type": "str",
-          "description": "ID attribute of the TF resource"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ResourceCAIInfo",
-      "docstring": "CAI info of a Resource.\n\nAttributes:\n    full_resource_name (str):\n        CAI resource name in the format following\n        https://cloud.google.com/apis/design/resource_names#full_resource_name",
-      "attributes": {
-        "full_resource_name": {
-          "type": "str",
-          "description": "CAI resource name in the format following https://cloud.google.com/apis/design/resource_names#full_resource_name"
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetResourceRequest",
-      "docstring": "A request to get a Resource from a 'GetResource' call.\n\nAttributes:\n    name (str):\n        Required. The name of the Resource in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}/resource/{resource}'.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the Resource in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}/resource/{resource}'."
-        }
+      "description": "A request to get a Resource from a 'GetResource' call.\n\nAttributes:\n    name (str):\n        Required. The name of the Resource in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}/resource/{resource}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Resource in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}/resource/{resource}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListResourcesRequest",
-      "docstring": "A request to list Resources passed to a 'ListResources' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Resources are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.\n    page_size (int):\n        When requesting a page of resources, 'page_size' specifies\n        number of resources to return. If unspecified, at most 500\n        will be returned. The maximum value is 1000.\n    page_token (str):\n        Token returned by previous call to\n        'ListResources' which specifies the position in\n        the list from where to continue listing the\n        resources.\n    filter (str):\n        Lists the Resources that match the filter expression. A\n        filter expression filters the resources listed in the\n        response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the Resources are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'."
+      "description": "A request to list Resources passed to a 'ListResources' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Resources are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.\n    page_size (int):\n        When requesting a page of resources, 'page_size' specifies\n        number of resources to return. If unspecified, at most 500\n        will be returned. The maximum value is 1000.\n    page_token (str):\n        Token returned by previous call to\n        'ListResources' which specifies the position in\n        the list from where to continue listing the\n        resources.\n    filter (str):\n        Lists the Resources that match the filter expression. A\n        filter expression filters the resources listed in the\n        response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the Resources are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Token returned by previous call to 'ListResources' which specifies the position in the list from where to continue listing the resources.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Lists the Resources that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/dep/revisions/bar/resources/baz",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Field to use to sort the list.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Token returned by previous call to 'ListResources' which specifies the position in the list from where to continue listing the resources."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Lists the Resources that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/dep/revisions/bar/resources/baz"
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Field to use to sort the list."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListResourcesResponse",
-      "docstring": "A response to a 'ListResources' call. Contains a list of\nResources.\n\nAttributes:\n    resources (MutableSequence[google.cloud.config_v1.types.Resource]):\n        List of [Resources][]s.\n    next_page_token (str):\n        A token to request the next page of resources\n        from the 'ListResources' method. The value of an\n        empty string means that there are no more\n        resources to return.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "resources": {
-          "type": "MutableSequence[google.cloud.config_v1.types.Resource]",
-          "description": "List of [Resources][]s."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token to request the next page of resources from the 'ListResources' method. The value of an empty string means that there are no more resources to return."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Statefile",
-      "docstring": "Contains info about a Terraform state file\n\nAttributes:\n    signed_uri (str):\n        Output only. Cloud Storage signed URI used\n        for downloading or uploading the state file.",
-      "attributes": {
-        "signed_uri": {
-          "type": "str",
-          "description": "Output only. Cloud Storage signed URI used for downloading or uploading the state file."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ExportDeploymentStatefileRequest",
-      "docstring": "A request to export a state file passed to a\n'ExportDeploymentStatefile' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the statefile is\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    draft (bool):\n        Optional. If this flag is set to true, the\n        exported deployment state file will be the draft\n        state. This will enable the draft file to be\n        validated before copying it over to the working\n        state on unlock.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the statefile is listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
+      "description": "A request to export a state file passed to a\n'ExportDeploymentStatefile' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the statefile is\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    draft (bool):\n        Optional. If this flag is set to true, the\n        exported deployment state file will be the draft\n        state. This will enable the draft file to be\n        validated before copying it over to the working\n        state on unlock.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the statefile is listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          },
+          "draft": {
+            "description": "Optional. If this flag is set to true, the exported deployment state file will be the draft state. This will enable the draft file to be validated before copying it over to the working state on unlock.",
+            "type": "boolean"
+          }
         },
-        "draft": {
-          "type": "bool",
-          "description": "Optional. If this flag is set to true, the exported deployment state file will be the draft state. This will enable the draft file to be validated before copying it over to the working state on unlock."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ExportRevisionStatefileRequest",
-      "docstring": "A request to export a state file passed to a\n'ExportRevisionStatefile' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the statefile is\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the statefile is listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'."
-        }
+      "description": "A request to export a state file passed to a\n'ExportRevisionStatefile' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the statefile is\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the statefile is listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}/revisions/{revision}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ImportStatefileRequest",
-      "docstring": "A request to import a state file passed to a\n'ImportStatefile' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the statefile is\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    lock_id (int):\n        Required. Lock ID of the lock file to verify\n        that the user who is importing the state file\n        previously locked the Deployment.\n    skip_draft (bool):\n        Optional.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the statefile is listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
+      "description": "A request to import a state file passed to a\n'ImportStatefile' call.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the statefile is\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    lock_id (int):\n        Required. Lock ID of the lock file to verify\n        that the user who is importing the state file\n        previously locked the Deployment.\n    skip_draft (bool):\n        Optional.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the statefile is listed. The parent value is in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          },
+          "lock_id": {
+            "description": "Required. Lock ID of the lock file to verify that the user who is importing the state file previously locked the Deployment.",
+            "type": "integer"
+          },
+          "skip_draft": {
+            "description": "Optional.",
+            "type": "boolean"
+          }
         },
-        "lock_id": {
-          "type": "int",
-          "description": "Required. Lock ID of the lock file to verify that the user who is importing the state file previously locked the Deployment."
-        },
-        "skip_draft": {
-          "type": "bool",
-          "description": "Optional."
-        }
+        "required": [
+          "parent",
+          "lock_id"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteStatefileRequest",
-      "docstring": "A request to delete a state file passed to a\n'DeleteStatefile' call.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    lock_id (int):\n        Required. Lock ID of the lock file to verify\n        that the user who is deleting the state file\n        previously locked the Deployment.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
+      "description": "A request to delete a state file passed to a\n'DeleteStatefile' call.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    lock_id (int):\n        Required. Lock ID of the lock file to verify\n        that the user who is deleting the state file\n        previously locked the Deployment.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          },
+          "lock_id": {
+            "description": "Required. Lock ID of the lock file to verify that the user who is deleting the state file previously locked the Deployment.",
+            "type": "integer"
+          }
         },
-        "lock_id": {
-          "type": "int",
-          "description": "Required. Lock ID of the lock file to verify that the user who is deleting the state file previously locked the Deployment."
-        }
+        "required": [
+          "name",
+          "lock_id"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "LockDeploymentRequest",
-      "docstring": "A request to lock a deployment passed to a 'LockDeployment'\ncall.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
-        }
+      "description": "A request to lock a deployment passed to a 'LockDeployment'\ncall.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UnlockDeploymentRequest",
-      "docstring": "A request to unlock a state file passed to a\n'UnlockDeployment' call.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    lock_id (int):\n        Required. Lock ID of the lock file to be\n        unlocked.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
+      "description": "A request to unlock a state file passed to a\n'UnlockDeployment' call.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.\n    lock_id (int):\n        Required. Lock ID of the lock file to be\n        unlocked.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          },
+          "lock_id": {
+            "description": "Required. Lock ID of the lock file to be unlocked.",
+            "type": "integer"
+          }
         },
-        "lock_id": {
-          "type": "int",
-          "description": "Required. Lock ID of the lock file to be unlocked."
-        }
+        "required": [
+          "name",
+          "lock_id"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ExportLockInfoRequest",
-      "docstring": "A request to get a state file lock info passed to a\n'ExportLockInfo' call.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'."
-        }
+      "description": "A request to get a state file lock info passed to a\n'ExportLockInfo' call.\n\nAttributes:\n    name (str):\n        Required. The name of the deployment in the format:\n        'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the deployment in the format: 'projects/{project_id}/locations/{location}/deployments/{deployment}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "LockInfo",
-      "docstring": "Details about the lock which locked the deployment.\n\nAttributes:\n    lock_id (int):\n        Unique ID for the lock to be overridden with\n        generation ID in the backend.\n    operation (str):\n        Terraform operation, provided by the caller.\n    info (str):\n        Extra information to store with the lock,\n        provided by the caller.\n    who (str):\n        user@hostname when available\n    version (str):\n        Terraform version\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Time that the lock was taken.",
-      "attributes": {
-        "lock_id": {
-          "type": "int",
-          "description": "Unique ID for the lock to be overridden with generation ID in the backend."
-        },
-        "operation": {
-          "type": "str",
-          "description": "Terraform operation, provided by the caller."
-        },
-        "info": {
-          "type": "str",
-          "description": "Extra information to store with the lock, provided by the caller."
-        },
-        "who": {
-          "type": "str",
-          "description": "user@hostname when available"
-        },
-        "version": {
-          "type": "str",
-          "description": "Terraform version"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Time that the lock was taken."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Preview",
-      "docstring": "A preview represents a set of actions Infra Manager would\nperform to move the resources towards the desired state as\nspecified in the configuration.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    terraform_blueprint (google.cloud.config_v1.types.TerraformBlueprint):\n        The terraform blueprint to preview.\n\n        This field is a member of `oneof`_ ``blueprint``.\n    name (str):\n        Identifier. Resource name of the preview. Resource name can\n        be user provided or server generated ID if unspecified.\n        Format:\n        ``projects/{project}/locations/{location}/previews/{preview}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Time the preview was created.\n    labels (MutableMapping[str, str]):\n        Optional. User-defined labels for the\n        preview.\n    state (google.cloud.config_v1.types.Preview.State):\n        Output only. Current state of the preview.\n    deployment (str):",
-      "attributes": {
-        "terraform_blueprint": {
-          "type": "google.cloud.config_v1.types.TerraformBlueprint",
-          "description": "The terraform blueprint to preview.  This field is a member of `oneof`_ ``blueprint``."
-        },
-        "name": {
-          "type": "str",
-          "description": "Identifier. Resource name of the preview. Resource name can be user provided or server generated ID if unspecified. Format: ``projects/{project}/locations/{location}/previews/{preview}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time the preview was created."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. User-defined labels for the preview."
-        },
-        "state": {
-          "type": "google.cloud.config_v1.types.Preview.State",
-          "description": "Output only. Current state of the preview."
-        },
-        "deployment": {
-          "type": "str",
-          "description": "Optional. Optional deployment reference. If specified, the preview will be performed using the provided deployment's current state and use any relevant fields from the deployment unless explicitly specified in the preview create request."
-        },
-        "preview_mode": {
-          "type": "google.cloud.config_v1.types.Preview.PreviewMode",
-          "description": "Optional. Current mode of preview."
-        },
-        "service_account": {
-          "type": "str",
-          "description": "Optional. User-specified Service Account (SA) credentials to be used when previewing resources. Format: ``projects/{projectID}/serviceAccounts/{serviceAccount}``"
-        },
-        "artifacts_gcs_bucket": {
-          "type": "str",
-          "description": "Optional. User-defined location of Cloud Build logs, artifacts, and in Google Cloud Storage. Format: ``gs://{bucket}/{folder}`` A default bucket will be bootstrapped if the field is not set or empty Default Bucket Format: ``gs://<project number>-<region>-blueprint-config`` Constraints:  -  The bucket needs to be in the same project as the deployment -  The path cannot be within the path of ``gcs_source`` If omitted and deployment resource ref provided has artifacts_gcs_bucket defined, that artifact bucket is used.  This field is a member of `oneof`_ ``_artifacts_gcs_bucket``."
-        },
-        "worker_pool": {
-          "type": "str",
-          "description": "Optional. The user-specified Worker Pool resource in which the Cloud Build job will execute. Format projects/{project}/locations/{location}/workerPools/{workerPoolId} If this field is unspecified, the default Cloud Build worker pool will be used. If omitted and deployment resource ref provided has worker_pool defined, that worker pool is used.  This field is a member of `oneof`_ ``_worker_pool``."
-        },
-        "error_code": {
-          "type": "google.cloud.config_v1.types.Preview.ErrorCode",
-          "description": "Output only. Code describing any errors that may have occurred."
-        },
-        "error_status": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Output only. Additional information regarding the current state."
-        },
-        "build": {
-          "type": "str",
-          "description": "Output only. Cloud Build instance UUID associated with this preview."
-        },
-        "tf_errors": {
-          "type": "MutableSequence[google.cloud.config_v1.types.TerraformError]",
-          "description": "Output only. Summary of errors encountered during Terraform preview. It has a size limit of 10, i.e. only top 10 errors will be summarized here."
-        },
-        "error_logs": {
-          "type": "str",
-          "description": "Output only. Link to tf-error.ndjson file, which contains the full list of the errors encountered during a Terraform preview. Format: ``gs://{bucket}/{object}``."
-        },
-        "preview_artifacts": {
-          "type": "google.cloud.config_v1.types.PreviewArtifacts",
-          "description": "Output only. Artifacts from preview."
-        },
-        "logs": {
-          "type": "str",
-          "description": "Output only. Location of preview logs in ``gs://{bucket}/{object}`` format."
-        },
-        "tf_version": {
-          "type": "str",
-          "description": "Output only. The current Terraform version set on the preview. It is in the format of \"Major.Minor.Patch\", for example, \"1.3.10\"."
-        },
-        "tf_version_constraint": {
-          "type": "str",
-          "description": "Optional. The user-specified Terraform version constraint. Example: \"=1.3.10\".  This field is a member of `oneof`_ ``_tf_version_constraint``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PreviewOperationMetadata",
-      "docstring": "Ephemeral metadata content describing the state of a preview\noperation.\n\nAttributes:\n    step (google.cloud.config_v1.types.PreviewOperationMetadata.PreviewStep):\n        The current step the preview operation is\n        running.\n    preview_artifacts (google.cloud.config_v1.types.PreviewArtifacts):\n        Artifacts from preview.\n    logs (str):\n        Output only. Location of preview logs in\n        ``gs://{bucket}/{object}`` format.\n    build (str):\n        Output only. Cloud Build instance UUID\n        associated with this preview.",
-      "attributes": {
-        "step": {
-          "type": "google.cloud.config_v1.types.PreviewOperationMetadata.PreviewStep",
-          "description": "The current step the preview operation is running."
-        },
-        "preview_artifacts": {
-          "type": "google.cloud.config_v1.types.PreviewArtifacts",
-          "description": "Artifacts from preview."
-        },
-        "logs": {
-          "type": "str",
-          "description": "Output only. Location of preview logs in ``gs://{bucket}/{object}`` format."
-        },
-        "build": {
-          "type": "str",
-          "description": "Output only. Cloud Build instance UUID associated with this preview."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PreviewArtifacts",
-      "docstring": "Artifacts created by preview.\n\nAttributes:\n    content (str):\n        Output only. Location of a blueprint copy and other content\n        in Google Cloud Storage. Format: ``gs://{bucket}/{object}``\n    artifacts (str):\n        Output only. Location of artifacts in Google Cloud Storage.\n        Format: ``gs://{bucket}/{object}``",
-      "attributes": {
-        "content": {
-          "type": "str",
-          "description": "Output only. Location of a blueprint copy and other content in Google Cloud Storage. Format: ``gs://{bucket}/{object}``"
-        },
-        "artifacts": {
-          "type": "str",
-          "description": "Output only. Location of artifacts in Google Cloud Storage. Format: ``gs://{bucket}/{object}``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "CreatePreviewRequest",
-      "docstring": "A request to create a preview.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Preview is\n        created. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    preview_id (str):\n        Optional. The preview ID.\n    preview (google.cloud.config_v1.types.Preview):\n        Required. [Preview][google.cloud.config.v1.Preview] resource\n        to be created.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes since the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the s",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the Preview is created. The parent value is in the format: 'projects/{project_id}/locations/{location}'."
+      "description": "A request to create a preview.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Preview is\n        created. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    preview_id (str):\n        Optional. The preview ID.\n    preview (google.cloud.config_v1.types.Preview):\n        Required. [Preview][google.cloud.config.v1.Preview] resource\n        to be created.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes since the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the s",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the Preview is created. The parent value is in the format: 'projects/{project_id}/locations/{location}'.",
+            "type": "string"
+          },
+          "preview_id": {
+            "description": "Optional. The preview ID.",
+            "type": "string"
+          },
+          "preview": {
+            "description": "Required. [Preview][google.cloud.config.v1.Preview] resource to be created.",
+            "type": "object",
+            "properties": {
+              "terraform_blueprint": {
+                "type": "object",
+                "properties": {
+                  "gcs_source": {
+                    "description": "Required. URI of an object in Google Cloud Storage. Format: ``gs://{bucket}/{object}``  URI may also specify an object version for zipped objects. Format: ``gs://{bucket}/{object}#{version}``  This field is a member of `oneof`_ ``source``.",
+                    "type": "string"
+                  },
+                  "git_source": {
+                    "type": "object",
+                    "properties": {
+                      "repo": {
+                        "description": "Location of the Git repo to build.",
+                        "type": "string"
+                      },
+                      "dir_": {
+                        "description": "Directory, relative to the source root, in which to run the build.  This must be a relative path. If a step's ``dir`` is specified and is an absolute path, this value is ignored for that step's execution.",
+                        "type": "string"
+                      },
+                      "commit": {
+                        "description": "The revision commit to use.  This field is a member of `oneof`_ ``ref``.",
+                        "type": "string"
+                      },
+                      "branch": {
+                        "description": "The revision branch to use.  This field is a member of `oneof`_ ``ref``.",
+                        "type": "string"
+                      },
+                      "tag": {
+                        "description": "The revision tag to use.  This field is a member of `oneof`_ ``ref``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "input_values": {
+                    "description": "Input variable values for the Terraform blueprint.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "input_value": {
+                          "type": "object",
+                          "properties": {
+                            "no_shipping": {
+                              "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
+                              "type": "boolean"
+                            },
+                            "flat_rate": {
+                              "type": "object",
+                              "properties": {
+                                "amount_micros": {
+                                  "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                  "type": "integer"
+                                },
+                                "currency_code": {
+                                  "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "price_percentage": {
+                              "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
+                              "type": "string"
+                            },
+                            "carrier_rate": {
+                              "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
+                              "type": "string"
+                            },
+                            "subtable": {
+                              "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "gcs_source",
+                  "git_source"
+                ]
+              },
+              "name": {
+                "description": "Identifier. Resource name of the preview. Resource name can be user provided or server generated ID if unspecified. Format: ``projects/{project}/locations/{location}/previews/{preview}``",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Output only. Time the preview was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "Optional. User-defined labels for the preview.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "state": {
+                "description": "Output only. Current state of the preview.",
+                "type": "object",
+                "reference": "google.cloud.config_v1.types.Preview.State"
+              },
+              "deployment": {
+                "description": "Optional. Optional deployment reference. If specified, the preview will be performed using the provided deployment's current state and use any relevant fields from the deployment unless explicitly specified in the preview create request.",
+                "type": "string"
+              },
+              "preview_mode": {
+                "description": "Optional. Current mode of preview.",
+                "type": "object",
+                "reference": "google.cloud.config_v1.types.Preview.PreviewMode"
+              },
+              "service_account": {
+                "description": "Optional. User-specified Service Account (SA) credentials to be used when previewing resources. Format: ``projects/{projectID}/serviceAccounts/{serviceAccount}``",
+                "type": "string"
+              },
+              "artifacts_gcs_bucket": {
+                "description": "Optional. User-defined location of Cloud Build logs, artifacts, and in Google Cloud Storage. Format: ``gs://{bucket}/{folder}`` A default bucket will be bootstrapped if the field is not set or empty Default Bucket Format: ``gs://<project number>-<region>-blueprint-config`` Constraints:  -  The bucket needs to be in the same project as the deployment -  The path cannot be within the path of ``gcs_source`` If omitted and deployment resource ref provided has artifacts_gcs_bucket defined, that artifact bucket is used.  This field is a member of `oneof`_ ``_artifacts_gcs_bucket``.",
+                "type": "string"
+              },
+              "worker_pool": {
+                "description": "Optional. The user-specified Worker Pool resource in which the Cloud Build job will execute. Format projects/{project}/locations/{location}/workerPools/{workerPoolId} If this field is unspecified, the default Cloud Build worker pool will be used. If omitted and deployment resource ref provided has worker_pool defined, that worker pool is used.  This field is a member of `oneof`_ ``_worker_pool``.",
+                "type": "string"
+              },
+              "error_code": {
+                "description": "Output only. Code describing any errors that may have occurred.",
+                "type": "object",
+                "reference": "google.cloud.config_v1.types.Preview.ErrorCode"
+              },
+              "error_status": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "description": "State enum for status.",
+                    "type": "object",
+                    "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                  },
+                  "error_message": {
+                    "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                    "type": "string"
+                  }
+                }
+              },
+              "build": {
+                "description": "Output only. Cloud Build instance UUID associated with this preview.",
+                "type": "string"
+              },
+              "tf_errors": {
+                "description": "Output only. Summary of errors encountered during Terraform preview. It has a size limit of 10, i.e. only top 10 errors will be summarized here.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "resource_address": {
+                      "description": "Address of the resource associated with the error, e.g. ``google_compute_network.vpc_network``.",
+                      "type": "string"
+                    },
+                    "http_response_code": {
+                      "description": "HTTP response code returned from Google Cloud Platform APIs when Terraform fails to provision the resource. If unset or 0, no HTTP response code was returned by Terraform.",
+                      "type": "integer"
+                    },
+                    "error_description": {
+                      "description": "A human-readable error description.",
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "description": "State enum for status.",
+                          "type": "object",
+                          "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                        },
+                        "error_message": {
+                          "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "error_logs": {
+                "description": "Output only. Link to tf-error.ndjson file, which contains the full list of the errors encountered during a Terraform preview. Format: ``gs://{bucket}/{object}``.",
+                "type": "string"
+              },
+              "preview_artifacts": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "description": "Output only. Location of a blueprint copy and other content in Google Cloud Storage. Format: ``gs://{bucket}/{object}``",
+                    "type": "string"
+                  },
+                  "artifacts": {
+                    "description": "Output only. Location of artifacts in Google Cloud Storage. Format: ``gs://{bucket}/{object}``",
+                    "type": "string"
+                  }
+                }
+              },
+              "logs": {
+                "description": "Output only. Location of preview logs in ``gs://{bucket}/{object}`` format.",
+                "type": "string"
+              },
+              "tf_version": {
+                "description": "Output only. The current Terraform version set on the preview. It is in the format of \"Major.Minor.Patch\", for example, \"1.3.10\".",
+                "type": "string"
+              },
+              "tf_version_constraint": {
+                "description": "Optional. The user-specified Terraform version constraint. Example: \"=1.3.10\".  This field is a member of `oneof`_ ``_tf_version_constraint``.",
+                "type": "string"
+              }
+            }
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "preview_id": {
-          "type": "str",
-          "description": "Optional. The preview ID."
-        },
-        "preview": {
-          "type": "google.cloud.config_v1.types.Preview",
-          "description": "Required. [Preview][google.cloud.config.v1.Preview] resource to be created."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "parent",
+          "preview"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetPreviewRequest",
-      "docstring": "A request to get details about a preview.\n\nAttributes:\n    name (str):\n        Required. The name of the preview. Format:\n        'projects/{project_id}/locations/{location}/previews/{preview}'.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the preview. Format: 'projects/{project_id}/locations/{location}/previews/{preview}'."
-        }
+      "description": "A request to get details about a preview.\n\nAttributes:\n    name (str):\n        Required. The name of the preview. Format:\n        'projects/{project_id}/locations/{location}/previews/{preview}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the preview. Format: 'projects/{project_id}/locations/{location}/previews/{preview}'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListPreviewsRequest",
-      "docstring": "A request to list all previews for a given project and\nlocation.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Previews are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    page_size (int):\n        Optional. When requesting a page of resources, 'page_size'\n        specifies number of resources to return. If unspecified, at\n        most 500 will be returned. The maximum value is 1000.\n    page_token (str):\n        Optional. Token returned by previous call to\n        'ListDeployments' which specifies the position\n        in the list from where to continue listing the\n        resources.\n    filter (str):\n        Optional. Lists the Deployments that match the filter\n        expression. A filter expression filters the resources listed\n        in the response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon ':' repre",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the Previews are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}'."
+      "description": "A request to list all previews for a given project and\nlocation.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the Previews are\n        listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    page_size (int):\n        Optional. When requesting a page of resources, 'page_size'\n        specifies number of resources to return. If unspecified, at\n        most 500 will be returned. The maximum value is 1000.\n    page_token (str):\n        Optional. Token returned by previous call to\n        'ListDeployments' which specifies the position\n        in the list from where to continue listing the\n        resources.\n    filter (str):\n        Optional. Lists the Deployments that match the filter\n        expression. A filter expression filters the resources listed\n        in the response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (colon ':' repre",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the Previews are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}'.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. Token returned by previous call to 'ListDeployments' which specifies the position in the list from where to continue listing the resources.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Optional. Lists the Deployments that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/bar  -  Filter by labels:  -  Resources that have a key called 'foo' labels.foo:\\* -  Resources that have a key called 'foo' whose value is 'bar' labels.foo = bar  -  Filter by state:  -  Deployments in CREATING state. state=CREATING",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Optional. Field to use to sort the list.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. Token returned by previous call to 'ListDeployments' which specifies the position in the list from where to continue listing the resources."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. Lists the Deployments that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.  Examples:  -  Filter by name: name = \"projects/foo/locations/us-central1/deployments/bar  -  Filter by labels:  -  Resources that have a key called 'foo' labels.foo:\\* -  Resources that have a key called 'foo' whose value is 'bar' labels.foo = bar  -  Filter by state:  -  Deployments in CREATING state. state=CREATING"
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Optional. Field to use to sort the list."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListPreviewsResponse",
-      "docstring": "A response to a ``ListPreviews`` call. Contains a list of Previews.\n\nAttributes:\n    previews (MutableSequence[google.cloud.config_v1.types.Preview]):\n        List of [Previews][]s.\n    next_page_token (str):\n        Token to be supplied to the next ListPreviews request via\n        ``page_token`` to obtain the next set of results.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "previews": {
-          "type": "MutableSequence[google.cloud.config_v1.types.Preview]",
-          "description": "List of [Previews][]s."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "Token to be supplied to the next ListPreviews request via ``page_token`` to obtain the next set of results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "DeletePreviewRequest",
-      "docstring": "A request to delete a preview.\n\nAttributes:\n    name (str):\n        Required. The name of the Preview in the format:\n        'projects/{project_id}/locations/{location}/previews/{preview}'.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes after the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request ID was received, and if\n        so, will ignore the second request. This\n        prevents clients from accidentally creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID with the\n        exception",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the Preview in the format: 'projects/{project_id}/locations/{location}/previews/{preview}'."
+      "description": "A request to delete a preview.\n\nAttributes:\n    name (str):\n        Required. The name of the Preview in the format:\n        'projects/{project_id}/locations/{location}/previews/{preview}'.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes after the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request ID was received, and if\n        so, will ignore the second request. This\n        prevents clients from accidentally creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID with the\n        exception",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Preview in the format: 'projects/{project_id}/locations/{location}/previews/{preview}'.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ExportPreviewResultRequest",
-      "docstring": "A request to export preview results.\n\nAttributes:\n    parent (str):\n        Required. The preview whose results should be exported. The\n        preview value is in the format:\n        'projects/{project_id}/locations/{location}/previews/{preview}'.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The preview whose results should be exported. The preview value is in the format: 'projects/{project_id}/locations/{location}/previews/{preview}'."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ExportPreviewResultResponse",
-      "docstring": "A response to ``ExportPreviewResult`` call. Contains preview\nresults.\n\nAttributes:\n    result (google.cloud.config_v1.types.PreviewResult):\n        Output only. Signed URLs for accessing the\n        plan files.",
-      "attributes": {
-        "result": {
-          "type": "google.cloud.config_v1.types.PreviewResult",
-          "description": "Output only. Signed URLs for accessing the plan files."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PreviewResult",
-      "docstring": "Contains a signed Cloud Storage URLs.\n\nAttributes:\n    binary_signed_uri (str):\n        Output only. Plan binary signed URL\n    json_signed_uri (str):\n        Output only. Plan JSON signed URL",
-      "attributes": {
-        "binary_signed_uri": {
-          "type": "str",
-          "description": "Output only. Plan binary signed URL"
+      "description": "A request to export preview results.\n\nAttributes:\n    parent (str):\n        Required. The preview whose results should be exported. The\n        preview value is in the format:\n        'projects/{project_id}/locations/{location}/previews/{preview}'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The preview whose results should be exported. The preview value is in the format: 'projects/{project_id}/locations/{location}/previews/{preview}'.",
+            "type": "string"
+          }
         },
-        "json_signed_uri": {
-          "type": "str",
-          "description": "Output only. Plan JSON signed URL"
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetTerraformVersionRequest",
-      "docstring": "The request message for the GetTerraformVersion method.\n\nAttributes:\n    name (str):\n        Required. The name of the TerraformVersion. Format:\n        'projects/{project_id}/locations/{location}/terraformVersions/{terraform_version}'",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the TerraformVersion. Format: 'projects/{project_id}/locations/{location}/terraformVersions/{terraform_version}'"
-        }
+      "description": "The request message for the GetTerraformVersion method.\n\nAttributes:\n    name (str):\n        Required. The name of the TerraformVersion. Format:\n        'projects/{project_id}/locations/{location}/terraformVersions/{terraform_version}'",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the TerraformVersion. Format: 'projects/{project_id}/locations/{location}/terraformVersions/{terraform_version}'",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListTerraformVersionsRequest",
-      "docstring": "The request message for the ListTerraformVersions method.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the TerraformVersions\n        are listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    page_size (int):\n        Optional. When requesting a page of resources, 'page_size'\n        specifies number of resources to return. If unspecified, at\n        most 500 will be returned. The maximum value is 1000.\n    page_token (str):\n        Optional. Token returned by previous call to\n        'ListTerraformVersions' which specifies the\n        position in the list from where to continue\n        listing the resources.\n    filter (str):\n        Optional. Lists the TerraformVersions that match the filter\n        expression. A filter expression filters the resources listed\n        in the response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (c",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent in whose context the TerraformVersions are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}'."
+      "description": "The request message for the ListTerraformVersions method.\n\nAttributes:\n    parent (str):\n        Required. The parent in whose context the TerraformVersions\n        are listed. The parent value is in the format:\n        'projects/{project_id}/locations/{location}'.\n    page_size (int):\n        Optional. When requesting a page of resources, 'page_size'\n        specifies number of resources to return. If unspecified, at\n        most 500 will be returned. The maximum value is 1000.\n    page_token (str):\n        Optional. Token returned by previous call to\n        'ListTerraformVersions' which specifies the\n        position in the list from where to continue\n        listing the resources.\n    filter (str):\n        Optional. Lists the TerraformVersions that match the filter\n        expression. A filter expression filters the resources listed\n        in the response. The expression must be of the form '{field}\n        {operator} {value}' where operators: '<', '>', '<=', '>=',\n        '!=', '=', ':' are supported (c",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent in whose context the TerraformVersions are listed. The parent value is in the format: 'projects/{project_id}/locations/{location}'.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Optional. When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. Token returned by previous call to 'ListTerraformVersions' which specifies the position in the list from where to continue listing the resources.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Optional. Lists the TerraformVersions that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Optional. Field to use to sort the list.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. When requesting a page of resources, 'page_size' specifies number of resources to return. If unspecified, at most 500 will be returned. The maximum value is 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Optional. Token returned by previous call to 'ListTerraformVersions' which specifies the position in the list from where to continue listing the resources."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. Lists the TerraformVersions that match the filter expression. A filter expression filters the resources listed in the response. The expression must be of the form '{field} {operator} {value}' where operators: '<', '>', '<=', '>=', '!=', '=', ':' are supported (colon ':' represents a HAS operator which is roughly synonymous with equality). {field} can refer to a proto or JSON field, or a synthetic field. Field names can be camelCase or snake_case."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Optional. Field to use to sort the list."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListTerraformVersionsResponse",
-      "docstring": "The response message for the ``ListTerraformVersions`` method.\n\nAttributes:\n    terraform_versions (MutableSequence[google.cloud.config_v1.types.TerraformVersion]):\n        List of\n        [TerraformVersion][google.cloud.config.v1.TerraformVersion]s.\n    next_page_token (str):\n        Token to be supplied to the next ListTerraformVersions\n        request via ``page_token`` to obtain the next set of\n        results.\n    unreachable (MutableSequence[str]):\n        Unreachable resources, if any.",
-      "attributes": {
-        "terraform_versions": {
-          "type": "MutableSequence[google.cloud.config_v1.types.TerraformVersion]",
-          "description": "List of [TerraformVersion][google.cloud.config.v1.TerraformVersion]s."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "Token to be supplied to the next ListTerraformVersions request via ``page_token`` to obtain the next set of results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Unreachable resources, if any."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TerraformVersion",
-      "docstring": "A TerraformVersion represents the support state the\ncorresponding Terraform version.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        Identifier. The version name is in the format:\n        'projects/{project_id}/locations/{location}/terraformVersions/{terraform_version}'.\n    state (google.cloud.config_v1.types.TerraformVersion.State):\n        Output only. The state of the version,\n        ACTIVE, DEPRECATED or OBSOLETE.\n    support_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. When the version is supported.\n    deprecate_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. When the version is deprecated.\n\n        This field is a member of `oneof`_ ``_deprecate_time``.\n    obsolete_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. When the version is obsolete.\n\n        This field is a member of `oneof`_ ``_obsolete_time``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The version name is in the format: 'projects/{project_id}/locations/{location}/terraformVersions/{terraform_version}'."
-        },
-        "state": {
-          "type": "google.cloud.config_v1.types.TerraformVersion.State",
-          "description": "Output only. The state of the version, ACTIVE, DEPRECATED or OBSOLETE."
-        },
-        "support_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. When the version is supported."
-        },
-        "deprecate_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. When the version is deprecated.  This field is a member of `oneof`_ ``_deprecate_time``."
-        },
-        "obsolete_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. When the version is obsolete.  This field is a member of `oneof`_ ``_obsolete_time``."
-        }
+        "required": [
+          "parent"
+        ]
       }
     }
   ]

@@ -1,258 +1,148 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-workflows\\google\\cloud\\workflows\\executions_v1\\types\\executions.py": [
     {
-      "type": "request_class",
-      "name": "Execution",
-      "docstring": "A running instance of a\n`Workflow </workflows/docs/reference/rest/v1/projects.locations.workflows>`__.\n\nAttributes:\n    name (str):\n        Output only. The resource name of the\n        execution. Format:\n\n        projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Marks the beginning of\n        execution.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. Marks the end of execution,\n        successful or not.\n    duration (google.protobuf.duration_pb2.Duration):\n        Output only. Measures the duration of the\n        execution.\n    state (google.cloud.workflows.executions_v1.types.Execution.State):\n        Output only. Current state of the execution.\n    argument (str):\n        Input parameters of the execution represented as a JSON\n        string. The size limit is 32KB.\n\n        *Note*: If you are using the REST API directly to run your\n        workflow, you must escape",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Output only. The resource name of the execution. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}"
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Marks the beginning of execution."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Marks the end of execution, successful or not."
-        },
-        "duration": {
-          "type": "google.protobuf.duration_pb2.Duration",
-          "description": "Output only. Measures the duration of the execution."
-        },
-        "state": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.State",
-          "description": "Output only. Current state of the execution."
-        },
-        "argument": {
-          "type": "str",
-          "description": "Input parameters of the execution represented as a JSON string. The size limit is 32KB.  *Note*: If you are using the REST API directly to run your workflow, you must escape any JSON string value of ``argument``. Example: ``'{\"argument\":\"{\\\"firstName\\\":\\\"FIRST\\\",\\\"lastName\\\":\\\"LAST\\\"}\"}'``"
-        },
-        "result": {
-          "type": "str",
-          "description": "Output only. Output of the execution represented as a JSON string. The value can only be present if the execution's state is ``SUCCEEDED``."
-        },
-        "error": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.Error",
-          "description": "Output only. The error which caused the execution to finish prematurely. The value is only present if the execution's state is ``FAILED`` or ``CANCELLED``."
-        },
-        "workflow_revision_id": {
-          "type": "str",
-          "description": "Output only. Revision of the workflow this execution is using."
-        },
-        "call_log_level": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.CallLogLevel",
-          "description": "The call logging level associated to this execution."
-        },
-        "status": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.Status",
-          "description": "Output only. Status tracks the current steps and progress data of this execution."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution."
-        },
-        "state_error": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.StateError",
-          "description": "Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListExecutionsRequest",
-      "docstring": "Request for the [ListExecutions][] method.\n\nAttributes:\n    parent (str):\n        Required. Name of the workflow for which the\n        executions should be listed. Format:\n        projects/{project}/locations/{location}/workflows/{workflow}\n    page_size (int):\n        Maximum number of executions to return per\n        call. Max supported value depends on the\n        selected Execution view: it's 1000 for BASIC and\n        100 for FULL. The default value used if the\n        field is not specified is 100, regardless of the\n        selected view. Values greater than the max value\n        will be coerced down to it.\n    page_token (str):\n        A page token, received from a previous ``ListExecutions``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListExecutions`` must match the call that provided the\n        page token.\n\n        Note that pagination is applied to dynamic data. The list of\n        executions returned can change be",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the workflow for which the executions should be listed. Format: projects/{project}/locations/{location}/workflows/{workflow}"
+      "description": "Request for the [ListExecutions][] method.\n\nAttributes:\n    parent (str):\n        Required. Name of the workflow for which the\n        executions should be listed. Format:\n        projects/{project}/locations/{location}/workflows/{workflow}\n    page_size (int):\n        Maximum number of executions to return per\n        call. Max supported value depends on the\n        selected Execution view: it's 1000 for BASIC and\n        100 for FULL. The default value used if the\n        field is not specified is 100, regardless of the\n        selected view. Values greater than the max value\n        will be coerced down to it.\n    page_token (str):\n        A page token, received from a previous ``ListExecutions``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListExecutions`` must match the call that provided the\n        page token.\n\n        Note that pagination is applied to dynamic data. The list of\n        executions returned can change be",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the workflow for which the executions should be listed. Format: projects/{project}/locations/{location}/workflows/{workflow}",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Maximum number of executions to return per call. Max supported value depends on the selected Execution view: it's 1000 for BASIC and 100 for FULL. The default value used if the field is not specified is 100, regardless of the selected view. Values greater than the max value will be coerced down to it.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token, received from a previous ``ListExecutions`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListExecutions`` must match the call that provided the page token.  Note that pagination is applied to dynamic data. The list of executions returned can change between page requests.",
+            "type": "string"
+          },
+          "view": {
+            "description": "Optional. A view defining which fields should be filled in the returned executions. The API will default to the BASIC view.",
+            "type": "object",
+            "reference": "google.cloud.workflows.executions_v1.types.ExecutionView"
+          },
+          "filter": {
+            "description": "Optional. Filters applied to the [Executions.ListExecutions] results. The following fields are supported for filtering: executionID, state, startTime, endTime, duration, workflowRevisionID, stepName, and label.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Optional. The ordering applied to the [Executions.ListExecutions] results. By default the ordering is based on descending start time. The following fields are supported for order by: executionID, startTime, endTime, duration, state, and workflowRevisionID.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "Maximum number of executions to return per call. Max supported value depends on the selected Execution view: it's 1000 for BASIC and 100 for FULL. The default value used if the field is not specified is 100, regardless of the selected view. Values greater than the max value will be coerced down to it."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "A page token, received from a previous ``ListExecutions`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListExecutions`` must match the call that provided the page token.  Note that pagination is applied to dynamic data. The list of executions returned can change between page requests."
-        },
-        "view": {
-          "type": "google.cloud.workflows.executions_v1.types.ExecutionView",
-          "description": "Optional. A view defining which fields should be filled in the returned executions. The API will default to the BASIC view."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. Filters applied to the [Executions.ListExecutions] results. The following fields are supported for filtering: executionID, state, startTime, endTime, duration, workflowRevisionID, stepName, and label."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Optional. The ordering applied to the [Executions.ListExecutions] results. By default the ordering is based on descending start time. The following fields are supported for order by: executionID, startTime, endTime, duration, state, and workflowRevisionID."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListExecutionsResponse",
-      "docstring": "Response for the\n[ListExecutions][google.cloud.workflows.executions.v1.Executions.ListExecutions]\nmethod.\n\nAttributes:\n    executions (MutableSequence[google.cloud.workflows.executions_v1.types.Execution]):\n        The executions which match the request.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.",
-      "attributes": {
-        "executions": {
-          "type": "MutableSequence[google.cloud.workflows.executions_v1.types.Execution]",
-          "description": "The executions which match the request."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateExecutionRequest",
-      "docstring": "Request for the\n[CreateExecution][google.cloud.workflows.executions.v1.Executions.CreateExecution]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. Name of the workflow for which an\n        execution should be created. Format:\n        projects/{project}/locations/{location}/workflows/{workflow}\n        The latest revision of the workflow will be\n        used.\n    execution (google.cloud.workflows.executions_v1.types.Execution):\n        Required. Execution to be created.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the workflow for which an execution should be created. Format: projects/{project}/locations/{location}/workflows/{workflow} The latest revision of the workflow will be used."
+      "description": "Request for the\n[CreateExecution][google.cloud.workflows.executions.v1.Executions.CreateExecution]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. Name of the workflow for which an\n        execution should be created. Format:\n        projects/{project}/locations/{location}/workflows/{workflow}\n        The latest revision of the workflow will be\n        used.\n    execution (google.cloud.workflows.executions_v1.types.Execution):\n        Required. Execution to be created.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the workflow for which an execution should be created. Format: projects/{project}/locations/{location}/workflows/{workflow} The latest revision of the workflow will be used.",
+            "type": "string"
+          },
+          "execution": {
+            "description": "Required. Execution to be created.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Output only. The resource name of the execution. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}",
+                "type": "string"
+              },
+              "start_time": {
+                "description": "Output only. Marks the beginning of execution.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "end_time": {
+                "description": "Output only. Marks the end of execution, successful or not.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. Current state of the execution.",
+                "type": "object",
+                "reference": "google.cloud.workflows.executions_v1beta.types.Execution.State"
+              },
+              "argument": {
+                "description": "Input parameters of the execution represented as a JSON string. The size limit is 32KB.",
+                "type": "string"
+              },
+              "result": {
+                "description": "Output only. Output of the execution represented as a JSON string. The value can only be present if the execution's state is ``SUCCEEDED``.",
+                "type": "string"
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "payload": {
+                    "description": "Error payload returned by the execution, represented as a JSON string.",
+                    "type": "string"
+                  },
+                  "context": {
+                    "description": "Human readable error context, helpful for debugging purposes.",
+                    "type": "string"
+                  }
+                }
+              },
+              "workflow_revision_id": {
+                "description": "Output only. Revision of the workflow this execution is using.",
+                "type": "string"
+              }
+            }
+          }
         },
-        "execution": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution",
-          "description": "Required. Execution to be created."
-        }
+        "required": [
+          "parent",
+          "execution"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetExecutionRequest",
-      "docstring": "Request for the\n[GetExecution][google.cloud.workflows.executions.v1.Executions.GetExecution]\nmethod.\n\nAttributes:\n    name (str):\n        Required. Name of the execution to be\n        retrieved. Format:\n\n        projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}\n    view (google.cloud.workflows.executions_v1.types.ExecutionView):\n        Optional. A view defining which fields should\n        be filled in the returned execution. The API\n        will default to the FULL view.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the execution to be retrieved. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}"
+      "description": "Request for the\n[GetExecution][google.cloud.workflows.executions.v1.Executions.GetExecution]\nmethod.\n\nAttributes:\n    name (str):\n        Required. Name of the execution to be\n        retrieved. Format:\n\n        projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}\n    view (google.cloud.workflows.executions_v1.types.ExecutionView):\n        Optional. A view defining which fields should\n        be filled in the returned execution. The API\n        will default to the FULL view.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the execution to be retrieved. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}",
+            "type": "string"
+          },
+          "view": {
+            "description": "Optional. A view defining which fields should be filled in the returned execution. The API will default to the FULL view.",
+            "type": "object",
+            "reference": "google.cloud.workflows.executions_v1.types.ExecutionView"
+          }
         },
-        "view": {
-          "type": "google.cloud.workflows.executions_v1.types.ExecutionView",
-          "description": "Optional. A view defining which fields should be filled in the returned execution. The API will default to the FULL view."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CancelExecutionRequest",
-      "docstring": "Request for the\n[CancelExecution][google.cloud.workflows.executions.v1.Executions.CancelExecution]\nmethod.\n\nAttributes:\n    name (str):\n        Required. Name of the execution to be\n        cancelled. Format:\n\n        projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the execution to be cancelled. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StackTraceElement",
-      "docstring": "A single stack element (frame) where an error occurred.\n\nAttributes:\n    step (str):\n        The step the error occurred at.\n    routine (str):\n        The routine where the error occurred.\n    position (google.cloud.workflows.executions_v1.types.Execution.StackTraceElement.Position):\n        The source position information of the stack\n        trace element.",
-      "attributes": {
-        "step": {
-          "type": "str",
-          "description": "The step the error occurred at."
+      "description": "Request for the\n[CancelExecution][google.cloud.workflows.executions.v1.Executions.CancelExecution]\nmethod.\n\nAttributes:\n    name (str):\n        Required. Name of the execution to be\n        cancelled. Format:\n\n        projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the execution to be cancelled. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}",
+            "type": "string"
+          }
         },
-        "routine": {
-          "type": "str",
-          "description": "The routine where the error occurred."
-        },
-        "position": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.StackTraceElement.Position",
-          "description": "The source position information of the stack trace element."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StackTrace",
-      "docstring": "A collection of stack elements (frames) where an error\noccurred.\n\nAttributes:\n    elements (MutableSequence[google.cloud.workflows.executions_v1.types.Execution.StackTraceElement]):\n        An array of stack elements.",
-      "attributes": {
-        "elements": {
-          "type": "MutableSequence[google.cloud.workflows.executions_v1.types.Execution.StackTraceElement]",
-          "description": "An array of stack elements."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Error",
-      "docstring": "Error describes why the execution was abnormally terminated.\n\nAttributes:\n    payload (str):\n        Error message and data returned represented\n        as a JSON string.\n    context (str):\n        Human-readable stack trace string.\n    stack_trace (google.cloud.workflows.executions_v1.types.Execution.StackTrace):\n        Stack trace with detailed information of\n        where error was generated.",
-      "attributes": {
-        "payload": {
-          "type": "str",
-          "description": "Error message and data returned represented as a JSON string."
-        },
-        "context": {
-          "type": "str",
-          "description": "Human-readable stack trace string."
-        },
-        "stack_trace": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.StackTrace",
-          "description": "Stack trace with detailed information of where error was generated."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Status",
-      "docstring": "Represents the current status of this execution.\n\nAttributes:\n    current_steps (MutableSequence[google.cloud.workflows.executions_v1.types.Execution.Status.Step]):\n        A list of currently executing or last executed step names\n        for the workflow execution currently running. If the\n        workflow has succeeded or failed, this is the last attempted\n        or executed step. Presently, if the current step is inside a\n        subworkflow, the list only includes that step. In the\n        future, the list will contain items for each step in the\n        call stack, starting with the outermost step in the ``main``\n        subworkflow, and ending with the most deeply nested step.",
-      "attributes": {
-        "current_steps": {
-          "type": "MutableSequence[google.cloud.workflows.executions_v1.types.Execution.Status.Step]",
-          "description": "A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the ``main`` subworkflow, and ending with the most deeply nested step."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StateError",
-      "docstring": "Describes an error related to the current state of the\nExecution resource.\n\nAttributes:\n    details (str):\n        Provides specifics about the error.\n    type_ (google.cloud.workflows.executions_v1.types.Execution.StateError.Type):\n        The type of this state error.",
-      "attributes": {
-        "details": {
-          "type": "str",
-          "description": "Provides specifics about the error."
-        },
-        "type_": {
-          "type": "google.cloud.workflows.executions_v1.types.Execution.StateError.Type",
-          "description": "The type of this state error."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Position",
-      "docstring": "Position contains source position information about the stack\ntrace element such as line number, column number and length of\nthe code block in bytes.\n\nAttributes:\n    line (int):\n        The source code line number the current\n        instruction was generated from.\n    column (int):\n        The source code column position (of the line)\n        the current instruction was generated from.\n    length (int):\n        The number of bytes of source code making up\n        this stack trace element.",
-      "attributes": {
-        "line": {
-          "type": "int",
-          "description": "The source code line number the current instruction was generated from."
-        },
-        "column": {
-          "type": "int",
-          "description": "The source code column position (of the line) the current instruction was generated from."
-        },
-        "length": {
-          "type": "int",
-          "description": "The number of bytes of source code making up this stack trace element."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Step",
-      "docstring": "Represents a step of the workflow this execution is running.\n\nAttributes:\n    routine (str):\n        Name of a routine within the workflow.\n    step (str):\n        Name of a step within the routine.",
-      "attributes": {
-        "routine": {
-          "type": "str",
-          "description": "Name of a routine within the workflow."
-        },
-        "step": {
-          "type": "str",
-          "description": "Name of a step within the routine."
-        }
+        "required": [
+          "name"
+        ]
       }
     }
   ]

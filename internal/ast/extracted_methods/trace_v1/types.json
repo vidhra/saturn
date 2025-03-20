@@ -1,152 +1,157 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-trace\\google\\cloud\\trace_v1\\types\\trace.py": [
     {
-      "type": "request_class",
-      "name": "Trace",
-      "docstring": "A trace describes how long it takes for an application to\nperform an operation. It consists of a set of spans, each of\nwhich represent a single timed event within the operation.\n\nAttributes:\n    project_id (str):\n        Project ID of the Cloud project where the\n        trace data is stored.\n    trace_id (str):\n        Globally unique identifier for the trace. This identifier is\n        a 128-bit numeric value formatted as a 32-byte hex string.\n        For example, ``382d4f4c6b7bb2f4a972559d9085001d``.\n    spans (MutableSequence[google.cloud.trace_v1.types.TraceSpan]):\n        Collection of spans in the trace.",
-      "attributes": {
-        "project_id": {
-          "type": "str",
-          "description": "Project ID of the Cloud project where the trace data is stored."
-        },
-        "trace_id": {
-          "type": "str",
-          "description": "Globally unique identifier for the trace. This identifier is a 128-bit numeric value formatted as a 32-byte hex string. For example, ``382d4f4c6b7bb2f4a972559d9085001d``."
-        },
-        "spans": {
-          "type": "MutableSequence[google.cloud.trace_v1.types.TraceSpan]",
-          "description": "Collection of spans in the trace."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Traces",
-      "docstring": "List of new or updated traces.\n\nAttributes:\n    traces (MutableSequence[google.cloud.trace_v1.types.Trace]):\n        List of traces.",
-      "attributes": {
-        "traces": {
-          "type": "MutableSequence[google.cloud.trace_v1.types.Trace]",
-          "description": "List of traces."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TraceSpan",
-      "docstring": "A span represents a single timed event within a trace. Spans\ncan be nested and form a trace tree. Often, a trace contains a\nroot span that describes the end-to-end latency of an operation\nand, optionally, one or more subspans for its suboperations.\nSpans do not need to be contiguous. There may be gaps between\nspans in a trace.\n\nAttributes:\n    span_id (int):\n        Identifier for the span. Must be a 64-bit integer other than\n        0 and unique within a trace. For example,\n        ``2205310701640571284``.\n    kind (google.cloud.trace_v1.types.TraceSpan.SpanKind):\n        Distinguishes between spans generated in a particular\n        context. For example, two spans with the same name may be\n        distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to\n        identify queueing latency associated with the span.\n    name (str):\n        Name of the span. Must be less than 128\n        bytes. The span name is sanitized and displayed\n        in the Stackdriver Trace tool in the Google\n        Cloud Platform Cons",
-      "attributes": {
-        "span_id": {
-          "type": "int",
-          "description": "Identifier for the span. Must be a 64-bit integer other than 0 and unique within a trace. For example, ``2205310701640571284``."
-        },
-        "kind": {
-          "type": "google.cloud.trace_v1.types.TraceSpan.SpanKind",
-          "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span."
-        },
-        "name": {
-          "type": "str",
-          "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans."
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Start time of the span in nanoseconds from the UNIX epoch."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "End time of the span in nanoseconds from the UNIX epoch."
-        },
-        "parent_span_id": {
-          "type": "int",
-          "description": "Optional. ID of the parent span, if any."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Collection of labels associated with the span. Label keys must be less than 128 bytes. Label values must be less than 16 kilobytes (10MB for ``/stacktrace`` values).  Some predefined label keys exist, or you may create your own. When creating your own, we recommend the following formats:  -  ``/category/product/key`` for agents of well-known products (e.g. ``/db/mongodb/read_size``). -  ``short_host/path/key`` for domain-specific keys (e.g. ``foo.com/myproduct/bar``)  Predefined labels include:  -  ``/agent`` -  ``/component`` -  ``/error/message`` -  ``/error/name`` -  ``/http/client_city`` -  ``/http/client_country`` -  ``/http/client_protocol`` -  ``/http/client_region`` -  ``/http/host`` -  ``/http/method`` -  ``/http/path`` -  ``/http/redirected_url`` -  ``/http/request/size`` -  ``/http/response/size`` -  ``/http/route`` -  ``/http/status_code`` -  ``/http/url`` -  ``/http/user_agent`` -  ``/pid`` -  ``/stacktrace`` -  ``/tid``"
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListTracesRequest",
-      "docstring": "The request message for the ``ListTraces`` method. All fields are\nrequired unless specified.\n\nAttributes:\n    project_id (str):\n        Required. ID of the Cloud project where the\n        trace data is stored.\n    view (google.cloud.trace_v1.types.ListTracesRequest.ViewType):\n        Optional. Type of data returned for traces in the list.\n        Default is ``MINIMAL``.\n    page_size (int):\n        Optional. Maximum number of traces to return.\n        If not specified or <= 0, the implementation\n        selects a reasonable value.  The implementation\n        may return fewer traces than the requested page\n        size.\n    page_token (str):\n        Token identifying the page of results to return. If\n        provided, use the value of the ``next_page_token`` field\n        from a previous request.\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Start of the time interval (inclusive) during\n        which the trace data was collected from the\n        application.\n    end_time (google.protobuf.ti",
-      "attributes": {
-        "project_id": {
-          "type": "str",
-          "description": "Required. ID of the Cloud project where the trace data is stored."
+      "description": "The request message for the ``ListTraces`` method. All fields are\nrequired unless specified.\n\nAttributes:\n    project_id (str):\n        Required. ID of the Cloud project where the\n        trace data is stored.\n    view (google.cloud.trace_v1.types.ListTracesRequest.ViewType):\n        Optional. Type of data returned for traces in the list.\n        Default is ``MINIMAL``.\n    page_size (int):\n        Optional. Maximum number of traces to return.\n        If not specified or <= 0, the implementation\n        selects a reasonable value.  The implementation\n        may return fewer traces than the requested page\n        size.\n    page_token (str):\n        Token identifying the page of results to return. If\n        provided, use the value of the ``next_page_token`` field\n        from a previous request.\n    start_time (google.protobuf.timestamp_pb2.Timestamp):\n        Start of the time interval (inclusive) during\n        which the trace data was collected from the\n        application.\n    end_time (google.protobuf.ti",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "description": "Required. ID of the Cloud project where the trace data is stored.",
+            "type": "string"
+          },
+          "view": {
+            "description": "Optional. Type of data returned for traces in the list. Default is ``MINIMAL``.",
+            "type": "object",
+            "reference": "google.cloud.trace_v1.types.ListTracesRequest.ViewType"
+          },
+          "page_size": {
+            "description": "Optional. Maximum number of traces to return. If not specified or <= 0, the implementation selects a reasonable value.  The implementation may return fewer traces than the requested page size.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Token identifying the page of results to return. If provided, use the value of the ``next_page_token`` field from a previous request.",
+            "type": "string"
+          },
+          "start_time": {
+            "description": "Start of the time interval (inclusive) during which the trace data was collected from the application.",
+            "type": "object",
+            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+          },
+          "end_time": {
+            "description": "End of the time interval (inclusive) during which the trace data was collected from the application.",
+            "type": "object",
+            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+          },
+          "filter": {
+            "description": "Optional. A filter against labels for the request.  By default, searches use prefix matching. To specify exact match, prepend a plus symbol (``+``) to the search term. Multiple terms are ANDed. Syntax:  -  ``root:NAME_PREFIX`` or ``NAME_PREFIX``: Return traces where any root span starts with ``NAME_PREFIX``. -  ``+root:NAME`` or ``+NAME``: Return traces where any root span's name is exactly ``NAME``. -  ``span:NAME_PREFIX``: Return traces where any span starts with ``NAME_PREFIX``. -  ``+span:NAME``: Return traces where any span's name is exactly ``NAME``. -  ``latency:DURATION``: Return traces whose overall latency is greater or equal to than ``DURATION``. Accepted units are nanoseconds (``ns``), milliseconds (``ms``), and seconds (``s``). Default is ``ms``. For example, ``latency:24ms`` returns traces whose overall latency is greater than or equal to 24 milliseconds. -  ``label:LABEL_KEY``: Return all traces containing the specified label key (exact match, case-sensitive) regardless of the key:value pair's value (including empty values). -  ``LABEL_KEY:VALUE_PREFIX``: Return all traces containing the specified label key (exact match, case-sensitive) whose value starts with ``VALUE_PREFIX``. Both a key and a value must be specified. -  ``+LABEL_KEY:VALUE``: Return all traces containing a key:value pair exactly matching the specified text. Both a key and a value must be specified. -  ``method:VALUE``: Equivalent to ``/http/method:VALUE``. -  ``url:VALUE``: Equivalent to ``/http/url:VALUE``.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Optional. Field used to sort the returned traces. Can be one of the following:  -  ``trace_id`` -  ``name`` (``name`` field of root span in the trace) -  ``duration`` (difference between ``end_time`` and ``start_time`` fields of the root span) -  ``start`` (``start_time`` field of the root span)  Descending order can be specified by appending ``desc`` to the sort field (for example, ``name desc``).  Only one sort field is permitted.",
+            "type": "string"
+          }
         },
-        "view": {
-          "type": "google.cloud.trace_v1.types.ListTracesRequest.ViewType",
-          "description": "Optional. Type of data returned for traces in the list. Default is ``MINIMAL``."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "Optional. Maximum number of traces to return. If not specified or <= 0, the implementation selects a reasonable value.  The implementation may return fewer traces than the requested page size."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "Token identifying the page of results to return. If provided, use the value of the ``next_page_token`` field from a previous request."
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Start of the time interval (inclusive) during which the trace data was collected from the application."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "End of the time interval (inclusive) during which the trace data was collected from the application."
-        },
-        "filter": {
-          "type": "str",
-          "description": "Optional. A filter against labels for the request.  By default, searches use prefix matching. To specify exact match, prepend a plus symbol (``+``) to the search term. Multiple terms are ANDed. Syntax:  -  ``root:NAME_PREFIX`` or ``NAME_PREFIX``: Return traces where any root span starts with ``NAME_PREFIX``. -  ``+root:NAME`` or ``+NAME``: Return traces where any root span's name is exactly ``NAME``. -  ``span:NAME_PREFIX``: Return traces where any span starts with ``NAME_PREFIX``. -  ``+span:NAME``: Return traces where any span's name is exactly ``NAME``. -  ``latency:DURATION``: Return traces whose overall latency is greater or equal to than ``DURATION``. Accepted units are nanoseconds (``ns``), milliseconds (``ms``), and seconds (``s``). Default is ``ms``. For example, ``latency:24ms`` returns traces whose overall latency is greater than or equal to 24 milliseconds. -  ``label:LABEL_KEY``: Return all traces containing the specified label key (exact match, case-sensitive) regardless of the key:value pair's value (including empty values). -  ``LABEL_KEY:VALUE_PREFIX``: Return all traces containing the specified label key (exact match, case-sensitive) whose value starts with ``VALUE_PREFIX``. Both a key and a value must be specified. -  ``+LABEL_KEY:VALUE``: Return all traces containing a key:value pair exactly matching the specified text. Both a key and a value must be specified. -  ``method:VALUE``: Equivalent to ``/http/method:VALUE``. -  ``url:VALUE``: Equivalent to ``/http/url:VALUE``."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Optional. Field used to sort the returned traces. Can be one of the following:  -  ``trace_id`` -  ``name`` (``name`` field of root span in the trace) -  ``duration`` (difference between ``end_time`` and ``start_time`` fields of the root span) -  ``start`` (``start_time`` field of the root span)  Descending order can be specified by appending ``desc`` to the sort field (for example, ``name desc``).  Only one sort field is permitted."
-        }
+        "required": [
+          "project_id"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListTracesResponse",
-      "docstring": "The response message for the ``ListTraces`` method.\n\nAttributes:\n    traces (MutableSequence[google.cloud.trace_v1.types.Trace]):\n        List of trace records as specified by the\n        view parameter.\n    next_page_token (str):\n        If defined, indicates that there are more\n        traces that match the request and that this\n        value should be passed to the next request to\n        continue retrieving additional traces.",
-      "attributes": {
-        "traces": {
-          "type": "MutableSequence[google.cloud.trace_v1.types.Trace]",
-          "description": "List of trace records as specified by the view parameter."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "If defined, indicates that there are more traces that match the request and that this value should be passed to the next request to continue retrieving additional traces."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetTraceRequest",
-      "docstring": "The request message for the ``GetTrace`` method.\n\nAttributes:\n    project_id (str):\n        Required. ID of the Cloud project where the\n        trace data is stored.\n    trace_id (str):\n        Required. ID of the trace to return.",
-      "attributes": {
-        "project_id": {
-          "type": "str",
-          "description": "Required. ID of the Cloud project where the trace data is stored."
+      "description": "The request message for the ``GetTrace`` method.\n\nAttributes:\n    project_id (str):\n        Required. ID of the Cloud project where the\n        trace data is stored.\n    trace_id (str):\n        Required. ID of the trace to return.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "description": "Required. ID of the Cloud project where the trace data is stored.",
+            "type": "string"
+          },
+          "trace_id": {
+            "description": "Required. ID of the trace to return.",
+            "type": "string"
+          }
         },
-        "trace_id": {
-          "type": "str",
-          "description": "Required. ID of the trace to return."
-        }
+        "required": [
+          "project_id",
+          "trace_id"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "PatchTracesRequest",
-      "docstring": "The request message for the ``PatchTraces`` method.\n\nAttributes:\n    project_id (str):\n        Required. ID of the Cloud project where the\n        trace data is stored.\n    traces (google.cloud.trace_v1.types.Traces):\n        Required. The body of the message.",
-      "attributes": {
-        "project_id": {
-          "type": "str",
-          "description": "Required. ID of the Cloud project where the trace data is stored."
+      "description": "The request message for the ``PatchTraces`` method.\n\nAttributes:\n    project_id (str):\n        Required. ID of the Cloud project where the\n        trace data is stored.\n    traces (google.cloud.trace_v1.types.Traces):\n        Required. The body of the message.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "description": "Required. ID of the Cloud project where the trace data is stored.",
+            "type": "string"
+          },
+          "traces": {
+            "description": "Required. The body of the message.",
+            "type": "object",
+            "properties": {
+              "traces": {
+                "description": "List of traces.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "project_id": {
+                      "description": "Project ID of the Cloud project where the trace data is stored.",
+                      "type": "string"
+                    },
+                    "trace_id": {
+                      "description": "Globally unique identifier for the trace. This identifier is a 128-bit numeric value formatted as a 32-byte hex string. For example, ``382d4f4c6b7bb2f4a972559d9085001d``.",
+                      "type": "string"
+                    },
+                    "spans": {
+                      "description": "Collection of spans in the trace.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "span_id": {
+                            "description": "Identifier for the span. Must be a 64-bit integer other than 0 and unique within a trace. For example, ``2205310701640571284``.",
+                            "type": "integer"
+                          },
+                          "kind": {
+                            "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span.",
+                            "type": "object",
+                            "reference": "google.cloud.trace_v1.types.TraceSpan.SpanKind"
+                          },
+                          "name": {
+                            "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans.",
+                            "type": "string"
+                          },
+                          "start_time": {
+                            "description": "Start time of the span in nanoseconds from the UNIX epoch.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "end_time": {
+                            "description": "End time of the span in nanoseconds from the UNIX epoch.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "parent_span_id": {
+                            "description": "Optional. ID of the parent span, if any.",
+                            "type": "integer"
+                          },
+                          "labels": {
+                            "description": "Collection of labels associated with the span. Label keys must be less than 128 bytes. Label values must be less than 16 kilobytes (10MB for ``/stacktrace`` values).  Some predefined label keys exist, or you may create your own. When creating your own, we recommend the following formats:  -  ``/category/product/key`` for agents of well-known products (e.g. ``/db/mongodb/read_size``). -  ``short_host/path/key`` for domain-specific keys (e.g. ``foo.com/myproduct/bar``)  Predefined labels include:  -  ``/agent`` -  ``/component`` -  ``/error/message`` -  ``/error/name`` -  ``/http/client_city`` -  ``/http/client_country`` -  ``/http/client_protocol`` -  ``/http/client_region`` -  ``/http/host`` -  ``/http/method`` -  ``/http/path`` -  ``/http/redirected_url`` -  ``/http/request/size`` -  ``/http/response/size`` -  ``/http/route`` -  ``/http/status_code`` -  ``/http/url`` -  ``/http/user_agent`` -  ``/pid`` -  ``/stacktrace`` -  ``/tid``",
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
-        "traces": {
-          "type": "google.cloud.trace_v1.types.Traces",
-          "description": "Required. The body of the message."
-        }
+        "required": [
+          "project_id",
+          "traces"
+        ]
       }
     }
   ]

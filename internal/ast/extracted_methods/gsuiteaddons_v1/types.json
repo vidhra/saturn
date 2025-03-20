@@ -1,233 +1,372 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gsuiteaddons\\google\\cloud\\gsuiteaddons_v1\\types\\gsuiteaddons.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetAuthorizationRequest",
-      "docstring": "Request message to get Google Workspace Add-ons authorization\ninformation.\n\nAttributes:\n    name (str):\n        Required. Name of the project for which to get the Google\n        Workspace Add-ons authorization information.\n\n        Example: ``projects/my_project/authorization``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the project for which to get the Google Workspace Add-ons authorization information.  Example: ``projects/my_project/authorization``."
-        }
+      "description": "Request message to get Google Workspace Add-ons authorization\ninformation.\n\nAttributes:\n    name (str):\n        Required. Name of the project for which to get the Google\n        Workspace Add-ons authorization information.\n\n        Example: ``projects/my_project/authorization``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the project for which to get the Google Workspace Add-ons authorization information.  Example: ``projects/my_project/authorization``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "Authorization",
-      "docstring": "The authorization information used when invoking deployment\nendpoints.\n\nAttributes:\n    name (str):\n        The canonical full name of this resource. Example:\n        ``projects/123/authorization``\n    service_account_email (str):\n        The email address of the service account used\n        to authenticate requests to add-on callback\n        endpoints.\n    oauth_client_id (str):\n        The OAuth client ID used to obtain OAuth\n        access tokens for a user on the add-on's behalf.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The canonical full name of this resource. Example: ``projects/123/authorization``"
-        },
-        "service_account_email": {
-          "type": "str",
-          "description": "The email address of the service account used to authenticate requests to add-on callback endpoints."
-        },
-        "oauth_client_id": {
-          "type": "str",
-          "description": "The OAuth client ID used to obtain OAuth access tokens for a user on the add-on's behalf."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateDeploymentRequest",
-      "docstring": "Request message to create a deployment.\n\nAttributes:\n    parent (str):\n        Required. Name of the project in which to create the\n        deployment.\n\n        Example: ``projects/my_project``.\n    deployment_id (str):\n        Required. The id to use for this deployment. The full name\n        of the created resource will be\n        ``projects/<project_number>/deployments/<deployment_id>``.\n    deployment (google.cloud.gsuiteaddons_v1.types.Deployment):\n        Required. The deployment to create\n        (deployment.name cannot be set).",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the project in which to create the deployment.  Example: ``projects/my_project``."
+      "description": "Request message to create a deployment.\n\nAttributes:\n    parent (str):\n        Required. Name of the project in which to create the\n        deployment.\n\n        Example: ``projects/my_project``.\n    deployment_id (str):\n        Required. The id to use for this deployment. The full name\n        of the created resource will be\n        ``projects/<project_number>/deployments/<deployment_id>``.\n    deployment (google.cloud.gsuiteaddons_v1.types.Deployment):\n        Required. The deployment to create\n        (deployment.name cannot be set).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the project in which to create the deployment.  Example: ``projects/my_project``.",
+            "type": "string"
+          },
+          "deployment_id": {
+            "description": "Required. The id to use for this deployment. The full name of the created resource will be ``projects/<project_number>/deployments/<deployment_id>``.",
+            "type": "string"
+          },
+          "deployment": {
+            "description": "Required. The deployment to create (deployment.name cannot be set).",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The name of the deployment.",
+                "type": "string"
+              },
+              "revision_id": {
+                "description": "Output only. Immutable. The revision ID of the deployment. A new revision is committed whenever a change in deployment is applied.",
+                "type": "string"
+              },
+              "source_blueprint_revision": {
+                "description": "Required. The blueprint revision from which this deployment was created.",
+                "type": "string"
+              },
+              "revision_create_time": {
+                "description": "Output only. The timestamp that the revision was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. State of the deployment (DRAFT, APPLIED, DELETING).",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.Deployment.State"
+              },
+              "display_name": {
+                "description": "Optional. Human readable name of a Deployment.",
+                "type": "string"
+              },
+              "repository": {
+                "description": "Output only. Name of the repository where the deployment package files are stored.",
+                "type": "string"
+              },
+              "files": {
+                "description": "Optional. Files present in a deployment. When invoking UpdateDeployment API, only the modified files should be included in this. Files that are not included in the update of a deployment will not be changed.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "description": "Required. Path of the file in package. e.g. ``gdce/v1/cluster.yaml``",
+                      "type": "string"
+                    },
+                    "content": {
+                      "description": "Optional. The contents of a file in string format.",
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "description": "Optional. Signifies whether a file is marked for deletion.",
+                      "type": "boolean"
+                    },
+                    "editable": {
+                      "description": "Optional. Indicates whether changes are allowed to a file. If the field is not set, the file cannot be edited.",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              },
+              "labels": {
+                "description": "Optional. Labels are key-value attributes that can be set on a deployment resource by the user.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "create_time": {
+                "description": "Output only. Deployment creation time.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. The timestamp when the deployment was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "source_provider": {
+                "description": "Output only. Source provider is the author of a public blueprint, from which this deployment is created.",
+                "type": "string"
+              },
+              "workload_cluster": {
+                "description": "Optional. Immutable. The WorkloadCluster on which to create the Deployment. This field should only be passed when the deployment_level of the source blueprint specifies deployments on workload clusters e.g. WORKLOAD_CLUSTER_DEPLOYMENT.",
+                "type": "string"
+              },
+              "deployment_level": {
+                "description": "Output only. Attributes to where the deployment can inflict changes. The value can only be [SINGLE_DEPLOYMENT, MULTI_DEPLOYMENT].",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.DeploymentLevel"
+              },
+              "rollback_support": {
+                "description": "Output only. Indicates if the deployment can be rolled back, exported from public blueprint.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "source_blueprint_revision"
+            ]
+          }
         },
-        "deployment_id": {
-          "type": "str",
-          "description": "Required. The id to use for this deployment. The full name of the created resource will be ``projects/<project_number>/deployments/<deployment_id>``."
-        },
-        "deployment": {
-          "type": "google.cloud.gsuiteaddons_v1.types.Deployment",
-          "description": "Required. The deployment to create (deployment.name cannot be set)."
-        }
+        "required": [
+          "parent",
+          "deployment_id",
+          "deployment"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ReplaceDeploymentRequest",
-      "docstring": "Request message to create or replace a deployment.\n\nAttributes:\n    deployment (google.cloud.gsuiteaddons_v1.types.Deployment):\n        Required. The deployment to create or\n        replace.",
-      "attributes": {
-        "deployment": {
-          "type": "google.cloud.gsuiteaddons_v1.types.Deployment",
-          "description": "Required. The deployment to create or replace."
-        }
+      "description": "Request message to create or replace a deployment.\n\nAttributes:\n    deployment (google.cloud.gsuiteaddons_v1.types.Deployment):\n        Required. The deployment to create or\n        replace.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "deployment": {
+            "description": "Required. The deployment to create or replace.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "The name of the deployment.",
+                "type": "string"
+              },
+              "revision_id": {
+                "description": "Output only. Immutable. The revision ID of the deployment. A new revision is committed whenever a change in deployment is applied.",
+                "type": "string"
+              },
+              "source_blueprint_revision": {
+                "description": "Required. The blueprint revision from which this deployment was created.",
+                "type": "string"
+              },
+              "revision_create_time": {
+                "description": "Output only. The timestamp that the revision was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "state": {
+                "description": "Output only. State of the deployment (DRAFT, APPLIED, DELETING).",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.Deployment.State"
+              },
+              "display_name": {
+                "description": "Optional. Human readable name of a Deployment.",
+                "type": "string"
+              },
+              "repository": {
+                "description": "Output only. Name of the repository where the deployment package files are stored.",
+                "type": "string"
+              },
+              "files": {
+                "description": "Optional. Files present in a deployment. When invoking UpdateDeployment API, only the modified files should be included in this. Files that are not included in the update of a deployment will not be changed.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "description": "Required. Path of the file in package. e.g. ``gdce/v1/cluster.yaml``",
+                      "type": "string"
+                    },
+                    "content": {
+                      "description": "Optional. The contents of a file in string format.",
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "description": "Optional. Signifies whether a file is marked for deletion.",
+                      "type": "boolean"
+                    },
+                    "editable": {
+                      "description": "Optional. Indicates whether changes are allowed to a file. If the field is not set, the file cannot be edited.",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ]
+                }
+              },
+              "labels": {
+                "description": "Optional. Labels are key-value attributes that can be set on a deployment resource by the user.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "create_time": {
+                "description": "Output only. Deployment creation time.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. The timestamp when the deployment was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "source_provider": {
+                "description": "Output only. Source provider is the author of a public blueprint, from which this deployment is created.",
+                "type": "string"
+              },
+              "workload_cluster": {
+                "description": "Optional. Immutable. The WorkloadCluster on which to create the Deployment. This field should only be passed when the deployment_level of the source blueprint specifies deployments on workload clusters e.g. WORKLOAD_CLUSTER_DEPLOYMENT.",
+                "type": "string"
+              },
+              "deployment_level": {
+                "description": "Output only. Attributes to where the deployment can inflict changes. The value can only be [SINGLE_DEPLOYMENT, MULTI_DEPLOYMENT].",
+                "type": "object",
+                "reference": "google.cloud.telcoautomation_v1alpha1.types.DeploymentLevel"
+              },
+              "rollback_support": {
+                "description": "Output only. Indicates if the deployment can be rolled back, exported from public blueprint.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "source_blueprint_revision"
+            ]
+          }
+        },
+        "required": [
+          "deployment"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetDeploymentRequest",
-      "docstring": "Request message to get a deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to get.\n\n        Example: ``projects/my_project/deployments/my_deployment``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The full resource name of the deployment to get.  Example: ``projects/my_project/deployments/my_deployment``."
-        }
+      "description": "Request message to get a deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to get.\n\n        Example: ``projects/my_project/deployments/my_deployment``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full resource name of the deployment to get.  Example: ``projects/my_project/deployments/my_deployment``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListDeploymentsRequest",
-      "docstring": "Request message to list deployments for a project.\n\nAttributes:\n    parent (str):\n        Required. Name of the project in which to create the\n        deployment.\n\n        Example: ``projects/my_project``.\n    page_size (int):\n        The maximum number of deployments to return.\n        The service may return fewer than this value. If\n        unspecified, at most 1000 deployments will be\n        returned. The maximum value is 1000; values\n        above 1000 will be coerced to 1000.\n    page_token (str):\n        A page token, received from a previous ``ListDeployments``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListDeployments`` must match the call that provided the\n        page token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. Name of the project in which to create the deployment.  Example: ``projects/my_project``."
+      "description": "Request message to list deployments for a project.\n\nAttributes:\n    parent (str):\n        Required. Name of the project in which to create the\n        deployment.\n\n        Example: ``projects/my_project``.\n    page_size (int):\n        The maximum number of deployments to return.\n        The service may return fewer than this value. If\n        unspecified, at most 1000 deployments will be\n        returned. The maximum value is 1000; values\n        above 1000 will be coerced to 1000.\n    page_token (str):\n        A page token, received from a previous ``ListDeployments``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListDeployments`` must match the call that provided the\n        page token.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. Name of the project in which to create the deployment.  Example: ``projects/my_project``.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of deployments to return. The service may return fewer than this value. If unspecified, at most 1000 deployments will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token, received from a previous ``ListDeployments`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListDeployments`` must match the call that provided the page token.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of deployments to return. The service may return fewer than this value. If unspecified, at most 1000 deployments will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "A page token, received from a previous ``ListDeployments`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListDeployments`` must match the call that provided the page token."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListDeploymentsResponse",
-      "docstring": "Response message to list deployments.\n\nAttributes:\n    deployments (MutableSequence[google.cloud.gsuiteaddons_v1.types.Deployment]):\n        The list of deployments for the given\n        project.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.",
-      "attributes": {
-        "deployments": {
-          "type": "MutableSequence[google.cloud.gsuiteaddons_v1.types.Deployment]",
-          "description": "The list of deployments for the given project."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteDeploymentRequest",
-      "docstring": "Request message to delete a deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to\n        delete.\n\n        Example: ``projects/my_project/deployments/my_deployment``.\n    etag (str):\n        The etag of the deployment to delete.\n        If this is provided, it must match the server's\n        etag.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The full resource name of the deployment to delete.  Example: ``projects/my_project/deployments/my_deployment``."
+      "description": "Request message to delete a deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to\n        delete.\n\n        Example: ``projects/my_project/deployments/my_deployment``.\n    etag (str):\n        The etag of the deployment to delete.\n        If this is provided, it must match the server's\n        etag.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full resource name of the deployment to delete.  Example: ``projects/my_project/deployments/my_deployment``.",
+            "type": "string"
+          },
+          "etag": {
+            "description": "The etag of the deployment to delete. If this is provided, it must match the server's etag.",
+            "type": "string"
+          }
         },
-        "etag": {
-          "type": "str",
-          "description": "The etag of the deployment to delete. If this is provided, it must match the server's etag."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "InstallDeploymentRequest",
-      "docstring": "Request message to install a developer mode deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to\n        install.\n\n        Example: ``projects/my_project/deployments/my_deployment``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The full resource name of the deployment to install.  Example: ``projects/my_project/deployments/my_deployment``."
-        }
+      "description": "Request message to install a developer mode deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to\n        install.\n\n        Example: ``projects/my_project/deployments/my_deployment``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full resource name of the deployment to install.  Example: ``projects/my_project/deployments/my_deployment``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UninstallDeploymentRequest",
-      "docstring": "Request message to uninstall a developer mode deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to\n        install.\n\n        Example: ``projects/my_project/deployments/my_deployment``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The full resource name of the deployment to install.  Example: ``projects/my_project/deployments/my_deployment``."
-        }
+      "description": "Request message to uninstall a developer mode deployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment to\n        install.\n\n        Example: ``projects/my_project/deployments/my_deployment``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full resource name of the deployment to install.  Example: ``projects/my_project/deployments/my_deployment``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetInstallStatusRequest",
-      "docstring": "Request message to get the install status of a developer mode\ndeployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment.\n\n        Example:\n        ``projects/my_project/deployments/my_deployment/installStatus``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The full resource name of the deployment.  Example: ``projects/my_project/deployments/my_deployment/installStatus``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "InstallStatus",
-      "docstring": "Developer mode install status of a deployment\n\nAttributes:\n    name (str):\n        The canonical full resource name of the deployment install\n        status.\n\n        Example:\n        ``projects/123/deployments/my_deployment/installStatus``.\n    installed (google.protobuf.wrappers_pb2.BoolValue):\n        True if the deployment is installed for the\n        user",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The canonical full resource name of the deployment install status.  Example: ``projects/123/deployments/my_deployment/installStatus``."
+      "description": "Request message to get the install status of a developer mode\ndeployment.\n\nAttributes:\n    name (str):\n        Required. The full resource name of the deployment.\n\n        Example:\n        ``projects/my_project/deployments/my_deployment/installStatus``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full resource name of the deployment.  Example: ``projects/my_project/deployments/my_deployment/installStatus``.",
+            "type": "string"
+          }
         },
-        "installed": {
-          "type": "google.protobuf.wrappers_pb2.BoolValue",
-          "description": "True if the deployment is installed for the user"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Deployment",
-      "docstring": "A Google Workspace Add-on deployment\n\nAttributes:\n    name (str):\n        The deployment resource name. Example:\n        projects/123/deployments/my_deployment.\n    oauth_scopes (MutableSequence[str]):\n        The list of Google OAuth scopes for which to\n        request consent from the end user before\n        executing an add-on endpoint.\n    add_ons (google.cloud.gsuiteaddons_v1.types.AddOns):\n        The Google Workspace Add-on configuration.\n    etag (str):\n        This value is computed by the server based on\n        the version of the deployment in storage, and\n        may be sent on update and delete requests to\n        ensure the client has an up-to-date value before\n        proceeding.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The deployment resource name. Example: projects/123/deployments/my_deployment."
-        },
-        "oauth_scopes": {
-          "type": "MutableSequence[str]",
-          "description": "The list of Google OAuth scopes for which to request consent from the end user before executing an add-on endpoint."
-        },
-        "add_ons": {
-          "type": "google.cloud.gsuiteaddons_v1.types.AddOns",
-          "description": "The Google Workspace Add-on configuration."
-        },
-        "etag": {
-          "type": "str",
-          "description": "This value is computed by the server based on the version of the deployment in storage, and may be sent on update and delete requests to ensure the client has an up-to-date value before proceeding."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AddOns",
-      "docstring": "A Google Workspace Add-on configuration.\n\nAttributes:\n    common (google.apps.script.type.types.CommonAddOnManifest):\n        Configuration that is common across all\n        Google Workspace Add-ons.\n    gmail (google.apps.script.type.gmail.types.GmailAddOnManifest):\n        Gmail add-on configuration.\n    drive (google.apps.script.type.drive.types.DriveAddOnManifest):\n        Drive add-on configuration.\n    calendar (google.apps.script.type.calendar.types.CalendarAddOnManifest):\n        Calendar add-on configuration.\n    docs (google.apps.script.type.docs.types.DocsAddOnManifest):\n        Docs add-on configuration.\n    sheets (google.apps.script.type.sheets.types.SheetsAddOnManifest):\n        Sheets add-on configuration.\n    slides (google.apps.script.type.slides.types.SlidesAddOnManifest):\n        Slides add-on configuration.\n    http_options (google.apps.script.type.types.HttpOptions):\n        Options for sending requests to add-on HTTP\n        endpoints",
-      "attributes": {
-        "common": {
-          "type": "google.apps.script.type.types.CommonAddOnManifest",
-          "description": "Configuration that is common across all Google Workspace Add-ons."
-        },
-        "gmail": {
-          "type": "google.apps.script.type.gmail.types.GmailAddOnManifest",
-          "description": "Gmail add-on configuration."
-        },
-        "drive": {
-          "type": "google.apps.script.type.drive.types.DriveAddOnManifest",
-          "description": "Drive add-on configuration."
-        },
-        "calendar": {
-          "type": "google.apps.script.type.calendar.types.CalendarAddOnManifest",
-          "description": "Calendar add-on configuration."
-        },
-        "docs": {
-          "type": "google.apps.script.type.docs.types.DocsAddOnManifest",
-          "description": "Docs add-on configuration."
-        },
-        "sheets": {
-          "type": "google.apps.script.type.sheets.types.SheetsAddOnManifest",
-          "description": "Sheets add-on configuration."
-        },
-        "slides": {
-          "type": "google.apps.script.type.slides.types.SlidesAddOnManifest",
-          "description": "Slides add-on configuration."
-        },
-        "http_options": {
-          "type": "google.apps.script.type.types.HttpOptions",
-          "description": "Options for sending requests to add-on HTTP endpoints"
-        }
+        "required": [
+          "name"
+        ]
       }
     }
   ]

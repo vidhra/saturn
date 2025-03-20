@@ -1,526 +1,344 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-language\\google\\cloud\\language_v1\\types\\language_service.py": [
     {
-      "type": "request_class",
-      "name": "Document",
-      "docstring": "Represents the input to API methods.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    type_ (google.cloud.language_v1.types.Document.Type):\n        Required. If the type is not set or is ``TYPE_UNSPECIFIED``,\n        returns an ``INVALID_ARGUMENT`` error.\n    content (str):\n        The content of the input in string format.\n        Cloud audit logging exempt since it is based on\n        user data.\n\n        This field is a member of `oneof`_ ``source``.\n    gcs_content_uri (str):\n        The Google Cloud Storage URI where the file content is\n        located. This URI must be of the form:\n        gs://bucket_name/object_name. For more details, see\n        https://cloud.google.com/storage/docs/reference-uris. NOTE:\n        Cloud Storage",
-      "attributes": {
-        "type_": {
-          "type": "google.cloud.language_v1.types.Document.Type",
-          "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error."
-        },
-        "content": {
-          "type": "str",
-          "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``."
-        },
-        "gcs_content_uri": {
-          "type": "str",
-          "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``."
-        },
-        "language": {
-          "type": "str",
-          "description": "The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Sentence",
-      "docstring": "Represents a sentence in the input document.\n\nAttributes:\n    text (google.cloud.language_v1.types.TextSpan):\n        The sentence text.\n    sentiment (google.cloud.language_v1.types.Sentiment):\n        For calls to [AnalyzeSentiment][] or if\n        [AnnotateTextRequest.Features.extract_document_sentiment][google.cloud.language.v1.AnnotateTextRequest.Features.extract_document_sentiment]\n        is set to true, this field will contain the sentiment for\n        the sentence.",
-      "attributes": {
-        "text": {
-          "type": "google.cloud.language_v1.types.TextSpan",
-          "description": "The sentence text."
-        },
-        "sentiment": {
-          "type": "google.cloud.language_v1.types.Sentiment",
-          "description": "For calls to [AnalyzeSentiment][] or if [AnnotateTextRequest.Features.extract_document_sentiment][google.cloud.language.v1.AnnotateTextRequest.Features.extract_document_sentiment] is set to true, this field will contain the sentiment for the sentence."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Entity",
-      "docstring": "Represents a phrase in the text that is a known entity, such\nas a person, an organization, or location. The API associates\ninformation, such as salience and mentions, with entities.\n\nAttributes:\n    name (str):\n        The representative name for the entity.\n    type_ (google.cloud.language_v1.types.Entity.Type):\n        The entity type.\n    metadata (MutableMapping[str, str]):\n        Metadata associated with the entity.\n\n        For most entity types, the metadata is a Wikipedia URL\n        (``wikipedia_url``) and Knowledge Graph MID (``mid``), if\n        they are available. For the metadata associated with other\n        entity types, see the Type table below.\n    salience (float):\n        The salience score associated with the entity in the [0,\n        1.0] range.\n\n        The salience score for an entity provides information about\n        the importance or centrality of that entity to the entire\n        document text. Scores closer to 0 are less salient, while\n        scores closer to 1.0 are highly salie",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The representative name for the entity."
-        },
-        "type_": {
-          "type": "google.cloud.language_v1.types.Entity.Type",
-          "description": "The entity type."
-        },
-        "metadata": {
-          "type": "MutableMapping[str, str]",
-          "description": "Metadata associated with the entity.  For most entity types, the metadata is a Wikipedia URL (``wikipedia_url``) and Knowledge Graph MID (``mid``), if they are available. For the metadata associated with other entity types, see the Type table below."
-        },
-        "salience": {
-          "type": "float",
-          "description": "The salience score associated with the entity in the [0, 1.0] range.  The salience score for an entity provides information about the importance or centrality of that entity to the entire document text. Scores closer to 0 are less salient, while scores closer to 1.0 are highly salient."
-        },
-        "mentions": {
-          "type": "MutableSequence[google.cloud.language_v1.types.EntityMention]",
-          "description": "The mentions of this entity in the input document. The API currently supports proper noun mentions."
-        },
-        "sentiment": {
-          "type": "google.cloud.language_v1.types.Sentiment",
-          "description": "For calls to [AnalyzeEntitySentiment][] or if [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1.AnnotateTextRequest.Features.extract_entity_sentiment] is set to true, this field will contain the aggregate sentiment expressed for this entity in the provided document."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Token",
-      "docstring": "Represents the smallest syntactic building block of the text.\n\nAttributes:\n    text (google.cloud.language_v1.types.TextSpan):\n        The token text.\n    part_of_speech (google.cloud.language_v1.types.PartOfSpeech):\n        Parts of speech tag for this token.\n    dependency_edge (google.cloud.language_v1.types.DependencyEdge):\n        Dependency tree parse for this token.\n    lemma (str):\n        `Lemma <https://en.wikipedia.org/wiki/Lemma_%28morphology%29>`__\n        of the token.",
-      "attributes": {
-        "text": {
-          "type": "google.cloud.language_v1.types.TextSpan",
-          "description": "The token text."
-        },
-        "part_of_speech": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech",
-          "description": "Parts of speech tag for this token."
-        },
-        "dependency_edge": {
-          "type": "google.cloud.language_v1.types.DependencyEdge",
-          "description": "Dependency tree parse for this token."
-        },
-        "lemma": {
-          "type": "str",
-          "description": "`Lemma <https://en.wikipedia.org/wiki/Lemma_%28morphology%29>`__ of the token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Sentiment",
-      "docstring": "Represents the feeling associated with the entire text or\nentities in the text.\n\nAttributes:\n    magnitude (float):\n        A non-negative number in the [0, +inf) range, which\n        represents the absolute magnitude of sentiment regardless of\n        score (positive or negative).\n    score (float):\n        Sentiment score between -1.0 (negative\n        sentiment) and 1.0 (positive sentiment).",
-      "attributes": {
-        "magnitude": {
-          "type": "float",
-          "description": "A non-negative number in the [0, +inf) range, which represents the absolute magnitude of sentiment regardless of score (positive or negative)."
-        },
-        "score": {
-          "type": "float",
-          "description": "Sentiment score between -1.0 (negative sentiment) and 1.0 (positive sentiment)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PartOfSpeech",
-      "docstring": "Represents part of speech information for a token. Parts of speech\nare as defined in\nhttp://www.lrec-conf.org/proceedings/lrec2012/pdf/274_Paper.pdf\n\nAttributes:\n    tag (google.cloud.language_v1.types.PartOfSpeech.Tag):\n        The part of speech tag.\n    aspect (google.cloud.language_v1.types.PartOfSpeech.Aspect):\n        The grammatical aspect.\n    case (google.cloud.language_v1.types.PartOfSpeech.Case):\n        The grammatical case.\n    form (google.cloud.language_v1.types.PartOfSpeech.Form):\n        The grammatical form.\n    gender (google.cloud.language_v1.types.PartOfSpeech.Gender):\n        The grammatical gender.\n    mood (google.cloud.language_v1.types.PartOfSpeech.Mood):\n        The grammatical mood.\n    number (google.cloud.language_v1.types.PartOfSpeech.Number):\n        The grammatical number.\n    person (google.cloud.language_v1.types.PartOfSpeech.Person):\n        The grammatical person.\n    proper (google.cloud.language_v1.types.PartOfSpeech.Proper):\n        The grammatical properness.\n    recip",
-      "attributes": {
-        "tag": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Tag",
-          "description": "The part of speech tag."
-        },
-        "aspect": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Aspect",
-          "description": "The grammatical aspect."
-        },
-        "case": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Case",
-          "description": "The grammatical case."
-        },
-        "form": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Form",
-          "description": "The grammatical form."
-        },
-        "gender": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Gender",
-          "description": "The grammatical gender."
-        },
-        "mood": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Mood",
-          "description": "The grammatical mood."
-        },
-        "number": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Number",
-          "description": "The grammatical number."
-        },
-        "person": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Person",
-          "description": "The grammatical person."
-        },
-        "proper": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Proper",
-          "description": "The grammatical properness."
-        },
-        "reciprocity": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Reciprocity",
-          "description": "The grammatical reciprocity."
-        },
-        "tense": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Tense",
-          "description": "The grammatical tense."
-        },
-        "voice": {
-          "type": "google.cloud.language_v1.types.PartOfSpeech.Voice",
-          "description": "The grammatical voice."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DependencyEdge",
-      "docstring": "Represents dependency parse tree information for a token.\n(For more information on dependency labels, see\nhttp://www.aclweb.org/anthology/P13-2017\n\nAttributes:\n    head_token_index (int):\n        Represents the head of this token in the dependency tree.\n        This is the index of the token which has an arc going to\n        this token. The index is the position of the token in the\n        array of tokens returned by the API method. If this token is\n        a root token, then the ``head_token_index`` is its own\n        index.\n    label (google.cloud.language_v1.types.DependencyEdge.Label):\n        The parse label for the token.",
-      "attributes": {
-        "head_token_index": {
-          "type": "int",
-          "description": "Represents the head of this token in the dependency tree. This is the index of the token which has an arc going to this token. The index is the position of the token in the array of tokens returned by the API method. If this token is a root token, then the ``head_token_index`` is its own index."
-        },
-        "label": {
-          "type": "google.cloud.language_v1.types.DependencyEdge.Label",
-          "description": "The parse label for the token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "EntityMention",
-      "docstring": "Represents a mention for an entity in the text. Currently,\nproper noun mentions are supported.\n\nAttributes:\n    text (google.cloud.language_v1.types.TextSpan):\n        The mention text.\n    type_ (google.cloud.language_v1.types.EntityMention.Type):\n        The type of the entity mention.\n    sentiment (google.cloud.language_v1.types.Sentiment):\n        For calls to [AnalyzeEntitySentiment][] or if\n        [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1.AnnotateTextRequest.Features.extract_entity_sentiment]\n        is set to true, this field will contain the sentiment\n        expressed for this mention of the entity in the provided\n        document.",
-      "attributes": {
-        "text": {
-          "type": "google.cloud.language_v1.types.TextSpan",
-          "description": "The mention text."
-        },
-        "type_": {
-          "type": "google.cloud.language_v1.types.EntityMention.Type",
-          "description": "The type of the entity mention."
-        },
-        "sentiment": {
-          "type": "google.cloud.language_v1.types.Sentiment",
-          "description": "For calls to [AnalyzeEntitySentiment][] or if [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1.AnnotateTextRequest.Features.extract_entity_sentiment] is set to true, this field will contain the sentiment expressed for this mention of the entity in the provided document."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TextSpan",
-      "docstring": "Represents an output piece of text.\n\nAttributes:\n    content (str):\n        The content of the output text.\n    begin_offset (int):\n        The API calculates the beginning offset of the content in\n        the original document according to the\n        [EncodingType][google.cloud.language.v1.EncodingType]\n        specified in the API request.",
-      "attributes": {
-        "content": {
-          "type": "str",
-          "description": "The content of the output text."
-        },
-        "begin_offset": {
-          "type": "int",
-          "description": "The API calculates the beginning offset of the content in the original document according to the [EncodingType][google.cloud.language.v1.EncodingType] specified in the API request."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ClassificationCategory",
-      "docstring": "Represents a category returned from the text classifier.\n\nAttributes:\n    name (str):\n        The name of the category representing the\n        document.\n    confidence (float):\n        The classifier's confidence of the category.\n        Number represents how certain the classifier is\n        that this category represents the given text.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The name of the category representing the document."
-        },
-        "confidence": {
-          "type": "float",
-          "description": "The classifier's confidence of the category. Number represents how certain the classifier is that this category represents the given text."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ClassificationModelOptions",
-      "docstring": "Model options available for classification requests.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    v1_model (google.cloud.language_v1.types.ClassificationModelOptions.V1Model):\n        Setting this field will use the V1 model and\n        V1 content categories version. The V1 model is a\n        legacy model; support for this will be\n        discontinued in the future.\n\n        This field is a member of `oneof`_ ``model_type``.\n    v2_model (google.cloud.language_v1.types.ClassificationModelOptions.V2Model):\n        Setting this field will use the V2 model with\n        the appropriate content categories version. The\n        V2 model is a better performing model.\n\n        This field is a member of `oneof`_ ``model_type``.",
-      "attributes": {
-        "v1_model": {
-          "type": "google.cloud.language_v1.types.ClassificationModelOptions.V1Model",
-          "description": "Setting this field will use the V1 model and V1 content categories version. The V1 model is a legacy model; support for this will be discontinued in the future.  This field is a member of `oneof`_ ``model_type``."
-        },
-        "v2_model": {
-          "type": "google.cloud.language_v1.types.ClassificationModelOptions.V2Model",
-          "description": "Setting this field will use the V2 model with the appropriate content categories version. The V2 model is a better performing model.  This field is a member of `oneof`_ ``model_type``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "AnalyzeSentimentRequest",
-      "docstring": "The sentiment analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate sentence offsets.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
+      "description": "The sentiment analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate sentence offsets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          },
+          "encoding_type": {
+            "description": "The encoding type used by the API to calculate sentence offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v1.types.EncodingType"
+          }
         },
-        "encoding_type": {
-          "type": "google.cloud.language_v1.types.EncodingType",
-          "description": "The encoding type used by the API to calculate sentence offsets."
-        }
+        "required": [
+          "document"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "AnalyzeSentimentResponse",
-      "docstring": "The sentiment analysis response message.\n\nAttributes:\n    document_sentiment (google.cloud.language_v1.types.Sentiment):\n        The overall sentiment of the input document.\n    language (str):\n        The language of the text, which will be the same as the\n        language specified in the request or, if not specified, the\n        automatically-detected language. See\n        [Document.language][google.cloud.language.v1.Document.language]\n        field for more details.\n    sentences (MutableSequence[google.cloud.language_v1.types.Sentence]):\n        The sentiment for all the sentences in the\n        document.",
-      "attributes": {
-        "document_sentiment": {
-          "type": "google.cloud.language_v1.types.Sentiment",
-          "description": "The overall sentiment of the input document."
-        },
-        "language": {
-          "type": "str",
-          "description": "The language of the text, which will be the same as the language specified in the request or, if not specified, the automatically-detected language. See [Document.language][google.cloud.language.v1.Document.language] field for more details."
-        },
-        "sentences": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Sentence]",
-          "description": "The sentiment for all the sentences in the document."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "AnalyzeEntitySentimentRequest",
-      "docstring": "The entity-level sentiment analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
+      "description": "The entity-level sentiment analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          },
+          "encoding_type": {
+            "description": "The encoding type used by the API to calculate offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v1.types.EncodingType"
+          }
         },
-        "encoding_type": {
-          "type": "google.cloud.language_v1.types.EncodingType",
-          "description": "The encoding type used by the API to calculate offsets."
-        }
+        "required": [
+          "document"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "AnalyzeEntitySentimentResponse",
-      "docstring": "The entity-level sentiment analysis response message.\n\nAttributes:\n    entities (MutableSequence[google.cloud.language_v1.types.Entity]):\n        The recognized entities in the input document\n        with associated sentiments.\n    language (str):\n        The language of the text, which will be the same as the\n        language specified in the request or, if not specified, the\n        automatically-detected language. See\n        [Document.language][google.cloud.language.v1.Document.language]\n        field for more details.",
-      "attributes": {
-        "entities": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Entity]",
-          "description": "The recognized entities in the input document with associated sentiments."
-        },
-        "language": {
-          "type": "str",
-          "description": "The language of the text, which will be the same as the language specified in the request or, if not specified, the automatically-detected language. See [Document.language][google.cloud.language.v1.Document.language] field for more details."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "AnalyzeEntitiesRequest",
-      "docstring": "The entity analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
+      "description": "The entity analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          },
+          "encoding_type": {
+            "description": "The encoding type used by the API to calculate offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v1.types.EncodingType"
+          }
         },
-        "encoding_type": {
-          "type": "google.cloud.language_v1.types.EncodingType",
-          "description": "The encoding type used by the API to calculate offsets."
-        }
+        "required": [
+          "document"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "AnalyzeEntitiesResponse",
-      "docstring": "The entity analysis response message.\n\nAttributes:\n    entities (MutableSequence[google.cloud.language_v1.types.Entity]):\n        The recognized entities in the input\n        document.\n    language (str):\n        The language of the text, which will be the same as the\n        language specified in the request or, if not specified, the\n        automatically-detected language. See\n        [Document.language][google.cloud.language.v1.Document.language]\n        field for more details.",
-      "attributes": {
-        "entities": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Entity]",
-          "description": "The recognized entities in the input document."
-        },
-        "language": {
-          "type": "str",
-          "description": "The language of the text, which will be the same as the language specified in the request or, if not specified, the automatically-detected language. See [Document.language][google.cloud.language.v1.Document.language] field for more details."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "AnalyzeSyntaxRequest",
-      "docstring": "The syntax analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
+      "description": "The syntax analysis request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          },
+          "encoding_type": {
+            "description": "The encoding type used by the API to calculate offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v1.types.EncodingType"
+          }
         },
-        "encoding_type": {
-          "type": "google.cloud.language_v1.types.EncodingType",
-          "description": "The encoding type used by the API to calculate offsets."
-        }
+        "required": [
+          "document"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "AnalyzeSyntaxResponse",
-      "docstring": "The syntax analysis response message.\n\nAttributes:\n    sentences (MutableSequence[google.cloud.language_v1.types.Sentence]):\n        Sentences in the input document.\n    tokens (MutableSequence[google.cloud.language_v1.types.Token]):\n        Tokens, along with their syntactic\n        information, in the input document.\n    language (str):\n        The language of the text, which will be the same as the\n        language specified in the request or, if not specified, the\n        automatically-detected language. See\n        [Document.language][google.cloud.language.v1.Document.language]\n        field for more details.",
-      "attributes": {
-        "sentences": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Sentence]",
-          "description": "Sentences in the input document."
-        },
-        "tokens": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Token]",
-          "description": "Tokens, along with their syntactic information, in the input document."
-        },
-        "language": {
-          "type": "str",
-          "description": "The language of the text, which will be the same as the language specified in the request or, if not specified, the automatically-detected language. See [Document.language][google.cloud.language.v1.Document.language] field for more details."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ClassifyTextRequest",
-      "docstring": "The document classification request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    classification_model_options (google.cloud.language_v1.types.ClassificationModelOptions):\n        Model options to use for classification.\n        Defaults to v1 options if not specified.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
+      "description": "The document classification request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    classification_model_options (google.cloud.language_v1.types.ClassificationModelOptions):\n        Model options to use for classification.\n        Defaults to v1 options if not specified.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          },
+          "classification_model_options": {
+            "description": "Model options to use for classification. Defaults to v1 options if not specified.",
+            "type": "object",
+            "properties": {
+              "v1_model": {
+                "type": "object",
+                "properties": {}
+              },
+              "v2_model": {
+                "type": "object",
+                "properties": {
+                  "content_categories_version": {
+                    "description": "The content categories used for classification.",
+                    "type": "object",
+                    "reference": "google.cloud.language_v1beta2.types.ClassificationModelOptions.V2Model.ContentCategoriesVersion"
+                  }
+                }
+              }
+            }
+          }
         },
-        "classification_model_options": {
-          "type": "google.cloud.language_v1.types.ClassificationModelOptions",
-          "description": "Model options to use for classification. Defaults to v1 options if not specified."
-        }
+        "required": [
+          "document"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ClassifyTextResponse",
-      "docstring": "The document classification response message.\n\nAttributes:\n    categories (MutableSequence[google.cloud.language_v1.types.ClassificationCategory]):\n        Categories representing the input document.",
-      "attributes": {
-        "categories": {
-          "type": "MutableSequence[google.cloud.language_v1.types.ClassificationCategory]",
-          "description": "Categories representing the input document."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ModerateTextRequest",
-      "docstring": "The document moderation request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
-        }
+      "description": "The document moderation request message.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          }
+        },
+        "required": [
+          "document"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ModerateTextResponse",
-      "docstring": "The document moderation response message.\n\nAttributes:\n    moderation_categories (MutableSequence[google.cloud.language_v1.types.ClassificationCategory]):\n        Harmful and sensitive categories representing\n        the input document.",
-      "attributes": {
-        "moderation_categories": {
-          "type": "MutableSequence[google.cloud.language_v1.types.ClassificationCategory]",
-          "description": "Harmful and sensitive categories representing the input document."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "AnnotateTextRequest",
-      "docstring": "The request message for the text annotation API, which can\nperform multiple analysis types (sentiment, entities, and\nsyntax) in one call.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    features (google.cloud.language_v1.types.AnnotateTextRequest.Features):\n        Required. The enabled features.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
-      "attributes": {
-        "document": {
-          "type": "google.cloud.language_v1.types.Document",
-          "description": "Required. Input document."
+      "description": "The request message for the text annotation API, which can\nperform multiple analysis types (sentiment, entities, and\nsyntax) in one call.\n\nAttributes:\n    document (google.cloud.language_v1.types.Document):\n        Required. Input document.\n    features (google.cloud.language_v1.types.AnnotateTextRequest.Features):\n        Required. The enabled features.\n    encoding_type (google.cloud.language_v1.types.EncodingType):\n        The encoding type used by the API to\n        calculate offsets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Required. Input document.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
+                "type": "object",
+                "reference": "google.cloud.language_v2.types.Document.Type"
+              },
+              "content": {
+                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "gcs_content_uri": {
+                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
+                "type": "string"
+              },
+              "language_code": {
+                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type_"
+            ]
+          },
+          "features": {
+            "description": "Required. The enabled features.",
+            "type": "object",
+            "properties": {
+              "extract_entities": {
+                "description": "Optional. Extract entities.",
+                "type": "boolean"
+              },
+              "extract_document_sentiment": {
+                "description": "Optional. Extract document-level sentiment.",
+                "type": "boolean"
+              },
+              "classify_text": {
+                "description": "Optional. Classify the full document into categories.",
+                "type": "boolean"
+              },
+              "moderate_text": {
+                "description": "Optional. Moderate the document for harmful and sensitive categories.",
+                "type": "boolean"
+              }
+            }
+          },
+          "encoding_type": {
+            "description": "The encoding type used by the API to calculate offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v1.types.EncodingType"
+          }
         },
-        "features": {
-          "type": "google.cloud.language_v1.types.AnnotateTextRequest.Features",
-          "description": "Required. The enabled features."
-        },
-        "encoding_type": {
-          "type": "google.cloud.language_v1.types.EncodingType",
-          "description": "The encoding type used by the API to calculate offsets."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AnnotateTextResponse",
-      "docstring": "The text annotations response message.\n\nAttributes:\n    sentences (MutableSequence[google.cloud.language_v1.types.Sentence]):\n        Sentences in the input document. Populated if the user\n        enables\n        [AnnotateTextRequest.Features.extract_syntax][google.cloud.language.v1.AnnotateTextRequest.Features.extract_syntax].\n    tokens (MutableSequence[google.cloud.language_v1.types.Token]):\n        Tokens, along with their syntactic information, in the input\n        document. Populated if the user enables\n        [AnnotateTextRequest.Features.extract_syntax][google.cloud.language.v1.AnnotateTextRequest.Features.extract_syntax].\n    entities (MutableSequence[google.cloud.language_v1.types.Entity]):\n        Entities, along with their semantic information, in the\n        input document. Populated if the user enables\n        [AnnotateTextRequest.Features.extract_entities][google.cloud.language.v1.AnnotateTextRequest.Features.extract_entities].\n    document_sentiment (google.cloud.language_v1.types.Sentiment):",
-      "attributes": {
-        "sentences": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Sentence]",
-          "description": "Sentences in the input document. Populated if the user enables [AnnotateTextRequest.Features.extract_syntax][google.cloud.language.v1.AnnotateTextRequest.Features.extract_syntax]."
-        },
-        "tokens": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Token]",
-          "description": "Tokens, along with their syntactic information, in the input document. Populated if the user enables [AnnotateTextRequest.Features.extract_syntax][google.cloud.language.v1.AnnotateTextRequest.Features.extract_syntax]."
-        },
-        "entities": {
-          "type": "MutableSequence[google.cloud.language_v1.types.Entity]",
-          "description": "Entities, along with their semantic information, in the input document. Populated if the user enables [AnnotateTextRequest.Features.extract_entities][google.cloud.language.v1.AnnotateTextRequest.Features.extract_entities]."
-        },
-        "document_sentiment": {
-          "type": "google.cloud.language_v1.types.Sentiment",
-          "description": "The overall sentiment for the document. Populated if the user enables [AnnotateTextRequest.Features.extract_document_sentiment][google.cloud.language.v1.AnnotateTextRequest.Features.extract_document_sentiment]."
-        },
-        "language": {
-          "type": "str",
-          "description": "The language of the text, which will be the same as the language specified in the request or, if not specified, the automatically-detected language. See [Document.language][google.cloud.language.v1.Document.language] field for more details."
-        },
-        "categories": {
-          "type": "MutableSequence[google.cloud.language_v1.types.ClassificationCategory]",
-          "description": "Categories identified in the input document."
-        },
-        "moderation_categories": {
-          "type": "MutableSequence[google.cloud.language_v1.types.ClassificationCategory]",
-          "description": "Harmful and sensitive categories identified in the input document."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "V1Model",
-      "docstring": "Options for the V1 model.",
-      "attributes": {}
-    },
-    {
-      "type": "request_class",
-      "name": "V2Model",
-      "docstring": "Options for the V2 model.\n\nAttributes:\n    content_categories_version (google.cloud.language_v1.types.ClassificationModelOptions.V2Model.ContentCategoriesVersion):\n        The content categories used for\n        classification.",
-      "attributes": {
-        "content_categories_version": {
-          "type": "google.cloud.language_v1.types.ClassificationModelOptions.V2Model.ContentCategoriesVersion",
-          "description": "The content categories used for classification."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Features",
-      "docstring": "All available features for sentiment, syntax, and semantic\nanalysis. Setting each one to true will enable that specific\nanalysis for the input.\n\nAttributes:\n    extract_syntax (bool):\n        Extract syntax information.\n    extract_entities (bool):\n        Extract entities.\n    extract_document_sentiment (bool):\n        Extract document-level sentiment.\n    extract_entity_sentiment (bool):\n        Extract entities and their associated\n        sentiment.\n    classify_text (bool):\n        Classify the full document into categories.\n    moderate_text (bool):\n        Moderate the document for harmful and\n        sensitive categories.\n    classification_model_options (google.cloud.language_v1.types.ClassificationModelOptions):\n        The model options to use for classification. Defaults to v1\n        options if not specified. Only used if ``classify_text`` is\n        set to true.",
-      "attributes": {
-        "extract_syntax": {
-          "type": "bool",
-          "description": "Extract syntax information."
-        },
-        "extract_entities": {
-          "type": "bool",
-          "description": "Extract entities."
-        },
-        "extract_document_sentiment": {
-          "type": "bool",
-          "description": "Extract document-level sentiment."
-        },
-        "extract_entity_sentiment": {
-          "type": "bool",
-          "description": "Extract entities and their associated sentiment."
-        },
-        "classify_text": {
-          "type": "bool",
-          "description": "Classify the full document into categories."
-        },
-        "moderate_text": {
-          "type": "bool",
-          "description": "Moderate the document for harmful and sensitive categories."
-        },
-        "classification_model_options": {
-          "type": "google.cloud.language_v1.types.ClassificationModelOptions",
-          "description": "The model options to use for classification. Defaults to v1 options if not specified. Only used if ``classify_text`` is set to true."
-        }
+        "required": [
+          "document",
+          "features"
+        ]
       }
     }
   ]

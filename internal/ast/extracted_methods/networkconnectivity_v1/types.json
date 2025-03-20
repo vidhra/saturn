@@ -1,1231 +1,1462 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-network-connectivity\\google\\cloud\\networkconnectivity_v1\\types\\common.py": [
-    {
-      "type": "request_class",
-      "name": "OperationMetadata",
-      "docstring": "Represents the metadata of the long-running operation.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation was\n        created.\n    end_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the operation finished\n        running.\n    target (str):\n        Output only. Server-defined resource path for\n        the target of the operation.\n    verb (str):\n        Output only. Name of the verb executed by the\n        operation.\n    status_message (str):\n        Output only. Human-readable status of the\n        operation, if any.\n    requested_cancellation (bool):\n        Output only. Identifies whether the user has requested\n        cancellation of the operation. Operations that have been\n        cancelled successfully have [Operation.error][] value with a\n        [google.rpc.Status.code][google.rpc.Status.code] of 1,\n        corresponding to ``Code.CANCELLED``.\n    api_version (str):\n        Output only. API version used to s",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the operation was created."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the operation finished running."
-        },
-        "target": {
-          "type": "str",
-          "description": "Output only. Server-defined resource path for the target of the operation."
-        },
-        "verb": {
-          "type": "str",
-          "description": "Output only. Name of the verb executed by the operation."
-        },
-        "status_message": {
-          "type": "str",
-          "description": "Output only. Human-readable status of the operation, if any."
-        },
-        "requested_cancellation": {
-          "type": "bool",
-          "description": "Output only. Identifies whether the user has requested cancellation of the operation. Operations that have been cancelled successfully have [Operation.error][] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding to ``Code.CANCELLED``."
-        },
-        "api_version": {
-          "type": "str",
-          "description": "Output only. API version used to start the operation."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-network-connectivity\\google\\cloud\\networkconnectivity_v1\\types\\hub.py": [
     {
-      "type": "request_class",
-      "name": "Hub",
-      "docstring": "A Network Connectivity Center hub is a global management\nresource to which you attach spokes. A single hub can contain\nspokes from multiple regions. However, if any of a hub's spokes\nuse the site-to-site data transfer feature, the resources\nassociated with those spokes must all be in the same VPC\nnetwork. Spokes that do not use site-to-site data transfer can\nbe associated with any VPC network in your project.\n\nAttributes:\n    name (str):\n        Immutable. The name of the hub. Hub names must be unique.\n        They use the following form:\n        ``projects/{project_number}/locations/global/hubs/{hub_id}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the hub was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the hub was last\n        updated.\n    labels (MutableMapping[str, str]):\n        Optional labels in key-value pair format. For more\n        information about labels, see `Requirements for\n        labels <https:/",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Immutable. The name of the hub. Hub names must be unique. They use the following form: ``projects/{project_number}/locations/global/hubs/{hub_id}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the hub was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the hub was last updated."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional labels in key-value pair format. For more information about labels, see `Requirements for labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__."
-        },
-        "description": {
-          "type": "str",
-          "description": "An optional description of the hub."
-        },
-        "unique_id": {
-          "type": "str",
-          "description": "Output only. The Google-generated UUID for the hub. This value is unique across all hub resources. If a hub is deleted and another with the same name is created, the new hub is assigned a different unique_id."
-        },
-        "state": {
-          "type": "google.cloud.networkconnectivity_v1.types.State",
-          "description": "Output only. The current lifecycle state of this hub."
-        },
-        "routing_vpcs": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.RoutingVPC]",
-          "description": "The VPC networks associated with this hub's spokes. This field is read-only. Network Connectivity Center automatically populates it based on the set of spokes attached to the hub."
-        },
-        "route_tables": {
-          "type": "MutableSequence[str]",
-          "description": "Output only. The route tables that belong to this hub. They use the following form: ``projects/{project_number}/locations/global/hubs/{hub_id}/routeTables/{route_table_id}``  This field is read-only. Network Connectivity Center automatically populates it based on the route tables nested under the hub."
-        },
-        "spoke_summary": {
-          "type": "google.cloud.networkconnectivity_v1.types.SpokeSummary",
-          "description": "Output only. A summary of the spokes associated with a hub. The summary includes a count of spokes according to type and according to state. If any spokes are inactive, the summary also lists the reasons they are inactive, including a count for each reason."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RoutingVPC",
-      "docstring": "RoutingVPC contains information about the VPC networks\nassociated with the spokes of a Network Connectivity Center hub.\n\nAttributes:\n    uri (str):\n        The URI of the VPC network.\n    required_for_new_site_to_site_data_transfer_spokes (bool):\n        Output only. If true, indicates that this VPC network is\n        currently associated with spokes that use the data transfer\n        feature (spokes where the site_to_site_data_transfer field\n        is set to true). If you create new spokes that use data\n        transfer, they must be associated with this VPC network. At\n        most, one VPC network will have this field set to true.",
-      "attributes": {
-        "uri": {
-          "type": "str",
-          "description": "The URI of the VPC network."
-        },
-        "required_for_new_site_to_site_data_transfer_spokes": {
-          "type": "bool",
-          "description": "Output only. If true, indicates that this VPC network is currently associated with spokes that use the data transfer feature (spokes where the site_to_site_data_transfer field is set to true). If you create new spokes that use data transfer, they must be associated with this VPC network. At most, one VPC network will have this field set to true."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Spoke",
-      "docstring": "A Network Connectivity Center spoke represents one or more network\nconnectivity resources.\n\nWhen you create a spoke, you associate it with a hub. You must also\nidentify a value for exactly one of the following fields:\n\n-  linked_vpn_tunnels\n-  linked_interconnect_attachments\n-  linked_router_appliance_instances\n-  linked_vpc_network\n\nAttributes:\n    name (str):\n        Immutable. The name of the spoke. Spoke names must be\n        unique. They use the following form:\n        ``projects/{project_number}/locations/{region}/spokes/{spoke_id}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the spoke was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the spoke was last\n        updated.\n    labels (MutableMapping[str, str]):\n        Optional labels in key-value pair format. For more\n        information about labels, see `Requirements for\n        labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Immutable. The name of the spoke. Spoke names must be unique. They use the following form: ``projects/{project_number}/locations/{region}/spokes/{spoke_id}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the spoke was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the spoke was last updated."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional labels in key-value pair format. For more information about labels, see `Requirements for labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__."
-        },
-        "description": {
-          "type": "str",
-          "description": "An optional description of the spoke."
-        },
-        "hub": {
-          "type": "str",
-          "description": "Immutable. The name of the hub that this spoke is attached to."
-        },
-        "group": {
-          "type": "str",
-          "description": "Optional. The name of the group that this spoke is associated with."
-        },
-        "linked_vpn_tunnels": {
-          "type": "google.cloud.networkconnectivity_v1.types.LinkedVpnTunnels",
-          "description": "VPN tunnels that are associated with the spoke."
-        },
-        "linked_interconnect_attachments": {
-          "type": "google.cloud.networkconnectivity_v1.types.LinkedInterconnectAttachments",
-          "description": "VLAN attachments that are associated with the spoke."
-        },
-        "linked_router_appliance_instances": {
-          "type": "google.cloud.networkconnectivity_v1.types.LinkedRouterApplianceInstances",
-          "description": "Router appliance instances that are associated with the spoke."
-        },
-        "linked_vpc_network": {
-          "type": "google.cloud.networkconnectivity_v1.types.LinkedVpcNetwork",
-          "description": "Optional. VPC network that is associated with the spoke."
-        },
-        "unique_id": {
-          "type": "str",
-          "description": "Output only. The Google-generated UUID for the spoke. This value is unique across all spoke resources. If a spoke is deleted and another with the same name is created, the new spoke is assigned a different ``unique_id``."
-        },
-        "state": {
-          "type": "google.cloud.networkconnectivity_v1.types.State",
-          "description": "Output only. The current lifecycle state of this spoke."
-        },
-        "reasons": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.Spoke.StateReason]",
-          "description": "Output only. The reasons for current state of the spoke. Only present when the spoke is in the ``INACTIVE`` state."
-        },
-        "spoke_type": {
-          "type": "google.cloud.networkconnectivity_v1.types.SpokeType",
-          "description": "Output only. The type of resource associated with the spoke."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RouteTable",
-      "docstring": "Attributes:\n    name (str):\n        Immutable. The name of the route table. Route table names\n        must be unique. They use the following form:\n        ``projects/{project_number}/locations/global/hubs/{hub}/routeTables/{route_table_id}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the route table was\n        created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the route table was\n        last updated.\n    labels (MutableMapping[str, str]):\n        Optional labels in key-value pair format. For more\n        information about labels, see `Requirements for\n        labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__.\n    description (str):\n        An optional description of the route table.\n    uid (str):\n        Output only. The Google-generated UUID for the route table.\n        This value is unique across all route table resources. If a\n        route table is deleted and anot",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Immutable. The name of the route table. Route table names must be unique. They use the following form: ``projects/{project_number}/locations/global/hubs/{hub}/routeTables/{route_table_id}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the route table was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the route table was last updated."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional labels in key-value pair format. For more information about labels, see `Requirements for labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__."
-        },
-        "description": {
-          "type": "str",
-          "description": "An optional description of the route table."
-        },
-        "uid": {
-          "type": "str",
-          "description": "Output only. The Google-generated UUID for the route table. This value is unique across all route table resources. If a route table is deleted and another with the same name is created, the new route table is assigned a different ``uid``."
-        },
-        "state": {
-          "type": "google.cloud.networkconnectivity_v1.types.State",
-          "description": "Output only. The current lifecycle state of this route table."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Route",
-      "docstring": "A route defines a path from VM instances within a spoke to a\nspecific destination resource. Only VPC spokes have routes.\n\nAttributes:\n    name (str):\n        Immutable. The name of the route. Route names must be\n        unique. Route names use the following form:\n        ``projects/{project_number}/locations/global/hubs/{hub}/routeTables/{route_table_id}/routes/{route_id}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the route was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the route was last\n        updated.\n    ip_cidr_range (str):\n        The destination IP address range.\n    type_ (google.cloud.networkconnectivity_v1.types.RouteType):\n        Output only. The route's type. Its type is\n        determined by the properties of its IP address\n        range.\n    next_hop_vpc_network (google.cloud.networkconnectivity_v1.types.NextHopVpcNetwork):\n        Immutable. The destination VPC network for\n        packets on",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Immutable. The name of the route. Route names must be unique. Route names use the following form: ``projects/{project_number}/locations/global/hubs/{hub}/routeTables/{route_table_id}/routes/{route_id}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the route was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the route was last updated."
-        },
-        "ip_cidr_range": {
-          "type": "str",
-          "description": "The destination IP address range."
-        },
-        "type_": {
-          "type": "google.cloud.networkconnectivity_v1.types.RouteType",
-          "description": "Output only. The route's type. Its type is determined by the properties of its IP address range."
-        },
-        "next_hop_vpc_network": {
-          "type": "google.cloud.networkconnectivity_v1.types.NextHopVpcNetwork",
-          "description": "Immutable. The destination VPC network for packets on this route."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional labels in key-value pair format. For more information about labels, see `Requirements for labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__."
-        },
-        "description": {
-          "type": "str",
-          "description": "An optional description of the route."
-        },
-        "uid": {
-          "type": "str",
-          "description": "Output only. The Google-generated UUID for the route. This value is unique across all Network Connectivity Center route resources. If a route is deleted and another with the same name is created, the new route is assigned a different ``uid``."
-        },
-        "state": {
-          "type": "google.cloud.networkconnectivity_v1.types.State",
-          "description": "Output only. The current lifecycle state of the route."
-        },
-        "spoke": {
-          "type": "str",
-          "description": "Immutable. The spoke that this route leads to. Example: projects/12345/locations/global/spokes/SPOKE"
-        },
-        "location": {
-          "type": "str",
-          "description": "Output only. The location of the route. Uses the following form: \"projects/{project}/locations/{location}\" Example: projects/1234/locations/us-central1"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Group",
-      "docstring": "A group represents a subset of spokes attached to a hub.\n\nAttributes:\n    name (str):\n        Immutable. The name of the group. Group names must be\n        unique. They use the following form:\n        ``projects/{project_number}/locations/global/hubs/{hub}/groups/{group_id}``\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the group was created.\n    update_time (google.protobuf.timestamp_pb2.Timestamp):\n        Output only. The time the group was last\n        updated.\n    labels (MutableMapping[str, str]):\n        Optional. Labels in key-value pair format. For more\n        information about labels, see `Requirements for\n        labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__.\n    description (str):\n        Optional. The description of the group.\n    uid (str):\n        Output only. The Google-generated UUID for the group. This\n        value is unique across all group resources. If a group is\n        deleted and another wi",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Immutable. The name of the group. Group names must be unique. They use the following form: ``projects/{project_number}/locations/global/hubs/{hub}/groups/{group_id}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the group was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time the group was last updated."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "Optional. Labels in key-value pair format. For more information about labels, see `Requirements for labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>`__."
-        },
-        "description": {
-          "type": "str",
-          "description": "Optional. The description of the group."
-        },
-        "uid": {
-          "type": "str",
-          "description": "Output only. The Google-generated UUID for the group. This value is unique across all group resources. If a group is deleted and another with the same name is created, the new route table is assigned a different unique_id."
-        },
-        "state": {
-          "type": "google.cloud.networkconnectivity_v1.types.State",
-          "description": "Output only. The current lifecycle state of this group."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListHubsRequest",
-      "docstring": "Request for\n[HubService.ListHubs][google.cloud.networkconnectivity.v1.HubService.ListHubs]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results per page to\n        return.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource's name."
+      "description": "Request for\n[HubService.ListHubs][google.cloud.networkconnectivity.v1.HubService.ListHubs]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results per page to\n        return.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource's name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of results per page to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "An expression that filters the list of results.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by a certain order.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results per page to return."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "An expression that filters the list of results."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by a certain order."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListHubsResponse",
-      "docstring": "Response for\n[HubService.ListHubs][google.cloud.networkconnectivity.v1.HubService.ListHubs]\nmethod.\n\nAttributes:\n    hubs (MutableSequence[google.cloud.networkconnectivity_v1.types.Hub]):\n        The requested hubs.\n    next_page_token (str):\n        The token for the next page of the response. To see more\n        results, use this value as the page_token for your next\n        request. If this value is empty, there are no more results.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "hubs": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.Hub]",
-          "description": "The requested hubs."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for the next page of the response. To see more results, use this value as the page_token for your next request. If this value is empty, there are no more results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetHubRequest",
-      "docstring": "Request for\n[HubService.GetHub][google.cloud.networkconnectivity.v1.HubService.GetHub]\nmethod.\n\nAttributes:\n    name (str):\n        Required. The name of the hub resource to\n        get.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the hub resource to get."
-        }
+      "description": "Request for\n[HubService.GetHub][google.cloud.networkconnectivity.v1.HubService.GetHub]\nmethod.\n\nAttributes:\n    name (str):\n        Required. The name of the hub resource to\n        get.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the hub resource to get.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateHubRequest",
-      "docstring": "Request for\n[HubService.CreateHub][google.cloud.networkconnectivity.v1.HubService.CreateHub]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource.\n    hub_id (str):\n        Required. A unique identifier for the hub.\n    hub (google.cloud.networkconnectivity_v1.types.Hub):\n        Required. The initial values for a new hub.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ig",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource."
+      "description": "Request for\n[HubService.CreateHub][google.cloud.networkconnectivity.v1.HubService.CreateHub]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource.\n    hub_id (str):\n        Required. A unique identifier for the hub.\n    hub (google.cloud.networkconnectivity_v1.types.Hub):\n        Required. The initial values for a new hub.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ig",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource.",
+            "type": "string"
+          },
+          "hub_id": {
+            "description": "Required. A unique identifier for the hub.",
+            "type": "string"
+          },
+          "hub": {
+            "description": "Required. The initial values for a new hub.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Immutable. The name of a Hub resource.",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Time when the Hub was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Time when the Hub was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "User-defined labels.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "description": "Short description of the hub resource.",
+                "type": "string"
+              },
+              "spokes": {
+                "description": "Output only. A list of the URIs of all attached spokes",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unique_id": {
+                "description": "Output only. Google-generated UUID for this resource. This is unique across all Hub resources. If a Hub resource is deleted and another with the same name is created, it gets a different unique_id.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. The current lifecycle state of this Hub.",
+                "type": "object",
+                "reference": "google.cloud.networkconnectivity_v1alpha1.types.State"
+              }
+            }
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "hub_id": {
-          "type": "str",
-          "description": "Required. A unique identifier for the hub."
-        },
-        "hub": {
-          "type": "google.cloud.networkconnectivity_v1.types.Hub",
-          "description": "Required. The initial values for a new hub."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "parent",
+          "hub_id",
+          "hub"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateHubRequest",
-      "docstring": "Request for\n[HubService.UpdateHub][google.cloud.networkconnectivity.v1.HubService.UpdateHub]\nmethod.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. In the case of an update to an existing hub, field\n        mask is used to specify the fields to be overwritten. The\n        fields specified in the update_mask are relative to the\n        resource, not the full request. A field is overwritten if it\n        is in the mask. If the user does not provide a mask, then\n        all fields are overwritten.\n    hub (google.cloud.networkconnectivity_v1.types.Hub):\n        Required. The state that the hub should be in\n        after the update.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitment",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Optional. In the case of an update to an existing hub, field mask is used to specify the fields to be overwritten. The fields specified in the update_mask are relative to the resource, not the full request. A field is overwritten if it is in the mask. If the user does not provide a mask, then all fields are overwritten."
+      "description": "Request for\n[HubService.UpdateHub][google.cloud.networkconnectivity.v1.HubService.UpdateHub]\nmethod.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. In the case of an update to an existing hub, field\n        mask is used to specify the fields to be overwritten. The\n        fields specified in the update_mask are relative to the\n        resource, not the full request. A field is overwritten if it\n        is in the mask. If the user does not provide a mask, then\n        all fields are overwritten.\n    hub (google.cloud.networkconnectivity_v1.types.Hub):\n        Required. The state that the hub should be in\n        after the update.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitment",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Optional. In the case of an update to an existing hub, field mask is used to specify the fields to be overwritten. The fields specified in the update_mask are relative to the resource, not the full request. A field is overwritten if it is in the mask. If the user does not provide a mask, then all fields are overwritten.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "hub": {
+            "description": "Required. The state that the hub should be in after the update.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Immutable. The name of a Hub resource.",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Time when the Hub was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Time when the Hub was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "User-defined labels.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "description": "Short description of the hub resource.",
+                "type": "string"
+              },
+              "spokes": {
+                "description": "Output only. A list of the URIs of all attached spokes",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unique_id": {
+                "description": "Output only. Google-generated UUID for this resource. This is unique across all Hub resources. If a Hub resource is deleted and another with the same name is created, it gets a different unique_id.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. The current lifecycle state of this Hub.",
+                "type": "object",
+                "reference": "google.cloud.networkconnectivity_v1alpha1.types.State"
+              }
+            }
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "hub": {
-          "type": "google.cloud.networkconnectivity_v1.types.Hub",
-          "description": "Required. The state that the hub should be in after the update."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "hub"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteHubRequest",
-      "docstring": "The request for\n[HubService.DeleteHub][google.cloud.networkconnectivity.v1.HubService.DeleteHub].\n\nAttributes:\n    name (str):\n        Required. The name of the hub to delete.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n        prevents clients from mistakenly creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID, with t",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the hub to delete."
+      "description": "The request for\n[HubService.DeleteHub][google.cloud.networkconnectivity.v1.HubService.DeleteHub].\n\nAttributes:\n    name (str):\n        Required. The name of the hub to delete.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n        prevents clients from mistakenly creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID, with t",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the hub to delete.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListHubSpokesRequest",
-      "docstring": "The request for\n[HubService.ListHubSpokes][google.cloud.networkconnectivity.v1.HubService.ListHubSpokes].\n\nAttributes:\n    name (str):\n        Required. The name of the hub.\n    spoke_locations (MutableSequence[str]):\n        A list of locations. Specify one of the following:\n        ``[global]``, a single region (for example,\n        ``[us-central1]``), or a combination of values (for example,\n        ``[global, us-central1, us-west1]``). If the spoke_locations\n        field is populated, the list of results includes only spokes\n        in the specified location. If the spoke_locations field is\n        not populated, the list of results includes spokes in all\n        locations.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by name or create_time.\n    view (google.cloud.networkconnectivity_v1.types.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the hub."
+      "description": "The request for\n[HubService.ListHubSpokes][google.cloud.networkconnectivity.v1.HubService.ListHubSpokes].\n\nAttributes:\n    name (str):\n        Required. The name of the hub.\n    spoke_locations (MutableSequence[str]):\n        A list of locations. Specify one of the following:\n        ``[global]``, a single region (for example,\n        ``[us-central1]``), or a combination of values (for example,\n        ``[global, us-central1, us-west1]``). If the spoke_locations\n        field is populated, the list of results includes only spokes\n        in the specified location. If the spoke_locations field is\n        not populated, the list of results includes spokes in all\n        locations.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by name or create_time.\n    view (google.cloud.networkconnectivity_v1.types.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the hub.",
+            "type": "string"
+          },
+          "spoke_locations": {
+            "description": "A list of locations. Specify one of the following: ``[global]``, a single region (for example, ``[us-central1]``), or a combination of values (for example, ``[global, us-central1, us-west1]``). If the spoke_locations field is populated, the list of results includes only spokes in the specified location. If the spoke_locations field is not populated, the list of results includes spokes in all locations.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "page_size": {
+            "description": "The maximum number of results to return per page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "An expression that filters the list of results.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by name or create_time.",
+            "type": "string"
+          },
+          "view": {
+            "description": "The view of the spoke to return. The view that you use determines which spoke fields are included in the response.",
+            "type": "object",
+            "reference": "google.cloud.networkconnectivity_v1.types.ListHubSpokesRequest.SpokeView"
+          }
         },
-        "spoke_locations": {
-          "type": "MutableSequence[str]",
-          "description": "A list of locations. Specify one of the following: ``[global]``, a single region (for example, ``[us-central1]``), or a combination of values (for example, ``[global, us-central1, us-west1]``). If the spoke_locations field is populated, the list of results includes only spokes in the specified location. If the spoke_locations field is not populated, the list of results includes spokes in all locations."
-        },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results to return per page."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "An expression that filters the list of results."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by name or create_time."
-        },
-        "view": {
-          "type": "google.cloud.networkconnectivity_v1.types.ListHubSpokesRequest.SpokeView",
-          "description": "The view of the spoke to return. The view that you use determines which spoke fields are included in the response."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListHubSpokesResponse",
-      "docstring": "The response for\n[HubService.ListHubSpokes][google.cloud.networkconnectivity.v1.HubService.ListHubSpokes].\n\nAttributes:\n    spokes (MutableSequence[google.cloud.networkconnectivity_v1.types.Spoke]):\n        The requested spokes. The spoke fields can be partially\n        populated based on the ``view`` field in the request\n        message.\n    next_page_token (str):\n        The token for the next page of the response. To see more\n        results, use this value as the page_token for your next\n        request. If this value is empty, there are no more results.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "spokes": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.Spoke]",
-          "description": "The requested spokes. The spoke fields can be partially populated based on the ``view`` field in the request message."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for the next page of the response. To see more results, use this value as the page_token for your next request. If this value is empty, there are no more results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListSpokesRequest",
-      "docstring": "The request for\n[HubService.ListSpokes][google.cloud.networkconnectivity.v1.HubService.ListSpokes].\n\nAttributes:\n    parent (str):\n        Required. The parent resource.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource."
+      "description": "The request for\n[HubService.ListSpokes][google.cloud.networkconnectivity.v1.HubService.ListSpokes].\n\nAttributes:\n    parent (str):\n        Required. The parent resource.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of results to return per page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "An expression that filters the list of results.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by a certain order.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results to return per page."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "An expression that filters the list of results."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by a certain order."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListSpokesResponse",
-      "docstring": "The response for\n[HubService.ListSpokes][google.cloud.networkconnectivity.v1.HubService.ListSpokes].\n\nAttributes:\n    spokes (MutableSequence[google.cloud.networkconnectivity_v1.types.Spoke]):\n        The requested spokes.\n    next_page_token (str):\n        The token for the next page of the response. To see more\n        results, use this value as the page_token for your next\n        request. If this value is empty, there are no more results.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "spokes": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.Spoke]",
-          "description": "The requested spokes."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for the next page of the response. To see more results, use this value as the page_token for your next request. If this value is empty, there are no more results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetSpokeRequest",
-      "docstring": "The request for\n[HubService.GetSpoke][google.cloud.networkconnectivity.v1.HubService.GetSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the spoke resource.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the spoke resource."
-        }
+      "description": "The request for\n[HubService.GetSpoke][google.cloud.networkconnectivity.v1.HubService.GetSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the spoke resource.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the spoke resource.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreateSpokeRequest",
-      "docstring": "The request for\n[HubService.CreateSpoke][google.cloud.networkconnectivity.v1.HubService.CreateSpoke].\n\nAttributes:\n    parent (str):\n        Required. The parent resource.\n    spoke_id (str):\n        Required. Unique id for the spoke to create.\n    spoke (google.cloud.networkconnectivity_v1.types.Spoke):\n        Required. The initial values for a new spoke.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n      ",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource."
+      "description": "The request for\n[HubService.CreateSpoke][google.cloud.networkconnectivity.v1.HubService.CreateSpoke].\n\nAttributes:\n    parent (str):\n        Required. The parent resource.\n    spoke_id (str):\n        Required. Unique id for the spoke to create.\n    spoke (google.cloud.networkconnectivity_v1.types.Spoke):\n        Required. The initial values for a new spoke.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n      ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource.",
+            "type": "string"
+          },
+          "spoke_id": {
+            "description": "Required. Unique id for the spoke to create.",
+            "type": "string"
+          },
+          "spoke": {
+            "description": "Required. The initial values for a new spoke.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Immutable. The name of a Spoke resource.",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "The time when the Spoke was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "The time when the Spoke was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "User-defined labels.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "description": "Short description of the spoke resource",
+                "type": "string"
+              },
+              "hub": {
+                "description": "The resource URL of the hub resource that the spoke is attached to",
+                "type": "string"
+              },
+              "linked_vpn_tunnels": {
+                "description": "The URIs of linked VPN tunnel resources",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "linked_interconnect_attachments": {
+                "description": "The URIs of linked interconnect attachment resources",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "linked_router_appliance_instances": {
+                "description": "The URIs of linked Router appliance resources",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "virtual_machine": {
+                      "description": "The URI of the virtual machine resource",
+                      "type": "string"
+                    },
+                    "ip_address": {
+                      "description": "The IP address of the network interface to use for peering.",
+                      "type": "string"
+                    },
+                    "network_interface": {
+                      "description": "",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "unique_id": {
+                "description": "Output only. Google-generated UUID for this resource. This is unique across all Spoke resources. If a Spoke resource is deleted and another with the same name is created, it gets a different unique_id.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. The current lifecycle state of this Hub.",
+                "type": "object",
+                "reference": "google.cloud.networkconnectivity_v1alpha1.types.State"
+              }
+            }
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "spoke_id": {
-          "type": "str",
-          "description": "Required. Unique id for the spoke to create."
-        },
-        "spoke": {
-          "type": "google.cloud.networkconnectivity_v1.types.Spoke",
-          "description": "Required. The initial values for a new spoke."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "parent",
+          "spoke_id",
+          "spoke"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdateSpokeRequest",
-      "docstring": "Request for\n[HubService.UpdateSpoke][google.cloud.networkconnectivity.v1.HubService.UpdateSpoke]\nmethod.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. In the case of an update to an existing spoke,\n        field mask is used to specify the fields to be overwritten.\n        The fields specified in the update_mask are relative to the\n        resource, not the full request. A field is overwritten if it\n        is in the mask. If the user does not provide a mask, then\n        all fields are overwritten.\n    spoke (google.cloud.networkconnectivity_v1.types.Spoke):\n        Required. The state that the spoke should be\n        in after the update.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicat",
-      "attributes": {
-        "update_mask": {
-          "type": "google.protobuf.field_mask_pb2.FieldMask",
-          "description": "Optional. In the case of an update to an existing spoke, field mask is used to specify the fields to be overwritten. The fields specified in the update_mask are relative to the resource, not the full request. A field is overwritten if it is in the mask. If the user does not provide a mask, then all fields are overwritten."
+      "description": "Request for\n[HubService.UpdateSpoke][google.cloud.networkconnectivity.v1.HubService.UpdateSpoke]\nmethod.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. In the case of an update to an existing spoke,\n        field mask is used to specify the fields to be overwritten.\n        The fields specified in the update_mask are relative to the\n        resource, not the full request. A field is overwritten if it\n        is in the mask. If the user does not provide a mask, then\n        all fields are overwritten.\n    spoke (google.cloud.networkconnectivity_v1.types.Spoke):\n        Required. The state that the spoke should be\n        in after the update.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicat",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Optional. In the case of an update to an existing spoke, field mask is used to specify the fields to be overwritten. The fields specified in the update_mask are relative to the resource, not the full request. A field is overwritten if it is in the mask. If the user does not provide a mask, then all fields are overwritten.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "spoke": {
+            "description": "Required. The state that the spoke should be in after the update.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Immutable. The name of a Spoke resource.",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "The time when the Spoke was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "The time when the Spoke was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "User-defined labels.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "description": "Short description of the spoke resource",
+                "type": "string"
+              },
+              "hub": {
+                "description": "The resource URL of the hub resource that the spoke is attached to",
+                "type": "string"
+              },
+              "linked_vpn_tunnels": {
+                "description": "The URIs of linked VPN tunnel resources",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "linked_interconnect_attachments": {
+                "description": "The URIs of linked interconnect attachment resources",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "linked_router_appliance_instances": {
+                "description": "The URIs of linked Router appliance resources",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "virtual_machine": {
+                      "description": "The URI of the virtual machine resource",
+                      "type": "string"
+                    },
+                    "ip_address": {
+                      "description": "The IP address of the network interface to use for peering.",
+                      "type": "string"
+                    },
+                    "network_interface": {
+                      "description": "",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "unique_id": {
+                "description": "Output only. Google-generated UUID for this resource. This is unique across all Spoke resources. If a Spoke resource is deleted and another with the same name is created, it gets a different unique_id.",
+                "type": "string"
+              },
+              "state": {
+                "description": "Output only. The current lifecycle state of this Hub.",
+                "type": "object",
+                "reference": "google.cloud.networkconnectivity_v1alpha1.types.State"
+              }
+            }
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "spoke": {
-          "type": "google.cloud.networkconnectivity_v1.types.Spoke",
-          "description": "Required. The state that the spoke should be in after the update."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "spoke"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteSpokeRequest",
-      "docstring": "The request for\n[HubService.DeleteSpoke][google.cloud.networkconnectivity.v1.HubService.DeleteSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the spoke to delete.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n        prevents clients from mistakenly creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID, ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the spoke to delete."
+      "description": "The request for\n[HubService.DeleteSpoke][google.cloud.networkconnectivity.v1.HubService.DeleteSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the spoke to delete.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n        prevents clients from mistakenly creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID, ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the spoke to delete.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "AcceptHubSpokeRequest",
-      "docstring": "The request for\n[HubService.AcceptHubSpoke][google.cloud.networkconnectivity.v1.HubService.AcceptHubSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the hub into which to\n        accept the spoke.\n    spoke_uri (str):\n        Required. The URI of the spoke to accept into\n        the hub.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n  ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the hub into which to accept the spoke."
+      "description": "The request for\n[HubService.AcceptHubSpoke][google.cloud.networkconnectivity.v1.HubService.AcceptHubSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the hub into which to\n        accept the spoke.\n    spoke_uri (str):\n        Required. The URI of the spoke to accept into\n        the hub.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n  ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the hub into which to accept the spoke.",
+            "type": "string"
+          },
+          "spoke_uri": {
+            "description": "Required. The URI of the spoke to accept into the hub.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "spoke_uri": {
-          "type": "str",
-          "description": "Required. The URI of the spoke to accept into the hub."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "name",
+          "spoke_uri"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "AcceptHubSpokeResponse",
-      "docstring": "The response for\n[HubService.AcceptHubSpoke][google.cloud.networkconnectivity.v1.HubService.AcceptHubSpoke].\n\nAttributes:\n    spoke (google.cloud.networkconnectivity_v1.types.Spoke):\n        The spoke that was operated on.",
-      "attributes": {
-        "spoke": {
-          "type": "google.cloud.networkconnectivity_v1.types.Spoke",
-          "description": "The spoke that was operated on."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "RejectHubSpokeRequest",
-      "docstring": "The request for\n[HubService.RejectHubSpoke][google.cloud.networkconnectivity.v1.HubService.RejectHubSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the hub from which to\n        reject the spoke.\n    spoke_uri (str):\n        Required. The URI of the spoke to reject from\n        the hub.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n  ",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the hub from which to reject the spoke."
+      "description": "The request for\n[HubService.RejectHubSpoke][google.cloud.networkconnectivity.v1.HubService.RejectHubSpoke].\n\nAttributes:\n    name (str):\n        Required. The name of the hub from which to\n        reject the spoke.\n    spoke_uri (str):\n        Required. The URI of the spoke to reject from\n        the hub.\n    request_id (str):\n        Optional. A request ID to identify requests.\n        Specify a unique request ID so that if you must\n        retry your request, the server knows to ignore\n        the request if it has already been completed.\n        The server guarantees that a request doesn't\n        result in creation of duplicate commitments for\n        at least 60 minutes.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check to see whether the\n        original operation was received. If it was, the\n        server ignores the second request. This behavior\n  ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the hub from which to reject the spoke.",
+            "type": "string"
+          },
+          "spoke_uri": {
+            "description": "Required. The URI of the spoke to reject from the hub.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          },
+          "details": {
+            "description": "Optional. Additional information provided by the hub administrator.",
+            "type": "string"
+          }
         },
-        "spoke_uri": {
-          "type": "str",
-          "description": "Required. The URI of the spoke to reject from the hub."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees that a request doesn't result in creation of duplicate commitments for at least 60 minutes.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check to see whether the original operation was received. If it was, the server ignores the second request. This behavior prevents clients from mistakenly creating duplicate commitments.  The request ID must be a valid UUID, with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        },
-        "details": {
-          "type": "str",
-          "description": "Optional. Additional information provided by the hub administrator."
-        }
+        "required": [
+          "name",
+          "spoke_uri"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "RejectHubSpokeResponse",
-      "docstring": "The response for\n[HubService.RejectHubSpoke][google.cloud.networkconnectivity.v1.HubService.RejectHubSpoke].\n\nAttributes:\n    spoke (google.cloud.networkconnectivity_v1.types.Spoke):\n        The spoke that was operated on.",
-      "attributes": {
-        "spoke": {
-          "type": "google.cloud.networkconnectivity_v1.types.Spoke",
-          "description": "The spoke that was operated on."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetRouteTableRequest",
-      "docstring": "The request for\n[HubService.GetRouteTable][google.cloud.networkconnectivity.v1.HubService.GetRouteTable].\n\nAttributes:\n    name (str):\n        Required. The name of the route table\n        resource.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the route table resource."
-        }
+      "description": "The request for\n[HubService.GetRouteTable][google.cloud.networkconnectivity.v1.HubService.GetRouteTable].\n\nAttributes:\n    name (str):\n        Required. The name of the route table\n        resource.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the route table resource.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "GetRouteRequest",
-      "docstring": "The request for\n[HubService.GetRoute][google.cloud.networkconnectivity.v1.HubService.GetRoute].\n\nAttributes:\n    name (str):\n        Required. The name of the route resource.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the route resource."
-        }
+      "description": "The request for\n[HubService.GetRoute][google.cloud.networkconnectivity.v1.HubService.GetRoute].\n\nAttributes:\n    name (str):\n        Required. The name of the route resource.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the route resource.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListRoutesRequest",
-      "docstring": "Request for\n[HubService.ListRoutes][google.cloud.networkconnectivity.v1.HubService.ListRoutes]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource's name."
+      "description": "Request for\n[HubService.ListRoutes][google.cloud.networkconnectivity.v1.HubService.ListRoutes]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource's name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of results to return per page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "An expression that filters the list of results.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by a certain order.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results to return per page."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "An expression that filters the list of results."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by a certain order."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListRoutesResponse",
-      "docstring": "Response for\n[HubService.ListRoutes][google.cloud.networkconnectivity.v1.HubService.ListRoutes]\nmethod.\n\nAttributes:\n    routes (MutableSequence[google.cloud.networkconnectivity_v1.types.Route]):\n        The requested routes.\n    next_page_token (str):\n        The token for the next page of the response. To see more\n        results, use this value as the page_token for your next\n        request. If this value is empty, there are no more results.\n    unreachable (MutableSequence[str]):\n        RouteTables that could not be reached.",
-      "attributes": {
-        "routes": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.Route]",
-          "description": "The requested routes."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for the next page of the response. To see more results, use this value as the page_token for your next request. If this value is empty, there are no more results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "RouteTables that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListRouteTablesRequest",
-      "docstring": "Request for\n[HubService.ListRouteTables][google.cloud.networkconnectivity.v1.HubService.ListRouteTables]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource's name."
+      "description": "Request for\n[HubService.ListRouteTables][google.cloud.networkconnectivity.v1.HubService.ListRouteTables]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource's name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of results to return per page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "An expression that filters the list of results.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by a certain order.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results to return per page."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "An expression that filters the list of results."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by a certain order."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListRouteTablesResponse",
-      "docstring": "Response for\n[HubService.ListRouteTables][google.cloud.networkconnectivity.v1.HubService.ListRouteTables]\nmethod.\n\nAttributes:\n    route_tables (MutableSequence[google.cloud.networkconnectivity_v1.types.RouteTable]):\n        The requested route tables.\n    next_page_token (str):\n        The token for the next page of the response. To see more\n        results, use this value as the page_token for your next\n        request. If this value is empty, there are no more results.\n    unreachable (MutableSequence[str]):\n        Hubs that could not be reached.",
-      "attributes": {
-        "route_tables": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.RouteTable]",
-          "description": "The requested route tables."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for the next page of the response. To see more results, use this value as the page_token for your next request. If this value is empty, there are no more results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Hubs that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListGroupsRequest",
-      "docstring": "Request for\n[HubService.ListGroups][google.cloud.networkconnectivity.v1.HubService.ListGroups]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource's name."
+      "description": "Request for\n[HubService.ListGroups][google.cloud.networkconnectivity.v1.HubService.ListGroups]\nmethod.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results to return per\n        page.\n    page_token (str):\n        The page token.\n    filter (str):\n        An expression that filters the list of\n        results.\n    order_by (str):\n        Sort the results by a certain order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource's name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of results to return per page.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "An expression that filters the list of results.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by a certain order.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results to return per page."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "An expression that filters the list of results."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by a certain order."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListGroupsResponse",
-      "docstring": "Response for\n[HubService.ListGroups][google.cloud.networkconnectivity.v1.HubService.ListGroups]\nmethod.\n\nAttributes:\n    groups (MutableSequence[google.cloud.networkconnectivity_v1.types.Group]):\n        The requested groups.\n    next_page_token (str):\n        The token for the next page of the response. To see more\n        results, use this value as the page_token for your next\n        request. If this value is empty, there are no more results.\n    unreachable (MutableSequence[str]):\n        Hubs that could not be reached.",
-      "attributes": {
-        "groups": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.Group]",
-          "description": "The requested groups."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The token for the next page of the response. To see more results, use this value as the page_token for your next request. If this value is empty, there are no more results."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Hubs that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LinkedVpnTunnels",
-      "docstring": "A collection of Cloud VPN tunnel resources. These resources\nshould be redundant HA VPN tunnels that all advertise the same\nprefixes to Google Cloud. Alternatively, in a passive/active\nconfiguration, all tunnels should be capable of advertising the\nsame prefixes.\n\nAttributes:\n    uris (MutableSequence[str]):\n        The URIs of linked VPN tunnel resources.\n    site_to_site_data_transfer (bool):\n        A value that controls whether site-to-site data transfer is\n        enabled for these resources. Data transfer is available only\n        in `supported\n        locations <https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/locations>`__.\n    vpc_network (str):\n        Output only. The VPC network where these VPN\n        tunnels are located.",
-      "attributes": {
-        "uris": {
-          "type": "MutableSequence[str]",
-          "description": "The URIs of linked VPN tunnel resources."
-        },
-        "site_to_site_data_transfer": {
-          "type": "bool",
-          "description": "A value that controls whether site-to-site data transfer is enabled for these resources. Data transfer is available only in `supported locations <https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/locations>`__."
-        },
-        "vpc_network": {
-          "type": "str",
-          "description": "Output only. The VPC network where these VPN tunnels are located."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LinkedInterconnectAttachments",
-      "docstring": "A collection of VLAN attachment resources. These resources\nshould be redundant attachments that all advertise the same\nprefixes to Google Cloud. Alternatively, in active/passive\nconfigurations, all attachments should be capable of advertising\nthe same prefixes.\n\nAttributes:\n    uris (MutableSequence[str]):\n        The URIs of linked interconnect attachment\n        resources\n    site_to_site_data_transfer (bool):\n        A value that controls whether site-to-site data transfer is\n        enabled for these resources. Data transfer is available only\n        in `supported\n        locations <https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/locations>`__.\n    vpc_network (str):\n        Output only. The VPC network where these VLAN\n        attachments are located.",
-      "attributes": {
-        "uris": {
-          "type": "MutableSequence[str]",
-          "description": "The URIs of linked interconnect attachment resources"
-        },
-        "site_to_site_data_transfer": {
-          "type": "bool",
-          "description": "A value that controls whether site-to-site data transfer is enabled for these resources. Data transfer is available only in `supported locations <https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/locations>`__."
-        },
-        "vpc_network": {
-          "type": "str",
-          "description": "Output only. The VPC network where these VLAN attachments are located."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LinkedRouterApplianceInstances",
-      "docstring": "A collection of router appliance instances. If you configure\nmultiple router appliance instances to receive data from the\nsame set of sites outside of Google Cloud, we recommend that you\nassociate those instances with the same spoke.\n\nAttributes:\n    instances (MutableSequence[google.cloud.networkconnectivity_v1.types.RouterApplianceInstance]):\n        The list of router appliance instances.\n    site_to_site_data_transfer (bool):\n        A value that controls whether site-to-site data transfer is\n        enabled for these resources. Data transfer is available only\n        in `supported\n        locations <https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/locations>`__.\n    vpc_network (str):\n        Output only. The VPC network where these\n        router appliance instances are located.",
-      "attributes": {
-        "instances": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.RouterApplianceInstance]",
-          "description": "The list of router appliance instances."
-        },
-        "site_to_site_data_transfer": {
-          "type": "bool",
-          "description": "A value that controls whether site-to-site data transfer is enabled for these resources. Data transfer is available only in `supported locations <https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/locations>`__."
-        },
-        "vpc_network": {
-          "type": "str",
-          "description": "Output only. The VPC network where these router appliance instances are located."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LinkedVpcNetwork",
-      "docstring": "An existing VPC network.\n\nAttributes:\n    uri (str):\n        Required. The URI of the VPC network\n        resource.\n    exclude_export_ranges (MutableSequence[str]):\n        Optional. IP ranges encompassing the subnets\n        to be excluded from peering.",
-      "attributes": {
-        "uri": {
-          "type": "str",
-          "description": "Required. The URI of the VPC network resource."
-        },
-        "exclude_export_ranges": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. IP ranges encompassing the subnets to be excluded from peering."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "RouterApplianceInstance",
-      "docstring": "A router appliance instance is a Compute Engine virtual\nmachine (VM) instance that acts as a BGP speaker. A router\nappliance instance is specified by the URI of the VM and the\ninternal IP address of one of the VM's network interfaces.\n\nAttributes:\n    virtual_machine (str):\n        The URI of the VM.\n    ip_address (str):\n        The IP address on the VM to use for peering.",
-      "attributes": {
-        "virtual_machine": {
-          "type": "str",
-          "description": "The URI of the VM."
-        },
-        "ip_address": {
-          "type": "str",
-          "description": "The IP address on the VM to use for peering."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LocationMetadata",
-      "docstring": "Metadata about locations\n\nAttributes:\n    location_features (MutableSequence[google.cloud.networkconnectivity_v1.types.LocationFeature]):\n        List of supported features",
-      "attributes": {
-        "location_features": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.LocationFeature]",
-          "description": "List of supported features"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "NextHopVpcNetwork",
-      "docstring": "Attributes:\n    uri (str):\n        The URI of the VPC network resource",
-      "attributes": {
-        "uri": {
-          "type": "str",
-          "description": "The URI of the VPC network resource"
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SpokeSummary",
-      "docstring": "Summarizes information about the spokes associated with a\nhub. The summary includes a count of spokes according to type\nand according to state. If any spokes are inactive, the summary\nalso lists the reasons they are inactive, including a count for\neach reason.\n\nAttributes:\n    spoke_type_counts (MutableSequence[google.cloud.networkconnectivity_v1.types.SpokeSummary.SpokeTypeCount]):\n        Output only. Counts the number of spokes of\n        each type that are associated with a specific\n        hub.\n    spoke_state_counts (MutableSequence[google.cloud.networkconnectivity_v1.types.SpokeSummary.SpokeStateCount]):\n        Output only. Counts the number of spokes that\n        are in each state and associated with a given\n        hub.\n    spoke_state_reason_counts (MutableSequence[google.cloud.networkconnectivity_v1.types.SpokeSummary.SpokeStateReasonCount]):\n        Output only. Counts the number of spokes that\n        are inactive for each possible reason and\n        associated with a given hub.",
-      "attributes": {
-        "spoke_type_counts": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.SpokeSummary.SpokeTypeCount]",
-          "description": "Output only. Counts the number of spokes of each type that are associated with a specific hub."
-        },
-        "spoke_state_counts": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.SpokeSummary.SpokeStateCount]",
-          "description": "Output only. Counts the number of spokes that are in each state and associated with a given hub."
-        },
-        "spoke_state_reason_counts": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.SpokeSummary.SpokeStateReasonCount]",
-          "description": "Output only. Counts the number of spokes that are inactive for each possible reason and associated with a given hub."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetGroupRequest",
-      "docstring": "The request for\n[HubService.GetGroup][google.cloud.networkconnectivity.v1.HubService.GetGroup].\n\nAttributes:\n    name (str):\n        Required. The name of the route table\n        resource.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the route table resource."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StateReason",
-      "docstring": "The reason a spoke is inactive.\n\nAttributes:\n    code (google.cloud.networkconnectivity_v1.types.Spoke.StateReason.Code):\n        The code associated with this reason.\n    message (str):\n        Human-readable details about this reason.\n    user_details (str):\n        Additional information provided by the user\n        in the RejectSpoke call.",
-      "attributes": {
-        "code": {
-          "type": "google.cloud.networkconnectivity_v1.types.Spoke.StateReason.Code",
-          "description": "The code associated with this reason."
+      "description": "The request for\n[HubService.GetGroup][google.cloud.networkconnectivity.v1.HubService.GetGroup].\n\nAttributes:\n    name (str):\n        Required. The name of the route table\n        resource.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the route table resource.",
+            "type": "string"
+          }
         },
-        "message": {
-          "type": "str",
-          "description": "Human-readable details about this reason."
-        },
-        "user_details": {
-          "type": "str",
-          "description": "Additional information provided by the user in the RejectSpoke call."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SpokeTypeCount",
-      "docstring": "The number of spokes of a given type that are associated\nwith a specific hub. The type indicates what kind of resource is\nassociated with the spoke.\n\nAttributes:\n    spoke_type (google.cloud.networkconnectivity_v1.types.SpokeType):\n        Output only. The type of the spokes.\n    count (int):\n        Output only. The total number of spokes of\n        this type that are associated with the hub.",
-      "attributes": {
-        "spoke_type": {
-          "type": "google.cloud.networkconnectivity_v1.types.SpokeType",
-          "description": "Output only. The type of the spokes."
-        },
-        "count": {
-          "type": "int",
-          "description": "Output only. The total number of spokes of this type that are associated with the hub."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SpokeStateCount",
-      "docstring": "The number of spokes that are in a particular state\nand associated with a given hub.\n\nAttributes:\n    state (google.cloud.networkconnectivity_v1.types.State):\n        Output only. The state of the spokes.\n    count (int):\n        Output only. The total number of spokes that\n        are in this state and associated with a given\n        hub.",
-      "attributes": {
-        "state": {
-          "type": "google.cloud.networkconnectivity_v1.types.State",
-          "description": "Output only. The state of the spokes."
-        },
-        "count": {
-          "type": "int",
-          "description": "Output only. The total number of spokes that are in this state and associated with a given hub."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SpokeStateReasonCount",
-      "docstring": "The number of spokes in the hub that are inactive for this\nreason.\n\nAttributes:\n    state_reason_code (google.cloud.networkconnectivity_v1.types.Spoke.StateReason.Code):\n        Output only. The reason that a spoke is\n        inactive.\n    count (int):\n        Output only. The total number of spokes that\n        are inactive for a particular reason and\n        associated with a given hub.",
-      "attributes": {
-        "state_reason_code": {
-          "type": "google.cloud.networkconnectivity_v1.types.Spoke.StateReason.Code",
-          "description": "Output only. The reason that a spoke is inactive."
-        },
-        "count": {
-          "type": "int",
-          "description": "Output only. The total number of spokes that are inactive for a particular reason and associated with a given hub."
-        }
+        "required": [
+          "name"
+        ]
       }
     }
   ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-network-connectivity\\google\\cloud\\networkconnectivity_v1\\types\\policy_based_routing.py": [
     {
-      "type": "request_class",
-      "name": "PolicyBasedRoute",
-      "docstring": "Policy Based Routes (PBR) are more powerful routes that\nallows GCP customers to route their L4 network traffic based on\nnot just destination IP, but also source IP, protocol and more.\nA PBR always take precedence when it conflicts with other types\nof routes.\nNext id: 22\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    virtual_machine (google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.VirtualMachine):\n        Optional. VM instances to which this policy\n        based route applies to.\n\n        This field is a member of `oneof`_ ``target``.\n    interconnect_attachment (google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.InterconnectAttachment):\n        Optional. The interconnect attachments to\n        which this route ap",
-      "attributes": {
-        "virtual_machine": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.VirtualMachine",
-          "description": "Optional. VM instances to which this policy based route applies to.  This field is a member of `oneof`_ ``target``."
-        },
-        "interconnect_attachment": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.InterconnectAttachment",
-          "description": "Optional. The interconnect attachments to which this route applies to.  This field is a member of `oneof`_ ``target``."
-        },
-        "next_hop_ilb_ip": {
-          "type": "str",
-          "description": "Optional. The IP of a global access enabled L4 ILB that should be the next hop to handle matching packets. For this version, only next_hop_ilb_ip is supported.  This field is a member of `oneof`_ ``next_hop``."
-        },
-        "next_hop_other_routes": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.OtherRoutes",
-          "description": "Optional. Other routes that will be referenced to determine the next hop of the packet.  This field is a member of `oneof`_ ``next_hop``."
-        },
-        "name": {
-          "type": "str",
-          "description": "Immutable. A unique name of the resource in the form of ``projects/{project_number}/locations/global/PolicyBasedRoutes/{policy_based_route_id}``"
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the PolicyBasedRoute was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. Time when the PolicyBasedRoute was updated."
-        },
-        "labels": {
-          "type": "MutableMapping[str, str]",
-          "description": "User-defined labels."
-        },
-        "description": {
-          "type": "str",
-          "description": "Optional. An optional description of this resource. Provide this field when you create the resource."
-        },
-        "network": {
-          "type": "str",
-          "description": "Required. Fully-qualified URL of the network that this route applies to. e.g. projects/my-project/global/networks/my-network."
-        },
-        "filter": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Filter",
-          "description": "Required. The filter to match L4 traffic."
-        },
-        "priority": {
-          "type": "int",
-          "description": "Optional. The priority of this policy based route. Priority is used to break ties in cases where there are more than one matching policy based routes found. In cases where multiple policy based routes are matched, the one with the lowest-numbered priority value wins. The default value is 1000. The priority value must be from 1 to 65535, inclusive."
-        },
-        "warnings": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Warnings]",
-          "description": "Output only. If potential misconfigurations are detected for this route, this field will be populated with warning messages."
-        },
-        "self_link": {
-          "type": "str",
-          "description": "Output only. Server-defined fully-qualified URL for this resource."
-        },
-        "kind": {
-          "type": "str",
-          "description": "Output only. Type of this resource. Always networkconnectivity#policyBasedRoute for Policy Based Route resources."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListPolicyBasedRoutesRequest",
-      "docstring": "Request for [PolicyBasedRouting.ListPolicyBasedRoutes][] method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results per page that\n        should be returned.\n    page_token (str):\n        The page token.\n    filter (str):\n        A filter expression that filters the results\n        listed in the response.\n    order_by (str):\n        Sort the results by a certain order.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource's name."
+      "description": "Request for [PolicyBasedRouting.ListPolicyBasedRoutes][] method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name.\n    page_size (int):\n        The maximum number of results per page that\n        should be returned.\n    page_token (str):\n        The page token.\n    filter (str):\n        A filter expression that filters the results\n        listed in the response.\n    order_by (str):\n        Sort the results by a certain order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource's name.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of results per page that should be returned.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The page token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "A filter expression that filters the results listed in the response.",
+            "type": "string"
+          },
+          "order_by": {
+            "description": "Sort the results by a certain order.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of results per page that should be returned."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "The page token."
-        },
-        "filter": {
-          "type": "str",
-          "description": "A filter expression that filters the results listed in the response."
-        },
-        "order_by": {
-          "type": "str",
-          "description": "Sort the results by a certain order."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListPolicyBasedRoutesResponse",
-      "docstring": "Response for [PolicyBasedRouting.ListPolicyBasedRoutes][] method.\n\nAttributes:\n    policy_based_routes (MutableSequence[google.cloud.networkconnectivity_v1.types.PolicyBasedRoute]):\n        Policy based routes to be returned.\n    next_page_token (str):\n        The next pagination token in the List response. It should be\n        used as page_token for the following request. An empty value\n        means no more result.\n    unreachable (MutableSequence[str]):\n        Locations that could not be reached.",
-      "attributes": {
-        "policy_based_routes": {
-          "type": "MutableSequence[google.cloud.networkconnectivity_v1.types.PolicyBasedRoute]",
-          "description": "Policy based routes to be returned."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "The next pagination token in the List response. It should be used as page_token for the following request. An empty value means no more result."
-        },
-        "unreachable": {
-          "type": "MutableSequence[str]",
-          "description": "Locations that could not be reached."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetPolicyBasedRouteRequest",
-      "docstring": "Request for [PolicyBasedRouting.GetPolicyBasedRoute][] method.\n\nAttributes:\n    name (str):\n        Required. Name of the PolicyBasedRoute\n        resource to get.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the PolicyBasedRoute resource to get."
-        }
+      "description": "Request for [PolicyBasedRouting.GetPolicyBasedRoute][] method.\n\nAttributes:\n    name (str):\n        Required. Name of the PolicyBasedRoute\n        resource to get.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the PolicyBasedRoute resource to get.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreatePolicyBasedRouteRequest",
-      "docstring": "Request for [PolicyBasedRouting.CreatePolicyBasedRoute][] method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name of the\n        PolicyBasedRoute.\n    policy_based_route_id (str):\n        Required. Unique id for the Policy Based\n        Route to create.\n    policy_based_route (google.cloud.networkconnectivity_v1.types.PolicyBasedRoute):\n        Required. Initial values for a new Policy\n        Based Route.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes since the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        w",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The parent resource's name of the PolicyBasedRoute."
+      "description": "Request for [PolicyBasedRouting.CreatePolicyBasedRoute][] method.\n\nAttributes:\n    parent (str):\n        Required. The parent resource's name of the\n        PolicyBasedRoute.\n    policy_based_route_id (str):\n        Required. Unique id for the Policy Based\n        Route to create.\n    policy_based_route (google.cloud.networkconnectivity_v1.types.PolicyBasedRoute):\n        Required. Initial values for a new Policy\n        Based Route.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes since the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        w",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The parent resource's name of the PolicyBasedRoute.",
+            "type": "string"
+          },
+          "policy_based_route_id": {
+            "description": "Required. Unique id for the Policy Based Route to create.",
+            "type": "string"
+          },
+          "policy_based_route": {
+            "description": "Required. Initial values for a new Policy Based Route.",
+            "type": "object",
+            "properties": {
+              "virtual_machine": {
+                "type": "object",
+                "properties": {
+                  "instance_name": {
+                    "description": "Output only. The user-friendly name of the Managed Compute Engine instance.",
+                    "type": "string"
+                  },
+                  "instance_id": {
+                    "description": "Output only. The unique identifier of the Managed Compute Engine instance.",
+                    "type": "string"
+                  },
+                  "virtual_machine_config": {
+                    "type": "object",
+                    "properties": {
+                      "zone": {
+                        "description": "Output only. The zone where the virtual machine is located. If using regional request, the notebooks service will pick a location in the corresponding runtime region. On a get request, zone will always be present. Example:  -  ``us-central1-b``",
+                        "type": "string"
+                      },
+                      "machine_type": {
+                        "description": "Required. The Compute Engine machine type used for runtimes. Short name is valid. Examples:  -  ``n1-standard-2`` -  ``e2-standard-8``",
+                        "type": "string"
+                      },
+                      "container_images": {
+                        "description": "Optional. Use a list of container images to use as Kernels in the notebook instance.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "repository": {
+                              "description": "Required. The path to the container image repository. For example: ``gcr.io/{project_id}/{image_name}``",
+                              "type": "string"
+                            },
+                            "tag": {
+                              "description": "Optional. The tag of the container image. If not specified, this defaults to the latest tag.",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "repository"
+                          ]
+                        }
+                      },
+                      "data_disk": {
+                        "type": "object",
+                        "properties": {
+                          "auto_delete": {
+                            "description": "Optional. Output only. Specifies whether the disk will be auto-deleted when the instance is deleted (but not when the disk is detached from the instance).",
+                            "type": "boolean"
+                          },
+                          "boot": {
+                            "description": "Optional. Output only. Indicates that this is a boot disk. The virtual machine will use the first partition of the disk for its root filesystem.",
+                            "type": "boolean"
+                          },
+                          "device_name": {
+                            "description": "Optional. Output only. Specifies a unique device name of your choice that is reflected into the ``/dev/disk/by-id/google-*`` tree of a Linux operating system running within the instance. This name can be used to reference the device for mounting, resizing, and so on, from within the instance.  If not specified, the server chooses a default device name to apply to this disk, in the form persistent-disk-x, where x is a number assigned by Google Compute Engine. This field is only applicable for persistent disks.",
+                            "type": "string"
+                          },
+                          "guest_os_features": {
+                            "description": "Output only. Indicates a list of features to enable on the guest operating system. Applicable only for bootable images. Read  Enabling guest operating system features to see a list of available options.",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type_": {
+                                  "description": "The ID of a supported feature. Read `Enabling guest operating system features <https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features>`__ to see a list of available options.  Valid values:  -  ``FEATURE_TYPE_UNSPECIFIED`` -  ``MULTI_IP_SUBNET`` -  ``SECURE_BOOT`` -  ``UEFI_COMPATIBLE`` -  ``VIRTIO_SCSI_MULTIQUEUE`` -  ``WINDOWS``",
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "index": {
+                            "description": "Output only. A zero-based index to this disk, where 0 is reserved for the boot disk. If you have many disks attached to an instance, each disk would have a unique index number.",
+                            "type": "integer"
+                          },
+                          "initialize_params": {
+                            "type": "object",
+                            "properties": {
+                              "description": {
+                                "description": "Optional. Provide this property when creating the disk.",
+                                "type": "string"
+                              },
+                              "disk_name": {
+                                "description": "Optional. Specifies the disk name. If not specified, the default is to use the name of the instance. If the disk with the instance name exists already in the given zone/region, a new name will be automatically generated.",
+                                "type": "string"
+                              },
+                              "disk_size_gb": {
+                                "description": "Optional. Specifies the size of the disk in base-2 GB. If not specified, the disk will be the same size as the image (usually 10GB). If specified, the size must be equal to or larger than 10GB. Default 100 GB.",
+                                "type": "integer"
+                              },
+                              "disk_type": {
+                                "type": "object",
+                                "properties": {
+                                  "creation_timestamp": {
+                                    "description": "[Output Only] Creation timestamp in RFC3339 text format.  This field is a member of `oneof`_ ``_creation_timestamp``.",
+                                    "type": "string"
+                                  },
+                                  "default_disk_size_gb": {
+                                    "description": "[Output Only] Server-defined default disk size in GB.  This field is a member of `oneof`_ ``_default_disk_size_gb``.",
+                                    "type": "integer"
+                                  },
+                                  "deprecated": {
+                                    "type": "object",
+                                    "properties": {
+                                      "deleted": {
+                                        "description": "An optional RFC3339 timestamp on or after which the state of this resource is intended to change to DELETED. This is only informational and the status will not change unless the client explicitly changes it.  This field is a member of `oneof`_ ``_deleted``.",
+                                        "type": "string"
+                                      },
+                                      "deprecated": {
+                                        "description": "An optional RFC3339 timestamp on or after which the state of this resource is intended to change to DEPRECATED. This is only informational and the status will not change unless the client explicitly changes it.  This field is a member of `oneof`_ ``_deprecated``.",
+                                        "type": "string"
+                                      },
+                                      "obsolete": {
+                                        "description": "An optional RFC3339 timestamp on or after which the state of this resource is intended to change to OBSOLETE. This is only informational and the status will not change unless the client explicitly changes it.  This field is a member of `oneof`_ ``_obsolete``.",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "description": "The URL of the suggested replacement for a deprecated resource. The suggested replacement resource must be the same kind of resource as the deprecated resource.  This field is a member of `oneof`_ ``_replacement``.",
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "description": "The deprecation state of this resource. This can be ACTIVE, DEPRECATED, OBSOLETE, or DELETED. Operations which communicate the end of life date for an image, can use ACTIVE. Operations which create a new resource using a DEPRECATED resource will return successfully, but with a warning indicating the deprecated resource and recommending its replacement. Operations which use OBSOLETE or DELETED resources will be rejected and result in an error. Check the State enum for the list of possible values.  This field is a member of `oneof`_ ``_state``.",
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "description": {
+                                    "description": "[Output Only] An optional description of this resource.  This field is a member of `oneof`_ ``_description``.",
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "description": "[Output Only] The unique identifier for the resource. This identifier is defined by the server.  This field is a member of `oneof`_ ``_id``.",
+                                    "type": "integer"
+                                  },
+                                  "kind": {
+                                    "description": "[Output Only] Type of the resource. Always compute#diskType for disk types.  This field is a member of `oneof`_ ``_kind``.",
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "description": "[Output Only] Name of the resource.  This field is a member of `oneof`_ ``_name``.",
+                                    "type": "string"
+                                  },
+                                  "region": {
+                                    "description": "[Output Only] URL of the region where the disk type resides. Only applicable for regional resources. You must specify this field as part of the HTTP request URL. It is not settable as a field in the request body.  This field is a member of `oneof`_ ``_region``.",
+                                    "type": "string"
+                                  },
+                                  "self_link": {
+                                    "description": "[Output Only] Server-defined URL for the resource.  This field is a member of `oneof`_ ``_self_link``.",
+                                    "type": "string"
+                                  },
+                                  "valid_disk_size": {
+                                    "description": "[Output Only] An optional textual description of the valid disk size, such as \"10GB-10TB\".  This field is a member of `oneof`_ ``_valid_disk_size``.",
+                                    "type": "string"
+                                  },
+                                  "zone": {
+                                    "description": "[Output Only] URL of the zone where the disk type resides. You must specify this field as part of the HTTP request URL. It is not settable as a field in the request body.  This field is a member of `oneof`_ ``_zone``.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "labels": {
+                                "description": "Optional. Labels to apply to this disk. These can be later modified by the disks.setLabels method. This field is only applicable for persistent disks.",
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "interface": {
+                            "description": "Specifies the disk interface to use for attaching this disk, which is either SCSI or NVME. The default is SCSI. Persistent disks must always use SCSI and the request will fail if you attempt to attach a persistent disk in any other format than SCSI. Local SSDs can use either NVME or SCSI. For performance characteristics of SCSI over NVMe, see Local SSD performance. Valid values:  -  ``NVME`` -  ``SCSI``",
+                            "type": "string"
+                          },
+                          "kind": {
+                            "description": "Output only. Type of the resource. Always compute#attachedDisk for attached disks.",
+                            "type": "string"
+                          },
+                          "licenses": {
+                            "description": "Output only. Any valid publicly visible licenses.",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "mode": {
+                            "description": "The mode in which to attach this disk, either ``READ_WRITE`` or ``READ_ONLY``. If not specified, the default is to attach the disk in ``READ_WRITE`` mode. Valid values:  -  ``READ_ONLY`` -  ``READ_WRITE``",
+                            "type": "string"
+                          },
+                          "source": {
+                            "description": "Specifies a valid partial or full URL to an existing Persistent Disk resource.",
+                            "type": "string"
+                          },
+                          "type_": {
+                            "description": "Specifies the type of the disk, either ``SCRATCH`` or ``PERSISTENT``. If not specified, the default is ``PERSISTENT``. Valid values:  -  ``PERSISTENT`` -  ``SCRATCH``",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "encryption_config": {
+                        "type": "object",
+                        "properties": {
+                          "kms_key_name": {
+                            "description": "Optional. Customer-managed Encryption Key available through Google's Key Management Service. Cannot be updated. If not specified, Google-managed key will be used.",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "shielded_instance_config": {
+                        "type": "object",
+                        "properties": {
+                          "enable_secure_boot": {
+                            "description": "Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails. Disabled by default.",
+                            "type": "boolean"
+                          },
+                          "enable_vtpm": {
+                            "description": "Defines whether the instance has the vTPM enabled. Enabled by default.",
+                            "type": "boolean"
+                          },
+                          "enable_integrity_monitoring": {
+                            "description": "Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created. Enabled by default.",
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "accelerator_config": {
+                        "type": "object",
+                        "properties": {
+                          "type_": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "The resource name.",
+                                "type": "string"
+                              },
+                              "type_": {
+                                "description": "The accelerator type.",
+                                "type": "string"
+                              },
+                              "accelerator_configs": {
+                                "description": "The accelerator config.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type_": {
+                                      "description": "Required. Type of TPU.",
+                                      "type": "object",
+                                      "reference": "google.cloud.tpu_v2alpha1.types.AcceleratorConfig.Type"
+                                    },
+                                    "topology": {
+                                      "description": "Required. Topology of TPU in chips.",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type_",
+                                    "topology"
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "core_count": {
+                            "description": "Count of cores of this accelerator.",
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "network": {
+                        "description": "Optional. The Compute Engine network to be used for machine communications. Cannot be specified with subnetwork. If neither ``network`` nor ``subnet`` is specified, the \"default\" network of the project is used, if it exists.  A full URL or partial URI. Examples:  -  ``https://www.googleapis.com/compute/v1/projects/[project_id]/global/networks/default`` -  ``projects/[project_id]/global/networks/default``  Runtimes are managed resources inside Google Infrastructure. Runtimes support the following network configurations:  -  Google Managed Network (Network & subnet are empty) -  Consumer Project VPC (network & subnet are required). Requires configuring Private Service Access. -  Shared VPC (network & subnet are required). Requires configuring Private Service Access.",
+                        "type": "string"
+                      },
+                      "subnet": {
+                        "description": "Optional. The Compute Engine subnetwork to be used for machine communications. Cannot be specified with network.  A full URL or partial URI are valid. Examples:  -  ``https://www.googleapis.com/compute/v1/projects/[project_id]/regions/us-east1/subnetworks/sub0`` -  ``projects/[project_id]/regions/us-east1/subnetworks/sub0``",
+                        "type": "string"
+                      },
+                      "internal_ip_only": {
+                        "description": "Optional. If true, runtime will only have internal IP addresses. By default, runtimes are not restricted to internal IP addresses, and will have ephemeral external IP addresses assigned to each vm. This ``internal_ip_only`` restriction can only be enabled for subnetwork enabled networks, and all dependencies must be configured to be accessible without external IP addresses.",
+                        "type": "boolean"
+                      },
+                      "tags": {
+                        "description": "Optional. The Compute Engine tags to add to runtime (see `Tagging instances <https://cloud.google.com/compute/docs/label-or-tag-resources#tags>`__).",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "guest_attributes": {
+                        "description": "Output only. The Compute Engine guest attributes. (see `Project and instance guest attributes <https://cloud.google.com/compute/docs/storing-retrieving-metadata#guest_attributes>`__).",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "metadata": {
+                        "description": "Optional. The Compute Engine metadata entries to add to virtual machine. (see `Project and instance metadata <https://cloud.google.com/compute/docs/storing-retrieving-metadata#project_and_instance_metadata>`__).",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "labels": {
+                        "description": "Optional. The labels to associate with this runtime. Label **keys** must contain 1 to 63 characters, and must conform to `RFC 1035 <https://www.ietf.org/rfc/rfc1035.txt>`__. Label **values** may be empty, but, if present, must contain 1 to 63 characters, and must conform to `RFC 1035 <https://www.ietf.org/rfc/rfc1035.txt>`__. No more than 32 labels can be associated with a cluster.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nic_type": {
+                        "description": "Optional. The type of vNIC to be used on this interface. This may be gVNIC or VirtioNet.",
+                        "type": "object",
+                        "reference": "google.cloud.notebooks_v1.types.VirtualMachineConfig.NicType"
+                      },
+                      "reserved_ip_range": {
+                        "description": "Optional. Reserved IP Range name is used for VPC Peering. The subnetwork allocation will use the range *name* if it's assigned.  Example: managed-notebooks-range-c  ::  PEERING_RANGE_NAME_3=managed-notebooks-range-c gcloud compute addresses create $PEERING_RANGE_NAME_3 \\ --global \\ --prefix-length=24 \\ --description=\"Google Cloud Managed Notebooks Range 24 c\" \\ --network=$NETWORK \\ --addresses=192.168.0.0 \\ --purpose=VPC_PEERING  Field value will be: ``managed-notebooks-range-c``",
+                        "type": "string"
+                      },
+                      "boot_image": {
+                        "type": "object",
+                        "properties": {}
+                      }
+                    },
+                    "required": [
+                      "machine_type",
+                      "data_disk"
+                    ]
+                  }
+                }
+              },
+              "interconnect_attachment": {
+                "type": "object",
+                "properties": {
+                  "region": {
+                    "description": "Optional. Cloud region to install this policy based route on interconnect attachment. Use ``all`` to install it on all interconnect attachments.",
+                    "type": "string"
+                  }
+                }
+              },
+              "next_hop_ilb_ip": {
+                "description": "Optional. The IP of a global access enabled L4 ILB that should be the next hop to handle matching packets. For this version, only next_hop_ilb_ip is supported.  This field is a member of `oneof`_ ``next_hop``.",
+                "type": "string"
+              },
+              "next_hop_other_routes": {
+                "description": "Optional. Other routes that will be referenced to determine the next hop of the packet.  This field is a member of `oneof`_ ``next_hop``.",
+                "type": "object",
+                "reference": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.OtherRoutes"
+              },
+              "name": {
+                "description": "Immutable. A unique name of the resource in the form of ``projects/{project_number}/locations/global/PolicyBasedRoutes/{policy_based_route_id}``",
+                "type": "string"
+              },
+              "create_time": {
+                "description": "Output only. Time when the PolicyBasedRoute was created.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "update_time": {
+                "description": "Output only. Time when the PolicyBasedRoute was updated.",
+                "type": "object",
+                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              },
+              "labels": {
+                "description": "User-defined labels.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "description": "Optional. An optional description of this resource. Provide this field when you create the resource.",
+                "type": "string"
+              },
+              "network": {
+                "description": "Required. Fully-qualified URL of the network that this route applies to. e.g. projects/my-project/global/networks/my-network.",
+                "type": "string"
+              },
+              "filter": {
+                "type": "object",
+                "properties": {
+                  "location_filter": {
+                    "type": "object",
+                    "properties": {
+                      "circle": {
+                        "type": "object",
+                        "properties": {
+                          "center": {
+                            "description": "Required. Center latitude and longitude.  The range of latitude must be within [-90.0, 90.0]. The range of the longitude must be within [-180.0, 180.0].",
+                            "type": "object",
+                            "reference": "google.type.latlng_pb2.LatLng"
+                          },
+                          "radius": {
+                            "description": "Required. Radius measured in meters. The radius must be within [0.0, 50000.0].",
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "center",
+                          "radius"
+                        ]
+                      },
+                      "region": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "description": "Identifier. The resource name of the region. Format: ``accounts/{account}/regions/{region}``",
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "description": "Optional. The display name of the region.  This field is a member of `oneof`_ ``_display_name``.",
+                            "type": "string"
+                          },
+                          "postal_code_area": {
+                            "type": "object",
+                            "properties": {
+                              "region_code": {
+                                "description": "Required. `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ or the country the postal code group applies to.",
+                                "type": "string"
+                              },
+                              "postal_codes": {
+                                "description": "Required. A range of postal codes.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "begin": {
+                                      "description": "Required. A postal code or a pattern of the form prefix\\* denoting the inclusive lower bound of the range defining the area. Examples values: ``94108``, ``9410*``, ``9*``.",
+                                      "type": "string"
+                                    },
+                                    "end": {
+                                      "description": "Optional. A postal code or a pattern of the form ``prefix*`` denoting the inclusive upper bound of the range defining the area. It must have the same length as postalCodeRangeBegin: if postalCodeRangeBegin is a postal code then postalCodeRangeEnd must be a postal code too; if postalCodeRangeBegin is a pattern then postalCodeRangeEnd must be a pattern with the same prefix length. Optional: if not set, then the area is defined as being all the postal codes matching postalCodeRangeBegin.",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "begin"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "region_code",
+                              "postal_codes"
+                            ]
+                          },
+                          "geotarget_area": {
+                            "type": "object",
+                            "properties": {
+                              "geotarget_criteria_ids": {
+                                "description": "Required. A non-empty list of `location IDs <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__. They must all be of the same location type (for example, state).",
+                                "type": "array",
+                                "items": {
+                                  "type": "integer"
+                                }
+                              }
+                            },
+                            "required": [
+                              "geotarget_criteria_ids"
+                            ]
+                          },
+                          "regional_inventory_eligible": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "",
+                                "type": "boolean"
+                              }
+                            }
+                          },
+                          "shipping_eligible": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "",
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "custom_area": {
+                        "type": "object",
+                        "properties": {
+                          "polygon": {
+                            "type": "object",
+                            "properties": {
+                              "coordinates": {
+                                "description": "Optional. The coordinates that define the polygon.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.type.latlng_pb2.LatLng"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "polygon"
+                        ]
+                      }
+                    }
+                  },
+                  "type_filter": {
+                    "type": "object",
+                    "properties": {
+                      "included_types": {
+                        "description": "Optional. Included Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "excluded_types": {
+                        "description": "Optional. Excluded Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "included_primary_types": {
+                        "description": "Optional. Included primary Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "excluded_primary_types": {
+                        "description": "Optional. Excluded primary Place types.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "operating_status": {
+                    "description": "Optional. Restricts results to places whose operating status is included on this list. If operating_status is not set, OPERATING_STATUS_OPERATIONAL is used as default.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.maps.areainsights_v1.types.OperatingStatus"
+                    }
+                  },
+                  "price_levels": {
+                    "description": "Optional. Restricts results to places whose price level is included on this list. If price_level is not set, all price levels are included in the results.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.maps.areainsights_v1.types.PriceLevel"
+                    }
+                  },
+                  "rating_filter": {
+                    "type": "object",
+                    "properties": {
+                      "min_rating": {
+                        "description": "Optional. Restricts results to places whose average user rating is greater than or equal to min_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_min_rating``.",
+                        "type": "number"
+                      },
+                      "max_rating": {
+                        "description": "Optional. Restricts results to places whose average user rating is strictly less than or equal to max_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_max_rating``.",
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "location_filter",
+                  "type_filter"
+                ]
+              },
+              "priority": {
+                "description": "Optional. The priority of this policy based route. Priority is used to break ties in cases where there are more than one matching policy based routes found. In cases where multiple policy based routes are matched, the one with the lowest-numbered priority value wins. The default value is 1000. The priority value must be from 1 to 65535, inclusive.",
+                "type": "integer"
+              },
+              "warnings": {
+                "description": "Output only. If potential misconfigurations are detected for this route, this field will be populated with warning messages.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "description": "Output only. A warning code, if applicable.",
+                      "type": "object",
+                      "reference": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Warnings.Code"
+                    },
+                    "data": {
+                      "description": "Output only. Metadata about this warning in key: value format. The key should provides more detail on the warning being returned. For example, for warnings where there are no results in a list request for a particular zone, this key might be scope and the key value might be the zone name. Other examples might be a key indicating a deprecated resource and a suggested replacement.",
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "warning_message": {
+                      "description": "Output only. A human-readable description of the warning code.",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "self_link": {
+                "description": "Output only. Server-defined fully-qualified URL for this resource.",
+                "type": "string"
+              },
+              "kind": {
+                "description": "Output only. Type of this resource. Always networkconnectivity#policyBasedRoute for Policy Based Route resources.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "network",
+              "filter"
+            ]
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "policy_based_route_id": {
-          "type": "str",
-          "description": "Required. Unique id for the Policy Based Route to create."
-        },
-        "policy_based_route": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute",
-          "description": "Required. Initial values for a new Policy Based Route."
-        },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
+        "required": [
+          "parent",
+          "policy_based_route_id",
+          "policy_based_route"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeletePolicyBasedRouteRequest",
-      "docstring": "Request for [PolicyBasedRouting.DeletePolicyBasedRoute][] method.\n\nAttributes:\n    name (str):\n        Required. Name of the PolicyBasedRoute\n        resource to delete.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes after the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request ID was received, and if\n        so, will ignore the second request. This\n        prevents clients from accidentally creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID with the\n        exception that zero UUID is n",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. Name of the PolicyBasedRoute resource to delete."
+      "description": "Request for [PolicyBasedRouting.DeletePolicyBasedRoute][] method.\n\nAttributes:\n    name (str):\n        Required. Name of the PolicyBasedRoute\n        resource to delete.\n    request_id (str):\n        Optional. An optional request ID to identify\n        requests. Specify a unique request ID so that if\n        you must retry your request, the server will\n        know to ignore the request if it has already\n        been completed. The server will guarantee that\n        for at least 60 minutes after the first request.\n\n        For example, consider a situation where you make\n        an initial request and the request times out. If\n        you make the request again with the same request\n        ID, the server can check if original operation\n        with the same request ID was received, and if\n        so, will ignore the second request. This\n        prevents clients from accidentally creating\n        duplicate commitments.\n\n        The request ID must be a valid UUID with the\n        exception that zero UUID is n",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the PolicyBasedRoute resource to delete.",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+            "type": "string"
+          }
         },
-        "request_id": {
-          "type": "str",
-          "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "VirtualMachine",
-      "docstring": "VM instances to which this policy based route applies to.\n\nAttributes:\n    tags (MutableSequence[str]):\n        Optional. A list of VM instance tags to which\n        this policy based route applies to. VM instances\n        that have ANY of tags specified here will\n        install this PBR.",
-      "attributes": {
-        "tags": {
-          "type": "MutableSequence[str]",
-          "description": "Optional. A list of VM instance tags to which this policy based route applies to. VM instances that have ANY of tags specified here will install this PBR."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "InterconnectAttachment",
-      "docstring": "InterconnectAttachment to which this route applies to.\n\nAttributes:\n    region (str):\n        Optional. Cloud region to install this policy based route on\n        interconnect attachment. Use ``all`` to install it on all\n        interconnect attachments.",
-      "attributes": {
-        "region": {
-          "type": "str",
-          "description": "Optional. Cloud region to install this policy based route on interconnect attachment. Use ``all`` to install it on all interconnect attachments."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Filter",
-      "docstring": "Filter matches L4 traffic.\n\nAttributes:\n    ip_protocol (str):\n        Optional. The IP protocol that this policy\n        based route applies to. Valid values are 'TCP',\n        'UDP', and 'ALL'. Default is 'ALL'.\n    src_range (str):\n        Optional. The source IP range of outgoing\n        packets that this policy based route applies to.\n        Default is \"0.0.0.0/0\" if protocol version is\n        IPv4.\n    dest_range (str):\n        Optional. The destination IP range of\n        outgoing packets that this policy based route\n        applies to. Default is \"0.0.0.0/0\" if protocol\n        version is IPv4.\n    protocol_version (google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Filter.ProtocolVersion):\n        Required. Internet protocol versions this\n        policy based route applies to. For this version,\n        only IPV4 is supported.",
-      "attributes": {
-        "ip_protocol": {
-          "type": "str",
-          "description": "Optional. The IP protocol that this policy based route applies to. Valid values are 'TCP', 'UDP', and 'ALL'. Default is 'ALL'."
-        },
-        "src_range": {
-          "type": "str",
-          "description": "Optional. The source IP range of outgoing packets that this policy based route applies to. Default is \"0.0.0.0/0\" if protocol version is IPv4."
-        },
-        "dest_range": {
-          "type": "str",
-          "description": "Optional. The destination IP range of outgoing packets that this policy based route applies to. Default is \"0.0.0.0/0\" if protocol version is IPv4."
-        },
-        "protocol_version": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Filter.ProtocolVersion",
-          "description": "Required. Internet protocol versions this policy based route applies to. For this version, only IPV4 is supported."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Warnings",
-      "docstring": "Informational warning message.\n\nAttributes:\n    code (google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Warnings.Code):\n        Output only. A warning code, if applicable.\n    data (MutableMapping[str, str]):\n        Output only. Metadata about this warning in\n        key: value format. The key should provides more\n        detail on the warning being returned. For\n        example, for warnings where there are no results\n        in a list request for a particular zone, this\n        key might be scope and the key value might be\n        the zone name. Other examples might be a key\n        indicating a deprecated resource and a suggested\n        replacement.\n    warning_message (str):\n        Output only. A human-readable description of\n        the warning code.",
-      "attributes": {
-        "code": {
-          "type": "google.cloud.networkconnectivity_v1.types.PolicyBasedRoute.Warnings.Code",
-          "description": "Output only. A warning code, if applicable."
-        },
-        "data": {
-          "type": "MutableMapping[str, str]",
-          "description": "Output only. Metadata about this warning in key: value format. The key should provides more detail on the warning being returned. For example, for warnings where there are no results in a list request for a particular zone, this key might be scope and the key value might be the zone name. Other examples might be a key indicating a deprecated resource and a suggested replacement."
-        },
-        "warning_message": {
-          "type": "str",
-          "description": "Output only. A human-readable description of the warning code."
-        }
+        "required": [
+          "name"
+        ]
       }
     }
   ]

@@ -1,1030 +1,383 @@
 {
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-shopping-merchant-products\\google\\shopping\\merchant_products_v1beta\\types\\productinputs.py": [
     {
-      "type": "request_class",
-      "name": "ProductInput",
-      "docstring": "This resource represents input data you submit for a product, not\nthe processed product that you see in Merchant Center, in Shopping\nads, or across Google surfaces. Product inputs, rules and\nsupplemental data source data are combined to create the processed\n[product][google.shopping.content.bundles.Products.Product].\n\nRequired product input attributes to pass data validation checks are\nprimarily defined in the `Products Data\nSpecification <https://support.google.com/merchants/answer/188494>`__.\n\nThe following attributes are required:\n[feedLabel][google.shopping.content.bundles.Products.feed_label],\n[contentLanguage][google.shopping.content.bundles.Products.content_language]\nand [offerId][google.shopping.content.bundles.Products.offer_id].\n\nAfter inserting, updating, or deleting a product input, it may take\nseveral minutes before the processed product can be retrieved.\n\nAll fields in the product input and its sub-messages match the\nEnglish name of their corresponding attribute in the vertical spec\nwith `some\ne",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Identifier. The name of the product input. Format: ``\"{productinput.name=accounts/{account}/productInputs/{productinput}}\"``"
-        },
-        "product": {
-          "type": "str",
-          "description": "Output only. The name of the processed product. Format: ``\"{product.name=accounts/{account}/products/{product}}\"``"
-        },
-        "channel": {
-          "type": "google.shopping.type.types.Channel.ChannelEnum",
-          "description": "Required. Immutable. The `channel <https://support.google.com/merchants/answer/7361332>`__ of the product."
-        },
-        "offer_id": {
-          "type": "str",
-          "description": "Required. Immutable. Your unique identifier for the product. This is the same for the product input and processed product. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. See the `products data specification <https://support.google.com/merchants/answer/188494#id>`__ for details."
-        },
-        "content_language": {
-          "type": "str",
-          "description": "Required. Immutable. The two-letter `ISO 639-1 <http://en.wikipedia.org/wiki/ISO_639-1>`__ language code for the product."
-        },
-        "feed_label": {
-          "type": "str",
-          "description": "Required. Immutable. The `feed label <https://developers.google.com/shopping-content/guides/products/feed-labels>`__ for the product."
-        },
-        "version_number": {
-          "type": "int",
-          "description": "Optional. Represents the existing version (freshness) of the product, which can be used to preserve the right order when multiple updates are done at the same time.  If set, the insertion is prevented when version number is lower than the current version number of the existing product. Re-insertion (for example, product refresh after 30 days) can be performed with the current ``version_number``.  Only supported for insertions into primary data sources.  If the operation is prevented, the aborted exception will be thrown.  This field is a member of `oneof`_ ``_version_number``."
-        },
-        "attributes": {
-          "type": "google.shopping.merchant_products_v1beta.types.Attributes",
-          "description": "Optional. A list of product attributes."
-        },
-        "custom_attributes": {
-          "type": "MutableSequence[google.shopping.type.types.CustomAttribute]",
-          "description": "Optional. A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the data specification in its generic form (for example, ``{ \"name\": \"size type\", \"value\": \"regular\" }``). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google. Maximum allowed number of characters for each custom attribute is 10240 (represents sum of characters for name and value). Maximum 2500 custom attributes can be set per product, with total size of 102.4kB. Underscores in custom attribute names are replaced by spaces upon insertion."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "InsertProductInputRequest",
-      "docstring": "Request message for the InsertProductInput method.\n\nAttributes:\n    parent (str):\n        Required. The account where this product will\n        be inserted. Format: accounts/{account}\n    product_input (google.shopping.merchant_products_v1beta.types.ProductInput):\n        Required. The product input to insert.\n    data_source (str):\n        Required. The primary or supplemental product data source\n        name. If the product already exists and data source provided\n        is different, then the product will be moved to a new data\n        source. Format:\n        ``accounts/{account}/dataSources/{datasource}``.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The account where this product will be inserted. Format: accounts/{account}"
+      "description": "Request message for the InsertProductInput method.\n\nAttributes:\n    parent (str):\n        Required. The account where this product will\n        be inserted. Format: accounts/{account}\n    product_input (google.shopping.merchant_products_v1beta.types.ProductInput):\n        Required. The product input to insert.\n    data_source (str):\n        Required. The primary or supplemental product data source\n        name. If the product already exists and data source provided\n        is different, then the product will be moved to a new data\n        source. Format:\n        ``accounts/{account}/dataSources/{datasource}``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The account where this product will be inserted. Format: accounts/{account}",
+            "type": "string"
+          },
+          "product_input": {
+            "description": "Required. The product input to insert.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Identifier. The name of the product input. Format: ``\"{productinput.name=accounts/{account}/productInputs/{productinput}}\"``",
+                "type": "string"
+              },
+              "product": {
+                "description": "Output only. The name of the processed product. Format: ``\"{product.name=accounts/{account}/products/{product}}\"``",
+                "type": "string"
+              },
+              "channel": {
+                "description": "Required. Immutable. The `channel <https://support.google.com/merchants/answer/7361332>`__ of the product.",
+                "type": "object",
+                "reference": "google.shopping.type.types.Channel.ChannelEnum"
+              },
+              "offer_id": {
+                "description": "Required. Immutable. Your unique identifier for the product. This is the same for the product input and processed product. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. See the `products data specification <https://support.google.com/merchants/answer/188494#id>`__ for details.",
+                "type": "string"
+              },
+              "content_language": {
+                "description": "Required. Immutable. The two-letter `ISO 639-1 <http://en.wikipedia.org/wiki/ISO_639-1>`__ language code for the product.",
+                "type": "string"
+              },
+              "feed_label": {
+                "description": "Required. Immutable. The `feed label <https://developers.google.com/shopping-content/guides/products/feed-labels>`__ for the product.",
+                "type": "string"
+              },
+              "version_number": {
+                "description": "Optional. Represents the existing version (freshness) of the product, which can be used to preserve the right order when multiple updates are done at the same time.  If set, the insertion is prevented when version number is lower than the current version number of the existing product. Re-insertion (for example, product refresh after 30 days) can be performed with the current ``version_number``.  Only supported for insertions into primary data sources.  If the operation is prevented, the aborted exception will be thrown.  This field is a member of `oneof`_ ``_version_number``.",
+                "type": "integer"
+              },
+              "attributes": {
+                "type": "object",
+                "properties": {
+                  "product_applicability": {
+                    "description": "Required. Applicability of the promotion to either all products or `only specific products <https://support.google.com/merchants/answer/6396257?ref_topic=6396150&sjid=17642868584668136159-NC>`__.",
+                    "type": "object",
+                    "reference": "google.shopping.merchant_promotions_v1beta.types.ProductApplicability"
+                  },
+                  "offer_type": {
+                    "description": "Required. `Type <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__ of the promotion. Use this attribute to indicate whether or not customers need a coupon code to redeem your promotion.",
+                    "type": "object",
+                    "reference": "google.shopping.merchant_promotions_v1beta.types.OfferType"
+                  },
+                  "generic_redemption_code": {
+                    "description": "Optional. Generic redemption code for the promotion. To be used with the ``offerType`` field and must meet the `minimum requirements <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "string"
+                  },
+                  "long_title": {
+                    "description": "Required. `Long title <https://support.google.com/merchants/answer/13838102?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                    "type": "string"
+                  },
+                  "coupon_value_type": {
+                    "description": "Required. The [coupon value type] (https://support.google.com/merchants/answer/13861986?ref_topic=13773355&sjid=17642868584668136159-NC) attribute to signal the type of promotion that you are running. Depending on type of the selected coupon value `some attributes are required <https://support.google.com/merchants/answer/6393006?ref_topic=7322920>`__.",
+                    "type": "object",
+                    "reference": "google.shopping.merchant_promotions_v1beta.types.CouponValueType"
+                  },
+                  "promotion_destinations": {
+                    "description": "Required. The list of destinations where the promotion applies to. If you don't specify a destination by including a supported value in your data source, your promotion will display in Shopping ads and free listings by default.  You may have previously submitted the following values as destinations for your products: Shopping Actions, Surfaces across Google, Local surfaces across Google. To represent these values use ``FREE_LISTINGS``, ``FREE_LOCAL_LISTINGS``, ``LOCAL_INVENTORY_ADS``. For more details see `Promotion destination <https://support.google.com/merchants/answer/13837465?sjid=5155774230887277618-NC>`__",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.shopping.type.types.Destination.DestinationEnum"
+                    }
+                  },
+                  "item_id_inclusion": {
+                    "description": "Optional. Product filter by `item ID <https://support.google.com/merchants/answer/13861565?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "brand_inclusion": {
+                    "description": "Optional. Product filter by brand for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "item_group_id_inclusion": {
+                    "description": "Optional. Product filter by item group ID for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability [product_applicability] attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "product_type_inclusion": {
+                    "description": "Optional. Product filter by product type for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "item_id_exclusion": {
+                    "description": "Optional. Product filter by `item ID exclusion <https://support.google.com/merchants/answer/13863524?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "brand_exclusion": {
+                    "description": "Optional. Product filter by `brand exclusion <https://support.google.com/merchants/answer/13861679?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "item_group_id_exclusion": {
+                    "description": "Optional. Product filter by `item group ID <https://support.google.com/merchants/answer/13837298?ref_topic=13773355&sjid=17642868584668136159-NC>`__. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__. exclusion for the promotion.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "product_type_exclusion": {
+                    "description": "Optional. Product filter by `product type exclusion <https://support.google.com/merchants/answer/13863746?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "minimum_purchase_amount": {
+                    "type": "object",
+                    "properties": {
+                      "amount_micros": {
+                        "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                        "type": "integer"
+                      },
+                      "currency_code": {
+                        "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "minimum_purchase_quantity": {
+                    "description": "Optional. `Minimum purchase quantity <https://support.google.com/merchants/answer/13838182?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                    "type": "integer"
+                  },
+                  "limit_quantity": {
+                    "description": "Optional. `Maximum purchase quantity <https://support.google.com/merchants/answer/13861564?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                    "type": "integer"
+                  },
+                  "limit_value": {
+                    "type": "object",
+                    "properties": {
+                      "amount_micros": {
+                        "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                        "type": "integer"
+                      },
+                      "currency_code": {
+                        "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "percent_off": {
+                    "description": "Optional. The `percentage discount <https://support.google.com/merchants/answer/13837404?sjid=17642868584668136159-NC>`__ offered in the promotion.",
+                    "type": "integer"
+                  },
+                  "money_off_amount": {
+                    "type": "object",
+                    "properties": {
+                      "amount_micros": {
+                        "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                        "type": "integer"
+                      },
+                      "currency_code": {
+                        "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "get_this_quantity_discounted": {
+                    "description": "Optional. The number of items discounted in the promotion. The attribute is set when ``couponValueType`` is equal to ``buy_m_get_n_money_off`` or ``buy_m_get_n_percent_off``.",
+                    "type": "integer"
+                  },
+                  "free_gift_value": {
+                    "type": "object",
+                    "properties": {
+                      "amount_micros": {
+                        "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                        "type": "integer"
+                      },
+                      "currency_code": {
+                        "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "free_gift_description": {
+                    "description": "Optional. `Free gift description <https://support.google.com/merchants/answer/13847245?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                    "type": "string"
+                  },
+                  "free_gift_item_id": {
+                    "description": "Optional. `Free gift item ID <https://support.google.com/merchants/answer/13857152?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                    "type": "string"
+                  },
+                  "promotion_effective_time_period": {
+                    "type": "object",
+                    "properties": {
+                      "min_": {
+                        "description": "A minimum acceptable load. Must be \u2265 0. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].",
+                        "type": "integer"
+                      },
+                      "max_": {
+                        "description": "A maximum acceptable load. Must be \u2265 0. If unspecified, the maximum load is unrestricted by this message. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].  This field is a member of `oneof`_ ``_max``.",
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "promotion_display_time_period": {
+                    "type": "object",
+                    "properties": {
+                      "min_": {
+                        "description": "A minimum acceptable load. Must be \u2265 0. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].",
+                        "type": "integer"
+                      },
+                      "max_": {
+                        "description": "A maximum acceptable load. Must be \u2265 0. If unspecified, the maximum load is unrestricted by this message. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].  This field is a member of `oneof`_ ``_max``.",
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "store_applicability": {
+                    "description": "Optional. Whether the promotion applies to `all stores, or only specified stores <https://support.google.com/merchants/answer/13857563?sjid=17642868584668136159-NC>`__. Local Inventory ads promotions throw an error if no store applicability is included. An ``INVALID_ARGUMENT`` error is thrown if ``store_applicability`` is set to ``ALL_STORES`` and ``store_codes_inclusion`` or ``score_code_exclusion`` is set to a value.",
+                    "type": "object",
+                    "reference": "google.shopping.merchant_promotions_v1beta.types.StoreApplicability"
+                  },
+                  "store_codes_inclusion": {
+                    "description": "Optional. `Store codes to include <https://support.google.com/merchants/answer/13857470?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.  Store code (the store ID from your Business Profile) of the physical store the product is sold in. See the `Local product inventory data specification <https://support.google.com/merchants/answer/3061342>`__ for more information.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "store_codes_exclusion": {
+                    "description": "Optional. `Store codes to exclude <https://support.google.com/merchants/answer/13859586?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "promotion_url": {
+                    "description": "Optional. URL to the page on the merchant's site where the promotion shows. Local Inventory ads promotions throw an error if no ``promotion_url`` is included. URL is used to confirm that the promotion is valid and can be redeemed.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "product_applicability",
+                  "offer_type",
+                  "long_title",
+                  "coupon_value_type",
+                  "promotion_destinations",
+                  "promotion_effective_time_period"
+                ]
+              },
+              "custom_attributes": {
+                "description": "Optional. A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the data specification in its generic form (for example, ``{ \"name\": \"size type\", \"value\": \"regular\" }``). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google. Maximum allowed number of characters for each custom attribute is 10240 (represents sum of characters for name and value). Maximum 2500 custom attributes can be set per product, with total size of 102.4kB. Underscores in custom attribute names are replaced by spaces upon insertion.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "The name of the attribute.  This field is a member of `oneof`_ ``_name``.",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "The value of the attribute. If ``value`` is not empty, ``group_values`` must be empty.  This field is a member of `oneof`_ ``_value``.",
+                      "type": "string"
+                    },
+                    "group_values": {
+                      "description": "Subattributes within this attribute group. If ``group_values`` is not empty, ``value`` must be empty.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "reference": "google.shopping.type.types.CustomAttribute"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "channel",
+              "offer_id",
+              "content_language",
+              "feed_label"
+            ]
+          },
+          "data_source": {
+            "description": "Required. The primary or supplemental product data source name. If the product already exists and data source provided is different, then the product will be moved to a new data source. Format: ``accounts/{account}/dataSources/{datasource}``.",
+            "type": "string"
+          }
         },
-        "product_input": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductInput",
-          "description": "Required. The product input to insert."
-        },
-        "data_source": {
-          "type": "str",
-          "description": "Required. The primary or supplemental product data source name. If the product already exists and data source provided is different, then the product will be moved to a new data source. Format: ``accounts/{account}/dataSources/{datasource}``."
-        }
+        "required": [
+          "parent",
+          "product_input",
+          "data_source"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "DeleteProductInputRequest",
-      "docstring": "Request message for the DeleteProductInput method.\n\nAttributes:\n    name (str):\n        Required. The name of the product input\n        resource to delete. Format:\n        accounts/{account}/productInputs/{product}\n    data_source (str):\n        Required. The primary or supplemental data source from which\n        the product input should be deleted. Format:\n        ``accounts/{account}/dataSources/{datasource}``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the product input resource to delete. Format: accounts/{account}/productInputs/{product}"
+      "description": "Request message for the DeleteProductInput method.\n\nAttributes:\n    name (str):\n        Required. The name of the product input\n        resource to delete. Format:\n        accounts/{account}/productInputs/{product}\n    data_source (str):\n        Required. The primary or supplemental data source from which\n        the product input should be deleted. Format:\n        ``accounts/{account}/dataSources/{datasource}``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the product input resource to delete. Format: accounts/{account}/productInputs/{product}",
+            "type": "string"
+          },
+          "data_source": {
+            "description": "Required. The primary or supplemental data source from which the product input should be deleted. Format: ``accounts/{account}/dataSources/{datasource}``.",
+            "type": "string"
+          }
         },
-        "data_source": {
-          "type": "str",
-          "description": "Required. The primary or supplemental data source from which the product input should be deleted. Format: ``accounts/{account}/dataSources/{datasource}``."
-        }
+        "required": [
+          "name",
+          "data_source"
+        ]
       }
     }
   ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-shopping-merchant-products\\google\\shopping\\merchant_products_v1beta\\types\\products.py": [
     {
-      "type": "request_class",
-      "name": "Product",
-      "docstring": "The processed product, built from multiple [product\ninputs][[google.shopping.content.bundles.Products.ProductInput]\nafter applying rules and supplemental data sources. This processed\nproduct matches what is shown in your Merchant Center account and in\nShopping ads and other surfaces across Google. Each product is built\nfrom exactly one primary data source product input, and multiple\nsupplemental data source inputs. After inserting, updating, or\ndeleting a product input, it may take several minutes before the\nupdated processed product can be retrieved.\n\nAll fields in the processed product and its sub-messages match the\nname of their corresponding attribute in the `Product data\nspecification <https://support.google.com/merchants/answer/7052112>`__\nwith some exceptions.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    name (str):\n        The name of the product. Format:\n        ``\"{product.name=accounts/{account}/products/{product}}\"``\n",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "The name of the product. Format: ``\"{product.name=accounts/{account}/products/{product}}\"``"
-        },
-        "channel": {
-          "type": "google.shopping.type.types.Channel.ChannelEnum",
-          "description": "Output only. The `channel <https://support.google.com/merchants/answer/7361332>`__ of the product."
-        },
-        "offer_id": {
-          "type": "str",
-          "description": "Output only. Your unique identifier for the product. This is the same for the product input and processed product. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. See the `product data specification <https://support.google.com/merchants/answer/188494#id>`__ for details."
-        },
-        "content_language": {
-          "type": "str",
-          "description": "Output only. The two-letter `ISO 639-1 <http://en.wikipedia.org/wiki/ISO_639-1>`__ language code for the product."
-        },
-        "feed_label": {
-          "type": "str",
-          "description": "Output only. The feed label for the product."
-        },
-        "data_source": {
-          "type": "str",
-          "description": "Output only. The primary data source of the product."
-        },
-        "version_number": {
-          "type": "int",
-          "description": "Output only. Represents the existing version (freshness) of the product, which can be used to preserve the right order when multiple updates are done at the same time.  If set, the insertion is prevented when version number is lower than the current version number of the existing product. Re-insertion (for example, product refresh after 30 days) can be performed with the current ``version_number``.  Only supported for insertions into primary data sources.  If the operation is prevented, the aborted exception will be thrown.  This field is a member of `oneof`_ ``_version_number``."
-        },
-        "attributes": {
-          "type": "google.shopping.merchant_products_v1beta.types.Attributes",
-          "description": "Output only. A list of product attributes."
-        },
-        "custom_attributes": {
-          "type": "MutableSequence[google.shopping.type.types.CustomAttribute]",
-          "description": "Output only. A list of custom (merchant-provided) attributes. It can also be used to submit any attribute of the data specification in its generic form (for example, ``{ \"name\": \"size type\", \"value\": \"regular\" }``). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google."
-        },
-        "product_status": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductStatus",
-          "description": "Output only. The status of a product, data validation issues, that is, information about a product computed asynchronously."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetProductRequest",
-      "docstring": "Request message for the GetProduct method.\n\nAttributes:\n    name (str):\n        Required. The name of the product to retrieve. Format:\n        ``accounts/{account}/products/{product}``",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the product to retrieve. Format: ``accounts/{account}/products/{product}``"
-        }
+      "description": "Request message for the GetProduct method.\n\nAttributes:\n    name (str):\n        Required. The name of the product to retrieve. Format:\n        ``accounts/{account}/products/{product}``",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the product to retrieve. Format: ``accounts/{account}/products/{product}``",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "ListProductsRequest",
-      "docstring": "Request message for the ListProducts method.\n\nAttributes:\n    parent (str):\n        Required. The account to list processed\n        products for. Format: accounts/{account}\n    page_size (int):\n        The maximum number of products to return. The\n        service may return fewer than this value.\n        The maximum value is 1000; values above 1000\n        will be coerced to 1000. If unspecified, the\n        maximum number of products will be returned.\n    page_token (str):\n        A page token, received from a previous ``ListProducts``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListProducts`` must match the call that provided the page\n        token.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The account to list processed products for. Format: accounts/{account}"
-        },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of products to return. The service may return fewer than this value. The maximum value is 1000; values above 1000 will be coerced to 1000. If unspecified, the maximum number of products will be returned."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "A page token, received from a previous ``ListProducts`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListProducts`` must match the call that provided the page token."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ListProductsResponse",
-      "docstring": "Response message for the ListProducts method.\n\nAttributes:\n    products (MutableSequence[google.shopping.merchant_products_v1beta.types.Product]):\n        The processed products from the specified\n        account. These are your processed products after\n        applying rules and supplemental data sources.\n    next_page_token (str):\n        A token, which can be sent as ``page_token`` to retrieve the\n        next page. If this field is omitted, there are no subsequent\n        pages.",
-      "attributes": {
-        "products": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.Product]",
-          "description": "The processed products from the specified account. These are your processed products after applying rules and supplemental data sources."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A token, which can be sent as ``page_token`` to retrieve the next page. If this field is omitted, there are no subsequent pages."
-        }
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-shopping-merchant-products\\google\\shopping\\merchant_products_v1beta\\types\\products_common.py": [
-    {
-      "type": "request_class",
-      "name": "Attributes",
-      "docstring": "Attributes.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    identifier_exists (bool):\n        Set this value to false when the item does\n        not have unique product identifiers appropriate\n        to its category, such as GTIN, MPN, and brand.\n        Defaults to true, if not provided.\n\n        This field is a member of `oneof`_ ``_identifier_exists``.\n    is_bundle (bool):\n        Whether the item is a merchant-defined\n        bundle. A bundle is a custom grouping of\n        different products sold by a merchant for a\n        single price.\n\n        This field is a member of `oneof`_ ``_is_bundle``.\n    title (str):\n        Title of the item.\n\n        This field is a member of `oneof`_ ``_title``.\n    description (str):\n        Description of the item.\n\n        This field is a member of `oneof`_ ``_description``.\n    link (str):\n        URL directly linking to your item's page on\n        your online store.\n\n        This field is ",
-      "attributes": {
-        "identifier_exists": {
-          "type": "bool",
-          "description": "Set this value to false when the item does not have unique product identifiers appropriate to its category, such as GTIN, MPN, and brand. Defaults to true, if not provided.  This field is a member of `oneof`_ ``_identifier_exists``."
-        },
-        "is_bundle": {
-          "type": "bool",
-          "description": "Whether the item is a merchant-defined bundle. A bundle is a custom grouping of different products sold by a merchant for a single price.  This field is a member of `oneof`_ ``_is_bundle``."
-        },
-        "title": {
-          "type": "str",
-          "description": "Title of the item.  This field is a member of `oneof`_ ``_title``."
-        },
-        "description": {
-          "type": "str",
-          "description": "Description of the item.  This field is a member of `oneof`_ ``_description``."
-        },
-        "link": {
-          "type": "str",
-          "description": "URL directly linking to your item's page on your online store.  This field is a member of `oneof`_ ``_link``."
-        },
-        "mobile_link": {
-          "type": "str",
-          "description": "URL for the mobile-optimized version of your item's landing page.  This field is a member of `oneof`_ ``_mobile_link``."
-        },
-        "canonical_link": {
-          "type": "str",
-          "description": "URL for the canonical version of your item's landing page.  This field is a member of `oneof`_ ``_canonical_link``."
-        },
-        "image_link": {
-          "type": "str",
-          "description": "URL of an image of the item.  This field is a member of `oneof`_ ``_image_link``."
-        },
-        "additional_image_links": {
-          "type": "MutableSequence[str]",
-          "description": "Additional URLs of images of the item."
-        },
-        "expiration_date": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Date on which the item should expire, as specified upon insertion, in `ISO 8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format. The actual expiration date is exposed in ``productstatuses`` as `googleExpirationDate <https://support.google.com/merchants/answer/6324499>`__ and might be earlier if ``expirationDate`` is too far in the future."
-        },
-        "disclosure_date": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The date time when an offer becomes visible in search results across Google\u2019s YouTube surfaces, in `ISO 8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format. See `Disclosure date <https://support.google.com/merchants/answer/13034208>`__ for more information."
-        },
-        "adult": {
-          "type": "bool",
-          "description": "Set to true if the item is targeted towards adults.  This field is a member of `oneof`_ ``_adult``."
-        },
-        "age_group": {
-          "type": "str",
-          "description": "Target `age group <https://support.google.com/merchants/answer/6324463>`__ of the item.  This field is a member of `oneof`_ ``_age_group``."
-        },
-        "availability": {
-          "type": "str",
-          "description": "Availability status of the item.  This field is a member of `oneof`_ ``_availability``."
-        },
-        "availability_date": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The day a pre-ordered product becomes available for delivery, in `ISO 8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format."
-        },
-        "brand": {
-          "type": "str",
-          "description": "Brand of the item.  This field is a member of `oneof`_ ``_brand``."
-        },
-        "color": {
-          "type": "str",
-          "description": "Color of the item.  This field is a member of `oneof`_ ``_color``."
-        },
-        "condition": {
-          "type": "str",
-          "description": "Condition or state of the item.  This field is a member of `oneof`_ ``_condition``."
-        },
-        "gender": {
-          "type": "str",
-          "description": "Target gender of the item.  This field is a member of `oneof`_ ``_gender``."
-        },
-        "google_product_category": {
-          "type": "str",
-          "description": "Google's category of the item (see `Google product taxonomy <https://support.google.com/merchants/answer/1705911>`__). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.  This field is a member of `oneof`_ ``_google_product_category``."
-        },
-        "gtin": {
-          "type": "str",
-          "description": "Global Trade Item Number (`GTIN <https://support.google.com/merchants/answer/188494#gtin>`__) of the item.  This field is a member of `oneof`_ ``_gtin``."
-        },
-        "item_group_id": {
-          "type": "str",
-          "description": "Shared identifier for all variants of the same product.  This field is a member of `oneof`_ ``_item_group_id``."
-        },
-        "material": {
-          "type": "str",
-          "description": "The material of which the item is made.  This field is a member of `oneof`_ ``_material``."
-        },
-        "mpn": {
-          "type": "str",
-          "description": "Manufacturer Part Number (`MPN <https://support.google.com/merchants/answer/188494#mpn>`__) of the item.  This field is a member of `oneof`_ ``_mpn``."
-        },
-        "pattern": {
-          "type": "str",
-          "description": "The item's pattern (for example, polka dots).  This field is a member of `oneof`_ ``_pattern``."
-        },
-        "price": {
-          "type": "google.shopping.type.types.Price",
-          "description": "Price of the item."
-        },
-        "installment": {
-          "type": "google.shopping.merchant_products_v1beta.types.Installment",
-          "description": "Number and amount of installments to pay for an item."
-        },
-        "subscription_cost": {
-          "type": "google.shopping.merchant_products_v1beta.types.SubscriptionCost",
-          "description": "Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract."
-        },
-        "loyalty_points": {
-          "type": "google.shopping.merchant_products_v1beta.types.LoyaltyPoints",
-          "description": "Loyalty points that users receive after purchasing the item. Japan only."
-        },
-        "loyalty_programs": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.LoyaltyProgram]",
-          "description": "A list of loyalty program information that is used to surface loyalty benefits (for example, better pricing, points, etc) to the user of this item."
-        },
-        "product_types": {
-          "type": "MutableSequence[str]",
-          "description": "Categories of the item (formatted as in `product data specification <https://support.google.com/merchants/answer/188494#product_type>`__)."
-        },
-        "sale_price": {
-          "type": "google.shopping.type.types.Price",
-          "description": "Advertised sale price of the item."
-        },
-        "sale_price_effective_date": {
-          "type": "google.type.interval_pb2.Interval",
-          "description": "Date range during which the item is on sale (see `product data specification <https://support.google.com/merchants/answer/188494#sale_price_effective_date>`__)."
-        },
-        "sell_on_google_quantity": {
-          "type": "int",
-          "description": "The quantity of the product that is available for selling on Google. Supported only for online products.  This field is a member of `oneof`_ ``_sell_on_google_quantity``."
-        },
-        "product_height": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductDimension",
-          "description": "The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive)."
-        },
-        "product_length": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductDimension",
-          "description": "The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive)."
-        },
-        "product_width": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductDimension",
-          "description": "The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive)."
-        },
-        "product_weight": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductWeight",
-          "description": "The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive)."
-        },
-        "shipping": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.Shipping]",
-          "description": "Shipping rules."
-        },
-        "free_shipping_threshold": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.FreeShippingThreshold]",
-          "description": "Conditions to be met for a product to have free shipping."
-        },
-        "shipping_weight": {
-          "type": "google.shopping.merchant_products_v1beta.types.ShippingWeight",
-          "description": "Weight of the item for shipping."
-        },
-        "shipping_length": {
-          "type": "google.shopping.merchant_products_v1beta.types.ShippingDimension",
-          "description": "Length of the item for shipping."
-        },
-        "shipping_width": {
-          "type": "google.shopping.merchant_products_v1beta.types.ShippingDimension",
-          "description": "Width of the item for shipping."
-        },
-        "shipping_height": {
-          "type": "google.shopping.merchant_products_v1beta.types.ShippingDimension",
-          "description": "Height of the item for shipping."
-        },
-        "max_handling_time": {
-          "type": "int",
-          "description": "Maximal product handling time (in business days).  This field is a member of `oneof`_ ``_max_handling_time``."
-        },
-        "min_handling_time": {
-          "type": "int",
-          "description": "Minimal product handling time (in business days).  This field is a member of `oneof`_ ``_min_handling_time``."
-        },
-        "shipping_label": {
-          "type": "str",
-          "description": "The shipping label of the product, used to group product in account-level shipping rules.  This field is a member of `oneof`_ ``_shipping_label``."
-        },
-        "transit_time_label": {
-          "type": "str",
-          "description": "The transit time label of the product, used to group product in account-level transit time tables.  This field is a member of `oneof`_ ``_transit_time_label``."
-        },
-        "size": {
-          "type": "str",
-          "description": "Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same ``itemGroupId`` value (see [https://support.google.com/merchants/answer/6324492](size definition)).  This field is a member of `oneof`_ ``_size``."
-        },
-        "size_system": {
-          "type": "str",
-          "description": "System in which the size is specified. Recommended for apparel items.  This field is a member of `oneof`_ ``_size_system``."
-        },
-        "size_types": {
-          "type": "MutableSequence[str]",
-          "description": "The cut of the item. It can be used to represent combined size types for apparel items. Maximum two of size types can be provided (see [https://support.google.com/merchants/answer/6324497](size type))."
-        },
-        "taxes": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.Tax]",
-          "description": "Tax information."
-        },
-        "tax_category": {
-          "type": "str",
-          "description": "The tax category of the product, used to configure detailed tax nexus in account-level tax settings.  This field is a member of `oneof`_ ``_tax_category``."
-        },
-        "energy_efficiency_class": {
-          "type": "str",
-          "description": "The energy efficiency class as defined in EU directive 2010/30/EU.  This field is a member of `oneof`_ ``_energy_efficiency_class``."
-        },
-        "min_energy_efficiency_class": {
-          "type": "str",
-          "description": "The energy efficiency class as defined in EU directive 2010/30/EU.  This field is a member of `oneof`_ ``_min_energy_efficiency_class``."
-        },
-        "max_energy_efficiency_class": {
-          "type": "str",
-          "description": "The energy efficiency class as defined in EU directive 2010/30/EU.  This field is a member of `oneof`_ ``_max_energy_efficiency_class``."
-        },
-        "unit_pricing_measure": {
-          "type": "google.shopping.merchant_products_v1beta.types.UnitPricingMeasure",
-          "description": "The measure and dimension of an item."
-        },
-        "unit_pricing_base_measure": {
-          "type": "google.shopping.merchant_products_v1beta.types.UnitPricingBaseMeasure",
-          "description": "The preference of the denominator of the unit price."
-        },
-        "multipack": {
-          "type": "int",
-          "description": "The number of identical products in a merchant-defined multipack.  This field is a member of `oneof`_ ``_multipack``."
-        },
-        "ads_grouping": {
-          "type": "str",
-          "description": "Used to group items in an arbitrary way. Only for CPA%, discouraged otherwise.  This field is a member of `oneof`_ ``_ads_grouping``."
-        },
-        "ads_labels": {
-          "type": "MutableSequence[str]",
-          "description": "Similar to ads_grouping, but only works on CPC."
-        },
-        "ads_redirect": {
-          "type": "str",
-          "description": "Allows advertisers to override the item URL when the product is shown within the context of Product ads.  This field is a member of `oneof`_ ``_ads_redirect``."
-        },
-        "cost_of_goods_sold": {
-          "type": "google.shopping.type.types.Price",
-          "description": "Cost of goods sold. Used for gross profit reporting."
-        },
-        "product_details": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.ProductDetail]",
-          "description": "Technical specification or additional product details."
-        },
-        "product_highlights": {
-          "type": "MutableSequence[str]",
-          "description": "Bullet points describing the most relevant highlights of a product."
-        },
-        "display_ads_id": {
-          "type": "str",
-          "description": "An identifier for an item for dynamic remarketing campaigns.  This field is a member of `oneof`_ ``_display_ads_id``."
-        },
-        "display_ads_similar_ids": {
-          "type": "MutableSequence[str]",
-          "description": "Advertiser-specified recommendations."
-        },
-        "display_ads_title": {
-          "type": "str",
-          "description": "Title of an item for dynamic remarketing campaigns.  This field is a member of `oneof`_ ``_display_ads_title``."
-        },
-        "display_ads_link": {
-          "type": "str",
-          "description": "URL directly to your item's landing page for dynamic remarketing campaigns.  This field is a member of `oneof`_ ``_display_ads_link``."
-        },
-        "display_ads_value": {
-          "type": "float",
-          "description": "Offer margin for dynamic remarketing campaigns.  This field is a member of `oneof`_ ``_display_ads_value``."
-        },
-        "promotion_ids": {
-          "type": "MutableSequence[str]",
-          "description": "The unique ID of a promotion."
-        },
-        "pickup_method": {
-          "type": "str",
-          "description": "The pick up option for the item.  This field is a member of `oneof`_ ``_pickup_method``."
-        },
-        "pickup_sla": {
-          "type": "str",
-          "description": "Item store pickup timeline.  This field is a member of `oneof`_ ``_pickup_sla``."
-        },
-        "link_template": {
-          "type": "str",
-          "description": "Link template for merchant hosted local storefront.  This field is a member of `oneof`_ ``_link_template``."
-        },
-        "mobile_link_template": {
-          "type": "str",
-          "description": "Link template for merchant hosted local storefront optimized for mobile devices.  This field is a member of `oneof`_ ``_mobile_link_template``."
-        },
-        "custom_label_0": {
-          "type": "str",
-          "description": "Custom label 0 for custom grouping of items in a Shopping campaign.  This field is a member of `oneof`_ ``_custom_label_0``."
-        },
-        "custom_label_1": {
-          "type": "str",
-          "description": "Custom label 1 for custom grouping of items in a Shopping campaign.  This field is a member of `oneof`_ ``_custom_label_1``."
-        },
-        "custom_label_2": {
-          "type": "str",
-          "description": "Custom label 2 for custom grouping of items in a Shopping campaign.  This field is a member of `oneof`_ ``_custom_label_2``."
-        },
-        "custom_label_3": {
-          "type": "str",
-          "description": "Custom label 3 for custom grouping of items in a Shopping campaign.  This field is a member of `oneof`_ ``_custom_label_3``."
-        },
-        "custom_label_4": {
-          "type": "str",
-          "description": "Custom label 4 for custom grouping of items in a Shopping campaign.  This field is a member of `oneof`_ ``_custom_label_4``."
-        },
-        "included_destinations": {
-          "type": "MutableSequence[str]",
-          "description": "The list of destinations to include for this target (corresponds to checked check boxes in Merchant Center). Default destinations are always included unless provided in ``excludedDestinations``."
-        },
-        "excluded_destinations": {
-          "type": "MutableSequence[str]",
-          "description": "The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center)."
-        },
-        "shopping_ads_excluded_countries": {
-          "type": "MutableSequence[str]",
-          "description": "List of country codes (ISO 3166-1 alpha-2) to exclude the offer from Shopping Ads destination. Countries from this list are removed from countries configured in data source settings."
-        },
-        "external_seller_id": {
-          "type": "str",
-          "description": "Required for multi-seller accounts. Use this attribute if you're a marketplace uploading products for various sellers to your multi-seller account.  This field is a member of `oneof`_ ``_external_seller_id``."
-        },
-        "pause": {
-          "type": "str",
-          "description": "Publication of this item will be temporarily `paused <https://support.google.com/merchants/answer/11909930>`__.  This field is a member of `oneof`_ ``_pause``."
-        },
-        "lifestyle_image_links": {
-          "type": "MutableSequence[str]",
-          "description": "Additional URLs of lifestyle images of the item, used to explicitly identify images that showcase your item in a real-world context. See the `Help Center article <https://support.google.com/merchants/answer/9103186>`__ for more information."
-        },
-        "cloud_export_additional_properties": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.CloudExportAdditionalProperties]",
-          "description": "Extra fields to export to the Cloud Retail program."
-        },
-        "virtual_model_link": {
-          "type": "str",
-          "description": "URL of the 3D image of the item. See the `Help Center article <https://support.google.com/merchants/answer/13674896>`__ for more information.  This field is a member of `oneof`_ ``_virtual_model_link``."
-        },
-        "certifications": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.Certification]",
-          "description": "Product Certifications, for example for energy efficiency labeling of products recorded in the `EU EPREL <https://eprel.ec.europa.eu/screen/home>`__ database. See the `Help Center <https://support.google.com/merchants/answer/13528839>`__ article for more information."
-        },
-        "structured_title": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductStructuredTitle",
-          "description": "Structured title, for algorithmically (AI)-generated titles.  This field is a member of `oneof`_ ``_structured_title``."
-        },
-        "structured_description": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductStructuredDescription",
-          "description": "Structured description, for algorithmically (AI)-generated descriptions.  This field is a member of `oneof`_ ``_structured_description``."
-        },
-        "auto_pricing_min_price": {
-          "type": "google.shopping.type.types.Price",
-          "description": "A safeguard in the \"Automated Discounts\" (https://support.google.com/merchants/answer/10295759) and \"Dynamic Promotions\" (https://support.google.com/merchants/answer/13949249) projects, ensuring that discounts on merchants' offers do not fall below this value, thereby preserving the offer's value and profitability."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Tax",
-      "docstring": "The Tax of the product.\n\nAttributes:\n    rate (float):\n        The percentage of tax rate that applies to\n        the item price.\n    country (str):\n        The country within which the item is taxed, specified as a\n        `CLDR territory\n        code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__.\n    region (str):\n        The geographic region to which the tax rate\n        applies.\n    tax_ship (bool):\n        Set to true if tax is charged on shipping.\n    location_id (int):\n        The numeric ID of a location that the tax rate applies to as\n        defined in the `AdWords\n        API <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__.\n    postal_code (str):\n        The postal code range that the tax rate applies to,\n        represented by a ZIP code, a ZIP code prefix using \\*\n        wildcard, a range between two ZIP codes or two ZIP code\n        prefixes of equal length. Examples: 94114, 94*, 94002-95460,\n        94*-95*.",
-      "attributes": {
-        "rate": {
-          "type": "float",
-          "description": "The percentage of tax rate that applies to the item price."
-        },
-        "country": {
-          "type": "str",
-          "description": "The country within which the item is taxed, specified as a `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__."
-        },
-        "region": {
-          "type": "str",
-          "description": "The geographic region to which the tax rate applies."
-        },
-        "tax_ship": {
-          "type": "bool",
-          "description": "Set to true if tax is charged on shipping."
-        },
-        "location_id": {
-          "type": "int",
-          "description": "The numeric ID of a location that the tax rate applies to as defined in the `AdWords API <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__."
-        },
-        "postal_code": {
-          "type": "str",
-          "description": "The postal code range that the tax rate applies to, represented by a ZIP code, a ZIP code prefix using \\* wildcard, a range between two ZIP codes or two ZIP code prefixes of equal length. Examples: 94114, 94*, 94002-95460, 94*-95*."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ShippingWeight",
-      "docstring": "The ShippingWeight of the product.\n\nAttributes:\n    value (float):\n        The weight of the product used to calculate\n        the shipping cost of the item.\n    unit (str):\n        The unit of value.",
-      "attributes": {
-        "value": {
-          "type": "float",
-          "description": "The weight of the product used to calculate the shipping cost of the item."
-        },
-        "unit": {
-          "type": "str",
-          "description": "The unit of value."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ShippingDimension",
-      "docstring": "The ShippingDimension of the product.\n\nAttributes:\n    value (float):\n        The dimension of the product used to\n        calculate the shipping cost of the item.\n    unit (str):\n        The unit of value.",
-      "attributes": {
-        "value": {
-          "type": "float",
-          "description": "The dimension of the product used to calculate the shipping cost of the item."
-        },
-        "unit": {
-          "type": "str",
-          "description": "The unit of value."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UnitPricingBaseMeasure",
-      "docstring": "The UnitPricingBaseMeasure of the product.\n\nAttributes:\n    value (int):\n        The denominator of the unit price.\n    unit (str):\n        The unit of the denominator.",
-      "attributes": {
-        "value": {
-          "type": "int",
-          "description": "The denominator of the unit price."
-        },
-        "unit": {
-          "type": "str",
-          "description": "The unit of the denominator."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "UnitPricingMeasure",
-      "docstring": "The UnitPricingMeasure of the product.\n\nAttributes:\n    value (float):\n        The measure of an item.\n    unit (str):\n        The unit of the measure.",
-      "attributes": {
-        "value": {
-          "type": "float",
-          "description": "The measure of an item."
-        },
-        "unit": {
-          "type": "str",
-          "description": "The unit of the measure."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "SubscriptionCost",
-      "docstring": "The SubscriptionCost of the product.\n\nAttributes:\n    period (google.shopping.merchant_products_v1beta.types.SubscriptionPeriod):\n        The type of subscription period. Supported values are:\n\n        -  \"``month``\"\n        -  \"``year``\".\n    period_length (int):\n        The number of subscription periods the buyer\n        has to pay.\n    amount (google.shopping.type.types.Price):\n        The amount the buyer has to pay per\n        subscription period.",
-      "attributes": {
-        "period": {
-          "type": "google.shopping.merchant_products_v1beta.types.SubscriptionPeriod",
-          "description": "The type of subscription period. Supported values are:  -  \"``month``\" -  \"``year``\"."
-        },
-        "period_length": {
-          "type": "int",
-          "description": "The number of subscription periods the buyer has to pay."
-        },
-        "amount": {
-          "type": "google.shopping.type.types.Price",
-          "description": "The amount the buyer has to pay per subscription period."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Installment",
-      "docstring": "A message that represents installment.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    months (int):\n        The number of installments the buyer has to\n        pay.\n    amount (google.shopping.type.types.Price):\n        The amount the buyer has to pay per month.\n    downpayment (google.shopping.type.types.Price):\n        The up-front down payment amount the buyer\n        has to pay.\n\n        This field is a member of `oneof`_ ``_downpayment``.\n    credit_type (str):\n        Type of installment payments. Supported values are:\n\n        -  \"``finance``\"\n        -  \"``lease``\".\n\n        This field is a member of `oneof`_ ``_credit_type``.",
-      "attributes": {
-        "months": {
-          "type": "int",
-          "description": "The number of installments the buyer has to pay."
-        },
-        "amount": {
-          "type": "google.shopping.type.types.Price",
-          "description": "The amount the buyer has to pay per month."
-        },
-        "downpayment": {
-          "type": "google.shopping.type.types.Price",
-          "description": "The up-front down payment amount the buyer has to pay.  This field is a member of `oneof`_ ``_downpayment``."
-        },
-        "credit_type": {
-          "type": "str",
-          "description": "Type of installment payments. Supported values are:  -  \"``finance``\" -  \"``lease``\".  This field is a member of `oneof`_ ``_credit_type``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LoyaltyPoints",
-      "docstring": "A message that represents loyalty points.\n\nAttributes:\n    name (str):\n        Name of loyalty points program. It is\n        recommended to limit the name to 12 full-width\n        characters or 24 Roman characters.\n    points_value (int):\n        The retailer's loyalty points in absolute\n        value.\n    ratio (float):\n        The ratio of a point when converted to\n        currency. Google assumes currency based on\n        Merchant Center settings. If ratio is left out,\n        it defaults to 1.0.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Name of loyalty points program. It is recommended to limit the name to 12 full-width characters or 24 Roman characters."
-        },
-        "points_value": {
-          "type": "int",
-          "description": "The retailer's loyalty points in absolute value."
-        },
-        "ratio": {
-          "type": "float",
-          "description": "The ratio of a point when converted to currency. Google assumes currency based on Merchant Center settings. If ratio is left out, it defaults to 1.0."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "LoyaltyProgram",
-      "docstring": "A message that represents loyalty program.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    program_label (str):\n        The label of the loyalty program. This is an\n        internal label that uniquely identifies the\n        relationship between a merchant entity and a\n        loyalty program entity. The label must be\n        provided so that the system can associate the\n        assets below (for example, price and points)\n        with a merchant. The corresponding program must\n        be linked to the merchant account.\n\n        This field is a member of `oneof`_ ``_program_label``.\n    tier_label (str):\n        The label of the tier within the loyalty\n        program. Must match one of the labels within the\n        program.\n\n        This field is a member of `oneof`_ ``_tier_label``.\n    price (google.shopping.type.types.Price):\n        The price for members of the given tier, that\n        is, the instant discount price. Must be sma",
-      "attributes": {
-        "program_label": {
-          "type": "str",
-          "description": "The label of the loyalty program. This is an internal label that uniquely identifies the relationship between a merchant entity and a loyalty program entity. The label must be provided so that the system can associate the assets below (for example, price and points) with a merchant. The corresponding program must be linked to the merchant account.  This field is a member of `oneof`_ ``_program_label``."
-        },
-        "tier_label": {
-          "type": "str",
-          "description": "The label of the tier within the loyalty program. Must match one of the labels within the program.  This field is a member of `oneof`_ ``_tier_label``."
-        },
-        "price": {
-          "type": "google.shopping.type.types.Price",
-          "description": "The price for members of the given tier, that is, the instant discount price. Must be smaller or equal to the regular price.  This field is a member of `oneof`_ ``_price``."
-        },
-        "cashback_for_future_use": {
-          "type": "google.shopping.type.types.Price",
-          "description": "The cashback that can be used for future purchases.  This field is a member of `oneof`_ ``_cashback_for_future_use``."
-        },
-        "loyalty_points": {
-          "type": "int",
-          "description": "The amount of loyalty points earned on a purchase.  This field is a member of `oneof`_ ``_loyalty_points``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Shipping",
-      "docstring": "The Shipping of the product.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    price (google.shopping.type.types.Price):\n        Fixed shipping price, represented as a\n        number.\n    country (str):\n        The `CLDR territory\n        code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__\n        of the country to which an item will ship.\n    region (str):\n        The geographic region to which a shipping rate applies. See\n        `region <https://support.google.com/merchants/answer/6324484>`__\n        for more information.\n    service (str):\n        A free-form description of the service class\n        or delivery speed.\n    location_id (int):\n        The numeric ID of a location that the shipping rate applies\n        to as defined in the `AdWords\n        API <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__.\n    location_group_name (str):\n        The location where the shipping is\n      ",
-      "attributes": {
-        "price": {
-          "type": "google.shopping.type.types.Price",
-          "description": "Fixed shipping price, represented as a number."
-        },
-        "country": {
-          "type": "str",
-          "description": "The `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ of the country to which an item will ship."
-        },
-        "region": {
-          "type": "str",
-          "description": "The geographic region to which a shipping rate applies. See `region <https://support.google.com/merchants/answer/6324484>`__ for more information."
-        },
-        "service": {
-          "type": "str",
-          "description": "A free-form description of the service class or delivery speed."
-        },
-        "location_id": {
-          "type": "int",
-          "description": "The numeric ID of a location that the shipping rate applies to as defined in the `AdWords API <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__."
-        },
-        "location_group_name": {
-          "type": "str",
-          "description": "The location where the shipping is applicable, represented by a location group name."
-        },
-        "postal_code": {
-          "type": "str",
-          "description": "The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a \\* wildcard, a range between two postal codes or two postal code prefixes of equal length."
-        },
-        "min_handling_time": {
-          "type": "int",
-          "description": "Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. [minHandlingTime][google.shopping.content.bundles.Products.Shipping.min_handling_time] can only be present together with [maxHandlingTime][google.shopping.content.bundles.Products.Shipping.max_handling_time]; but it is not required if [maxHandlingTime][google.shopping.content.bundles.Products.Shipping.max_handling_time] is present.  This field is a member of `oneof`_ ``_min_handling_time``."
-        },
-        "max_handling_time": {
-          "type": "int",
-          "description": "Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both [maxHandlingTime][google.shopping.content.bundles.Products.Shipping.max_handling_time] and [maxTransitTime][google.shopping.content.bundles.Products.Shipping.max_transit_time] are required if providing shipping speeds. [minHandlingTime][google.shopping.content.bundles.Products.Shipping.min_handling_time] is optional if [maxHandlingTime][google.shopping.content.bundles.Products.Shipping.max_handling_time] is present.  This field is a member of `oneof`_ ``_max_handling_time``."
-        },
-        "min_transit_time": {
-          "type": "int",
-          "description": "Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. [minTransitTime][google.shopping.content.bundles.Products.Shipping.min_transit_time] can only be present together with [maxTransitTime][google.shopping.content.bundles.Products.Shipping.max_transit_time]; but it is not required if [maxTransitTime][google.shopping.content.bundles.Products.Shipping.max_transit_time] is present.  This field is a member of `oneof`_ ``_min_transit_time``."
-        },
-        "max_transit_time": {
-          "type": "int",
-          "description": "Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both [maxHandlingTime][google.shopping.content.bundles.Products.Shipping.max_handling_time] and [maxTransitTime][google.shopping.content.bundles.Products.Shipping.max_transit_time] are required if providing shipping speeds. [minTransitTime][google.shopping.content.bundles.Products.Shipping.min_transit_time] is optional if [maxTransitTime][google.shopping.content.bundles.Products.Shipping.max_transit_time] is present.  This field is a member of `oneof`_ ``_max_transit_time``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "FreeShippingThreshold",
-      "docstring": "Conditions to be met for a product to have free shipping.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    country (str):\n        The `CLDR territory\n        code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__\n        of the country to which an item will ship.\n\n        This field is a member of `oneof`_ ``_country``.\n    price_threshold (google.shopping.type.types.Price):\n        The minimum product price for the shipping\n        cost to become free. Represented as a number.\n\n        This field is a member of `oneof`_ ``_price_threshold``.",
-      "attributes": {
-        "country": {
-          "type": "str",
-          "description": "The `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ of the country to which an item will ship.  This field is a member of `oneof`_ ``_country``."
-        },
-        "price_threshold": {
-          "type": "google.shopping.type.types.Price",
-          "description": "The minimum product price for the shipping cost to become free. Represented as a number.  This field is a member of `oneof`_ ``_price_threshold``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProductDetail",
-      "docstring": "The product details.\n\nAttributes:\n    section_name (str):\n        The section header used to group a set of\n        product details.\n    attribute_name (str):\n        The name of the product detail.\n    attribute_value (str):\n        The value of the product detail.",
-      "attributes": {
-        "section_name": {
-          "type": "str",
-          "description": "The section header used to group a set of product details."
-        },
-        "attribute_name": {
-          "type": "str",
-          "description": "The name of the product detail."
-        },
-        "attribute_value": {
-          "type": "str",
-          "description": "The value of the product detail."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Certification",
-      "docstring": "Product\n`certification <https://support.google.com/merchants/answer/13528839>`__,\ninitially introduced for EU energy efficiency labeling compliance\nusing the EU EPREL database.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    certification_authority (str):\n        The certification authority, for example\n        \"European_Commission\". Maximum length is 2000 characters.\n\n        This field is a member of `oneof`_ ``_certification_authority``.\n    certification_name (str):\n        The name of the certification, for example\n        \"EPREL\". Maximum length is 2000 characters.\n\n        This field is a member of `oneof`_ ``_certification_name``.\n    certification_code (str):\n        The certification code.\n        Maximum length is 2000 characters.\n\n        This field is a member of `oneof`_ ``_certification_code``.\n    certification_value (str):\n        The certification value (also known as class,\n        level or grade), for example \"A+",
-      "attributes": {
-        "certification_authority": {
-          "type": "str",
-          "description": "The certification authority, for example \"European_Commission\". Maximum length is 2000 characters.  This field is a member of `oneof`_ ``_certification_authority``."
-        },
-        "certification_name": {
-          "type": "str",
-          "description": "The name of the certification, for example \"EPREL\". Maximum length is 2000 characters.  This field is a member of `oneof`_ ``_certification_name``."
-        },
-        "certification_code": {
-          "type": "str",
-          "description": "The certification code. Maximum length is 2000 characters.  This field is a member of `oneof`_ ``_certification_code``."
-        },
-        "certification_value": {
-          "type": "str",
-          "description": "The certification value (also known as class, level or grade), for example \"A+\", \"C\", \"gold\". Maximum length is 2000 characters.  This field is a member of `oneof`_ ``_certification_value``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProductStructuredTitle",
-      "docstring": "Structured title, for algorithmically (AI)-generated titles.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    digital_source_type (str):\n        The digital source type, for example\n        \"trained_algorithmic_media\". Following\n        `IPTC <https://cv.iptc.org/newscodes/digitalsourcetype>`__.\n        Maximum length is 40 characters.\n\n        This field is a member of `oneof`_ ``_digital_source_type``.\n    content (str):\n        The title text\n        Maximum length is 150 characters\n\n        This field is a member of `oneof`_ ``_content``.",
-      "attributes": {
-        "digital_source_type": {
-          "type": "str",
-          "description": "The digital source type, for example \"trained_algorithmic_media\". Following `IPTC <https://cv.iptc.org/newscodes/digitalsourcetype>`__. Maximum length is 40 characters.  This field is a member of `oneof`_ ``_digital_source_type``."
-        },
-        "content": {
-          "type": "str",
-          "description": "The title text Maximum length is 150 characters  This field is a member of `oneof`_ ``_content``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProductStructuredDescription",
-      "docstring": "Structured description, for algorithmically (AI)-generated\ndescriptions.\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    digital_source_type (str):\n        The digital source type, for example\n        \"trained_algorithmic_media\". Following\n        `IPTC <https://cv.iptc.org/newscodes/digitalsourcetype>`__.\n        Maximum length is 40 characters.\n\n        This field is a member of `oneof`_ ``_digital_source_type``.\n    content (str):\n        The description text\n        Maximum length is 5000 characters\n\n        This field is a member of `oneof`_ ``_content``.",
-      "attributes": {
-        "digital_source_type": {
-          "type": "str",
-          "description": "The digital source type, for example \"trained_algorithmic_media\". Following `IPTC <https://cv.iptc.org/newscodes/digitalsourcetype>`__. Maximum length is 40 characters.  This field is a member of `oneof`_ ``_digital_source_type``."
-        },
-        "content": {
-          "type": "str",
-          "description": "The description text Maximum length is 5000 characters  This field is a member of `oneof`_ ``_content``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProductDimension",
-      "docstring": "The dimension of the product.\n\nAttributes:\n    value (float):\n        Required. The dimension value represented as\n        a number. The value can have a maximum precision\n        of four decimal places.\n    unit (str):\n        Required. The dimension units. Acceptable values are:\n\n        -  \"``in``\"\n        -  \"``cm``\".",
-      "attributes": {
-        "value": {
-          "type": "float",
-          "description": "Required. The dimension value represented as a number. The value can have a maximum precision of four decimal places."
-        },
-        "unit": {
-          "type": "str",
-          "description": "Required. The dimension units. Acceptable values are:  -  \"``in``\" -  \"``cm``\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProductWeight",
-      "docstring": "The weight of the product.\n\nAttributes:\n    value (float):\n        Required. The weight represented as a number.\n        The weight can have a maximum precision of four\n        decimal places.\n    unit (str):\n        Required. The weight unit. Acceptable values are:\n\n        -  \"``g``\"\n        -  \"``kg``\"\n        -  \"``oz``\"\n        -  \"``lb``\".",
-      "attributes": {
-        "value": {
-          "type": "float",
-          "description": "Required. The weight represented as a number. The weight can have a maximum precision of four decimal places."
-        },
-        "unit": {
-          "type": "str",
-          "description": "Required. The weight unit. Acceptable values are:  -  \"``g``\" -  \"``kg``\" -  \"``oz``\" -  \"``lb``\"."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ProductStatus",
-      "docstring": "The status of a product, data validation issues, that is,\ninformation about a product computed asynchronously.\n\nAttributes:\n    destination_statuses (MutableSequence[google.shopping.merchant_products_v1beta.types.ProductStatus.DestinationStatus]):\n        The intended destinations for the product.\n    item_level_issues (MutableSequence[google.shopping.merchant_products_v1beta.types.ProductStatus.ItemLevelIssue]):\n        A list of all issues associated with the\n        product.\n    creation_date (google.protobuf.timestamp_pb2.Timestamp):\n        Date on which the item has been created, in `ISO\n        8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format.\n    last_update_date (google.protobuf.timestamp_pb2.Timestamp):\n        Date on which the item has been last updated, in `ISO\n        8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format.\n    google_expiration_date (google.protobuf.timestamp_pb2.Timestamp):\n        Date on which the item expires, in `ISO\n        8601 <http://en.wikipedia.org/wiki/ISO_8601",
-      "attributes": {
-        "destination_statuses": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.ProductStatus.DestinationStatus]",
-          "description": "The intended destinations for the product."
-        },
-        "item_level_issues": {
-          "type": "MutableSequence[google.shopping.merchant_products_v1beta.types.ProductStatus.ItemLevelIssue]",
-          "description": "A list of all issues associated with the product."
-        },
-        "creation_date": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Date on which the item has been created, in `ISO 8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format."
-        },
-        "last_update_date": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Date on which the item has been last updated, in `ISO 8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format."
-        },
-        "google_expiration_date": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Date on which the item expires, in `ISO 8601 <http://en.wikipedia.org/wiki/ISO_8601>`__ format."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "CloudExportAdditionalProperties",
-      "docstring": "Product property for the Cloud Retail API.\nFor example, properties for a TV product could be\n\"Screen-Resolution\" or \"Screen-Size\".\n\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    property_name (str):\n        Name of the given property. For example,\n        \"Screen-Resolution\" for a TV product. Maximum\n        string size is 256 characters.\n\n        This field is a member of `oneof`_ ``_property_name``.\n    text_value (MutableSequence[str]):\n        Text value of the given property. For\n        example, \"8K(UHD)\" could be a text value for a\n        TV product. Maximum repeatedness of this value\n        is 400. Values are stored in an arbitrary but\n        consistent order. Maximum string size is 256\n        characters.\n    bool_value (bool):\n        Boolean value of the given property. For\n        example for a TV product, \"True\" or \"False\" if\n        the screen is UHD.\n\n        This field is a member of `oneof`_ ``_bool_value``.\n   ",
-      "attributes": {
-        "property_name": {
-          "type": "str",
-          "description": "Name of the given property. For example, \"Screen-Resolution\" for a TV product. Maximum string size is 256 characters.  This field is a member of `oneof`_ ``_property_name``."
-        },
-        "text_value": {
-          "type": "MutableSequence[str]",
-          "description": "Text value of the given property. For example, \"8K(UHD)\" could be a text value for a TV product. Maximum repeatedness of this value is 400. Values are stored in an arbitrary but consistent order. Maximum string size is 256 characters."
-        },
-        "bool_value": {
-          "type": "bool",
-          "description": "Boolean value of the given property. For example for a TV product, \"True\" or \"False\" if the screen is UHD.  This field is a member of `oneof`_ ``_bool_value``."
-        },
-        "int_value": {
-          "type": "MutableSequence[int]",
-          "description": "Integer values of the given property. For example, 1080 for a TV product's Screen Resolution. Maximum repeatedness of this value is 400. Values are stored in an arbitrary but consistent order."
-        },
-        "float_value": {
-          "type": "MutableSequence[float]",
-          "description": "Float values of the given property. For example for a TV product 1.2345. Maximum repeatedness of this value is 400. Values are stored in an arbitrary but consistent order."
-        },
-        "min_value": {
-          "type": "float",
-          "description": "Minimum float value of the given property. For example for a TV product 1.00.  This field is a member of `oneof`_ ``_min_value``."
-        },
-        "max_value": {
-          "type": "float",
-          "description": "Maximum float value of the given property. For example for a TV product 100.00.  This field is a member of `oneof`_ ``_max_value``."
-        },
-        "unit_code": {
-          "type": "str",
-          "description": "Unit of the given property. For example, \"Pixels\" for a TV product. Maximum string size is 256B.  This field is a member of `oneof`_ ``_unit_code``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DestinationStatus",
-      "docstring": "The destination status of the product status.\n\nAttributes:\n    reporting_context (google.shopping.type.types.ReportingContext.ReportingContextEnum):\n        The name of the reporting context.\n    approved_countries (MutableSequence[str]):\n        List of country codes (ISO 3166-1 alpha-2)\n        where the offer is approved.\n    pending_countries (MutableSequence[str]):\n        List of country codes (ISO 3166-1 alpha-2)\n        where the offer is pending approval.\n    disapproved_countries (MutableSequence[str]):\n        List of country codes (ISO 3166-1 alpha-2)\n        where the offer is disapproved.",
-      "attributes": {
-        "reporting_context": {
-          "type": "google.shopping.type.types.ReportingContext.ReportingContextEnum",
-          "description": "The name of the reporting context."
-        },
-        "approved_countries": {
-          "type": "MutableSequence[str]",
-          "description": "List of country codes (ISO 3166-1 alpha-2) where the offer is approved."
-        },
-        "pending_countries": {
-          "type": "MutableSequence[str]",
-          "description": "List of country codes (ISO 3166-1 alpha-2) where the offer is pending approval."
-        },
-        "disapproved_countries": {
-          "type": "MutableSequence[str]",
-          "description": "List of country codes (ISO 3166-1 alpha-2) where the offer is disapproved."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "ItemLevelIssue",
-      "docstring": "The ItemLevelIssue of the product status.\n\nAttributes:\n    code (str):\n        The error code of the issue.\n    severity (google.shopping.merchant_products_v1beta.types.ProductStatus.ItemLevelIssue.Severity):\n        How this issue affects serving of the offer.\n    resolution (str):\n        Whether the issue can be resolved by the\n        merchant.\n    attribute (str):\n        The attribute's name, if the issue is caused\n        by a single attribute.\n    reporting_context (google.shopping.type.types.ReportingContext.ReportingContextEnum):\n        The reporting context the issue applies to.\n    description (str):\n        A short issue description in English.\n    detail (str):\n        A detailed issue description in English.\n    documentation (str):\n        The URL of a web page to help with resolving\n        this issue.\n    applicable_countries (MutableSequence[str]):\n        List of country codes (ISO 3166-1 alpha-2)\n        where issue applies to the offer.",
-      "attributes": {
-        "code": {
-          "type": "str",
-          "description": "The error code of the issue."
-        },
-        "severity": {
-          "type": "google.shopping.merchant_products_v1beta.types.ProductStatus.ItemLevelIssue.Severity",
-          "description": "How this issue affects serving of the offer."
-        },
-        "resolution": {
-          "type": "str",
-          "description": "Whether the issue can be resolved by the merchant."
-        },
-        "attribute": {
-          "type": "str",
-          "description": "The attribute's name, if the issue is caused by a single attribute."
-        },
-        "reporting_context": {
-          "type": "google.shopping.type.types.ReportingContext.ReportingContextEnum",
-          "description": "The reporting context the issue applies to."
-        },
-        "description": {
-          "type": "str",
-          "description": "A short issue description in English."
-        },
-        "detail": {
-          "type": "str",
-          "description": "A detailed issue description in English."
-        },
-        "documentation": {
-          "type": "str",
-          "description": "The URL of a web page to help with resolving this issue."
-        },
-        "applicable_countries": {
-          "type": "MutableSequence[str]",
-          "description": "List of country codes (ISO 3166-1 alpha-2) where issue applies to the offer."
-        }
+      "description": "Request message for the ListProducts method.\n\nAttributes:\n    parent (str):\n        Required. The account to list processed\n        products for. Format: accounts/{account}\n    page_size (int):\n        The maximum number of products to return. The\n        service may return fewer than this value.\n        The maximum value is 1000; values above 1000\n        will be coerced to 1000. If unspecified, the\n        maximum number of products will be returned.\n    page_token (str):\n        A page token, received from a previous ``ListProducts``\n        call. Provide this to retrieve the subsequent page.\n\n        When paginating, all other parameters provided to\n        ``ListProducts`` must match the call that provided the page\n        token.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The account to list processed products for. Format: accounts/{account}",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of products to return. The service may return fewer than this value. The maximum value is 1000; values above 1000 will be coerced to 1000. If unspecified, the maximum number of products will be returned.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token, received from a previous ``ListProducts`` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to ``ListProducts`` must match the call that provided the page token.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parent"
+        ]
       }
     }
   ]

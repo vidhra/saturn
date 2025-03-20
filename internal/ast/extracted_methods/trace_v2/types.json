@@ -1,326 +1,784 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-trace\\google\\cloud\\trace_v2\\types\\trace.py": [
-    {
-      "type": "request_class",
-      "name": "Span",
-      "docstring": "A span represents a single operation within a trace. Spans\ncan be nested to form a trace tree. Often, a trace contains a\nroot span that describes the end-to-end latency, and one or more\nsubspans for its sub-operations.\n\nA trace can also contain multiple root spans, or none at all.\nSpans do not need to be contiguous. There might be\ngaps or overlaps between spans in a trace.\n\nAttributes:\n    name (str):\n        Required. The resource name of the span in the following\n        format:\n\n        -  ``projects/[PROJECT_ID]/traces/[TRACE_ID]/spans/[SPAN_ID]``\n\n        ``[TRACE_ID]`` is a unique identifier for a trace within a\n        project; it is a 32-character hexadecimal encoding of a\n        16-byte array. It should not be zero.\n\n        ``[SPAN_ID]`` is a unique identifier for a span within a\n        trace; it is a 16-character hexadecimal encoding of an\n        8-byte array. It should not be zero. .\n    span_id (str):\n        Required. The ``[SPAN_ID]`` portion of the span's resource\n        name.\n    parent_s",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the span in the following format:  -  ``projects/[PROJECT_ID]/traces/[TRACE_ID]/spans/[SPAN_ID]``  ``[TRACE_ID]`` is a unique identifier for a trace within a project; it is a 32-character hexadecimal encoding of a 16-byte array. It should not be zero.  ``[SPAN_ID]`` is a unique identifier for a span within a trace; it is a 16-character hexadecimal encoding of an 8-byte array. It should not be zero. ."
-        },
-        "span_id": {
-          "type": "str",
-          "description": "Required. The ``[SPAN_ID]`` portion of the span's resource name."
-        },
-        "parent_span_id": {
-          "type": "str",
-          "description": "The ``[SPAN_ID]`` of this span's parent span. If this is a root span, then this field must be empty."
-        },
-        "display_name": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "Required. A description of the span's operation (up to 128 bytes). Cloud Trace displays the description in the Cloud console. For example, the display name can be a qualified method name or a file name and a line number where the operation is called. A best practice is to use the same display name within an application and at the same call point. This makes it easier to correlate spans in different traces."
-        },
-        "start_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. The start time of the span. On the client side, this is the time kept by the local machine where the span execution starts. On the server side, this is the time when the server's application handler starts running."
-        },
-        "end_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Required. The end time of the span. On the client side, this is the time kept by the local machine where the span execution ends. On the server side, this is the time when the server application handler stops running."
-        },
-        "attributes": {
-          "type": "google.cloud.trace_v2.types.Span.Attributes",
-          "description": "A set of attributes on the span. You can have up to 32 attributes per span."
-        },
-        "stack_trace": {
-          "type": "google.cloud.trace_v2.types.StackTrace",
-          "description": "Stack trace captured at the start of the span."
-        },
-        "time_events": {
-          "type": "google.cloud.trace_v2.types.Span.TimeEvents",
-          "description": "A set of time events. You can have up to 32 annotations and 128 message events per span."
-        },
-        "links": {
-          "type": "google.cloud.trace_v2.types.Span.Links",
-          "description": "Links associated with the span. You can have up to 128 links per Span."
-        },
-        "status": {
-          "type": "google.rpc.status_pb2.Status",
-          "description": "Optional. The final status for this span."
-        },
-        "same_process_as_parent_span": {
-          "type": "google.protobuf.wrappers_pb2.BoolValue",
-          "description": "Optional. Set this parameter to indicate whether this span is in the same process as its parent. If you do not set this parameter, Trace is unable to take advantage of this helpful information."
-        },
-        "child_span_count": {
-          "type": "google.protobuf.wrappers_pb2.Int32Value",
-          "description": "Optional. The number of child spans that were generated while this span was active. If set, allows implementation to detect missing child spans."
-        },
-        "span_kind": {
-          "type": "google.cloud.trace_v2.types.Span.SpanKind",
-          "description": "Optional. Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``CLIENT`` (caller) and ``SERVER`` (callee) to identify an RPC call."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "AttributeValue",
-      "docstring": "The allowed types for ``[VALUE]`` in a ``[KEY]:[VALUE]`` attribute.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    string_value (google.cloud.trace_v2.types.TruncatableString):\n        A string up to 256 bytes long.\n\n        This field is a member of `oneof`_ ``value``.\n    int_value (int):\n        A 64-bit signed integer.\n\n        This field is a member of `oneof`_ ``value``.\n    bool_value (bool):\n        A Boolean value represented by ``true`` or ``false``.\n\n        This field is a member of `oneof`_ ``value``.",
-      "attributes": {
-        "string_value": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "A string up to 256 bytes long.  This field is a member of `oneof`_ ``value``."
-        },
-        "int_value": {
-          "type": "int",
-          "description": "A 64-bit signed integer.  This field is a member of `oneof`_ ``value``."
-        },
-        "bool_value": {
-          "type": "bool",
-          "description": "A Boolean value represented by ``true`` or ``false``.  This field is a member of `oneof`_ ``value``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StackTrace",
-      "docstring": "A call stack appearing in a trace.\n\nAttributes:\n    stack_frames (google.cloud.trace_v2.types.StackTrace.StackFrames):\n        Stack frames in this stack trace. A maximum\n        of 128 frames are allowed.\n    stack_trace_hash_id (int):\n        The hash ID is used to conserve network bandwidth for\n        duplicate stack traces within a single trace.\n\n        Often multiple spans will have identical stack traces. The\n        first occurrence of a stack trace should contain both the\n        ``stackFrame`` content and a value in ``stackTraceHashId``.\n\n        Subsequent spans within the same request can refer to that\n        stack trace by only setting ``stackTraceHashId``.",
-      "attributes": {
-        "stack_frames": {
-          "type": "google.cloud.trace_v2.types.StackTrace.StackFrames",
-          "description": "Stack frames in this stack trace. A maximum of 128 frames are allowed."
-        },
-        "stack_trace_hash_id": {
-          "type": "int",
-          "description": "The hash ID is used to conserve network bandwidth for duplicate stack traces within a single trace.  Often multiple spans will have identical stack traces. The first occurrence of a stack trace should contain both the ``stackFrame`` content and a value in ``stackTraceHashId``.  Subsequent spans within the same request can refer to that stack trace by only setting ``stackTraceHashId``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Module",
-      "docstring": "Binary module.\n\nAttributes:\n    module (google.cloud.trace_v2.types.TruncatableString):\n        For example: main binary, kernel modules, and\n        dynamic libraries such as libc.so, sharedlib.so\n        (up to 256 bytes).\n    build_id (google.cloud.trace_v2.types.TruncatableString):\n        A unique identifier for the module, usually a\n        hash of its contents (up to 128 bytes).",
-      "attributes": {
-        "module": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "For example: main binary, kernel modules, and dynamic libraries such as libc.so, sharedlib.so (up to 256 bytes)."
-        },
-        "build_id": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "A unique identifier for the module, usually a hash of its contents (up to 128 bytes)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TruncatableString",
-      "docstring": "Represents a string that might be shortened to a specified\nlength.\n\nAttributes:\n    value (str):\n        The shortened string. For example, if the original string is\n        500 bytes long and the limit of the string is 128 bytes,\n        then ``value`` contains the first 128 bytes of the 500-byte\n        string.\n\n        Truncation always happens on a UTF8 character boundary. If\n        there are multi-byte characters in the string, then the\n        length of the shortened string might be less than the size\n        limit.\n    truncated_byte_count (int):\n        The number of bytes removed from the original\n        string. If this value is 0, then the string was\n        not shortened.",
-      "attributes": {
-        "value": {
-          "type": "str",
-          "description": "The shortened string. For example, if the original string is 500 bytes long and the limit of the string is 128 bytes, then ``value`` contains the first 128 bytes of the 500-byte string.  Truncation always happens on a UTF8 character boundary. If there are multi-byte characters in the string, then the length of the shortened string might be less than the size limit."
-        },
-        "truncated_byte_count": {
-          "type": "int",
-          "description": "The number of bytes removed from the original string. If this value is 0, then the string was not shortened."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Attributes",
-      "docstring": "A set of attributes as key-value pairs.\n\nAttributes:\n    attribute_map (MutableMapping[str, google.cloud.trace_v2.types.AttributeValue]):\n        A set of attributes. Each attribute's key can be up to 128\n        bytes long. The value can be a string up to 256 bytes, a\n        signed 64-bit integer, or the boolean values ``true`` or\n        ``false``. For example:\n\n        ::\n\n            \"/instance_id\": { \"string_value\": { \"value\": \"my-instance\" } }\n            \"/http/request_bytes\": { \"int_value\": 300 }\n            \"abc.com/myattribute\": { \"bool_value\": false }\n    dropped_attributes_count (int):\n        The number of attributes that were discarded.\n        Attributes can be discarded because their keys\n        are too long or because there are too many\n        attributes. If this value is 0 then all\n        attributes are valid.",
-      "attributes": {
-        "attribute_map": {
-          "type": "MutableMapping[str, google.cloud.trace_v2.types.AttributeValue]",
-          "description": "A set of attributes. Each attribute's key can be up to 128 bytes long. The value can be a string up to 256 bytes, a signed 64-bit integer, or the boolean values ``true`` or ``false``. For example:  ::  \"/instance_id\": { \"string_value\": { \"value\": \"my-instance\" } } \"/http/request_bytes\": { \"int_value\": 300 } \"abc.com/myattribute\": { \"bool_value\": false }"
-        },
-        "dropped_attributes_count": {
-          "type": "int",
-          "description": "The number of attributes that were discarded. Attributes can be discarded because their keys are too long or because there are too many attributes. If this value is 0 then all attributes are valid."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TimeEvent",
-      "docstring": "A time-stamped annotation or message event in the Span.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    time (google.protobuf.timestamp_pb2.Timestamp):\n        The timestamp indicating the time the event\n        occurred.\n    annotation (google.cloud.trace_v2.types.Span.TimeEvent.Annotation):\n        Text annotation with a set of attributes.\n\n        This field is a member of `oneof`_ ``value``.\n    message_event (google.cloud.trace_v2.types.Span.TimeEvent.MessageEvent):\n        An event describing a message sent/received\n        between Spans.\n\n        This field is a member of `oneof`_ ``value``.",
-      "attributes": {
-        "time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "The timestamp indicating the time the event occurred."
-        },
-        "annotation": {
-          "type": "google.cloud.trace_v2.types.Span.TimeEvent.Annotation",
-          "description": "Text annotation with a set of attributes.  This field is a member of `oneof`_ ``value``."
-        },
-        "message_event": {
-          "type": "google.cloud.trace_v2.types.Span.TimeEvent.MessageEvent",
-          "description": "An event describing a message sent/received between Spans.  This field is a member of `oneof`_ ``value``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "TimeEvents",
-      "docstring": "A collection of ``TimeEvent``\\ s. A ``TimeEvent`` is a time-stamped\nannotation on the span, consisting of either user-supplied key:value\npairs, or details of a message sent/received between Spans.\n\nAttributes:\n    time_event (MutableSequence[google.cloud.trace_v2.types.Span.TimeEvent]):\n        A collection of ``TimeEvent``\\ s.\n    dropped_annotations_count (int):\n        The number of dropped annotations in all the\n        included time events. If the value is 0, then no\n        annotations were dropped.\n    dropped_message_events_count (int):\n        The number of dropped message events in all\n        the included time events. If the value is 0,\n        then no message events were dropped.",
-      "attributes": {
-        "time_event": {
-          "type": "MutableSequence[google.cloud.trace_v2.types.Span.TimeEvent]",
-          "description": "A collection of ``TimeEvent``\\ s."
-        },
-        "dropped_annotations_count": {
-          "type": "int",
-          "description": "The number of dropped annotations in all the included time events. If the value is 0, then no annotations were dropped."
-        },
-        "dropped_message_events_count": {
-          "type": "int",
-          "description": "The number of dropped message events in all the included time events. If the value is 0, then no message events were dropped."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Link",
-      "docstring": "A pointer from the current span to another span in the same\ntrace or in a different trace. For example, this can be used in\nbatching operations, where a single batch handler processes\nmultiple requests from different traces or when the handler\nreceives a request from a different project.\n\nAttributes:\n    trace_id (str):\n        The ``[TRACE_ID]`` for a trace within a project.\n    span_id (str):\n        The ``[SPAN_ID]`` for a span within a trace.\n    type (google.cloud.trace_v2.types.Span.Link.Type):\n        The relationship of the current span relative\n        to the linked span.\n    attributes (google.cloud.trace_v2.types.Span.Attributes):\n        A set of attributes on the link. Up to 32\n        attributes can be specified per link.",
-      "attributes": {
-        "trace_id": {
-          "type": "str",
-          "description": "The ``[TRACE_ID]`` for a trace within a project."
-        },
-        "span_id": {
-          "type": "str",
-          "description": "The ``[SPAN_ID]`` for a span within a trace."
-        },
-        "type": {
-          "type": "google.cloud.trace_v2.types.Span.Link.Type",
-          "description": "The relationship of the current span relative to the linked span."
-        },
-        "attributes": {
-          "type": "google.cloud.trace_v2.types.Span.Attributes",
-          "description": "A set of attributes on the link. Up to 32 attributes can be specified per link."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Links",
-      "docstring": "A collection of links, which are references from this span to\na span in the same or different trace.\n\nAttributes:\n    link (MutableSequence[google.cloud.trace_v2.types.Span.Link]):\n        A collection of links.\n    dropped_links_count (int):\n        The number of dropped links after the maximum\n        size was enforced. If this value is 0, then no\n        links were dropped.",
-      "attributes": {
-        "link": {
-          "type": "MutableSequence[google.cloud.trace_v2.types.Span.Link]",
-          "description": "A collection of links."
-        },
-        "dropped_links_count": {
-          "type": "int",
-          "description": "The number of dropped links after the maximum size was enforced. If this value is 0, then no links were dropped."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StackFrame",
-      "docstring": "Represents a single stack frame in a stack trace.\n\nAttributes:\n    function_name (google.cloud.trace_v2.types.TruncatableString):\n        The fully-qualified name that uniquely\n        identifies the function or method that is active\n        in this frame (up to 1024 bytes).\n    original_function_name (google.cloud.trace_v2.types.TruncatableString):\n        An un-mangled function name, if ``function_name`` is\n        mangled. To get information about name mangling, run `this\n        search <https://www.google.com/search?q=cxx+name+mangling>`__.\n        The name can be fully-qualified (up to 1024 bytes).\n    file_name (google.cloud.trace_v2.types.TruncatableString):\n        The name of the source file where the\n        function call appears (up to 256 bytes).\n    line_number (int):\n        The line number in ``file_name`` where the function call\n        appears.\n    column_number (int):\n        The column number where the function call\n        appears, if available. This is important in\n        JavaScript beca",
-      "attributes": {
-        "function_name": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "The fully-qualified name that uniquely identifies the function or method that is active in this frame (up to 1024 bytes)."
-        },
-        "original_function_name": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "An un-mangled function name, if ``function_name`` is mangled. To get information about name mangling, run `this search <https://www.google.com/search?q=cxx+name+mangling>`__. The name can be fully-qualified (up to 1024 bytes)."
-        },
-        "file_name": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "The name of the source file where the function call appears (up to 256 bytes)."
-        },
-        "line_number": {
-          "type": "int",
-          "description": "The line number in ``file_name`` where the function call appears."
-        },
-        "column_number": {
-          "type": "int",
-          "description": "The column number where the function call appears, if available. This is important in JavaScript because of its anonymous functions."
-        },
-        "load_module": {
-          "type": "google.cloud.trace_v2.types.Module",
-          "description": "The binary module from where the code was loaded."
-        },
-        "source_version": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "The version of the deployed source code (up to 128 bytes)."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "StackFrames",
-      "docstring": "A collection of stack frames, which can be truncated.\n\nAttributes:\n    frame (MutableSequence[google.cloud.trace_v2.types.StackTrace.StackFrame]):\n        Stack frames in this call stack.\n    dropped_frames_count (int):\n        The number of stack frames that were dropped\n        because there were too many stack frames.\n        If this value is 0, then no stack frames were\n        dropped.",
-      "attributes": {
-        "frame": {
-          "type": "MutableSequence[google.cloud.trace_v2.types.StackTrace.StackFrame]",
-          "description": "Stack frames in this call stack."
-        },
-        "dropped_frames_count": {
-          "type": "int",
-          "description": "The number of stack frames that were dropped because there were too many stack frames. If this value is 0, then no stack frames were dropped."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "Annotation",
-      "docstring": "Text annotation with a set of attributes.\n\nAttributes:\n    description (google.cloud.trace_v2.types.TruncatableString):\n        A user-supplied message describing the event.\n        The maximum length for the description is 256\n        bytes.\n    attributes (google.cloud.trace_v2.types.Span.Attributes):\n        A set of attributes on the annotation. You\n        can have up to 4 attributes per Annotation.",
-      "attributes": {
-        "description": {
-          "type": "google.cloud.trace_v2.types.TruncatableString",
-          "description": "A user-supplied message describing the event. The maximum length for the description is 256 bytes."
-        },
-        "attributes": {
-          "type": "google.cloud.trace_v2.types.Span.Attributes",
-          "description": "A set of attributes on the annotation. You can have up to 4 attributes per Annotation."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "MessageEvent",
-      "docstring": "An event describing a message sent/received between Spans.\n\nAttributes:\n    type (google.cloud.trace_v2.types.Span.TimeEvent.MessageEvent.Type):\n        Type of MessageEvent. Indicates whether the\n        message was sent or received.\n    id (int):\n        An identifier for the MessageEvent's message that can be\n        used to match ``SENT`` and ``RECEIVED`` MessageEvents.\n    uncompressed_size_bytes (int):\n        The number of uncompressed bytes sent or\n        received.\n    compressed_size_bytes (int):\n        The number of compressed bytes sent or\n        received. If missing, the compressed size is\n        assumed to be the same size as the uncompressed\n        size.",
-      "attributes": {
-        "type": {
-          "type": "google.cloud.trace_v2.types.Span.TimeEvent.MessageEvent.Type",
-          "description": "Type of MessageEvent. Indicates whether the message was sent or received."
-        },
-        "id": {
-          "type": "int",
-          "description": "An identifier for the MessageEvent's message that can be used to match ``SENT`` and ``RECEIVED`` MessageEvents."
-        },
-        "uncompressed_size_bytes": {
-          "type": "int",
-          "description": "The number of uncompressed bytes sent or received."
-        },
-        "compressed_size_bytes": {
-          "type": "int",
-          "description": "The number of compressed bytes sent or received. If missing, the compressed size is assumed to be the same size as the uncompressed size."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-trace\\google\\cloud\\trace_v2\\types\\tracing.py": [
     {
-      "type": "request_class",
+      "type": "function",
       "name": "BatchWriteSpansRequest",
-      "docstring": "The request message for the ``BatchWriteSpans`` method.\n\nAttributes:\n    name (str):\n        Required. The name of the project where the spans belong.\n        The format is ``projects/[PROJECT_ID]``.\n    spans (MutableSequence[google.cloud.trace_v2.types.Span]):\n        Required. A list of new spans. The span names\n        must not match existing spans, otherwise the\n        results are undefined.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The name of the project where the spans belong. The format is ``projects/[PROJECT_ID]``."
+      "description": "The request message for the ``BatchWriteSpans`` method.\n\nAttributes:\n    name (str):\n        Required. The name of the project where the spans belong.\n        The format is ``projects/[PROJECT_ID]``.\n    spans (MutableSequence[google.cloud.trace_v2.types.Span]):\n        Required. A list of new spans. The span names\n        must not match existing spans, otherwise the\n        results are undefined.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the project where the spans belong. The format is ``projects/[PROJECT_ID]``.",
+            "type": "string"
+          },
+          "spans": {
+            "description": "Required. A list of new spans. The span names must not match existing spans, otherwise the results are undefined.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Required. The resource name of the span in the following format:  -  ``projects/[PROJECT_ID]/traces/[TRACE_ID]/spans/[SPAN_ID]``  ``[TRACE_ID]`` is a unique identifier for a trace within a project; it is a 32-character hexadecimal encoding of a 16-byte array. It should not be zero.  ``[SPAN_ID]`` is a unique identifier for a span within a trace; it is a 16-character hexadecimal encoding of an 8-byte array. It should not be zero. .",
+                  "type": "string"
+                },
+                "span_id": {
+                  "description": "Required. The ``[SPAN_ID]`` portion of the span's resource name.",
+                  "type": "string"
+                },
+                "parent_span_id": {
+                  "description": "The ``[SPAN_ID]`` of this span's parent span. If this is a root span, then this field must be empty.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "description": "The shortened string. For example, if the original string is 500 bytes long and the limit of the string is 128 bytes, then ``value`` contains the first 128 bytes of the 500-byte string.  Truncation always happens on a UTF8 character boundary. If there are multi-byte characters in the string, then the length of the shortened string might be less than the size limit.",
+                      "type": "string"
+                    },
+                    "truncated_byte_count": {
+                      "description": "The number of bytes removed from the original string. If this value is 0, then the string was not shortened.",
+                      "type": "integer"
+                    }
+                  }
+                },
+                "start_time": {
+                  "description": "Required. The start time of the span. On the client side, this is the time kept by the local machine where the span execution starts. On the server side, this is the time when the server's application handler starts running.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "Required. The end time of the span. On the client side, this is the time kept by the local machine where the span execution ends. On the server side, this is the time when the server application handler stops running.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "attributes": {
+                  "type": "object",
+                  "properties": {
+                    "product_applicability": {
+                      "description": "Required. Applicability of the promotion to either all products or `only specific products <https://support.google.com/merchants/answer/6396257?ref_topic=6396150&sjid=17642868584668136159-NC>`__.",
+                      "type": "object",
+                      "reference": "google.shopping.merchant_promotions_v1beta.types.ProductApplicability"
+                    },
+                    "offer_type": {
+                      "description": "Required. `Type <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__ of the promotion. Use this attribute to indicate whether or not customers need a coupon code to redeem your promotion.",
+                      "type": "object",
+                      "reference": "google.shopping.merchant_promotions_v1beta.types.OfferType"
+                    },
+                    "generic_redemption_code": {
+                      "description": "Optional. Generic redemption code for the promotion. To be used with the ``offerType`` field and must meet the `minimum requirements <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "string"
+                    },
+                    "long_title": {
+                      "description": "Required. `Long title <https://support.google.com/merchants/answer/13838102?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                      "type": "string"
+                    },
+                    "coupon_value_type": {
+                      "description": "Required. The [coupon value type] (https://support.google.com/merchants/answer/13861986?ref_topic=13773355&sjid=17642868584668136159-NC) attribute to signal the type of promotion that you are running. Depending on type of the selected coupon value `some attributes are required <https://support.google.com/merchants/answer/6393006?ref_topic=7322920>`__.",
+                      "type": "object",
+                      "reference": "google.shopping.merchant_promotions_v1beta.types.CouponValueType"
+                    },
+                    "promotion_destinations": {
+                      "description": "Required. The list of destinations where the promotion applies to. If you don't specify a destination by including a supported value in your data source, your promotion will display in Shopping ads and free listings by default.  You may have previously submitted the following values as destinations for your products: Shopping Actions, Surfaces across Google, Local surfaces across Google. To represent these values use ``FREE_LISTINGS``, ``FREE_LOCAL_LISTINGS``, ``LOCAL_INVENTORY_ADS``. For more details see `Promotion destination <https://support.google.com/merchants/answer/13837465?sjid=5155774230887277618-NC>`__",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "reference": "google.shopping.type.types.Destination.DestinationEnum"
+                      }
+                    },
+                    "item_id_inclusion": {
+                      "description": "Optional. Product filter by `item ID <https://support.google.com/merchants/answer/13861565?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "brand_inclusion": {
+                      "description": "Optional. Product filter by brand for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "item_group_id_inclusion": {
+                      "description": "Optional. Product filter by item group ID for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability [product_applicability] attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "product_type_inclusion": {
+                      "description": "Optional. Product filter by product type for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "item_id_exclusion": {
+                      "description": "Optional. Product filter by `item ID exclusion <https://support.google.com/merchants/answer/13863524?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "brand_exclusion": {
+                      "description": "Optional. Product filter by `brand exclusion <https://support.google.com/merchants/answer/13861679?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "item_group_id_exclusion": {
+                      "description": "Optional. Product filter by `item group ID <https://support.google.com/merchants/answer/13837298?ref_topic=13773355&sjid=17642868584668136159-NC>`__. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__. exclusion for the promotion.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "product_type_exclusion": {
+                      "description": "Optional. Product filter by `product type exclusion <https://support.google.com/merchants/answer/13863746?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "minimum_purchase_amount": {
+                      "type": "object",
+                      "properties": {
+                        "amount_micros": {
+                          "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                          "type": "integer"
+                        },
+                        "currency_code": {
+                          "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "minimum_purchase_quantity": {
+                      "description": "Optional. `Minimum purchase quantity <https://support.google.com/merchants/answer/13838182?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                      "type": "integer"
+                    },
+                    "limit_quantity": {
+                      "description": "Optional. `Maximum purchase quantity <https://support.google.com/merchants/answer/13861564?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                      "type": "integer"
+                    },
+                    "limit_value": {
+                      "type": "object",
+                      "properties": {
+                        "amount_micros": {
+                          "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                          "type": "integer"
+                        },
+                        "currency_code": {
+                          "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "percent_off": {
+                      "description": "Optional. The `percentage discount <https://support.google.com/merchants/answer/13837404?sjid=17642868584668136159-NC>`__ offered in the promotion.",
+                      "type": "integer"
+                    },
+                    "money_off_amount": {
+                      "type": "object",
+                      "properties": {
+                        "amount_micros": {
+                          "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                          "type": "integer"
+                        },
+                        "currency_code": {
+                          "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "get_this_quantity_discounted": {
+                      "description": "Optional. The number of items discounted in the promotion. The attribute is set when ``couponValueType`` is equal to ``buy_m_get_n_money_off`` or ``buy_m_get_n_percent_off``.",
+                      "type": "integer"
+                    },
+                    "free_gift_value": {
+                      "type": "object",
+                      "properties": {
+                        "amount_micros": {
+                          "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                          "type": "integer"
+                        },
+                        "currency_code": {
+                          "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "free_gift_description": {
+                      "description": "Optional. `Free gift description <https://support.google.com/merchants/answer/13847245?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                      "type": "string"
+                    },
+                    "free_gift_item_id": {
+                      "description": "Optional. `Free gift item ID <https://support.google.com/merchants/answer/13857152?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                      "type": "string"
+                    },
+                    "promotion_effective_time_period": {
+                      "type": "object",
+                      "properties": {
+                        "min_": {
+                          "description": "A minimum acceptable load. Must be \u2265 0. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].",
+                          "type": "integer"
+                        },
+                        "max_": {
+                          "description": "A maximum acceptable load. Must be \u2265 0. If unspecified, the maximum load is unrestricted by this message. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].  This field is a member of `oneof`_ ``_max``.",
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "promotion_display_time_period": {
+                      "type": "object",
+                      "properties": {
+                        "min_": {
+                          "description": "A minimum acceptable load. Must be \u2265 0. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].",
+                          "type": "integer"
+                        },
+                        "max_": {
+                          "description": "A maximum acceptable load. Must be \u2265 0. If unspecified, the maximum load is unrestricted by this message. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].  This field is a member of `oneof`_ ``_max``.",
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "store_applicability": {
+                      "description": "Optional. Whether the promotion applies to `all stores, or only specified stores <https://support.google.com/merchants/answer/13857563?sjid=17642868584668136159-NC>`__. Local Inventory ads promotions throw an error if no store applicability is included. An ``INVALID_ARGUMENT`` error is thrown if ``store_applicability`` is set to ``ALL_STORES`` and ``store_codes_inclusion`` or ``score_code_exclusion`` is set to a value.",
+                      "type": "object",
+                      "reference": "google.shopping.merchant_promotions_v1beta.types.StoreApplicability"
+                    },
+                    "store_codes_inclusion": {
+                      "description": "Optional. `Store codes to include <https://support.google.com/merchants/answer/13857470?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.  Store code (the store ID from your Business Profile) of the physical store the product is sold in. See the `Local product inventory data specification <https://support.google.com/merchants/answer/3061342>`__ for more information.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "store_codes_exclusion": {
+                      "description": "Optional. `Store codes to exclude <https://support.google.com/merchants/answer/13859586?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "promotion_url": {
+                      "description": "Optional. URL to the page on the merchant's site where the promotion shows. Local Inventory ads promotions throw an error if no ``promotion_url`` is included. URL is used to confirm that the promotion is valid and can be redeemed.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "product_applicability",
+                    "offer_type",
+                    "long_title",
+                    "coupon_value_type",
+                    "promotion_destinations",
+                    "promotion_effective_time_period"
+                  ]
+                },
+                "stack_trace": {
+                  "type": "object",
+                  "properties": {
+                    "elements": {
+                      "description": "An array of stack elements.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "step": {
+                            "description": "The step the error occurred at.",
+                            "type": "string"
+                          },
+                          "routine": {
+                            "description": "The routine where the error occurred.",
+                            "type": "string"
+                          },
+                          "position": {
+                            "type": "object",
+                            "properties": {
+                              "line": {
+                                "description": "The source code line number the current instruction was generated from.",
+                                "type": "integer"
+                              },
+                              "column": {
+                                "description": "The source code column position (of the line) the current instruction was generated from.",
+                                "type": "integer"
+                              },
+                              "length": {
+                                "description": "The number of bytes of source code making up this stack trace element.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "time_events": {
+                  "type": "object",
+                  "properties": {
+                    "time_event": {
+                      "description": "A collection of ``TimeEvent``\\ s.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "time": {
+                            "description": "The timestamp indicating the time the event occurred.",
+                            "type": "object",
+                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                          },
+                          "annotation": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Resource name of the annotation. Form: ``projects/{project_number}/locations/{location}/corpora/{corpus}/assets/{asset}/annotations/{annotation}``",
+                                "type": "string"
+                              },
+                              "user_specified_annotation": {
+                                "type": "object",
+                                "properties": {
+                                  "key": {
+                                    "description": "Required. Key of the annotation. The key must be set with type by CreateDataSchema.",
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "object",
+                                    "properties": {
+                                      "int_value": {
+                                        "description": "Value of int type annotation.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "integer"
+                                      },
+                                      "float_value": {
+                                        "description": "Value of float type annotation.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "number"
+                                      },
+                                      "str_value": {
+                                        "description": "Value of string type annotation.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "string"
+                                      },
+                                      "datetime_value": {
+                                        "description": "Value of date time type annotation.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "string"
+                                      },
+                                      "geo_coordinate": {
+                                        "type": "object",
+                                        "properties": {
+                                          "latitude": {
+                                            "description": "Latitude Coordinate. Degrees [-90 .. 90]",
+                                            "type": "number"
+                                          },
+                                          "longitude": {
+                                            "description": "Longitude Coordinate. Degrees [-180 .. 180]",
+                                            "type": "number"
+                                          }
+                                        }
+                                      },
+                                      "proto_any_value": {
+                                        "description": "Value of any proto value.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "object",
+                                        "reference": "google.protobuf.any_pb2.Any"
+                                      },
+                                      "bool_value": {
+                                        "description": "Value of boolean type annotation.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "boolean"
+                                      },
+                                      "customized_struct_data_value": {
+                                        "description": "Value of customized struct annotation.  This field is a member of `oneof`_ ``value``.",
+                                        "type": "object",
+                                        "reference": "google.protobuf.struct_pb2.Struct"
+                                      }
+                                    }
+                                  },
+                                  "partition": {
+                                    "type": "object",
+                                    "properties": {
+                                      "temporal_partition": {
+                                        "type": "object",
+                                        "properties": {
+                                          "start_time": {
+                                            "description": "Start time of the partition.",
+                                            "type": "object",
+                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                          },
+                                          "end_time": {
+                                            "description": "End time of the partition.",
+                                            "type": "object",
+                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                          }
+                                        }
+                                      },
+                                      "spatial_partition": {
+                                        "type": "object",
+                                        "properties": {
+                                          "x_min": {
+                                            "description": "The minimum x coordinate value.  This field is a member of `oneof`_ ``_x_min``.",
+                                            "type": "integer"
+                                          },
+                                          "y_min": {
+                                            "description": "The minimum y coordinate value.  This field is a member of `oneof`_ ``_y_min``.",
+                                            "type": "integer"
+                                          },
+                                          "x_max": {
+                                            "description": "The maximum x coordinate value.  This field is a member of `oneof`_ ``_x_max``.",
+                                            "type": "integer"
+                                          },
+                                          "y_max": {
+                                            "description": "The maximum y coordinate value.  This field is a member of `oneof`_ ``_y_max``.",
+                                            "type": "integer"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "key"
+                                ]
+                              }
+                            }
+                          },
+                          "message_event": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "description": "Type of MessageEvent. Indicates whether the message was sent or received.",
+                                "type": "object",
+                                "reference": "google.cloud.trace_v2.types.Span.TimeEvent.MessageEvent.Type"
+                              },
+                              "id": {
+                                "description": "An identifier for the MessageEvent's message that can be used to match ``SENT`` and ``RECEIVED`` MessageEvents.",
+                                "type": "integer"
+                              },
+                              "uncompressed_size_bytes": {
+                                "description": "The number of uncompressed bytes sent or received.",
+                                "type": "integer"
+                              },
+                              "compressed_size_bytes": {
+                                "description": "The number of compressed bytes sent or received. If missing, the compressed size is assumed to be the same size as the uncompressed size.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "dropped_annotations_count": {
+                      "description": "The number of dropped annotations in all the included time events. If the value is 0, then no annotations were dropped.",
+                      "type": "integer"
+                    },
+                    "dropped_message_events_count": {
+                      "description": "The number of dropped message events in all the included time events. If the value is 0, then no message events were dropped.",
+                      "type": "integer"
+                    }
+                  }
+                },
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "link": {
+                      "description": "A collection of links.",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "trace_id": {
+                            "description": "The ``[TRACE_ID]`` for a trace within a project.",
+                            "type": "string"
+                          },
+                          "span_id": {
+                            "description": "The ``[SPAN_ID]`` for a span within a trace.",
+                            "type": "string"
+                          },
+                          "type": {
+                            "description": "The relationship of the current span relative to the linked span.",
+                            "type": "object",
+                            "reference": "google.cloud.trace_v2.types.Span.Link.Type"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "product_applicability": {
+                                "description": "Required. Applicability of the promotion to either all products or `only specific products <https://support.google.com/merchants/answer/6396257?ref_topic=6396150&sjid=17642868584668136159-NC>`__.",
+                                "type": "object",
+                                "reference": "google.shopping.merchant_promotions_v1beta.types.ProductApplicability"
+                              },
+                              "offer_type": {
+                                "description": "Required. `Type <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__ of the promotion. Use this attribute to indicate whether or not customers need a coupon code to redeem your promotion.",
+                                "type": "object",
+                                "reference": "google.shopping.merchant_promotions_v1beta.types.OfferType"
+                              },
+                              "generic_redemption_code": {
+                                "description": "Optional. Generic redemption code for the promotion. To be used with the ``offerType`` field and must meet the `minimum requirements <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "string"
+                              },
+                              "long_title": {
+                                "description": "Required. `Long title <https://support.google.com/merchants/answer/13838102?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                                "type": "string"
+                              },
+                              "coupon_value_type": {
+                                "description": "Required. The [coupon value type] (https://support.google.com/merchants/answer/13861986?ref_topic=13773355&sjid=17642868584668136159-NC) attribute to signal the type of promotion that you are running. Depending on type of the selected coupon value `some attributes are required <https://support.google.com/merchants/answer/6393006?ref_topic=7322920>`__.",
+                                "type": "object",
+                                "reference": "google.shopping.merchant_promotions_v1beta.types.CouponValueType"
+                              },
+                              "promotion_destinations": {
+                                "description": "Required. The list of destinations where the promotion applies to. If you don't specify a destination by including a supported value in your data source, your promotion will display in Shopping ads and free listings by default.  You may have previously submitted the following values as destinations for your products: Shopping Actions, Surfaces across Google, Local surfaces across Google. To represent these values use ``FREE_LISTINGS``, ``FREE_LOCAL_LISTINGS``, ``LOCAL_INVENTORY_ADS``. For more details see `Promotion destination <https://support.google.com/merchants/answer/13837465?sjid=5155774230887277618-NC>`__",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.shopping.type.types.Destination.DestinationEnum"
+                                }
+                              },
+                              "item_id_inclusion": {
+                                "description": "Optional. Product filter by `item ID <https://support.google.com/merchants/answer/13861565?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "brand_inclusion": {
+                                "description": "Optional. Product filter by brand for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "item_group_id_inclusion": {
+                                "description": "Optional. Product filter by item group ID for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability [product_applicability] attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "product_type_inclusion": {
+                                "description": "Optional. Product filter by product type for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "item_id_exclusion": {
+                                "description": "Optional. Product filter by `item ID exclusion <https://support.google.com/merchants/answer/13863524?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "brand_exclusion": {
+                                "description": "Optional. Product filter by `brand exclusion <https://support.google.com/merchants/answer/13861679?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "item_group_id_exclusion": {
+                                "description": "Optional. Product filter by `item group ID <https://support.google.com/merchants/answer/13837298?ref_topic=13773355&sjid=17642868584668136159-NC>`__. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__. exclusion for the promotion.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "product_type_exclusion": {
+                                "description": "Optional. Product filter by `product type exclusion <https://support.google.com/merchants/answer/13863746?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The product filter attributes only applies when the products eligible for promotion product applicability ``product_applicability`` attribute is set to `specific_products <https://support.google.com/merchants/answer/13837299?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "minimum_purchase_amount": {
+                                "type": "object",
+                                "properties": {
+                                  "amount_micros": {
+                                    "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                    "type": "integer"
+                                  },
+                                  "currency_code": {
+                                    "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "minimum_purchase_quantity": {
+                                "description": "Optional. `Minimum purchase quantity <https://support.google.com/merchants/answer/13838182?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                                "type": "integer"
+                              },
+                              "limit_quantity": {
+                                "description": "Optional. `Maximum purchase quantity <https://support.google.com/merchants/answer/13861564?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                                "type": "integer"
+                              },
+                              "limit_value": {
+                                "type": "object",
+                                "properties": {
+                                  "amount_micros": {
+                                    "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                    "type": "integer"
+                                  },
+                                  "currency_code": {
+                                    "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "percent_off": {
+                                "description": "Optional. The `percentage discount <https://support.google.com/merchants/answer/13837404?sjid=17642868584668136159-NC>`__ offered in the promotion.",
+                                "type": "integer"
+                              },
+                              "money_off_amount": {
+                                "type": "object",
+                                "properties": {
+                                  "amount_micros": {
+                                    "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                    "type": "integer"
+                                  },
+                                  "currency_code": {
+                                    "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "get_this_quantity_discounted": {
+                                "description": "Optional. The number of items discounted in the promotion. The attribute is set when ``couponValueType`` is equal to ``buy_m_get_n_money_off`` or ``buy_m_get_n_percent_off``.",
+                                "type": "integer"
+                              },
+                              "free_gift_value": {
+                                "type": "object",
+                                "properties": {
+                                  "amount_micros": {
+                                    "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                                    "type": "integer"
+                                  },
+                                  "currency_code": {
+                                    "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "free_gift_description": {
+                                "description": "Optional. `Free gift description <https://support.google.com/merchants/answer/13847245?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                                "type": "string"
+                              },
+                              "free_gift_item_id": {
+                                "description": "Optional. `Free gift item ID <https://support.google.com/merchants/answer/13857152?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion.",
+                                "type": "string"
+                              },
+                              "promotion_effective_time_period": {
+                                "type": "object",
+                                "properties": {
+                                  "min_": {
+                                    "description": "A minimum acceptable load. Must be \u2265 0. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].",
+                                    "type": "integer"
+                                  },
+                                  "max_": {
+                                    "description": "A maximum acceptable load. Must be \u2265 0. If unspecified, the maximum load is unrestricted by this message. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].  This field is a member of `oneof`_ ``_max``.",
+                                    "type": "integer"
+                                  }
+                                }
+                              },
+                              "promotion_display_time_period": {
+                                "type": "object",
+                                "properties": {
+                                  "min_": {
+                                    "description": "A minimum acceptable load. Must be \u2265 0. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].",
+                                    "type": "integer"
+                                  },
+                                  "max_": {
+                                    "description": "A maximum acceptable load. Must be \u2265 0. If unspecified, the maximum load is unrestricted by this message. If they're both specified, [min][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.min] must be \u2264 [max][google.maps.routeoptimization.v1.Vehicle.LoadLimit.Interval.max].  This field is a member of `oneof`_ ``_max``.",
+                                    "type": "integer"
+                                  }
+                                }
+                              },
+                              "store_applicability": {
+                                "description": "Optional. Whether the promotion applies to `all stores, or only specified stores <https://support.google.com/merchants/answer/13857563?sjid=17642868584668136159-NC>`__. Local Inventory ads promotions throw an error if no store applicability is included. An ``INVALID_ARGUMENT`` error is thrown if ``store_applicability`` is set to ``ALL_STORES`` and ``store_codes_inclusion`` or ``score_code_exclusion`` is set to a value.",
+                                "type": "object",
+                                "reference": "google.shopping.merchant_promotions_v1beta.types.StoreApplicability"
+                              },
+                              "store_codes_inclusion": {
+                                "description": "Optional. `Store codes to include <https://support.google.com/merchants/answer/13857470?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.  Store code (the store ID from your Business Profile) of the physical store the product is sold in. See the `Local product inventory data specification <https://support.google.com/merchants/answer/3061342>`__ for more information.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "store_codes_exclusion": {
+                                "description": "Optional. `Store codes to exclude <https://support.google.com/merchants/answer/13859586?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "promotion_url": {
+                                "description": "Optional. URL to the page on the merchant's site where the promotion shows. Local Inventory ads promotions throw an error if no ``promotion_url`` is included. URL is used to confirm that the promotion is valid and can be redeemed.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "product_applicability",
+                              "offer_type",
+                              "long_title",
+                              "coupon_value_type",
+                              "promotion_destinations",
+                              "promotion_effective_time_period"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "dropped_links_count": {
+                      "description": "The number of dropped links after the maximum size was enforced. If this value is 0, then no links were dropped.",
+                      "type": "integer"
+                    }
+                  }
+                },
+                "status": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "description": "State enum for status.",
+                      "type": "object",
+                      "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                    },
+                    "error_message": {
+                      "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
+                      "type": "string"
+                    }
+                  }
+                },
+                "same_process_as_parent_span": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "description": "",
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "child_span_count": {
+                  "description": "Optional. The number of child spans that were generated while this span was active. If set, allows implementation to detect missing child spans.",
+                  "type": "object",
+                  "reference": "google.protobuf.wrappers_pb2.Int32Value"
+                },
+                "span_kind": {
+                  "description": "Optional. Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``CLIENT`` (caller) and ``SERVER`` (callee) to identify an RPC call.",
+                  "type": "object",
+                  "reference": "google.cloud.trace_v2.types.Span.SpanKind"
+                }
+              },
+              "required": [
+                "name",
+                "span_id",
+                "display_name",
+                "start_time",
+                "end_time"
+              ]
+            }
+          }
         },
-        "spans": {
-          "type": "MutableSequence[google.cloud.trace_v2.types.Span]",
-          "description": "Required. A list of new spans. The span names must not match existing spans, otherwise the results are undefined."
-        }
+        "required": [
+          "name",
+          "spans"
+        ]
       }
     }
   ]

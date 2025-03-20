@@ -1,195 +1,131 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-iam\\google\\cloud\\iam_v2beta\\types\\deny.py": [
-    {
-      "type": "request_class",
-      "name": "DenyRule",
-      "docstring": "A deny rule in an IAM deny policy.\n\nAttributes:\n    denied_principals (MutableSequence[str]):\n        The identities that are prevented from using one or more\n        permissions on Google Cloud resources. This field can\n        contain the following values:\n\n        -  ``principalSet://goog/public:all``: A special identifier\n           that represents any principal that is on the internet,\n           even if they do not have a Google Account or are not\n           logged in.\n\n        -  ``principal://goog/subject/{email_id}``: A specific\n           Google Account. Includes Gmail, Cloud Identity, and\n           Google Workspace user accounts. For example,\n           ``principal://goog/subject/alice@example.com``.\n\n        -  ``deleted:principal://goog/subject/{email_id}?uid={uid}``:\n           A specific Google Account that was deleted recently. For\n           example,\n           ``deleted:principal://goog/subject/alice@example.com?uid=1234567890``.\n           If the Google Account is recovered, this identifie",
-      "attributes": {
-        "denied_principals": {
-          "type": "MutableSequence[str]",
-          "description": "The identities that are prevented from using one or more permissions on Google Cloud resources. This field can contain the following values:  -  ``principalSet://goog/public:all``: A special identifier that represents any principal that is on the internet, even if they do not have a Google Account or are not logged in.  -  ``principal://goog/subject/{email_id}``: A specific Google Account. Includes Gmail, Cloud Identity, and Google Workspace user accounts. For example, ``principal://goog/subject/alice@example.com``.  -  ``deleted:principal://goog/subject/{email_id}?uid={uid}``: A specific Google Account that was deleted recently. For example, ``deleted:principal://goog/subject/alice@example.com?uid=1234567890``. If the Google Account is recovered, this identifier reverts to the standard identifier for a Google Account.  -  ``principalSet://goog/group/{group_id}``: A Google group. For example, ``principalSet://goog/group/admins@example.com``.  -  ``deleted:principalSet://goog/group/{group_id}?uid={uid}``: A Google group that was deleted recently. For example, ``deleted:principalSet://goog/group/admins@example.com?uid=1234567890``. If the Google group is restored, this identifier reverts to the standard identifier for a Google group.  -  ``principal://iam.googleapis.com/projects/-/serviceAccounts/{service_account_id}``: A Google Cloud service account. For example, ``principal://iam.googleapis.com/projects/-/serviceAccounts/my-service-account@iam.gserviceaccount.com``.  -  ``deleted:principal://iam.googleapis.com/projects/-/serviceAccounts/{service_account_id}?uid={uid}``: A Google Cloud service account that was deleted recently. For example, ``deleted:principal://iam.googleapis.com/projects/-/serviceAccounts/my-service-account@iam.gserviceaccount.com?uid=1234567890``. If the service account is undeleted, this identifier reverts to the standard identifier for a service account.  -  ``principalSet://goog/cloudIdentityCustomerId/{customer_id}``: All of the principals associated with the specified Google Workspace or Cloud Identity customer ID. For example, ``principalSet://goog/cloudIdentityCustomerId/C01Abc35``."
-        },
-        "exception_principals": {
-          "type": "MutableSequence[str]",
-          "description": "The identities that are excluded from the deny rule, even if they are listed in the ``denied_principals``. For example, you could add a Google group to the ``denied_principals``, then exclude specific users who belong to that group.  This field can contain the same values as the ``denied_principals`` field, excluding ``principalSet://goog/public:all``, which represents all users on the internet."
-        },
-        "denied_permissions": {
-          "type": "MutableSequence[str]",
-          "description": "The permissions that are explicitly denied by this rule. Each permission uses the format ``{service_fqdn}/{resource}.{verb}``, where ``{service_fqdn}`` is the fully qualified domain name for the service. For example, ``iam.googleapis.com/roles.list``."
-        },
-        "exception_permissions": {
-          "type": "MutableSequence[str]",
-          "description": "Specifies the permissions that this rule excludes from the set of denied permissions given by ``denied_permissions``. If a permission appears in ``denied_permissions`` *and* in ``exception_permissions`` then it will *not* be denied.  The excluded permissions can be specified using the same syntax as ``denied_permissions``."
-        },
-        "denial_condition": {
-          "type": "google.type.expr_pb2.Expr",
-          "description": "The condition that determines whether this deny rule applies to a request. If the condition expression evaluates to ``true``, then the deny rule is applied; otherwise, the deny rule is not applied.  Each deny rule is evaluated independently. If this deny rule does not apply to a request, other deny rules might still apply.  The condition can use CEL functions that evaluate `resource tags <https://cloud.google.com/iam/help/conditions/resource-tags>`__. Other functions and operators are not supported."
-        }
-      }
-    }
-  ],
   "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-iam\\google\\cloud\\iam_v2beta\\types\\policy.py": [
     {
-      "type": "request_class",
-      "name": "Policy",
-      "docstring": "Data for an IAM policy.\n\nAttributes:\n    name (str):\n        Immutable. The resource name of the ``Policy``, which must\n        be unique. Format:\n        ``policies/{attachment_point}/denypolicies/{policy_id}``\n\n        The attachment point is identified by its URL-encoded full\n        resource name, which means that the forward-slash character,\n        ``/``, must be written as ``%2F``. For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-deny-policy``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, requests can use the\n        alphanumeric or the numeric ID. Responses always contain the\n        numeric ID.\n    uid (str):\n        Immutable. The globally unique ID of the ``Policy``.\n        Assigned automatically when the ``Policy`` is created.\n    kind (str):\n        Output only. The kind of the ``Policy``. Always contains the\n        value ``DenyPolicy``.\n    display_name (str):\n        A use",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Immutable. The resource name of the ``Policy``, which must be unique. Format: ``policies/{attachment_point}/denypolicies/{policy_id}``  The attachment point is identified by its URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-deny-policy``.  For organizations and folders, use the numeric ID in the full resource name. For projects, requests can use the alphanumeric or the numeric ID. Responses always contain the numeric ID."
-        },
-        "uid": {
-          "type": "str",
-          "description": "Immutable. The globally unique ID of the ``Policy``. Assigned automatically when the ``Policy`` is created."
-        },
-        "kind": {
-          "type": "str",
-          "description": "Output only. The kind of the ``Policy``. Always contains the value ``DenyPolicy``."
-        },
-        "display_name": {
-          "type": "str",
-          "description": "A user-specified description of the ``Policy``. This value can be up to 63 characters."
-        },
-        "annotations": {
-          "type": "MutableMapping[str, str]",
-          "description": "A key-value map to store arbitrary metadata for the ``Policy``. Keys can be up to 63 characters. Values can be up to 255 characters."
-        },
-        "etag": {
-          "type": "str",
-          "description": "An opaque tag that identifies the current version of the ``Policy``. IAM uses this value to help manage concurrent updates, so they do not cause one update to be overwritten by another.  If this field is present in a [CreatePolicy][] request, the value is ignored."
-        },
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when the ``Policy`` was created."
-        },
-        "update_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when the ``Policy`` was last updated."
-        },
-        "delete_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Output only. The time when the ``Policy`` was deleted. Empty if the policy is not deleted."
-        },
-        "rules": {
-          "type": "MutableSequence[google.cloud.iam_v2beta.types.PolicyRule]",
-          "description": "A list of rules that specify the behavior of the ``Policy``. All of the rules should be of the ``kind`` specified in the ``Policy``."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "PolicyRule",
-      "docstring": "A single rule in a ``Policy``.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    deny_rule (google.cloud.iam_v2beta.types.DenyRule):\n        A rule for a deny policy.\n\n        This field is a member of `oneof`_ ``kind``.\n    description (str):\n        A user-specified description of the rule.\n        This value can be up to 256 characters.",
-      "attributes": {
-        "deny_rule": {
-          "type": "google.cloud.iam_v2beta.types.DenyRule",
-          "description": "A rule for a deny policy.  This field is a member of `oneof`_ ``kind``."
-        },
-        "description": {
-          "type": "str",
-          "description": "A user-specified description of the rule. This value can be up to 256 characters."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "ListPoliciesRequest",
-      "docstring": "Request message for ``ListPolicies``.\n\nAttributes:\n    parent (str):\n        Required. The resource that the policy is attached to, along\n        with the kind of policy to list. Format:\n        ``policies/{attachment_point}/denypolicies``\n\n        The attachment point is identified by its URL-encoded full\n        resource name, which means that the forward-slash character,\n        ``/``, must be written as ``%2F``. For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.\n    page_size (int):\n        The maximum number of policies to return. IAM\n        ignores this value and uses the value 1000.\n    page_token (str):\n        A page token received in a\n        [ListPoliciesResponse][google.iam.v2beta.ListPoliciesResponse].\n        Provide this token to retrieve the next page.",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The resource that the policy is attached to, along with the kind of policy to list. Format: ``policies/{attachment_point}/denypolicies``  The attachment point is identified by its URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID."
+      "description": "Request message for ``ListPolicies``.\n\nAttributes:\n    parent (str):\n        Required. The resource that the policy is attached to, along\n        with the kind of policy to list. Format:\n        ``policies/{attachment_point}/denypolicies``\n\n        The attachment point is identified by its URL-encoded full\n        resource name, which means that the forward-slash character,\n        ``/``, must be written as ``%2F``. For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.\n    page_size (int):\n        The maximum number of policies to return. IAM\n        ignores this value and uses the value 1000.\n    page_token (str):\n        A page token received in a\n        [ListPoliciesResponse][google.iam.v2beta.ListPoliciesResponse].\n        Provide this token to retrieve the next page.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource that the policy is attached to, along with the kind of policy to list. Format: ``policies/{attachment_point}/denypolicies``  The attachment point is identified by its URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of policies to return. IAM ignores this value and uses the value 1000.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token received in a [ListPoliciesResponse][google.iam.v2beta.ListPoliciesResponse]. Provide this token to retrieve the next page.",
+            "type": "string"
+          }
         },
-        "page_size": {
-          "type": "int",
-          "description": "The maximum number of policies to return. IAM ignores this value and uses the value 1000."
-        },
-        "page_token": {
-          "type": "str",
-          "description": "A page token received in a [ListPoliciesResponse][google.iam.v2beta.ListPoliciesResponse]. Provide this token to retrieve the next page."
-        }
+        "required": [
+          "parent"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "ListPoliciesResponse",
-      "docstring": "Response message for ``ListPolicies``.\n\nAttributes:\n    policies (MutableSequence[google.cloud.iam_v2beta.types.Policy]):\n        Metadata for the policies that are attached\n        to the resource.\n    next_page_token (str):\n        A page token that you can use in a\n        [ListPoliciesRequest][google.iam.v2beta.ListPoliciesRequest]\n        to retrieve the next page. If this field is omitted, there\n        are no additional pages.",
-      "attributes": {
-        "policies": {
-          "type": "MutableSequence[google.cloud.iam_v2beta.types.Policy]",
-          "description": "Metadata for the policies that are attached to the resource."
-        },
-        "next_page_token": {
-          "type": "str",
-          "description": "A page token that you can use in a [ListPoliciesRequest][google.iam.v2beta.ListPoliciesRequest] to retrieve the next page. If this field is omitted, there are no additional pages."
-        }
-      }
-    },
-    {
-      "type": "request_class",
+      "type": "function",
       "name": "GetPolicyRequest",
-      "docstring": "Request message for ``GetPolicy``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the policy to retrieve.\n        Format:\n        ``policies/{attachment_point}/denypolicies/{policy_id}``\n\n        Use the URL-encoded full resource name, which means that the\n        forward-slash character, ``/``, must be written as ``%2F``.\n        For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the policy to retrieve. Format: ``policies/{attachment_point}/denypolicies/{policy_id}``  Use the URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID."
-        }
+      "description": "Request message for ``GetPolicy``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the policy to retrieve.\n        Format:\n        ``policies/{attachment_point}/denypolicies/{policy_id}``\n\n        Use the URL-encoded full resource name, which means that the\n        forward-slash character, ``/``, must be written as ``%2F``.\n        For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the policy to retrieve. Format: ``policies/{attachment_point}/denypolicies/{policy_id}``  Use the URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "CreatePolicyRequest",
-      "docstring": "Request message for ``CreatePolicy``.\n\nAttributes:\n    parent (str):\n        Required. The resource that the policy is attached to, along\n        with the kind of policy to create. Format:\n        ``policies/{attachment_point}/denypolicies``\n\n        The attachment point is identified by its URL-encoded full\n        resource name, which means that the forward-slash character,\n        ``/``, must be written as ``%2F``. For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.\n    policy (google.cloud.iam_v2beta.types.Policy):\n        Required. The policy to create.\n    policy_id (str):\n        The ID to use for this policy, which will become the final\n        component of the policy's resource name. The ID must contain\n        3 to 63 characters. It can contain lowercase letters and\n        numbers, ",
-      "attributes": {
-        "parent": {
-          "type": "str",
-          "description": "Required. The resource that the policy is attached to, along with the kind of policy to create. Format: ``policies/{attachment_point}/denypolicies``  The attachment point is identified by its URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID."
+      "description": "Request message for ``CreatePolicy``.\n\nAttributes:\n    parent (str):\n        Required. The resource that the policy is attached to, along\n        with the kind of policy to create. Format:\n        ``policies/{attachment_point}/denypolicies``\n\n        The attachment point is identified by its URL-encoded full\n        resource name, which means that the forward-slash character,\n        ``/``, must be written as ``%2F``. For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.\n    policy (google.cloud.iam_v2beta.types.Policy):\n        Required. The policy to create.\n    policy_id (str):\n        The ID to use for this policy, which will become the final\n        component of the policy's resource name. The ID must contain\n        3 to 63 characters. It can contain lowercase letters and\n        numbers, ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource that the policy is attached to, along with the kind of policy to create. Format: ``policies/{attachment_point}/denypolicies``  The attachment point is identified by its URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID.",
+            "type": "string"
+          },
+          "policy": {
+            "description": "Required. The policy to create.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Policy type.",
+                "type": "object",
+                "reference": "google.shopping.merchant_accounts_v1beta.types.OnlineReturnPolicy.Policy.Type"
+              },
+              "days": {
+                "description": "The number of days items can be returned after delivery, where one day is defined as 24 hours after the delivery timestamp. Required for ``NUMBER_OF_DAYS_AFTER_DELIVERY`` returns.",
+                "type": "integer"
+              }
+            }
+          },
+          "policy_id": {
+            "description": "The ID to use for this policy, which will become the final component of the policy's resource name. The ID must contain 3 to 63 characters. It can contain lowercase letters and numbers, as well as dashes (``-``) and periods (``.``). The first character must be a lowercase letter.",
+            "type": "string"
+          }
         },
-        "policy": {
-          "type": "google.cloud.iam_v2beta.types.Policy",
-          "description": "Required. The policy to create."
-        },
-        "policy_id": {
-          "type": "str",
-          "description": "The ID to use for this policy, which will become the final component of the policy's resource name. The ID must contain 3 to 63 characters. It can contain lowercase letters and numbers, as well as dashes (``-``) and periods (``.``). The first character must be a lowercase letter."
-        }
+        "required": [
+          "parent",
+          "policy"
+        ]
       }
     },
     {
-      "type": "request_class",
+      "type": "function",
       "name": "UpdatePolicyRequest",
-      "docstring": "Request message for ``UpdatePolicy``.\n\nAttributes:\n    policy (google.cloud.iam_v2beta.types.Policy):\n        Required. The policy to update.\n\n        To prevent conflicting updates, the ``etag`` value must\n        match the value that is stored in IAM. If the ``etag``\n        values do not match, the request fails with a ``409`` error\n        code and ``ABORTED`` status.",
-      "attributes": {
-        "policy": {
-          "type": "google.cloud.iam_v2beta.types.Policy",
-          "description": "Required. The policy to update.  To prevent conflicting updates, the ``etag`` value must match the value that is stored in IAM. If the ``etag`` values do not match, the request fails with a ``409`` error code and ``ABORTED`` status."
-        }
-      }
-    },
-    {
-      "type": "request_class",
-      "name": "DeletePolicyRequest",
-      "docstring": "Request message for ``DeletePolicy``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the policy to delete. Format:\n        ``policies/{attachment_point}/denypolicies/{policy_id}``\n\n        Use the URL-encoded full resource name, which means that the\n        forward-slash character, ``/``, must be written as ``%2F``.\n        For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.\n    etag (str):\n        Optional. The expected ``etag`` of the policy to delete. If\n        the value does not match the value that is stored in IAM,\n        the request fails with a ``409`` error code and ``ABORTED``\n        status.\n\n        If you omit this field, the policy is deleted regardless of\n        its current ``etag``.",
-      "attributes": {
-        "name": {
-          "type": "str",
-          "description": "Required. The resource name of the policy to delete. Format: ``policies/{attachment_point}/denypolicies/{policy_id}``  Use the URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID."
+      "description": "Request message for ``UpdatePolicy``.\n\nAttributes:\n    policy (google.cloud.iam_v2beta.types.Policy):\n        Required. The policy to update.\n\n        To prevent conflicting updates, the ``etag`` value must\n        match the value that is stored in IAM. If the ``etag``\n        values do not match, the request fails with a ``409`` error\n        code and ``ABORTED`` status.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "policy": {
+            "description": "Required. The policy to update.  To prevent conflicting updates, the ``etag`` value must match the value that is stored in IAM. If the ``etag`` values do not match, the request fails with a ``409`` error code and ``ABORTED`` status.",
+            "type": "object",
+            "properties": {
+              "type_": {
+                "description": "Policy type.",
+                "type": "object",
+                "reference": "google.shopping.merchant_accounts_v1beta.types.OnlineReturnPolicy.Policy.Type"
+              },
+              "days": {
+                "description": "The number of days items can be returned after delivery, where one day is defined as 24 hours after the delivery timestamp. Required for ``NUMBER_OF_DAYS_AFTER_DELIVERY`` returns.",
+                "type": "integer"
+              }
+            }
+          }
         },
-        "etag": {
-          "type": "str",
-          "description": "Optional. The expected ``etag`` of the policy to delete. If the value does not match the value that is stored in IAM, the request fails with a ``409`` error code and ``ABORTED`` status.  If you omit this field, the policy is deleted regardless of its current ``etag``."
-        }
+        "required": [
+          "policy"
+        ]
       }
     },
     {
-      "type": "request_class",
-      "name": "PolicyOperationMetadata",
-      "docstring": "Metadata for long-running ``Policy`` operations.\n\nAttributes:\n    create_time (google.protobuf.timestamp_pb2.Timestamp):\n        Timestamp when the ``google.longrunning.Operation`` was\n        created.",
-      "attributes": {
-        "create_time": {
-          "type": "google.protobuf.timestamp_pb2.Timestamp",
-          "description": "Timestamp when the ``google.longrunning.Operation`` was created."
-        }
+      "type": "function",
+      "name": "DeletePolicyRequest",
+      "description": "Request message for ``DeletePolicy``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the policy to delete. Format:\n        ``policies/{attachment_point}/denypolicies/{policy_id}``\n\n        Use the URL-encoded full resource name, which means that the\n        forward-slash character, ``/``, must be written as ``%2F``.\n        For example,\n        ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.\n\n        For organizations and folders, use the numeric ID in the\n        full resource name. For projects, you can use the\n        alphanumeric or the numeric ID.\n    etag (str):\n        Optional. The expected ``etag`` of the policy to delete. If\n        the value does not match the value that is stored in IAM,\n        the request fails with a ``409`` error code and ``ABORTED``\n        status.\n\n        If you omit this field, the policy is deleted regardless of\n        its current ``etag``.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The resource name of the policy to delete. Format: ``policies/{attachment_point}/denypolicies/{policy_id}``  Use the URL-encoded full resource name, which means that the forward-slash character, ``/``, must be written as ``%2F``. For example, ``policies/cloudresourcemanager.googleapis.com%2Fprojects%2Fmy-project/denypolicies/my-policy``.  For organizations and folders, use the numeric ID in the full resource name. For projects, you can use the alphanumeric or the numeric ID.",
+            "type": "string"
+          },
+          "etag": {
+            "description": "Optional. The expected ``etag`` of the policy to delete. If the value does not match the value that is stored in IAM, the request fails with a ``409`` error code and ``ABORTED`` status.  If you omit this field, the policy is deleted regardless of its current ``etag``.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     }
   ]
