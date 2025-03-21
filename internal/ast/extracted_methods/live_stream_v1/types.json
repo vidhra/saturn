@@ -20,15 +20,24 @@
                 "type": "string"
               },
               "ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               }
@@ -309,166 +318,24 @@
             "type": "string"
           },
           "input": {
-            "description": "Required. The input resource to be created.",
-            "type": "object",
-            "properties": {
-              "key": {
-                "description": "A unique key for this input. Must be specified when using advanced mapping and edit lists.",
-                "type": "string"
+            "description": "Determines the type of input to the data source. Based on the\ninput some settings might not be supported.\n\nValues:\n    INPUT_UNSPECIFIED (0):\n        Input unspecified.\n    API (1):\n        Represents data sources for which the data is\n        primarily provided through the API.\n    FILE (2):\n        Represents data sources for which the data is\n        primarily provided through file input. Data can\n        still be provided through the API.\n    UI (3):\n        The data source for products added directly\n        in Merchant Center.\n        This type of data source can not be created or\n        updated through this API, only by Merchant\n        Center UI.\n\n        This type of data source is read only.\n    AUTOFEED (4):\n        This is also known as `Automated\n        feeds <https://support.google.com/merchants/answer/12158480>`__\n        used to automatically build your product data. This type of\n        data source can be enabled or disabled through the Accounts\n        bundle.",
+            "type": "enum",
+            "name": "Input",
+            "values": {
+              "INPUT_UNSPECIFIED": {
+                "value": 0
               },
-              "uri": {
-                "description": "URI of the media. Input files must be at least 5 seconds in duration and stored in Cloud Storage (for example, ``gs://bucket/inputs/file.mp4``). If empty, the value is populated from ``Job.input_uri``. See `Supported input and output formats <https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats>`__.",
-                "type": "string"
+              "API": {
+                "value": 1
               },
-              "preprocessing_config": {
-                "type": "object",
-                "properties": {
-                  "color": {
-                    "type": "object",
-                    "properties": {
-                      "saturation": {
-                        "description": "Control color saturation of the video. Enter a value between -1 and 1, where -1 is fully desaturated and 1 is maximum saturation. 0 is no change. The default is 0.",
-                        "type": "number"
-                      },
-                      "contrast": {
-                        "description": "Control black and white contrast of the video. Enter a value between -1 and 1, where -1 is minimum contrast and 1 is maximum contrast. 0 is no change. The default is 0.",
-                        "type": "number"
-                      },
-                      "brightness": {
-                        "description": "Control brightness of the video. Enter a value between -1 and 1, where -1 is minimum brightness and 1 is maximum brightness. 0 is no change. The default is 0.",
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "denoise": {
-                    "type": "object",
-                    "properties": {
-                      "strength": {
-                        "description": "Set strength of the denoise. Enter a value between 0 and 1. The higher the value, the smoother the image. 0 is no denoising. The default is 0.",
-                        "type": "number"
-                      },
-                      "tune": {
-                        "description": "Set the denoiser mode. The default is ``standard``.  Supported denoiser modes:  -  ``standard`` -  ``grain``",
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "deblock": {
-                    "type": "object",
-                    "properties": {
-                      "strength": {
-                        "description": "Set strength of the deblocker. Enter a value between 0 and 1. The higher the value, the stronger the block removal. 0 is no deblocking. The default is 0.",
-                        "type": "number"
-                      },
-                      "enabled": {
-                        "description": "Enable deblocker. The default is ``false``.",
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "audio": {
-                    "type": "object",
-                    "properties": {
-                      "lufs": {
-                        "description": "Specify audio loudness normalization in loudness units relative to full scale (LUFS). Enter a value between -24 and 0 (the default), where:  -  -24 is the Advanced Television Systems Committee (ATSC A/85) standard -  -23 is the EU R128 broadcast standard -  -19 is the prior standard for online mono audio -  -18 is the ReplayGain standard -  -16 is the prior standard for stereo audio -  -14 is the new online audio standard recommended by Spotify, as well as Amazon Echo -  0 disables normalization",
-                        "type": "number"
-                      },
-                      "high_boost": {
-                        "description": "Enable boosting high frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                        "type": "boolean"
-                      },
-                      "low_boost": {
-                        "description": "Enable boosting low frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "crop": {
-                    "type": "object",
-                    "properties": {
-                      "top_pixels": {
-                        "description": "The number of pixels to crop from the top. The default is 0.",
-                        "type": "integer"
-                      },
-                      "bottom_pixels": {
-                        "description": "The number of pixels to crop from the bottom. The default is 0.",
-                        "type": "integer"
-                      },
-                      "left_pixels": {
-                        "description": "The number of pixels to crop from the left. The default is 0.",
-                        "type": "integer"
-                      },
-                      "right_pixels": {
-                        "description": "The number of pixels to crop from the right. The default is 0.",
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "pad": {
-                    "type": "object",
-                    "properties": {
-                      "top_pixels": {
-                        "description": "The number of pixels to add to the top. The default is 0.",
-                        "type": "integer"
-                      },
-                      "bottom_pixels": {
-                        "description": "The number of pixels to add to the bottom. The default is 0.",
-                        "type": "integer"
-                      },
-                      "left_pixels": {
-                        "description": "The number of pixels to add to the left. The default is 0.",
-                        "type": "integer"
-                      },
-                      "right_pixels": {
-                        "description": "The number of pixels to add to the right. The default is 0.",
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "deinterlace": {
-                    "type": "object",
-                    "properties": {
-                      "yadif": {
-                        "type": "object",
-                        "properties": {
-                          "mode": {
-                            "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                            "type": "string"
-                          },
-                          "disable_spatial_interlacing": {
-                            "description": "Disable spacial interlacing. The default is ``false``.",
-                            "type": "boolean"
-                          },
-                          "parity": {
-                            "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                            "type": "string"
-                          },
-                          "deinterlace_all_frames": {
-                            "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                            "type": "boolean"
-                          }
-                        }
-                      },
-                      "bwdif": {
-                        "type": "object",
-                        "properties": {
-                          "mode": {
-                            "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                            "type": "string"
-                          },
-                          "parity": {
-                            "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                            "type": "string"
-                          },
-                          "deinterlace_all_frames": {
-                            "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                            "type": "boolean"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+              "FILE": {
+                "value": 2
+              },
+              "UI": {
+                "value": 3
+              },
+              "AUTOFEED": {
+                "value": 4
               }
             }
           },
@@ -572,166 +439,24 @@
             "reference": "google.protobuf.field_mask_pb2.FieldMask"
           },
           "input": {
-            "description": "Required. The input resource to be updated.",
-            "type": "object",
-            "properties": {
-              "key": {
-                "description": "A unique key for this input. Must be specified when using advanced mapping and edit lists.",
-                "type": "string"
+            "description": "Determines the type of input to the data source. Based on the\ninput some settings might not be supported.\n\nValues:\n    INPUT_UNSPECIFIED (0):\n        Input unspecified.\n    API (1):\n        Represents data sources for which the data is\n        primarily provided through the API.\n    FILE (2):\n        Represents data sources for which the data is\n        primarily provided through file input. Data can\n        still be provided through the API.\n    UI (3):\n        The data source for products added directly\n        in Merchant Center.\n        This type of data source can not be created or\n        updated through this API, only by Merchant\n        Center UI.\n\n        This type of data source is read only.\n    AUTOFEED (4):\n        This is also known as `Automated\n        feeds <https://support.google.com/merchants/answer/12158480>`__\n        used to automatically build your product data. This type of\n        data source can be enabled or disabled through the Accounts\n        bundle.",
+            "type": "enum",
+            "name": "Input",
+            "values": {
+              "INPUT_UNSPECIFIED": {
+                "value": 0
               },
-              "uri": {
-                "description": "URI of the media. Input files must be at least 5 seconds in duration and stored in Cloud Storage (for example, ``gs://bucket/inputs/file.mp4``). If empty, the value is populated from ``Job.input_uri``. See `Supported input and output formats <https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats>`__.",
-                "type": "string"
+              "API": {
+                "value": 1
               },
-              "preprocessing_config": {
-                "type": "object",
-                "properties": {
-                  "color": {
-                    "type": "object",
-                    "properties": {
-                      "saturation": {
-                        "description": "Control color saturation of the video. Enter a value between -1 and 1, where -1 is fully desaturated and 1 is maximum saturation. 0 is no change. The default is 0.",
-                        "type": "number"
-                      },
-                      "contrast": {
-                        "description": "Control black and white contrast of the video. Enter a value between -1 and 1, where -1 is minimum contrast and 1 is maximum contrast. 0 is no change. The default is 0.",
-                        "type": "number"
-                      },
-                      "brightness": {
-                        "description": "Control brightness of the video. Enter a value between -1 and 1, where -1 is minimum brightness and 1 is maximum brightness. 0 is no change. The default is 0.",
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "denoise": {
-                    "type": "object",
-                    "properties": {
-                      "strength": {
-                        "description": "Set strength of the denoise. Enter a value between 0 and 1. The higher the value, the smoother the image. 0 is no denoising. The default is 0.",
-                        "type": "number"
-                      },
-                      "tune": {
-                        "description": "Set the denoiser mode. The default is ``standard``.  Supported denoiser modes:  -  ``standard`` -  ``grain``",
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "deblock": {
-                    "type": "object",
-                    "properties": {
-                      "strength": {
-                        "description": "Set strength of the deblocker. Enter a value between 0 and 1. The higher the value, the stronger the block removal. 0 is no deblocking. The default is 0.",
-                        "type": "number"
-                      },
-                      "enabled": {
-                        "description": "Enable deblocker. The default is ``false``.",
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "audio": {
-                    "type": "object",
-                    "properties": {
-                      "lufs": {
-                        "description": "Specify audio loudness normalization in loudness units relative to full scale (LUFS). Enter a value between -24 and 0 (the default), where:  -  -24 is the Advanced Television Systems Committee (ATSC A/85) standard -  -23 is the EU R128 broadcast standard -  -19 is the prior standard for online mono audio -  -18 is the ReplayGain standard -  -16 is the prior standard for stereo audio -  -14 is the new online audio standard recommended by Spotify, as well as Amazon Echo -  0 disables normalization",
-                        "type": "number"
-                      },
-                      "high_boost": {
-                        "description": "Enable boosting high frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                        "type": "boolean"
-                      },
-                      "low_boost": {
-                        "description": "Enable boosting low frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "crop": {
-                    "type": "object",
-                    "properties": {
-                      "top_pixels": {
-                        "description": "The number of pixels to crop from the top. The default is 0.",
-                        "type": "integer"
-                      },
-                      "bottom_pixels": {
-                        "description": "The number of pixels to crop from the bottom. The default is 0.",
-                        "type": "integer"
-                      },
-                      "left_pixels": {
-                        "description": "The number of pixels to crop from the left. The default is 0.",
-                        "type": "integer"
-                      },
-                      "right_pixels": {
-                        "description": "The number of pixels to crop from the right. The default is 0.",
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "pad": {
-                    "type": "object",
-                    "properties": {
-                      "top_pixels": {
-                        "description": "The number of pixels to add to the top. The default is 0.",
-                        "type": "integer"
-                      },
-                      "bottom_pixels": {
-                        "description": "The number of pixels to add to the bottom. The default is 0.",
-                        "type": "integer"
-                      },
-                      "left_pixels": {
-                        "description": "The number of pixels to add to the left. The default is 0.",
-                        "type": "integer"
-                      },
-                      "right_pixels": {
-                        "description": "The number of pixels to add to the right. The default is 0.",
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "deinterlace": {
-                    "type": "object",
-                    "properties": {
-                      "yadif": {
-                        "type": "object",
-                        "properties": {
-                          "mode": {
-                            "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                            "type": "string"
-                          },
-                          "disable_spatial_interlacing": {
-                            "description": "Disable spacial interlacing. The default is ``false``.",
-                            "type": "boolean"
-                          },
-                          "parity": {
-                            "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                            "type": "string"
-                          },
-                          "deinterlace_all_frames": {
-                            "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                            "type": "boolean"
-                          }
-                        }
-                      },
-                      "bwdif": {
-                        "type": "object",
-                        "properties": {
-                          "mode": {
-                            "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                            "type": "string"
-                          },
-                          "parity": {
-                            "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                            "type": "string"
-                          },
-                          "deinterlace_all_frames": {
-                            "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                            "type": "boolean"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+              "FILE": {
+                "value": 2
+              },
+              "UI": {
+                "value": 3
+              },
+              "AUTOFEED": {
+                "value": 4
               }
             }
           },
@@ -789,20 +514,40 @@
                 }
               },
               "alignment_clock": {
-                "description": "The clock used for joining streams.",
-                "type": "object",
-                "reference": "google.cloud.visionai_v1alpha1.types.Event.Clock"
+                "type": "enum",
+                "name": "Clock",
+                "description": "Clock that will be used for joining streams.\n\nValues:\n    CLOCK_UNSPECIFIED (0):\n        Clock is not specified.\n    CAPTURE (1):\n        Use the timestamp when the data is captured.\n        Clients need to sync the clock.\n    INGEST (2):\n        Use the timestamp when the data is received.",
+                "values": {
+                  "CLOCK_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "CAPTURE": {
+                    "value": 1
+                  },
+                  "INGEST": {
+                    "value": 2
+                  }
+                }
               },
               "grace_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               }
@@ -991,9 +736,26 @@
                 }
               },
               "state": {
-                "description": "Output only. The state of the clip.",
-                "type": "object",
-                "reference": "google.cloud.video.live_stream_v1.types.Clip.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "output_uri": {
                 "description": "Specify the ``output_uri`` to determine where to place the clip segments and clip manifest files in Cloud Storage. The manifests specified in ``clip_manifests`` fields will be placed under this URI. The exact URI of the generated manifests will be provided in ``clip_manifests.output_uri`` for each manifest. Example: \"output_uri\": \"gs://my-bucket/clip-outputs\" \"clip_manifests.output_uri\": \"gs://my-bucket/clip-outputs/main.m3u8\".",
@@ -1003,9 +765,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "State enum for status.",
-                    "type": "object",
-                    "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",

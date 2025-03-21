@@ -33,247 +33,60 @@ query = "can you update the billing account info of the project vidhra to vidhra
 client = OpenAI(
     api_key=api_key,  # This is the default and can be omitted
 )
+tools_data = {}
+types_data = {}
 
-openai_format_tools = [{
-      "type": "function",
-      "name": "GetBillingAccountRequest",
-      "description": "Request message for ``GetBillingAccount``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the billing account to\n        retrieve. For example,\n        ``billingAccounts/012345-567890-ABCDEF``.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. The resource name of the billing account to retrieve. For example, ``billingAccounts/012345-567890-ABCDEF``.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "ListBillingAccountsRequest",
-      "description": "Request message for ``ListBillingAccounts``.\n\nAttributes:\n    page_size (int):\n        Requested page size. The maximum page size is\n        100; this is also the default.\n    page_token (str):\n        A token identifying a page of results to return. This should\n        be a ``next_page_token`` value returned from a previous\n        ``ListBillingAccounts`` call. If unspecified, the first page\n        of results is returned.\n    filter (str):\n        Options for how to filter the returned billing accounts.\n        This only supports filtering for\n        `subaccounts <https://cloud.google.com/billing/docs/concepts>`__\n        under a single provided parent billing account. (for\n        example,\n        ``master_billing_account=billingAccounts/012345-678901-ABCDEF``).\n        Boolean algebra and other fields are not currently\n        supported.\n    parent (str):\n        Optional. The parent resource to list billing accounts from.\n        Format:\n\n        -  ``organizations/{organization_id}``, for example,\n    ",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "page_size": {
-            "description": "Requested page size. The maximum page size is 100; this is also the default.",
-            "type": "integer"
-          },
-          "page_token": {
-            "description": "A token identifying a page of results to return. This should be a ``next_page_token`` value returned from a previous ``ListBillingAccounts`` call. If unspecified, the first page of results is returned.",
-            "type": "string"
-          },
-          "filter": {
-            "description": "Options for how to filter the returned billing accounts. This only supports filtering for `subaccounts <https://cloud.google.com/billing/docs/concepts>`__ under a single provided parent billing account. (for example, ``master_billing_account=billingAccounts/012345-678901-ABCDEF``). Boolean algebra and other fields are not currently supported.",
-            "type": "string"
-          },
-          "parent": {
-            "description": "Optional. The parent resource to list billing accounts from. Format:  -  ``organizations/{organization_id}``, for example, ``organizations/12345678`` -  ``billingAccounts/{billing_account_id}``, for example, ``billingAccounts/012345-567890-ABCDEF``",
-            "type": "string"
-          }
-        }
-      }
-    },
-    {
-      "type": "function",
-      "name": "CreateBillingAccountRequest",
-      "description": "Request message for ``CreateBillingAccount``.\n\nAttributes:\n    billing_account (google.cloud.billing_v1.types.BillingAccount):\n        Required. The billing account resource to\n        create. Currently CreateBillingAccount only\n        supports subaccount creation, so any created\n        billing accounts must be under a provided parent\n        billing account.\n    parent (str):\n        Optional. The parent to create a billing account from.\n        Format:\n\n        -  ``billingAccounts/{billing_account_id}``, for example,\n           ``billingAccounts/012345-567890-ABCDEF``",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "billing_account": {
-            "description": "Required. The billing account resource to create. Currently CreateBillingAccount only supports subaccount creation, so any created billing accounts must be under a provided parent billing account.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. Resource name of the billing account. Format: accounts/{account_id}/billingAccounts/{billing_account_id}.",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "Display name of the billing account.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The time when this billing account was created.",
-                "type": "string",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "currency_code": {
-                "description": "Output only. The 3-letter currency code defined in ISO 4217.",
-                "type": "string"
-              },
-              "region_code": {
-                "description": "Output only. The CLDR region code.",
-                "type": "string"
-              }
+def build_openai_tools(tools_json_path, types_json_path):
+    """
+    Builds OpenAI function definitions by combining tools.json and types.json information.
+    """
+    with open(tools_json_path, 'r') as f:
+        tools_data = json.load(f)
+    
+    with open(types_json_path, 'r') as f:
+        types_data = json.load(f)
+
+    # Extract all request types from types.json for quick lookup
+    request_types_map = {}
+    for file_types in types_data.values():
+        for type_info in file_types:
+            if type_info["type"] == "function":
+                request_types_map[type_info["name"]] = type_info
+
+    openai_tools = []
+    
+    # Process each service in tools.json
+    for service_name, service_data in tools_data.items():
+        for method in service_data["methods"]:
+            # Get the request type from the method
+            request_types = method["function"].get("request_types", [])
+            if not request_types:
+                continue
+                
+            # Use the first request type to build the function definition
+            request_type = request_types[0]
+            type_info = request_types_map.get(request_type)
+            
+            if not type_info:
+                continue
+
+            # Build the OpenAI function definition
+            print(method["function"]["name"])
+            tool = {
+                "type": "function",
+                "name": method["function"]["name"],
+                "description": type_info["description"],
+                "parameters": type_info["parameters"]
             }
-          },
-          "parent": {
-            "description": "Optional. The parent to create a billing account from. Format:  -  ``billingAccounts/{billing_account_id}``, for example, ``billingAccounts/012345-567890-ABCDEF``",
-            "type": "string"
-          }
-        },
-        "required": [
-          "billing_account"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "UpdateBillingAccountRequest",
-      "description": "Request message for ``UpdateBillingAccount``.\n\nAttributes:\n    name (str):\n        Required. The name of the billing account\n        resource to be updated.\n    account (google.cloud.billing_v1.types.BillingAccount):\n        Required. The billing account resource to\n        replace the resource on the server.\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        The update mask applied to the resource. Only \"display_name\"\n        is currently supported.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. The name of the billing account resource to be updated.",
-            "type": "string"
-          },
-          "account": {
-            "description": "Required. The billing account resource to replace the resource on the server.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. Resource name of the billing account. Format: accounts/{account_id}/billingAccounts/{billing_account_id}.",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "Display name of the billing account.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The time when this billing account was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "currency_code": {
-                "description": "Output only. The 3-letter currency code defined in ISO 4217.",
-                "type": "string"
-              },
-              "region_code": {
-                "description": "Output only. The CLDR region code.",
-                "type": "string"
-              }
-            }
-          },
-          "update_mask": {
-            "description": "The update mask applied to the resource. Only \"display_name\" is currently supported.",
-            "type": "string",
-            "reference": "google.protobuf.field_mask_pb2.FieldMask"
-          }
-        },
-        "required": [
-          "name",
-          "account"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "ListProjectBillingInfoRequest",
-      "description": "Request message for ``ListProjectBillingInfo``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the billing account\n        associated with the projects that you want to list. For\n        example, ``billingAccounts/012345-567890-ABCDEF``.\n    page_size (int):\n        Requested page size. The maximum page size is\n        100; this is also the default.\n    page_token (str):\n        A token identifying a page of results to be returned. This\n        should be a ``next_page_token`` value returned from a\n        previous ``ListProjectBillingInfo`` call. If unspecified,\n        the first page of results is returned.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. The resource name of the billing account associated with the projects that you want to list. For example, ``billingAccounts/012345-567890-ABCDEF``.",
-            "type": "string"
-          },
-          "page_size": {
-            "description": "Requested page size. The maximum page size is 100; this is also the default.",
-            "type": "integer"
-          },
-          "page_token": {
-            "description": "A token identifying a page of results to be returned. This should be a ``next_page_token`` value returned from a previous ``ListProjectBillingInfo`` call. If unspecified, the first page of results is returned.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "GetProjectBillingInfoRequest",
-      "description": "Request message for ``GetProjectBillingInfo``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the project for which billing\n        information is retrieved. For example,\n        ``projects/tokyo-rain-123``.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. The resource name of the project for which billing information is retrieved. For example, ``projects/tokyo-rain-123``.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "UpdateProjectBillingInfoRequest",
-      "description": "Request message for ``UpdateProjectBillingInfo``.\n\nAttributes:\n    name (str):\n        Required. The resource name of the project associated with\n        the billing information that you want to update. For\n        example, ``projects/tokyo-rain-123``.\n    project_billing_info (google.cloud.billing_v1.types.ProjectBillingInfo):\n        The new billing information for the project. Output-only\n        fields are ignored; thus, you can leave empty all fields\n        except ``billing_account_name``.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. The resource name of the project associated with the billing information that you want to update. For example, ``projects/tokyo-rain-123``.",
-            "type": "string"
-          },
-          "project_billing_info": {
-            "description": "The new billing information for the project. Output-only fields are ignored; thus, you can leave empty all fields except ``billing_account_name``.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. The resource name for the ``ProjectBillingInfo``; has the form ``projects/{project_id}/billingInfo``. For example, the resource name for the billing information for project ``tokyo-rain-123`` would be ``projects/tokyo-rain-123/billingInfo``.",
-                "type": "string"
-              },
-              "project_id": {
-                "description": "Output only. The ID of the project that this ``ProjectBillingInfo`` represents, such as ``tokyo-rain-123``. This is a convenience field so that you don't need to parse the ``name`` field to obtain a project ID.",
-                "type": "string"
-              },
-              "billing_account_name": {
-                "description": "The resource name of the billing account associated with the project, if any. For example, ``billingAccounts/012345-567890-ABCDEF``.",
-                "type": "string"
-              },
-              "billing_enabled": {
-                "description": "Output only. True if the project is associated with an open billing account, to which usage on the project is charged. False if the project is associated with a closed billing account, or no billing account at all, and therefore cannot use paid services.",
-                "type": "boolean"
-              }
-            }
-          }
-        },
-        "required": [
-          "name"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "MoveBillingAccountRequest",
-      "description": "Request message for ``MoveBillingAccount`` RPC.\n\nAttributes:\n    name (str):\n        Required. The resource name of the billing account to move.\n        Must be of the form\n        ``billingAccounts/{billing_account_id}``. The specified\n        billing account cannot be a subaccount, since a subaccount\n        always belongs to the same organization as its parent\n        account.\n    destination_parent (str):\n        Required. The resource name of the Organization to move the\n        billing account under. Must be of the form\n        ``organizations/{organization_id}``.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. The resource name of the billing account to move. Must be of the form ``billingAccounts/{billing_account_id}``. The specified billing account cannot be a subaccount, since a subaccount always belongs to the same organization as its parent account.",
-            "type": "string"
-          },
-          "destination_parent": {
-            "description": "Required. The resource name of the Organization to move the billing account under. Must be of the form ``organizations/{organization_id}``.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "destination_parent"
-        ]
-      }
-    }]
+            openai_tools.append(tool)
+
+    return openai_tools
+
+# Use the function to build tools dynamically
+tools_json_path = "billing_v1/tools.json"
+types_json_path = "billing_v1/types.json"
+openai_format_tools = build_openai_tools(tools_json_path, types_json_path)
+
 
 def build_prompt(task_instruction: str, format_instruction: str, tools: list, query: str):
     prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
@@ -311,7 +124,7 @@ def convert_strings_to_json(data: dict) -> dict:
             new_data[k] = v
     return new_data
 
-async def dynamic_executor(class_name: str, method_name: str, args: dict):
+async def dynamic_executor(request_type: str, method_name: str, args: dict):
     """
     Dynamically call a method from the CloudBillingAsyncClient by:
       1. Retrieving the request class using 'class_name' from billing_v1
@@ -321,7 +134,7 @@ async def dynamic_executor(class_name: str, method_name: str, args: dict):
       4. Invoking the async method.
     """
     try:
-        RequestClass = getattr(billing_v1, class_name)
+        RequestClass = getattr(billing_v1, request_type)
 
         billing_client = billing_v1.CloudBillingAsyncClient()
         method = getattr(billing_client, method_name)
@@ -391,15 +204,52 @@ def extract_args(arguments: dict,start_key='request',end_key='retry'):
 # content = response.choices[0].message.content
 content = response.output_text
 print(content)
+
+
+def get_request_types_for_method(tools_json_path: str, method_name: str) -> list:
+    """
+    Returns a list of request types for the given *method name* (e.g. 'update_project_billing_info').
+    Gathers them from all services in tools.json.
+    """
+    import json
+
+    with open(tools_json_path, "r", encoding="utf-8") as f:
+        tools_data = json.load(f)
+
+    # We’ll search across all services for this method
+    all_request_types = set()
+
+    for service_name, service_data in tools_data.items():
+        for method_def in service_data.get("methods", []):
+            fn_info = method_def.get("function", {})
+            if fn_info.get("name") == method_name:
+                # method_name matches, gather any request_types
+                req_types = fn_info.get("request_types", [])
+                for rt in req_types:
+                    all_request_types.add(rt)
+
+    return sorted(all_request_types)
+
+
+# Example usage:
+tools_json_path = "billing_v1/tools.json"
+
+
+# Then in your dynamic_executor or wherever you need it:
 tools = json.loads(content)
 for call in tools["tool_calls"]:
-    print(call)
-    args = extract_args(call["arguments"])
-    print(args)
+    # Suppose the call includes "service_name" and "method_name"
+    method_name = call["name"]
+
+    # Find the corresponding request type
+    request_types = get_request_types_for_method(tools_json_path, method_name)  # e.g. "GetBillingAccountRequest"
+
+    print(f"Found request type for {method_name}: {request_types}")
+    print(request_types[0])
     asyncio.run(dynamic_executor(
-        call["arguments"]["request"], 
-        call["name"],
-        args # Replace with your actual project ID
+        request_types[0],
+        method_name,
+        call["arguments"]
     ))
 
 

@@ -35,15 +35,24 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -125,46 +134,21 @@
                           "type": "string"
                         },
                         "authentication": {
-                          "type": "object",
-                          "properties": {
-                            "google_account": {
-                              "type": "object",
-                              "properties": {
-                                "username": {
-                                  "description": "Required. The user name of the Google account.",
-                                  "type": "string"
-                                },
-                                "password": {
-                                  "description": "Required. Input only. The password of the Google account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "username",
-                                "password"
-                              ]
+                          "type": "enum",
+                          "name": "Authentication",
+                          "description": "Values:\n    AUTHENTICATION_UNSPECIFIED (0):\n        No description available.\n    AUTHENTICATION_MULTIPLE (1):\n        No description available.\n    AUTHENTICATION_SINGLE (2):\n        No description available.\n    AUTHENTICATION_NONE (3):\n        No description available.",
+                          "values": {
+                            "AUTHENTICATION_UNSPECIFIED": {
+                              "value": 0
                             },
-                            "custom_account": {
-                              "type": "object",
-                              "properties": {
-                                "username": {
-                                  "description": "Required. The user name of the custom account.",
-                                  "type": "string"
-                                },
-                                "password": {
-                                  "description": "Required. Input only. The password of the custom account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                                  "type": "string"
-                                },
-                                "login_url": {
-                                  "description": "Required. The login form URL of the website.",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "username",
-                                "password",
-                                "login_url"
-                              ]
+                            "AUTHENTICATION_MULTIPLE": {
+                              "value": 1
+                            },
+                            "AUTHENTICATION_SINGLE": {
+                              "value": 2
+                            },
+                            "AUTHENTICATION_NONE": {
+                              "value": 3
                             }
                           }
                         },
@@ -265,19 +249,70 @@
                                   ]
                                 },
                                 "service_agent_auth": {
-                                  "description": "Optional. Indicate the auth token type generated from the `Diglogflow service agent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__. The generated token is sent in the Authorization header.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.ServiceAgentAuth"
+                                  "type": "enum",
+                                  "name": "ServiceAgentAuth",
+                                  "description": "Indicate the auth token type generated from the `Diglogflow service\nagent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__.\n\nValues:\n    SERVICE_AGENT_AUTH_UNSPECIFIED (0):\n        Service agent auth type unspecified. Default to ID_TOKEN.\n    NONE (1):\n        No token used.\n    ID_TOKEN (2):\n        Use `ID\n        token <https://cloud.google.com/docs/authentication/token-types#id>`__\n        generated from service agent. This can be used to access\n        Cloud Function and Cloud Run after you grant Invoker role to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.\n    ACCESS_TOKEN (3):\n        Use `access\n        token <https://cloud.google.com/docs/authentication/token-types#access>`__\n        generated from service agent. This can be used to access\n        other Google Cloud APIs after you grant required roles to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.",
+                                  "values": {
+                                    "SERVICE_AGENT_AUTH_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "NONE": {
+                                      "value": 1
+                                    },
+                                    "ID_TOKEN": {
+                                      "value": 2
+                                    },
+                                    "ACCESS_TOKEN": {
+                                      "value": 3
+                                    }
+                                  }
                                 },
                                 "webhook_type": {
-                                  "description": "Optional. Type of the webhook.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.WebhookType"
+                                  "type": "enum",
+                                  "name": "WebhookType",
+                                  "description": "Represents the type of webhook configuration.\n\nValues:\n    WEBHOOK_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    STANDARD (1):\n        Represents a standard webhook.\n    FLEXIBLE (2):\n        Represents a flexible webhook.",
+                                  "values": {
+                                    "WEBHOOK_TYPE_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "STANDARD": {
+                                      "value": 1
+                                    },
+                                    "FLEXIBLE": {
+                                      "value": 2
+                                    }
+                                  }
                                 },
                                 "http_method": {
-                                  "description": "Optional. HTTP method for the flexible webhook calls. Standard webhook always uses POST.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.HttpMethod"
+                                  "type": "enum",
+                                  "name": "HttpMethod",
+                                  "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+                                  "values": {
+                                    "HTTP_METHOD_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "POST": {
+                                      "value": 1
+                                    },
+                                    "GET": {
+                                      "value": 2
+                                    },
+                                    "HEAD": {
+                                      "value": 3
+                                    },
+                                    "PUT": {
+                                      "value": 4
+                                    },
+                                    "DELETE": {
+                                      "value": 5
+                                    },
+                                    "PATCH": {
+                                      "value": 6
+                                    },
+                                    "OPTIONS": {
+                                      "value": 7
+                                    }
+                                  }
                                 },
                                 "request_body": {
                                   "description": "Optional. Defines a custom JSON object as request body to send to flexible webhook.",
@@ -315,9 +350,23 @@
                             "type": "object",
                             "properties": {
                               "data_store_type": {
-                                "description": "The type of the connected data store.",
-                                "type": "object",
-                                "reference": "google.cloud.dialogflowcx_v3beta1.types.DataStoreType"
+                                "type": "enum",
+                                "name": "DataStoreType",
+                                "description": "Type of a data store.\nDetermines how search is performed in the data store.\n\nValues:\n    DATA_STORE_TYPE_UNSPECIFIED (0):\n        Not specified. This value indicates that the\n        data store type is not specified, so it will not\n        be used during search.\n    PUBLIC_WEB (1):\n        A data store that contains public web\n        content.\n    UNSTRUCTURED (2):\n        A data store that contains unstructured\n        private data.\n    STRUCTURED (3):\n        A data store that contains structured data\n        (for example FAQ).",
+                                "values": {
+                                  "DATA_STORE_TYPE_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "PUBLIC_WEB": {
+                                    "value": 1
+                                  },
+                                  "UNSTRUCTURED": {
+                                    "value": 2
+                                  },
+                                  "STRUCTURED": {
+                                    "value": 3
+                                  }
+                                }
                               },
                               "data_store": {
                                 "description": "The full name of the referenced data store. Formats: ``projects/{project}/locations/{location}/collections/{collection}/dataStores/{data_store}`` ``projects/{project}/locations/{location}/dataStores/{data_store}``",
@@ -364,9 +413,20 @@
                       }
                     },
                     "tool_type": {
-                      "description": "Output only. The tool type.",
-                      "type": "object",
-                      "reference": "google.cloud.dialogflowcx_v3beta1.types.Tool.ToolType"
+                      "type": "enum",
+                      "name": "ToolType",
+                      "description": "Represents the type of the tool.\n\nValues:\n    TOOL_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    CUSTOMIZED_TOOL (1):\n        Customer provided tool.\n    BUILTIN_TOOL (2):\n        First party built-in tool created by\n        Dialogflow which cannot be modified.",
+                      "values": {
+                        "TOOL_TYPE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CUSTOMIZED_TOOL": {
+                          "value": 1
+                        },
+                        "BUILTIN_TOOL": {
+                          "value": 2
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -382,9 +442,20 @@
                     "type": "object",
                     "properties": {
                       "mode": {
-                        "description": "Optional. Specifies the mode in which function calling should execute. If unspecified, the default value will be set to AUTO.",
-                        "type": "object",
-                        "reference": "google.ai.generativelanguage_v1beta.types.FunctionCallingConfig.Mode"
+                        "type": "enum",
+                        "name": "Mode",
+                        "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                        "values": {
+                          "MODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MODE_SKIP": {
+                            "value": 1
+                          },
+                          "MODE_PRESERVE": {
+                            "value": 2
+                          }
+                        }
                       },
                       "allowed_function_names": {
                         "description": "Optional. A set of function names that, when provided, limits the functions the model will call.  This should only be set when the Mode is ANY. Function names should match [FunctionDeclaration.name]. With mode set to ANY, model will predict a function call from the set of function names provided.",
@@ -473,15 +544,24 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -563,46 +643,21 @@
                           "type": "string"
                         },
                         "authentication": {
-                          "type": "object",
-                          "properties": {
-                            "google_account": {
-                              "type": "object",
-                              "properties": {
-                                "username": {
-                                  "description": "Required. The user name of the Google account.",
-                                  "type": "string"
-                                },
-                                "password": {
-                                  "description": "Required. Input only. The password of the Google account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "username",
-                                "password"
-                              ]
+                          "type": "enum",
+                          "name": "Authentication",
+                          "description": "Values:\n    AUTHENTICATION_UNSPECIFIED (0):\n        No description available.\n    AUTHENTICATION_MULTIPLE (1):\n        No description available.\n    AUTHENTICATION_SINGLE (2):\n        No description available.\n    AUTHENTICATION_NONE (3):\n        No description available.",
+                          "values": {
+                            "AUTHENTICATION_UNSPECIFIED": {
+                              "value": 0
                             },
-                            "custom_account": {
-                              "type": "object",
-                              "properties": {
-                                "username": {
-                                  "description": "Required. The user name of the custom account.",
-                                  "type": "string"
-                                },
-                                "password": {
-                                  "description": "Required. Input only. The password of the custom account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                                  "type": "string"
-                                },
-                                "login_url": {
-                                  "description": "Required. The login form URL of the website.",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "username",
-                                "password",
-                                "login_url"
-                              ]
+                            "AUTHENTICATION_MULTIPLE": {
+                              "value": 1
+                            },
+                            "AUTHENTICATION_SINGLE": {
+                              "value": 2
+                            },
+                            "AUTHENTICATION_NONE": {
+                              "value": 3
                             }
                           }
                         },
@@ -703,19 +758,70 @@
                                   ]
                                 },
                                 "service_agent_auth": {
-                                  "description": "Optional. Indicate the auth token type generated from the `Diglogflow service agent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__. The generated token is sent in the Authorization header.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.ServiceAgentAuth"
+                                  "type": "enum",
+                                  "name": "ServiceAgentAuth",
+                                  "description": "Indicate the auth token type generated from the `Diglogflow service\nagent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__.\n\nValues:\n    SERVICE_AGENT_AUTH_UNSPECIFIED (0):\n        Service agent auth type unspecified. Default to ID_TOKEN.\n    NONE (1):\n        No token used.\n    ID_TOKEN (2):\n        Use `ID\n        token <https://cloud.google.com/docs/authentication/token-types#id>`__\n        generated from service agent. This can be used to access\n        Cloud Function and Cloud Run after you grant Invoker role to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.\n    ACCESS_TOKEN (3):\n        Use `access\n        token <https://cloud.google.com/docs/authentication/token-types#access>`__\n        generated from service agent. This can be used to access\n        other Google Cloud APIs after you grant required roles to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.",
+                                  "values": {
+                                    "SERVICE_AGENT_AUTH_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "NONE": {
+                                      "value": 1
+                                    },
+                                    "ID_TOKEN": {
+                                      "value": 2
+                                    },
+                                    "ACCESS_TOKEN": {
+                                      "value": 3
+                                    }
+                                  }
                                 },
                                 "webhook_type": {
-                                  "description": "Optional. Type of the webhook.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.WebhookType"
+                                  "type": "enum",
+                                  "name": "WebhookType",
+                                  "description": "Represents the type of webhook configuration.\n\nValues:\n    WEBHOOK_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    STANDARD (1):\n        Represents a standard webhook.\n    FLEXIBLE (2):\n        Represents a flexible webhook.",
+                                  "values": {
+                                    "WEBHOOK_TYPE_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "STANDARD": {
+                                      "value": 1
+                                    },
+                                    "FLEXIBLE": {
+                                      "value": 2
+                                    }
+                                  }
                                 },
                                 "http_method": {
-                                  "description": "Optional. HTTP method for the flexible webhook calls. Standard webhook always uses POST.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.HttpMethod"
+                                  "type": "enum",
+                                  "name": "HttpMethod",
+                                  "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+                                  "values": {
+                                    "HTTP_METHOD_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "POST": {
+                                      "value": 1
+                                    },
+                                    "GET": {
+                                      "value": 2
+                                    },
+                                    "HEAD": {
+                                      "value": 3
+                                    },
+                                    "PUT": {
+                                      "value": 4
+                                    },
+                                    "DELETE": {
+                                      "value": 5
+                                    },
+                                    "PATCH": {
+                                      "value": 6
+                                    },
+                                    "OPTIONS": {
+                                      "value": 7
+                                    }
+                                  }
                                 },
                                 "request_body": {
                                   "description": "Optional. Defines a custom JSON object as request body to send to flexible webhook.",
@@ -753,9 +859,23 @@
                             "type": "object",
                             "properties": {
                               "data_store_type": {
-                                "description": "The type of the connected data store.",
-                                "type": "object",
-                                "reference": "google.cloud.dialogflowcx_v3beta1.types.DataStoreType"
+                                "type": "enum",
+                                "name": "DataStoreType",
+                                "description": "Type of a data store.\nDetermines how search is performed in the data store.\n\nValues:\n    DATA_STORE_TYPE_UNSPECIFIED (0):\n        Not specified. This value indicates that the\n        data store type is not specified, so it will not\n        be used during search.\n    PUBLIC_WEB (1):\n        A data store that contains public web\n        content.\n    UNSTRUCTURED (2):\n        A data store that contains unstructured\n        private data.\n    STRUCTURED (3):\n        A data store that contains structured data\n        (for example FAQ).",
+                                "values": {
+                                  "DATA_STORE_TYPE_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "PUBLIC_WEB": {
+                                    "value": 1
+                                  },
+                                  "UNSTRUCTURED": {
+                                    "value": 2
+                                  },
+                                  "STRUCTURED": {
+                                    "value": 3
+                                  }
+                                }
                               },
                               "data_store": {
                                 "description": "The full name of the referenced data store. Formats: ``projects/{project}/locations/{location}/collections/{collection}/dataStores/{data_store}`` ``projects/{project}/locations/{location}/dataStores/{data_store}``",
@@ -802,9 +922,20 @@
                       }
                     },
                     "tool_type": {
-                      "description": "Output only. The tool type.",
-                      "type": "object",
-                      "reference": "google.cloud.dialogflowcx_v3beta1.types.Tool.ToolType"
+                      "type": "enum",
+                      "name": "ToolType",
+                      "description": "Represents the type of the tool.\n\nValues:\n    TOOL_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    CUSTOMIZED_TOOL (1):\n        Customer provided tool.\n    BUILTIN_TOOL (2):\n        First party built-in tool created by\n        Dialogflow which cannot be modified.",
+                      "values": {
+                        "TOOL_TYPE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CUSTOMIZED_TOOL": {
+                          "value": 1
+                        },
+                        "BUILTIN_TOOL": {
+                          "value": 2
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -820,9 +951,20 @@
                     "type": "object",
                     "properties": {
                       "mode": {
-                        "description": "Optional. Specifies the mode in which function calling should execute. If unspecified, the default value will be set to AUTO.",
-                        "type": "object",
-                        "reference": "google.ai.generativelanguage_v1beta.types.FunctionCallingConfig.Mode"
+                        "type": "enum",
+                        "name": "Mode",
+                        "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                        "values": {
+                          "MODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MODE_SKIP": {
+                            "value": 1
+                          },
+                          "MODE_PRESERVE": {
+                            "value": 2
+                          }
+                        }
                       },
                       "allowed_function_names": {
                         "description": "Optional. A set of function names that, when provided, limits the functions the model will call.  This should only be set when the Mode is ANY. Function names should match [FunctionDeclaration.name]. With mode set to ANY, model will predict a function call from the set of function names provided.",
@@ -973,9 +1115,20 @@
                                 "type": "string"
                               },
                               "format_": {
-                                "description": "How the text content is formatted.",
-                                "type": "object",
-                                "reference": "google.cloud.monitoring_dashboard_v1.types.Text.Format"
+                                "type": "enum",
+                                "name": "Format",
+                                "description": "The format type of the text content.\n\nValues:\n    FORMAT_UNSPECIFIED (0):\n        Format is unspecified. Defaults to MARKDOWN.\n    MARKDOWN (1):\n        The text contains Markdown formatting.\n    RAW (2):\n        The text contains no special formatting.",
+                                "values": {
+                                  "FORMAT_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "MARKDOWN": {
+                                    "value": 1
+                                  },
+                                  "RAW": {
+                                    "value": 2
+                                  }
+                                }
                               },
                               "style": {
                                 "type": "object",
@@ -989,37 +1142,138 @@
                                     "type": "string"
                                   },
                                   "horizontal_alignment": {
-                                    "description": "The horizontal alignment of both the title and content",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.HorizontalAlignment"
+                                    "type": "enum",
+                                    "name": "HorizontalAlignment",
+                                    "description": "The horizontal alignment of both the title and content on a\ntext widget\n\nValues:\n    HORIZONTAL_ALIGNMENT_UNSPECIFIED (0):\n        No horizontal alignment specified, will default to H_LEFT\n    H_LEFT (1):\n        Left-align\n    H_CENTER (2):\n        Center-align\n    H_RIGHT (3):\n        Right-align",
+                                    "values": {
+                                      "HORIZONTAL_ALIGNMENT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "H_LEFT": {
+                                        "value": 1
+                                      },
+                                      "H_CENTER": {
+                                        "value": 2
+                                      },
+                                      "H_RIGHT": {
+                                        "value": 3
+                                      }
+                                    }
                                   },
                                   "vertical_alignment": {
-                                    "description": "The vertical alignment of both the title and content",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.VerticalAlignment"
+                                    "type": "enum",
+                                    "name": "VerticalAlignment",
+                                    "description": "The vertical alignment of both the title and content on a\ntext widget\n\nValues:\n    VERTICAL_ALIGNMENT_UNSPECIFIED (0):\n        No vertical alignment specified, will default to V_TOP\n    V_TOP (1):\n        Top-align\n    V_CENTER (2):\n        Center-align\n    V_BOTTOM (3):\n        Bottom-align",
+                                    "values": {
+                                      "VERTICAL_ALIGNMENT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "V_TOP": {
+                                        "value": 1
+                                      },
+                                      "V_CENTER": {
+                                        "value": 2
+                                      },
+                                      "V_BOTTOM": {
+                                        "value": 3
+                                      }
+                                    }
                                   },
                                   "padding": {
-                                    "description": "The amount of padding around the widget",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PaddingSize"
+                                    "type": "enum",
+                                    "name": "PaddingSize",
+                                    "description": "Specifies padding size around a text widget\n\nValues:\n    PADDING_SIZE_UNSPECIFIED (0):\n        No padding size specified, will default to P_EXTRA_SMALL\n    P_EXTRA_SMALL (1):\n        Extra small padding\n    P_SMALL (2):\n        Small padding\n    P_MEDIUM (3):\n        Medium padding\n    P_LARGE (4):\n        Large padding\n    P_EXTRA_LARGE (5):\n        Extra large padding",
+                                    "values": {
+                                      "PADDING_SIZE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "P_EXTRA_SMALL": {
+                                        "value": 1
+                                      },
+                                      "P_SMALL": {
+                                        "value": 2
+                                      },
+                                      "P_MEDIUM": {
+                                        "value": 3
+                                      },
+                                      "P_LARGE": {
+                                        "value": 4
+                                      },
+                                      "P_EXTRA_LARGE": {
+                                        "value": 5
+                                      }
+                                    }
                                   },
                                   "font_size": {
-                                    "type": "object",
-                                    "properties": {
-                                      "size": {
-                                        "description": "Font size for the text.",
-                                        "type": "number"
+                                    "type": "enum",
+                                    "name": "FontSize",
+                                    "description": "Specifies a font size for the title and content of a text\nwidget\n\nValues:\n    FONT_SIZE_UNSPECIFIED (0):\n        No font size specified, will default to FS_LARGE\n    FS_EXTRA_SMALL (1):\n        Extra small font size\n    FS_SMALL (2):\n        Small font size\n    FS_MEDIUM (3):\n        Medium font size\n    FS_LARGE (4):\n        Large font size\n    FS_EXTRA_LARGE (5):\n        Extra large font size",
+                                    "values": {
+                                      "FONT_SIZE_UNSPECIFIED": {
+                                        "value": 0
                                       },
-                                      "unit": {
-                                        "description": "Unit for the font size. Follows CSS naming (such as ``in``, ``px``, and ``pt``).",
-                                        "type": "string"
+                                      "FS_EXTRA_SMALL": {
+                                        "value": 1
+                                      },
+                                      "FS_SMALL": {
+                                        "value": 2
+                                      },
+                                      "FS_MEDIUM": {
+                                        "value": 3
+                                      },
+                                      "FS_LARGE": {
+                                        "value": 4
+                                      },
+                                      "FS_EXTRA_LARGE": {
+                                        "value": 5
                                       }
                                     }
                                   },
                                   "pointer_location": {
-                                    "description": "The pointer location for this widget (also sometimes called a \"tail\")",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PointerLocation"
+                                    "type": "enum",
+                                    "name": "PointerLocation",
+                                    "description": "Specifies where a visual pointer is placed on a text widget\n(also sometimes called a \"tail\")\n\nValues:\n    POINTER_LOCATION_UNSPECIFIED (0):\n        No visual pointer\n    PL_TOP (1):\n        Placed in the middle of the top of the widget\n    PL_RIGHT (2):\n        Placed in the middle of the right side of the\n        widget\n    PL_BOTTOM (3):\n        Placed in the middle of the bottom of the\n        widget\n    PL_LEFT (4):\n        Placed in the middle of the left side of the\n        widget\n    PL_TOP_LEFT (5):\n        Placed on the left side of the top of the\n        widget\n    PL_TOP_RIGHT (6):\n        Placed on the right side of the top of the\n        widget\n    PL_RIGHT_TOP (7):\n        Placed on the top of the right side of the\n        widget\n    PL_RIGHT_BOTTOM (8):\n        Placed on the bottom of the right side of the\n        widget\n    PL_BOTTOM_RIGHT (9):\n        Placed on the right side of the bottom of the\n        widget\n    PL_BOTTOM_LEFT (10):\n        Placed on the left side of the bottom of the\n    ",
+                                    "values": {
+                                      "POINTER_LOCATION_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "PL_TOP": {
+                                        "value": 1
+                                      },
+                                      "PL_RIGHT": {
+                                        "value": 2
+                                      },
+                                      "PL_BOTTOM": {
+                                        "value": 3
+                                      },
+                                      "PL_LEFT": {
+                                        "value": 4
+                                      },
+                                      "PL_TOP_LEFT": {
+                                        "value": 5
+                                      },
+                                      "PL_TOP_RIGHT": {
+                                        "value": 6
+                                      },
+                                      "PL_RIGHT_TOP": {
+                                        "value": 7
+                                      },
+                                      "PL_RIGHT_BOTTOM": {
+                                        "value": 8
+                                      },
+                                      "PL_BOTTOM_RIGHT": {
+                                        "value": 9
+                                      },
+                                      "PL_BOTTOM_LEFT": {
+                                        "value": 10
+                                      },
+                                      "PL_LEFT_BOTTOM": {
+                                        "value": 11
+                                      },
+                                      "PL_LEFT_TOP": {
+                                        "value": 12
+                                      }
+                                    }
                                   }
                                 }
                               }
@@ -1164,9 +1418,23 @@
                       "type": "object",
                       "properties": {
                         "kind": {
-                          "description": "Role type.",
-                          "type": "object",
-                          "reference": "google.cloud.securitycenter_v2.types.Kubernetes.Role.Kind"
+                          "type": "enum",
+                          "name": "Kind",
+                          "description": "The type of an alias.\n\nValues:\n    KIND_UNSPECIFIED (0):\n        Unknown.\n    FIXED (1):\n        Git tag.\n    MOVABLE (2):\n        Git branch.\n    OTHER (4):\n        Used to specify non-standard aliases. For\n        example, if a Git repo has a ref named\n        \"refs/foo/bar\".",
+                          "values": {
+                            "KIND_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "FIXED": {
+                              "value": 1
+                            },
+                            "MOVABLE": {
+                              "value": 2
+                            },
+                            "OTHER": {
+                              "value": 4
+                            }
+                          }
                         },
                         "ns": {
                           "description": "Role namespace.",
@@ -1373,9 +1641,20 @@
                                 "type": "string"
                               },
                               "format_": {
-                                "description": "How the text content is formatted.",
-                                "type": "object",
-                                "reference": "google.cloud.monitoring_dashboard_v1.types.Text.Format"
+                                "type": "enum",
+                                "name": "Format",
+                                "description": "The format type of the text content.\n\nValues:\n    FORMAT_UNSPECIFIED (0):\n        Format is unspecified. Defaults to MARKDOWN.\n    MARKDOWN (1):\n        The text contains Markdown formatting.\n    RAW (2):\n        The text contains no special formatting.",
+                                "values": {
+                                  "FORMAT_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "MARKDOWN": {
+                                    "value": 1
+                                  },
+                                  "RAW": {
+                                    "value": 2
+                                  }
+                                }
                               },
                               "style": {
                                 "type": "object",
@@ -1389,37 +1668,138 @@
                                     "type": "string"
                                   },
                                   "horizontal_alignment": {
-                                    "description": "The horizontal alignment of both the title and content",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.HorizontalAlignment"
+                                    "type": "enum",
+                                    "name": "HorizontalAlignment",
+                                    "description": "The horizontal alignment of both the title and content on a\ntext widget\n\nValues:\n    HORIZONTAL_ALIGNMENT_UNSPECIFIED (0):\n        No horizontal alignment specified, will default to H_LEFT\n    H_LEFT (1):\n        Left-align\n    H_CENTER (2):\n        Center-align\n    H_RIGHT (3):\n        Right-align",
+                                    "values": {
+                                      "HORIZONTAL_ALIGNMENT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "H_LEFT": {
+                                        "value": 1
+                                      },
+                                      "H_CENTER": {
+                                        "value": 2
+                                      },
+                                      "H_RIGHT": {
+                                        "value": 3
+                                      }
+                                    }
                                   },
                                   "vertical_alignment": {
-                                    "description": "The vertical alignment of both the title and content",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.VerticalAlignment"
+                                    "type": "enum",
+                                    "name": "VerticalAlignment",
+                                    "description": "The vertical alignment of both the title and content on a\ntext widget\n\nValues:\n    VERTICAL_ALIGNMENT_UNSPECIFIED (0):\n        No vertical alignment specified, will default to V_TOP\n    V_TOP (1):\n        Top-align\n    V_CENTER (2):\n        Center-align\n    V_BOTTOM (3):\n        Bottom-align",
+                                    "values": {
+                                      "VERTICAL_ALIGNMENT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "V_TOP": {
+                                        "value": 1
+                                      },
+                                      "V_CENTER": {
+                                        "value": 2
+                                      },
+                                      "V_BOTTOM": {
+                                        "value": 3
+                                      }
+                                    }
                                   },
                                   "padding": {
-                                    "description": "The amount of padding around the widget",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PaddingSize"
+                                    "type": "enum",
+                                    "name": "PaddingSize",
+                                    "description": "Specifies padding size around a text widget\n\nValues:\n    PADDING_SIZE_UNSPECIFIED (0):\n        No padding size specified, will default to P_EXTRA_SMALL\n    P_EXTRA_SMALL (1):\n        Extra small padding\n    P_SMALL (2):\n        Small padding\n    P_MEDIUM (3):\n        Medium padding\n    P_LARGE (4):\n        Large padding\n    P_EXTRA_LARGE (5):\n        Extra large padding",
+                                    "values": {
+                                      "PADDING_SIZE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "P_EXTRA_SMALL": {
+                                        "value": 1
+                                      },
+                                      "P_SMALL": {
+                                        "value": 2
+                                      },
+                                      "P_MEDIUM": {
+                                        "value": 3
+                                      },
+                                      "P_LARGE": {
+                                        "value": 4
+                                      },
+                                      "P_EXTRA_LARGE": {
+                                        "value": 5
+                                      }
+                                    }
                                   },
                                   "font_size": {
-                                    "type": "object",
-                                    "properties": {
-                                      "size": {
-                                        "description": "Font size for the text.",
-                                        "type": "number"
+                                    "type": "enum",
+                                    "name": "FontSize",
+                                    "description": "Specifies a font size for the title and content of a text\nwidget\n\nValues:\n    FONT_SIZE_UNSPECIFIED (0):\n        No font size specified, will default to FS_LARGE\n    FS_EXTRA_SMALL (1):\n        Extra small font size\n    FS_SMALL (2):\n        Small font size\n    FS_MEDIUM (3):\n        Medium font size\n    FS_LARGE (4):\n        Large font size\n    FS_EXTRA_LARGE (5):\n        Extra large font size",
+                                    "values": {
+                                      "FONT_SIZE_UNSPECIFIED": {
+                                        "value": 0
                                       },
-                                      "unit": {
-                                        "description": "Unit for the font size. Follows CSS naming (such as ``in``, ``px``, and ``pt``).",
-                                        "type": "string"
+                                      "FS_EXTRA_SMALL": {
+                                        "value": 1
+                                      },
+                                      "FS_SMALL": {
+                                        "value": 2
+                                      },
+                                      "FS_MEDIUM": {
+                                        "value": 3
+                                      },
+                                      "FS_LARGE": {
+                                        "value": 4
+                                      },
+                                      "FS_EXTRA_LARGE": {
+                                        "value": 5
                                       }
                                     }
                                   },
                                   "pointer_location": {
-                                    "description": "The pointer location for this widget (also sometimes called a \"tail\")",
-                                    "type": "object",
-                                    "reference": "google.cloud.monitoring_dashboard_v1.types.Text.TextStyle.PointerLocation"
+                                    "type": "enum",
+                                    "name": "PointerLocation",
+                                    "description": "Specifies where a visual pointer is placed on a text widget\n(also sometimes called a \"tail\")\n\nValues:\n    POINTER_LOCATION_UNSPECIFIED (0):\n        No visual pointer\n    PL_TOP (1):\n        Placed in the middle of the top of the widget\n    PL_RIGHT (2):\n        Placed in the middle of the right side of the\n        widget\n    PL_BOTTOM (3):\n        Placed in the middle of the bottom of the\n        widget\n    PL_LEFT (4):\n        Placed in the middle of the left side of the\n        widget\n    PL_TOP_LEFT (5):\n        Placed on the left side of the top of the\n        widget\n    PL_TOP_RIGHT (6):\n        Placed on the right side of the top of the\n        widget\n    PL_RIGHT_TOP (7):\n        Placed on the top of the right side of the\n        widget\n    PL_RIGHT_BOTTOM (8):\n        Placed on the bottom of the right side of the\n        widget\n    PL_BOTTOM_RIGHT (9):\n        Placed on the right side of the bottom of the\n        widget\n    PL_BOTTOM_LEFT (10):\n        Placed on the left side of the bottom of the\n    ",
+                                    "values": {
+                                      "POINTER_LOCATION_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "PL_TOP": {
+                                        "value": 1
+                                      },
+                                      "PL_RIGHT": {
+                                        "value": 2
+                                      },
+                                      "PL_BOTTOM": {
+                                        "value": 3
+                                      },
+                                      "PL_LEFT": {
+                                        "value": 4
+                                      },
+                                      "PL_TOP_LEFT": {
+                                        "value": 5
+                                      },
+                                      "PL_TOP_RIGHT": {
+                                        "value": 6
+                                      },
+                                      "PL_RIGHT_TOP": {
+                                        "value": 7
+                                      },
+                                      "PL_RIGHT_BOTTOM": {
+                                        "value": 8
+                                      },
+                                      "PL_BOTTOM_RIGHT": {
+                                        "value": 9
+                                      },
+                                      "PL_BOTTOM_LEFT": {
+                                        "value": 10
+                                      },
+                                      "PL_LEFT_BOTTOM": {
+                                        "value": 11
+                                      },
+                                      "PL_LEFT_TOP": {
+                                        "value": 12
+                                      }
+                                    }
                                   }
                                 }
                               }
@@ -1564,9 +1944,23 @@
                       "type": "object",
                       "properties": {
                         "kind": {
-                          "description": "Role type.",
-                          "type": "object",
-                          "reference": "google.cloud.securitycenter_v2.types.Kubernetes.Role.Kind"
+                          "type": "enum",
+                          "name": "Kind",
+                          "description": "The type of an alias.\n\nValues:\n    KIND_UNSPECIFIED (0):\n        Unknown.\n    FIXED (1):\n        Git tag.\n    MOVABLE (2):\n        Git branch.\n    OTHER (4):\n        Used to specify non-standard aliases. For\n        example, if a Git repo has a ref named\n        \"refs/foo/bar\".",
+                          "values": {
+                            "KIND_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "FIXED": {
+                              "value": 1
+                            },
+                            "MOVABLE": {
+                              "value": 2
+                            },
+                            "OTHER": {
+                              "value": 4
+                            }
+                          }
                         },
                         "ns": {
                           "description": "Role namespace.",
@@ -1854,46 +2248,21 @@
                       "type": "string"
                     },
                     "authentication": {
-                      "type": "object",
-                      "properties": {
-                        "google_account": {
-                          "type": "object",
-                          "properties": {
-                            "username": {
-                              "description": "Required. The user name of the Google account.",
-                              "type": "string"
-                            },
-                            "password": {
-                              "description": "Required. Input only. The password of the Google account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "username",
-                            "password"
-                          ]
+                      "type": "enum",
+                      "name": "Authentication",
+                      "description": "Values:\n    AUTHENTICATION_UNSPECIFIED (0):\n        No description available.\n    AUTHENTICATION_MULTIPLE (1):\n        No description available.\n    AUTHENTICATION_SINGLE (2):\n        No description available.\n    AUTHENTICATION_NONE (3):\n        No description available.",
+                      "values": {
+                        "AUTHENTICATION_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "custom_account": {
-                          "type": "object",
-                          "properties": {
-                            "username": {
-                              "description": "Required. The user name of the custom account.",
-                              "type": "string"
-                            },
-                            "password": {
-                              "description": "Required. Input only. The password of the custom account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                              "type": "string"
-                            },
-                            "login_url": {
-                              "description": "Required. The login form URL of the website.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "username",
-                            "password",
-                            "login_url"
-                          ]
+                        "AUTHENTICATION_MULTIPLE": {
+                          "value": 1
+                        },
+                        "AUTHENTICATION_SINGLE": {
+                          "value": 2
+                        },
+                        "AUTHENTICATION_NONE": {
+                          "value": 3
                         }
                       }
                     },
@@ -1994,19 +2363,70 @@
                               ]
                             },
                             "service_agent_auth": {
-                              "description": "Optional. Indicate the auth token type generated from the `Diglogflow service agent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__. The generated token is sent in the Authorization header.",
-                              "type": "object",
-                              "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.ServiceAgentAuth"
+                              "type": "enum",
+                              "name": "ServiceAgentAuth",
+                              "description": "Indicate the auth token type generated from the `Diglogflow service\nagent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__.\n\nValues:\n    SERVICE_AGENT_AUTH_UNSPECIFIED (0):\n        Service agent auth type unspecified. Default to ID_TOKEN.\n    NONE (1):\n        No token used.\n    ID_TOKEN (2):\n        Use `ID\n        token <https://cloud.google.com/docs/authentication/token-types#id>`__\n        generated from service agent. This can be used to access\n        Cloud Function and Cloud Run after you grant Invoker role to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.\n    ACCESS_TOKEN (3):\n        Use `access\n        token <https://cloud.google.com/docs/authentication/token-types#access>`__\n        generated from service agent. This can be used to access\n        other Google Cloud APIs after you grant required roles to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.",
+                              "values": {
+                                "SERVICE_AGENT_AUTH_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "NONE": {
+                                  "value": 1
+                                },
+                                "ID_TOKEN": {
+                                  "value": 2
+                                },
+                                "ACCESS_TOKEN": {
+                                  "value": 3
+                                }
+                              }
                             },
                             "webhook_type": {
-                              "description": "Optional. Type of the webhook.",
-                              "type": "object",
-                              "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.WebhookType"
+                              "type": "enum",
+                              "name": "WebhookType",
+                              "description": "Represents the type of webhook configuration.\n\nValues:\n    WEBHOOK_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    STANDARD (1):\n        Represents a standard webhook.\n    FLEXIBLE (2):\n        Represents a flexible webhook.",
+                              "values": {
+                                "WEBHOOK_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "STANDARD": {
+                                  "value": 1
+                                },
+                                "FLEXIBLE": {
+                                  "value": 2
+                                }
+                              }
                             },
                             "http_method": {
-                              "description": "Optional. HTTP method for the flexible webhook calls. Standard webhook always uses POST.",
-                              "type": "object",
-                              "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.HttpMethod"
+                              "type": "enum",
+                              "name": "HttpMethod",
+                              "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+                              "values": {
+                                "HTTP_METHOD_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "POST": {
+                                  "value": 1
+                                },
+                                "GET": {
+                                  "value": 2
+                                },
+                                "HEAD": {
+                                  "value": 3
+                                },
+                                "PUT": {
+                                  "value": 4
+                                },
+                                "DELETE": {
+                                  "value": 5
+                                },
+                                "PATCH": {
+                                  "value": 6
+                                },
+                                "OPTIONS": {
+                                  "value": 7
+                                }
+                              }
                             },
                             "request_body": {
                               "description": "Optional. Defines a custom JSON object as request body to send to flexible webhook.",
@@ -2044,9 +2464,23 @@
                         "type": "object",
                         "properties": {
                           "data_store_type": {
-                            "description": "The type of the connected data store.",
-                            "type": "object",
-                            "reference": "google.cloud.dialogflowcx_v3beta1.types.DataStoreType"
+                            "type": "enum",
+                            "name": "DataStoreType",
+                            "description": "Type of a data store.\nDetermines how search is performed in the data store.\n\nValues:\n    DATA_STORE_TYPE_UNSPECIFIED (0):\n        Not specified. This value indicates that the\n        data store type is not specified, so it will not\n        be used during search.\n    PUBLIC_WEB (1):\n        A data store that contains public web\n        content.\n    UNSTRUCTURED (2):\n        A data store that contains unstructured\n        private data.\n    STRUCTURED (3):\n        A data store that contains structured data\n        (for example FAQ).",
+                            "values": {
+                              "DATA_STORE_TYPE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "PUBLIC_WEB": {
+                                "value": 1
+                              },
+                              "UNSTRUCTURED": {
+                                "value": 2
+                              },
+                              "STRUCTURED": {
+                                "value": 3
+                              }
+                            }
                           },
                           "data_store": {
                             "description": "The full name of the referenced data store. Formats: ``projects/{project}/locations/{location}/collections/{collection}/dataStores/{data_store}`` ``projects/{project}/locations/{location}/dataStores/{data_store}``",
@@ -2093,9 +2527,20 @@
                   }
                 },
                 "tool_type": {
-                  "description": "Output only. The tool type.",
-                  "type": "object",
-                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Tool.ToolType"
+                  "type": "enum",
+                  "name": "ToolType",
+                  "description": "Represents the type of the tool.\n\nValues:\n    TOOL_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    CUSTOMIZED_TOOL (1):\n        Customer provided tool.\n    BUILTIN_TOOL (2):\n        First party built-in tool created by\n        Dialogflow which cannot be modified.",
+                  "values": {
+                    "TOOL_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "CUSTOMIZED_TOOL": {
+                      "value": 1
+                    },
+                    "BUILTIN_TOOL": {
+                      "value": 2
+                    }
+                  }
                 }
               },
               "required": [
@@ -2112,9 +2557,20 @@
                 "type": "object",
                 "properties": {
                   "mode": {
-                    "description": "Optional. Specifies the mode in which function calling should execute. If unspecified, the default value will be set to AUTO.",
-                    "type": "object",
-                    "reference": "google.ai.generativelanguage_v1beta.types.FunctionCallingConfig.Mode"
+                    "type": "enum",
+                    "name": "Mode",
+                    "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                    "values": {
+                      "MODE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MODE_SKIP": {
+                        "value": 1
+                      },
+                      "MODE_PRESERVE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "allowed_function_names": {
                     "description": "Optional. A set of function names that, when provided, limits the functions the model will call.  This should only be set when the Mode is ANY. Function names should match [FunctionDeclaration.name]. With mode set to ANY, model will predict a function call from the set of function names provided.",
@@ -2134,14 +2590,54 @@
               "type": "object",
               "properties": {
                 "category": {
-                  "description": "Required. The category for this setting.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta3.types.HarmCategory"
+                  "type": "enum",
+                  "name": "HarmCategory",
+                  "description": "The category of a rating.\n\nThese categories cover various kinds of harms that developers\nmay wish to adjust.\n\nValues:\n    HARM_CATEGORY_UNSPECIFIED (0):\n        Category is unspecified.\n    HARM_CATEGORY_DEROGATORY (1):\n        Negative or harmful comments targeting\n        identity and/or protected attribute.\n    HARM_CATEGORY_TOXICITY (2):\n        Content that is rude, disrepspectful, or\n        profane.\n    HARM_CATEGORY_VIOLENCE (3):\n        Describes scenarios depictng violence against\n        an individual or group, or general descriptions\n        of gore.\n    HARM_CATEGORY_SEXUAL (4):\n        Contains references to sexual acts or other\n        lewd content.\n    HARM_CATEGORY_MEDICAL (5):\n        Promotes unchecked medical advice.\n    HARM_CATEGORY_DANGEROUS (6):\n        Dangerous content that promotes, facilitates,\n        or encourages harmful acts.",
+                  "values": {
+                    "HARM_CATEGORY_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "HARM_CATEGORY_DEROGATORY": {
+                      "value": 1
+                    },
+                    "HARM_CATEGORY_TOXICITY": {
+                      "value": 2
+                    },
+                    "HARM_CATEGORY_VIOLENCE": {
+                      "value": 3
+                    },
+                    "HARM_CATEGORY_SEXUAL": {
+                      "value": 4
+                    },
+                    "HARM_CATEGORY_MEDICAL": {
+                      "value": 5
+                    },
+                    "HARM_CATEGORY_DANGEROUS": {
+                      "value": 6
+                    }
+                  }
                 },
                 "threshold": {
-                  "description": "Required. Controls the probability threshold at which harm is blocked.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta3.types.SafetySetting.HarmBlockThreshold"
+                  "type": "enum",
+                  "name": "HarmBlockThreshold",
+                  "description": "Block at and beyond a specified harm probability.\n\nValues:\n    HARM_BLOCK_THRESHOLD_UNSPECIFIED (0):\n        Threshold is unspecified.\n    BLOCK_LOW_AND_ABOVE (1):\n        Content with NEGLIGIBLE will be allowed.\n    BLOCK_MEDIUM_AND_ABOVE (2):\n        Content with NEGLIGIBLE and LOW will be\n        allowed.\n    BLOCK_ONLY_HIGH (3):\n        Content with NEGLIGIBLE, LOW, and MEDIUM will\n        be allowed.\n    BLOCK_NONE (4):\n        All content will be allowed.",
+                  "values": {
+                    "HARM_BLOCK_THRESHOLD_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "BLOCK_LOW_AND_ABOVE": {
+                      "value": 1
+                    },
+                    "BLOCK_MEDIUM_AND_ABOVE": {
+                      "value": 2
+                    },
+                    "BLOCK_ONLY_HIGH": {
+                      "value": 3
+                    },
+                    "BLOCK_NONE": {
+                      "value": 4
+                    }
+                  }
                 }
               },
               "required": [
@@ -2373,9 +2869,23 @@
             }
           },
           "answer_style": {
-            "description": "Required. Style in which answers should be returned.",
-            "type": "object",
-            "reference": "google.ai.generativelanguage_v1beta.types.GenerateAnswerRequest.AnswerStyle"
+            "description": "Style for grounded answers.\n\nValues:\n    ANSWER_STYLE_UNSPECIFIED (0):\n        Unspecified answer style.\n    ABSTRACTIVE (1):\n        Succint but abstract style.\n    EXTRACTIVE (2):\n        Very brief and extractive style.\n    VERBOSE (3):\n        Verbose style including extra details. The\n        response may be formatted as a sentence,\n        paragraph, multiple paragraphs, or bullet\n        points, etc.",
+            "type": "enum",
+            "name": "AnswerStyle",
+            "values": {
+              "ANSWER_STYLE_UNSPECIFIED": {
+                "value": 0
+              },
+              "ABSTRACTIVE": {
+                "value": 1
+              },
+              "EXTRACTIVE": {
+                "value": 2
+              },
+              "VERBOSE": {
+                "value": 3
+              }
+            }
           },
           "safety_settings": {
             "description": "Optional. A list of unique ``SafetySetting`` instances for blocking unsafe content.  This will be enforced on the ``GenerateAnswerRequest.contents`` and ``GenerateAnswerResponse.candidate``. There should not be more than one setting for each ``SafetyCategory`` type. The API will block any contents and responses that fail to meet the thresholds set by these settings. This list overrides the default settings for each ``SafetyCategory`` specified in the safety_settings. If there is no ``SafetySetting`` for a given ``SafetyCategory`` provided in the list, the API will use the default safety setting for that category. Harm categories HARM_CATEGORY_HATE_SPEECH, HARM_CATEGORY_SEXUALLY_EXPLICIT, HARM_CATEGORY_DANGEROUS_CONTENT, HARM_CATEGORY_HARASSMENT are supported. Refer to the `guide <https://ai.google.dev/gemini-api/docs/safety-settings>`__ for detailed information on available safety settings. Also refer to the `Safety guidance <https://ai.google.dev/gemini-api/docs/safety-guidance>`__ to learn how to incorporate safety considerations in your AI applications.",
@@ -2384,14 +2894,54 @@
               "type": "object",
               "properties": {
                 "category": {
-                  "description": "Required. The category for this setting.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta3.types.HarmCategory"
+                  "type": "enum",
+                  "name": "HarmCategory",
+                  "description": "The category of a rating.\n\nThese categories cover various kinds of harms that developers\nmay wish to adjust.\n\nValues:\n    HARM_CATEGORY_UNSPECIFIED (0):\n        Category is unspecified.\n    HARM_CATEGORY_DEROGATORY (1):\n        Negative or harmful comments targeting\n        identity and/or protected attribute.\n    HARM_CATEGORY_TOXICITY (2):\n        Content that is rude, disrepspectful, or\n        profane.\n    HARM_CATEGORY_VIOLENCE (3):\n        Describes scenarios depictng violence against\n        an individual or group, or general descriptions\n        of gore.\n    HARM_CATEGORY_SEXUAL (4):\n        Contains references to sexual acts or other\n        lewd content.\n    HARM_CATEGORY_MEDICAL (5):\n        Promotes unchecked medical advice.\n    HARM_CATEGORY_DANGEROUS (6):\n        Dangerous content that promotes, facilitates,\n        or encourages harmful acts.",
+                  "values": {
+                    "HARM_CATEGORY_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "HARM_CATEGORY_DEROGATORY": {
+                      "value": 1
+                    },
+                    "HARM_CATEGORY_TOXICITY": {
+                      "value": 2
+                    },
+                    "HARM_CATEGORY_VIOLENCE": {
+                      "value": 3
+                    },
+                    "HARM_CATEGORY_SEXUAL": {
+                      "value": 4
+                    },
+                    "HARM_CATEGORY_MEDICAL": {
+                      "value": 5
+                    },
+                    "HARM_CATEGORY_DANGEROUS": {
+                      "value": 6
+                    }
+                  }
                 },
                 "threshold": {
-                  "description": "Required. Controls the probability threshold at which harm is blocked.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta3.types.SafetySetting.HarmBlockThreshold"
+                  "type": "enum",
+                  "name": "HarmBlockThreshold",
+                  "description": "Block at and beyond a specified harm probability.\n\nValues:\n    HARM_BLOCK_THRESHOLD_UNSPECIFIED (0):\n        Threshold is unspecified.\n    BLOCK_LOW_AND_ABOVE (1):\n        Content with NEGLIGIBLE will be allowed.\n    BLOCK_MEDIUM_AND_ABOVE (2):\n        Content with NEGLIGIBLE and LOW will be\n        allowed.\n    BLOCK_ONLY_HIGH (3):\n        Content with NEGLIGIBLE, LOW, and MEDIUM will\n        be allowed.\n    BLOCK_NONE (4):\n        All content will be allowed.",
+                  "values": {
+                    "HARM_BLOCK_THRESHOLD_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "BLOCK_LOW_AND_ABOVE": {
+                      "value": 1
+                    },
+                    "BLOCK_MEDIUM_AND_ABOVE": {
+                      "value": 2
+                    },
+                    "BLOCK_ONLY_HIGH": {
+                      "value": 3
+                    },
+                    "BLOCK_NONE": {
+                      "value": 4
+                    }
+                  }
                 }
               },
               "required": [
@@ -2443,9 +2993,35 @@
             }
           },
           "task_type": {
-            "description": "Optional. Optional task type for which the embeddings will be used. Can only be set for ``models/embedding-001``.  This field is a member of `oneof`_ ``_task_type``.",
-            "type": "object",
-            "reference": "google.ai.generativelanguage_v1beta.types.TaskType"
+            "description": "Type of task for which the embedding will be used.\n\nValues:\n    TASK_TYPE_UNSPECIFIED (0):\n        Unset value, which will default to one of the\n        other enum values.\n    RETRIEVAL_QUERY (1):\n        Specifies the given text is a query in a\n        search/retrieval setting.\n    RETRIEVAL_DOCUMENT (2):\n        Specifies the given text is a document from\n        the corpus being searched.\n    SEMANTIC_SIMILARITY (3):\n        Specifies the given text will be used for\n        STS.\n    CLASSIFICATION (4):\n        Specifies that the given text will be\n        classified.\n    CLUSTERING (5):\n        Specifies that the embeddings will be used\n        for clustering.\n    QUESTION_ANSWERING (6):\n        Specifies that the given text will be used\n        for question answering.\n    FACT_VERIFICATION (7):\n        Specifies that the given text will be used\n        for fact verification.",
+            "type": "enum",
+            "name": "TaskType",
+            "values": {
+              "TASK_TYPE_UNSPECIFIED": {
+                "value": 0
+              },
+              "RETRIEVAL_QUERY": {
+                "value": 1
+              },
+              "RETRIEVAL_DOCUMENT": {
+                "value": 2
+              },
+              "SEMANTIC_SIMILARITY": {
+                "value": 3
+              },
+              "CLASSIFICATION": {
+                "value": 4
+              },
+              "CLUSTERING": {
+                "value": 5
+              },
+              "QUESTION_ANSWERING": {
+                "value": 6
+              },
+              "FACT_VERIFICATION": {
+                "value": 7
+              }
+            }
           },
           "title": {
             "description": "Optional. An optional title for the text. Only applicable when TaskType is ``RETRIEVAL_DOCUMENT``.  Note: Specifying a ``title`` for ``RETRIEVAL_DOCUMENT`` provides better quality embeddings for retrieval.  This field is a member of `oneof`_ ``_title``.",
@@ -2502,9 +3078,35 @@
                   }
                 },
                 "task_type": {
-                  "description": "Optional. Optional task type for which the embeddings will be used. Can only be set for ``models/embedding-001``.  This field is a member of `oneof`_ ``_task_type``.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta.types.TaskType"
+                  "type": "enum",
+                  "name": "TaskType",
+                  "description": "Type of task for which the embedding will be used.\n\nValues:\n    TASK_TYPE_UNSPECIFIED (0):\n        Unset value, which will default to one of the\n        other enum values.\n    RETRIEVAL_QUERY (1):\n        Specifies the given text is a query in a\n        search/retrieval setting.\n    RETRIEVAL_DOCUMENT (2):\n        Specifies the given text is a document from\n        the corpus being searched.\n    SEMANTIC_SIMILARITY (3):\n        Specifies the given text will be used for\n        STS.\n    CLASSIFICATION (4):\n        Specifies that the given text will be\n        classified.\n    CLUSTERING (5):\n        Specifies that the embeddings will be used\n        for clustering.\n    QUESTION_ANSWERING (6):\n        Specifies that the given text will be used\n        for question answering.\n    FACT_VERIFICATION (7):\n        Specifies that the given text will be used\n        for fact verification.",
+                  "values": {
+                    "TASK_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "RETRIEVAL_QUERY": {
+                      "value": 1
+                    },
+                    "RETRIEVAL_DOCUMENT": {
+                      "value": 2
+                    },
+                    "SEMANTIC_SIMILARITY": {
+                      "value": 3
+                    },
+                    "CLASSIFICATION": {
+                      "value": 4
+                    },
+                    "CLUSTERING": {
+                      "value": 5
+                    },
+                    "QUESTION_ANSWERING": {
+                      "value": 6
+                    },
+                    "FACT_VERIFICATION": {
+                      "value": 7
+                    }
+                  }
                 },
                 "title": {
                   "description": "Optional. An optional title for the text. Only applicable when TaskType is ``RETRIEVAL_DOCUMENT``.  Note: Specifying a ``title`` for ``RETRIEVAL_DOCUMENT`` provides better quality embeddings for retrieval.  This field is a member of `oneof`_ ``_title``.",
@@ -2635,46 +3237,21 @@
                           "type": "string"
                         },
                         "authentication": {
-                          "type": "object",
-                          "properties": {
-                            "google_account": {
-                              "type": "object",
-                              "properties": {
-                                "username": {
-                                  "description": "Required. The user name of the Google account.",
-                                  "type": "string"
-                                },
-                                "password": {
-                                  "description": "Required. Input only. The password of the Google account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "username",
-                                "password"
-                              ]
+                          "type": "enum",
+                          "name": "Authentication",
+                          "description": "Values:\n    AUTHENTICATION_UNSPECIFIED (0):\n        No description available.\n    AUTHENTICATION_MULTIPLE (1):\n        No description available.\n    AUTHENTICATION_SINGLE (2):\n        No description available.\n    AUTHENTICATION_NONE (3):\n        No description available.",
+                          "values": {
+                            "AUTHENTICATION_UNSPECIFIED": {
+                              "value": 0
                             },
-                            "custom_account": {
-                              "type": "object",
-                              "properties": {
-                                "username": {
-                                  "description": "Required. The user name of the custom account.",
-                                  "type": "string"
-                                },
-                                "password": {
-                                  "description": "Required. Input only. The password of the custom account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                                  "type": "string"
-                                },
-                                "login_url": {
-                                  "description": "Required. The login form URL of the website.",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "username",
-                                "password",
-                                "login_url"
-                              ]
+                            "AUTHENTICATION_MULTIPLE": {
+                              "value": 1
+                            },
+                            "AUTHENTICATION_SINGLE": {
+                              "value": 2
+                            },
+                            "AUTHENTICATION_NONE": {
+                              "value": 3
                             }
                           }
                         },
@@ -2775,19 +3352,70 @@
                                   ]
                                 },
                                 "service_agent_auth": {
-                                  "description": "Optional. Indicate the auth token type generated from the `Diglogflow service agent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__. The generated token is sent in the Authorization header.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.ServiceAgentAuth"
+                                  "type": "enum",
+                                  "name": "ServiceAgentAuth",
+                                  "description": "Indicate the auth token type generated from the `Diglogflow service\nagent <https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent>`__.\n\nValues:\n    SERVICE_AGENT_AUTH_UNSPECIFIED (0):\n        Service agent auth type unspecified. Default to ID_TOKEN.\n    NONE (1):\n        No token used.\n    ID_TOKEN (2):\n        Use `ID\n        token <https://cloud.google.com/docs/authentication/token-types#id>`__\n        generated from service agent. This can be used to access\n        Cloud Function and Cloud Run after you grant Invoker role to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.\n    ACCESS_TOKEN (3):\n        Use `access\n        token <https://cloud.google.com/docs/authentication/token-types#access>`__\n        generated from service agent. This can be used to access\n        other Google Cloud APIs after you grant required roles to\n        ``service-<PROJECT-NUMBER>@gcp-sa-dialogflow.iam.gserviceaccount.com``.",
+                                  "values": {
+                                    "SERVICE_AGENT_AUTH_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "NONE": {
+                                      "value": 1
+                                    },
+                                    "ID_TOKEN": {
+                                      "value": 2
+                                    },
+                                    "ACCESS_TOKEN": {
+                                      "value": 3
+                                    }
+                                  }
                                 },
                                 "webhook_type": {
-                                  "description": "Optional. Type of the webhook.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.WebhookType"
+                                  "type": "enum",
+                                  "name": "WebhookType",
+                                  "description": "Represents the type of webhook configuration.\n\nValues:\n    WEBHOOK_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    STANDARD (1):\n        Represents a standard webhook.\n    FLEXIBLE (2):\n        Represents a flexible webhook.",
+                                  "values": {
+                                    "WEBHOOK_TYPE_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "STANDARD": {
+                                      "value": 1
+                                    },
+                                    "FLEXIBLE": {
+                                      "value": 2
+                                    }
+                                  }
                                 },
                                 "http_method": {
-                                  "description": "Optional. HTTP method for the flexible webhook calls. Standard webhook always uses POST.",
-                                  "type": "object",
-                                  "reference": "google.cloud.dialogflowcx_v3beta1.types.Webhook.GenericWebService.HttpMethod"
+                                  "type": "enum",
+                                  "name": "HttpMethod",
+                                  "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+                                  "values": {
+                                    "HTTP_METHOD_UNSPECIFIED": {
+                                      "value": 0
+                                    },
+                                    "POST": {
+                                      "value": 1
+                                    },
+                                    "GET": {
+                                      "value": 2
+                                    },
+                                    "HEAD": {
+                                      "value": 3
+                                    },
+                                    "PUT": {
+                                      "value": 4
+                                    },
+                                    "DELETE": {
+                                      "value": 5
+                                    },
+                                    "PATCH": {
+                                      "value": 6
+                                    },
+                                    "OPTIONS": {
+                                      "value": 7
+                                    }
+                                  }
                                 },
                                 "request_body": {
                                   "description": "Optional. Defines a custom JSON object as request body to send to flexible webhook.",
@@ -2825,9 +3453,23 @@
                             "type": "object",
                             "properties": {
                               "data_store_type": {
-                                "description": "The type of the connected data store.",
-                                "type": "object",
-                                "reference": "google.cloud.dialogflowcx_v3beta1.types.DataStoreType"
+                                "type": "enum",
+                                "name": "DataStoreType",
+                                "description": "Type of a data store.\nDetermines how search is performed in the data store.\n\nValues:\n    DATA_STORE_TYPE_UNSPECIFIED (0):\n        Not specified. This value indicates that the\n        data store type is not specified, so it will not\n        be used during search.\n    PUBLIC_WEB (1):\n        A data store that contains public web\n        content.\n    UNSTRUCTURED (2):\n        A data store that contains unstructured\n        private data.\n    STRUCTURED (3):\n        A data store that contains structured data\n        (for example FAQ).",
+                                "values": {
+                                  "DATA_STORE_TYPE_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "PUBLIC_WEB": {
+                                    "value": 1
+                                  },
+                                  "UNSTRUCTURED": {
+                                    "value": 2
+                                  },
+                                  "STRUCTURED": {
+                                    "value": 3
+                                  }
+                                }
                               },
                               "data_store": {
                                 "description": "The full name of the referenced data store. Formats: ``projects/{project}/locations/{location}/collections/{collection}/dataStores/{data_store}`` ``projects/{project}/locations/{location}/dataStores/{data_store}``",
@@ -2874,9 +3516,20 @@
                       }
                     },
                     "tool_type": {
-                      "description": "Output only. The tool type.",
-                      "type": "object",
-                      "reference": "google.cloud.dialogflowcx_v3beta1.types.Tool.ToolType"
+                      "type": "enum",
+                      "name": "ToolType",
+                      "description": "Represents the type of the tool.\n\nValues:\n    TOOL_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    CUSTOMIZED_TOOL (1):\n        Customer provided tool.\n    BUILTIN_TOOL (2):\n        First party built-in tool created by\n        Dialogflow which cannot be modified.",
+                      "values": {
+                        "TOOL_TYPE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CUSTOMIZED_TOOL": {
+                          "value": 1
+                        },
+                        "BUILTIN_TOOL": {
+                          "value": 2
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -2892,9 +3545,20 @@
                     "type": "object",
                     "properties": {
                       "mode": {
-                        "description": "Optional. Specifies the mode in which function calling should execute. If unspecified, the default value will be set to AUTO.",
-                        "type": "object",
-                        "reference": "google.ai.generativelanguage_v1beta.types.FunctionCallingConfig.Mode"
+                        "type": "enum",
+                        "name": "Mode",
+                        "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                        "values": {
+                          "MODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MODE_SKIP": {
+                            "value": 1
+                          },
+                          "MODE_PRESERVE": {
+                            "value": 2
+                          }
+                        }
                       },
                       "allowed_function_names": {
                         "description": "Optional. A set of function names that, when provided, limits the functions the model will call.  This should only be set when the Mode is ANY. Function names should match [FunctionDeclaration.name]. With mode set to ANY, model will predict a function call from the set of function names provided.",
@@ -2914,14 +3578,54 @@
                   "type": "object",
                   "properties": {
                     "category": {
-                      "description": "Required. The category for this setting.",
-                      "type": "object",
-                      "reference": "google.ai.generativelanguage_v1beta3.types.HarmCategory"
+                      "type": "enum",
+                      "name": "HarmCategory",
+                      "description": "The category of a rating.\n\nThese categories cover various kinds of harms that developers\nmay wish to adjust.\n\nValues:\n    HARM_CATEGORY_UNSPECIFIED (0):\n        Category is unspecified.\n    HARM_CATEGORY_DEROGATORY (1):\n        Negative or harmful comments targeting\n        identity and/or protected attribute.\n    HARM_CATEGORY_TOXICITY (2):\n        Content that is rude, disrepspectful, or\n        profane.\n    HARM_CATEGORY_VIOLENCE (3):\n        Describes scenarios depictng violence against\n        an individual or group, or general descriptions\n        of gore.\n    HARM_CATEGORY_SEXUAL (4):\n        Contains references to sexual acts or other\n        lewd content.\n    HARM_CATEGORY_MEDICAL (5):\n        Promotes unchecked medical advice.\n    HARM_CATEGORY_DANGEROUS (6):\n        Dangerous content that promotes, facilitates,\n        or encourages harmful acts.",
+                      "values": {
+                        "HARM_CATEGORY_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "HARM_CATEGORY_DEROGATORY": {
+                          "value": 1
+                        },
+                        "HARM_CATEGORY_TOXICITY": {
+                          "value": 2
+                        },
+                        "HARM_CATEGORY_VIOLENCE": {
+                          "value": 3
+                        },
+                        "HARM_CATEGORY_SEXUAL": {
+                          "value": 4
+                        },
+                        "HARM_CATEGORY_MEDICAL": {
+                          "value": 5
+                        },
+                        "HARM_CATEGORY_DANGEROUS": {
+                          "value": 6
+                        }
+                      }
                     },
                     "threshold": {
-                      "description": "Required. Controls the probability threshold at which harm is blocked.",
-                      "type": "object",
-                      "reference": "google.ai.generativelanguage_v1beta3.types.SafetySetting.HarmBlockThreshold"
+                      "type": "enum",
+                      "name": "HarmBlockThreshold",
+                      "description": "Block at and beyond a specified harm probability.\n\nValues:\n    HARM_BLOCK_THRESHOLD_UNSPECIFIED (0):\n        Threshold is unspecified.\n    BLOCK_LOW_AND_ABOVE (1):\n        Content with NEGLIGIBLE will be allowed.\n    BLOCK_MEDIUM_AND_ABOVE (2):\n        Content with NEGLIGIBLE and LOW will be\n        allowed.\n    BLOCK_ONLY_HIGH (3):\n        Content with NEGLIGIBLE, LOW, and MEDIUM will\n        be allowed.\n    BLOCK_NONE (4):\n        All content will be allowed.",
+                      "values": {
+                        "HARM_BLOCK_THRESHOLD_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "BLOCK_LOW_AND_ABOVE": {
+                          "value": 1
+                        },
+                        "BLOCK_MEDIUM_AND_ABOVE": {
+                          "value": 2
+                        },
+                        "BLOCK_ONLY_HIGH": {
+                          "value": 3
+                        },
+                        "BLOCK_NONE": {
+                          "value": 4
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -3149,9 +3853,26 @@
                 "type": "integer"
               },
               "state": {
-                "description": "Output only. The state of the tuned model.",
-                "type": "object",
-                "reference": "google.ai.generativelanguage_v1beta3.types.TunedModel.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. The timestamp when this model was created.",
@@ -3225,8 +3946,17 @@
                         "description": "Specified use case for this dataset.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.maps.mapsplatformdatasets_v1.types.Usage"
+                          "type": "enum",
+                          "name": "Usage",
+                          "description": "Usage specifies where the data is intended to be used to\ninform how to process the data.\n\nValues:\n    USAGE_UNSPECIFIED (0):\n        The usage of this dataset is not set.\n    USAGE_DATA_DRIVEN_STYLING (1):\n        This dataset will be used for data driven\n        styling.",
+                          "values": {
+                            "USAGE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "USAGE_DATA_DRIVEN_STYLING": {
+                              "value": 1
+                            }
+                          }
                         }
                       },
                       "local_file_source": {
@@ -3237,9 +3967,23 @@
                             "type": "string"
                           },
                           "file_format": {
-                            "description": "The format of the file that is being uploaded.",
-                            "type": "object",
-                            "reference": "google.maps.mapsplatformdatasets_v1.types.FileFormat"
+                            "type": "enum",
+                            "name": "FileFormat",
+                            "description": "The format of the file being uploaded.\n\nValues:\n    FILE_FORMAT_UNSPECIFIED (0):\n        Unspecified file format.\n    FILE_FORMAT_GEOJSON (1):\n        GeoJson file.\n    FILE_FORMAT_KML (2):\n        KML file.\n    FILE_FORMAT_CSV (3):\n        CSV file.",
+                            "values": {
+                              "FILE_FORMAT_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "FILE_FORMAT_GEOJSON": {
+                                "value": 1
+                              },
+                              "FILE_FORMAT_KML": {
+                                "value": 2
+                              },
+                              "FILE_FORMAT_CSV": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       },
@@ -3259,9 +4003,26 @@
                         "type": "object",
                         "properties": {
                           "state": {
-                            "description": "State enum for status.",
-                            "type": "object",
-                            "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                            "type": "enum",
+                            "name": "State",
+                            "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                            "values": {
+                              "STATE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "AFFECTED": {
+                                "value": 1
+                              },
+                              "NOT_AFFECTED": {
+                                "value": 2
+                              },
+                              "FIXED": {
+                                "value": 3
+                              },
+                              "UNDER_INVESTIGATION": {
+                                "value": 4
+                              }
+                            }
                           },
                           "error_message": {
                             "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
@@ -3376,9 +4137,26 @@
                 "type": "integer"
               },
               "state": {
-                "description": "Output only. The state of the tuned model.",
-                "type": "object",
-                "reference": "google.ai.generativelanguage_v1beta3.types.TunedModel.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. The timestamp when this model was created.",
@@ -3452,8 +4230,17 @@
                         "description": "Specified use case for this dataset.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.maps.mapsplatformdatasets_v1.types.Usage"
+                          "type": "enum",
+                          "name": "Usage",
+                          "description": "Usage specifies where the data is intended to be used to\ninform how to process the data.\n\nValues:\n    USAGE_UNSPECIFIED (0):\n        The usage of this dataset is not set.\n    USAGE_DATA_DRIVEN_STYLING (1):\n        This dataset will be used for data driven\n        styling.",
+                          "values": {
+                            "USAGE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "USAGE_DATA_DRIVEN_STYLING": {
+                              "value": 1
+                            }
+                          }
                         }
                       },
                       "local_file_source": {
@@ -3464,9 +4251,23 @@
                             "type": "string"
                           },
                           "file_format": {
-                            "description": "The format of the file that is being uploaded.",
-                            "type": "object",
-                            "reference": "google.maps.mapsplatformdatasets_v1.types.FileFormat"
+                            "type": "enum",
+                            "name": "FileFormat",
+                            "description": "The format of the file being uploaded.\n\nValues:\n    FILE_FORMAT_UNSPECIFIED (0):\n        Unspecified file format.\n    FILE_FORMAT_GEOJSON (1):\n        GeoJson file.\n    FILE_FORMAT_KML (2):\n        KML file.\n    FILE_FORMAT_CSV (3):\n        CSV file.",
+                            "values": {
+                              "FILE_FORMAT_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "FILE_FORMAT_GEOJSON": {
+                                "value": 1
+                              },
+                              "FILE_FORMAT_KML": {
+                                "value": 2
+                              },
+                              "FILE_FORMAT_CSV": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       },
@@ -3486,9 +4287,26 @@
                         "type": "object",
                         "properties": {
                           "state": {
-                            "description": "State enum for status.",
-                            "type": "object",
-                            "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                            "type": "enum",
+                            "name": "State",
+                            "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                            "values": {
+                              "STATE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "AFFECTED": {
+                                "value": 1
+                              },
+                              "NOT_AFFECTED": {
+                                "value": 2
+                              },
+                              "FIXED": {
+                                "value": 3
+                              },
+                              "UNDER_INVESTIGATION": {
+                                "value": 4
+                              }
+                            }
                           },
                           "error_message": {
                             "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
@@ -3606,14 +4424,39 @@
                 "type": "boolean"
               },
               "stage": {
-                "description": "The current launch stage of the permission.",
-                "type": "object",
-                "reference": "google.cloud.iam_admin_v1.types.Permission.PermissionLaunchStage"
+                "type": "enum",
+                "name": "PermissionLaunchStage",
+                "description": "A stage representing a permission's lifecycle phase.\n\nValues:\n    ALPHA (0):\n        The permission is currently in an alpha\n        phase.\n    BETA (1):\n        The permission is currently in a beta phase.\n    GA (2):\n        The permission is generally available.\n    DEPRECATED (3):\n        The permission is being deprecated.",
+                "values": {
+                  "ALPHA": {
+                    "value": 0
+                  },
+                  "BETA": {
+                    "value": 1
+                  },
+                  "GA": {
+                    "value": 2
+                  },
+                  "DEPRECATED": {
+                    "value": 3
+                  }
+                }
               },
               "custom_roles_support_level": {
-                "description": "The current custom role support level.",
-                "type": "object",
-                "reference": "google.cloud.iam_admin_v1.types.Permission.CustomRolesSupportLevel"
+                "type": "enum",
+                "name": "CustomRolesSupportLevel",
+                "description": "The state of the permission with regards to custom roles.\n\nValues:\n    SUPPORTED (0):\n        Default state. Permission is fully supported\n        for custom role use.\n    TESTING (1):\n        Permission is being tested to check custom\n        role compatibility.\n    NOT_SUPPORTED (2):\n        Permission is not supported for custom role\n        use.",
+                "values": {
+                  "SUPPORTED": {
+                    "value": 0
+                  },
+                  "TESTING": {
+                    "value": 1
+                  },
+                  "NOT_SUPPORTED": {
+                    "value": 2
+                  }
+                }
               },
               "api_disabled": {
                 "description": "The service API associated with the permission is not enabled.",
@@ -3702,14 +4545,39 @@
                 "type": "boolean"
               },
               "stage": {
-                "description": "The current launch stage of the permission.",
-                "type": "object",
-                "reference": "google.cloud.iam_admin_v1.types.Permission.PermissionLaunchStage"
+                "type": "enum",
+                "name": "PermissionLaunchStage",
+                "description": "A stage representing a permission's lifecycle phase.\n\nValues:\n    ALPHA (0):\n        The permission is currently in an alpha\n        phase.\n    BETA (1):\n        The permission is currently in a beta phase.\n    GA (2):\n        The permission is generally available.\n    DEPRECATED (3):\n        The permission is being deprecated.",
+                "values": {
+                  "ALPHA": {
+                    "value": 0
+                  },
+                  "BETA": {
+                    "value": 1
+                  },
+                  "GA": {
+                    "value": 2
+                  },
+                  "DEPRECATED": {
+                    "value": 3
+                  }
+                }
               },
               "custom_roles_support_level": {
-                "description": "The current custom role support level.",
-                "type": "object",
-                "reference": "google.cloud.iam_admin_v1.types.Permission.CustomRolesSupportLevel"
+                "type": "enum",
+                "name": "CustomRolesSupportLevel",
+                "description": "The state of the permission with regards to custom roles.\n\nValues:\n    SUPPORTED (0):\n        Default state. Permission is fully supported\n        for custom role use.\n    TESTING (1):\n        Permission is being tested to check custom\n        role compatibility.\n    NOT_SUPPORTED (2):\n        Permission is not supported for custom role\n        use.",
+                "values": {
+                  "SUPPORTED": {
+                    "value": 0
+                  },
+                  "TESTING": {
+                    "value": 1
+                  },
+                  "NOT_SUPPORTED": {
+                    "value": 2
+                  }
+                }
               },
               "api_disabled": {
                 "description": "The service API associated with the permission is not enabled.",
@@ -3891,15 +4759,24 @@
                 "type": "string"
               },
               "default_ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               }
@@ -3956,15 +4833,24 @@
                 "type": "string"
               },
               "default_ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               }
@@ -4097,9 +4983,23 @@
             "type": "object",
             "properties": {
               "type_": {
-                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
-                "type": "object",
-                "reference": "google.cloud.language_v2.types.Document.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "content": {
                 "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
@@ -4154,9 +5054,23 @@
             "type": "object",
             "properties": {
               "type_": {
-                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
-                "type": "object",
-                "reference": "google.cloud.language_v2.types.Document.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "content": {
                 "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
@@ -4882,14 +5796,54 @@
               "type": "object",
               "properties": {
                 "category": {
-                  "description": "Required. The category for this setting.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta3.types.HarmCategory"
+                  "type": "enum",
+                  "name": "HarmCategory",
+                  "description": "The category of a rating.\n\nThese categories cover various kinds of harms that developers\nmay wish to adjust.\n\nValues:\n    HARM_CATEGORY_UNSPECIFIED (0):\n        Category is unspecified.\n    HARM_CATEGORY_DEROGATORY (1):\n        Negative or harmful comments targeting\n        identity and/or protected attribute.\n    HARM_CATEGORY_TOXICITY (2):\n        Content that is rude, disrepspectful, or\n        profane.\n    HARM_CATEGORY_VIOLENCE (3):\n        Describes scenarios depictng violence against\n        an individual or group, or general descriptions\n        of gore.\n    HARM_CATEGORY_SEXUAL (4):\n        Contains references to sexual acts or other\n        lewd content.\n    HARM_CATEGORY_MEDICAL (5):\n        Promotes unchecked medical advice.\n    HARM_CATEGORY_DANGEROUS (6):\n        Dangerous content that promotes, facilitates,\n        or encourages harmful acts.",
+                  "values": {
+                    "HARM_CATEGORY_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "HARM_CATEGORY_DEROGATORY": {
+                      "value": 1
+                    },
+                    "HARM_CATEGORY_TOXICITY": {
+                      "value": 2
+                    },
+                    "HARM_CATEGORY_VIOLENCE": {
+                      "value": 3
+                    },
+                    "HARM_CATEGORY_SEXUAL": {
+                      "value": 4
+                    },
+                    "HARM_CATEGORY_MEDICAL": {
+                      "value": 5
+                    },
+                    "HARM_CATEGORY_DANGEROUS": {
+                      "value": 6
+                    }
+                  }
                 },
                 "threshold": {
-                  "description": "Required. Controls the probability threshold at which harm is blocked.",
-                  "type": "object",
-                  "reference": "google.ai.generativelanguage_v1beta3.types.SafetySetting.HarmBlockThreshold"
+                  "type": "enum",
+                  "name": "HarmBlockThreshold",
+                  "description": "Block at and beyond a specified harm probability.\n\nValues:\n    HARM_BLOCK_THRESHOLD_UNSPECIFIED (0):\n        Threshold is unspecified.\n    BLOCK_LOW_AND_ABOVE (1):\n        Content with NEGLIGIBLE will be allowed.\n    BLOCK_MEDIUM_AND_ABOVE (2):\n        Content with NEGLIGIBLE and LOW will be\n        allowed.\n    BLOCK_ONLY_HIGH (3):\n        Content with NEGLIGIBLE, LOW, and MEDIUM will\n        be allowed.\n    BLOCK_NONE (4):\n        All content will be allowed.",
+                  "values": {
+                    "HARM_BLOCK_THRESHOLD_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "BLOCK_LOW_AND_ABOVE": {
+                      "value": 1
+                    },
+                    "BLOCK_MEDIUM_AND_ABOVE": {
+                      "value": 2
+                    },
+                    "BLOCK_ONLY_HIGH": {
+                      "value": 3
+                    },
+                    "BLOCK_NONE": {
+                      "value": 4
+                    }
+                  }
                 }
               },
               "required": [

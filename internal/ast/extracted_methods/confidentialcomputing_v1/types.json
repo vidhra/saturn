@@ -12,30 +12,21 @@
             "type": "string"
           },
           "challenge": {
-            "description": "Required. The Challenge to be created. Currently this field can be empty as all the Challenge fields are set by the server.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. The resource name for this Challenge in the format ``projects/*/locations/*/challenges/*``",
-                "type": "string"
+            "description": "Challenge information for SCORE_AND_CHALLENGE keys\n\nValues:\n    CHALLENGE_UNSPECIFIED (0):\n        Default unspecified type.\n    NOCAPTCHA (1):\n        No challenge was presented for solving.\n    PASSED (2):\n        A solution was submitted that was correct.\n    FAILED (3):\n        A solution was submitted that was incorrect\n        or otherwise deemed suspicious.",
+            "type": "enum",
+            "name": "Challenge",
+            "values": {
+              "CHALLENGE_UNSPECIFIED": {
+                "value": 0
               },
-              "create_time": {
-                "description": "Output only. The time at which this Challenge was created",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              "NOCAPTCHA": {
+                "value": 1
               },
-              "expire_time": {
-                "description": "Output only. The time at which this Challenge will no longer be usable. It is also the expiration time for any tokens generated from this Challenge.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+              "PASSED": {
+                "value": 2
               },
-              "used": {
-                "description": "Output only. Indicates if this challenge has been used to generate a token.",
-                "type": "boolean"
-              },
-              "tpm_nonce": {
-                "description": "Output only. Identical to nonce, but as a string.",
-                "type": "string"
+              "FAILED": {
+                "value": 3
               }
             }
           }
@@ -204,9 +195,23 @@
                             "reference": "bytes"
                           },
                           "sig_alg": {
-                            "description": "Optional. Reserved for future use.",
-                            "type": "object",
-                            "reference": "google.cloud.confidentialcomputing_v1.types.SigningAlgorithm"
+                            "type": "enum",
+                            "name": "SigningAlgorithm",
+                            "description": "SigningAlgorithm enumerates all the supported signing\nalgorithms.\n\nValues:\n    SIGNING_ALGORITHM_UNSPECIFIED (0):\n        Unspecified signing algorithm.\n    RSASSA_PSS_SHA256 (1):\n        RSASSA-PSS with a SHA256 digest.\n    RSASSA_PKCS1V15_SHA256 (2):\n        RSASSA-PKCS1 v1.5 with a SHA256 digest.\n    ECDSA_P256_SHA256 (3):\n        ECDSA on the P-256 Curve with a SHA256\n        digest.",
+                            "values": {
+                              "SIGNING_ALGORITHM_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "RSASSA_PSS_SHA256": {
+                                "value": 1
+                              },
+                              "RSASSA_PKCS1V15_SHA256": {
+                                "value": 2
+                              },
+                              "ECDSA_P256_SHA256": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       }
@@ -232,9 +237,23 @@
                 }
               },
               "token_type": {
-                "description": "Optional. Optional token type to select what type of token to return.",
-                "type": "object",
-                "reference": "google.cloud.confidentialcomputing_v1.types.TokenType"
+                "type": "enum",
+                "name": "TokenType",
+                "description": "Token type enum contains the different types of token\nresponses Confidential Space supports\n\nValues:\n    TOKEN_TYPE_UNSPECIFIED (0):\n        Unspecified token type\n    TOKEN_TYPE_OIDC (1):\n        OpenID Connect (OIDC) token type\n    TOKEN_TYPE_PKI (2):\n        Public Key Infrastructure (PKI) token type\n    TOKEN_TYPE_LIMITED_AWS (3):\n        Limited claim token type for AWS integration",
+                "values": {
+                  "TOKEN_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "TOKEN_TYPE_OIDC": {
+                    "value": 1
+                  },
+                  "TOKEN_TYPE_PKI": {
+                    "value": 2
+                  },
+                  "TOKEN_TYPE_LIMITED_AWS": {
+                    "value": 3
+                  }
+                }
               }
             }
           }

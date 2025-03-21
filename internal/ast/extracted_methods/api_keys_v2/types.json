@@ -42,14 +42,42 @@
                     "type": "boolean"
                   },
                   "integration_type": {
-                    "description": "Required. Describes how this key is integrated with the website.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WebKeySettings.IntegrationType"
+                    "type": "enum",
+                    "name": "IntegrationType",
+                    "description": "Enum that represents the integration types for web keys.\n\nValues:\n    INTEGRATION_TYPE_UNSPECIFIED (0):\n        Default type that indicates this enum hasn't\n        been specified. This is not a valid\n        IntegrationType, one of the other types must be\n        specified instead.\n    SCORE (1):\n        Only used to produce scores. It doesn't\n        display the \"I'm not a robot\" checkbox and never\n        shows captcha challenges.\n    CHECKBOX (2):\n        Displays the \"I'm not a robot\" checkbox and\n        may show captcha challenges after it is checked.\n    INVISIBLE (3):\n        Doesn't display the \"I'm not a robot\"\n        checkbox, but may show captcha challenges after\n        risk analysis.",
+                    "values": {
+                      "INTEGRATION_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SCORE": {
+                        "value": 1
+                      },
+                      "CHECKBOX": {
+                        "value": 2
+                      },
+                      "INVISIBLE": {
+                        "value": 3
+                      }
+                    }
                   },
                   "challenge_security_preference": {
-                    "description": "Optional. Settings for the frequency and difficulty at which this key triggers captcha challenges. This should only be specified for IntegrationTypes CHECKBOX and INVISIBLE and SCORE_AND_CHALLENGE.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WebKeySettings.ChallengeSecurityPreference"
+                    "type": "enum",
+                    "name": "ChallengeSecurityPreference",
+                    "description": "Enum that represents the possible challenge frequency and\ndifficulty configurations for a web key.\n\nValues:\n    CHALLENGE_SECURITY_PREFERENCE_UNSPECIFIED (0):\n        Default type that indicates this enum hasn't\n        been specified.\n    USABILITY (1):\n        Key tends to show fewer and easier\n        challenges.\n    BALANCE (2):\n        Key tends to show balanced (in amount and\n        difficulty) challenges.\n    SECURITY (3):\n        Key tends to show more and harder challenges.",
+                    "values": {
+                      "CHALLENGE_SECURITY_PREFERENCE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "USABILITY": {
+                        "value": 1
+                      },
+                      "BALANCE": {
+                        "value": 2
+                      },
+                      "SECURITY": {
+                        "value": 3
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -138,9 +166,20 @@
                     "type": "number"
                   },
                   "testing_challenge": {
-                    "description": "Optional. For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.TestingOptions.TestingChallenge"
+                    "type": "enum",
+                    "name": "TestingChallenge",
+                    "description": "Enum that represents the challenge option for challenge-based\n(CHECKBOX, INVISIBLE) testing keys.\n\nValues:\n    TESTING_CHALLENGE_UNSPECIFIED (0):\n        Perform the normal risk analysis and return\n        either nocaptcha or a challenge depending on\n        risk and trust factors.\n    NOCAPTCHA (1):\n        Challenge requests for this key always return\n        a nocaptcha, which does not require a solution.\n    UNSOLVABLE_CHALLENGE (2):\n        Challenge requests for this key always return\n        an unsolvable challenge.",
+                    "values": {
+                      "TESTING_CHALLENGE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NOCAPTCHA": {
+                        "value": 1
+                      },
+                      "UNSOLVABLE_CHALLENGE": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -148,14 +187,48 @@
                 "type": "object",
                 "properties": {
                   "waf_service": {
-                    "description": "Required. The WAF service that uses this key.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WafSettings.WafService"
+                    "type": "enum",
+                    "name": "WafService",
+                    "description": "Web Application Firewalls supported by reCAPTCHA.\n\nValues:\n    WAF_SERVICE_UNSPECIFIED (0):\n        Undefined WAF\n    CA (1):\n        Cloud Armor\n    FASTLY (3):\n        Fastly\n    CLOUDFLARE (4):\n        Cloudflare\n    AKAMAI (5):\n        Akamai",
+                    "values": {
+                      "WAF_SERVICE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "CA": {
+                        "value": 1
+                      },
+                      "FASTLY": {
+                        "value": 3
+                      },
+                      "CLOUDFLARE": {
+                        "value": 4
+                      },
+                      "AKAMAI": {
+                        "value": 5
+                      }
+                    }
                   },
                   "waf_feature": {
-                    "description": "Required. The WAF feature for which this key is enabled.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WafSettings.WafFeature"
+                    "type": "enum",
+                    "name": "WafFeature",
+                    "description": "Supported WAF features. For more information, see\nhttps://cloud.google.com/recaptcha/docs/usecase#comparison_of_features.\n\nValues:\n    WAF_FEATURE_UNSPECIFIED (0):\n        Undefined feature.\n    CHALLENGE_PAGE (1):\n        Redirects suspicious traffic to reCAPTCHA.\n    SESSION_TOKEN (2):\n        Use reCAPTCHA session-tokens to protect the\n        whole user session on the site's domain.\n    ACTION_TOKEN (3):\n        Use reCAPTCHA action-tokens to protect user\n        actions.\n    EXPRESS (5):\n        Use reCAPTCHA WAF express protection to\n        protect any content other than web pages, like\n        APIs and IoT devices.",
+                    "values": {
+                      "WAF_FEATURE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "CHALLENGE_PAGE": {
+                        "value": 1
+                      },
+                      "SESSION_TOKEN": {
+                        "value": 2
+                      },
+                      "ACTION_TOKEN": {
+                        "value": 3
+                      },
+                      "EXPRESS": {
+                        "value": 5
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -280,14 +353,42 @@
                     "type": "boolean"
                   },
                   "integration_type": {
-                    "description": "Required. Describes how this key is integrated with the website.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WebKeySettings.IntegrationType"
+                    "type": "enum",
+                    "name": "IntegrationType",
+                    "description": "Enum that represents the integration types for web keys.\n\nValues:\n    INTEGRATION_TYPE_UNSPECIFIED (0):\n        Default type that indicates this enum hasn't\n        been specified. This is not a valid\n        IntegrationType, one of the other types must be\n        specified instead.\n    SCORE (1):\n        Only used to produce scores. It doesn't\n        display the \"I'm not a robot\" checkbox and never\n        shows captcha challenges.\n    CHECKBOX (2):\n        Displays the \"I'm not a robot\" checkbox and\n        may show captcha challenges after it is checked.\n    INVISIBLE (3):\n        Doesn't display the \"I'm not a robot\"\n        checkbox, but may show captcha challenges after\n        risk analysis.",
+                    "values": {
+                      "INTEGRATION_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SCORE": {
+                        "value": 1
+                      },
+                      "CHECKBOX": {
+                        "value": 2
+                      },
+                      "INVISIBLE": {
+                        "value": 3
+                      }
+                    }
                   },
                   "challenge_security_preference": {
-                    "description": "Optional. Settings for the frequency and difficulty at which this key triggers captcha challenges. This should only be specified for IntegrationTypes CHECKBOX and INVISIBLE and SCORE_AND_CHALLENGE.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WebKeySettings.ChallengeSecurityPreference"
+                    "type": "enum",
+                    "name": "ChallengeSecurityPreference",
+                    "description": "Enum that represents the possible challenge frequency and\ndifficulty configurations for a web key.\n\nValues:\n    CHALLENGE_SECURITY_PREFERENCE_UNSPECIFIED (0):\n        Default type that indicates this enum hasn't\n        been specified.\n    USABILITY (1):\n        Key tends to show fewer and easier\n        challenges.\n    BALANCE (2):\n        Key tends to show balanced (in amount and\n        difficulty) challenges.\n    SECURITY (3):\n        Key tends to show more and harder challenges.",
+                    "values": {
+                      "CHALLENGE_SECURITY_PREFERENCE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "USABILITY": {
+                        "value": 1
+                      },
+                      "BALANCE": {
+                        "value": 2
+                      },
+                      "SECURITY": {
+                        "value": 3
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -376,9 +477,20 @@
                     "type": "number"
                   },
                   "testing_challenge": {
-                    "description": "Optional. For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.TestingOptions.TestingChallenge"
+                    "type": "enum",
+                    "name": "TestingChallenge",
+                    "description": "Enum that represents the challenge option for challenge-based\n(CHECKBOX, INVISIBLE) testing keys.\n\nValues:\n    TESTING_CHALLENGE_UNSPECIFIED (0):\n        Perform the normal risk analysis and return\n        either nocaptcha or a challenge depending on\n        risk and trust factors.\n    NOCAPTCHA (1):\n        Challenge requests for this key always return\n        a nocaptcha, which does not require a solution.\n    UNSOLVABLE_CHALLENGE (2):\n        Challenge requests for this key always return\n        an unsolvable challenge.",
+                    "values": {
+                      "TESTING_CHALLENGE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NOCAPTCHA": {
+                        "value": 1
+                      },
+                      "UNSOLVABLE_CHALLENGE": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -386,14 +498,48 @@
                 "type": "object",
                 "properties": {
                   "waf_service": {
-                    "description": "Required. The WAF service that uses this key.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WafSettings.WafService"
+                    "type": "enum",
+                    "name": "WafService",
+                    "description": "Web Application Firewalls supported by reCAPTCHA.\n\nValues:\n    WAF_SERVICE_UNSPECIFIED (0):\n        Undefined WAF\n    CA (1):\n        Cloud Armor\n    FASTLY (3):\n        Fastly\n    CLOUDFLARE (4):\n        Cloudflare\n    AKAMAI (5):\n        Akamai",
+                    "values": {
+                      "WAF_SERVICE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "CA": {
+                        "value": 1
+                      },
+                      "FASTLY": {
+                        "value": 3
+                      },
+                      "CLOUDFLARE": {
+                        "value": 4
+                      },
+                      "AKAMAI": {
+                        "value": 5
+                      }
+                    }
                   },
                   "waf_feature": {
-                    "description": "Required. The WAF feature for which this key is enabled.",
-                    "type": "object",
-                    "reference": "google.cloud.recaptchaenterprise_v1.types.WafSettings.WafFeature"
+                    "type": "enum",
+                    "name": "WafFeature",
+                    "description": "Supported WAF features. For more information, see\nhttps://cloud.google.com/recaptcha/docs/usecase#comparison_of_features.\n\nValues:\n    WAF_FEATURE_UNSPECIFIED (0):\n        Undefined feature.\n    CHALLENGE_PAGE (1):\n        Redirects suspicious traffic to reCAPTCHA.\n    SESSION_TOKEN (2):\n        Use reCAPTCHA session-tokens to protect the\n        whole user session on the site's domain.\n    ACTION_TOKEN (3):\n        Use reCAPTCHA action-tokens to protect user\n        actions.\n    EXPRESS (5):\n        Use reCAPTCHA WAF express protection to\n        protect any content other than web pages, like\n        APIs and IoT devices.",
+                    "values": {
+                      "WAF_FEATURE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "CHALLENGE_PAGE": {
+                        "value": 1
+                      },
+                      "SESSION_TOKEN": {
+                        "value": 2
+                      },
+                      "ACTION_TOKEN": {
+                        "value": 3
+                      },
+                      "EXPRESS": {
+                        "value": 5
+                      }
+                    }
                   }
                 },
                 "required": [

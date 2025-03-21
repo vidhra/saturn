@@ -1049,9 +1049,26 @@
                     "type": "string"
                   },
                   "state": {
-                    "description": "State of the condition.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "message": {
                     "description": "Human readable message indicating details about the current status.",
@@ -1063,24 +1080,152 @@
                     "reference": "google.protobuf.timestamp_pb2.Timestamp"
                   },
                   "severity": {
-                    "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.Severity"
+                    "type": "enum",
+                    "name": "Severity",
+                    "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                    "values": {
+                      "SEVERITY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MINIMAL": {
+                        "value": 1
+                      },
+                      "LOW": {
+                        "value": 2
+                      },
+                      "MEDIUM": {
+                        "value": 3
+                      },
+                      "HIGH": {
+                        "value": 4
+                      },
+                      "CRITICAL": {
+                        "value": 5
+                      }
+                    }
                   },
                   "reason": {
-                    "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                    "type": "enum",
+                    "name": "CommonReason",
+                    "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                    "values": {
+                      "COMMON_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "UNKNOWN": {
+                        "value": 1
+                      },
+                      "REVISION_FAILED": {
+                        "value": 3
+                      },
+                      "PROGRESS_DEADLINE_EXCEEDED": {
+                        "value": 4
+                      },
+                      "CONTAINER_MISSING": {
+                        "value": 6
+                      },
+                      "CONTAINER_PERMISSION_DENIED": {
+                        "value": 7
+                      },
+                      "CONTAINER_IMAGE_UNAUTHORIZED": {
+                        "value": 8
+                      },
+                      "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                        "value": 9
+                      },
+                      "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                        "value": 10
+                      },
+                      "ENCRYPTION_KEY_CHECK_FAILED": {
+                        "value": 11
+                      },
+                      "SECRETS_ACCESS_CHECK_FAILED": {
+                        "value": 12
+                      },
+                      "WAITING_FOR_OPERATION": {
+                        "value": 13
+                      },
+                      "IMMEDIATE_RETRY": {
+                        "value": 14
+                      },
+                      "POSTPONED_RETRY": {
+                        "value": 15
+                      },
+                      "INTERNAL": {
+                        "value": 16
+                      }
+                    }
                   },
                   "revision_reason": {
-                    "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                    "type": "enum",
+                    "name": "RevisionReason",
+                    "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                    "values": {
+                      "REVISION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "PENDING": {
+                        "value": 1
+                      },
+                      "RESERVE": {
+                        "value": 2
+                      },
+                      "RETIRED": {
+                        "value": 3
+                      },
+                      "RETIRING": {
+                        "value": 4
+                      },
+                      "RECREATING": {
+                        "value": 5
+                      },
+                      "HEALTH_CHECK_CONTAINER_ERROR": {
+                        "value": 6
+                      },
+                      "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                        "value": 7
+                      },
+                      "MIN_INSTANCES_NOT_PROVISIONED": {
+                        "value": 8
+                      },
+                      "ACTIVE_REVISION_LIMIT_REACHED": {
+                        "value": 9
+                      },
+                      "NO_DEPLOYMENT": {
+                        "value": 10
+                      },
+                      "HEALTH_CHECK_SKIPPED": {
+                        "value": 11
+                      },
+                      "MIN_INSTANCES_WARMING": {
+                        "value": 12
+                      }
+                    }
                   },
                   "execution_reason": {
-                    "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                    "type": "enum",
+                    "name": "ExecutionReason",
+                    "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                    "values": {
+                      "EXECUTION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                        "value": 1
+                      },
+                      "NON_ZERO_EXIT_CODE": {
+                        "value": 2
+                      },
+                      "CANCELLED": {
+                        "value": 3
+                      },
+                      "CANCELLING": {
+                        "value": 4
+                      },
+                      "DELETED": {
+                        "value": 5
+                      }
+                    }
                   }
                 }
               }
@@ -1275,9 +1420,26 @@
                     "type": "string"
                   },
                   "state": {
-                    "description": "State of the condition.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "message": {
                     "description": "Human readable message indicating details about the current status.",
@@ -1289,24 +1451,152 @@
                     "reference": "google.protobuf.timestamp_pb2.Timestamp"
                   },
                   "severity": {
-                    "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.Severity"
+                    "type": "enum",
+                    "name": "Severity",
+                    "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                    "values": {
+                      "SEVERITY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MINIMAL": {
+                        "value": 1
+                      },
+                      "LOW": {
+                        "value": 2
+                      },
+                      "MEDIUM": {
+                        "value": 3
+                      },
+                      "HIGH": {
+                        "value": 4
+                      },
+                      "CRITICAL": {
+                        "value": 5
+                      }
+                    }
                   },
                   "reason": {
-                    "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                    "type": "enum",
+                    "name": "CommonReason",
+                    "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                    "values": {
+                      "COMMON_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "UNKNOWN": {
+                        "value": 1
+                      },
+                      "REVISION_FAILED": {
+                        "value": 3
+                      },
+                      "PROGRESS_DEADLINE_EXCEEDED": {
+                        "value": 4
+                      },
+                      "CONTAINER_MISSING": {
+                        "value": 6
+                      },
+                      "CONTAINER_PERMISSION_DENIED": {
+                        "value": 7
+                      },
+                      "CONTAINER_IMAGE_UNAUTHORIZED": {
+                        "value": 8
+                      },
+                      "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                        "value": 9
+                      },
+                      "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                        "value": 10
+                      },
+                      "ENCRYPTION_KEY_CHECK_FAILED": {
+                        "value": 11
+                      },
+                      "SECRETS_ACCESS_CHECK_FAILED": {
+                        "value": 12
+                      },
+                      "WAITING_FOR_OPERATION": {
+                        "value": 13
+                      },
+                      "IMMEDIATE_RETRY": {
+                        "value": 14
+                      },
+                      "POSTPONED_RETRY": {
+                        "value": 15
+                      },
+                      "INTERNAL": {
+                        "value": 16
+                      }
+                    }
                   },
                   "revision_reason": {
-                    "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                    "type": "enum",
+                    "name": "RevisionReason",
+                    "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                    "values": {
+                      "REVISION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "PENDING": {
+                        "value": 1
+                      },
+                      "RESERVE": {
+                        "value": 2
+                      },
+                      "RETIRED": {
+                        "value": 3
+                      },
+                      "RETIRING": {
+                        "value": 4
+                      },
+                      "RECREATING": {
+                        "value": 5
+                      },
+                      "HEALTH_CHECK_CONTAINER_ERROR": {
+                        "value": 6
+                      },
+                      "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                        "value": 7
+                      },
+                      "MIN_INSTANCES_NOT_PROVISIONED": {
+                        "value": 8
+                      },
+                      "ACTIVE_REVISION_LIMIT_REACHED": {
+                        "value": 9
+                      },
+                      "NO_DEPLOYMENT": {
+                        "value": 10
+                      },
+                      "HEALTH_CHECK_SKIPPED": {
+                        "value": 11
+                      },
+                      "MIN_INSTANCES_WARMING": {
+                        "value": 12
+                      }
+                    }
                   },
                   "execution_reason": {
-                    "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                    "type": "enum",
+                    "name": "ExecutionReason",
+                    "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                    "values": {
+                      "EXECUTION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                        "value": 1
+                      },
+                      "NON_ZERO_EXIT_CODE": {
+                        "value": 2
+                      },
+                      "CANCELLED": {
+                        "value": 3
+                      },
+                      "CANCELLING": {
+                        "value": 4
+                      },
+                      "DELETED": {
+                        "value": 5
+                      }
+                    }
                   }
                 }
               }
@@ -1375,9 +1665,23 @@
                 "type": "string"
               },
               "legacy_redirection_state": {
-                "description": "The redirection state of the legacy repositories in this project.",
-                "type": "object",
-                "reference": "google.cloud.artifactregistry_v1beta2.types.ProjectSettings.RedirectionState"
+                "type": "enum",
+                "name": "RedirectionState",
+                "description": "The possible redirection states for legacy repositories.\n\nValues:\n    REDIRECTION_STATE_UNSPECIFIED (0):\n        No redirection status has been set.\n    REDIRECTION_FROM_GCR_IO_DISABLED (1):\n        Redirection is disabled.\n    REDIRECTION_FROM_GCR_IO_ENABLED (2):\n        Redirection is enabled.\n    REDIRECTION_FROM_GCR_IO_FINALIZED (3):\n        Redirection is enabled, and has been\n        finalized so cannot be reverted.",
+                "values": {
+                  "REDIRECTION_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "REDIRECTION_FROM_GCR_IO_DISABLED": {
+                    "value": 1
+                  },
+                  "REDIRECTION_FROM_GCR_IO_ENABLED": {
+                    "value": 2
+                  },
+                  "REDIRECTION_FROM_GCR_IO_FINALIZED": {
+                    "value": 3
+                  }
+                }
               }
             }
           },
@@ -1528,9 +1832,20 @@
             "type": "string"
           },
           "view": {
-            "description": "The view that should be returned in the response.",
-            "type": "object",
-            "reference": "google.cloud.artifactregistry_v1.types.VersionView"
+            "description": "The view, which determines what version information is\nreturned in a response.\n\nValues:\n    VERSION_VIEW_UNSPECIFIED (0):\n        The default / unset value.\n        The API will default to the BASIC view.\n    BASIC (1):\n        Includes basic information about the version,\n        but not any related tags.\n    FULL (2):\n        Include everything.",
+            "type": "enum",
+            "name": "VersionView",
+            "values": {
+              "VERSION_VIEW_UNSPECIFIED": {
+                "value": 0
+              },
+              "BASIC": {
+                "value": 1
+              },
+              "FULL": {
+                "value": 2
+              }
+            }
           },
           "order_by": {
             "description": "Optional. The field to order the results by.",
@@ -1555,9 +1870,20 @@
             "type": "string"
           },
           "view": {
-            "description": "The view that should be returned in the response.",
-            "type": "object",
-            "reference": "google.cloud.artifactregistry_v1.types.VersionView"
+            "description": "The view, which determines what version information is\nreturned in a response.\n\nValues:\n    VERSION_VIEW_UNSPECIFIED (0):\n        The default / unset value.\n        The API will default to the BASIC view.\n    BASIC (1):\n        Includes basic information about the version,\n        but not any related tags.\n    FULL (2):\n        Include everything.",
+            "type": "enum",
+            "name": "VersionView",
+            "values": {
+              "VERSION_VIEW_UNSPECIFIED": {
+                "value": 0
+              },
+              "BASIC": {
+                "value": 1
+              },
+              "FULL": {
+                "value": 2
+              }
+            }
           }
         }
       }
@@ -1636,9 +1962,23 @@
                 "type": "boolean"
               },
               "kind": {
-                "description": "Required. Distinguishes between sentinel MIN/MAX versions and normal versions.",
-                "type": "object",
-                "reference": "grafeas.grafeas_v1.types.Version.VersionKind"
+                "type": "enum",
+                "name": "VersionKind",
+                "description": "Whether this is an ordinary package version or a sentinel\nMIN/MAX version.\n\nValues:\n    VERSION_KIND_UNSPECIFIED (0):\n        Unknown.\n    NORMAL (1):\n        A standard package version.\n    MINIMUM (2):\n        A special version representing negative\n        infinity.\n    MAXIMUM (3):\n        A special version representing positive\n        infinity.",
+                "values": {
+                  "VERSION_KIND_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NORMAL": {
+                    "value": 1
+                  },
+                  "MINIMUM": {
+                    "value": 2
+                  },
+                  "MAXIMUM": {
+                    "value": 3
+                  }
+                }
               },
               "full_name": {
                 "description": "Human readable version string. This string is of the form <epoch>:<name>-<revision> and is only set when kind is NORMAL.",
@@ -1696,9 +2036,20 @@
                 "type": "string"
               },
               "vpcsc_policy": {
-                "description": "The project per location VPC SC policy that defines the VPC SC behavior for the Remote Repository (Allow/Deny).",
-                "type": "object",
-                "reference": "google.cloud.artifactregistry_v1.types.VPCSCConfig.VPCSCPolicy"
+                "type": "enum",
+                "name": "VPCSCPolicy",
+                "description": "VPCSCPolicy is the VPC SC policy for project and location.\n\nValues:\n    VPCSC_POLICY_UNSPECIFIED (0):\n        VPCSC_POLICY_UNSPECIFIED - the VPS SC policy is not defined.\n        When VPS SC policy is not defined - the Service will use the\n        default behavior (VPCSC_DENY).\n    DENY (1):\n        VPCSC_DENY - repository will block the requests to the\n        Upstreams for the Remote Repositories if the resource is in\n        the perimeter.\n    ALLOW (2):\n        VPCSC_ALLOW - repository will allow the requests to the\n        Upstreams for the Remote Repositories if the resource is in\n        the perimeter.",
+                "values": {
+                  "VPCSC_POLICY_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "DENY": {
+                    "value": 1
+                  },
+                  "ALLOW": {
+                    "value": 2
+                  }
+                }
               }
             }
           },

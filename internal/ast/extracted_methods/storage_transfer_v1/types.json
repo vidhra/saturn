@@ -223,24 +223,68 @@
                         "type": "object",
                         "properties": {
                           "auth_method": {
-                            "description": "Specifies the authentication and authorization method used by the storage service. When not specified, Transfer Service will attempt to determine right auth method to use.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.AuthMethod"
+                            "type": "enum",
+                            "name": "AuthMethod",
+                            "description": "The authentication and authorization method used by the\nstorage service.\n\nValues:\n    AUTH_METHOD_UNSPECIFIED (0):\n        AuthMethod is not specified.\n    AUTH_METHOD_AWS_SIGNATURE_V4 (1):\n        Auth requests with AWS SigV4.\n    AUTH_METHOD_AWS_SIGNATURE_V2 (2):\n        Auth requests with AWS SigV2.",
+                            "values": {
+                              "AUTH_METHOD_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "AUTH_METHOD_AWS_SIGNATURE_V4": {
+                                "value": 1
+                              },
+                              "AUTH_METHOD_AWS_SIGNATURE_V2": {
+                                "value": 2
+                              }
+                            }
                           },
                           "request_model": {
-                            "description": "Specifies the API request model used to call the storage service. When not specified, the default value of RequestModel REQUEST_MODEL_VIRTUAL_HOSTED_STYLE is used.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.RequestModel"
+                            "type": "enum",
+                            "name": "RequestModel",
+                            "description": "The request model of the API.\n\nValues:\n    REQUEST_MODEL_UNSPECIFIED (0):\n        RequestModel is not specified.\n    REQUEST_MODEL_VIRTUAL_HOSTED_STYLE (1):\n        Perform requests using Virtual Hosted Style.\n        Example:\n        https://bucket-name.s3.region.amazonaws.com/key-name\n    REQUEST_MODEL_PATH_STYLE (2):\n        Perform requests using Path Style.\n        Example:\n        https://s3.region.amazonaws.com/bucket-name/key-name",
+                            "values": {
+                              "REQUEST_MODEL_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "REQUEST_MODEL_VIRTUAL_HOSTED_STYLE": {
+                                "value": 1
+                              },
+                              "REQUEST_MODEL_PATH_STYLE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "protocol": {
-                            "description": "Specifies the network protocol of the agent. When not specified, the default value of NetworkProtocol NETWORK_PROTOCOL_HTTPS is used.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.NetworkProtocol"
+                            "type": "enum",
+                            "name": "NetworkProtocol",
+                            "description": "The agent network protocol to access the storage service.\n\nValues:\n    NETWORK_PROTOCOL_UNSPECIFIED (0):\n        NetworkProtocol is not specified.\n    NETWORK_PROTOCOL_HTTPS (1):\n        Perform requests using HTTPS.\n    NETWORK_PROTOCOL_HTTP (2):\n        Not recommended: This sends data in\n        clear-text. This is only appropriate within a\n        closed network or for publicly available data.\n        Perform requests using HTTP.",
+                            "values": {
+                              "NETWORK_PROTOCOL_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NETWORK_PROTOCOL_HTTPS": {
+                                "value": 1
+                              },
+                              "NETWORK_PROTOCOL_HTTP": {
+                                "value": 2
+                              }
+                            }
                           },
                           "list_api": {
-                            "description": "The Listing API to use for discovering objects. When not specified, Transfer Service will attempt to determine the right API to use.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.ListApi"
+                            "type": "enum",
+                            "name": "ListApi",
+                            "description": "The Listing API to use for discovering objects.\n\nValues:\n    LIST_API_UNSPECIFIED (0):\n        ListApi is not specified.\n    LIST_OBJECTS_V2 (1):\n        Perform listing using ListObjectsV2 API.\n    LIST_OBJECTS (2):\n        Legacy ListObjects API.",
+                            "values": {
+                              "LIST_API_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "LIST_OBJECTS_V2": {
+                                "value": 1
+                              },
+                              "LIST_OBJECTS": {
+                                "value": 2
+                              }
+                            }
                           }
                         }
                       }
@@ -283,28 +327,46 @@
                     "type": "object",
                     "properties": {
                       "min_time_elapsed_since_last_modification": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
                       "max_time_elapsed_since_last_modification": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -350,57 +412,182 @@
                         "type": "boolean"
                       },
                       "overwrite_when": {
-                        "description": "When to overwrite objects that already exist in the sink. If not set, overwrite behavior is determined by [overwrite_objects_already_existing_in_sink][google.storagetransfer.v1.TransferOptions.overwrite_objects_already_existing_in_sink].",
-                        "type": "object",
-                        "reference": "google.cloud.storage_transfer_v1.types.TransferOptions.OverwriteWhen"
+                        "type": "enum",
+                        "name": "OverwriteWhen",
+                        "description": "Specifies when to overwrite an object in the sink when an\nobject with matching name is found in the source.\n\nValues:\n    OVERWRITE_WHEN_UNSPECIFIED (0):\n        Overwrite behavior is unspecified.\n    DIFFERENT (1):\n        Overwrites destination objects with the\n        source objects, only if the objects have the\n        same name but different HTTP ETags or checksum\n        values.\n    NEVER (2):\n        Never overwrites a destination object if a\n        source object has the same name. In this case,\n        the source object is not transferred.\n    ALWAYS (3):\n        Always overwrite the destination object with\n        the source object, even if the HTTP Etags or\n        checksum values are the same.",
+                        "values": {
+                          "OVERWRITE_WHEN_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "DIFFERENT": {
+                            "value": 1
+                          },
+                          "NEVER": {
+                            "value": 2
+                          },
+                          "ALWAYS": {
+                            "value": 3
+                          }
+                        }
                       },
                       "metadata_options": {
                         "type": "object",
                         "properties": {
                           "symlink": {
-                            "description": "Specifies how symlinks should be handled by the transfer. By default, symlinks are not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.Symlink"
+                            "type": "enum",
+                            "name": "Symlink",
+                            "description": "Whether symlinks should be skipped or preserved during a\ntransfer job.\n\nValues:\n    SYMLINK_UNSPECIFIED (0):\n        Symlink behavior is unspecified.\n    SYMLINK_SKIP (1):\n        Do not preserve symlinks during a transfer\n        job.\n    SYMLINK_PRESERVE (2):\n        Preserve symlinks during a transfer job.",
+                            "values": {
+                              "SYMLINK_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "SYMLINK_SKIP": {
+                                "value": 1
+                              },
+                              "SYMLINK_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "mode": {
-                            "description": "Specifies how each file's mode attribute should be handled by the transfer. By default, mode is not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.Mode"
+                            "type": "enum",
+                            "name": "Mode",
+                            "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                            "values": {
+                              "MODE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "MODE_SKIP": {
+                                "value": 1
+                              },
+                              "MODE_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "gid": {
-                            "description": "Specifies how each file's POSIX group ID (GID) attribute should be handled by the transfer. By default, GID is not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.GID"
+                            "type": "enum",
+                            "name": "GID",
+                            "description": "Options for handling file GID attribute.\n\nValues:\n    GID_UNSPECIFIED (0):\n        GID behavior is unspecified.\n    GID_SKIP (1):\n        Do not preserve GID during a transfer job.\n    GID_NUMBER (2):\n        Preserve GID during a transfer job.",
+                            "values": {
+                              "GID_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "GID_SKIP": {
+                                "value": 1
+                              },
+                              "GID_NUMBER": {
+                                "value": 2
+                              }
+                            }
                           },
                           "uid": {
-                            "description": "Specifies how each file's POSIX user ID (UID) attribute should be handled by the transfer. By default, UID is not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.UID"
+                            "type": "enum",
+                            "name": "UID",
+                            "description": "Options for handling file UID attribute.\n\nValues:\n    UID_UNSPECIFIED (0):\n        UID behavior is unspecified.\n    UID_SKIP (1):\n        Do not preserve UID during a transfer job.\n    UID_NUMBER (2):\n        Preserve UID during a transfer job.",
+                            "values": {
+                              "UID_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "UID_SKIP": {
+                                "value": 1
+                              },
+                              "UID_NUMBER": {
+                                "value": 2
+                              }
+                            }
                           },
                           "acl": {
-                            "description": "Specifies how each object's ACLs should be preserved for transfers between Google Cloud Storage buckets. If unspecified, the default behavior is the same as ACL_DESTINATION_BUCKET_DEFAULT.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.Acl"
+                            "type": "enum",
+                            "name": "Acl",
+                            "description": "Options for handling Cloud Storage object ACLs.\n\nValues:\n    ACL_UNSPECIFIED (0):\n        ACL behavior is unspecified.\n    ACL_DESTINATION_BUCKET_DEFAULT (1):\n        Use the destination bucket's default object\n        ACLS, if applicable.\n    ACL_PRESERVE (2):\n        Preserve the object's original ACLs. This requires the\n        service account to have ``storage.objects.getIamPolicy``\n        permission for the source object. `Uniform bucket-level\n        access <https://cloud.google.com/storage/docs/uniform-bucket-level-access>`__\n        must not be enabled on either the source or destination\n        buckets.",
+                            "values": {
+                              "ACL_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "ACL_DESTINATION_BUCKET_DEFAULT": {
+                                "value": 1
+                              },
+                              "ACL_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "storage_class": {
-                            "description": "Specifies the storage class to set on objects being transferred to Google Cloud Storage buckets. If unspecified, the default behavior is the same as [STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT][google.storagetransfer.v1.MetadataOptions.StorageClass.STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT].",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.StorageClass"
+                            "type": "enum",
+                            "name": "StorageClass",
+                            "description": "Options for handling Google Cloud Storage object storage\nclass.\n\nValues:\n    STORAGE_CLASS_UNSPECIFIED (0):\n        Storage class behavior is unspecified.\n    STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT (1):\n        Use the destination bucket's default storage\n        class.\n    STORAGE_CLASS_PRESERVE (2):\n        Preserve the object's original storage class. This is only\n        supported for transfers from Google Cloud Storage buckets.\n        REGIONAL and MULTI_REGIONAL storage classes will be mapped\n        to STANDARD to ensure they can be written to the destination\n        bucket.\n    STORAGE_CLASS_STANDARD (3):\n        Set the storage class to STANDARD.\n    STORAGE_CLASS_NEARLINE (4):\n        Set the storage class to NEARLINE.\n    STORAGE_CLASS_COLDLINE (5):\n        Set the storage class to COLDLINE.\n    STORAGE_CLASS_ARCHIVE (6):\n        Set the storage class to ARCHIVE.",
+                            "values": {
+                              "STORAGE_CLASS_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT": {
+                                "value": 1
+                              },
+                              "STORAGE_CLASS_PRESERVE": {
+                                "value": 2
+                              },
+                              "STORAGE_CLASS_STANDARD": {
+                                "value": 3
+                              },
+                              "STORAGE_CLASS_NEARLINE": {
+                                "value": 4
+                              },
+                              "STORAGE_CLASS_COLDLINE": {
+                                "value": 5
+                              },
+                              "STORAGE_CLASS_ARCHIVE": {
+                                "value": 6
+                              }
+                            }
                           },
                           "temporary_hold": {
-                            "description": "Specifies how each object's temporary hold status should be preserved for transfers between Google Cloud Storage buckets. If unspecified, the default behavior is the same as [TEMPORARY_HOLD_PRESERVE][google.storagetransfer.v1.MetadataOptions.TemporaryHold.TEMPORARY_HOLD_PRESERVE].",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.TemporaryHold"
+                            "type": "enum",
+                            "name": "TemporaryHold",
+                            "description": "Options for handling temporary holds for Google Cloud Storage\nobjects.\n\nValues:\n    TEMPORARY_HOLD_UNSPECIFIED (0):\n        Temporary hold behavior is unspecified.\n    TEMPORARY_HOLD_SKIP (1):\n        Do not set a temporary hold on the\n        destination object.\n    TEMPORARY_HOLD_PRESERVE (2):\n        Preserve the object's original temporary hold\n        status.",
+                            "values": {
+                              "TEMPORARY_HOLD_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "TEMPORARY_HOLD_SKIP": {
+                                "value": 1
+                              },
+                              "TEMPORARY_HOLD_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "kms_key": {
-                            "description": "Specifies how each object's Cloud KMS customer-managed encryption key (CMEK) is preserved for transfers between Google Cloud Storage buckets. If unspecified, the default behavior is the same as [KMS_KEY_DESTINATION_BUCKET_DEFAULT][google.storagetransfer.v1.MetadataOptions.KmsKey.KMS_KEY_DESTINATION_BUCKET_DEFAULT].",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.KmsKey"
+                            "type": "enum",
+                            "name": "KmsKey",
+                            "description": "Options for handling the KmsKey setting for Google Cloud\nStorage objects.\n\nValues:\n    KMS_KEY_UNSPECIFIED (0):\n        KmsKey behavior is unspecified.\n    KMS_KEY_DESTINATION_BUCKET_DEFAULT (1):\n        Use the destination bucket's default\n        encryption settings.\n    KMS_KEY_PRESERVE (2):\n        Preserve the object's original Cloud KMS\n        customer-managed encryption key (CMEK) if\n        present. Objects that do not use a Cloud KMS\n        encryption key will be encrypted using the\n        destination bucket's encryption settings.",
+                            "values": {
+                              "KMS_KEY_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "KMS_KEY_DESTINATION_BUCKET_DEFAULT": {
+                                "value": 1
+                              },
+                              "KMS_KEY_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "time_created": {
-                            "description": "Specifies how each object's ``timeCreated`` metadata is preserved for transfers. If unspecified, the default behavior is the same as [TIME_CREATED_SKIP][google.storagetransfer.v1.MetadataOptions.TimeCreated.TIME_CREATED_SKIP]. This behavior is supported for transfers to Cloud Storage buckets from Cloud Storage, Amazon S3, S3-compatible storage, and Azure sources.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.TimeCreated"
+                            "type": "enum",
+                            "name": "TimeCreated",
+                            "description": "Options for handling ``timeCreated`` metadata for Google Cloud\nStorage objects.\n\nValues:\n    TIME_CREATED_UNSPECIFIED (0):\n        TimeCreated behavior is unspecified.\n    TIME_CREATED_SKIP (1):\n        Do not preserve the ``timeCreated`` metadata from the source\n        object.\n    TIME_CREATED_PRESERVE_AS_CUSTOM_TIME (2):\n        Preserves the source object's ``timeCreated`` or\n        ``lastModified`` metadata in the ``customTime`` field in the\n        destination object. Note that any value stored in the source\n        object's ``customTime`` field will not be propagated to the\n        destination object.",
+                            "values": {
+                              "TIME_CREATED_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "TIME_CREATED_SKIP": {
+                                "value": 1
+                              },
+                              "TIME_CREATED_PRESERVE_AS_CUSTOM_TIME": {
+                                "value": 2
+                              }
+                            }
                           }
                         }
                       }
@@ -436,52 +623,103 @@
                     "description": "Event types for which a notification is desired. If empty, send notifications for all event types.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "type_": {
-                          "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
-                          "type": "string"
+                      "type": "enum",
+                      "name": "EventType",
+                      "description": "Describes the event that occurred.\n\nValues:\n    EVENT_TYPE_UNSPECIFIED (0):\n        The event type is unspecified.\n    CREATIVE_VIEW (1):\n        First frame of creative ad viewed.\n    START (2):\n        Creative ad started.\n    BREAK_START (3):\n        Start of an ad break.\n    BREAK_END (4):\n        End of an ad break.\n    IMPRESSION (5):\n        Impression.\n    FIRST_QUARTILE (6):\n        First quartile progress.\n    MIDPOINT (7):\n        Midpoint progress.\n    THIRD_QUARTILE (8):\n        Third quartile progress.\n    COMPLETE (9):\n        Ad progress completed.\n    PROGRESS (10):\n        Specific progress event with an offset.\n    MUTE (11):\n        Player muted.\n    UNMUTE (12):\n        Player unmuted.\n    PAUSE (13):\n        Player paused.\n    CLICK (14):\n        Click event.\n    CLICK_THROUGH (15):\n        Click-through event.\n    REWIND (16):\n        Player rewinding.\n    RESUME (17):\n        Player resumed.\n    ERROR (18):\n        Error event.\n    EXPAND (21):\n        Ad expanded to a larger size.\n   ",
+                      "values": {
+                        "EVENT_TYPE_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "description": {
-                          "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
-                          "type": "string"
+                        "CREATIVE_VIEW": {
+                          "value": 1
                         },
-                        "filtering_attributes": {
-                          "description": "Output only. Filtering attributes for the event type.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "attribute": {
-                                "description": "Output only. Attribute used for filtering the event type.",
-                                "type": "string"
-                              },
-                              "description": {
-                                "description": "Output only. Description of the purpose of the attribute.",
-                                "type": "string"
-                              },
-                              "required": {
-                                "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
-                                "type": "boolean"
-                              },
-                              "path_pattern_supported": {
-                                "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
-                                "type": "boolean"
-                              }
-                            }
-                          }
+                        "START": {
+                          "value": 2
                         },
-                        "event_schema_uri": {
-                          "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
-                          "type": "string"
+                        "BREAK_START": {
+                          "value": 3
+                        },
+                        "BREAK_END": {
+                          "value": 4
+                        },
+                        "IMPRESSION": {
+                          "value": 5
+                        },
+                        "FIRST_QUARTILE": {
+                          "value": 6
+                        },
+                        "MIDPOINT": {
+                          "value": 7
+                        },
+                        "THIRD_QUARTILE": {
+                          "value": 8
+                        },
+                        "COMPLETE": {
+                          "value": 9
+                        },
+                        "PROGRESS": {
+                          "value": 10
+                        },
+                        "MUTE": {
+                          "value": 11
+                        },
+                        "UNMUTE": {
+                          "value": 12
+                        },
+                        "PAUSE": {
+                          "value": 13
+                        },
+                        "CLICK": {
+                          "value": 14
+                        },
+                        "CLICK_THROUGH": {
+                          "value": 15
+                        },
+                        "REWIND": {
+                          "value": 16
+                        },
+                        "RESUME": {
+                          "value": 17
+                        },
+                        "ERROR": {
+                          "value": 18
+                        },
+                        "EXPAND": {
+                          "value": 21
+                        },
+                        "COLLAPSE": {
+                          "value": 22
+                        },
+                        "CLOSE": {
+                          "value": 24
+                        },
+                        "CLOSE_LINEAR": {
+                          "value": 25
+                        },
+                        "SKIP": {
+                          "value": 26
+                        },
+                        "ACCEPT_INVITATION": {
+                          "value": 27
                         }
                       }
                     }
                   },
                   "payload_format": {
-                    "description": "Required. The desired format of the notification message payloads.",
-                    "type": "object",
-                    "reference": "google.cloud.storage_transfer_v1.types.NotificationConfig.PayloadFormat"
+                    "type": "enum",
+                    "name": "PayloadFormat",
+                    "description": "Enum for specifying the format of a notification message's\npayload.\n\nValues:\n    PAYLOAD_FORMAT_UNSPECIFIED (0):\n        Illegal value, to avoid allowing a default.\n    NONE (1):\n        No payload is included with the notification.\n    JSON (2):\n        ``TransferOperation`` is `formatted as a JSON\n        response <https://developers.google.com/protocol-buffers/docs/proto3#json>`__,\n        in application/json.",
+                    "values": {
+                      "PAYLOAD_FORMAT_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NONE": {
+                        "value": 1
+                      },
+                      "JSON": {
+                        "value": 2
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -496,16 +734,43 @@
                     "description": "Specifies the actions to be logged. If empty, no logs are generated.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.storage_transfer_v1.types.LoggingConfig.LoggableAction"
+                      "type": "enum",
+                      "name": "LoggableAction",
+                      "description": "Loggable actions.\n\nValues:\n    LOGGABLE_ACTION_UNSPECIFIED (0):\n        Default value. This value is unused.\n    FIND (1):\n        Listing objects in a bucket.\n    DELETE (2):\n        Deleting objects at the source or the\n        destination.\n    COPY (3):\n        Copying objects to Google Cloud Storage.",
+                      "values": {
+                        "LOGGABLE_ACTION_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "FIND": {
+                          "value": 1
+                        },
+                        "DELETE": {
+                          "value": 2
+                        },
+                        "COPY": {
+                          "value": 3
+                        }
+                      }
                     }
                   },
                   "log_action_states": {
                     "description": "States in which ``log_actions`` are logged. If empty, no logs are generated.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.storage_transfer_v1.types.LoggingConfig.LoggableActionState"
+                      "type": "enum",
+                      "name": "LoggableActionState",
+                      "description": "Loggable action states.\n\nValues:\n    LOGGABLE_ACTION_STATE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    SUCCEEDED (1):\n        ``LoggableAction`` completed successfully. ``SUCCEEDED``\n        actions are logged as\n        [INFO][google.logging.type.LogSeverity.INFO].\n    FAILED (2):\n        ``LoggableAction`` terminated in an error state. ``FAILED``\n        actions are logged as\n        [ERROR][google.logging.type.LogSeverity.ERROR].",
+                      "values": {
+                        "LOGGABLE_ACTION_STATE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "SUCCEEDED": {
+                          "value": 1
+                        },
+                        "FAILED": {
+                          "value": 2
+                        }
+                      }
                     }
                   },
                   "enable_onprem_gcs_transfer_logs": {
@@ -557,9 +822,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "State enum for status.",
-                    "type": "object",
-                    "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
@@ -808,24 +1090,68 @@
                         "type": "object",
                         "properties": {
                           "auth_method": {
-                            "description": "Specifies the authentication and authorization method used by the storage service. When not specified, Transfer Service will attempt to determine right auth method to use.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.AuthMethod"
+                            "type": "enum",
+                            "name": "AuthMethod",
+                            "description": "The authentication and authorization method used by the\nstorage service.\n\nValues:\n    AUTH_METHOD_UNSPECIFIED (0):\n        AuthMethod is not specified.\n    AUTH_METHOD_AWS_SIGNATURE_V4 (1):\n        Auth requests with AWS SigV4.\n    AUTH_METHOD_AWS_SIGNATURE_V2 (2):\n        Auth requests with AWS SigV2.",
+                            "values": {
+                              "AUTH_METHOD_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "AUTH_METHOD_AWS_SIGNATURE_V4": {
+                                "value": 1
+                              },
+                              "AUTH_METHOD_AWS_SIGNATURE_V2": {
+                                "value": 2
+                              }
+                            }
                           },
                           "request_model": {
-                            "description": "Specifies the API request model used to call the storage service. When not specified, the default value of RequestModel REQUEST_MODEL_VIRTUAL_HOSTED_STYLE is used.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.RequestModel"
+                            "type": "enum",
+                            "name": "RequestModel",
+                            "description": "The request model of the API.\n\nValues:\n    REQUEST_MODEL_UNSPECIFIED (0):\n        RequestModel is not specified.\n    REQUEST_MODEL_VIRTUAL_HOSTED_STYLE (1):\n        Perform requests using Virtual Hosted Style.\n        Example:\n        https://bucket-name.s3.region.amazonaws.com/key-name\n    REQUEST_MODEL_PATH_STYLE (2):\n        Perform requests using Path Style.\n        Example:\n        https://s3.region.amazonaws.com/bucket-name/key-name",
+                            "values": {
+                              "REQUEST_MODEL_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "REQUEST_MODEL_VIRTUAL_HOSTED_STYLE": {
+                                "value": 1
+                              },
+                              "REQUEST_MODEL_PATH_STYLE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "protocol": {
-                            "description": "Specifies the network protocol of the agent. When not specified, the default value of NetworkProtocol NETWORK_PROTOCOL_HTTPS is used.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.NetworkProtocol"
+                            "type": "enum",
+                            "name": "NetworkProtocol",
+                            "description": "The agent network protocol to access the storage service.\n\nValues:\n    NETWORK_PROTOCOL_UNSPECIFIED (0):\n        NetworkProtocol is not specified.\n    NETWORK_PROTOCOL_HTTPS (1):\n        Perform requests using HTTPS.\n    NETWORK_PROTOCOL_HTTP (2):\n        Not recommended: This sends data in\n        clear-text. This is only appropriate within a\n        closed network or for publicly available data.\n        Perform requests using HTTP.",
+                            "values": {
+                              "NETWORK_PROTOCOL_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NETWORK_PROTOCOL_HTTPS": {
+                                "value": 1
+                              },
+                              "NETWORK_PROTOCOL_HTTP": {
+                                "value": 2
+                              }
+                            }
                           },
                           "list_api": {
-                            "description": "The Listing API to use for discovering objects. When not specified, Transfer Service will attempt to determine the right API to use.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.S3CompatibleMetadata.ListApi"
+                            "type": "enum",
+                            "name": "ListApi",
+                            "description": "The Listing API to use for discovering objects.\n\nValues:\n    LIST_API_UNSPECIFIED (0):\n        ListApi is not specified.\n    LIST_OBJECTS_V2 (1):\n        Perform listing using ListObjectsV2 API.\n    LIST_OBJECTS (2):\n        Legacy ListObjects API.",
+                            "values": {
+                              "LIST_API_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "LIST_OBJECTS_V2": {
+                                "value": 1
+                              },
+                              "LIST_OBJECTS": {
+                                "value": 2
+                              }
+                            }
                           }
                         }
                       }
@@ -868,28 +1194,46 @@
                     "type": "object",
                     "properties": {
                       "min_time_elapsed_since_last_modification": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
                       "max_time_elapsed_since_last_modification": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -935,57 +1279,182 @@
                         "type": "boolean"
                       },
                       "overwrite_when": {
-                        "description": "When to overwrite objects that already exist in the sink. If not set, overwrite behavior is determined by [overwrite_objects_already_existing_in_sink][google.storagetransfer.v1.TransferOptions.overwrite_objects_already_existing_in_sink].",
-                        "type": "object",
-                        "reference": "google.cloud.storage_transfer_v1.types.TransferOptions.OverwriteWhen"
+                        "type": "enum",
+                        "name": "OverwriteWhen",
+                        "description": "Specifies when to overwrite an object in the sink when an\nobject with matching name is found in the source.\n\nValues:\n    OVERWRITE_WHEN_UNSPECIFIED (0):\n        Overwrite behavior is unspecified.\n    DIFFERENT (1):\n        Overwrites destination objects with the\n        source objects, only if the objects have the\n        same name but different HTTP ETags or checksum\n        values.\n    NEVER (2):\n        Never overwrites a destination object if a\n        source object has the same name. In this case,\n        the source object is not transferred.\n    ALWAYS (3):\n        Always overwrite the destination object with\n        the source object, even if the HTTP Etags or\n        checksum values are the same.",
+                        "values": {
+                          "OVERWRITE_WHEN_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "DIFFERENT": {
+                            "value": 1
+                          },
+                          "NEVER": {
+                            "value": 2
+                          },
+                          "ALWAYS": {
+                            "value": 3
+                          }
+                        }
                       },
                       "metadata_options": {
                         "type": "object",
                         "properties": {
                           "symlink": {
-                            "description": "Specifies how symlinks should be handled by the transfer. By default, symlinks are not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.Symlink"
+                            "type": "enum",
+                            "name": "Symlink",
+                            "description": "Whether symlinks should be skipped or preserved during a\ntransfer job.\n\nValues:\n    SYMLINK_UNSPECIFIED (0):\n        Symlink behavior is unspecified.\n    SYMLINK_SKIP (1):\n        Do not preserve symlinks during a transfer\n        job.\n    SYMLINK_PRESERVE (2):\n        Preserve symlinks during a transfer job.",
+                            "values": {
+                              "SYMLINK_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "SYMLINK_SKIP": {
+                                "value": 1
+                              },
+                              "SYMLINK_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "mode": {
-                            "description": "Specifies how each file's mode attribute should be handled by the transfer. By default, mode is not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.Mode"
+                            "type": "enum",
+                            "name": "Mode",
+                            "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                            "values": {
+                              "MODE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "MODE_SKIP": {
+                                "value": 1
+                              },
+                              "MODE_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "gid": {
-                            "description": "Specifies how each file's POSIX group ID (GID) attribute should be handled by the transfer. By default, GID is not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.GID"
+                            "type": "enum",
+                            "name": "GID",
+                            "description": "Options for handling file GID attribute.\n\nValues:\n    GID_UNSPECIFIED (0):\n        GID behavior is unspecified.\n    GID_SKIP (1):\n        Do not preserve GID during a transfer job.\n    GID_NUMBER (2):\n        Preserve GID during a transfer job.",
+                            "values": {
+                              "GID_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "GID_SKIP": {
+                                "value": 1
+                              },
+                              "GID_NUMBER": {
+                                "value": 2
+                              }
+                            }
                           },
                           "uid": {
-                            "description": "Specifies how each file's POSIX user ID (UID) attribute should be handled by the transfer. By default, UID is not preserved. Only applicable to transfers involving POSIX file systems, and ignored for other transfers.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.UID"
+                            "type": "enum",
+                            "name": "UID",
+                            "description": "Options for handling file UID attribute.\n\nValues:\n    UID_UNSPECIFIED (0):\n        UID behavior is unspecified.\n    UID_SKIP (1):\n        Do not preserve UID during a transfer job.\n    UID_NUMBER (2):\n        Preserve UID during a transfer job.",
+                            "values": {
+                              "UID_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "UID_SKIP": {
+                                "value": 1
+                              },
+                              "UID_NUMBER": {
+                                "value": 2
+                              }
+                            }
                           },
                           "acl": {
-                            "description": "Specifies how each object's ACLs should be preserved for transfers between Google Cloud Storage buckets. If unspecified, the default behavior is the same as ACL_DESTINATION_BUCKET_DEFAULT.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.Acl"
+                            "type": "enum",
+                            "name": "Acl",
+                            "description": "Options for handling Cloud Storage object ACLs.\n\nValues:\n    ACL_UNSPECIFIED (0):\n        ACL behavior is unspecified.\n    ACL_DESTINATION_BUCKET_DEFAULT (1):\n        Use the destination bucket's default object\n        ACLS, if applicable.\n    ACL_PRESERVE (2):\n        Preserve the object's original ACLs. This requires the\n        service account to have ``storage.objects.getIamPolicy``\n        permission for the source object. `Uniform bucket-level\n        access <https://cloud.google.com/storage/docs/uniform-bucket-level-access>`__\n        must not be enabled on either the source or destination\n        buckets.",
+                            "values": {
+                              "ACL_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "ACL_DESTINATION_BUCKET_DEFAULT": {
+                                "value": 1
+                              },
+                              "ACL_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "storage_class": {
-                            "description": "Specifies the storage class to set on objects being transferred to Google Cloud Storage buckets. If unspecified, the default behavior is the same as [STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT][google.storagetransfer.v1.MetadataOptions.StorageClass.STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT].",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.StorageClass"
+                            "type": "enum",
+                            "name": "StorageClass",
+                            "description": "Options for handling Google Cloud Storage object storage\nclass.\n\nValues:\n    STORAGE_CLASS_UNSPECIFIED (0):\n        Storage class behavior is unspecified.\n    STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT (1):\n        Use the destination bucket's default storage\n        class.\n    STORAGE_CLASS_PRESERVE (2):\n        Preserve the object's original storage class. This is only\n        supported for transfers from Google Cloud Storage buckets.\n        REGIONAL and MULTI_REGIONAL storage classes will be mapped\n        to STANDARD to ensure they can be written to the destination\n        bucket.\n    STORAGE_CLASS_STANDARD (3):\n        Set the storage class to STANDARD.\n    STORAGE_CLASS_NEARLINE (4):\n        Set the storage class to NEARLINE.\n    STORAGE_CLASS_COLDLINE (5):\n        Set the storage class to COLDLINE.\n    STORAGE_CLASS_ARCHIVE (6):\n        Set the storage class to ARCHIVE.",
+                            "values": {
+                              "STORAGE_CLASS_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT": {
+                                "value": 1
+                              },
+                              "STORAGE_CLASS_PRESERVE": {
+                                "value": 2
+                              },
+                              "STORAGE_CLASS_STANDARD": {
+                                "value": 3
+                              },
+                              "STORAGE_CLASS_NEARLINE": {
+                                "value": 4
+                              },
+                              "STORAGE_CLASS_COLDLINE": {
+                                "value": 5
+                              },
+                              "STORAGE_CLASS_ARCHIVE": {
+                                "value": 6
+                              }
+                            }
                           },
                           "temporary_hold": {
-                            "description": "Specifies how each object's temporary hold status should be preserved for transfers between Google Cloud Storage buckets. If unspecified, the default behavior is the same as [TEMPORARY_HOLD_PRESERVE][google.storagetransfer.v1.MetadataOptions.TemporaryHold.TEMPORARY_HOLD_PRESERVE].",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.TemporaryHold"
+                            "type": "enum",
+                            "name": "TemporaryHold",
+                            "description": "Options for handling temporary holds for Google Cloud Storage\nobjects.\n\nValues:\n    TEMPORARY_HOLD_UNSPECIFIED (0):\n        Temporary hold behavior is unspecified.\n    TEMPORARY_HOLD_SKIP (1):\n        Do not set a temporary hold on the\n        destination object.\n    TEMPORARY_HOLD_PRESERVE (2):\n        Preserve the object's original temporary hold\n        status.",
+                            "values": {
+                              "TEMPORARY_HOLD_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "TEMPORARY_HOLD_SKIP": {
+                                "value": 1
+                              },
+                              "TEMPORARY_HOLD_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "kms_key": {
-                            "description": "Specifies how each object's Cloud KMS customer-managed encryption key (CMEK) is preserved for transfers between Google Cloud Storage buckets. If unspecified, the default behavior is the same as [KMS_KEY_DESTINATION_BUCKET_DEFAULT][google.storagetransfer.v1.MetadataOptions.KmsKey.KMS_KEY_DESTINATION_BUCKET_DEFAULT].",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.KmsKey"
+                            "type": "enum",
+                            "name": "KmsKey",
+                            "description": "Options for handling the KmsKey setting for Google Cloud\nStorage objects.\n\nValues:\n    KMS_KEY_UNSPECIFIED (0):\n        KmsKey behavior is unspecified.\n    KMS_KEY_DESTINATION_BUCKET_DEFAULT (1):\n        Use the destination bucket's default\n        encryption settings.\n    KMS_KEY_PRESERVE (2):\n        Preserve the object's original Cloud KMS\n        customer-managed encryption key (CMEK) if\n        present. Objects that do not use a Cloud KMS\n        encryption key will be encrypted using the\n        destination bucket's encryption settings.",
+                            "values": {
+                              "KMS_KEY_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "KMS_KEY_DESTINATION_BUCKET_DEFAULT": {
+                                "value": 1
+                              },
+                              "KMS_KEY_PRESERVE": {
+                                "value": 2
+                              }
+                            }
                           },
                           "time_created": {
-                            "description": "Specifies how each object's ``timeCreated`` metadata is preserved for transfers. If unspecified, the default behavior is the same as [TIME_CREATED_SKIP][google.storagetransfer.v1.MetadataOptions.TimeCreated.TIME_CREATED_SKIP]. This behavior is supported for transfers to Cloud Storage buckets from Cloud Storage, Amazon S3, S3-compatible storage, and Azure sources.",
-                            "type": "object",
-                            "reference": "google.cloud.storage_transfer_v1.types.MetadataOptions.TimeCreated"
+                            "type": "enum",
+                            "name": "TimeCreated",
+                            "description": "Options for handling ``timeCreated`` metadata for Google Cloud\nStorage objects.\n\nValues:\n    TIME_CREATED_UNSPECIFIED (0):\n        TimeCreated behavior is unspecified.\n    TIME_CREATED_SKIP (1):\n        Do not preserve the ``timeCreated`` metadata from the source\n        object.\n    TIME_CREATED_PRESERVE_AS_CUSTOM_TIME (2):\n        Preserves the source object's ``timeCreated`` or\n        ``lastModified`` metadata in the ``customTime`` field in the\n        destination object. Note that any value stored in the source\n        object's ``customTime`` field will not be propagated to the\n        destination object.",
+                            "values": {
+                              "TIME_CREATED_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "TIME_CREATED_SKIP": {
+                                "value": 1
+                              },
+                              "TIME_CREATED_PRESERVE_AS_CUSTOM_TIME": {
+                                "value": 2
+                              }
+                            }
                           }
                         }
                       }
@@ -1021,52 +1490,103 @@
                     "description": "Event types for which a notification is desired. If empty, send notifications for all event types.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "type_": {
-                          "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
-                          "type": "string"
+                      "type": "enum",
+                      "name": "EventType",
+                      "description": "Describes the event that occurred.\n\nValues:\n    EVENT_TYPE_UNSPECIFIED (0):\n        The event type is unspecified.\n    CREATIVE_VIEW (1):\n        First frame of creative ad viewed.\n    START (2):\n        Creative ad started.\n    BREAK_START (3):\n        Start of an ad break.\n    BREAK_END (4):\n        End of an ad break.\n    IMPRESSION (5):\n        Impression.\n    FIRST_QUARTILE (6):\n        First quartile progress.\n    MIDPOINT (7):\n        Midpoint progress.\n    THIRD_QUARTILE (8):\n        Third quartile progress.\n    COMPLETE (9):\n        Ad progress completed.\n    PROGRESS (10):\n        Specific progress event with an offset.\n    MUTE (11):\n        Player muted.\n    UNMUTE (12):\n        Player unmuted.\n    PAUSE (13):\n        Player paused.\n    CLICK (14):\n        Click event.\n    CLICK_THROUGH (15):\n        Click-through event.\n    REWIND (16):\n        Player rewinding.\n    RESUME (17):\n        Player resumed.\n    ERROR (18):\n        Error event.\n    EXPAND (21):\n        Ad expanded to a larger size.\n   ",
+                      "values": {
+                        "EVENT_TYPE_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "description": {
-                          "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
-                          "type": "string"
+                        "CREATIVE_VIEW": {
+                          "value": 1
                         },
-                        "filtering_attributes": {
-                          "description": "Output only. Filtering attributes for the event type.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "attribute": {
-                                "description": "Output only. Attribute used for filtering the event type.",
-                                "type": "string"
-                              },
-                              "description": {
-                                "description": "Output only. Description of the purpose of the attribute.",
-                                "type": "string"
-                              },
-                              "required": {
-                                "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
-                                "type": "boolean"
-                              },
-                              "path_pattern_supported": {
-                                "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
-                                "type": "boolean"
-                              }
-                            }
-                          }
+                        "START": {
+                          "value": 2
                         },
-                        "event_schema_uri": {
-                          "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
-                          "type": "string"
+                        "BREAK_START": {
+                          "value": 3
+                        },
+                        "BREAK_END": {
+                          "value": 4
+                        },
+                        "IMPRESSION": {
+                          "value": 5
+                        },
+                        "FIRST_QUARTILE": {
+                          "value": 6
+                        },
+                        "MIDPOINT": {
+                          "value": 7
+                        },
+                        "THIRD_QUARTILE": {
+                          "value": 8
+                        },
+                        "COMPLETE": {
+                          "value": 9
+                        },
+                        "PROGRESS": {
+                          "value": 10
+                        },
+                        "MUTE": {
+                          "value": 11
+                        },
+                        "UNMUTE": {
+                          "value": 12
+                        },
+                        "PAUSE": {
+                          "value": 13
+                        },
+                        "CLICK": {
+                          "value": 14
+                        },
+                        "CLICK_THROUGH": {
+                          "value": 15
+                        },
+                        "REWIND": {
+                          "value": 16
+                        },
+                        "RESUME": {
+                          "value": 17
+                        },
+                        "ERROR": {
+                          "value": 18
+                        },
+                        "EXPAND": {
+                          "value": 21
+                        },
+                        "COLLAPSE": {
+                          "value": 22
+                        },
+                        "CLOSE": {
+                          "value": 24
+                        },
+                        "CLOSE_LINEAR": {
+                          "value": 25
+                        },
+                        "SKIP": {
+                          "value": 26
+                        },
+                        "ACCEPT_INVITATION": {
+                          "value": 27
                         }
                       }
                     }
                   },
                   "payload_format": {
-                    "description": "Required. The desired format of the notification message payloads.",
-                    "type": "object",
-                    "reference": "google.cloud.storage_transfer_v1.types.NotificationConfig.PayloadFormat"
+                    "type": "enum",
+                    "name": "PayloadFormat",
+                    "description": "Enum for specifying the format of a notification message's\npayload.\n\nValues:\n    PAYLOAD_FORMAT_UNSPECIFIED (0):\n        Illegal value, to avoid allowing a default.\n    NONE (1):\n        No payload is included with the notification.\n    JSON (2):\n        ``TransferOperation`` is `formatted as a JSON\n        response <https://developers.google.com/protocol-buffers/docs/proto3#json>`__,\n        in application/json.",
+                    "values": {
+                      "PAYLOAD_FORMAT_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NONE": {
+                        "value": 1
+                      },
+                      "JSON": {
+                        "value": 2
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -1081,16 +1601,43 @@
                     "description": "Specifies the actions to be logged. If empty, no logs are generated.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.storage_transfer_v1.types.LoggingConfig.LoggableAction"
+                      "type": "enum",
+                      "name": "LoggableAction",
+                      "description": "Loggable actions.\n\nValues:\n    LOGGABLE_ACTION_UNSPECIFIED (0):\n        Default value. This value is unused.\n    FIND (1):\n        Listing objects in a bucket.\n    DELETE (2):\n        Deleting objects at the source or the\n        destination.\n    COPY (3):\n        Copying objects to Google Cloud Storage.",
+                      "values": {
+                        "LOGGABLE_ACTION_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "FIND": {
+                          "value": 1
+                        },
+                        "DELETE": {
+                          "value": 2
+                        },
+                        "COPY": {
+                          "value": 3
+                        }
+                      }
                     }
                   },
                   "log_action_states": {
                     "description": "States in which ``log_actions`` are logged. If empty, no logs are generated.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.storage_transfer_v1.types.LoggingConfig.LoggableActionState"
+                      "type": "enum",
+                      "name": "LoggableActionState",
+                      "description": "Loggable action states.\n\nValues:\n    LOGGABLE_ACTION_STATE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    SUCCEEDED (1):\n        ``LoggableAction`` completed successfully. ``SUCCEEDED``\n        actions are logged as\n        [INFO][google.logging.type.LogSeverity.INFO].\n    FAILED (2):\n        ``LoggableAction`` terminated in an error state. ``FAILED``\n        actions are logged as\n        [ERROR][google.logging.type.LogSeverity.ERROR].",
+                      "values": {
+                        "LOGGABLE_ACTION_STATE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "SUCCEEDED": {
+                          "value": 1
+                        },
+                        "FAILED": {
+                          "value": 2
+                        }
+                      }
                     }
                   },
                   "enable_onprem_gcs_transfer_logs": {
@@ -1142,9 +1689,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "State enum for status.",
-                    "type": "object",
-                    "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
@@ -1335,9 +1899,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "Output only. Specifies the state of the AgentPool.",
-                "type": "object",
-                "reference": "google.cloud.storage_transfer_v1.types.AgentPool.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "bandwidth_limit": {
                 "type": "object",
@@ -1385,9 +1966,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "Output only. Specifies the state of the AgentPool.",
-                "type": "object",
-                "reference": "google.cloud.storage_transfer_v1.types.AgentPool.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "bandwidth_limit": {
                 "type": "object",

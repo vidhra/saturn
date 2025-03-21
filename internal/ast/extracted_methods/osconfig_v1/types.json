@@ -12,9 +12,20 @@
             "type": "string"
           },
           "view": {
-            "description": "Inventory view indicating what information should be included in the inventory resource. If unspecified, the default view is BASIC.",
-            "type": "object",
-            "reference": "google.cloud.osconfig_v1.types.InventoryView"
+            "description": "The view for inventory objects.\n\nValues:\n    INVENTORY_VIEW_UNSPECIFIED (0):\n        The default value.\n        The API defaults to the BASIC view.\n    BASIC (1):\n        Returns the basic inventory information that includes\n        ``os_info``.\n    FULL (2):\n        Returns all fields.",
+            "type": "enum",
+            "name": "InventoryView",
+            "values": {
+              "INVENTORY_VIEW_UNSPECIFIED": {
+                "value": 0
+              },
+              "BASIC": {
+                "value": 1
+              },
+              "FULL": {
+                "value": 2
+              }
+            }
           }
         },
         "required": [
@@ -34,9 +45,20 @@
             "type": "string"
           },
           "view": {
-            "description": "Inventory view indicating what information should be included in the inventory resource. If unspecified, the default view is BASIC.",
-            "type": "object",
-            "reference": "google.cloud.osconfig_v1.types.InventoryView"
+            "description": "The view for inventory objects.\n\nValues:\n    INVENTORY_VIEW_UNSPECIFIED (0):\n        The default value.\n        The API defaults to the BASIC view.\n    BASIC (1):\n        Returns the basic inventory information that includes\n        ``os_info``.\n    FULL (2):\n        Returns all fields.",
+            "type": "enum",
+            "name": "InventoryView",
+            "values": {
+              "INVENTORY_VIEW_UNSPECIFIED": {
+                "value": 0
+              },
+              "BASIC": {
+                "value": 1
+              },
+              "FULL": {
+                "value": 2
+              }
+            }
           },
           "page_size": {
             "description": "The maximum number of results to return.",
@@ -96,9 +118,20 @@
                       "type": "string"
                     },
                     "mode": {
-                      "description": "Required. Policy mode",
-                      "type": "object",
-                      "reference": "google.cloud.osconfig_v1alpha.types.OSPolicy.Mode"
+                      "type": "enum",
+                      "name": "Mode",
+                      "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                      "values": {
+                        "MODE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "MODE_SKIP": {
+                          "value": 1
+                        },
+                        "MODE_PRESERVE": {
+                          "value": 2
+                        }
+                      }
                     },
                     "resource_groups": {
                       "description": "Required. List of resource groups for the policy. For a particular VM, resource groups are evaluated in the order specified and the first resource group that is applicable is selected and the rest are ignored.  If none of the resource groups are applicable for a VM, the VM is considered to be non-compliant w.r.t this policy. This behavior can be toggled by the flag ``allow_no_resource_group_match``",
@@ -143,212 +176,15 @@
                             "description": "Required. List of resources configured for this resource group. The resources are executed in the exact order specified here.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "name": {
-                                  "description": "The full resource name of the resource. See: https://cloud.google.com/apis/design/resource_names#full_resource_name",
-                                  "type": "string"
+                              "type": "enum",
+                              "name": "Resource",
+                              "description": "Enum to specify the resource that is being changed to notify\nthe merchant about.\n\nValues:\n    RESOURCE_UNSPECIFIED (0):\n        Unspecified resource\n    PRODUCT (1):\n        Resource type : product",
+                              "values": {
+                                "RESOURCE_UNSPECIFIED": {
+                                  "value": 0
                                 },
-                                "display_name": {
-                                  "description": "The human readable name of the resource.",
-                                  "type": "string"
-                                },
-                                "type_": {
-                                  "description": "The full resource type of the resource.",
-                                  "type": "string"
-                                },
-                                "cloud_provider": {
-                                  "description": "Indicates which cloud provider the finding is from.",
-                                  "type": "object",
-                                  "reference": "google.cloud.securitycenter_v2.types.CloudProvider"
-                                },
-                                "service": {
-                                  "description": "The service or resource provider associated with the resource.",
-                                  "type": "string"
-                                },
-                                "location": {
-                                  "description": "The region or location of the service (if applicable).",
-                                  "type": "string"
-                                },
-                                "gcp_metadata": {
-                                  "type": "object",
-                                  "properties": {
-                                    "project": {
-                                      "description": "The full resource name of project that the resource belongs to.",
-                                      "type": "string"
-                                    },
-                                    "project_display_name": {
-                                      "description": "The project ID that the resource belongs to.",
-                                      "type": "string"
-                                    },
-                                    "parent": {
-                                      "description": "The full resource name of resource's parent.",
-                                      "type": "string"
-                                    },
-                                    "parent_display_name": {
-                                      "description": "The human readable name of resource's parent.",
-                                      "type": "string"
-                                    },
-                                    "folders": {
-                                      "description": "Output only. Contains a Folder message for each folder in the assets ancestry. The first folder is the deepest nested folder, and the last folder is the folder directly under the Organization.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "name": {
-                                            "description": "Identifier. The name of this folder. Format: ``projects/{project}/buckets/{bucket}/folders/{folder}``",
-                                            "type": "string"
-                                          },
-                                          "metageneration": {
-                                            "description": "Output only. The version of the metadata for this folder. Used for preconditions and for detecting changes in metadata.",
-                                            "type": "integer"
-                                          },
-                                          "create_time": {
-                                            "description": "Output only. The creation time of the folder.",
-                                            "type": "object",
-                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                          },
-                                          "update_time": {
-                                            "description": "Output only. The modification time of the folder.",
-                                            "type": "object",
-                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                          },
-                                          "pending_rename_info": {
-                                            "type": "object",
-                                            "properties": {
-                                              "operation": {
-                                                "description": "Output only. The name of the rename operation.",
-                                                "type": "string"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "organization": {
-                                      "description": "The name of the organization that the resource belongs to.",
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "aws_metadata": {
-                                  "type": "object",
-                                  "properties": {
-                                    "organization": {
-                                      "type": "object",
-                                      "properties": {
-                                        "id": {
-                                          "description": "The unique identifier (ID) for the organization. The regex pattern for an organization ID string requires \"o-\" followed by from 10 to 32 lowercase letters or digits.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    },
-                                    "organizational_units": {
-                                      "description": "A list of AWS organizational units associated with the resource, ordered from lowest level (closest to the account) to highest level.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "id": {
-                                            "description": "The unique identifier (ID) associated with this OU. The regex pattern for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lowercase letters or digits (the ID of the root that contains the OU). This string is followed by a second \"-\" dash and from 8 to 32 additional lowercase letters or digits. For example, \"ou-ab12-cd34ef56\".",
-                                            "type": "string"
-                                          },
-                                          "name": {
-                                            "description": "The friendly name of the OU.",
-                                            "type": "string"
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "account": {
-                                      "type": "object",
-                                      "properties": {
-                                        "id": {
-                                          "description": "The unique identifier (ID) of the account, containing exactly 12 digits.",
-                                          "type": "string"
-                                        },
-                                        "name": {
-                                          "description": "The friendly name of this account.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "azure_metadata": {
-                                  "type": "object",
-                                  "properties": {
-                                    "management_groups": {
-                                      "description": "A list of Azure management groups associated with the resource, ordered from lowest level (closest to the subscription) to highest level.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "id": {
-                                            "description": "The UUID of the Azure management group, for example, ``20000000-0001-0000-0000-000000000000``.",
-                                            "type": "string"
-                                          },
-                                          "display_name": {
-                                            "description": "The display name of the Azure management group.",
-                                            "type": "string"
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "subscription": {
-                                      "type": "object",
-                                      "properties": {
-                                        "id": {
-                                          "description": "The UUID of the Azure subscription, for example, ``291bba3f-e0a5-47bc-a099-3bdcb2a50a05``.",
-                                          "type": "string"
-                                        },
-                                        "display_name": {
-                                          "description": "The display name of the Azure subscription.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    },
-                                    "resource_group": {
-                                      "type": "object",
-                                      "properties": {
-                                        "name": {
-                                          "description": "The name of the Azure resource group. This is not a UUID.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "resource_path": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nodes": {
-                                      "description": "The list of nodes that make the up resource path, ordered from lowest level to highest level.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "node_type": {
-                                            "description": "The type of resource this node represents.",
-                                            "type": "object",
-                                            "reference": "google.cloud.securitycenter_v2.types.ResourcePath.ResourcePathNodeType"
-                                          },
-                                          "id": {
-                                            "description": "The ID of the resource this node represents.",
-                                            "type": "string"
-                                          },
-                                          "display_name": {
-                                            "description": "The display name of the resource this node represents.",
-                                            "type": "string"
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "resource_path_string": {
-                                  "description": "A string representation of the resource path. For Google Cloud, it has the format of ``organizations/{organization_id}/folders/{folder_id}/folders/{folder_id}/projects/{project_id}`` where there can be any number of folders. For AWS, it has the format of ``org/{organization_id}/ou/{organizational_unit_id}/ou/{organizational_unit_id}/account/{account_id}`` where there can be any number of organizational units. For Azure, it has the format of ``mg/{management_group_id}/mg/{management_group_id}/subscription/{subscription_id}/rg/{resource_group_name}`` where there can be any number of management groups.",
-                                  "type": "string"
+                                "PRODUCT": {
+                                  "value": 1
                                 }
                               }
                             }
@@ -456,9 +292,32 @@
                     "type": "string"
                   },
                   "status": {
-                    "description": "The status of this rollout. Readonly. In case of a failed rollout, the system will automatically rollback to the current Rollout version. Readonly.",
-                    "type": "object",
-                    "reference": "google.cloud.servicemanagement_v1.types.Rollout.RolloutStatus"
+                    "type": "enum",
+                    "name": "RolloutStatus",
+                    "description": "Status of a Rollout.\n\nValues:\n    ROLLOUT_STATUS_UNSPECIFIED (0):\n        No status specified.\n    IN_PROGRESS (1):\n        The Rollout is in progress.\n    SUCCESS (2):\n        The Rollout has completed successfully.\n    CANCELLED (3):\n        The Rollout has been cancelled. This can\n        happen if you have overlapping Rollout pushes,\n        and the previous ones will be cancelled.\n    FAILED (4):\n        The Rollout has failed and the rollback\n        attempt has failed too.\n    PENDING (5):\n        The Rollout has not started yet and is\n        pending for execution.\n    FAILED_ROLLED_BACK (6):\n        The Rollout has failed and rolled back to the\n        previous successful Rollout.",
+                    "values": {
+                      "ROLLOUT_STATUS_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "IN_PROGRESS": {
+                        "value": 1
+                      },
+                      "SUCCESS": {
+                        "value": 2
+                      },
+                      "CANCELLED": {
+                        "value": 3
+                      },
+                      "FAILED": {
+                        "value": 4
+                      },
+                      "PENDING": {
+                        "value": 5
+                      },
+                      "FAILED_ROLLED_BACK": {
+                        "value": 6
+                      }
+                    }
                   },
                   "traffic_percent_strategy": {
                     "type": "object",
@@ -496,20 +355,24 @@
                 "type": "string"
               },
               "rollout_state": {
-                "type": "object",
-                "properties": {
-                  "step": {
-                    "description": "Display name of the current auto rollout step.",
-                    "type": "string"
+                "type": "enum",
+                "name": "RolloutState",
+                "description": "State of the rollout\n\nValues:\n    ROLLOUT_STATE_UNSPECIFIED (0):\n        Invalid value\n    IN_PROGRESS (1):\n        The rollout is in progress.\n    CANCELLING (2):\n        The rollout is being cancelled.\n    CANCELLED (3):\n        The rollout is cancelled.\n    SUCCEEDED (4):\n        The rollout has completed successfully.",
+                "values": {
+                  "ROLLOUT_STATE_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "step_index": {
-                    "description": "Index of the current step in the auto rollout steps list.",
-                    "type": "integer"
+                  "IN_PROGRESS": {
+                    "value": 1
                   },
-                  "start_time": {
-                    "description": "Start time of the current step.",
-                    "type": "object",
-                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "CANCELLING": {
+                    "value": 2
+                  },
+                  "CANCELLED": {
+                    "value": 3
+                  },
+                  "SUCCEEDED": {
+                    "value": 4
                   }
                 }
               },
@@ -582,9 +445,20 @@
                       "type": "string"
                     },
                     "mode": {
-                      "description": "Required. Policy mode",
-                      "type": "object",
-                      "reference": "google.cloud.osconfig_v1alpha.types.OSPolicy.Mode"
+                      "type": "enum",
+                      "name": "Mode",
+                      "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                      "values": {
+                        "MODE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "MODE_SKIP": {
+                          "value": 1
+                        },
+                        "MODE_PRESERVE": {
+                          "value": 2
+                        }
+                      }
                     },
                     "resource_groups": {
                       "description": "Required. List of resource groups for the policy. For a particular VM, resource groups are evaluated in the order specified and the first resource group that is applicable is selected and the rest are ignored.  If none of the resource groups are applicable for a VM, the VM is considered to be non-compliant w.r.t this policy. This behavior can be toggled by the flag ``allow_no_resource_group_match``",
@@ -629,212 +503,15 @@
                             "description": "Required. List of resources configured for this resource group. The resources are executed in the exact order specified here.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "name": {
-                                  "description": "The full resource name of the resource. See: https://cloud.google.com/apis/design/resource_names#full_resource_name",
-                                  "type": "string"
+                              "type": "enum",
+                              "name": "Resource",
+                              "description": "Enum to specify the resource that is being changed to notify\nthe merchant about.\n\nValues:\n    RESOURCE_UNSPECIFIED (0):\n        Unspecified resource\n    PRODUCT (1):\n        Resource type : product",
+                              "values": {
+                                "RESOURCE_UNSPECIFIED": {
+                                  "value": 0
                                 },
-                                "display_name": {
-                                  "description": "The human readable name of the resource.",
-                                  "type": "string"
-                                },
-                                "type_": {
-                                  "description": "The full resource type of the resource.",
-                                  "type": "string"
-                                },
-                                "cloud_provider": {
-                                  "description": "Indicates which cloud provider the finding is from.",
-                                  "type": "object",
-                                  "reference": "google.cloud.securitycenter_v2.types.CloudProvider"
-                                },
-                                "service": {
-                                  "description": "The service or resource provider associated with the resource.",
-                                  "type": "string"
-                                },
-                                "location": {
-                                  "description": "The region or location of the service (if applicable).",
-                                  "type": "string"
-                                },
-                                "gcp_metadata": {
-                                  "type": "object",
-                                  "properties": {
-                                    "project": {
-                                      "description": "The full resource name of project that the resource belongs to.",
-                                      "type": "string"
-                                    },
-                                    "project_display_name": {
-                                      "description": "The project ID that the resource belongs to.",
-                                      "type": "string"
-                                    },
-                                    "parent": {
-                                      "description": "The full resource name of resource's parent.",
-                                      "type": "string"
-                                    },
-                                    "parent_display_name": {
-                                      "description": "The human readable name of resource's parent.",
-                                      "type": "string"
-                                    },
-                                    "folders": {
-                                      "description": "Output only. Contains a Folder message for each folder in the assets ancestry. The first folder is the deepest nested folder, and the last folder is the folder directly under the Organization.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "name": {
-                                            "description": "Identifier. The name of this folder. Format: ``projects/{project}/buckets/{bucket}/folders/{folder}``",
-                                            "type": "string"
-                                          },
-                                          "metageneration": {
-                                            "description": "Output only. The version of the metadata for this folder. Used for preconditions and for detecting changes in metadata.",
-                                            "type": "integer"
-                                          },
-                                          "create_time": {
-                                            "description": "Output only. The creation time of the folder.",
-                                            "type": "object",
-                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                          },
-                                          "update_time": {
-                                            "description": "Output only. The modification time of the folder.",
-                                            "type": "object",
-                                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                          },
-                                          "pending_rename_info": {
-                                            "type": "object",
-                                            "properties": {
-                                              "operation": {
-                                                "description": "Output only. The name of the rename operation.",
-                                                "type": "string"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "organization": {
-                                      "description": "The name of the organization that the resource belongs to.",
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "aws_metadata": {
-                                  "type": "object",
-                                  "properties": {
-                                    "organization": {
-                                      "type": "object",
-                                      "properties": {
-                                        "id": {
-                                          "description": "The unique identifier (ID) for the organization. The regex pattern for an organization ID string requires \"o-\" followed by from 10 to 32 lowercase letters or digits.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    },
-                                    "organizational_units": {
-                                      "description": "A list of AWS organizational units associated with the resource, ordered from lowest level (closest to the account) to highest level.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "id": {
-                                            "description": "The unique identifier (ID) associated with this OU. The regex pattern for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lowercase letters or digits (the ID of the root that contains the OU). This string is followed by a second \"-\" dash and from 8 to 32 additional lowercase letters or digits. For example, \"ou-ab12-cd34ef56\".",
-                                            "type": "string"
-                                          },
-                                          "name": {
-                                            "description": "The friendly name of the OU.",
-                                            "type": "string"
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "account": {
-                                      "type": "object",
-                                      "properties": {
-                                        "id": {
-                                          "description": "The unique identifier (ID) of the account, containing exactly 12 digits.",
-                                          "type": "string"
-                                        },
-                                        "name": {
-                                          "description": "The friendly name of this account.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "azure_metadata": {
-                                  "type": "object",
-                                  "properties": {
-                                    "management_groups": {
-                                      "description": "A list of Azure management groups associated with the resource, ordered from lowest level (closest to the subscription) to highest level.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "id": {
-                                            "description": "The UUID of the Azure management group, for example, ``20000000-0001-0000-0000-000000000000``.",
-                                            "type": "string"
-                                          },
-                                          "display_name": {
-                                            "description": "The display name of the Azure management group.",
-                                            "type": "string"
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "subscription": {
-                                      "type": "object",
-                                      "properties": {
-                                        "id": {
-                                          "description": "The UUID of the Azure subscription, for example, ``291bba3f-e0a5-47bc-a099-3bdcb2a50a05``.",
-                                          "type": "string"
-                                        },
-                                        "display_name": {
-                                          "description": "The display name of the Azure subscription.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    },
-                                    "resource_group": {
-                                      "type": "object",
-                                      "properties": {
-                                        "name": {
-                                          "description": "The name of the Azure resource group. This is not a UUID.",
-                                          "type": "string"
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "resource_path": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nodes": {
-                                      "description": "The list of nodes that make the up resource path, ordered from lowest level to highest level.",
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "properties": {
-                                          "node_type": {
-                                            "description": "The type of resource this node represents.",
-                                            "type": "object",
-                                            "reference": "google.cloud.securitycenter_v2.types.ResourcePath.ResourcePathNodeType"
-                                          },
-                                          "id": {
-                                            "description": "The ID of the resource this node represents.",
-                                            "type": "string"
-                                          },
-                                          "display_name": {
-                                            "description": "The display name of the resource this node represents.",
-                                            "type": "string"
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "resource_path_string": {
-                                  "description": "A string representation of the resource path. For Google Cloud, it has the format of ``organizations/{organization_id}/folders/{folder_id}/folders/{folder_id}/projects/{project_id}`` where there can be any number of folders. For AWS, it has the format of ``org/{organization_id}/ou/{organizational_unit_id}/ou/{organizational_unit_id}/account/{account_id}`` where there can be any number of organizational units. For Azure, it has the format of ``mg/{management_group_id}/mg/{management_group_id}/subscription/{subscription_id}/rg/{resource_group_name}`` where there can be any number of management groups.",
-                                  "type": "string"
+                                "PRODUCT": {
+                                  "value": 1
                                 }
                               }
                             }
@@ -942,9 +619,32 @@
                     "type": "string"
                   },
                   "status": {
-                    "description": "The status of this rollout. Readonly. In case of a failed rollout, the system will automatically rollback to the current Rollout version. Readonly.",
-                    "type": "object",
-                    "reference": "google.cloud.servicemanagement_v1.types.Rollout.RolloutStatus"
+                    "type": "enum",
+                    "name": "RolloutStatus",
+                    "description": "Status of a Rollout.\n\nValues:\n    ROLLOUT_STATUS_UNSPECIFIED (0):\n        No status specified.\n    IN_PROGRESS (1):\n        The Rollout is in progress.\n    SUCCESS (2):\n        The Rollout has completed successfully.\n    CANCELLED (3):\n        The Rollout has been cancelled. This can\n        happen if you have overlapping Rollout pushes,\n        and the previous ones will be cancelled.\n    FAILED (4):\n        The Rollout has failed and the rollback\n        attempt has failed too.\n    PENDING (5):\n        The Rollout has not started yet and is\n        pending for execution.\n    FAILED_ROLLED_BACK (6):\n        The Rollout has failed and rolled back to the\n        previous successful Rollout.",
+                    "values": {
+                      "ROLLOUT_STATUS_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "IN_PROGRESS": {
+                        "value": 1
+                      },
+                      "SUCCESS": {
+                        "value": 2
+                      },
+                      "CANCELLED": {
+                        "value": 3
+                      },
+                      "FAILED": {
+                        "value": 4
+                      },
+                      "PENDING": {
+                        "value": 5
+                      },
+                      "FAILED_ROLLED_BACK": {
+                        "value": 6
+                      }
+                    }
                   },
                   "traffic_percent_strategy": {
                     "type": "object",
@@ -982,20 +682,24 @@
                 "type": "string"
               },
               "rollout_state": {
-                "type": "object",
-                "properties": {
-                  "step": {
-                    "description": "Display name of the current auto rollout step.",
-                    "type": "string"
+                "type": "enum",
+                "name": "RolloutState",
+                "description": "State of the rollout\n\nValues:\n    ROLLOUT_STATE_UNSPECIFIED (0):\n        Invalid value\n    IN_PROGRESS (1):\n        The rollout is in progress.\n    CANCELLING (2):\n        The rollout is being cancelled.\n    CANCELLED (3):\n        The rollout is cancelled.\n    SUCCEEDED (4):\n        The rollout has completed successfully.",
+                "values": {
+                  "ROLLOUT_STATE_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "step_index": {
-                    "description": "Index of the current step in the auto rollout steps list.",
-                    "type": "integer"
+                  "IN_PROGRESS": {
+                    "value": 1
                   },
-                  "start_time": {
-                    "description": "Start time of the current step.",
-                    "type": "object",
-                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "CANCELLING": {
+                    "value": 2
+                  },
+                  "CANCELLED": {
+                    "value": 3
+                  },
+                  "SUCCEEDED": {
+                    "value": 4
                   }
                 }
               },
@@ -1244,17 +948,45 @@
                 "type": "object",
                 "properties": {
                   "reboot_config": {
-                    "description": "Post-patch reboot settings.",
-                    "type": "object",
-                    "reference": "google.cloud.osconfig_v1.types.PatchConfig.RebootConfig"
+                    "type": "enum",
+                    "name": "RebootConfig",
+                    "description": "Post-patch reboot settings.\n\nValues:\n    REBOOT_CONFIG_UNSPECIFIED (0):\n        The default behavior is DEFAULT.\n    DEFAULT (1):\n        The agent decides if a reboot is necessary by checking\n        signals such as registry keys on Windows or\n        ``/var/run/reboot-required`` on APT based systems. On RPM\n        based systems, a set of core system package install times\n        are compared with system boot time.\n    ALWAYS (2):\n        Always reboot the machine after the update\n        completes.\n    NEVER (3):\n        Never reboot the machine after the update\n        completes.",
+                    "values": {
+                      "REBOOT_CONFIG_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DEFAULT": {
+                        "value": 1
+                      },
+                      "ALWAYS": {
+                        "value": 2
+                      },
+                      "NEVER": {
+                        "value": 3
+                      }
+                    }
                   },
                   "apt": {
                     "type": "object",
                     "properties": {
                       "type_": {
-                        "description": "By changing the type to DIST, the patching is performed using ``apt-get dist-upgrade`` instead.",
-                        "type": "object",
-                        "reference": "google.cloud.osconfig_v1.types.AptSettings.Type"
+                        "type": "enum",
+                        "name": "Type",
+                        "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                        "values": {
+                          "TYPE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                            "value": 1
+                          },
+                          "NO_RETURNS": {
+                            "value": 2
+                          },
+                          "LIFETIME_RETURNS": {
+                            "value": 3
+                          }
+                        }
                       },
                       "excludes": {
                         "description": "List of packages to exclude from update. These packages will be excluded",
@@ -1351,8 +1083,41 @@
                         "description": "Only apply updates of these windows update classifications. If empty, all updates are applied.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.cloud.osconfig_v1.types.WindowsUpdateSettings.Classification"
+                          "type": "enum",
+                          "name": "Classification",
+                          "description": "Microsoft Windows update classifications as defined in [1]\nhttps://support.microsoft.com/en-us/help/824684/description-of-the-standard-terminology-that-is-used-to-describe-micro\n\nValues:\n    CLASSIFICATION_UNSPECIFIED (0):\n        Invalid. If classifications are included,\n        they must be specified.\n    CRITICAL (1):\n        \"A widely released fix for a specific problem that addresses\n        a critical, non-security-related bug.\" [1]\n    SECURITY (2):\n        \"A widely released fix for a product-specific,\n        security-related vulnerability. Security vulnerabilities are\n        rated by their severity. The severity rating is indicated in\n        the Microsoft security bulletin as critical, important,\n        moderate, or low.\" [1]\n    DEFINITION (3):\n        \"A widely released and frequent software update that\n        contains additions to a product's definition database.\n        Definition databases are often used to detect objects that\n        have specific attributes, such as malicious code, phishi",
+                          "values": {
+                            "CLASSIFICATION_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "CRITICAL": {
+                              "value": 1
+                            },
+                            "SECURITY": {
+                              "value": 2
+                            },
+                            "DEFINITION": {
+                              "value": 3
+                            },
+                            "DRIVER": {
+                              "value": 4
+                            },
+                            "FEATURE_PACK": {
+                              "value": 5
+                            },
+                            "SERVICE_PACK": {
+                              "value": 6
+                            },
+                            "TOOL": {
+                              "value": 7
+                            },
+                            "UPDATE_ROLLUP": {
+                              "value": 8
+                            },
+                            "UPDATE": {
+                              "value": 9
+                            }
+                          }
                         }
                       },
                       "excludes": {
@@ -1411,9 +1176,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       },
@@ -1454,9 +1233,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       }
@@ -1502,9 +1295,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       },
@@ -1545,9 +1352,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       }
@@ -1560,15 +1381,24 @@
                 }
               },
               "duration": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -1613,14 +1443,21 @@
                     "reference": "google.type.timeofday_pb2.TimeOfDay"
                   },
                   "frequency": {
-                    "type": "object",
-                    "properties": {
-                      "values": {
-                        "description": "",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "integer"
-                        }
+                    "type": "enum",
+                    "name": "Frequency",
+                    "description": "The required fields vary based on the frequency of fetching. For a\nmonthly fetch schedule, [day of\nmonth][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_month]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a weekly fetch schedule, [day of\nweek][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_week]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a daily fetch schedule, only an [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nis required.\n\nValues:\n    FREQUENCY_UNSPECIFIED (0):\n        Frequency unspecified.\n    FREQUENCY_DAILY (1):\n        The fetch happens every day.\n    FREQUENCY_WEEKLY (2):\n        The fetch happens every week.\n    FREQUENCY_MONTHLY (3):\n        The fetch happens every month.",
+                    "values": {
+                      "FREQUENCY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "FREQUENCY_DAILY": {
+                        "value": 1
+                      },
+                      "FREQUENCY_WEEKLY": {
+                        "value": 2
+                      },
+                      "FREQUENCY_MONTHLY": {
+                        "value": 3
                       }
                     }
                   },
@@ -1710,9 +1547,20 @@
                 "type": "object",
                 "properties": {
                   "mode": {
-                    "description": "Mode of the patch rollout.",
-                    "type": "object",
-                    "reference": "google.cloud.osconfig_v1.types.PatchRollout.Mode"
+                    "type": "enum",
+                    "name": "Mode",
+                    "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                    "values": {
+                      "MODE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MODE_SKIP": {
+                        "value": 1
+                      },
+                      "MODE_PRESERVE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "disruption_budget": {
                     "type": "object",
@@ -1730,9 +1578,26 @@
                 }
               },
               "state": {
-                "description": "Output only. Current state of the patch deployment.",
-                "type": "object",
-                "reference": "google.cloud.osconfig_v1.types.PatchDeployment.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               }
             },
             "required": [
@@ -1877,17 +1742,45 @@
                 "type": "object",
                 "properties": {
                   "reboot_config": {
-                    "description": "Post-patch reboot settings.",
-                    "type": "object",
-                    "reference": "google.cloud.osconfig_v1.types.PatchConfig.RebootConfig"
+                    "type": "enum",
+                    "name": "RebootConfig",
+                    "description": "Post-patch reboot settings.\n\nValues:\n    REBOOT_CONFIG_UNSPECIFIED (0):\n        The default behavior is DEFAULT.\n    DEFAULT (1):\n        The agent decides if a reboot is necessary by checking\n        signals such as registry keys on Windows or\n        ``/var/run/reboot-required`` on APT based systems. On RPM\n        based systems, a set of core system package install times\n        are compared with system boot time.\n    ALWAYS (2):\n        Always reboot the machine after the update\n        completes.\n    NEVER (3):\n        Never reboot the machine after the update\n        completes.",
+                    "values": {
+                      "REBOOT_CONFIG_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DEFAULT": {
+                        "value": 1
+                      },
+                      "ALWAYS": {
+                        "value": 2
+                      },
+                      "NEVER": {
+                        "value": 3
+                      }
+                    }
                   },
                   "apt": {
                     "type": "object",
                     "properties": {
                       "type_": {
-                        "description": "By changing the type to DIST, the patching is performed using ``apt-get dist-upgrade`` instead.",
-                        "type": "object",
-                        "reference": "google.cloud.osconfig_v1.types.AptSettings.Type"
+                        "type": "enum",
+                        "name": "Type",
+                        "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                        "values": {
+                          "TYPE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                            "value": 1
+                          },
+                          "NO_RETURNS": {
+                            "value": 2
+                          },
+                          "LIFETIME_RETURNS": {
+                            "value": 3
+                          }
+                        }
                       },
                       "excludes": {
                         "description": "List of packages to exclude from update. These packages will be excluded",
@@ -1984,8 +1877,41 @@
                         "description": "Only apply updates of these windows update classifications. If empty, all updates are applied.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.cloud.osconfig_v1.types.WindowsUpdateSettings.Classification"
+                          "type": "enum",
+                          "name": "Classification",
+                          "description": "Microsoft Windows update classifications as defined in [1]\nhttps://support.microsoft.com/en-us/help/824684/description-of-the-standard-terminology-that-is-used-to-describe-micro\n\nValues:\n    CLASSIFICATION_UNSPECIFIED (0):\n        Invalid. If classifications are included,\n        they must be specified.\n    CRITICAL (1):\n        \"A widely released fix for a specific problem that addresses\n        a critical, non-security-related bug.\" [1]\n    SECURITY (2):\n        \"A widely released fix for a product-specific,\n        security-related vulnerability. Security vulnerabilities are\n        rated by their severity. The severity rating is indicated in\n        the Microsoft security bulletin as critical, important,\n        moderate, or low.\" [1]\n    DEFINITION (3):\n        \"A widely released and frequent software update that\n        contains additions to a product's definition database.\n        Definition databases are often used to detect objects that\n        have specific attributes, such as malicious code, phishi",
+                          "values": {
+                            "CLASSIFICATION_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "CRITICAL": {
+                              "value": 1
+                            },
+                            "SECURITY": {
+                              "value": 2
+                            },
+                            "DEFINITION": {
+                              "value": 3
+                            },
+                            "DRIVER": {
+                              "value": 4
+                            },
+                            "FEATURE_PACK": {
+                              "value": 5
+                            },
+                            "SERVICE_PACK": {
+                              "value": 6
+                            },
+                            "TOOL": {
+                              "value": 7
+                            },
+                            "UPDATE_ROLLUP": {
+                              "value": 8
+                            },
+                            "UPDATE": {
+                              "value": 9
+                            }
+                          }
                         }
                       },
                       "excludes": {
@@ -2044,9 +1970,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       },
@@ -2087,9 +2027,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       }
@@ -2135,9 +2089,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       },
@@ -2178,9 +2146,23 @@
                             }
                           },
                           "interpreter": {
-                            "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                            "type": "object",
-                            "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                            "type": "enum",
+                            "name": "Interpreter",
+                            "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                            "values": {
+                              "INTERPRETER_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NONE": {
+                                "value": 1
+                              },
+                              "SHELL": {
+                                "value": 2
+                              },
+                              "POWERSHELL": {
+                                "value": 3
+                              }
+                            }
                           }
                         }
                       }
@@ -2193,15 +2175,24 @@
                 }
               },
               "duration": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -2246,14 +2237,21 @@
                     "reference": "google.type.timeofday_pb2.TimeOfDay"
                   },
                   "frequency": {
-                    "type": "object",
-                    "properties": {
-                      "values": {
-                        "description": "",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "integer"
-                        }
+                    "type": "enum",
+                    "name": "Frequency",
+                    "description": "The required fields vary based on the frequency of fetching. For a\nmonthly fetch schedule, [day of\nmonth][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_month]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a weekly fetch schedule, [day of\nweek][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_week]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a daily fetch schedule, only an [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nis required.\n\nValues:\n    FREQUENCY_UNSPECIFIED (0):\n        Frequency unspecified.\n    FREQUENCY_DAILY (1):\n        The fetch happens every day.\n    FREQUENCY_WEEKLY (2):\n        The fetch happens every week.\n    FREQUENCY_MONTHLY (3):\n        The fetch happens every month.",
+                    "values": {
+                      "FREQUENCY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "FREQUENCY_DAILY": {
+                        "value": 1
+                      },
+                      "FREQUENCY_WEEKLY": {
+                        "value": 2
+                      },
+                      "FREQUENCY_MONTHLY": {
+                        "value": 3
                       }
                     }
                   },
@@ -2343,9 +2341,20 @@
                 "type": "object",
                 "properties": {
                   "mode": {
-                    "description": "Mode of the patch rollout.",
-                    "type": "object",
-                    "reference": "google.cloud.osconfig_v1.types.PatchRollout.Mode"
+                    "type": "enum",
+                    "name": "Mode",
+                    "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                    "values": {
+                      "MODE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MODE_SKIP": {
+                        "value": 1
+                      },
+                      "MODE_PRESERVE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "disruption_budget": {
                     "type": "object",
@@ -2363,9 +2372,26 @@
                 }
               },
               "state": {
-                "description": "Output only. Current state of the patch deployment.",
-                "type": "object",
-                "reference": "google.cloud.osconfig_v1.types.PatchDeployment.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               }
             },
             "required": [
@@ -2488,17 +2514,45 @@
             "type": "object",
             "properties": {
               "reboot_config": {
-                "description": "Post-patch reboot settings.",
-                "type": "object",
-                "reference": "google.cloud.osconfig_v1.types.PatchConfig.RebootConfig"
+                "type": "enum",
+                "name": "RebootConfig",
+                "description": "Post-patch reboot settings.\n\nValues:\n    REBOOT_CONFIG_UNSPECIFIED (0):\n        The default behavior is DEFAULT.\n    DEFAULT (1):\n        The agent decides if a reboot is necessary by checking\n        signals such as registry keys on Windows or\n        ``/var/run/reboot-required`` on APT based systems. On RPM\n        based systems, a set of core system package install times\n        are compared with system boot time.\n    ALWAYS (2):\n        Always reboot the machine after the update\n        completes.\n    NEVER (3):\n        Never reboot the machine after the update\n        completes.",
+                "values": {
+                  "REBOOT_CONFIG_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "DEFAULT": {
+                    "value": 1
+                  },
+                  "ALWAYS": {
+                    "value": 2
+                  },
+                  "NEVER": {
+                    "value": 3
+                  }
+                }
               },
               "apt": {
                 "type": "object",
                 "properties": {
                   "type_": {
-                    "description": "By changing the type to DIST, the patching is performed using ``apt-get dist-upgrade`` instead.",
-                    "type": "object",
-                    "reference": "google.cloud.osconfig_v1.types.AptSettings.Type"
+                    "type": "enum",
+                    "name": "Type",
+                    "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                    "values": {
+                      "TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                        "value": 1
+                      },
+                      "NO_RETURNS": {
+                        "value": 2
+                      },
+                      "LIFETIME_RETURNS": {
+                        "value": 3
+                      }
+                    }
                   },
                   "excludes": {
                     "description": "List of packages to exclude from update. These packages will be excluded",
@@ -2595,8 +2649,41 @@
                     "description": "Only apply updates of these windows update classifications. If empty, all updates are applied.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.osconfig_v1.types.WindowsUpdateSettings.Classification"
+                      "type": "enum",
+                      "name": "Classification",
+                      "description": "Microsoft Windows update classifications as defined in [1]\nhttps://support.microsoft.com/en-us/help/824684/description-of-the-standard-terminology-that-is-used-to-describe-micro\n\nValues:\n    CLASSIFICATION_UNSPECIFIED (0):\n        Invalid. If classifications are included,\n        they must be specified.\n    CRITICAL (1):\n        \"A widely released fix for a specific problem that addresses\n        a critical, non-security-related bug.\" [1]\n    SECURITY (2):\n        \"A widely released fix for a product-specific,\n        security-related vulnerability. Security vulnerabilities are\n        rated by their severity. The severity rating is indicated in\n        the Microsoft security bulletin as critical, important,\n        moderate, or low.\" [1]\n    DEFINITION (3):\n        \"A widely released and frequent software update that\n        contains additions to a product's definition database.\n        Definition databases are often used to detect objects that\n        have specific attributes, such as malicious code, phishi",
+                      "values": {
+                        "CLASSIFICATION_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CRITICAL": {
+                          "value": 1
+                        },
+                        "SECURITY": {
+                          "value": 2
+                        },
+                        "DEFINITION": {
+                          "value": 3
+                        },
+                        "DRIVER": {
+                          "value": 4
+                        },
+                        "FEATURE_PACK": {
+                          "value": 5
+                        },
+                        "SERVICE_PACK": {
+                          "value": 6
+                        },
+                        "TOOL": {
+                          "value": 7
+                        },
+                        "UPDATE_ROLLUP": {
+                          "value": 8
+                        },
+                        "UPDATE": {
+                          "value": 9
+                        }
+                      }
                     }
                   },
                   "excludes": {
@@ -2655,9 +2742,23 @@
                         }
                       },
                       "interpreter": {
-                        "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                        "type": "object",
-                        "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                        "type": "enum",
+                        "name": "Interpreter",
+                        "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                        "values": {
+                          "INTERPRETER_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NONE": {
+                            "value": 1
+                          },
+                          "SHELL": {
+                            "value": 2
+                          },
+                          "POWERSHELL": {
+                            "value": 3
+                          }
+                        }
                       }
                     }
                   },
@@ -2698,9 +2799,23 @@
                         }
                       },
                       "interpreter": {
-                        "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                        "type": "object",
-                        "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                        "type": "enum",
+                        "name": "Interpreter",
+                        "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                        "values": {
+                          "INTERPRETER_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NONE": {
+                            "value": 1
+                          },
+                          "SHELL": {
+                            "value": 2
+                          },
+                          "POWERSHELL": {
+                            "value": 3
+                          }
+                        }
                       }
                     }
                   }
@@ -2746,9 +2861,23 @@
                         }
                       },
                       "interpreter": {
-                        "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                        "type": "object",
-                        "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                        "type": "enum",
+                        "name": "Interpreter",
+                        "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                        "values": {
+                          "INTERPRETER_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NONE": {
+                            "value": 1
+                          },
+                          "SHELL": {
+                            "value": 2
+                          },
+                          "POWERSHELL": {
+                            "value": 3
+                          }
+                        }
                       }
                     }
                   },
@@ -2789,9 +2918,23 @@
                         }
                       },
                       "interpreter": {
-                        "description": "The script interpreter to use to run the script. If no interpreter is specified the script will be executed directly, which will likely only succeed for scripts with [shebang lines] (https://en.wikipedia.org/wiki/Shebang_(Unix)).",
-                        "type": "object",
-                        "reference": "google.cloud.osconfig_v1.types.ExecStepConfig.Interpreter"
+                        "type": "enum",
+                        "name": "Interpreter",
+                        "description": "The interpreter to use.\n\nValues:\n    INTERPRETER_UNSPECIFIED (0):\n        Invalid value, the request will return\n        validation error.\n    NONE (1):\n        If an interpreter is not specified, the source is executed\n        directly. This execution, without an interpreter, only\n        succeeds for executables and scripts that have shebang\n        lines.\n    SHELL (2):\n        Indicates that the script runs with ``/bin/sh`` on Linux and\n        ``cmd.exe`` on Windows.\n    POWERSHELL (3):\n        Indicates that the script runs with\n        PowerShell.",
+                        "values": {
+                          "INTERPRETER_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NONE": {
+                            "value": 1
+                          },
+                          "SHELL": {
+                            "value": 2
+                          },
+                          "POWERSHELL": {
+                            "value": 3
+                          }
+                        }
                       }
                     }
                   }
@@ -2804,16 +2947,24 @@
             }
           },
           "duration": {
-            "description": "Duration of the patch job. After the duration ends, the patch job times out.",
-            "type": "object",
-            "properties": {
-              "nanos": {
-                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                "type": "integer"
+            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+            "type": "enum",
+            "name": "Duration",
+            "values": {
+              "UNDEFINED_DURATION": {
+                "value": 0
               },
-              "seconds": {
-                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                "type": "integer"
+              "DURATION_UNSPECIFIED": {
+                "value": 529071340
+              },
+              "HOUR": {
+                "value": 2223588
+              },
+              "MAX": {
+                "value": 76100
+              },
+              "MINUTE": {
+                "value": 126786068
               }
             }
           },
@@ -2830,9 +2981,20 @@
             "type": "object",
             "properties": {
               "mode": {
-                "description": "Mode of the patch rollout.",
-                "type": "object",
-                "reference": "google.cloud.osconfig_v1.types.PatchRollout.Mode"
+                "type": "enum",
+                "name": "Mode",
+                "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                "values": {
+                  "MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MODE_SKIP": {
+                    "value": 1
+                  },
+                  "MODE_PRESERVE": {
+                    "value": 2
+                  }
+                }
               },
               "disruption_budget": {
                 "type": "object",

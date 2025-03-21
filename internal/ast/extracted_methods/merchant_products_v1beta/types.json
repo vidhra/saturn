@@ -24,9 +24,20 @@
                 "type": "string"
               },
               "channel": {
-                "description": "Required. Immutable. The `channel <https://support.google.com/merchants/answer/7361332>`__ of the product.",
-                "type": "object",
-                "reference": "google.shopping.type.types.Channel.ChannelEnum"
+                "type": "enum",
+                "name": "ChannelEnum",
+                "description": "Channel values.\n\nValues:\n    CHANNEL_ENUM_UNSPECIFIED (0):\n        Not specified.\n    ONLINE (1):\n        Online product.\n    LOCAL (2):\n        Local product.",
+                "values": {
+                  "CHANNEL_ENUM_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ONLINE": {
+                    "value": 1
+                  },
+                  "LOCAL": {
+                    "value": 2
+                  }
+                }
               },
               "offer_id": {
                 "description": "Required. Immutable. Your unique identifier for the product. This is the same for the product input and processed product. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. See the `products data specification <https://support.google.com/merchants/answer/188494#id>`__ for details.",
@@ -48,14 +59,36 @@
                 "type": "object",
                 "properties": {
                   "product_applicability": {
-                    "description": "Required. Applicability of the promotion to either all products or `only specific products <https://support.google.com/merchants/answer/6396257?ref_topic=6396150&sjid=17642868584668136159-NC>`__.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_promotions_v1beta.types.ProductApplicability"
+                    "type": "enum",
+                    "name": "ProductApplicability",
+                    "description": "Which product or list of products the promotion applies to.\n\nValues:\n    PRODUCT_APPLICABILITY_UNSPECIFIED (0):\n        Which products the promotion applies to is\n        unknown.\n    ALL_PRODUCTS (1):\n        Applicable to all products.\n    SPECIFIC_PRODUCTS (2):\n        Applicable to only a single product or list\n        of products.",
+                    "values": {
+                      "PRODUCT_APPLICABILITY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "ALL_PRODUCTS": {
+                        "value": 1
+                      },
+                      "SPECIFIC_PRODUCTS": {
+                        "value": 2
+                      }
+                    }
                   },
                   "offer_type": {
-                    "description": "Required. `Type <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__ of the promotion. Use this attribute to indicate whether or not customers need a coupon code to redeem your promotion.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_promotions_v1beta.types.OfferType"
+                    "type": "enum",
+                    "name": "OfferType",
+                    "description": "Offer type of a promotion.\n\nValues:\n    OFFER_TYPE_UNSPECIFIED (0):\n        Unknown offer type.\n    NO_CODE (1):\n        Offer type without a code.\n    GENERIC_CODE (2):\n        Offer type with a code. Generic redemption code for the\n        promotion is required when ``offerType`` = ``GENERIC_CODE``.",
+                    "values": {
+                      "OFFER_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NO_CODE": {
+                        "value": 1
+                      },
+                      "GENERIC_CODE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "generic_redemption_code": {
                     "description": "Optional. Generic redemption code for the promotion. To be used with the ``offerType`` field and must meet the `minimum requirements <https://support.google.com/merchants/answer/13837405?ref_topic=13773355&sjid=17642868584668136159-NC>`__.",
@@ -66,16 +99,81 @@
                     "type": "string"
                   },
                   "coupon_value_type": {
-                    "description": "Required. The [coupon value type] (https://support.google.com/merchants/answer/13861986?ref_topic=13773355&sjid=17642868584668136159-NC) attribute to signal the type of promotion that you are running. Depending on type of the selected coupon value `some attributes are required <https://support.google.com/merchants/answer/6393006?ref_topic=7322920>`__.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_promotions_v1beta.types.CouponValueType"
+                    "type": "enum",
+                    "name": "CouponValueType",
+                    "description": "`Coupon value\ntype <https://support.google.com/merchants/answer/13861986?ref_topic=13773355&sjid=17642868584668136159-NC>`__\nof a promotion.\n\nValues:\n    COUPON_VALUE_TYPE_UNSPECIFIED (0):\n        Indicates that the coupon value type is\n        unspecified.\n    MONEY_OFF (1):\n        Money off coupon value type.\n    PERCENT_OFF (2):\n        Percent off coupon value type.\n    BUY_M_GET_N_MONEY_OFF (3):\n        Buy M quantity, get N money off coupon value type.\n        ``minimum_purchase_quantity`` and\n        ``get_this_quantity_discounted`` must be present.\n        ``money_off_amount`` must also be present.\n    BUY_M_GET_N_PERCENT_OFF (4):\n        Buy M quantity, get N percent off coupon value type.\n        ``minimum_purchase_quantity`` and\n        ``get_this_quantity_discounted`` must be present.\n        ``percent_off_percentage`` must also be present.\n    BUY_M_GET_MONEY_OFF (5):\n        Buy M quantity, get money off. ``minimum_purchase_quantity``\n        and ``money_off_amount`` must be present.\n    BUY_M_",
+                    "values": {
+                      "COUPON_VALUE_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MONEY_OFF": {
+                        "value": 1
+                      },
+                      "PERCENT_OFF": {
+                        "value": 2
+                      },
+                      "BUY_M_GET_N_MONEY_OFF": {
+                        "value": 3
+                      },
+                      "BUY_M_GET_N_PERCENT_OFF": {
+                        "value": 4
+                      },
+                      "BUY_M_GET_MONEY_OFF": {
+                        "value": 5
+                      },
+                      "BUY_M_GET_PERCENT_OFF": {
+                        "value": 6
+                      },
+                      "FREE_GIFT": {
+                        "value": 7
+                      },
+                      "FREE_GIFT_WITH_VALUE": {
+                        "value": 8
+                      },
+                      "FREE_GIFT_WITH_ITEM_ID": {
+                        "value": 9
+                      },
+                      "FREE_SHIPPING_STANDARD": {
+                        "value": 10
+                      },
+                      "FREE_SHIPPING_OVERNIGHT": {
+                        "value": 11
+                      },
+                      "FREE_SHIPPING_TWO_DAY": {
+                        "value": 12
+                      }
+                    }
                   },
                   "promotion_destinations": {
                     "description": "Required. The list of destinations where the promotion applies to. If you don't specify a destination by including a supported value in your data source, your promotion will display in Shopping ads and free listings by default.  You may have previously submitted the following values as destinations for your products: Shopping Actions, Surfaces across Google, Local surfaces across Google. To represent these values use ``FREE_LISTINGS``, ``FREE_LOCAL_LISTINGS``, ``LOCAL_INVENTORY_ADS``. For more details see `Promotion destination <https://support.google.com/merchants/answer/13837465?sjid=5155774230887277618-NC>`__",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.shopping.type.types.Destination.DestinationEnum"
+                      "type": "enum",
+                      "name": "DestinationEnum",
+                      "description": "Destination values.\n\nValues:\n    DESTINATION_ENUM_UNSPECIFIED (0):\n        Not specified.\n    SHOPPING_ADS (1):\n        `Shopping\n        ads <https://support.google.com/google-ads/answer/2454022>`__.\n    DISPLAY_ADS (2):\n        `Display\n        ads <https://support.google.com/merchants/answer/6069387>`__.\n    LOCAL_INVENTORY_ADS (3):\n        `Local inventory\n        ads <https://support.google.com/merchants/answer/3057972>`__.\n    FREE_LISTINGS (4):\n        `Free\n        listings <https://support.google.com/merchants/answer/9199328>`__.\n    FREE_LOCAL_LISTINGS (5):\n        `Free local product\n        listings <https://support.google.com/merchants/answer/9825611>`__.\n    YOUTUBE_SHOPPING (6):\n        `YouTube\n        Shopping <https://support.google.com/merchants/answer/12362804>`__.",
+                      "values": {
+                        "DESTINATION_ENUM_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "SHOPPING_ADS": {
+                          "value": 1
+                        },
+                        "DISPLAY_ADS": {
+                          "value": 2
+                        },
+                        "LOCAL_INVENTORY_ADS": {
+                          "value": 3
+                        },
+                        "FREE_LISTINGS": {
+                          "value": 4
+                        },
+                        "FREE_LOCAL_LISTINGS": {
+                          "value": 5
+                        },
+                        "YOUTUBE_SHOPPING": {
+                          "value": 6
+                        }
+                      }
                     }
                   },
                   "item_id_inclusion": {
@@ -237,9 +335,20 @@
                     }
                   },
                   "store_applicability": {
-                    "description": "Optional. Whether the promotion applies to `all stores, or only specified stores <https://support.google.com/merchants/answer/13857563?sjid=17642868584668136159-NC>`__. Local Inventory ads promotions throw an error if no store applicability is included. An ``INVALID_ARGUMENT`` error is thrown if ``store_applicability`` is set to ``ALL_STORES`` and ``store_codes_inclusion`` or ``score_code_exclusion`` is set to a value.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_promotions_v1beta.types.StoreApplicability"
+                    "type": "enum",
+                    "name": "StoreApplicability",
+                    "description": "Store codes or list of store codes the promotion applies to.\nOnly for Local inventory ads promotions.\n\nValues:\n    STORE_APPLICABILITY_UNSPECIFIED (0):\n        Which store codes the promotion applies to is\n        unknown.\n    ALL_STORES (1):\n        Promotion applies to all stores.\n    SPECIFIC_STORES (2):\n        Promotion applies to only the specified\n        stores.",
+                    "values": {
+                      "STORE_APPLICABILITY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "ALL_STORES": {
+                        "value": 1
+                      },
+                      "SPECIFIC_STORES": {
+                        "value": 2
+                      }
+                    }
                   },
                   "store_codes_inclusion": {
                     "description": "Optional. `Store codes to include <https://support.google.com/merchants/answer/13857470?ref_topic=13773355&sjid=17642868584668136159-NC>`__ for the promotion. The store filter attributes only applies when the ``store_applicability`` attribute is set to `specific_stores <https://support.google.com/merchants/answer/13857563?ref_topic=13773355&sjid=17642868584668136159-NC>`__.  Store code (the store ID from your Business Profile) of the physical store the product is sold in. See the `Local product inventory data specification <https://support.google.com/merchants/answer/3061342>`__ for more information.",

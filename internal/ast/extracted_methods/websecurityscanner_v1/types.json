@@ -35,53 +35,42 @@
                 }
               },
               "authentication": {
-                "type": "object",
-                "properties": {
-                  "google_account": {
-                    "type": "object",
-                    "properties": {
-                      "username": {
-                        "description": "Required. The user name of the Google account.",
-                        "type": "string"
-                      },
-                      "password": {
-                        "description": "Required. Input only. The password of the Google account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "username",
-                      "password"
-                    ]
+                "type": "enum",
+                "name": "Authentication",
+                "description": "Values:\n    AUTHENTICATION_UNSPECIFIED (0):\n        No description available.\n    AUTHENTICATION_MULTIPLE (1):\n        No description available.\n    AUTHENTICATION_SINGLE (2):\n        No description available.\n    AUTHENTICATION_NONE (3):\n        No description available.",
+                "values": {
+                  "AUTHENTICATION_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "custom_account": {
-                    "type": "object",
-                    "properties": {
-                      "username": {
-                        "description": "Required. The user name of the custom account.",
-                        "type": "string"
-                      },
-                      "password": {
-                        "description": "Required. Input only. The password of the custom account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                        "type": "string"
-                      },
-                      "login_url": {
-                        "description": "Required. The login form URL of the website.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "username",
-                      "password",
-                      "login_url"
-                    ]
+                  "AUTHENTICATION_MULTIPLE": {
+                    "value": 1
+                  },
+                  "AUTHENTICATION_SINGLE": {
+                    "value": 2
+                  },
+                  "AUTHENTICATION_NONE": {
+                    "value": 3
                   }
                 }
               },
               "user_agent": {
-                "description": "The user agent used during scanning.",
-                "type": "object",
-                "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.UserAgent"
+                "type": "enum",
+                "name": "UserAgent",
+                "description": "Type of user agents used for scanning.\n\nValues:\n    USER_AGENT_UNSPECIFIED (0):\n        The user agent is unknown. Service will default to\n        CHROME_LINUX.\n    CHROME_LINUX (1):\n        Chrome on Linux. This is the service default\n        if unspecified.\n    CHROME_ANDROID (2):\n        Chrome on Android.\n    SAFARI_IPHONE (3):\n        Safari on IPhone.",
+                "values": {
+                  "USER_AGENT_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "CHROME_LINUX": {
+                    "value": 1
+                  },
+                  "CHROME_ANDROID": {
+                    "value": 2
+                  },
+                  "SAFARI_IPHONE": {
+                    "value": 3
+                  }
+                }
               },
               "blacklist_patterns": {
                 "description": "The blacklist URL patterns as described in https://cloud.google.com/security-scanner/docs/excluded-urls",
@@ -111,14 +100,37 @@
                 "description": "Set of Cloud Platforms targeted by the scan. If empty, APP_ENGINE will be used as a default.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.TargetPlatform"
+                  "type": "enum",
+                  "name": "TargetPlatform",
+                  "description": "Cloud platforms supported by Cloud Web Security Scanner.\n\nValues:\n    TARGET_PLATFORM_UNSPECIFIED (0):\n        The target platform is unknown. Requests with this enum\n        value will be rejected with INVALID_ARGUMENT error.\n    APP_ENGINE (1):\n        Google App Engine service.\n    COMPUTE (2):\n        Google Compute Engine service.",
+                  "values": {
+                    "TARGET_PLATFORM_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "APP_ENGINE": {
+                      "value": 1
+                    },
+                    "COMPUTE": {
+                      "value": 2
+                    }
+                  }
                 }
               },
               "export_to_security_command_center": {
-                "description": "Controls export of scan configurations and results to Cloud Security Command Center.",
-                "type": "object",
-                "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.ExportToSecurityCommandCenter"
+                "type": "enum",
+                "name": "ExportToSecurityCommandCenter",
+                "description": "Controls export of scan configurations and results to Cloud\nSecurity Command Center.\n\nValues:\n    EXPORT_TO_SECURITY_COMMAND_CENTER_UNSPECIFIED (0):\n        Use default, which is ENABLED.\n    ENABLED (1):\n        Export results of this scan to Cloud Security\n        Command Center.\n    DISABLED (2):\n        Do not export results of this scan to Cloud\n        Security Command Center.",
+                "values": {
+                  "EXPORT_TO_SECURITY_COMMAND_CENTER_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ENABLED": {
+                    "value": 1
+                  },
+                  "DISABLED": {
+                    "value": 2
+                  }
+                }
               },
               "latest_run": {
                 "type": "object",
@@ -128,14 +140,42 @@
                     "type": "string"
                   },
                   "execution_state": {
-                    "description": "The execution state of the ScanRun.",
-                    "type": "object",
-                    "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRun.ExecutionState"
+                    "type": "enum",
+                    "name": "ExecutionState",
+                    "description": "Types of ScanRun execution state.\n\nValues:\n    EXECUTION_STATE_UNSPECIFIED (0):\n        Represents an invalid state caused by\n        internal server error. This value should never\n        be returned.\n    QUEUED (1):\n        The scan is waiting in the queue.\n    SCANNING (2):\n        The scan is in progress.\n    FINISHED (3):\n        The scan is either finished or stopped by\n        user.",
+                    "values": {
+                      "EXECUTION_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "QUEUED": {
+                        "value": 1
+                      },
+                      "SCANNING": {
+                        "value": 2
+                      },
+                      "FINISHED": {
+                        "value": 3
+                      }
+                    }
                   },
                   "result_state": {
-                    "description": "The result state of the ScanRun. This field is only available after the execution state reaches \"FINISHED\".",
-                    "type": "object",
-                    "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRun.ResultState"
+                    "type": "enum",
+                    "name": "ResultState",
+                    "description": "Types of ScanRun result state.\n\nValues:\n    RESULT_STATE_UNSPECIFIED (0):\n        Default value. This value is returned when\n        the ScanRun is not yet finished.\n    SUCCESS (1):\n        The scan finished without errors.\n    ERROR (2):\n        The scan finished with errors.\n    KILLED (3):\n        The scan was terminated by user.",
+                    "values": {
+                      "RESULT_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SUCCESS": {
+                        "value": 1
+                      },
+                      "ERROR": {
+                        "value": 2
+                      },
+                      "KILLED": {
+                        "value": 3
+                      }
+                    }
                   },
                   "start_time": {
                     "description": "The time at which the ScanRun started.",
@@ -167,17 +207,69 @@
                     "type": "object",
                     "properties": {
                       "code": {
-                        "description": "Indicates the error reason code.",
-                        "type": "object",
-                        "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRunErrorTrace.Code"
+                        "type": "enum",
+                        "name": "Code",
+                        "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
+                        "values": {
+                          "CODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NO_VEHICLE": {
+                            "value": 1
+                          },
+                          "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
+                            "value": 2
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
+                            "value": 3
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
+                            "value": 4
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
+                            "value": 5
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
+                            "value": 6
+                          },
+                          "VEHICLE_NOT_ALLOWED": {
+                            "value": 7
+                          }
+                        }
                       },
                       "scan_config_error": {
                         "type": "object",
                         "properties": {
                           "code": {
-                            "description": "Indicates the reason code for a configuration failure.",
-                            "type": "object",
-                            "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfigError.Code"
+                            "type": "enum",
+                            "name": "Code",
+                            "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
+                            "values": {
+                              "CODE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NO_VEHICLE": {
+                                "value": 1
+                              },
+                              "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
+                                "value": 2
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
+                                "value": 3
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
+                                "value": 4
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
+                                "value": 5
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
+                                "value": 6
+                              },
+                              "VEHICLE_NOT_ALLOWED": {
+                                "value": 7
+                              }
+                            }
                           },
                           "field_name": {
                             "description": "Indicates the full name of the ScanConfig field that triggers this error, for example \"scan_config.max_qps\". This field is provided for troubleshooting purposes only and its actual value can change in the future.",
@@ -198,9 +290,35 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "description": "Indicates the warning code.",
-                          "type": "object",
-                          "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRunWarningTrace.Code"
+                          "type": "enum",
+                          "name": "Code",
+                          "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
+                          "values": {
+                            "CODE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "NO_VEHICLE": {
+                              "value": 1
+                            },
+                            "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
+                              "value": 2
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
+                              "value": 3
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
+                              "value": 4
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
+                              "value": 5
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
+                              "value": 6
+                            },
+                            "VEHICLE_NOT_ALLOWED": {
+                              "value": 7
+                            }
+                          }
                         }
                       }
                     }
@@ -208,9 +326,20 @@
                 }
               },
               "risk_level": {
-                "description": "The risk level selected for the scan",
-                "type": "object",
-                "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.RiskLevel"
+                "type": "enum",
+                "name": "RiskLevel",
+                "description": "Scan risk levels supported by Cloud Web Security Scanner. LOW\nimpact scanning will minimize requests with the potential to\nmodify data. To achieve the maximum scan coverage, NORMAL risk\nlevel is recommended.\n\nValues:\n    RISK_LEVEL_UNSPECIFIED (0):\n        Use default, which is NORMAL.\n    NORMAL (1):\n        Normal scanning (Recommended)\n    LOW (2):\n        Lower impact scanning",
+                "values": {
+                  "RISK_LEVEL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NORMAL": {
+                    "value": 1
+                  },
+                  "LOW": {
+                    "value": 2
+                  }
+                }
               }
             },
             "required": [
@@ -315,53 +444,42 @@
                 }
               },
               "authentication": {
-                "type": "object",
-                "properties": {
-                  "google_account": {
-                    "type": "object",
-                    "properties": {
-                      "username": {
-                        "description": "Required. The user name of the Google account.",
-                        "type": "string"
-                      },
-                      "password": {
-                        "description": "Required. Input only. The password of the Google account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "username",
-                      "password"
-                    ]
+                "type": "enum",
+                "name": "Authentication",
+                "description": "Values:\n    AUTHENTICATION_UNSPECIFIED (0):\n        No description available.\n    AUTHENTICATION_MULTIPLE (1):\n        No description available.\n    AUTHENTICATION_SINGLE (2):\n        No description available.\n    AUTHENTICATION_NONE (3):\n        No description available.",
+                "values": {
+                  "AUTHENTICATION_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "custom_account": {
-                    "type": "object",
-                    "properties": {
-                      "username": {
-                        "description": "Required. The user name of the custom account.",
-                        "type": "string"
-                      },
-                      "password": {
-                        "description": "Required. Input only. The password of the custom account. The credential is stored encrypted and not returned in any response nor included in audit logs.",
-                        "type": "string"
-                      },
-                      "login_url": {
-                        "description": "Required. The login form URL of the website.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "username",
-                      "password",
-                      "login_url"
-                    ]
+                  "AUTHENTICATION_MULTIPLE": {
+                    "value": 1
+                  },
+                  "AUTHENTICATION_SINGLE": {
+                    "value": 2
+                  },
+                  "AUTHENTICATION_NONE": {
+                    "value": 3
                   }
                 }
               },
               "user_agent": {
-                "description": "The user agent used during scanning.",
-                "type": "object",
-                "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.UserAgent"
+                "type": "enum",
+                "name": "UserAgent",
+                "description": "Type of user agents used for scanning.\n\nValues:\n    USER_AGENT_UNSPECIFIED (0):\n        The user agent is unknown. Service will default to\n        CHROME_LINUX.\n    CHROME_LINUX (1):\n        Chrome on Linux. This is the service default\n        if unspecified.\n    CHROME_ANDROID (2):\n        Chrome on Android.\n    SAFARI_IPHONE (3):\n        Safari on IPhone.",
+                "values": {
+                  "USER_AGENT_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "CHROME_LINUX": {
+                    "value": 1
+                  },
+                  "CHROME_ANDROID": {
+                    "value": 2
+                  },
+                  "SAFARI_IPHONE": {
+                    "value": 3
+                  }
+                }
               },
               "blacklist_patterns": {
                 "description": "The blacklist URL patterns as described in https://cloud.google.com/security-scanner/docs/excluded-urls",
@@ -391,14 +509,37 @@
                 "description": "Set of Cloud Platforms targeted by the scan. If empty, APP_ENGINE will be used as a default.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.TargetPlatform"
+                  "type": "enum",
+                  "name": "TargetPlatform",
+                  "description": "Cloud platforms supported by Cloud Web Security Scanner.\n\nValues:\n    TARGET_PLATFORM_UNSPECIFIED (0):\n        The target platform is unknown. Requests with this enum\n        value will be rejected with INVALID_ARGUMENT error.\n    APP_ENGINE (1):\n        Google App Engine service.\n    COMPUTE (2):\n        Google Compute Engine service.",
+                  "values": {
+                    "TARGET_PLATFORM_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "APP_ENGINE": {
+                      "value": 1
+                    },
+                    "COMPUTE": {
+                      "value": 2
+                    }
+                  }
                 }
               },
               "export_to_security_command_center": {
-                "description": "Controls export of scan configurations and results to Cloud Security Command Center.",
-                "type": "object",
-                "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.ExportToSecurityCommandCenter"
+                "type": "enum",
+                "name": "ExportToSecurityCommandCenter",
+                "description": "Controls export of scan configurations and results to Cloud\nSecurity Command Center.\n\nValues:\n    EXPORT_TO_SECURITY_COMMAND_CENTER_UNSPECIFIED (0):\n        Use default, which is ENABLED.\n    ENABLED (1):\n        Export results of this scan to Cloud Security\n        Command Center.\n    DISABLED (2):\n        Do not export results of this scan to Cloud\n        Security Command Center.",
+                "values": {
+                  "EXPORT_TO_SECURITY_COMMAND_CENTER_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ENABLED": {
+                    "value": 1
+                  },
+                  "DISABLED": {
+                    "value": 2
+                  }
+                }
               },
               "latest_run": {
                 "type": "object",
@@ -408,14 +549,42 @@
                     "type": "string"
                   },
                   "execution_state": {
-                    "description": "The execution state of the ScanRun.",
-                    "type": "object",
-                    "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRun.ExecutionState"
+                    "type": "enum",
+                    "name": "ExecutionState",
+                    "description": "Types of ScanRun execution state.\n\nValues:\n    EXECUTION_STATE_UNSPECIFIED (0):\n        Represents an invalid state caused by\n        internal server error. This value should never\n        be returned.\n    QUEUED (1):\n        The scan is waiting in the queue.\n    SCANNING (2):\n        The scan is in progress.\n    FINISHED (3):\n        The scan is either finished or stopped by\n        user.",
+                    "values": {
+                      "EXECUTION_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "QUEUED": {
+                        "value": 1
+                      },
+                      "SCANNING": {
+                        "value": 2
+                      },
+                      "FINISHED": {
+                        "value": 3
+                      }
+                    }
                   },
                   "result_state": {
-                    "description": "The result state of the ScanRun. This field is only available after the execution state reaches \"FINISHED\".",
-                    "type": "object",
-                    "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRun.ResultState"
+                    "type": "enum",
+                    "name": "ResultState",
+                    "description": "Types of ScanRun result state.\n\nValues:\n    RESULT_STATE_UNSPECIFIED (0):\n        Default value. This value is returned when\n        the ScanRun is not yet finished.\n    SUCCESS (1):\n        The scan finished without errors.\n    ERROR (2):\n        The scan finished with errors.\n    KILLED (3):\n        The scan was terminated by user.",
+                    "values": {
+                      "RESULT_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SUCCESS": {
+                        "value": 1
+                      },
+                      "ERROR": {
+                        "value": 2
+                      },
+                      "KILLED": {
+                        "value": 3
+                      }
+                    }
                   },
                   "start_time": {
                     "description": "The time at which the ScanRun started.",
@@ -447,17 +616,69 @@
                     "type": "object",
                     "properties": {
                       "code": {
-                        "description": "Indicates the error reason code.",
-                        "type": "object",
-                        "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRunErrorTrace.Code"
+                        "type": "enum",
+                        "name": "Code",
+                        "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
+                        "values": {
+                          "CODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "NO_VEHICLE": {
+                            "value": 1
+                          },
+                          "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
+                            "value": 2
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
+                            "value": 3
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
+                            "value": 4
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
+                            "value": 5
+                          },
+                          "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
+                            "value": 6
+                          },
+                          "VEHICLE_NOT_ALLOWED": {
+                            "value": 7
+                          }
+                        }
                       },
                       "scan_config_error": {
                         "type": "object",
                         "properties": {
                           "code": {
-                            "description": "Indicates the reason code for a configuration failure.",
-                            "type": "object",
-                            "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfigError.Code"
+                            "type": "enum",
+                            "name": "Code",
+                            "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
+                            "values": {
+                              "CODE_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "NO_VEHICLE": {
+                                "value": 1
+                              },
+                              "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
+                                "value": 2
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
+                                "value": 3
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
+                                "value": 4
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
+                                "value": 5
+                              },
+                              "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
+                                "value": 6
+                              },
+                              "VEHICLE_NOT_ALLOWED": {
+                                "value": 7
+                              }
+                            }
                           },
                           "field_name": {
                             "description": "Indicates the full name of the ScanConfig field that triggers this error, for example \"scan_config.max_qps\". This field is provided for troubleshooting purposes only and its actual value can change in the future.",
@@ -478,9 +699,35 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "description": "Indicates the warning code.",
-                          "type": "object",
-                          "reference": "google.cloud.websecurityscanner_v1beta.types.ScanRunWarningTrace.Code"
+                          "type": "enum",
+                          "name": "Code",
+                          "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
+                          "values": {
+                            "CODE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "NO_VEHICLE": {
+                              "value": 1
+                            },
+                            "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
+                              "value": 2
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
+                              "value": 3
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
+                              "value": 4
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
+                              "value": 5
+                            },
+                            "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
+                              "value": 6
+                            },
+                            "VEHICLE_NOT_ALLOWED": {
+                              "value": 7
+                            }
+                          }
                         }
                       }
                     }
@@ -488,9 +735,20 @@
                 }
               },
               "risk_level": {
-                "description": "The risk level selected for the scan",
-                "type": "object",
-                "reference": "google.cloud.websecurityscanner_v1beta.types.ScanConfig.RiskLevel"
+                "type": "enum",
+                "name": "RiskLevel",
+                "description": "Scan risk levels supported by Cloud Web Security Scanner. LOW\nimpact scanning will minimize requests with the potential to\nmodify data. To achieve the maximum scan coverage, NORMAL risk\nlevel is recommended.\n\nValues:\n    RISK_LEVEL_UNSPECIFIED (0):\n        Use default, which is NORMAL.\n    NORMAL (1):\n        Normal scanning (Recommended)\n    LOW (2):\n        Lower impact scanning",
+                "values": {
+                  "RISK_LEVEL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NORMAL": {
+                    "value": 1
+                  },
+                  "LOW": {
+                    "value": 2
+                  }
+                }
               }
             },
             "required": [

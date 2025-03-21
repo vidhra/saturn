@@ -20,9 +20,20 @@
                 "type": "string"
               },
               "enroll_status": {
-                "description": "The enrollment status of a customer.",
-                "type": "object",
-                "reference": "google.cloud.retail_v2beta.types.AlertConfig.AlertPolicy.EnrollStatus"
+                "type": "enum",
+                "name": "EnrollStatus",
+                "description": "The enrollment status enum for alert policy.\n\nValues:\n    ENROLL_STATUS_UNSPECIFIED (0):\n        Default value. Used for customers who have\n        not responded to the alert policy.\n    ENROLLED (1):\n        Customer is enrolled in this policy.\n    DECLINED (2):\n        Customer declined this policy.",
+                "values": {
+                  "ENROLL_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ENROLLED": {
+                    "value": 1
+                  },
+                  "DECLINED": {
+                    "value": 2
+                  }
+                }
               },
               "recipients": {
                 "description": "Recipients for the alert policy. One alert policy should not exceed 20 recipients.",
@@ -117,9 +128,20 @@
                 "type": "string"
               },
               "enroll_status": {
-                "description": "The enrollment status of a customer.",
-                "type": "object",
-                "reference": "google.cloud.retail_v2beta.types.AlertConfig.AlertPolicy.EnrollStatus"
+                "type": "enum",
+                "name": "EnrollStatus",
+                "description": "The enrollment status enum for alert policy.\n\nValues:\n    ENROLL_STATUS_UNSPECIFIED (0):\n        Default value. Used for customers who have\n        not responded to the alert policy.\n    ENROLLED (1):\n        Customer is enrolled in this policy.\n    DECLINED (2):\n        Customer declined this policy.",
+                "values": {
+                  "ENROLL_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ENROLLED": {
+                    "value": 1
+                  },
+                  "DECLINED": {
+                    "value": 2
+                  }
+                }
               },
               "recipients": {
                 "description": "Recipients for the alert policy. One alert policy should not exceed 20 recipients.",
@@ -552,27 +574,139 @@
             "type": "object",
             "properties": {
               "alignment_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "per_series_aligner": {
-                "description": "An ``Aligner`` describes how to bring the data points in a single time series into temporal alignment. Except for ``ALIGN_NONE``, all alignments cause all the data points in an ``alignment_period`` to be mathematically grouped together, resulting in a single data point for each ``alignment_period`` with end timestamp at the end of the period.  Not all alignment operations may be applied to all time series. The valid choices depend on the ``metric_kind`` and ``value_type`` of the original time series. Alignment can change the ``metric_kind`` or the ``value_type`` of the time series.  Time series data must be aligned in order to perform cross-time series reduction. If ``cross_series_reducer`` is specified, then ``per_series_aligner`` must be specified and not equal to ``ALIGN_NONE`` and ``alignment_period`` must be specified; otherwise, an error is returned.",
-                "type": "object",
-                "reference": "google.cloud.monitoring_dashboard_v1.types.Aggregation.Aligner"
+                "type": "enum",
+                "name": "Aligner",
+                "description": "The ``Aligner`` specifies the operation that will be applied to the\ndata points in each alignment period in a time series. Except for\n``ALIGN_NONE``, which specifies that no operation be applied, each\nalignment operation replaces the set of data values in each\nalignment period with a single value: the result of applying the\noperation to the data values. An aligned time series has a single\ndata value at the end of each ``alignment_period``.\n\nAn alignment operation can change the data type of the values, too.\nFor example, if you apply a counting operation to boolean values,\nthe data ``value_type`` in the original time series is ``BOOLEAN``,\nbut the ``value_type`` in the aligned result is ``INT64``.\n\nValues:\n    ALIGN_NONE (0):\n        No alignment. Raw data is returned. Not valid if\n        cross-series reduction is requested. The ``value_type`` of\n        the result is the same as the ``value_type`` of the input.\n    ALIGN_DELTA (1):\n        Align and convert to\n        [DELTA][google.api.MetricDescriptor.Metr",
+                "values": {
+                  "ALIGN_NONE": {
+                    "value": 0
+                  },
+                  "ALIGN_DELTA": {
+                    "value": 1
+                  },
+                  "ALIGN_RATE": {
+                    "value": 2
+                  },
+                  "ALIGN_INTERPOLATE": {
+                    "value": 3
+                  },
+                  "ALIGN_NEXT_OLDER": {
+                    "value": 4
+                  },
+                  "ALIGN_MIN": {
+                    "value": 10
+                  },
+                  "ALIGN_MAX": {
+                    "value": 11
+                  },
+                  "ALIGN_MEAN": {
+                    "value": 12
+                  },
+                  "ALIGN_COUNT": {
+                    "value": 13
+                  },
+                  "ALIGN_SUM": {
+                    "value": 14
+                  },
+                  "ALIGN_STDDEV": {
+                    "value": 15
+                  },
+                  "ALIGN_COUNT_TRUE": {
+                    "value": 16
+                  },
+                  "ALIGN_COUNT_FALSE": {
+                    "value": 24
+                  },
+                  "ALIGN_FRACTION_TRUE": {
+                    "value": 17
+                  },
+                  "ALIGN_PERCENTILE_99": {
+                    "value": 18
+                  },
+                  "ALIGN_PERCENTILE_95": {
+                    "value": 19
+                  },
+                  "ALIGN_PERCENTILE_50": {
+                    "value": 20
+                  },
+                  "ALIGN_PERCENTILE_05": {
+                    "value": 21
+                  },
+                  "ALIGN_PERCENT_CHANGE": {
+                    "value": 23
+                  }
+                }
               },
               "cross_series_reducer": {
-                "description": "The reduction operation to be used to combine time series into a single time series, where the value of each data point in the resulting series is a function of all the already aligned values in the input time series.  Not all reducer operations can be applied to all time series. The valid choices depend on the ``metric_kind`` and the ``value_type`` of the original time series. Reduction can yield a time series with a different ``metric_kind`` or ``value_type`` than the input time series.  Time series data must first be aligned (see ``per_series_aligner``) in order to perform cross-time series reduction. If ``cross_series_reducer`` is specified, then ``per_series_aligner`` must be specified, and must not be ``ALIGN_NONE``. An ``alignment_period`` must also be specified; otherwise, an error is returned.",
-                "type": "object",
-                "reference": "google.cloud.monitoring_dashboard_v1.types.Aggregation.Reducer"
+                "type": "enum",
+                "name": "Reducer",
+                "description": "A Reducer operation describes how to aggregate data points\nfrom multiple time series into a single time series, where the\nvalue of each data point in the resulting series is a function\nof all the already aligned values in the input time series.\n\nValues:\n    REDUCE_NONE (0):\n        No cross-time series reduction. The output of the\n        ``Aligner`` is returned.\n    REDUCE_MEAN (1):\n        Reduce by computing the mean value across time series for\n        each alignment period. This reducer is valid for\n        [DELTA][google.api.MetricDescriptor.MetricKind.DELTA] and\n        [GAUGE][google.api.MetricDescriptor.MetricKind.GAUGE]\n        metrics with numeric or distribution values. The\n        ``value_type`` of the output is\n        [DOUBLE][google.api.MetricDescriptor.ValueType.DOUBLE].\n    REDUCE_MIN (2):\n        Reduce by computing the minimum value across time series for\n        each alignment period. This reducer is valid for ``DELTA``\n        and ``GAUGE`` metrics with numeric values. The\n        ``valu",
+                "values": {
+                  "REDUCE_NONE": {
+                    "value": 0
+                  },
+                  "REDUCE_MEAN": {
+                    "value": 1
+                  },
+                  "REDUCE_MIN": {
+                    "value": 2
+                  },
+                  "REDUCE_MAX": {
+                    "value": 3
+                  },
+                  "REDUCE_SUM": {
+                    "value": 4
+                  },
+                  "REDUCE_STDDEV": {
+                    "value": 5
+                  },
+                  "REDUCE_COUNT": {
+                    "value": 6
+                  },
+                  "REDUCE_COUNT_TRUE": {
+                    "value": 7
+                  },
+                  "REDUCE_COUNT_FALSE": {
+                    "value": 15
+                  },
+                  "REDUCE_FRACTION_TRUE": {
+                    "value": 8
+                  },
+                  "REDUCE_PERCENTILE_99": {
+                    "value": 9
+                  },
+                  "REDUCE_PERCENTILE_95": {
+                    "value": 10
+                  },
+                  "REDUCE_PERCENTILE_50": {
+                    "value": 11
+                  },
+                  "REDUCE_PERCENTILE_05": {
+                    "value": 12
+                  }
+                }
               },
               "group_by_fields": {
                 "description": "The set of fields to preserve when ``cross_series_reducer`` is specified. The ``group_by_fields`` determine how the time series are partitioned into subsets prior to applying the aggregation operation. Each subset contains time series that have the same value for each of the grouping fields. Each individual time series is a member of exactly one subset. The ``cross_series_reducer`` is applied to each subset of time series. It is not possible to reduce across different resource types, so this field implicitly contains ``resource.type``. Fields not specified in ``group_by_fields`` are aggregated away. If ``group_by_fields`` is not specified and all the time series have the same resource type, then the time series are aggregated into a single output time series. If ``cross_series_reducer`` is not defined, this field is ignored.",
@@ -588,27 +722,139 @@
             "type": "object",
             "properties": {
               "alignment_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "per_series_aligner": {
-                "description": "An ``Aligner`` describes how to bring the data points in a single time series into temporal alignment. Except for ``ALIGN_NONE``, all alignments cause all the data points in an ``alignment_period`` to be mathematically grouped together, resulting in a single data point for each ``alignment_period`` with end timestamp at the end of the period.  Not all alignment operations may be applied to all time series. The valid choices depend on the ``metric_kind`` and ``value_type`` of the original time series. Alignment can change the ``metric_kind`` or the ``value_type`` of the time series.  Time series data must be aligned in order to perform cross-time series reduction. If ``cross_series_reducer`` is specified, then ``per_series_aligner`` must be specified and not equal to ``ALIGN_NONE`` and ``alignment_period`` must be specified; otherwise, an error is returned.",
-                "type": "object",
-                "reference": "google.cloud.monitoring_dashboard_v1.types.Aggregation.Aligner"
+                "type": "enum",
+                "name": "Aligner",
+                "description": "The ``Aligner`` specifies the operation that will be applied to the\ndata points in each alignment period in a time series. Except for\n``ALIGN_NONE``, which specifies that no operation be applied, each\nalignment operation replaces the set of data values in each\nalignment period with a single value: the result of applying the\noperation to the data values. An aligned time series has a single\ndata value at the end of each ``alignment_period``.\n\nAn alignment operation can change the data type of the values, too.\nFor example, if you apply a counting operation to boolean values,\nthe data ``value_type`` in the original time series is ``BOOLEAN``,\nbut the ``value_type`` in the aligned result is ``INT64``.\n\nValues:\n    ALIGN_NONE (0):\n        No alignment. Raw data is returned. Not valid if\n        cross-series reduction is requested. The ``value_type`` of\n        the result is the same as the ``value_type`` of the input.\n    ALIGN_DELTA (1):\n        Align and convert to\n        [DELTA][google.api.MetricDescriptor.Metr",
+                "values": {
+                  "ALIGN_NONE": {
+                    "value": 0
+                  },
+                  "ALIGN_DELTA": {
+                    "value": 1
+                  },
+                  "ALIGN_RATE": {
+                    "value": 2
+                  },
+                  "ALIGN_INTERPOLATE": {
+                    "value": 3
+                  },
+                  "ALIGN_NEXT_OLDER": {
+                    "value": 4
+                  },
+                  "ALIGN_MIN": {
+                    "value": 10
+                  },
+                  "ALIGN_MAX": {
+                    "value": 11
+                  },
+                  "ALIGN_MEAN": {
+                    "value": 12
+                  },
+                  "ALIGN_COUNT": {
+                    "value": 13
+                  },
+                  "ALIGN_SUM": {
+                    "value": 14
+                  },
+                  "ALIGN_STDDEV": {
+                    "value": 15
+                  },
+                  "ALIGN_COUNT_TRUE": {
+                    "value": 16
+                  },
+                  "ALIGN_COUNT_FALSE": {
+                    "value": 24
+                  },
+                  "ALIGN_FRACTION_TRUE": {
+                    "value": 17
+                  },
+                  "ALIGN_PERCENTILE_99": {
+                    "value": 18
+                  },
+                  "ALIGN_PERCENTILE_95": {
+                    "value": 19
+                  },
+                  "ALIGN_PERCENTILE_50": {
+                    "value": 20
+                  },
+                  "ALIGN_PERCENTILE_05": {
+                    "value": 21
+                  },
+                  "ALIGN_PERCENT_CHANGE": {
+                    "value": 23
+                  }
+                }
               },
               "cross_series_reducer": {
-                "description": "The reduction operation to be used to combine time series into a single time series, where the value of each data point in the resulting series is a function of all the already aligned values in the input time series.  Not all reducer operations can be applied to all time series. The valid choices depend on the ``metric_kind`` and the ``value_type`` of the original time series. Reduction can yield a time series with a different ``metric_kind`` or ``value_type`` than the input time series.  Time series data must first be aligned (see ``per_series_aligner``) in order to perform cross-time series reduction. If ``cross_series_reducer`` is specified, then ``per_series_aligner`` must be specified, and must not be ``ALIGN_NONE``. An ``alignment_period`` must also be specified; otherwise, an error is returned.",
-                "type": "object",
-                "reference": "google.cloud.monitoring_dashboard_v1.types.Aggregation.Reducer"
+                "type": "enum",
+                "name": "Reducer",
+                "description": "A Reducer operation describes how to aggregate data points\nfrom multiple time series into a single time series, where the\nvalue of each data point in the resulting series is a function\nof all the already aligned values in the input time series.\n\nValues:\n    REDUCE_NONE (0):\n        No cross-time series reduction. The output of the\n        ``Aligner`` is returned.\n    REDUCE_MEAN (1):\n        Reduce by computing the mean value across time series for\n        each alignment period. This reducer is valid for\n        [DELTA][google.api.MetricDescriptor.MetricKind.DELTA] and\n        [GAUGE][google.api.MetricDescriptor.MetricKind.GAUGE]\n        metrics with numeric or distribution values. The\n        ``value_type`` of the output is\n        [DOUBLE][google.api.MetricDescriptor.ValueType.DOUBLE].\n    REDUCE_MIN (2):\n        Reduce by computing the minimum value across time series for\n        each alignment period. This reducer is valid for ``DELTA``\n        and ``GAUGE`` metrics with numeric values. The\n        ``valu",
+                "values": {
+                  "REDUCE_NONE": {
+                    "value": 0
+                  },
+                  "REDUCE_MEAN": {
+                    "value": 1
+                  },
+                  "REDUCE_MIN": {
+                    "value": 2
+                  },
+                  "REDUCE_MAX": {
+                    "value": 3
+                  },
+                  "REDUCE_SUM": {
+                    "value": 4
+                  },
+                  "REDUCE_STDDEV": {
+                    "value": 5
+                  },
+                  "REDUCE_COUNT": {
+                    "value": 6
+                  },
+                  "REDUCE_COUNT_TRUE": {
+                    "value": 7
+                  },
+                  "REDUCE_COUNT_FALSE": {
+                    "value": 15
+                  },
+                  "REDUCE_FRACTION_TRUE": {
+                    "value": 8
+                  },
+                  "REDUCE_PERCENTILE_99": {
+                    "value": 9
+                  },
+                  "REDUCE_PERCENTILE_95": {
+                    "value": 10
+                  },
+                  "REDUCE_PERCENTILE_50": {
+                    "value": 11
+                  },
+                  "REDUCE_PERCENTILE_05": {
+                    "value": 12
+                  }
+                }
               },
               "group_by_fields": {
                 "description": "The set of fields to preserve when ``cross_series_reducer`` is specified. The ``group_by_fields`` determine how the time series are partitioned into subsets prior to applying the aggregation operation. Each subset contains time series that have the same value for each of the grouping fields. Each individual time series is a member of exactly one subset. The ``cross_series_reducer`` is applied to each subset of time series. It is not possible to reduce across different resource types, so this field implicitly contains ``resource.type``. Fields not specified in ``group_by_fields`` are aggregated away. If ``group_by_fields`` is not specified and all the time series have the same resource type, then the time series are aggregated into a single output time series. If ``cross_series_reducer`` is not defined, this field is ignored.",
@@ -624,9 +870,17 @@
             "type": "string"
           },
           "view": {
-            "description": "Required. Specifies which information is returned about the time series.",
-            "type": "object",
-            "reference": "google.cloud.monitoring_v3.types.ListTimeSeriesRequest.TimeSeriesView"
+            "description": "Controls which fields are returned by ``ListTimeSeries*``.\n\nValues:\n    FULL (0):\n        Returns the identity of the metric(s), the\n        time series, and the time series data.\n    HEADERS (1):\n        Returns the identity of the metric and the\n        time series resource, but not the time series\n        data.",
+            "type": "enum",
+            "name": "TimeSeriesView",
+            "values": {
+              "FULL": {
+                "value": 0
+              },
+              "HEADERS": {
+                "value": 1
+              }
+            }
           },
           "page_size": {
             "description": "A positive number that is the maximum number of results to return. If ``page_size`` is empty or more than 100,000 results, the effective ``page_size`` is 100,000 results. If ``view`` is set to ``FULL``, this is the maximum number of ``Points`` returned. If ``view`` is set to ``HEADERS``, this is the maximum number of ``TimeSeries`` returned.",
@@ -666,14 +920,48 @@
                   "type": "object",
                   "properties": {
                     "type_": {
-                      "description": "Ratio-based metric type. Only one of type or count_type is specified in each Metric.",
-                      "type": "object",
-                      "reference": "google.cloud.dialogflowcx_v3beta1.types.Experiment.Result.MetricType"
+                      "type": "enum",
+                      "name": "MetricType",
+                      "description": "Types of ratio-based metric for Dialogflow experiment.\n\nValues:\n    METRIC_UNSPECIFIED (0):\n        Metric unspecified.\n    CONTAINED_SESSION_NO_CALLBACK_RATE (1):\n        Percentage of contained sessions without user\n        calling back in 24 hours.\n    LIVE_AGENT_HANDOFF_RATE (2):\n        Percentage of sessions that were handed to a\n        human agent.\n    CALLBACK_SESSION_RATE (3):\n        Percentage of sessions with the same user\n        calling back.\n    ABANDONED_SESSION_RATE (4):\n        Percentage of sessions where user hung up.\n    SESSION_END_RATE (5):\n        Percentage of sessions reached Dialogflow 'END_PAGE' or\n        'END_SESSION'.",
+                      "values": {
+                        "METRIC_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CONTAINED_SESSION_NO_CALLBACK_RATE": {
+                          "value": 1
+                        },
+                        "LIVE_AGENT_HANDOFF_RATE": {
+                          "value": 2
+                        },
+                        "CALLBACK_SESSION_RATE": {
+                          "value": 3
+                        },
+                        "ABANDONED_SESSION_RATE": {
+                          "value": 4
+                        },
+                        "SESSION_END_RATE": {
+                          "value": 5
+                        }
+                      }
                     },
                     "count_type": {
-                      "description": "Count-based metric type. Only one of type or count_type is specified in each Metric.",
-                      "type": "object",
-                      "reference": "google.cloud.dialogflowcx_v3beta1.types.Experiment.Result.CountType"
+                      "type": "enum",
+                      "name": "CountType",
+                      "description": "types of count-based metric for Dialogflow experiment.\n\nValues:\n    COUNT_TYPE_UNSPECIFIED (0):\n        Count type unspecified.\n    TOTAL_NO_MATCH_COUNT (1):\n        Total number of occurrences of a 'NO_MATCH'.\n    TOTAL_TURN_COUNT (2):\n        Total number of turn counts.\n    AVERAGE_TURN_COUNT (3):\n        Average turn count in a session.",
+                      "values": {
+                        "COUNT_TYPE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "TOTAL_NO_MATCH_COUNT": {
+                          "value": 1
+                        },
+                        "TOTAL_TURN_COUNT": {
+                          "value": 2
+                        },
+                        "AVERAGE_TURN_COUNT": {
+                          "value": 3
+                        }
+                      }
                     },
                     "ratio": {
                       "description": "Ratio value of a metric.  This field is a member of `oneof`_ ``value``.",
@@ -722,9 +1010,26 @@
                   "reference": "google.api.metric_pb2.MetricKind"
                 },
                 "value_type": {
-                  "description": "The value type of the time series. When listing time series, this value type might be different from the value type of the associated metric if this time series is an alignment or reduction of other time series.  When creating a time series, this field is optional. If present, it must be the same as the type of the data in the ``points`` field.",
-                  "type": "object",
-                  "reference": "google.api.metric_pb2.ValueType"
+                  "type": "enum",
+                  "name": "ValueType",
+                  "description": "ValueType describes the semantic type of the value that the flag\naccepts. Regardless of the ValueType, the Instance.database_flags\nfield accepts the stringified version of the value, i.e. \"20\" or\n\"3.14\".\n\nValues:\n    VALUE_TYPE_UNSPECIFIED (0):\n        This is an unknown flag type.\n    STRING (1):\n        String type flag.\n    INTEGER (2):\n        Integer type flag.\n    FLOAT (3):\n        Float type flag.\n    NONE (4):\n        Denotes that the flag does not accept any\n        values.",
+                  "values": {
+                    "VALUE_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "STRING": {
+                      "value": 1
+                    },
+                    "INTEGER": {
+                      "value": 2
+                    },
+                    "FLOAT": {
+                      "value": 3
+                    },
+                    "NONE": {
+                      "value": 4
+                    }
+                  }
                 },
                 "points": {
                   "description": "The data points of this time series. When listing time series, points are returned in reverse time order.  When creating a time series, this field must contain exactly one point and the point's type must be the same as the value type of the associated metric. If the associated metric's descriptor must be auto-created, then the value type of the descriptor is determined by the point's type, which must be ``BOOL``, ``INT64``, ``DOUBLE``, or ``DISTRIBUTION``.",
@@ -890,9 +1195,20 @@
                 }
               },
               "verification_status": {
-                "description": "Indicates whether this channel has been verified or not. On a [``ListNotificationChannels``][google.monitoring.v3.NotificationChannelService.ListNotificationChannels] or [``GetNotificationChannel``][google.monitoring.v3.NotificationChannelService.GetNotificationChannel] operation, this field is expected to be populated.  If the value is ``UNVERIFIED``, then it indicates that the channel is non-functioning (it both requires verification and lacks verification); otherwise, it is assumed that the channel works.  If the channel is neither ``VERIFIED`` nor ``UNVERIFIED``, it implies that the channel is of a type that does not require verification or that this specific channel has been exempted from verification because it was created prior to verification being required for channels of this type.  This field cannot be modified using a standard [``UpdateNotificationChannel``][google.monitoring.v3.NotificationChannelService.UpdateNotificationChannel] operation. To change the value of this field, you must call [``VerifyNotificationChannel``][google.monitoring.v3.NotificationChannelService.VerifyNotificationChannel].",
-                "type": "object",
-                "reference": "google.cloud.monitoring_v3.types.NotificationChannel.VerificationStatus"
+                "type": "enum",
+                "name": "VerificationStatus",
+                "description": "Indicates whether the channel has been verified or not. It is\nillegal to specify this field in a\n[``CreateNotificationChannel``][google.monitoring.v3.NotificationChannelService.CreateNotificationChannel]\nor an\n[``UpdateNotificationChannel``][google.monitoring.v3.NotificationChannelService.UpdateNotificationChannel]\noperation.\n\nValues:\n    VERIFICATION_STATUS_UNSPECIFIED (0):\n        Sentinel value used to indicate that the\n        state is unknown, omitted, or is not applicable\n        (as in the case of channels that neither support\n        nor require verification in order to function).\n    UNVERIFIED (1):\n        The channel has yet to be verified and\n        requires verification to function. Note that\n        this state also applies to the case where the\n        verification process has been initiated by\n        sending a verification code but where the\n        verification code has not been submitted to\n        complete the process.\n    VERIFIED (2):\n        It has been proven that notifications can be\n",
+                "values": {
+                  "VERIFICATION_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "UNVERIFIED": {
+                    "value": 1
+                  },
+                  "VERIFIED": {
+                    "value": 2
+                  }
+                }
               },
               "enabled": {
                 "type": "object",
@@ -1041,9 +1357,20 @@
                 }
               },
               "verification_status": {
-                "description": "Indicates whether this channel has been verified or not. On a [``ListNotificationChannels``][google.monitoring.v3.NotificationChannelService.ListNotificationChannels] or [``GetNotificationChannel``][google.monitoring.v3.NotificationChannelService.GetNotificationChannel] operation, this field is expected to be populated.  If the value is ``UNVERIFIED``, then it indicates that the channel is non-functioning (it both requires verification and lacks verification); otherwise, it is assumed that the channel works.  If the channel is neither ``VERIFIED`` nor ``UNVERIFIED``, it implies that the channel is of a type that does not require verification or that this specific channel has been exempted from verification because it was created prior to verification being required for channels of this type.  This field cannot be modified using a standard [``UpdateNotificationChannel``][google.monitoring.v3.NotificationChannelService.UpdateNotificationChannel] operation. To change the value of this field, you must call [``VerifyNotificationChannel``][google.monitoring.v3.NotificationChannelService.VerifyNotificationChannel].",
-                "type": "object",
-                "reference": "google.cloud.monitoring_v3.types.NotificationChannel.VerificationStatus"
+                "type": "enum",
+                "name": "VerificationStatus",
+                "description": "Indicates whether the channel has been verified or not. It is\nillegal to specify this field in a\n[``CreateNotificationChannel``][google.monitoring.v3.NotificationChannelService.CreateNotificationChannel]\nor an\n[``UpdateNotificationChannel``][google.monitoring.v3.NotificationChannelService.UpdateNotificationChannel]\noperation.\n\nValues:\n    VERIFICATION_STATUS_UNSPECIFIED (0):\n        Sentinel value used to indicate that the\n        state is unknown, omitted, or is not applicable\n        (as in the case of channels that neither support\n        nor require verification in order to function).\n    UNVERIFIED (1):\n        The channel has yet to be verified and\n        requires verification to function. Note that\n        this state also applies to the case where the\n        verification process has been initiated by\n        sending a verification code but where the\n        verification code has not been submitted to\n        complete the process.\n    VERIFIED (2):\n        It has been proven that notifications can be\n",
+                "values": {
+                  "VERIFICATION_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "UNVERIFIED": {
+                    "value": 1
+                  },
+                  "VERIFIED": {
+                    "value": 2
+                  }
+                }
               },
               "enabled": {
                 "type": "object",
@@ -1317,8 +1644,35 @@
                         "description": "Required. Regular business days. May not be empty.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                          "type": "enum",
+                          "name": "Weekday",
+                          "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                          "values": {
+                            "WEEKDAY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MONDAY": {
+                              "value": 1
+                            },
+                            "TUESDAY": {
+                              "value": 2
+                            },
+                            "WEDNESDAY": {
+                              "value": 3
+                            },
+                            "THURSDAY": {
+                              "value": 4
+                            },
+                            "FRIDAY": {
+                              "value": 5
+                            },
+                            "SATURDAY": {
+                              "value": 6
+                            },
+                            "SUNDAY": {
+                              "value": 7
+                            }
+                          }
                         }
                       }
                     },
@@ -1333,8 +1687,35 @@
                         "description": "Required. Regular business days. May not be empty.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                          "type": "enum",
+                          "name": "Weekday",
+                          "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                          "values": {
+                            "WEEKDAY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MONDAY": {
+                              "value": 1
+                            },
+                            "TUESDAY": {
+                              "value": 2
+                            },
+                            "WEDNESDAY": {
+                              "value": 3
+                            },
+                            "THURSDAY": {
+                              "value": 4
+                            },
+                            "FRIDAY": {
+                              "value": 5
+                            },
+                            "SATURDAY": {
+                              "value": 6
+                            },
+                            "SUNDAY": {
+                              "value": 7
+                            }
+                          }
                         }
                       }
                     },
@@ -1455,9 +1836,20 @@
                                     "type": "integer"
                                   },
                                   "unit": {
-                                    "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                    "type": "object",
-                                    "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                    "type": "enum",
+                                    "name": "WeightUnit",
+                                    "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                    "values": {
+                                      "WEIGHT_UNIT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "POUND": {
+                                        "value": 1
+                                      },
+                                      "KILOGRAM": {
+                                        "value": 2
+                                      }
+                                    }
                                   }
                                 },
                                 "required": [
@@ -1539,9 +1931,20 @@
                                     "type": "integer"
                                   },
                                   "unit": {
-                                    "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                    "type": "object",
-                                    "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                    "type": "enum",
+                                    "name": "WeightUnit",
+                                    "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                    "values": {
+                                      "WEIGHT_UNIT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "POUND": {
+                                        "value": 1
+                                      },
+                                      "KILOGRAM": {
+                                        "value": 2
+                                      }
+                                    }
                                   }
                                 },
                                 "required": [
@@ -1689,9 +2092,20 @@
                                       "type": "integer"
                                     },
                                     "unit": {
-                                      "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                      "type": "object",
-                                      "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                      "type": "enum",
+                                      "name": "WeightUnit",
+                                      "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                      "values": {
+                                        "WEIGHT_UNIT_UNSPECIFIED": {
+                                          "value": 0
+                                        },
+                                        "POUND": {
+                                          "value": 1
+                                        },
+                                        "KILOGRAM": {
+                                          "value": 2
+                                        }
+                                      }
                                     }
                                   },
                                   "required": [
@@ -1773,9 +2187,20 @@
                                       "type": "integer"
                                     },
                                     "unit": {
-                                      "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                      "type": "object",
-                                      "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                      "type": "enum",
+                                      "name": "WeightUnit",
+                                      "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                      "values": {
+                                        "WEIGHT_UNIT_UNSPECIFIED": {
+                                          "value": 0
+                                        },
+                                        "POUND": {
+                                          "value": 1
+                                        },
+                                        "KILOGRAM": {
+                                          "value": 2
+                                        }
+                                      }
                                     }
                                   },
                                   "required": [
@@ -1942,9 +2367,23 @@
                 }
               },
               "shipment_type": {
-                "description": "Type of locations this service ships orders to.  This field is a member of `oneof`_ ``_shipment_type``.",
-                "type": "object",
-                "reference": "google.shopping.merchant_accounts_v1beta.types.Service.ShipmentType"
+                "type": "enum",
+                "name": "ShipmentType",
+                "description": "Shipment type of shipping service.\n\nValues:\n    SHIPMENT_TYPE_UNSPECIFIED (0):\n        This service did not specify shipment type.\n    DELIVERY (1):\n        This service ships orders to an address\n        chosen by the customer.\n    LOCAL_DELIVERY (2):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a local store near by.\n    COLLECTION_POINT (3):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a collection point.",
+                "values": {
+                  "SHIPMENT_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "DELIVERY": {
+                    "value": 1
+                  },
+                  "LOCAL_DELIVERY": {
+                    "value": 2
+                  },
+                  "COLLECTION_POINT": {
+                    "value": 3
+                  }
+                }
               },
               "minimum_order_value": {
                 "type": "object",
@@ -2000,9 +2439,20 @@
                 "type": "object",
                 "properties": {
                   "store_service_type": {
-                    "description": "Indicates whether all stores, or selected stores, listed by this merchant provide local delivery.  This field is a member of `oneof`_ ``_store_service_type``.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_accounts_v1beta.types.Service.StoreConfig.StoreServiceType"
+                    "type": "enum",
+                    "name": "StoreServiceType",
+                    "description": "Indicates whether all stores, or selected stores, listed by\nthe merchant provide local delivery.\n\nValues:\n    STORE_SERVICE_TYPE_UNSPECIFIED (0):\n        Did not specify store service type.\n    ALL_STORES (1):\n        Indicates whether all stores, current and\n        future, listed by this merchant provide local\n        delivery.\n    SELECTED_STORES (2):\n        Indicates that only the stores listed in ``store_codes`` are\n        eligible for local delivery.",
+                    "values": {
+                      "STORE_SERVICE_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "ALL_STORES": {
+                        "value": 1
+                      },
+                      "SELECTED_STORES": {
+                        "value": 2
+                      }
+                    }
                   },
                   "store_codes": {
                     "description": "Optional. A list of store codes that provide local delivery. If empty, then ``all_stores`` must be true.",
@@ -2045,9 +2495,20 @@
                         "type": "integer"
                       },
                       "unit": {
-                        "description": "Unit can differ based on country, it is parameterized to include miles and kilometers.  This field is a member of `oneof`_ ``_unit``.",
-                        "type": "object",
-                        "reference": "google.shopping.merchant_accounts_v1beta.types.Distance.Unit"
+                        "type": "enum",
+                        "name": "Unit",
+                        "description": "Unit can differ based on country, it is parameterized to\ninclude miles and kilometers.\n\nValues:\n    UNIT_UNSPECIFIED (0):\n        Unit unspecified\n    MILES (1):\n        Unit in miles\n    KILOMETERS (2):\n        Unit in kilometers",
+                        "values": {
+                          "UNIT_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MILES": {
+                            "value": 1
+                          },
+                          "KILOMETERS": {
+                            "value": 2
+                          }
+                        }
                       }
                     }
                   }
@@ -2292,8 +2753,35 @@
                         "description": "Required. Regular business days. May not be empty.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                          "type": "enum",
+                          "name": "Weekday",
+                          "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                          "values": {
+                            "WEEKDAY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MONDAY": {
+                              "value": 1
+                            },
+                            "TUESDAY": {
+                              "value": 2
+                            },
+                            "WEDNESDAY": {
+                              "value": 3
+                            },
+                            "THURSDAY": {
+                              "value": 4
+                            },
+                            "FRIDAY": {
+                              "value": 5
+                            },
+                            "SATURDAY": {
+                              "value": 6
+                            },
+                            "SUNDAY": {
+                              "value": 7
+                            }
+                          }
                         }
                       }
                     },
@@ -2308,8 +2796,35 @@
                         "description": "Required. Regular business days. May not be empty.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                          "type": "enum",
+                          "name": "Weekday",
+                          "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                          "values": {
+                            "WEEKDAY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MONDAY": {
+                              "value": 1
+                            },
+                            "TUESDAY": {
+                              "value": 2
+                            },
+                            "WEDNESDAY": {
+                              "value": 3
+                            },
+                            "THURSDAY": {
+                              "value": 4
+                            },
+                            "FRIDAY": {
+                              "value": 5
+                            },
+                            "SATURDAY": {
+                              "value": 6
+                            },
+                            "SUNDAY": {
+                              "value": 7
+                            }
+                          }
                         }
                       }
                     },
@@ -2430,9 +2945,20 @@
                                     "type": "integer"
                                   },
                                   "unit": {
-                                    "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                    "type": "object",
-                                    "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                    "type": "enum",
+                                    "name": "WeightUnit",
+                                    "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                    "values": {
+                                      "WEIGHT_UNIT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "POUND": {
+                                        "value": 1
+                                      },
+                                      "KILOGRAM": {
+                                        "value": 2
+                                      }
+                                    }
                                   }
                                 },
                                 "required": [
@@ -2514,9 +3040,20 @@
                                     "type": "integer"
                                   },
                                   "unit": {
-                                    "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                    "type": "object",
-                                    "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                    "type": "enum",
+                                    "name": "WeightUnit",
+                                    "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                    "values": {
+                                      "WEIGHT_UNIT_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "POUND": {
+                                        "value": 1
+                                      },
+                                      "KILOGRAM": {
+                                        "value": 2
+                                      }
+                                    }
                                   }
                                 },
                                 "required": [
@@ -2664,9 +3201,20 @@
                                       "type": "integer"
                                     },
                                     "unit": {
-                                      "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                      "type": "object",
-                                      "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                      "type": "enum",
+                                      "name": "WeightUnit",
+                                      "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                      "values": {
+                                        "WEIGHT_UNIT_UNSPECIFIED": {
+                                          "value": 0
+                                        },
+                                        "POUND": {
+                                          "value": 1
+                                        },
+                                        "KILOGRAM": {
+                                          "value": 2
+                                        }
+                                      }
                                     }
                                   },
                                   "required": [
@@ -2748,9 +3296,20 @@
                                       "type": "integer"
                                     },
                                     "unit": {
-                                      "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                      "type": "object",
-                                      "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                      "type": "enum",
+                                      "name": "WeightUnit",
+                                      "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                      "values": {
+                                        "WEIGHT_UNIT_UNSPECIFIED": {
+                                          "value": 0
+                                        },
+                                        "POUND": {
+                                          "value": 1
+                                        },
+                                        "KILOGRAM": {
+                                          "value": 2
+                                        }
+                                      }
                                     }
                                   },
                                   "required": [
@@ -2917,9 +3476,23 @@
                 }
               },
               "shipment_type": {
-                "description": "Type of locations this service ships orders to.  This field is a member of `oneof`_ ``_shipment_type``.",
-                "type": "object",
-                "reference": "google.shopping.merchant_accounts_v1beta.types.Service.ShipmentType"
+                "type": "enum",
+                "name": "ShipmentType",
+                "description": "Shipment type of shipping service.\n\nValues:\n    SHIPMENT_TYPE_UNSPECIFIED (0):\n        This service did not specify shipment type.\n    DELIVERY (1):\n        This service ships orders to an address\n        chosen by the customer.\n    LOCAL_DELIVERY (2):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a local store near by.\n    COLLECTION_POINT (3):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a collection point.",
+                "values": {
+                  "SHIPMENT_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "DELIVERY": {
+                    "value": 1
+                  },
+                  "LOCAL_DELIVERY": {
+                    "value": 2
+                  },
+                  "COLLECTION_POINT": {
+                    "value": 3
+                  }
+                }
               },
               "minimum_order_value": {
                 "type": "object",
@@ -2975,9 +3548,20 @@
                 "type": "object",
                 "properties": {
                   "store_service_type": {
-                    "description": "Indicates whether all stores, or selected stores, listed by this merchant provide local delivery.  This field is a member of `oneof`_ ``_store_service_type``.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_accounts_v1beta.types.Service.StoreConfig.StoreServiceType"
+                    "type": "enum",
+                    "name": "StoreServiceType",
+                    "description": "Indicates whether all stores, or selected stores, listed by\nthe merchant provide local delivery.\n\nValues:\n    STORE_SERVICE_TYPE_UNSPECIFIED (0):\n        Did not specify store service type.\n    ALL_STORES (1):\n        Indicates whether all stores, current and\n        future, listed by this merchant provide local\n        delivery.\n    SELECTED_STORES (2):\n        Indicates that only the stores listed in ``store_codes`` are\n        eligible for local delivery.",
+                    "values": {
+                      "STORE_SERVICE_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "ALL_STORES": {
+                        "value": 1
+                      },
+                      "SELECTED_STORES": {
+                        "value": 2
+                      }
+                    }
                   },
                   "store_codes": {
                     "description": "Optional. A list of store codes that provide local delivery. If empty, then ``all_stores`` must be true.",
@@ -3020,9 +3604,20 @@
                         "type": "integer"
                       },
                       "unit": {
-                        "description": "Unit can differ based on country, it is parameterized to include miles and kilometers.  This field is a member of `oneof`_ ``_unit``.",
-                        "type": "object",
-                        "reference": "google.shopping.merchant_accounts_v1beta.types.Distance.Unit"
+                        "type": "enum",
+                        "name": "Unit",
+                        "description": "Unit can differ based on country, it is parameterized to\ninclude miles and kilometers.\n\nValues:\n    UNIT_UNSPECIFIED (0):\n        Unit unspecified\n    MILES (1):\n        Unit in miles\n    KILOMETERS (2):\n        Unit in kilometers",
+                        "values": {
+                          "UNIT_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MILES": {
+                            "value": 1
+                          },
+                          "KILOMETERS": {
+                            "value": 2
+                          }
+                        }
                       }
                     }
                   }
@@ -3173,15 +3768,24 @@
                         "type": "object",
                         "properties": {
                           "threshold": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           }
@@ -3471,15 +4075,24 @@
                                 "type": "object",
                                 "properties": {
                                   "threshold": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -3690,15 +4303,24 @@
                         }
                       },
                       "window_period": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       }
@@ -3711,22 +4333,45 @@
                 "type": "number"
               },
               "rolling_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "calendar_period": {
-                "description": "A calendar period, semantically \"since the start of the current ``<calendar_period>``\". At this time, only ``DAY``, ``WEEK``, ``FORTNIGHT``, and ``MONTH`` are supported.  This field is a member of `oneof`_ ``period``.",
-                "type": "object",
-                "reference": "google.type.calendar_period_pb2.CalendarPeriod"
+                "type": "enum",
+                "name": "CalendarPeriod",
+                "description": "A ``CalendarPeriod`` represents the abstract concept of a time\nperiod that has a canonical start. Grammatically, \"the start of the\ncurrent ``CalendarPeriod``\". All calendar times begin at 12 AM US\nand Canadian Pacific Time (UTC-8).\n\nValues:\n    CALENDAR_PERIOD_UNSPECIFIED (0):\n        Calendar period is unset. This is the default\n        if the budget is for a custom time period\n        (CustomPeriod).\n    MONTH (1):\n        A month. Month starts on the first day of\n        each month, such as January 1, February 1, March\n        1, and so on.\n    QUARTER (2):\n        A quarter. Quarters start on dates January 1,\n        April 1, July 1, and October 1 of each year.\n    YEAR (3):\n        A year. Year starts on January 1.",
+                "values": {
+                  "CALENDAR_PERIOD_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MONTH": {
+                    "value": 1
+                  },
+                  "QUARTER": {
+                    "value": 2
+                  },
+                  "YEAR": {
+                    "value": 3
+                  }
+                }
               },
               "user_labels": {
                 "description": "Labels which have been used to annotate the service-level objective. Label keys must start with a letter. Label keys and values may contain lowercase letters, numbers, underscores, and dashes. Label keys and values have a maximum length of 63 characters, and must be less than 128 bytes in size. Up to 64 label entries may be stored. For labels which do not have a semantic value, the empty string may be supplied for the label value.",
@@ -3756,30 +4401,18 @@
             "type": "string"
           },
           "view": {
-            "description": "View of the ``ServiceLevelObjective`` to return. If ``DEFAULT``, return the ``ServiceLevelObjective`` as originally defined. If ``EXPLICIT`` and the ``ServiceLevelObjective`` is defined in terms of a ``BasicSli``, replace the ``BasicSli`` with a ``RequestBasedSli`` spelling out how the SLI is computed.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the view. Format:  projects/{project}/locations/{location}/views/{view}",
-                "type": "string"
+            "description": "The view specifies a subset of\n[Task][google.cloud.tasks.v2beta3.Task] data.\n\nWhen a task is returned in a response, not all information is\nretrieved by default because some data, such as payloads, might be\ndesirable to return only when needed because of its large size or\nbecause of the sensitivity of data that it contains.\n\nValues:\n    VIEW_UNSPECIFIED (0):\n        Unspecified. Defaults to BASIC.\n    BASIC (1):\n        The basic view omits fields which can be large or can\n        contain sensitive data.\n\n        This view does not include the [body in\n        AppEngineHttpRequest][google.cloud.tasks.v2beta3.AppEngineHttpRequest.body].\n        Bodies are desirable to return only when needed, because\n        they can be large and because of the sensitivity of the data\n        that you choose to store in it.\n    FULL (2):\n        All information is returned.\n\n        Authorization for\n        [FULL][google.cloud.tasks.v2beta3.Task.View.FULL] requires\n        ``cloudtasks.tasks.fullView`` `Google\n        IAM <ht",
+            "type": "enum",
+            "name": "View",
+            "values": {
+              "VIEW_UNSPECIFIED": {
+                "value": 0
               },
-              "display_name": {
-                "description": "The human-readable display name of the view.",
-                "type": "string"
+              "BASIC": {
+                "value": 1
               },
-              "create_time": {
-                "description": "Output only. The time at which this view was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The most recent time at which the view was updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "value": {
-                "description": "String with specific view properties, must be non-empty.",
-                "type": "string"
+              "FULL": {
+                "value": 2
               }
             }
           }
@@ -3813,30 +4446,18 @@
             "type": "string"
           },
           "view": {
-            "description": "View of the ``ServiceLevelObjective``\\ s to return. If ``DEFAULT``, return each ``ServiceLevelObjective`` as originally defined. If ``EXPLICIT`` and the ``ServiceLevelObjective`` is defined in terms of a ``BasicSli``, replace the ``BasicSli`` with a ``RequestBasedSli`` spelling out how the SLI is computed.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the view. Format:  projects/{project}/locations/{location}/views/{view}",
-                "type": "string"
+            "description": "The view specifies a subset of\n[Task][google.cloud.tasks.v2beta3.Task] data.\n\nWhen a task is returned in a response, not all information is\nretrieved by default because some data, such as payloads, might be\ndesirable to return only when needed because of its large size or\nbecause of the sensitivity of data that it contains.\n\nValues:\n    VIEW_UNSPECIFIED (0):\n        Unspecified. Defaults to BASIC.\n    BASIC (1):\n        The basic view omits fields which can be large or can\n        contain sensitive data.\n\n        This view does not include the [body in\n        AppEngineHttpRequest][google.cloud.tasks.v2beta3.AppEngineHttpRequest.body].\n        Bodies are desirable to return only when needed, because\n        they can be large and because of the sensitivity of the data\n        that you choose to store in it.\n    FULL (2):\n        All information is returned.\n\n        Authorization for\n        [FULL][google.cloud.tasks.v2beta3.Task.View.FULL] requires\n        ``cloudtasks.tasks.fullView`` `Google\n        IAM <ht",
+            "type": "enum",
+            "name": "View",
+            "values": {
+              "VIEW_UNSPECIFIED": {
+                "value": 0
               },
-              "display_name": {
-                "description": "The human-readable display name of the view.",
-                "type": "string"
+              "BASIC": {
+                "value": 1
               },
-              "create_time": {
-                "description": "Output only. The time at which this view was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The most recent time at which the view was updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "value": {
-                "description": "String with specific view properties, must be non-empty.",
-                "type": "string"
+              "FULL": {
+                "value": 2
               }
             }
           }
@@ -3900,15 +4521,24 @@
                         "type": "object",
                         "properties": {
                           "threshold": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           }
@@ -4198,15 +4828,24 @@
                                 "type": "object",
                                 "properties": {
                                   "threshold": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -4417,15 +5056,24 @@
                         }
                       },
                       "window_period": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       }
@@ -4438,22 +5086,45 @@
                 "type": "number"
               },
               "rolling_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "calendar_period": {
-                "description": "A calendar period, semantically \"since the start of the current ``<calendar_period>``\". At this time, only ``DAY``, ``WEEK``, ``FORTNIGHT``, and ``MONTH`` are supported.  This field is a member of `oneof`_ ``period``.",
-                "type": "object",
-                "reference": "google.type.calendar_period_pb2.CalendarPeriod"
+                "type": "enum",
+                "name": "CalendarPeriod",
+                "description": "A ``CalendarPeriod`` represents the abstract concept of a time\nperiod that has a canonical start. Grammatically, \"the start of the\ncurrent ``CalendarPeriod``\". All calendar times begin at 12 AM US\nand Canadian Pacific Time (UTC-8).\n\nValues:\n    CALENDAR_PERIOD_UNSPECIFIED (0):\n        Calendar period is unset. This is the default\n        if the budget is for a custom time period\n        (CustomPeriod).\n    MONTH (1):\n        A month. Month starts on the first day of\n        each month, such as January 1, February 1, March\n        1, and so on.\n    QUARTER (2):\n        A quarter. Quarters start on dates January 1,\n        April 1, July 1, and October 1 of each year.\n    YEAR (3):\n        A year. Year starts on January 1.",
+                "values": {
+                  "CALENDAR_PERIOD_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MONTH": {
+                    "value": 1
+                  },
+                  "QUARTER": {
+                    "value": 2
+                  },
+                  "YEAR": {
+                    "value": 3
+                  }
+                }
               },
               "user_labels": {
                 "description": "Labels which have been used to annotate the service-level objective. Label keys must start with a letter. Label keys and values may contain lowercase letters, numbers, underscores, and dashes. Label keys and values have a maximum length of 63 characters, and must be less than 128 bytes in size. Up to 64 label entries may be stored. For labels which do not have a semantic value, the empty string may be supplied for the label value.",
@@ -5121,212 +5792,15 @@
                     "description": "Required. List of resources configured for this resource group. The resources are executed in the exact order specified here.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "description": "The full resource name of the resource. See: https://cloud.google.com/apis/design/resource_names#full_resource_name",
-                          "type": "string"
+                      "type": "enum",
+                      "name": "Resource",
+                      "description": "Enum to specify the resource that is being changed to notify\nthe merchant about.\n\nValues:\n    RESOURCE_UNSPECIFIED (0):\n        Unspecified resource\n    PRODUCT (1):\n        Resource type : product",
+                      "values": {
+                        "RESOURCE_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "display_name": {
-                          "description": "The human readable name of the resource.",
-                          "type": "string"
-                        },
-                        "type_": {
-                          "description": "The full resource type of the resource.",
-                          "type": "string"
-                        },
-                        "cloud_provider": {
-                          "description": "Indicates which cloud provider the finding is from.",
-                          "type": "object",
-                          "reference": "google.cloud.securitycenter_v2.types.CloudProvider"
-                        },
-                        "service": {
-                          "description": "The service or resource provider associated with the resource.",
-                          "type": "string"
-                        },
-                        "location": {
-                          "description": "The region or location of the service (if applicable).",
-                          "type": "string"
-                        },
-                        "gcp_metadata": {
-                          "type": "object",
-                          "properties": {
-                            "project": {
-                              "description": "The full resource name of project that the resource belongs to.",
-                              "type": "string"
-                            },
-                            "project_display_name": {
-                              "description": "The project ID that the resource belongs to.",
-                              "type": "string"
-                            },
-                            "parent": {
-                              "description": "The full resource name of resource's parent.",
-                              "type": "string"
-                            },
-                            "parent_display_name": {
-                              "description": "The human readable name of resource's parent.",
-                              "type": "string"
-                            },
-                            "folders": {
-                              "description": "Output only. Contains a Folder message for each folder in the assets ancestry. The first folder is the deepest nested folder, and the last folder is the folder directly under the Organization.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "name": {
-                                    "description": "Identifier. The name of this folder. Format: ``projects/{project}/buckets/{bucket}/folders/{folder}``",
-                                    "type": "string"
-                                  },
-                                  "metageneration": {
-                                    "description": "Output only. The version of the metadata for this folder. Used for preconditions and for detecting changes in metadata.",
-                                    "type": "integer"
-                                  },
-                                  "create_time": {
-                                    "description": "Output only. The creation time of the folder.",
-                                    "type": "object",
-                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                  },
-                                  "update_time": {
-                                    "description": "Output only. The modification time of the folder.",
-                                    "type": "object",
-                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                  },
-                                  "pending_rename_info": {
-                                    "type": "object",
-                                    "properties": {
-                                      "operation": {
-                                        "description": "Output only. The name of the rename operation.",
-                                        "type": "string"
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "organization": {
-                              "description": "The name of the organization that the resource belongs to.",
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "aws_metadata": {
-                          "type": "object",
-                          "properties": {
-                            "organization": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "description": "The unique identifier (ID) for the organization. The regex pattern for an organization ID string requires \"o-\" followed by from 10 to 32 lowercase letters or digits.",
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "organizational_units": {
-                              "description": "A list of AWS organizational units associated with the resource, ordered from lowest level (closest to the account) to highest level.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "description": "The unique identifier (ID) associated with this OU. The regex pattern for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lowercase letters or digits (the ID of the root that contains the OU). This string is followed by a second \"-\" dash and from 8 to 32 additional lowercase letters or digits. For example, \"ou-ab12-cd34ef56\".",
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "description": "The friendly name of the OU.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "account": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "description": "The unique identifier (ID) of the account, containing exactly 12 digits.",
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "description": "The friendly name of this account.",
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "azure_metadata": {
-                          "type": "object",
-                          "properties": {
-                            "management_groups": {
-                              "description": "A list of Azure management groups associated with the resource, ordered from lowest level (closest to the subscription) to highest level.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "description": "The UUID of the Azure management group, for example, ``20000000-0001-0000-0000-000000000000``.",
-                                    "type": "string"
-                                  },
-                                  "display_name": {
-                                    "description": "The display name of the Azure management group.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "subscription": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "description": "The UUID of the Azure subscription, for example, ``291bba3f-e0a5-47bc-a099-3bdcb2a50a05``.",
-                                  "type": "string"
-                                },
-                                "display_name": {
-                                  "description": "The display name of the Azure subscription.",
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "resource_group": {
-                              "type": "object",
-                              "properties": {
-                                "name": {
-                                  "description": "The name of the Azure resource group. This is not a UUID.",
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "resource_path": {
-                          "type": "object",
-                          "properties": {
-                            "nodes": {
-                              "description": "The list of nodes that make the up resource path, ordered from lowest level to highest level.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "node_type": {
-                                    "description": "The type of resource this node represents.",
-                                    "type": "object",
-                                    "reference": "google.cloud.securitycenter_v2.types.ResourcePath.ResourcePathNodeType"
-                                  },
-                                  "id": {
-                                    "description": "The ID of the resource this node represents.",
-                                    "type": "string"
-                                  },
-                                  "display_name": {
-                                    "description": "The display name of the resource this node represents.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "resource_path_string": {
-                          "description": "A string representation of the resource path. For Google Cloud, it has the format of ``organizations/{organization_id}/folders/{folder_id}/folders/{folder_id}/projects/{project_id}`` where there can be any number of folders. For AWS, it has the format of ``org/{organization_id}/ou/{organizational_unit_id}/ou/{organizational_unit_id}/account/{account_id}`` where there can be any number of organizational units. For Azure, it has the format of ``mg/{management_group_id}/mg/{management_group_id}/subscription/{subscription_id}/rg/{resource_group_name}`` where there can be any number of management groups.",
-                          "type": "string"
+                        "PRODUCT": {
+                          "value": 1
                         }
                       }
                     }
@@ -5362,9 +5836,20 @@
                 "type": "object",
                 "properties": {
                   "request_method": {
-                    "description": "The HTTP request method to use for the check. If set to ``METHOD_UNSPECIFIED`` then ``request_method`` defaults to ``GET``.",
-                    "type": "object",
-                    "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.RequestMethod"
+                    "type": "enum",
+                    "name": "RequestMethod",
+                    "description": "The HTTP request method options.\n\nValues:\n    METHOD_UNSPECIFIED (0):\n        No request method specified.\n    GET (1):\n        GET request.\n    POST (2):\n        POST request.",
+                    "values": {
+                      "METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "GET": {
+                        "value": 1
+                      },
+                      "POST": {
+                        "value": 2
+                      }
+                    }
                   },
                   "use_ssl": {
                     "description": "If ``true``, use HTTPS instead of HTTP to run the check.",
@@ -5403,9 +5888,20 @@
                     }
                   },
                   "content_type": {
-                    "description": "The content type header to use for the check. The following configurations result in errors:  1. Content type is specified in both the ``headers`` field and the ``content_type`` field. 2. Request method is ``GET`` and ``content_type`` is not ``TYPE_UNSPECIFIED`` 3. Request method is ``POST`` and ``content_type`` is ``TYPE_UNSPECIFIED``. 4. Request method is ``POST`` and a \"Content-Type\" header is provided via ``headers`` field. The ``content_type`` field should be used instead.",
-                    "type": "object",
-                    "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.ContentType"
+                    "type": "enum",
+                    "name": "ContentType",
+                    "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
+                    "values": {
+                      "TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "URL_ENCODED": {
+                        "value": 1
+                      },
+                      "USER_PROVIDED": {
+                        "value": 2
+                      }
+                    }
                   },
                   "custom_content_type": {
                     "description": "A user provided content type header to use for the check. The invalid configurations outlined in the ``content_type`` field apply to ``custom_content_type``, as well as the following:  1. ``content_type`` is ``URL_ENCODED`` and ``custom_content_type`` is set. 2. ``content_type`` is ``USER_PROVIDED`` and ``custom_content_type`` is not set.",
@@ -5431,9 +5927,32 @@
                           "type": "integer"
                         },
                         "status_class": {
-                          "description": "A class of status codes to accept.  This field is a member of `oneof`_ ``status_code``.",
-                          "type": "object",
-                          "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.ResponseStatusCode.StatusClass"
+                          "type": "enum",
+                          "name": "StatusClass",
+                          "description": "An HTTP status code class.\n\nValues:\n    STATUS_CLASS_UNSPECIFIED (0):\n        Default value that matches no status codes.\n    STATUS_CLASS_1XX (100):\n        The class of status codes between 100 and\n        199.\n    STATUS_CLASS_2XX (200):\n        The class of status codes between 200 and\n        299.\n    STATUS_CLASS_3XX (300):\n        The class of status codes between 300 and\n        399.\n    STATUS_CLASS_4XX (400):\n        The class of status codes between 400 and\n        499.\n    STATUS_CLASS_5XX (500):\n        The class of status codes between 500 and\n        599.\n    STATUS_CLASS_ANY (1000):\n        The class of all status codes.",
+                          "values": {
+                            "STATUS_CLASS_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "STATUS_CLASS_1XX": {
+                              "value": 100
+                            },
+                            "STATUS_CLASS_2XX": {
+                              "value": 200
+                            },
+                            "STATUS_CLASS_3XX": {
+                              "value": 300
+                            },
+                            "STATUS_CLASS_4XX": {
+                              "value": 400
+                            },
+                            "STATUS_CLASS_5XX": {
+                              "value": 500
+                            },
+                            "STATUS_CLASS_ANY": {
+                              "value": 1000
+                            }
+                          }
                         }
                       }
                     }
@@ -5451,9 +5970,17 @@
                     "type": "object",
                     "properties": {
                       "type_": {
-                        "description": "Type of authentication.",
-                        "type": "object",
-                        "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.ServiceAgentAuthentication.ServiceAgentAuthenticationType"
+                        "type": "enum",
+                        "name": "ServiceAgentAuthenticationType",
+                        "description": "Type of authentication.\n\nValues:\n    SERVICE_AGENT_AUTHENTICATION_TYPE_UNSPECIFIED (0):\n        Default value, will result in OIDC\n        Authentication.\n    OIDC_TOKEN (1):\n        OIDC Authentication",
+                        "values": {
+                          "SERVICE_AGENT_AUTHENTICATION_TYPE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "OIDC_TOKEN": {
+                            "value": 1
+                          }
+                        }
                       }
                     }
                   }
@@ -5478,28 +6005,46 @@
                 }
               },
               "period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "timeout": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -5514,9 +6059,32 @@
                       "type": "string"
                     },
                     "matcher": {
-                      "description": "The type of content matcher that will be applied to the server output, compared to the ``content`` string when the check is run.",
-                      "type": "object",
-                      "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.ContentMatcher.ContentMatcherOption"
+                      "type": "enum",
+                      "name": "ContentMatcherOption",
+                      "description": "Options to perform content matching.\n\nValues:\n    CONTENT_MATCHER_OPTION_UNSPECIFIED (0):\n        No content matcher type specified (maintained for backward\n        compatibility, but deprecated for future use). Treated as\n        ``CONTAINS_STRING``.\n    CONTAINS_STRING (1):\n        Selects substring matching. The match succeeds if the output\n        contains the ``content`` string. This is the default value\n        for checks without a ``matcher`` option, or where the value\n        of ``matcher`` is ``CONTENT_MATCHER_OPTION_UNSPECIFIED``.\n    NOT_CONTAINS_STRING (2):\n        Selects negation of substring matching. The match succeeds\n        if the output does *NOT* contain the ``content`` string.\n    MATCHES_REGEX (3):\n        Selects regular-expression matching. The match succeeds if\n        the output matches the regular expression specified in the\n        ``content`` string. Regex matching is only supported for\n        HTTP/HTTPS checks.\n    NOT_MATCHES_REGEX (4):\n        Selects negation of regular-expr",
+                      "values": {
+                        "CONTENT_MATCHER_OPTION_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CONTAINS_STRING": {
+                          "value": 1
+                        },
+                        "NOT_CONTAINS_STRING": {
+                          "value": 2
+                        },
+                        "MATCHES_REGEX": {
+                          "value": 3
+                        },
+                        "NOT_MATCHES_REGEX": {
+                          "value": 4
+                        },
+                        "MATCHES_JSON_PATH": {
+                          "value": 5
+                        },
+                        "NOT_MATCHES_JSON_PATH": {
+                          "value": 6
+                        }
+                      }
                     },
                     "json_path_matcher": {
                       "type": "object",
@@ -5526,9 +6094,20 @@
                           "type": "string"
                         },
                         "json_matcher": {
-                          "description": "The type of JSONPath match that will be applied to the JSON output (``ContentMatcher.content``)",
-                          "type": "object",
-                          "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.ContentMatcher.JsonPathMatcher.JsonPathMatcherOption"
+                          "type": "enum",
+                          "name": "JsonPathMatcherOption",
+                          "description": "Options to perform JSONPath content matching.\n\nValues:\n    JSON_PATH_MATCHER_OPTION_UNSPECIFIED (0):\n        No JSONPath matcher type specified (not\n        valid).\n    EXACT_MATCH (1):\n        Selects 'exact string' matching. The match succeeds if the\n        content at the ``json_path`` within the output is exactly\n        the same as the ``content`` string.\n    REGEX_MATCH (2):\n        Selects regular-expression matching. The match succeeds if\n        the content at the ``json_path`` within the output matches\n        the regular expression specified in the ``content`` string.",
+                          "values": {
+                            "JSON_PATH_MATCHER_OPTION_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "EXACT_MATCH": {
+                              "value": 1
+                            },
+                            "REGEX_MATCH": {
+                              "value": 2
+                            }
+                          }
                         }
                       }
                     }
@@ -5536,16 +6115,54 @@
                 }
               },
               "checker_type": {
-                "description": "The type of checkers to use to execute the Uptime check.",
-                "type": "object",
-                "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.CheckerType"
+                "type": "enum",
+                "name": "CheckerType",
+                "description": "What kind of checkers are available to be used by the check.\n\nValues:\n    CHECKER_TYPE_UNSPECIFIED (0):\n        The default checker type. Currently converted to\n        ``STATIC_IP_CHECKERS`` on creation, the default conversion\n        behavior may change in the future.\n    STATIC_IP_CHECKERS (1):\n        ``STATIC_IP_CHECKERS`` are used for uptime checks that\n        perform egress across the public internet.\n        ``STATIC_IP_CHECKERS`` use the static IP addresses returned\n        by ``ListUptimeCheckIps``.\n    VPC_CHECKERS (3):\n        ``VPC_CHECKERS`` are used for uptime checks that perform\n        egress using Service Directory and private network access.\n        When using ``VPC_CHECKERS``, the monitored resource type\n        must be ``servicedirectory_service``.",
+                "values": {
+                  "CHECKER_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "STATIC_IP_CHECKERS": {
+                    "value": 1
+                  },
+                  "VPC_CHECKERS": {
+                    "value": 3
+                  }
+                }
               },
               "selected_regions": {
                 "description": "The list of regions from which the check will be run. Some regions contain one location, and others contain more than one. If this field is specified, enough regions must be provided to include a minimum of 3 locations.  Not specifying this field will result in Uptime checks running from all available regions.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.monitoring_v3.types.UptimeCheckRegion"
+                  "type": "enum",
+                  "name": "UptimeCheckRegion",
+                  "description": "The regions from which an Uptime check can be run.\n\nValues:\n    REGION_UNSPECIFIED (0):\n        Default value if no region is specified. Will\n        result in Uptime checks running from all\n        regions.\n    USA (1):\n        Allows checks to run from locations within\n        the United States of America.\n    EUROPE (2):\n        Allows checks to run from locations within\n        the continent of Europe.\n    SOUTH_AMERICA (3):\n        Allows checks to run from locations within\n        the continent of South America.\n    ASIA_PACIFIC (4):\n        Allows checks to run from locations within\n        the Asia Pacific area (ex: Singapore).\n    USA_OREGON (5):\n        Allows checks to run from locations within\n        the western United States of America\n    USA_IOWA (6):\n        Allows checks to run from locations within\n        the central United States of America\n    USA_VIRGINIA (7):\n        Allows checks to run from locations within\n        the eastern United States of America",
+                  "values": {
+                    "REGION_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "USA": {
+                      "value": 1
+                    },
+                    "EUROPE": {
+                      "value": 2
+                    },
+                    "SOUTH_AMERICA": {
+                      "value": 3
+                    },
+                    "ASIA_PACIFIC": {
+                      "value": 4
+                    },
+                    "USA_OREGON": {
+                      "value": 5
+                    },
+                    "USA_IOWA": {
+                      "value": 6
+                    },
+                    "USA_VIRGINIA": {
+                      "value": 7
+                    }
+                  }
                 }
               },
               "is_internal": {
@@ -5579,9 +6196,26 @@
                       "type": "string"
                     },
                     "state": {
-                      "description": "The current operational state of the internal checker.",
-                      "type": "object",
-                      "reference": "google.cloud.monitoring_v3.types.InternalChecker.State"
+                      "type": "enum",
+                      "name": "State",
+                      "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                      "values": {
+                        "STATE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "AFFECTED": {
+                          "value": 1
+                        },
+                        "NOT_AFFECTED": {
+                          "value": 2
+                        },
+                        "FIXED": {
+                          "value": 3
+                        },
+                        "UNDER_INVESTIGATION": {
+                          "value": 4
+                        }
+                      }
                     }
                   }
                 }
@@ -5671,212 +6305,15 @@
                     "description": "Required. List of resources configured for this resource group. The resources are executed in the exact order specified here.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "description": "The full resource name of the resource. See: https://cloud.google.com/apis/design/resource_names#full_resource_name",
-                          "type": "string"
+                      "type": "enum",
+                      "name": "Resource",
+                      "description": "Enum to specify the resource that is being changed to notify\nthe merchant about.\n\nValues:\n    RESOURCE_UNSPECIFIED (0):\n        Unspecified resource\n    PRODUCT (1):\n        Resource type : product",
+                      "values": {
+                        "RESOURCE_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "display_name": {
-                          "description": "The human readable name of the resource.",
-                          "type": "string"
-                        },
-                        "type_": {
-                          "description": "The full resource type of the resource.",
-                          "type": "string"
-                        },
-                        "cloud_provider": {
-                          "description": "Indicates which cloud provider the finding is from.",
-                          "type": "object",
-                          "reference": "google.cloud.securitycenter_v2.types.CloudProvider"
-                        },
-                        "service": {
-                          "description": "The service or resource provider associated with the resource.",
-                          "type": "string"
-                        },
-                        "location": {
-                          "description": "The region or location of the service (if applicable).",
-                          "type": "string"
-                        },
-                        "gcp_metadata": {
-                          "type": "object",
-                          "properties": {
-                            "project": {
-                              "description": "The full resource name of project that the resource belongs to.",
-                              "type": "string"
-                            },
-                            "project_display_name": {
-                              "description": "The project ID that the resource belongs to.",
-                              "type": "string"
-                            },
-                            "parent": {
-                              "description": "The full resource name of resource's parent.",
-                              "type": "string"
-                            },
-                            "parent_display_name": {
-                              "description": "The human readable name of resource's parent.",
-                              "type": "string"
-                            },
-                            "folders": {
-                              "description": "Output only. Contains a Folder message for each folder in the assets ancestry. The first folder is the deepest nested folder, and the last folder is the folder directly under the Organization.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "name": {
-                                    "description": "Identifier. The name of this folder. Format: ``projects/{project}/buckets/{bucket}/folders/{folder}``",
-                                    "type": "string"
-                                  },
-                                  "metageneration": {
-                                    "description": "Output only. The version of the metadata for this folder. Used for preconditions and for detecting changes in metadata.",
-                                    "type": "integer"
-                                  },
-                                  "create_time": {
-                                    "description": "Output only. The creation time of the folder.",
-                                    "type": "object",
-                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                  },
-                                  "update_time": {
-                                    "description": "Output only. The modification time of the folder.",
-                                    "type": "object",
-                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                                  },
-                                  "pending_rename_info": {
-                                    "type": "object",
-                                    "properties": {
-                                      "operation": {
-                                        "description": "Output only. The name of the rename operation.",
-                                        "type": "string"
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "organization": {
-                              "description": "The name of the organization that the resource belongs to.",
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "aws_metadata": {
-                          "type": "object",
-                          "properties": {
-                            "organization": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "description": "The unique identifier (ID) for the organization. The regex pattern for an organization ID string requires \"o-\" followed by from 10 to 32 lowercase letters or digits.",
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "organizational_units": {
-                              "description": "A list of AWS organizational units associated with the resource, ordered from lowest level (closest to the account) to highest level.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "description": "The unique identifier (ID) associated with this OU. The regex pattern for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lowercase letters or digits (the ID of the root that contains the OU). This string is followed by a second \"-\" dash and from 8 to 32 additional lowercase letters or digits. For example, \"ou-ab12-cd34ef56\".",
-                                    "type": "string"
-                                  },
-                                  "name": {
-                                    "description": "The friendly name of the OU.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "account": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "description": "The unique identifier (ID) of the account, containing exactly 12 digits.",
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "description": "The friendly name of this account.",
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "azure_metadata": {
-                          "type": "object",
-                          "properties": {
-                            "management_groups": {
-                              "description": "A list of Azure management groups associated with the resource, ordered from lowest level (closest to the subscription) to highest level.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "description": "The UUID of the Azure management group, for example, ``20000000-0001-0000-0000-000000000000``.",
-                                    "type": "string"
-                                  },
-                                  "display_name": {
-                                    "description": "The display name of the Azure management group.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "subscription": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "description": "The UUID of the Azure subscription, for example, ``291bba3f-e0a5-47bc-a099-3bdcb2a50a05``.",
-                                  "type": "string"
-                                },
-                                "display_name": {
-                                  "description": "The display name of the Azure subscription.",
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "resource_group": {
-                              "type": "object",
-                              "properties": {
-                                "name": {
-                                  "description": "The name of the Azure resource group. This is not a UUID.",
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "resource_path": {
-                          "type": "object",
-                          "properties": {
-                            "nodes": {
-                              "description": "The list of nodes that make the up resource path, ordered from lowest level to highest level.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "node_type": {
-                                    "description": "The type of resource this node represents.",
-                                    "type": "object",
-                                    "reference": "google.cloud.securitycenter_v2.types.ResourcePath.ResourcePathNodeType"
-                                  },
-                                  "id": {
-                                    "description": "The ID of the resource this node represents.",
-                                    "type": "string"
-                                  },
-                                  "display_name": {
-                                    "description": "The display name of the resource this node represents.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "resource_path_string": {
-                          "description": "A string representation of the resource path. For Google Cloud, it has the format of ``organizations/{organization_id}/folders/{folder_id}/folders/{folder_id}/projects/{project_id}`` where there can be any number of folders. For AWS, it has the format of ``org/{organization_id}/ou/{organizational_unit_id}/ou/{organizational_unit_id}/account/{account_id}`` where there can be any number of organizational units. For Azure, it has the format of ``mg/{management_group_id}/mg/{management_group_id}/subscription/{subscription_id}/rg/{resource_group_name}`` where there can be any number of management groups.",
-                          "type": "string"
+                        "PRODUCT": {
+                          "value": 1
                         }
                       }
                     }
@@ -5912,9 +6349,20 @@
                 "type": "object",
                 "properties": {
                   "request_method": {
-                    "description": "The HTTP request method to use for the check. If set to ``METHOD_UNSPECIFIED`` then ``request_method`` defaults to ``GET``.",
-                    "type": "object",
-                    "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.RequestMethod"
+                    "type": "enum",
+                    "name": "RequestMethod",
+                    "description": "The HTTP request method options.\n\nValues:\n    METHOD_UNSPECIFIED (0):\n        No request method specified.\n    GET (1):\n        GET request.\n    POST (2):\n        POST request.",
+                    "values": {
+                      "METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "GET": {
+                        "value": 1
+                      },
+                      "POST": {
+                        "value": 2
+                      }
+                    }
                   },
                   "use_ssl": {
                     "description": "If ``true``, use HTTPS instead of HTTP to run the check.",
@@ -5953,9 +6401,20 @@
                     }
                   },
                   "content_type": {
-                    "description": "The content type header to use for the check. The following configurations result in errors:  1. Content type is specified in both the ``headers`` field and the ``content_type`` field. 2. Request method is ``GET`` and ``content_type`` is not ``TYPE_UNSPECIFIED`` 3. Request method is ``POST`` and ``content_type`` is ``TYPE_UNSPECIFIED``. 4. Request method is ``POST`` and a \"Content-Type\" header is provided via ``headers`` field. The ``content_type`` field should be used instead.",
-                    "type": "object",
-                    "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.ContentType"
+                    "type": "enum",
+                    "name": "ContentType",
+                    "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
+                    "values": {
+                      "TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "URL_ENCODED": {
+                        "value": 1
+                      },
+                      "USER_PROVIDED": {
+                        "value": 2
+                      }
+                    }
                   },
                   "custom_content_type": {
                     "description": "A user provided content type header to use for the check. The invalid configurations outlined in the ``content_type`` field apply to ``custom_content_type``, as well as the following:  1. ``content_type`` is ``URL_ENCODED`` and ``custom_content_type`` is set. 2. ``content_type`` is ``USER_PROVIDED`` and ``custom_content_type`` is not set.",
@@ -5981,9 +6440,32 @@
                           "type": "integer"
                         },
                         "status_class": {
-                          "description": "A class of status codes to accept.  This field is a member of `oneof`_ ``status_code``.",
-                          "type": "object",
-                          "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.ResponseStatusCode.StatusClass"
+                          "type": "enum",
+                          "name": "StatusClass",
+                          "description": "An HTTP status code class.\n\nValues:\n    STATUS_CLASS_UNSPECIFIED (0):\n        Default value that matches no status codes.\n    STATUS_CLASS_1XX (100):\n        The class of status codes between 100 and\n        199.\n    STATUS_CLASS_2XX (200):\n        The class of status codes between 200 and\n        299.\n    STATUS_CLASS_3XX (300):\n        The class of status codes between 300 and\n        399.\n    STATUS_CLASS_4XX (400):\n        The class of status codes between 400 and\n        499.\n    STATUS_CLASS_5XX (500):\n        The class of status codes between 500 and\n        599.\n    STATUS_CLASS_ANY (1000):\n        The class of all status codes.",
+                          "values": {
+                            "STATUS_CLASS_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "STATUS_CLASS_1XX": {
+                              "value": 100
+                            },
+                            "STATUS_CLASS_2XX": {
+                              "value": 200
+                            },
+                            "STATUS_CLASS_3XX": {
+                              "value": 300
+                            },
+                            "STATUS_CLASS_4XX": {
+                              "value": 400
+                            },
+                            "STATUS_CLASS_5XX": {
+                              "value": 500
+                            },
+                            "STATUS_CLASS_ANY": {
+                              "value": 1000
+                            }
+                          }
                         }
                       }
                     }
@@ -6001,9 +6483,17 @@
                     "type": "object",
                     "properties": {
                       "type_": {
-                        "description": "Type of authentication.",
-                        "type": "object",
-                        "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.HttpCheck.ServiceAgentAuthentication.ServiceAgentAuthenticationType"
+                        "type": "enum",
+                        "name": "ServiceAgentAuthenticationType",
+                        "description": "Type of authentication.\n\nValues:\n    SERVICE_AGENT_AUTHENTICATION_TYPE_UNSPECIFIED (0):\n        Default value, will result in OIDC\n        Authentication.\n    OIDC_TOKEN (1):\n        OIDC Authentication",
+                        "values": {
+                          "SERVICE_AGENT_AUTHENTICATION_TYPE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "OIDC_TOKEN": {
+                            "value": 1
+                          }
+                        }
                       }
                     }
                   }
@@ -6028,28 +6518,46 @@
                 }
               },
               "period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "timeout": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -6064,9 +6572,32 @@
                       "type": "string"
                     },
                     "matcher": {
-                      "description": "The type of content matcher that will be applied to the server output, compared to the ``content`` string when the check is run.",
-                      "type": "object",
-                      "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.ContentMatcher.ContentMatcherOption"
+                      "type": "enum",
+                      "name": "ContentMatcherOption",
+                      "description": "Options to perform content matching.\n\nValues:\n    CONTENT_MATCHER_OPTION_UNSPECIFIED (0):\n        No content matcher type specified (maintained for backward\n        compatibility, but deprecated for future use). Treated as\n        ``CONTAINS_STRING``.\n    CONTAINS_STRING (1):\n        Selects substring matching. The match succeeds if the output\n        contains the ``content`` string. This is the default value\n        for checks without a ``matcher`` option, or where the value\n        of ``matcher`` is ``CONTENT_MATCHER_OPTION_UNSPECIFIED``.\n    NOT_CONTAINS_STRING (2):\n        Selects negation of substring matching. The match succeeds\n        if the output does *NOT* contain the ``content`` string.\n    MATCHES_REGEX (3):\n        Selects regular-expression matching. The match succeeds if\n        the output matches the regular expression specified in the\n        ``content`` string. Regex matching is only supported for\n        HTTP/HTTPS checks.\n    NOT_MATCHES_REGEX (4):\n        Selects negation of regular-expr",
+                      "values": {
+                        "CONTENT_MATCHER_OPTION_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "CONTAINS_STRING": {
+                          "value": 1
+                        },
+                        "NOT_CONTAINS_STRING": {
+                          "value": 2
+                        },
+                        "MATCHES_REGEX": {
+                          "value": 3
+                        },
+                        "NOT_MATCHES_REGEX": {
+                          "value": 4
+                        },
+                        "MATCHES_JSON_PATH": {
+                          "value": 5
+                        },
+                        "NOT_MATCHES_JSON_PATH": {
+                          "value": 6
+                        }
+                      }
                     },
                     "json_path_matcher": {
                       "type": "object",
@@ -6076,9 +6607,20 @@
                           "type": "string"
                         },
                         "json_matcher": {
-                          "description": "The type of JSONPath match that will be applied to the JSON output (``ContentMatcher.content``)",
-                          "type": "object",
-                          "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.ContentMatcher.JsonPathMatcher.JsonPathMatcherOption"
+                          "type": "enum",
+                          "name": "JsonPathMatcherOption",
+                          "description": "Options to perform JSONPath content matching.\n\nValues:\n    JSON_PATH_MATCHER_OPTION_UNSPECIFIED (0):\n        No JSONPath matcher type specified (not\n        valid).\n    EXACT_MATCH (1):\n        Selects 'exact string' matching. The match succeeds if the\n        content at the ``json_path`` within the output is exactly\n        the same as the ``content`` string.\n    REGEX_MATCH (2):\n        Selects regular-expression matching. The match succeeds if\n        the content at the ``json_path`` within the output matches\n        the regular expression specified in the ``content`` string.",
+                          "values": {
+                            "JSON_PATH_MATCHER_OPTION_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "EXACT_MATCH": {
+                              "value": 1
+                            },
+                            "REGEX_MATCH": {
+                              "value": 2
+                            }
+                          }
                         }
                       }
                     }
@@ -6086,16 +6628,54 @@
                 }
               },
               "checker_type": {
-                "description": "The type of checkers to use to execute the Uptime check.",
-                "type": "object",
-                "reference": "google.cloud.monitoring_v3.types.UptimeCheckConfig.CheckerType"
+                "type": "enum",
+                "name": "CheckerType",
+                "description": "What kind of checkers are available to be used by the check.\n\nValues:\n    CHECKER_TYPE_UNSPECIFIED (0):\n        The default checker type. Currently converted to\n        ``STATIC_IP_CHECKERS`` on creation, the default conversion\n        behavior may change in the future.\n    STATIC_IP_CHECKERS (1):\n        ``STATIC_IP_CHECKERS`` are used for uptime checks that\n        perform egress across the public internet.\n        ``STATIC_IP_CHECKERS`` use the static IP addresses returned\n        by ``ListUptimeCheckIps``.\n    VPC_CHECKERS (3):\n        ``VPC_CHECKERS`` are used for uptime checks that perform\n        egress using Service Directory and private network access.\n        When using ``VPC_CHECKERS``, the monitored resource type\n        must be ``servicedirectory_service``.",
+                "values": {
+                  "CHECKER_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "STATIC_IP_CHECKERS": {
+                    "value": 1
+                  },
+                  "VPC_CHECKERS": {
+                    "value": 3
+                  }
+                }
               },
               "selected_regions": {
                 "description": "The list of regions from which the check will be run. Some regions contain one location, and others contain more than one. If this field is specified, enough regions must be provided to include a minimum of 3 locations.  Not specifying this field will result in Uptime checks running from all available regions.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.monitoring_v3.types.UptimeCheckRegion"
+                  "type": "enum",
+                  "name": "UptimeCheckRegion",
+                  "description": "The regions from which an Uptime check can be run.\n\nValues:\n    REGION_UNSPECIFIED (0):\n        Default value if no region is specified. Will\n        result in Uptime checks running from all\n        regions.\n    USA (1):\n        Allows checks to run from locations within\n        the United States of America.\n    EUROPE (2):\n        Allows checks to run from locations within\n        the continent of Europe.\n    SOUTH_AMERICA (3):\n        Allows checks to run from locations within\n        the continent of South America.\n    ASIA_PACIFIC (4):\n        Allows checks to run from locations within\n        the Asia Pacific area (ex: Singapore).\n    USA_OREGON (5):\n        Allows checks to run from locations within\n        the western United States of America\n    USA_IOWA (6):\n        Allows checks to run from locations within\n        the central United States of America\n    USA_VIRGINIA (7):\n        Allows checks to run from locations within\n        the eastern United States of America",
+                  "values": {
+                    "REGION_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "USA": {
+                      "value": 1
+                    },
+                    "EUROPE": {
+                      "value": 2
+                    },
+                    "SOUTH_AMERICA": {
+                      "value": 3
+                    },
+                    "ASIA_PACIFIC": {
+                      "value": 4
+                    },
+                    "USA_OREGON": {
+                      "value": 5
+                    },
+                    "USA_IOWA": {
+                      "value": 6
+                    },
+                    "USA_VIRGINIA": {
+                      "value": 7
+                    }
+                  }
                 }
               },
               "is_internal": {
@@ -6129,9 +6709,26 @@
                       "type": "string"
                     },
                     "state": {
-                      "description": "The current operational state of the internal checker.",
-                      "type": "object",
-                      "reference": "google.cloud.monitoring_v3.types.InternalChecker.State"
+                      "type": "enum",
+                      "name": "State",
+                      "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                      "values": {
+                        "STATE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "AFFECTED": {
+                          "value": 1
+                        },
+                        "NOT_AFFECTED": {
+                          "value": 2
+                        },
+                        "FIXED": {
+                          "value": 3
+                        },
+                        "UNDER_INVESTIGATION": {
+                          "value": 4
+                        }
+                      }
                     }
                   }
                 }

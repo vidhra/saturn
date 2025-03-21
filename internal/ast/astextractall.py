@@ -20,6 +20,7 @@ def extract_methods_from_file(file_path, class_name, target_methods):
           - description
           - parameters (as JSON schema)
           - request_types
+          - response_types
 
     Parameters are extracted from:
       1. The function signature (positional and keyword-only arguments).
@@ -125,6 +126,24 @@ def extract_methods_from_file(file_path, class_name, target_methods):
                             ).strip()
                             properties[param_name_in_progress] = existing
 
+                        # 5) Extract response types from the docstring (if any)
+                        response_types = re.findall(
+                            r"Response message for\s*``([^`]+)``", docstring
+                        )
+                        updated_response_types = []
+                        if response_types:
+                            for rt in response_types:
+                                if not rt.endswith("Response"):
+                                    updated_response_types.append(rt + "Response")
+                                else:
+                                    updated_response_types.append(rt)
+                        else:
+                            # Alternatively, try to extract from the Returns section.
+                            match = re.search(r"Returns:\s*\n\s*([\w\.\_]+):", docstring)
+                            if match:
+                                rt = match.group(1)
+                                updated_response_types.append(rt)
+
                         # Build final method information
                         method_info = {
                             "type": "function",
@@ -136,7 +155,8 @@ def extract_methods_from_file(file_path, class_name, target_methods):
                                     "properties": properties,
                                     "required": required
                                 },
-                                "request_types": updated_request_types
+                                "request_types": updated_request_types,
+                                "response_types": updated_response_types
                             }
                         }
                         extracted_methods.append(method_info)
@@ -186,7 +206,6 @@ def process_package(metadata_path):
         methods_info = extract_methods_from_file(client_file, class_name, target_methods)
 
         results[service_name] = {
-
             "methods": methods_info
         }
     return results
