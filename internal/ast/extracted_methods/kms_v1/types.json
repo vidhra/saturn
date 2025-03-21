@@ -111,9 +111,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "Output only. The state for the AutokeyConfig.",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.AutokeyConfig.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               }
             }
           },
@@ -576,9 +593,20 @@
                                 "type": "object",
                                 "properties": {
                                   "type_": {
-                                    "description": "Required. The type of public key.",
-                                    "type": "object",
-                                    "reference": "google.cloud.security.privateca_v1beta1.types.PublicKey.KeyType"
+                                    "type": "enum",
+                                    "name": "KeyType",
+                                    "description": "Types of public keys that are supported. At a minimum, we support\nRSA and ECDSA, for the key sizes or curves listed:\nhttps://cloud.google.com/kms/docs/algorithms#asymmetric_signing_algorithms\n\nValues:\n    KEY_TYPE_UNSPECIFIED (0):\n        Default unspecified value.\n    PEM_RSA_KEY (1):\n        A PEM-encoded PKCS#1/RFC 3447 RSAPrivateKey\n        structure.\n    PEM_EC_KEY (2):\n        A PEM-encoded compressed NIST\n        P-256/secp256r1/prime256v1 or P-384 key.",
+                                    "values": {
+                                      "KEY_TYPE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "PEM_RSA_KEY": {
+                                        "value": 1
+                                      },
+                                      "PEM_EC_KEY": {
+                                        "value": 2
+                                      }
+                                    }
                                   },
                                   "key": {
                                     "description": "Required. A public key. Padding and encoding varies by 'KeyType' and is described along with the KeyType values.",
@@ -598,15 +626,24 @@
                             ]
                           },
                           "lifetime": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           },
@@ -614,9 +651,38 @@
                             "type": "object",
                             "properties": {
                               "revocation_state": {
-                                "description": "Indicates why a [Certificate][google.cloud.security.privateca.v1beta1.Certificate] was revoked.",
-                                "type": "object",
-                                "reference": "google.cloud.security.privateca_v1beta1.types.RevocationReason"
+                                "type": "enum",
+                                "name": "RevocationReason",
+                                "description": "A\n[RevocationReason][google.cloud.security.privateca.v1beta1.RevocationReason]\nindicates whether a\n[Certificate][google.cloud.security.privateca.v1beta1.Certificate]\nhas been revoked, and the reason for revocation. These correspond to\nstandard revocation reasons from RFC 5280. Note that the enum labels\nand values in this definition are not the same ASN.1 values defined\nin RFC 5280. These values will be translated to the correct ASN.1\nvalues when a CRL is created.\n\nValues:\n    REVOCATION_REASON_UNSPECIFIED (0):\n        Default unspecified value. This value does indicate that a\n        [Certificate][google.cloud.security.privateca.v1beta1.Certificate]\n        has been revoked, but that a reason has not been recorded.\n    KEY_COMPROMISE (1):\n        Key material for this\n        [Certificate][google.cloud.security.privateca.v1beta1.Certificate]\n        may have leaked.\n    CERTIFICATE_AUTHORITY_COMPROMISE (2):\n        The key material for a certificate authority\n        in the issuing path may have leaked.\n    A",
+                                "values": {
+                                  "REVOCATION_REASON_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "KEY_COMPROMISE": {
+                                    "value": 1
+                                  },
+                                  "CERTIFICATE_AUTHORITY_COMPROMISE": {
+                                    "value": 2
+                                  },
+                                  "AFFILIATION_CHANGED": {
+                                    "value": 3
+                                  },
+                                  "SUPERSEDED": {
+                                    "value": 4
+                                  },
+                                  "CESSATION_OF_OPERATION": {
+                                    "value": 5
+                                  },
+                                  "CERTIFICATE_HOLD": {
+                                    "value": 6
+                                  },
+                                  "PRIVILEGE_WITHDRAWN": {
+                                    "value": 7
+                                  },
+                                  "ATTRIBUTE_AUTHORITY_COMPROMISE": {
+                                    "value": 8
+                                  }
+                                }
                               },
                               "revocation_time": {
                                 "description": "The time at which this [Certificate][google.cloud.security.privateca.v1beta1.Certificate] was revoked.",
@@ -731,15 +797,24 @@
                                     "type": "string"
                                   },
                                   "lifetime": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   },
@@ -941,9 +1016,20 @@
                                 "type": "object",
                                 "properties": {
                                   "type_": {
-                                    "description": "Required. The type of public key.",
-                                    "type": "object",
-                                    "reference": "google.cloud.security.privateca_v1beta1.types.PublicKey.KeyType"
+                                    "type": "enum",
+                                    "name": "KeyType",
+                                    "description": "Types of public keys that are supported. At a minimum, we support\nRSA and ECDSA, for the key sizes or curves listed:\nhttps://cloud.google.com/kms/docs/algorithms#asymmetric_signing_algorithms\n\nValues:\n    KEY_TYPE_UNSPECIFIED (0):\n        Default unspecified value.\n    PEM_RSA_KEY (1):\n        A PEM-encoded PKCS#1/RFC 3447 RSAPrivateKey\n        structure.\n    PEM_EC_KEY (2):\n        A PEM-encoded compressed NIST\n        P-256/secp256r1/prime256v1 or P-384 key.",
+                                    "values": {
+                                      "KEY_TYPE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "PEM_RSA_KEY": {
+                                        "value": 1
+                                      },
+                                      "PEM_EC_KEY": {
+                                        "value": 2
+                                      }
+                                    }
                                   },
                                   "key": {
                                     "description": "Required. A public key. Padding and encoding varies by 'KeyType' and is described along with the KeyType values.",
@@ -1042,9 +1128,20 @@
                 "type": "string"
               },
               "key_management_mode": {
-                "description": "Optional. Describes who can perform control plane operations on the EKM. If unset, this defaults to [MANUAL][google.cloud.kms.v1.EkmConnection.KeyManagementMode.MANUAL].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.EkmConnection.KeyManagementMode"
+                "type": "enum",
+                "name": "KeyManagementMode",
+                "description": "[KeyManagementMode][google.cloud.kms.v1.EkmConnection.KeyManagementMode]\ndescribes who can perform control plane cryptographic operations\nusing this [EkmConnection][google.cloud.kms.v1.EkmConnection].\n\nValues:\n    KEY_MANAGEMENT_MODE_UNSPECIFIED (0):\n        Not specified.\n    MANUAL (1):\n        EKM-side key management operations on\n        [CryptoKeys][google.cloud.kms.v1.CryptoKey] created with\n        this [EkmConnection][google.cloud.kms.v1.EkmConnection] must\n        be initiated from the EKM directly and cannot be performed\n        from Cloud KMS. This means that:\n\n        -  When creating a\n           [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]\n           associated with this\n           [EkmConnection][google.cloud.kms.v1.EkmConnection], the\n           caller must supply the key path of pre-existing external\n           key material that will be linked to the\n           [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].\n        -  Destruction of external key material cannot be reque",
+                "values": {
+                  "KEY_MANAGEMENT_MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MANUAL": {
+                    "value": 1
+                  },
+                  "CLOUD_KMS": {
+                    "value": 2
+                  }
+                }
               },
               "crypto_space_path": {
                 "description": "Optional. Identifies the EKM Crypto Space that this [EkmConnection][google.cloud.kms.v1.EkmConnection] maps to. Note: This field is required if [KeyManagementMode][google.cloud.kms.v1.EkmConnection.KeyManagementMode] is [CLOUD_KMS][google.cloud.kms.v1.EkmConnection.KeyManagementMode.CLOUD_KMS].",
@@ -1413,9 +1510,20 @@
                                 "type": "object",
                                 "properties": {
                                   "type_": {
-                                    "description": "Required. The type of public key.",
-                                    "type": "object",
-                                    "reference": "google.cloud.security.privateca_v1beta1.types.PublicKey.KeyType"
+                                    "type": "enum",
+                                    "name": "KeyType",
+                                    "description": "Types of public keys that are supported. At a minimum, we support\nRSA and ECDSA, for the key sizes or curves listed:\nhttps://cloud.google.com/kms/docs/algorithms#asymmetric_signing_algorithms\n\nValues:\n    KEY_TYPE_UNSPECIFIED (0):\n        Default unspecified value.\n    PEM_RSA_KEY (1):\n        A PEM-encoded PKCS#1/RFC 3447 RSAPrivateKey\n        structure.\n    PEM_EC_KEY (2):\n        A PEM-encoded compressed NIST\n        P-256/secp256r1/prime256v1 or P-384 key.",
+                                    "values": {
+                                      "KEY_TYPE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "PEM_RSA_KEY": {
+                                        "value": 1
+                                      },
+                                      "PEM_EC_KEY": {
+                                        "value": 2
+                                      }
+                                    }
                                   },
                                   "key": {
                                     "description": "Required. A public key. Padding and encoding varies by 'KeyType' and is described along with the KeyType values.",
@@ -1435,15 +1543,24 @@
                             ]
                           },
                           "lifetime": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           },
@@ -1451,9 +1568,38 @@
                             "type": "object",
                             "properties": {
                               "revocation_state": {
-                                "description": "Indicates why a [Certificate][google.cloud.security.privateca.v1beta1.Certificate] was revoked.",
-                                "type": "object",
-                                "reference": "google.cloud.security.privateca_v1beta1.types.RevocationReason"
+                                "type": "enum",
+                                "name": "RevocationReason",
+                                "description": "A\n[RevocationReason][google.cloud.security.privateca.v1beta1.RevocationReason]\nindicates whether a\n[Certificate][google.cloud.security.privateca.v1beta1.Certificate]\nhas been revoked, and the reason for revocation. These correspond to\nstandard revocation reasons from RFC 5280. Note that the enum labels\nand values in this definition are not the same ASN.1 values defined\nin RFC 5280. These values will be translated to the correct ASN.1\nvalues when a CRL is created.\n\nValues:\n    REVOCATION_REASON_UNSPECIFIED (0):\n        Default unspecified value. This value does indicate that a\n        [Certificate][google.cloud.security.privateca.v1beta1.Certificate]\n        has been revoked, but that a reason has not been recorded.\n    KEY_COMPROMISE (1):\n        Key material for this\n        [Certificate][google.cloud.security.privateca.v1beta1.Certificate]\n        may have leaked.\n    CERTIFICATE_AUTHORITY_COMPROMISE (2):\n        The key material for a certificate authority\n        in the issuing path may have leaked.\n    A",
+                                "values": {
+                                  "REVOCATION_REASON_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "KEY_COMPROMISE": {
+                                    "value": 1
+                                  },
+                                  "CERTIFICATE_AUTHORITY_COMPROMISE": {
+                                    "value": 2
+                                  },
+                                  "AFFILIATION_CHANGED": {
+                                    "value": 3
+                                  },
+                                  "SUPERSEDED": {
+                                    "value": 4
+                                  },
+                                  "CESSATION_OF_OPERATION": {
+                                    "value": 5
+                                  },
+                                  "CERTIFICATE_HOLD": {
+                                    "value": 6
+                                  },
+                                  "PRIVILEGE_WITHDRAWN": {
+                                    "value": 7
+                                  },
+                                  "ATTRIBUTE_AUTHORITY_COMPROMISE": {
+                                    "value": 8
+                                  }
+                                }
                               },
                               "revocation_time": {
                                 "description": "The time at which this [Certificate][google.cloud.security.privateca.v1beta1.Certificate] was revoked.",
@@ -1568,15 +1714,24 @@
                                     "type": "string"
                                   },
                                   "lifetime": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   },
@@ -1778,9 +1933,20 @@
                                 "type": "object",
                                 "properties": {
                                   "type_": {
-                                    "description": "Required. The type of public key.",
-                                    "type": "object",
-                                    "reference": "google.cloud.security.privateca_v1beta1.types.PublicKey.KeyType"
+                                    "type": "enum",
+                                    "name": "KeyType",
+                                    "description": "Types of public keys that are supported. At a minimum, we support\nRSA and ECDSA, for the key sizes or curves listed:\nhttps://cloud.google.com/kms/docs/algorithms#asymmetric_signing_algorithms\n\nValues:\n    KEY_TYPE_UNSPECIFIED (0):\n        Default unspecified value.\n    PEM_RSA_KEY (1):\n        A PEM-encoded PKCS#1/RFC 3447 RSAPrivateKey\n        structure.\n    PEM_EC_KEY (2):\n        A PEM-encoded compressed NIST\n        P-256/secp256r1/prime256v1 or P-384 key.",
+                                    "values": {
+                                      "KEY_TYPE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "PEM_RSA_KEY": {
+                                        "value": 1
+                                      },
+                                      "PEM_EC_KEY": {
+                                        "value": 2
+                                      }
+                                    }
                                   },
                                   "key": {
                                     "description": "Required. A public key. Padding and encoding varies by 'KeyType' and is described along with the KeyType values.",
@@ -1879,9 +2045,20 @@
                 "type": "string"
               },
               "key_management_mode": {
-                "description": "Optional. Describes who can perform control plane operations on the EKM. If unset, this defaults to [MANUAL][google.cloud.kms.v1.EkmConnection.KeyManagementMode.MANUAL].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.EkmConnection.KeyManagementMode"
+                "type": "enum",
+                "name": "KeyManagementMode",
+                "description": "[KeyManagementMode][google.cloud.kms.v1.EkmConnection.KeyManagementMode]\ndescribes who can perform control plane cryptographic operations\nusing this [EkmConnection][google.cloud.kms.v1.EkmConnection].\n\nValues:\n    KEY_MANAGEMENT_MODE_UNSPECIFIED (0):\n        Not specified.\n    MANUAL (1):\n        EKM-side key management operations on\n        [CryptoKeys][google.cloud.kms.v1.CryptoKey] created with\n        this [EkmConnection][google.cloud.kms.v1.EkmConnection] must\n        be initiated from the EKM directly and cannot be performed\n        from Cloud KMS. This means that:\n\n        -  When creating a\n           [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]\n           associated with this\n           [EkmConnection][google.cloud.kms.v1.EkmConnection], the\n           caller must supply the key path of pre-existing external\n           key material that will be linked to the\n           [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].\n        -  Destruction of external key material cannot be reque",
+                "values": {
+                  "KEY_MANAGEMENT_MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MANUAL": {
+                    "value": 1
+                  },
+                  "CLOUD_KMS": {
+                    "value": 2
+                  }
+                }
               },
               "crypto_space_path": {
                 "description": "Optional. Identifies the EKM Crypto Space that this [EkmConnection][google.cloud.kms.v1.EkmConnection] maps to. Note: This field is required if [KeyManagementMode][google.cloud.kms.v1.EkmConnection.KeyManagementMode] is [CLOUD_KMS][google.cloud.kms.v1.EkmConnection.KeyManagementMode.CLOUD_KMS].",
@@ -2023,9 +2200,17 @@
             "type": "string"
           },
           "version_view": {
-            "description": "The fields of the primary version to include in the response.",
-            "type": "object",
-            "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionView"
+            "description": "A view for\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]s. Controls\nthe level of detail returned for\n[CryptoKeyVersions][google.cloud.kms.v1.CryptoKeyVersion] in\n[KeyManagementService.ListCryptoKeyVersions][google.cloud.kms.v1.KeyManagementService.ListCryptoKeyVersions]\nand\n[KeyManagementService.ListCryptoKeys][google.cloud.kms.v1.KeyManagementService.ListCryptoKeys].\n\nValues:\n    CRYPTO_KEY_VERSION_VIEW_UNSPECIFIED (0):\n        Default view for each\n        [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].\n        Does not include the\n        [attestation][google.cloud.kms.v1.CryptoKeyVersion.attestation]\n        field.\n    FULL (1):\n        Provides all fields in each\n        [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion],\n        including the\n        [attestation][google.cloud.kms.v1.CryptoKeyVersion.attestation].",
+            "type": "enum",
+            "name": "CryptoKeyVersionView",
+            "values": {
+              "CRYPTO_KEY_VERSION_VIEW_UNSPECIFIED": {
+                "value": 0
+              },
+              "FULL": {
+                "value": 1
+              }
+            }
           },
           "filter": {
             "description": "Optional. Only include resources that match the filter in the response. For more information, see `Sorting and filtering list results <https://cloud.google.com/kms/docs/sorting-and-filtering>`__.",
@@ -2061,9 +2246,17 @@
             "type": "string"
           },
           "view": {
-            "description": "The fields to include in the response.",
-            "type": "object",
-            "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionView"
+            "description": "A view for\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]s. Controls\nthe level of detail returned for\n[CryptoKeyVersions][google.cloud.kms.v1.CryptoKeyVersion] in\n[KeyManagementService.ListCryptoKeyVersions][google.cloud.kms.v1.KeyManagementService.ListCryptoKeyVersions]\nand\n[KeyManagementService.ListCryptoKeys][google.cloud.kms.v1.KeyManagementService.ListCryptoKeys].\n\nValues:\n    CRYPTO_KEY_VERSION_VIEW_UNSPECIFIED (0):\n        Default view for each\n        [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].\n        Does not include the\n        [attestation][google.cloud.kms.v1.CryptoKeyVersion.attestation]\n        field.\n    FULL (1):\n        Provides all fields in each\n        [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion],\n        including the\n        [attestation][google.cloud.kms.v1.CryptoKeyVersion.attestation].",
+            "type": "enum",
+            "name": "CryptoKeyVersionView",
+            "values": {
+              "CRYPTO_KEY_VERSION_VIEW_UNSPECIFIED": {
+                "value": 0
+              },
+              "FULL": {
+                "value": 1
+              }
+            }
           },
           "filter": {
             "description": "Optional. Only include resources that match the filter in the response. For more information, see `Sorting and filtering list results <https://cloud.google.com/kms/docs/sorting-and-filtering>`__.",
@@ -2266,27 +2459,200 @@
                     "type": "string"
                   },
                   "state": {
-                    "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionState"
+                    "type": "enum",
+                    "name": "CryptoKeyVersionState",
+                    "description": "The state of a\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nif it can be used.\n\nValues:\n    CRYPTO_KEY_VERSION_STATE_UNSPECIFIED (0):\n        Not specified.\n    PENDING_GENERATION (5):\n        This version is still being generated. It may not be used,\n        enabled, disabled, or destroyed yet. Cloud KMS will\n        automatically mark this version\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        as soon as the version is ready.\n    ENABLED (1):\n        This version may be used for cryptographic\n        operations.\n    DISABLED (2):\n        This version may not be used, but the key material is still\n        available, and the version can be placed back into the\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        state.\n    DESTROYED (3):\n        This version is destroyed, and the key material is no longer\n        stored. This version may only become\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVer",
+                    "values": {
+                      "CRYPTO_KEY_VERSION_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PENDING_GENERATION": {
+                        "value": 5
+                      },
+                      "ENABLED": {
+                        "value": 1
+                      },
+                      "DISABLED": {
+                        "value": 2
+                      },
+                      "DESTROYED": {
+                        "value": 3
+                      },
+                      "DESTROY_SCHEDULED": {
+                        "value": 4
+                      },
+                      "PENDING_IMPORT": {
+                        "value": 6
+                      },
+                      "IMPORT_FAILED": {
+                        "value": 7
+                      },
+                      "GENERATION_FAILED": {
+                        "value": 8
+                      },
+                      "PENDING_EXTERNAL_DESTRUCTION": {
+                        "value": 9
+                      },
+                      "EXTERNAL_DESTRUCTION_FAILED": {
+                        "value": 10
+                      }
+                    }
                   },
                   "protection_level": {
-                    "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                    "type": "enum",
+                    "name": "ProtectionLevel",
+                    "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+                    "values": {
+                      "PROTECTION_LEVEL_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SOFTWARE": {
+                        "value": 1
+                      },
+                      "HSM": {
+                        "value": 2
+                      },
+                      "EXTERNAL": {
+                        "value": 3
+                      },
+                      "EXTERNAL_VPC": {
+                        "value": 4
+                      }
+                    }
                   },
                   "algorithm": {
-                    "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                    "type": "enum",
+                    "name": "CryptoKeyVersionAlgorithm",
+                    "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+                    "values": {
+                      "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                        "value": 1
+                      },
+                      "AES_128_GCM": {
+                        "value": 41
+                      },
+                      "AES_256_GCM": {
+                        "value": 19
+                      },
+                      "AES_128_CBC": {
+                        "value": 42
+                      },
+                      "AES_256_CBC": {
+                        "value": 43
+                      },
+                      "AES_128_CTR": {
+                        "value": 44
+                      },
+                      "AES_256_CTR": {
+                        "value": 45
+                      },
+                      "RSA_SIGN_PSS_2048_SHA256": {
+                        "value": 2
+                      },
+                      "RSA_SIGN_PSS_3072_SHA256": {
+                        "value": 3
+                      },
+                      "RSA_SIGN_PSS_4096_SHA256": {
+                        "value": 4
+                      },
+                      "RSA_SIGN_PSS_4096_SHA512": {
+                        "value": 15
+                      },
+                      "RSA_SIGN_PKCS1_2048_SHA256": {
+                        "value": 5
+                      },
+                      "RSA_SIGN_PKCS1_3072_SHA256": {
+                        "value": 6
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA256": {
+                        "value": 7
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA512": {
+                        "value": 16
+                      },
+                      "RSA_SIGN_RAW_PKCS1_2048": {
+                        "value": 28
+                      },
+                      "RSA_SIGN_RAW_PKCS1_3072": {
+                        "value": 29
+                      },
+                      "RSA_SIGN_RAW_PKCS1_4096": {
+                        "value": 30
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA256": {
+                        "value": 8
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA256": {
+                        "value": 9
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA256": {
+                        "value": 10
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA512": {
+                        "value": 17
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA1": {
+                        "value": 37
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA1": {
+                        "value": 38
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA1": {
+                        "value": 39
+                      },
+                      "EC_SIGN_P256_SHA256": {
+                        "value": 12
+                      },
+                      "EC_SIGN_P384_SHA384": {
+                        "value": 13
+                      },
+                      "EC_SIGN_SECP256K1_SHA256": {
+                        "value": 31
+                      },
+                      "EC_SIGN_ED25519": {
+                        "value": 40
+                      },
+                      "HMAC_SHA256": {
+                        "value": 32
+                      },
+                      "HMAC_SHA1": {
+                        "value": 33
+                      },
+                      "HMAC_SHA384": {
+                        "value": 34
+                      },
+                      "HMAC_SHA512": {
+                        "value": 35
+                      },
+                      "HMAC_SHA224": {
+                        "value": 36
+                      },
+                      "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                        "value": 18
+                      }
+                    }
                   },
                   "attestation": {
                     "type": "object",
                     "properties": {
                       "format": {
-                        "description": "Output only. The format of the attestation data.",
-                        "type": "object",
-                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                        "type": "enum",
+                        "name": "AttestationFormat",
+                        "description": "Attestation formats provided by the HSM.\n\nValues:\n    ATTESTATION_FORMAT_UNSPECIFIED (0):\n        Not specified.\n    CAVIUM_V1_COMPRESSED (3):\n        Cavium HSM attestation compressed with gzip.\n        Note that this format is defined by Cavium and\n        subject to change at any time.\n\n        See\n        https://www.marvell.com/products/security-solutions/nitrox-hs-adapters/software-key-attestation.html.\n    CAVIUM_V2_COMPRESSED (4):\n        Cavium HSM attestation V2 compressed with\n        gzip. This is a new format introduced in\n        Cavium's version 3.2-08.",
+                        "values": {
+                          "ATTESTATION_FORMAT_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "CAVIUM_V1_COMPRESSED": {
+                            "value": 3
+                          },
+                          "CAVIUM_V2_COMPRESSED": {
+                            "value": 4
+                          }
+                        }
                       },
                       "content": {
                         "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
@@ -2382,9 +2748,29 @@
                 }
               },
               "purpose": {
-                "description": "Immutable. The immutable purpose of this [CryptoKey][google.cloud.kms.v1.CryptoKey].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.CryptoKey.CryptoKeyPurpose"
+                "type": "enum",
+                "name": "CryptoKeyPurpose",
+                "description": "[CryptoKeyPurpose][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose]\ndescribes the cryptographic capabilities of a\n[CryptoKey][google.cloud.kms.v1.CryptoKey]. A given key can only be\nused for the operations allowed by its purpose. For more\ninformation, see `Key\npurposes <https://cloud.google.com/kms/docs/algorithms#key_purposes>`__.\n\nValues:\n    CRYPTO_KEY_PURPOSE_UNSPECIFIED (0):\n        Not specified.\n    ENCRYPT_DECRYPT (1):\n        [CryptoKeys][google.cloud.kms.v1.CryptoKey] with this\n        purpose may be used with\n        [Encrypt][google.cloud.kms.v1.KeyManagementService.Encrypt]\n        and\n        [Decrypt][google.cloud.kms.v1.KeyManagementService.Decrypt].\n    ASYMMETRIC_SIGN (5):\n        [CryptoKeys][google.cloud.kms.v1.CryptoKey] with this\n        purpose may be used with\n        [AsymmetricSign][google.cloud.kms.v1.KeyManagementService.AsymmetricSign]\n        and\n        [GetPublicKey][google.cloud.kms.v1.KeyManagementService.GetPublicKey].\n    ASYMMETRIC_DECRYPT (6):\n        [CryptoKeys][google.c",
+                "values": {
+                  "CRYPTO_KEY_PURPOSE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ENCRYPT_DECRYPT": {
+                    "value": 1
+                  },
+                  "ASYMMETRIC_SIGN": {
+                    "value": 5
+                  },
+                  "ASYMMETRIC_DECRYPT": {
+                    "value": 6
+                  },
+                  "RAW_ENCRYPT_DECRYPT": {
+                    "value": 7
+                  },
+                  "MAC": {
+                    "value": 9
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. The time at which this [CryptoKey][google.cloud.kms.v1.CryptoKey] was created.",
@@ -2397,15 +2783,24 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "rotation_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -2413,14 +2808,141 @@
                 "type": "object",
                 "properties": {
                   "protection_level": {
-                    "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] to use when creating a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] based on this template. Immutable. Defaults to [SOFTWARE][google.cloud.kms.v1.ProtectionLevel.SOFTWARE].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                    "type": "enum",
+                    "name": "ProtectionLevel",
+                    "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+                    "values": {
+                      "PROTECTION_LEVEL_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SOFTWARE": {
+                        "value": 1
+                      },
+                      "HSM": {
+                        "value": 2
+                      },
+                      "EXTERNAL": {
+                        "value": 3
+                      },
+                      "EXTERNAL_VPC": {
+                        "value": 4
+                      }
+                    }
                   },
                   "algorithm": {
-                    "description": "Required. [Algorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] to use when creating a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] based on this template.  For backwards compatibility, GOOGLE_SYMMETRIC_ENCRYPTION is implied if both this field is omitted and [CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose] is [ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                    "type": "enum",
+                    "name": "CryptoKeyVersionAlgorithm",
+                    "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+                    "values": {
+                      "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                        "value": 1
+                      },
+                      "AES_128_GCM": {
+                        "value": 41
+                      },
+                      "AES_256_GCM": {
+                        "value": 19
+                      },
+                      "AES_128_CBC": {
+                        "value": 42
+                      },
+                      "AES_256_CBC": {
+                        "value": 43
+                      },
+                      "AES_128_CTR": {
+                        "value": 44
+                      },
+                      "AES_256_CTR": {
+                        "value": 45
+                      },
+                      "RSA_SIGN_PSS_2048_SHA256": {
+                        "value": 2
+                      },
+                      "RSA_SIGN_PSS_3072_SHA256": {
+                        "value": 3
+                      },
+                      "RSA_SIGN_PSS_4096_SHA256": {
+                        "value": 4
+                      },
+                      "RSA_SIGN_PSS_4096_SHA512": {
+                        "value": 15
+                      },
+                      "RSA_SIGN_PKCS1_2048_SHA256": {
+                        "value": 5
+                      },
+                      "RSA_SIGN_PKCS1_3072_SHA256": {
+                        "value": 6
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA256": {
+                        "value": 7
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA512": {
+                        "value": 16
+                      },
+                      "RSA_SIGN_RAW_PKCS1_2048": {
+                        "value": 28
+                      },
+                      "RSA_SIGN_RAW_PKCS1_3072": {
+                        "value": 29
+                      },
+                      "RSA_SIGN_RAW_PKCS1_4096": {
+                        "value": 30
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA256": {
+                        "value": 8
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA256": {
+                        "value": 9
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA256": {
+                        "value": 10
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA512": {
+                        "value": 17
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA1": {
+                        "value": 37
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA1": {
+                        "value": 38
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA1": {
+                        "value": 39
+                      },
+                      "EC_SIGN_P256_SHA256": {
+                        "value": 12
+                      },
+                      "EC_SIGN_P384_SHA384": {
+                        "value": 13
+                      },
+                      "EC_SIGN_SECP256K1_SHA256": {
+                        "value": 31
+                      },
+                      "EC_SIGN_ED25519": {
+                        "value": 40
+                      },
+                      "HMAC_SHA256": {
+                        "value": 32
+                      },
+                      "HMAC_SHA1": {
+                        "value": 33
+                      },
+                      "HMAC_SHA384": {
+                        "value": 34
+                      },
+                      "HMAC_SHA512": {
+                        "value": 35
+                      },
+                      "HMAC_SHA224": {
+                        "value": 36
+                      },
+                      "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                        "value": 18
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -2439,15 +2961,24 @@
                 "type": "boolean"
               },
               "destroy_scheduled_duration": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -2462,16 +2993,45 @@
                     "description": "The list of allowed reasons for access to a [CryptoKey][google.cloud.kms.v1.CryptoKey]. Zero allowed access reasons means all encrypt, decrypt, and sign operations for the [CryptoKey][google.cloud.kms.v1.CryptoKey] associated with this policy will fail.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "type_": {
-                          "description": "Type of access justification.",
-                          "type": "object",
-                          "reference": "google.cloud.cloudcontrolspartner_v1beta.types.AccessReason.Type"
+                      "type": "enum",
+                      "name": "AccessReason",
+                      "description": "Describes the reason for a data access. Please refer to\nhttps://cloud.google.com/assured-workloads/key-access-justifications/docs/justification-codes\nfor the detailed semantic meaning of justification reason codes.\n\nValues:\n    REASON_UNSPECIFIED (0):\n        Unspecified access reason.\n    CUSTOMER_INITIATED_SUPPORT (1):\n        Customer-initiated support.\n    GOOGLE_INITIATED_SERVICE (2):\n        Google-initiated access for system management\n        and troubleshooting.\n    THIRD_PARTY_DATA_REQUEST (3):\n        Google-initiated access in response to a\n        legal request or legal process.\n    GOOGLE_INITIATED_REVIEW (4):\n        Google-initiated access for security, fraud,\n        abuse, or compliance purposes.\n    CUSTOMER_INITIATED_ACCESS (5):\n        Customer uses their account to perform any\n        access to their own data which their IAM policy\n        authorizes.\n    GOOGLE_INITIATED_SYSTEM_OPERATION (6):\n        Google systems access customer data to help\n        optimize the structure of the data ",
+                      "values": {
+                        "REASON_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "detail": {
-                          "description": "More detail about certain reason types. See comments for each type above.",
-                          "type": "string"
+                        "CUSTOMER_INITIATED_SUPPORT": {
+                          "value": 1
+                        },
+                        "GOOGLE_INITIATED_SERVICE": {
+                          "value": 2
+                        },
+                        "THIRD_PARTY_DATA_REQUEST": {
+                          "value": 3
+                        },
+                        "GOOGLE_INITIATED_REVIEW": {
+                          "value": 4
+                        },
+                        "CUSTOMER_INITIATED_ACCESS": {
+                          "value": 5
+                        },
+                        "GOOGLE_INITIATED_SYSTEM_OPERATION": {
+                          "value": 6
+                        },
+                        "REASON_NOT_EXPECTED": {
+                          "value": 7
+                        },
+                        "MODIFIED_CUSTOMER_INITIATED_ACCESS": {
+                          "value": 8
+                        },
+                        "MODIFIED_GOOGLE_INITIATED_SYSTEM_OPERATION": {
+                          "value": 9
+                        },
+                        "GOOGLE_RESPONSE_TO_PRODUCTION_ALERT": {
+                          "value": 10
+                        },
+                        "CUSTOMER_AUTHORIZED_WORKFLOW_SERVICING": {
+                          "value": 11
                         }
                       }
                     }
@@ -2512,27 +3072,200 @@
                 "type": "string"
               },
               "state": {
-                "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionState"
+                "type": "enum",
+                "name": "CryptoKeyVersionState",
+                "description": "The state of a\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nif it can be used.\n\nValues:\n    CRYPTO_KEY_VERSION_STATE_UNSPECIFIED (0):\n        Not specified.\n    PENDING_GENERATION (5):\n        This version is still being generated. It may not be used,\n        enabled, disabled, or destroyed yet. Cloud KMS will\n        automatically mark this version\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        as soon as the version is ready.\n    ENABLED (1):\n        This version may be used for cryptographic\n        operations.\n    DISABLED (2):\n        This version may not be used, but the key material is still\n        available, and the version can be placed back into the\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        state.\n    DESTROYED (3):\n        This version is destroyed, and the key material is no longer\n        stored. This version may only become\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVer",
+                "values": {
+                  "CRYPTO_KEY_VERSION_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "PENDING_GENERATION": {
+                    "value": 5
+                  },
+                  "ENABLED": {
+                    "value": 1
+                  },
+                  "DISABLED": {
+                    "value": 2
+                  },
+                  "DESTROYED": {
+                    "value": 3
+                  },
+                  "DESTROY_SCHEDULED": {
+                    "value": 4
+                  },
+                  "PENDING_IMPORT": {
+                    "value": 6
+                  },
+                  "IMPORT_FAILED": {
+                    "value": 7
+                  },
+                  "GENERATION_FAILED": {
+                    "value": 8
+                  },
+                  "PENDING_EXTERNAL_DESTRUCTION": {
+                    "value": 9
+                  },
+                  "EXTERNAL_DESTRUCTION_FAILED": {
+                    "value": 10
+                  }
+                }
               },
               "protection_level": {
-                "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                "type": "enum",
+                "name": "ProtectionLevel",
+                "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+                "values": {
+                  "PROTECTION_LEVEL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "SOFTWARE": {
+                    "value": 1
+                  },
+                  "HSM": {
+                    "value": 2
+                  },
+                  "EXTERNAL": {
+                    "value": 3
+                  },
+                  "EXTERNAL_VPC": {
+                    "value": 4
+                  }
+                }
               },
               "algorithm": {
-                "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                "type": "enum",
+                "name": "CryptoKeyVersionAlgorithm",
+                "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+                "values": {
+                  "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                    "value": 1
+                  },
+                  "AES_128_GCM": {
+                    "value": 41
+                  },
+                  "AES_256_GCM": {
+                    "value": 19
+                  },
+                  "AES_128_CBC": {
+                    "value": 42
+                  },
+                  "AES_256_CBC": {
+                    "value": 43
+                  },
+                  "AES_128_CTR": {
+                    "value": 44
+                  },
+                  "AES_256_CTR": {
+                    "value": 45
+                  },
+                  "RSA_SIGN_PSS_2048_SHA256": {
+                    "value": 2
+                  },
+                  "RSA_SIGN_PSS_3072_SHA256": {
+                    "value": 3
+                  },
+                  "RSA_SIGN_PSS_4096_SHA256": {
+                    "value": 4
+                  },
+                  "RSA_SIGN_PSS_4096_SHA512": {
+                    "value": 15
+                  },
+                  "RSA_SIGN_PKCS1_2048_SHA256": {
+                    "value": 5
+                  },
+                  "RSA_SIGN_PKCS1_3072_SHA256": {
+                    "value": 6
+                  },
+                  "RSA_SIGN_PKCS1_4096_SHA256": {
+                    "value": 7
+                  },
+                  "RSA_SIGN_PKCS1_4096_SHA512": {
+                    "value": 16
+                  },
+                  "RSA_SIGN_RAW_PKCS1_2048": {
+                    "value": 28
+                  },
+                  "RSA_SIGN_RAW_PKCS1_3072": {
+                    "value": 29
+                  },
+                  "RSA_SIGN_RAW_PKCS1_4096": {
+                    "value": 30
+                  },
+                  "RSA_DECRYPT_OAEP_2048_SHA256": {
+                    "value": 8
+                  },
+                  "RSA_DECRYPT_OAEP_3072_SHA256": {
+                    "value": 9
+                  },
+                  "RSA_DECRYPT_OAEP_4096_SHA256": {
+                    "value": 10
+                  },
+                  "RSA_DECRYPT_OAEP_4096_SHA512": {
+                    "value": 17
+                  },
+                  "RSA_DECRYPT_OAEP_2048_SHA1": {
+                    "value": 37
+                  },
+                  "RSA_DECRYPT_OAEP_3072_SHA1": {
+                    "value": 38
+                  },
+                  "RSA_DECRYPT_OAEP_4096_SHA1": {
+                    "value": 39
+                  },
+                  "EC_SIGN_P256_SHA256": {
+                    "value": 12
+                  },
+                  "EC_SIGN_P384_SHA384": {
+                    "value": 13
+                  },
+                  "EC_SIGN_SECP256K1_SHA256": {
+                    "value": 31
+                  },
+                  "EC_SIGN_ED25519": {
+                    "value": 40
+                  },
+                  "HMAC_SHA256": {
+                    "value": 32
+                  },
+                  "HMAC_SHA1": {
+                    "value": 33
+                  },
+                  "HMAC_SHA384": {
+                    "value": 34
+                  },
+                  "HMAC_SHA512": {
+                    "value": 35
+                  },
+                  "HMAC_SHA224": {
+                    "value": 36
+                  },
+                  "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                    "value": 18
+                  }
+                }
               },
               "attestation": {
                 "type": "object",
                 "properties": {
                   "format": {
-                    "description": "Output only. The format of the attestation data.",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                    "type": "enum",
+                    "name": "AttestationFormat",
+                    "description": "Attestation formats provided by the HSM.\n\nValues:\n    ATTESTATION_FORMAT_UNSPECIFIED (0):\n        Not specified.\n    CAVIUM_V1_COMPRESSED (3):\n        Cavium HSM attestation compressed with gzip.\n        Note that this format is defined by Cavium and\n        subject to change at any time.\n\n        See\n        https://www.marvell.com/products/security-solutions/nitrox-hs-adapters/software-key-attestation.html.\n    CAVIUM_V2_COMPRESSED (4):\n        Cavium HSM attestation V2 compressed with\n        gzip. This is a new format introduced in\n        Cavium's version 3.2-08.",
+                    "values": {
+                      "ATTESTATION_FORMAT_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "CAVIUM_V1_COMPRESSED": {
+                        "value": 3
+                      },
+                      "CAVIUM_V2_COMPRESSED": {
+                        "value": 4
+                      }
+                    }
                   },
                   "content": {
                     "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
@@ -2650,9 +3383,119 @@
             "type": "string"
           },
           "algorithm": {
-            "description": "Required. The [algorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] of the key being imported. This does not need to match the [version_template][google.cloud.kms.v1.CryptoKey.version_template] of the [CryptoKey][google.cloud.kms.v1.CryptoKey] this version imports into.",
-            "type": "object",
-            "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+            "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+            "type": "enum",
+            "name": "CryptoKeyVersionAlgorithm",
+            "values": {
+              "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                "value": 0
+              },
+              "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                "value": 1
+              },
+              "AES_128_GCM": {
+                "value": 41
+              },
+              "AES_256_GCM": {
+                "value": 19
+              },
+              "AES_128_CBC": {
+                "value": 42
+              },
+              "AES_256_CBC": {
+                "value": 43
+              },
+              "AES_128_CTR": {
+                "value": 44
+              },
+              "AES_256_CTR": {
+                "value": 45
+              },
+              "RSA_SIGN_PSS_2048_SHA256": {
+                "value": 2
+              },
+              "RSA_SIGN_PSS_3072_SHA256": {
+                "value": 3
+              },
+              "RSA_SIGN_PSS_4096_SHA256": {
+                "value": 4
+              },
+              "RSA_SIGN_PSS_4096_SHA512": {
+                "value": 15
+              },
+              "RSA_SIGN_PKCS1_2048_SHA256": {
+                "value": 5
+              },
+              "RSA_SIGN_PKCS1_3072_SHA256": {
+                "value": 6
+              },
+              "RSA_SIGN_PKCS1_4096_SHA256": {
+                "value": 7
+              },
+              "RSA_SIGN_PKCS1_4096_SHA512": {
+                "value": 16
+              },
+              "RSA_SIGN_RAW_PKCS1_2048": {
+                "value": 28
+              },
+              "RSA_SIGN_RAW_PKCS1_3072": {
+                "value": 29
+              },
+              "RSA_SIGN_RAW_PKCS1_4096": {
+                "value": 30
+              },
+              "RSA_DECRYPT_OAEP_2048_SHA256": {
+                "value": 8
+              },
+              "RSA_DECRYPT_OAEP_3072_SHA256": {
+                "value": 9
+              },
+              "RSA_DECRYPT_OAEP_4096_SHA256": {
+                "value": 10
+              },
+              "RSA_DECRYPT_OAEP_4096_SHA512": {
+                "value": 17
+              },
+              "RSA_DECRYPT_OAEP_2048_SHA1": {
+                "value": 37
+              },
+              "RSA_DECRYPT_OAEP_3072_SHA1": {
+                "value": 38
+              },
+              "RSA_DECRYPT_OAEP_4096_SHA1": {
+                "value": 39
+              },
+              "EC_SIGN_P256_SHA256": {
+                "value": 12
+              },
+              "EC_SIGN_P384_SHA384": {
+                "value": 13
+              },
+              "EC_SIGN_SECP256K1_SHA256": {
+                "value": 31
+              },
+              "EC_SIGN_ED25519": {
+                "value": 40
+              },
+              "HMAC_SHA256": {
+                "value": 32
+              },
+              "HMAC_SHA1": {
+                "value": 33
+              },
+              "HMAC_SHA384": {
+                "value": 34
+              },
+              "HMAC_SHA512": {
+                "value": 35
+              },
+              "HMAC_SHA224": {
+                "value": 36
+              },
+              "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                "value": 18
+              }
+            }
           },
           "import_job": {
             "description": "Required. The [name][google.cloud.kms.v1.ImportJob.name] of the [ImportJob][google.cloud.kms.v1.ImportJob] that was used to wrap this key material.",
@@ -2719,9 +3562,35 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "state": {
-                "description": "Output only. The state of the import job.",
-                "type": "object",
-                "reference": "google.cloud.migrationcenter_v1.types.ImportJob.ImportJobState"
+                "type": "enum",
+                "name": "ImportJobState",
+                "description": "Enumerates possible states of an import job.\n\nValues:\n    IMPORT_JOB_STATE_UNSPECIFIED (0):\n        Default value.\n    IMPORT_JOB_STATE_PENDING (1):\n        The import job is pending.\n    IMPORT_JOB_STATE_RUNNING (2):\n        The processing of the import job is ongoing.\n    IMPORT_JOB_STATE_COMPLETED (3):\n        The import job processing has completed.\n    IMPORT_JOB_STATE_FAILED (4):\n        The import job failed to be processed.\n    IMPORT_JOB_STATE_VALIDATING (5):\n        The import job is being validated.\n    IMPORT_JOB_STATE_FAILED_VALIDATION (6):\n        The import job contains blocking errors.\n    IMPORT_JOB_STATE_READY (7):\n        The validation of the job completed with no\n        blocking errors.",
+                "values": {
+                  "IMPORT_JOB_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "IMPORT_JOB_STATE_PENDING": {
+                    "value": 1
+                  },
+                  "IMPORT_JOB_STATE_RUNNING": {
+                    "value": 2
+                  },
+                  "IMPORT_JOB_STATE_COMPLETED": {
+                    "value": 3
+                  },
+                  "IMPORT_JOB_STATE_FAILED": {
+                    "value": 4
+                  },
+                  "IMPORT_JOB_STATE_VALIDATING": {
+                    "value": 5
+                  },
+                  "IMPORT_JOB_STATE_FAILED_VALIDATION": {
+                    "value": 6
+                  },
+                  "IMPORT_JOB_STATE_READY": {
+                    "value": 7
+                  }
+                }
               },
               "labels": {
                 "description": "Labels as key value pairs.",
@@ -2776,9 +3645,29 @@
                                       "type": "string"
                                     },
                                     "severity": {
-                                      "description": "The severity of the error.",
-                                      "type": "object",
-                                      "reference": "google.cloud.migrationcenter_v1.types.ImportError.Severity"
+                                      "type": "enum",
+                                      "name": "Severity",
+                                      "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                                      "values": {
+                                        "SEVERITY_UNSPECIFIED": {
+                                          "value": 0
+                                        },
+                                        "MINIMAL": {
+                                          "value": 1
+                                        },
+                                        "LOW": {
+                                          "value": 2
+                                        },
+                                        "MEDIUM": {
+                                          "value": 3
+                                        },
+                                        "HIGH": {
+                                          "value": 4
+                                        },
+                                        "CRITICAL": {
+                                          "value": 5
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -2801,9 +3690,29 @@
                                 "type": "string"
                               },
                               "severity": {
-                                "description": "The severity of the error.",
-                                "type": "object",
-                                "reference": "google.cloud.migrationcenter_v1.types.ImportError.Severity"
+                                "type": "enum",
+                                "name": "Severity",
+                                "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                                "values": {
+                                  "SEVERITY_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "MINIMAL": {
+                                    "value": 1
+                                  },
+                                  "LOW": {
+                                    "value": 2
+                                  },
+                                  "MEDIUM": {
+                                    "value": 3
+                                  },
+                                  "HIGH": {
+                                    "value": 4
+                                  },
+                                  "CRITICAL": {
+                                    "value": 5
+                                  }
+                                }
                               }
                             }
                           }
@@ -2822,9 +3731,29 @@
                           "type": "string"
                         },
                         "severity": {
-                          "description": "The severity of the error.",
-                          "type": "object",
-                          "reference": "google.cloud.migrationcenter_v1.types.ImportError.Severity"
+                          "type": "enum",
+                          "name": "Severity",
+                          "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                          "values": {
+                            "SEVERITY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MINIMAL": {
+                              "value": 1
+                            },
+                            "LOW": {
+                              "value": 2
+                            },
+                            "MEDIUM": {
+                              "value": 3
+                            },
+                            "HIGH": {
+                              "value": 4
+                            },
+                            "CRITICAL": {
+                              "value": 5
+                            }
+                          }
                         }
                       }
                     }
@@ -2880,9 +3809,29 @@
                                           "type": "string"
                                         },
                                         "severity": {
-                                          "description": "The severity of the error.",
-                                          "type": "object",
-                                          "reference": "google.cloud.migrationcenter_v1.types.ImportError.Severity"
+                                          "type": "enum",
+                                          "name": "Severity",
+                                          "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                                          "values": {
+                                            "SEVERITY_UNSPECIFIED": {
+                                              "value": 0
+                                            },
+                                            "MINIMAL": {
+                                              "value": 1
+                                            },
+                                            "LOW": {
+                                              "value": 2
+                                            },
+                                            "MEDIUM": {
+                                              "value": 3
+                                            },
+                                            "HIGH": {
+                                              "value": 4
+                                            },
+                                            "CRITICAL": {
+                                              "value": 5
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -2905,9 +3854,29 @@
                                     "type": "string"
                                   },
                                   "severity": {
-                                    "description": "The severity of the error.",
-                                    "type": "object",
-                                    "reference": "google.cloud.migrationcenter_v1.types.ImportError.Severity"
+                                    "type": "enum",
+                                    "name": "Severity",
+                                    "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                                    "values": {
+                                      "SEVERITY_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "MINIMAL": {
+                                        "value": 1
+                                      },
+                                      "LOW": {
+                                        "value": 2
+                                      },
+                                      "MEDIUM": {
+                                        "value": 3
+                                      },
+                                      "HIGH": {
+                                        "value": 4
+                                      },
+                                      "CRITICAL": {
+                                        "value": 5
+                                      }
+                                    }
                                   }
                                 }
                               }
@@ -2926,9 +3895,29 @@
                               "type": "string"
                             },
                             "severity": {
-                              "description": "The severity of the error.",
-                              "type": "object",
-                              "reference": "google.cloud.migrationcenter_v1.types.ImportError.Severity"
+                              "type": "enum",
+                              "name": "Severity",
+                              "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                              "values": {
+                                "SEVERITY_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "MINIMAL": {
+                                  "value": 1
+                                },
+                                "LOW": {
+                                  "value": 2
+                                },
+                                "MEDIUM": {
+                                  "value": 3
+                                },
+                                "HIGH": {
+                                  "value": 4
+                                },
+                                "CRITICAL": {
+                                  "value": 5
+                                }
+                              }
                             }
                           }
                         }
@@ -2977,27 +3966,200 @@
                     "type": "string"
                   },
                   "state": {
-                    "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionState"
+                    "type": "enum",
+                    "name": "CryptoKeyVersionState",
+                    "description": "The state of a\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nif it can be used.\n\nValues:\n    CRYPTO_KEY_VERSION_STATE_UNSPECIFIED (0):\n        Not specified.\n    PENDING_GENERATION (5):\n        This version is still being generated. It may not be used,\n        enabled, disabled, or destroyed yet. Cloud KMS will\n        automatically mark this version\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        as soon as the version is ready.\n    ENABLED (1):\n        This version may be used for cryptographic\n        operations.\n    DISABLED (2):\n        This version may not be used, but the key material is still\n        available, and the version can be placed back into the\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        state.\n    DESTROYED (3):\n        This version is destroyed, and the key material is no longer\n        stored. This version may only become\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVer",
+                    "values": {
+                      "CRYPTO_KEY_VERSION_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PENDING_GENERATION": {
+                        "value": 5
+                      },
+                      "ENABLED": {
+                        "value": 1
+                      },
+                      "DISABLED": {
+                        "value": 2
+                      },
+                      "DESTROYED": {
+                        "value": 3
+                      },
+                      "DESTROY_SCHEDULED": {
+                        "value": 4
+                      },
+                      "PENDING_IMPORT": {
+                        "value": 6
+                      },
+                      "IMPORT_FAILED": {
+                        "value": 7
+                      },
+                      "GENERATION_FAILED": {
+                        "value": 8
+                      },
+                      "PENDING_EXTERNAL_DESTRUCTION": {
+                        "value": 9
+                      },
+                      "EXTERNAL_DESTRUCTION_FAILED": {
+                        "value": 10
+                      }
+                    }
                   },
                   "protection_level": {
-                    "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                    "type": "enum",
+                    "name": "ProtectionLevel",
+                    "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+                    "values": {
+                      "PROTECTION_LEVEL_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SOFTWARE": {
+                        "value": 1
+                      },
+                      "HSM": {
+                        "value": 2
+                      },
+                      "EXTERNAL": {
+                        "value": 3
+                      },
+                      "EXTERNAL_VPC": {
+                        "value": 4
+                      }
+                    }
                   },
                   "algorithm": {
-                    "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                    "type": "enum",
+                    "name": "CryptoKeyVersionAlgorithm",
+                    "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+                    "values": {
+                      "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                        "value": 1
+                      },
+                      "AES_128_GCM": {
+                        "value": 41
+                      },
+                      "AES_256_GCM": {
+                        "value": 19
+                      },
+                      "AES_128_CBC": {
+                        "value": 42
+                      },
+                      "AES_256_CBC": {
+                        "value": 43
+                      },
+                      "AES_128_CTR": {
+                        "value": 44
+                      },
+                      "AES_256_CTR": {
+                        "value": 45
+                      },
+                      "RSA_SIGN_PSS_2048_SHA256": {
+                        "value": 2
+                      },
+                      "RSA_SIGN_PSS_3072_SHA256": {
+                        "value": 3
+                      },
+                      "RSA_SIGN_PSS_4096_SHA256": {
+                        "value": 4
+                      },
+                      "RSA_SIGN_PSS_4096_SHA512": {
+                        "value": 15
+                      },
+                      "RSA_SIGN_PKCS1_2048_SHA256": {
+                        "value": 5
+                      },
+                      "RSA_SIGN_PKCS1_3072_SHA256": {
+                        "value": 6
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA256": {
+                        "value": 7
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA512": {
+                        "value": 16
+                      },
+                      "RSA_SIGN_RAW_PKCS1_2048": {
+                        "value": 28
+                      },
+                      "RSA_SIGN_RAW_PKCS1_3072": {
+                        "value": 29
+                      },
+                      "RSA_SIGN_RAW_PKCS1_4096": {
+                        "value": 30
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA256": {
+                        "value": 8
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA256": {
+                        "value": 9
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA256": {
+                        "value": 10
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA512": {
+                        "value": 17
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA1": {
+                        "value": 37
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA1": {
+                        "value": 38
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA1": {
+                        "value": 39
+                      },
+                      "EC_SIGN_P256_SHA256": {
+                        "value": 12
+                      },
+                      "EC_SIGN_P384_SHA384": {
+                        "value": 13
+                      },
+                      "EC_SIGN_SECP256K1_SHA256": {
+                        "value": 31
+                      },
+                      "EC_SIGN_ED25519": {
+                        "value": 40
+                      },
+                      "HMAC_SHA256": {
+                        "value": 32
+                      },
+                      "HMAC_SHA1": {
+                        "value": 33
+                      },
+                      "HMAC_SHA384": {
+                        "value": 34
+                      },
+                      "HMAC_SHA512": {
+                        "value": 35
+                      },
+                      "HMAC_SHA224": {
+                        "value": 36
+                      },
+                      "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                        "value": 18
+                      }
+                    }
                   },
                   "attestation": {
                     "type": "object",
                     "properties": {
                       "format": {
-                        "description": "Output only. The format of the attestation data.",
-                        "type": "object",
-                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                        "type": "enum",
+                        "name": "AttestationFormat",
+                        "description": "Attestation formats provided by the HSM.\n\nValues:\n    ATTESTATION_FORMAT_UNSPECIFIED (0):\n        Not specified.\n    CAVIUM_V1_COMPRESSED (3):\n        Cavium HSM attestation compressed with gzip.\n        Note that this format is defined by Cavium and\n        subject to change at any time.\n\n        See\n        https://www.marvell.com/products/security-solutions/nitrox-hs-adapters/software-key-attestation.html.\n    CAVIUM_V2_COMPRESSED (4):\n        Cavium HSM attestation V2 compressed with\n        gzip. This is a new format introduced in\n        Cavium's version 3.2-08.",
+                        "values": {
+                          "ATTESTATION_FORMAT_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "CAVIUM_V1_COMPRESSED": {
+                            "value": 3
+                          },
+                          "CAVIUM_V2_COMPRESSED": {
+                            "value": 4
+                          }
+                        }
                       },
                       "content": {
                         "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
@@ -3093,9 +4255,29 @@
                 }
               },
               "purpose": {
-                "description": "Immutable. The immutable purpose of this [CryptoKey][google.cloud.kms.v1.CryptoKey].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.CryptoKey.CryptoKeyPurpose"
+                "type": "enum",
+                "name": "CryptoKeyPurpose",
+                "description": "[CryptoKeyPurpose][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose]\ndescribes the cryptographic capabilities of a\n[CryptoKey][google.cloud.kms.v1.CryptoKey]. A given key can only be\nused for the operations allowed by its purpose. For more\ninformation, see `Key\npurposes <https://cloud.google.com/kms/docs/algorithms#key_purposes>`__.\n\nValues:\n    CRYPTO_KEY_PURPOSE_UNSPECIFIED (0):\n        Not specified.\n    ENCRYPT_DECRYPT (1):\n        [CryptoKeys][google.cloud.kms.v1.CryptoKey] with this\n        purpose may be used with\n        [Encrypt][google.cloud.kms.v1.KeyManagementService.Encrypt]\n        and\n        [Decrypt][google.cloud.kms.v1.KeyManagementService.Decrypt].\n    ASYMMETRIC_SIGN (5):\n        [CryptoKeys][google.cloud.kms.v1.CryptoKey] with this\n        purpose may be used with\n        [AsymmetricSign][google.cloud.kms.v1.KeyManagementService.AsymmetricSign]\n        and\n        [GetPublicKey][google.cloud.kms.v1.KeyManagementService.GetPublicKey].\n    ASYMMETRIC_DECRYPT (6):\n        [CryptoKeys][google.c",
+                "values": {
+                  "CRYPTO_KEY_PURPOSE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ENCRYPT_DECRYPT": {
+                    "value": 1
+                  },
+                  "ASYMMETRIC_SIGN": {
+                    "value": 5
+                  },
+                  "ASYMMETRIC_DECRYPT": {
+                    "value": 6
+                  },
+                  "RAW_ENCRYPT_DECRYPT": {
+                    "value": 7
+                  },
+                  "MAC": {
+                    "value": 9
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. The time at which this [CryptoKey][google.cloud.kms.v1.CryptoKey] was created.",
@@ -3108,15 +4290,24 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "rotation_period": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -3124,14 +4315,141 @@
                 "type": "object",
                 "properties": {
                   "protection_level": {
-                    "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] to use when creating a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] based on this template. Immutable. Defaults to [SOFTWARE][google.cloud.kms.v1.ProtectionLevel.SOFTWARE].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                    "type": "enum",
+                    "name": "ProtectionLevel",
+                    "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+                    "values": {
+                      "PROTECTION_LEVEL_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SOFTWARE": {
+                        "value": 1
+                      },
+                      "HSM": {
+                        "value": 2
+                      },
+                      "EXTERNAL": {
+                        "value": 3
+                      },
+                      "EXTERNAL_VPC": {
+                        "value": 4
+                      }
+                    }
                   },
                   "algorithm": {
-                    "description": "Required. [Algorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] to use when creating a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] based on this template.  For backwards compatibility, GOOGLE_SYMMETRIC_ENCRYPTION is implied if both this field is omitted and [CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose] is [ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                    "type": "enum",
+                    "name": "CryptoKeyVersionAlgorithm",
+                    "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+                    "values": {
+                      "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                        "value": 1
+                      },
+                      "AES_128_GCM": {
+                        "value": 41
+                      },
+                      "AES_256_GCM": {
+                        "value": 19
+                      },
+                      "AES_128_CBC": {
+                        "value": 42
+                      },
+                      "AES_256_CBC": {
+                        "value": 43
+                      },
+                      "AES_128_CTR": {
+                        "value": 44
+                      },
+                      "AES_256_CTR": {
+                        "value": 45
+                      },
+                      "RSA_SIGN_PSS_2048_SHA256": {
+                        "value": 2
+                      },
+                      "RSA_SIGN_PSS_3072_SHA256": {
+                        "value": 3
+                      },
+                      "RSA_SIGN_PSS_4096_SHA256": {
+                        "value": 4
+                      },
+                      "RSA_SIGN_PSS_4096_SHA512": {
+                        "value": 15
+                      },
+                      "RSA_SIGN_PKCS1_2048_SHA256": {
+                        "value": 5
+                      },
+                      "RSA_SIGN_PKCS1_3072_SHA256": {
+                        "value": 6
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA256": {
+                        "value": 7
+                      },
+                      "RSA_SIGN_PKCS1_4096_SHA512": {
+                        "value": 16
+                      },
+                      "RSA_SIGN_RAW_PKCS1_2048": {
+                        "value": 28
+                      },
+                      "RSA_SIGN_RAW_PKCS1_3072": {
+                        "value": 29
+                      },
+                      "RSA_SIGN_RAW_PKCS1_4096": {
+                        "value": 30
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA256": {
+                        "value": 8
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA256": {
+                        "value": 9
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA256": {
+                        "value": 10
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA512": {
+                        "value": 17
+                      },
+                      "RSA_DECRYPT_OAEP_2048_SHA1": {
+                        "value": 37
+                      },
+                      "RSA_DECRYPT_OAEP_3072_SHA1": {
+                        "value": 38
+                      },
+                      "RSA_DECRYPT_OAEP_4096_SHA1": {
+                        "value": 39
+                      },
+                      "EC_SIGN_P256_SHA256": {
+                        "value": 12
+                      },
+                      "EC_SIGN_P384_SHA384": {
+                        "value": 13
+                      },
+                      "EC_SIGN_SECP256K1_SHA256": {
+                        "value": 31
+                      },
+                      "EC_SIGN_ED25519": {
+                        "value": 40
+                      },
+                      "HMAC_SHA256": {
+                        "value": 32
+                      },
+                      "HMAC_SHA1": {
+                        "value": 33
+                      },
+                      "HMAC_SHA384": {
+                        "value": 34
+                      },
+                      "HMAC_SHA512": {
+                        "value": 35
+                      },
+                      "HMAC_SHA224": {
+                        "value": 36
+                      },
+                      "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                        "value": 18
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -3150,15 +4468,24 @@
                 "type": "boolean"
               },
               "destroy_scheduled_duration": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -3173,16 +4500,45 @@
                     "description": "The list of allowed reasons for access to a [CryptoKey][google.cloud.kms.v1.CryptoKey]. Zero allowed access reasons means all encrypt, decrypt, and sign operations for the [CryptoKey][google.cloud.kms.v1.CryptoKey] associated with this policy will fail.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "type_": {
-                          "description": "Type of access justification.",
-                          "type": "object",
-                          "reference": "google.cloud.cloudcontrolspartner_v1beta.types.AccessReason.Type"
+                      "type": "enum",
+                      "name": "AccessReason",
+                      "description": "Describes the reason for a data access. Please refer to\nhttps://cloud.google.com/assured-workloads/key-access-justifications/docs/justification-codes\nfor the detailed semantic meaning of justification reason codes.\n\nValues:\n    REASON_UNSPECIFIED (0):\n        Unspecified access reason.\n    CUSTOMER_INITIATED_SUPPORT (1):\n        Customer-initiated support.\n    GOOGLE_INITIATED_SERVICE (2):\n        Google-initiated access for system management\n        and troubleshooting.\n    THIRD_PARTY_DATA_REQUEST (3):\n        Google-initiated access in response to a\n        legal request or legal process.\n    GOOGLE_INITIATED_REVIEW (4):\n        Google-initiated access for security, fraud,\n        abuse, or compliance purposes.\n    CUSTOMER_INITIATED_ACCESS (5):\n        Customer uses their account to perform any\n        access to their own data which their IAM policy\n        authorizes.\n    GOOGLE_INITIATED_SYSTEM_OPERATION (6):\n        Google systems access customer data to help\n        optimize the structure of the data ",
+                      "values": {
+                        "REASON_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "detail": {
-                          "description": "More detail about certain reason types. See comments for each type above.",
-                          "type": "string"
+                        "CUSTOMER_INITIATED_SUPPORT": {
+                          "value": 1
+                        },
+                        "GOOGLE_INITIATED_SERVICE": {
+                          "value": 2
+                        },
+                        "THIRD_PARTY_DATA_REQUEST": {
+                          "value": 3
+                        },
+                        "GOOGLE_INITIATED_REVIEW": {
+                          "value": 4
+                        },
+                        "CUSTOMER_INITIATED_ACCESS": {
+                          "value": 5
+                        },
+                        "GOOGLE_INITIATED_SYSTEM_OPERATION": {
+                          "value": 6
+                        },
+                        "REASON_NOT_EXPECTED": {
+                          "value": 7
+                        },
+                        "MODIFIED_CUSTOMER_INITIATED_ACCESS": {
+                          "value": 8
+                        },
+                        "MODIFIED_GOOGLE_INITIATED_SYSTEM_OPERATION": {
+                          "value": 9
+                        },
+                        "GOOGLE_RESPONSE_TO_PRODUCTION_ALERT": {
+                          "value": 10
+                        },
+                        "CUSTOMER_AUTHORIZED_WORKFLOW_SERVICING": {
+                          "value": 11
                         }
                       }
                     }
@@ -3219,27 +4575,200 @@
                 "type": "string"
               },
               "state": {
-                "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionState"
+                "type": "enum",
+                "name": "CryptoKeyVersionState",
+                "description": "The state of a\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nif it can be used.\n\nValues:\n    CRYPTO_KEY_VERSION_STATE_UNSPECIFIED (0):\n        Not specified.\n    PENDING_GENERATION (5):\n        This version is still being generated. It may not be used,\n        enabled, disabled, or destroyed yet. Cloud KMS will\n        automatically mark this version\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        as soon as the version is ready.\n    ENABLED (1):\n        This version may be used for cryptographic\n        operations.\n    DISABLED (2):\n        This version may not be used, but the key material is still\n        available, and the version can be placed back into the\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.ENABLED]\n        state.\n    DESTROYED (3):\n        This version is destroyed, and the key material is no longer\n        stored. This version may only become\n        [ENABLED][google.cloud.kms.v1.CryptoKeyVer",
+                "values": {
+                  "CRYPTO_KEY_VERSION_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "PENDING_GENERATION": {
+                    "value": 5
+                  },
+                  "ENABLED": {
+                    "value": 1
+                  },
+                  "DISABLED": {
+                    "value": 2
+                  },
+                  "DESTROYED": {
+                    "value": 3
+                  },
+                  "DESTROY_SCHEDULED": {
+                    "value": 4
+                  },
+                  "PENDING_IMPORT": {
+                    "value": 6
+                  },
+                  "IMPORT_FAILED": {
+                    "value": 7
+                  },
+                  "GENERATION_FAILED": {
+                    "value": 8
+                  },
+                  "PENDING_EXTERNAL_DESTRUCTION": {
+                    "value": 9
+                  },
+                  "EXTERNAL_DESTRUCTION_FAILED": {
+                    "value": 10
+                  }
+                }
               },
               "protection_level": {
-                "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                "type": "enum",
+                "name": "ProtectionLevel",
+                "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+                "values": {
+                  "PROTECTION_LEVEL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "SOFTWARE": {
+                    "value": 1
+                  },
+                  "HSM": {
+                    "value": 2
+                  },
+                  "EXTERNAL": {
+                    "value": 3
+                  },
+                  "EXTERNAL_VPC": {
+                    "value": 4
+                  }
+                }
               },
               "algorithm": {
-                "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
-                "type": "object",
-                "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                "type": "enum",
+                "name": "CryptoKeyVersionAlgorithm",
+                "description": "The algorithm of the\n[CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating\nwhat parameters must be used for each cryptographic operation.\n\nThe\n[GOOGLE_SYMMETRIC_ENCRYPTION][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.GOOGLE_SYMMETRIC_ENCRYPTION]\nalgorithm is usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT].\n\nAlgorithms beginning with ``RSA_SIGN_`` are usable with\n[CryptoKey.purpose][google.cloud.kms.v1.CryptoKey.purpose]\n[ASYMMETRIC_SIGN][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ASYMMETRIC_SIGN].\n\nThe fields in the name after ``RSA_SIGN_`` correspond to the\nfollowing parameters: padding algorithm, modulus bit length, and\ndigest algorithm.\n\nFor PSS, the salt length used is equal to the length of digest\nalgorithm. For example,\n[RSA_SIGN_PSS_2048_SHA256][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm.RSA_SIGN_PSS_2048_SHA256]\nwill use PSS with a salt leng",
+                "values": {
+                  "CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "GOOGLE_SYMMETRIC_ENCRYPTION": {
+                    "value": 1
+                  },
+                  "AES_128_GCM": {
+                    "value": 41
+                  },
+                  "AES_256_GCM": {
+                    "value": 19
+                  },
+                  "AES_128_CBC": {
+                    "value": 42
+                  },
+                  "AES_256_CBC": {
+                    "value": 43
+                  },
+                  "AES_128_CTR": {
+                    "value": 44
+                  },
+                  "AES_256_CTR": {
+                    "value": 45
+                  },
+                  "RSA_SIGN_PSS_2048_SHA256": {
+                    "value": 2
+                  },
+                  "RSA_SIGN_PSS_3072_SHA256": {
+                    "value": 3
+                  },
+                  "RSA_SIGN_PSS_4096_SHA256": {
+                    "value": 4
+                  },
+                  "RSA_SIGN_PSS_4096_SHA512": {
+                    "value": 15
+                  },
+                  "RSA_SIGN_PKCS1_2048_SHA256": {
+                    "value": 5
+                  },
+                  "RSA_SIGN_PKCS1_3072_SHA256": {
+                    "value": 6
+                  },
+                  "RSA_SIGN_PKCS1_4096_SHA256": {
+                    "value": 7
+                  },
+                  "RSA_SIGN_PKCS1_4096_SHA512": {
+                    "value": 16
+                  },
+                  "RSA_SIGN_RAW_PKCS1_2048": {
+                    "value": 28
+                  },
+                  "RSA_SIGN_RAW_PKCS1_3072": {
+                    "value": 29
+                  },
+                  "RSA_SIGN_RAW_PKCS1_4096": {
+                    "value": 30
+                  },
+                  "RSA_DECRYPT_OAEP_2048_SHA256": {
+                    "value": 8
+                  },
+                  "RSA_DECRYPT_OAEP_3072_SHA256": {
+                    "value": 9
+                  },
+                  "RSA_DECRYPT_OAEP_4096_SHA256": {
+                    "value": 10
+                  },
+                  "RSA_DECRYPT_OAEP_4096_SHA512": {
+                    "value": 17
+                  },
+                  "RSA_DECRYPT_OAEP_2048_SHA1": {
+                    "value": 37
+                  },
+                  "RSA_DECRYPT_OAEP_3072_SHA1": {
+                    "value": 38
+                  },
+                  "RSA_DECRYPT_OAEP_4096_SHA1": {
+                    "value": 39
+                  },
+                  "EC_SIGN_P256_SHA256": {
+                    "value": 12
+                  },
+                  "EC_SIGN_P384_SHA384": {
+                    "value": 13
+                  },
+                  "EC_SIGN_SECP256K1_SHA256": {
+                    "value": 31
+                  },
+                  "EC_SIGN_ED25519": {
+                    "value": 40
+                  },
+                  "HMAC_SHA256": {
+                    "value": 32
+                  },
+                  "HMAC_SHA1": {
+                    "value": 33
+                  },
+                  "HMAC_SHA384": {
+                    "value": 34
+                  },
+                  "HMAC_SHA512": {
+                    "value": 35
+                  },
+                  "HMAC_SHA224": {
+                    "value": 36
+                  },
+                  "EXTERNAL_SYMMETRIC_ENCRYPTION": {
+                    "value": 18
+                  }
+                }
               },
               "attestation": {
                 "type": "object",
                 "properties": {
                   "format": {
-                    "description": "Output only. The format of the attestation data.",
-                    "type": "object",
-                    "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                    "type": "enum",
+                    "name": "AttestationFormat",
+                    "description": "Attestation formats provided by the HSM.\n\nValues:\n    ATTESTATION_FORMAT_UNSPECIFIED (0):\n        Not specified.\n    CAVIUM_V1_COMPRESSED (3):\n        Cavium HSM attestation compressed with gzip.\n        Note that this format is defined by Cavium and\n        subject to change at any time.\n\n        See\n        https://www.marvell.com/products/security-solutions/nitrox-hs-adapters/software-key-attestation.html.\n    CAVIUM_V2_COMPRESSED (4):\n        Cavium HSM attestation V2 compressed with\n        gzip. This is a new format introduced in\n        Cavium's version 3.2-08.",
+                    "values": {
+                      "ATTESTATION_FORMAT_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "CAVIUM_V1_COMPRESSED": {
+                        "value": 3
+                      },
+                      "CAVIUM_V2_COMPRESSED": {
+                        "value": 4
+                      }
+                    }
                   },
                   "content": {
                     "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
@@ -3737,9 +5266,26 @@
             "type": "integer"
           },
           "protection_level": {
-            "description": "The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] to use when generating the random data. Currently, only [HSM][google.cloud.kms.v1.ProtectionLevel.HSM] protection level is supported.",
-            "type": "object",
-            "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+            "description": "[ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] specifies how\ncryptographic operations are performed. For more information, see\n[Protection levels]\n(https://cloud.google.com/kms/docs/algorithms#protection_levels).\n\nValues:\n    PROTECTION_LEVEL_UNSPECIFIED (0):\n        Not specified.\n    SOFTWARE (1):\n        Crypto operations are performed in software.\n    HSM (2):\n        Crypto operations are performed in a Hardware\n        Security Module.\n    EXTERNAL (3):\n        Crypto operations are performed by an\n        external key manager.\n    EXTERNAL_VPC (4):\n        Crypto operations are performed in an\n        EKM-over-VPC backend.",
+            "type": "enum",
+            "name": "ProtectionLevel",
+            "values": {
+              "PROTECTION_LEVEL_UNSPECIFIED": {
+                "value": 0
+              },
+              "SOFTWARE": {
+                "value": 1
+              },
+              "HSM": {
+                "value": 2
+              },
+              "EXTERNAL": {
+                "value": 3
+              },
+              "EXTERNAL_VPC": {
+                "value": 4
+              }
+            }
           }
         }
       }

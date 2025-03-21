@@ -87,474 +87,20 @@
                 }
               },
               "action": {
-                "type": "object",
-                "properties": {
-                  "container_name": {
-                    "description": "An optional name for the container. The container hostname will be set to this name, making it useful for inter-container communication. The name must contain only upper and lowercase alphanumeric characters and hyphens and cannot start with a hyphen.",
-                    "type": "string"
+                "type": "enum",
+                "name": "Action",
+                "description": "Action determines whether the external access rule permits or\nblocks traffic, subject to the other components of the rule\nmatching the traffic.\n\nValues:\n    ACTION_UNSPECIFIED (0):\n        Defaults to allow.\n    ALLOW (1):\n        Allows connections that match the other\n        specified components.\n    DENY (2):\n        Blocks connections that match the other\n        specified components.",
+                "values": {
+                  "ACTION_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "image_uri": {
-                    "description": "Required. The URI to pull the container image from. Note that all images referenced by actions in the pipeline are pulled before the first action runs. If multiple actions reference the same image, it is only pulled once, ensuring that the same image is used for all actions in a single pipeline.  The image URI can be either a complete host and image specification (e.g., quay.io/biocontainers/samtools), a library and image name (e.g., google/cloud-sdk) or a bare image name ('bash') to pull from the default library. No schema is required in any of these cases.  If the specified image is not public, the service account specified for the Virtual Machine must have access to pull the images from GCR, or appropriate credentials must be specified in the [google.cloud.lifesciences.v2beta.Action.credentials][google.cloud.lifesciences.v2beta.Action.credentials] field.",
-                    "type": "string"
+                  "ALLOW": {
+                    "value": 1
                   },
-                  "commands": {
-                    "description": "If specified, overrides the ``CMD`` specified in the container. If the container also has an ``ENTRYPOINT`` the values are used as entrypoint arguments. Otherwise, they are used as a command and arguments to run inside the container.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "entrypoint": {
-                    "description": "If specified, overrides the ``ENTRYPOINT`` specified in the container.",
-                    "type": "string"
-                  },
-                  "environment": {
-                    "description": "The environment to pass into the container. This environment is merged with values specified in the [google.cloud.lifesciences.v2beta.Pipeline][google.cloud.lifesciences.v2beta.Pipeline] message, overwriting any duplicate values.  In addition to the values passed here, a few other values are automatically injected into the environment. These cannot be hidden or overwritten.  ``GOOGLE_PIPELINE_FAILED`` will be set to \"1\" if the pipeline failed because an action has exited with a non-zero status (and did not have the ``IGNORE_EXIT_STATUS`` flag set). This can be used to determine if additional debug or logging actions should execute.  ``GOOGLE_LAST_EXIT_STATUS`` will be set to the exit status of the last non-background action that executed. This can be used by workflow engine authors to determine whether an individual action has succeeded or failed.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  },
-                  "encrypted_environment": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "description": "Output only. The resource name of the [Secret][google.cloud.secretmanager.v1beta2.Secret] in the format ``projects/*/secrets/*``.",
-                        "type": "string"
-                      },
-                      "replication": {
-                        "type": "object",
-                        "properties": {
-                          "automatic": {
-                            "type": "object",
-                            "properties": {
-                              "customer_managed_encryption": {
-                                "type": "object",
-                                "properties": {
-                                  "kms_key_name": {
-                                    "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "kms_key_name"
-                                ]
-                              }
-                            }
-                          },
-                          "user_managed": {
-                            "type": "object",
-                            "properties": {
-                              "replicas": {
-                                "description": "Required. The list of Replicas for this [Secret][google.cloud.secretmanager.v1beta2.Secret].  Cannot be empty.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "location": {
-                                      "description": "The canonical IDs of the location to replicate data. For example: ``\"us-east1\"``.",
-                                      "type": "string"
-                                    },
-                                    "customer_managed_encryption": {
-                                      "type": "object",
-                                      "properties": {
-                                        "kms_key_name": {
-                                          "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "kms_key_name"
-                                      ]
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "replicas"
-                            ]
-                          }
-                        }
-                      },
-                      "create_time": {
-                        "description": "Output only. The time at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] was created.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "labels": {
-                        "description": "The labels assigned to this Secret.  Label keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}][\\p{Ll}\\p{Lo}\\p{N}_-]{0,62}``  Label values must be between 0 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}\\p{N}_-]{0,63}``  No more than 64 labels can be assigned to a given resource.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "topics": {
-                        "description": "Optional. A list of up to 10 Pub/Sub topics to which messages are published when control plane operations are called on the secret or its versions.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "description": "Required. The resource name of the Pub/Sub topic that will be published to, in the following format: ``projects/*/topics/*``. For publication to succeed, the Secret Manager service agent must have the ``pubsub.topic.publish`` permission on the topic. The Pub/Sub Publisher role (``roles/pubsub.publisher``) includes this permission.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "name"
-                          ]
-                        }
-                      },
-                      "expire_time": {
-                        "description": "Optional. Timestamp in UTC when the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to expire. This is always provided on output, regardless of what was sent on input.  This field is a member of `oneof`_ ``expiration``.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "etag": {
-                        "description": "Optional. Etag of the currently stored [Secret][google.cloud.secretmanager.v1beta2.Secret].",
-                        "type": "string"
-                      },
-                      "rotation": {
-                        "type": "object",
-                        "properties": {
-                          "next_rotation_time": {
-                            "description": "Optional. Timestamp in UTC at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to rotate. Cannot be set to less than 300s (5 min) in the future and at most 3153600000s (100 years).  [next_rotation_time][google.cloud.secretmanager.v1beta2.Rotation.next_rotation_time] MUST be set if [rotation_period][google.cloud.secretmanager.v1beta2.Rotation.rotation_period] is set.",
-                            "type": "object",
-                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                          },
-                          "rotation_period": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
-                              },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "version_aliases": {
-                        "description": "Optional. Mapping from version alias to version name.  A version alias is a string with a maximum length of 63 characters and can contain uppercase and lowercase letters, numerals, and the hyphen (``-``) and underscore ('_') characters. An alias string must start with a letter and cannot be the string 'latest' or 'NEW'. No more than 50 aliases can be assigned to a given secret.  Version-Alias pairs will be viewable via GetSecret and modifiable via UpdateSecret. Access by alias is only supported for GetSecretVersion and AccessSecretVersion.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "integer"
-                        }
-                      },
-                      "annotations": {
-                        "description": "Optional. Custom metadata about the secret.  Annotations are distinct from various forms of labels. Annotations exist to allow client tools to store their own state information without requiring a database.  Annotation keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, begin and end with an alphanumeric character ([a-z0-9A-Z]), and may have dashes (-), underscores (_), dots (.), and alphanumerics in between these symbols.  The total size of annotation keys and values must be less than 16KiB.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "version_destroy_ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "customer_managed_encryption": {
-                        "type": "object",
-                        "properties": {
-                          "kms_key_name": {
-                            "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "kms_key_name"
-                        ]
-                      }
-                    }
-                  },
-                  "pid_namespace": {
-                    "description": "An optional identifier for a PID namespace to run the action inside. Multiple actions should use the same string to share a namespace.  If unspecified, a separate isolated namespace is used.",
-                    "type": "string"
-                  },
-                  "port_mappings": {
-                    "description": "A map of containers to host port mappings for this container. If the container already specifies exposed ports, use the ``PUBLISH_EXPOSED_PORTS`` flag instead.  The host port number must be less than 65536. If it is zero, an unused random port is assigned. To determine the resulting port number, consult the ``ContainerStartedEvent`` in the operation metadata.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "integer"
-                    }
-                  },
-                  "mounts": {
-                    "description": "A list of mounts to make available to the action.  In addition to the values specified here, every action has a special virtual disk mounted under ``/google`` that contains log files and other operational components.  .. raw:: html  <ul> <li><code>/google/logs</code> All logs written during the pipeline execution.</li> <li><code>/google/logs/output</code> The combined standard output and standard error of all actions run as part of the pipeline execution.</li> <li><code>/google/logs/action/*/stdout</code> The complete contents of each individual action's standard output.</li> <li><code>/google/logs/action/*/stderr</code> The complete contents of each individual action's standard error output.</li> </ul>",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "disk": {
-                          "description": "The name of the disk to mount, as specified in the resources section.",
-                          "type": "string"
-                        },
-                        "path": {
-                          "description": "The path to mount the disk inside the container.",
-                          "type": "string"
-                        },
-                        "read_only": {
-                          "description": "If true, the disk is mounted read-only inside the container.",
-                          "type": "boolean"
-                        }
-                      }
-                    }
-                  },
-                  "labels": {
-                    "description": "Labels to associate with the action. This field is provided to assist workflow engine authors in identifying actions (for example, to indicate what sort of action they perform, such as localization or debugging). They are returned in the operation metadata, but are otherwise ignored.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  },
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "description": "Output only. The resource name of the [Secret][google.cloud.secretmanager.v1beta2.Secret] in the format ``projects/*/secrets/*``.",
-                        "type": "string"
-                      },
-                      "replication": {
-                        "type": "object",
-                        "properties": {
-                          "automatic": {
-                            "type": "object",
-                            "properties": {
-                              "customer_managed_encryption": {
-                                "type": "object",
-                                "properties": {
-                                  "kms_key_name": {
-                                    "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "kms_key_name"
-                                ]
-                              }
-                            }
-                          },
-                          "user_managed": {
-                            "type": "object",
-                            "properties": {
-                              "replicas": {
-                                "description": "Required. The list of Replicas for this [Secret][google.cloud.secretmanager.v1beta2.Secret].  Cannot be empty.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "location": {
-                                      "description": "The canonical IDs of the location to replicate data. For example: ``\"us-east1\"``.",
-                                      "type": "string"
-                                    },
-                                    "customer_managed_encryption": {
-                                      "type": "object",
-                                      "properties": {
-                                        "kms_key_name": {
-                                          "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "kms_key_name"
-                                      ]
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "replicas"
-                            ]
-                          }
-                        }
-                      },
-                      "create_time": {
-                        "description": "Output only. The time at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] was created.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "labels": {
-                        "description": "The labels assigned to this Secret.  Label keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}][\\p{Ll}\\p{Lo}\\p{N}_-]{0,62}``  Label values must be between 0 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}\\p{N}_-]{0,63}``  No more than 64 labels can be assigned to a given resource.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "topics": {
-                        "description": "Optional. A list of up to 10 Pub/Sub topics to which messages are published when control plane operations are called on the secret or its versions.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "description": "Required. The resource name of the Pub/Sub topic that will be published to, in the following format: ``projects/*/topics/*``. For publication to succeed, the Secret Manager service agent must have the ``pubsub.topic.publish`` permission on the topic. The Pub/Sub Publisher role (``roles/pubsub.publisher``) includes this permission.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "name"
-                          ]
-                        }
-                      },
-                      "expire_time": {
-                        "description": "Optional. Timestamp in UTC when the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to expire. This is always provided on output, regardless of what was sent on input.  This field is a member of `oneof`_ ``expiration``.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "etag": {
-                        "description": "Optional. Etag of the currently stored [Secret][google.cloud.secretmanager.v1beta2.Secret].",
-                        "type": "string"
-                      },
-                      "rotation": {
-                        "type": "object",
-                        "properties": {
-                          "next_rotation_time": {
-                            "description": "Optional. Timestamp in UTC at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to rotate. Cannot be set to less than 300s (5 min) in the future and at most 3153600000s (100 years).  [next_rotation_time][google.cloud.secretmanager.v1beta2.Rotation.next_rotation_time] MUST be set if [rotation_period][google.cloud.secretmanager.v1beta2.Rotation.rotation_period] is set.",
-                            "type": "object",
-                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                          },
-                          "rotation_period": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
-                              },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "version_aliases": {
-                        "description": "Optional. Mapping from version alias to version name.  A version alias is a string with a maximum length of 63 characters and can contain uppercase and lowercase letters, numerals, and the hyphen (``-``) and underscore ('_') characters. An alias string must start with a letter and cannot be the string 'latest' or 'NEW'. No more than 50 aliases can be assigned to a given secret.  Version-Alias pairs will be viewable via GetSecret and modifiable via UpdateSecret. Access by alias is only supported for GetSecretVersion and AccessSecretVersion.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "integer"
-                        }
-                      },
-                      "annotations": {
-                        "description": "Optional. Custom metadata about the secret.  Annotations are distinct from various forms of labels. Annotations exist to allow client tools to store their own state information without requiring a database.  Annotation keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, begin and end with an alphanumeric character ([a-z0-9A-Z]), and may have dashes (-), underscores (_), dots (.), and alphanumerics in between these symbols.  The total size of annotation keys and values must be less than 16KiB.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "version_destroy_ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "customer_managed_encryption": {
-                        "type": "object",
-                        "properties": {
-                          "kms_key_name": {
-                            "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "kms_key_name"
-                        ]
-                      }
-                    }
-                  },
-                  "timeout": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
-                      },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "ignore_exit_status": {
-                    "description": "Normally, a non-zero exit status causes the pipeline to fail. This flag allows execution of other actions to continue instead.",
-                    "type": "boolean"
-                  },
-                  "run_in_background": {
-                    "description": "This flag allows an action to continue running in the background while executing subsequent actions. This is useful to provide services to other actions (or to provide debugging support tools like SSH servers).",
-                    "type": "boolean"
-                  },
-                  "always_run": {
-                    "description": "By default, after an action fails, no further actions are run. This flag indicates that this action must be run even if the pipeline has already failed. This is useful for actions that copy output files off of the VM or for debugging. Note that no actions will be run if image prefetching fails.",
-                    "type": "boolean"
-                  },
-                  "enable_fuse": {
-                    "description": "Enable access to the FUSE device for this action. Filesystems can then be mounted into disks shared with other actions. The other actions do not need the ``enable_fuse`` flag to access the mounted filesystem.  This has the effect of causing the container to be executed with ``CAP_SYS_ADMIN`` and exposes ``/dev/fuse`` to the container, so use it only for containers you trust.",
-                    "type": "boolean"
-                  },
-                  "publish_exposed_ports": {
-                    "description": "Exposes all ports specified by ``EXPOSE`` statements in the container. To discover the host side port numbers, consult the ``ACTION_STARTED`` event in the operation metadata.",
-                    "type": "boolean"
-                  },
-                  "disable_image_prefetch": {
-                    "description": "All container images are typically downloaded before any actions are executed. This helps prevent typos in URIs or issues like lack of disk space from wasting large amounts of compute resources.  If set, this flag prevents the worker from downloading the image until just before the action is executed.",
-                    "type": "boolean"
-                  },
-                  "disable_standard_error_capture": {
-                    "description": "A small portion of the container's standard error stream is typically captured and returned inside the ``ContainerStoppedEvent``. Setting this flag disables this functionality.",
-                    "type": "boolean"
-                  },
-                  "block_external_network": {
-                    "description": "Prevents the container from accessing the external network.",
-                    "type": "boolean"
+                  "DENY": {
+                    "value": 2
                   }
-                },
-                "required": [
-                  "image_uri"
-                ]
+                }
               },
               "rules": {
                 "description": "Optional. List of rules to match. Note that at least one of the rules must match in order for the action specified in the 'action' field to be taken. A rule is a match if there is a matching source and destination. If left blank, the action specified in the ``action`` field will be applied on every request.",
@@ -731,9 +277,26 @@
                           "type": "string"
                         },
                         "state": {
-                          "description": "State of the condition.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.State"
+                          "type": "enum",
+                          "name": "State",
+                          "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                          "values": {
+                            "STATE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "AFFECTED": {
+                              "value": 1
+                            },
+                            "NOT_AFFECTED": {
+                              "value": 2
+                            },
+                            "FIXED": {
+                              "value": 3
+                            },
+                            "UNDER_INVESTIGATION": {
+                              "value": 4
+                            }
+                          }
                         },
                         "message": {
                           "description": "Human readable message indicating details about the current status.",
@@ -745,24 +308,152 @@
                           "reference": "google.protobuf.timestamp_pb2.Timestamp"
                         },
                         "severity": {
-                          "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.Severity"
+                          "type": "enum",
+                          "name": "Severity",
+                          "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                          "values": {
+                            "SEVERITY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MINIMAL": {
+                              "value": 1
+                            },
+                            "LOW": {
+                              "value": 2
+                            },
+                            "MEDIUM": {
+                              "value": 3
+                            },
+                            "HIGH": {
+                              "value": 4
+                            },
+                            "CRITICAL": {
+                              "value": 5
+                            }
+                          }
                         },
                         "reason": {
-                          "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                          "type": "enum",
+                          "name": "CommonReason",
+                          "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                          "values": {
+                            "COMMON_REASON_UNDEFINED": {
+                              "value": 0
+                            },
+                            "UNKNOWN": {
+                              "value": 1
+                            },
+                            "REVISION_FAILED": {
+                              "value": 3
+                            },
+                            "PROGRESS_DEADLINE_EXCEEDED": {
+                              "value": 4
+                            },
+                            "CONTAINER_MISSING": {
+                              "value": 6
+                            },
+                            "CONTAINER_PERMISSION_DENIED": {
+                              "value": 7
+                            },
+                            "CONTAINER_IMAGE_UNAUTHORIZED": {
+                              "value": 8
+                            },
+                            "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                              "value": 9
+                            },
+                            "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                              "value": 10
+                            },
+                            "ENCRYPTION_KEY_CHECK_FAILED": {
+                              "value": 11
+                            },
+                            "SECRETS_ACCESS_CHECK_FAILED": {
+                              "value": 12
+                            },
+                            "WAITING_FOR_OPERATION": {
+                              "value": 13
+                            },
+                            "IMMEDIATE_RETRY": {
+                              "value": 14
+                            },
+                            "POSTPONED_RETRY": {
+                              "value": 15
+                            },
+                            "INTERNAL": {
+                              "value": 16
+                            }
+                          }
                         },
                         "revision_reason": {
-                          "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                          "type": "enum",
+                          "name": "RevisionReason",
+                          "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                          "values": {
+                            "REVISION_REASON_UNDEFINED": {
+                              "value": 0
+                            },
+                            "PENDING": {
+                              "value": 1
+                            },
+                            "RESERVE": {
+                              "value": 2
+                            },
+                            "RETIRED": {
+                              "value": 3
+                            },
+                            "RETIRING": {
+                              "value": 4
+                            },
+                            "RECREATING": {
+                              "value": 5
+                            },
+                            "HEALTH_CHECK_CONTAINER_ERROR": {
+                              "value": 6
+                            },
+                            "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                              "value": 7
+                            },
+                            "MIN_INSTANCES_NOT_PROVISIONED": {
+                              "value": 8
+                            },
+                            "ACTIVE_REVISION_LIMIT_REACHED": {
+                              "value": 9
+                            },
+                            "NO_DEPLOYMENT": {
+                              "value": 10
+                            },
+                            "HEALTH_CHECK_SKIPPED": {
+                              "value": 11
+                            },
+                            "MIN_INSTANCES_WARMING": {
+                              "value": 12
+                            }
+                          }
                         },
                         "execution_reason": {
-                          "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                          "type": "enum",
+                          "name": "ExecutionReason",
+                          "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                          "values": {
+                            "EXECUTION_REASON_UNDEFINED": {
+                              "value": 0
+                            },
+                            "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                              "value": 1
+                            },
+                            "NON_ZERO_EXIT_CODE": {
+                              "value": 2
+                            },
+                            "CANCELLED": {
+                              "value": 3
+                            },
+                            "CANCELLING": {
+                              "value": 4
+                            },
+                            "DELETED": {
+                              "value": 5
+                            }
+                          }
                         }
                       }
                     }
@@ -828,474 +519,20 @@
                 }
               },
               "action": {
-                "type": "object",
-                "properties": {
-                  "container_name": {
-                    "description": "An optional name for the container. The container hostname will be set to this name, making it useful for inter-container communication. The name must contain only upper and lowercase alphanumeric characters and hyphens and cannot start with a hyphen.",
-                    "type": "string"
+                "type": "enum",
+                "name": "Action",
+                "description": "Action determines whether the external access rule permits or\nblocks traffic, subject to the other components of the rule\nmatching the traffic.\n\nValues:\n    ACTION_UNSPECIFIED (0):\n        Defaults to allow.\n    ALLOW (1):\n        Allows connections that match the other\n        specified components.\n    DENY (2):\n        Blocks connections that match the other\n        specified components.",
+                "values": {
+                  "ACTION_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "image_uri": {
-                    "description": "Required. The URI to pull the container image from. Note that all images referenced by actions in the pipeline are pulled before the first action runs. If multiple actions reference the same image, it is only pulled once, ensuring that the same image is used for all actions in a single pipeline.  The image URI can be either a complete host and image specification (e.g., quay.io/biocontainers/samtools), a library and image name (e.g., google/cloud-sdk) or a bare image name ('bash') to pull from the default library. No schema is required in any of these cases.  If the specified image is not public, the service account specified for the Virtual Machine must have access to pull the images from GCR, or appropriate credentials must be specified in the [google.cloud.lifesciences.v2beta.Action.credentials][google.cloud.lifesciences.v2beta.Action.credentials] field.",
-                    "type": "string"
+                  "ALLOW": {
+                    "value": 1
                   },
-                  "commands": {
-                    "description": "If specified, overrides the ``CMD`` specified in the container. If the container also has an ``ENTRYPOINT`` the values are used as entrypoint arguments. Otherwise, they are used as a command and arguments to run inside the container.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "entrypoint": {
-                    "description": "If specified, overrides the ``ENTRYPOINT`` specified in the container.",
-                    "type": "string"
-                  },
-                  "environment": {
-                    "description": "The environment to pass into the container. This environment is merged with values specified in the [google.cloud.lifesciences.v2beta.Pipeline][google.cloud.lifesciences.v2beta.Pipeline] message, overwriting any duplicate values.  In addition to the values passed here, a few other values are automatically injected into the environment. These cannot be hidden or overwritten.  ``GOOGLE_PIPELINE_FAILED`` will be set to \"1\" if the pipeline failed because an action has exited with a non-zero status (and did not have the ``IGNORE_EXIT_STATUS`` flag set). This can be used to determine if additional debug or logging actions should execute.  ``GOOGLE_LAST_EXIT_STATUS`` will be set to the exit status of the last non-background action that executed. This can be used by workflow engine authors to determine whether an individual action has succeeded or failed.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  },
-                  "encrypted_environment": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "description": "Output only. The resource name of the [Secret][google.cloud.secretmanager.v1beta2.Secret] in the format ``projects/*/secrets/*``.",
-                        "type": "string"
-                      },
-                      "replication": {
-                        "type": "object",
-                        "properties": {
-                          "automatic": {
-                            "type": "object",
-                            "properties": {
-                              "customer_managed_encryption": {
-                                "type": "object",
-                                "properties": {
-                                  "kms_key_name": {
-                                    "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "kms_key_name"
-                                ]
-                              }
-                            }
-                          },
-                          "user_managed": {
-                            "type": "object",
-                            "properties": {
-                              "replicas": {
-                                "description": "Required. The list of Replicas for this [Secret][google.cloud.secretmanager.v1beta2.Secret].  Cannot be empty.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "location": {
-                                      "description": "The canonical IDs of the location to replicate data. For example: ``\"us-east1\"``.",
-                                      "type": "string"
-                                    },
-                                    "customer_managed_encryption": {
-                                      "type": "object",
-                                      "properties": {
-                                        "kms_key_name": {
-                                          "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "kms_key_name"
-                                      ]
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "replicas"
-                            ]
-                          }
-                        }
-                      },
-                      "create_time": {
-                        "description": "Output only. The time at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] was created.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "labels": {
-                        "description": "The labels assigned to this Secret.  Label keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}][\\p{Ll}\\p{Lo}\\p{N}_-]{0,62}``  Label values must be between 0 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}\\p{N}_-]{0,63}``  No more than 64 labels can be assigned to a given resource.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "topics": {
-                        "description": "Optional. A list of up to 10 Pub/Sub topics to which messages are published when control plane operations are called on the secret or its versions.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "description": "Required. The resource name of the Pub/Sub topic that will be published to, in the following format: ``projects/*/topics/*``. For publication to succeed, the Secret Manager service agent must have the ``pubsub.topic.publish`` permission on the topic. The Pub/Sub Publisher role (``roles/pubsub.publisher``) includes this permission.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "name"
-                          ]
-                        }
-                      },
-                      "expire_time": {
-                        "description": "Optional. Timestamp in UTC when the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to expire. This is always provided on output, regardless of what was sent on input.  This field is a member of `oneof`_ ``expiration``.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "etag": {
-                        "description": "Optional. Etag of the currently stored [Secret][google.cloud.secretmanager.v1beta2.Secret].",
-                        "type": "string"
-                      },
-                      "rotation": {
-                        "type": "object",
-                        "properties": {
-                          "next_rotation_time": {
-                            "description": "Optional. Timestamp in UTC at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to rotate. Cannot be set to less than 300s (5 min) in the future and at most 3153600000s (100 years).  [next_rotation_time][google.cloud.secretmanager.v1beta2.Rotation.next_rotation_time] MUST be set if [rotation_period][google.cloud.secretmanager.v1beta2.Rotation.rotation_period] is set.",
-                            "type": "object",
-                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                          },
-                          "rotation_period": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
-                              },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "version_aliases": {
-                        "description": "Optional. Mapping from version alias to version name.  A version alias is a string with a maximum length of 63 characters and can contain uppercase and lowercase letters, numerals, and the hyphen (``-``) and underscore ('_') characters. An alias string must start with a letter and cannot be the string 'latest' or 'NEW'. No more than 50 aliases can be assigned to a given secret.  Version-Alias pairs will be viewable via GetSecret and modifiable via UpdateSecret. Access by alias is only supported for GetSecretVersion and AccessSecretVersion.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "integer"
-                        }
-                      },
-                      "annotations": {
-                        "description": "Optional. Custom metadata about the secret.  Annotations are distinct from various forms of labels. Annotations exist to allow client tools to store their own state information without requiring a database.  Annotation keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, begin and end with an alphanumeric character ([a-z0-9A-Z]), and may have dashes (-), underscores (_), dots (.), and alphanumerics in between these symbols.  The total size of annotation keys and values must be less than 16KiB.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "version_destroy_ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "customer_managed_encryption": {
-                        "type": "object",
-                        "properties": {
-                          "kms_key_name": {
-                            "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "kms_key_name"
-                        ]
-                      }
-                    }
-                  },
-                  "pid_namespace": {
-                    "description": "An optional identifier for a PID namespace to run the action inside. Multiple actions should use the same string to share a namespace.  If unspecified, a separate isolated namespace is used.",
-                    "type": "string"
-                  },
-                  "port_mappings": {
-                    "description": "A map of containers to host port mappings for this container. If the container already specifies exposed ports, use the ``PUBLISH_EXPOSED_PORTS`` flag instead.  The host port number must be less than 65536. If it is zero, an unused random port is assigned. To determine the resulting port number, consult the ``ContainerStartedEvent`` in the operation metadata.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "integer"
-                    }
-                  },
-                  "mounts": {
-                    "description": "A list of mounts to make available to the action.  In addition to the values specified here, every action has a special virtual disk mounted under ``/google`` that contains log files and other operational components.  .. raw:: html  <ul> <li><code>/google/logs</code> All logs written during the pipeline execution.</li> <li><code>/google/logs/output</code> The combined standard output and standard error of all actions run as part of the pipeline execution.</li> <li><code>/google/logs/action/*/stdout</code> The complete contents of each individual action's standard output.</li> <li><code>/google/logs/action/*/stderr</code> The complete contents of each individual action's standard error output.</li> </ul>",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "disk": {
-                          "description": "The name of the disk to mount, as specified in the resources section.",
-                          "type": "string"
-                        },
-                        "path": {
-                          "description": "The path to mount the disk inside the container.",
-                          "type": "string"
-                        },
-                        "read_only": {
-                          "description": "If true, the disk is mounted read-only inside the container.",
-                          "type": "boolean"
-                        }
-                      }
-                    }
-                  },
-                  "labels": {
-                    "description": "Labels to associate with the action. This field is provided to assist workflow engine authors in identifying actions (for example, to indicate what sort of action they perform, such as localization or debugging). They are returned in the operation metadata, but are otherwise ignored.",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "string"
-                    }
-                  },
-                  "credentials": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "description": "Output only. The resource name of the [Secret][google.cloud.secretmanager.v1beta2.Secret] in the format ``projects/*/secrets/*``.",
-                        "type": "string"
-                      },
-                      "replication": {
-                        "type": "object",
-                        "properties": {
-                          "automatic": {
-                            "type": "object",
-                            "properties": {
-                              "customer_managed_encryption": {
-                                "type": "object",
-                                "properties": {
-                                  "kms_key_name": {
-                                    "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "kms_key_name"
-                                ]
-                              }
-                            }
-                          },
-                          "user_managed": {
-                            "type": "object",
-                            "properties": {
-                              "replicas": {
-                                "description": "Required. The list of Replicas for this [Secret][google.cloud.secretmanager.v1beta2.Secret].  Cannot be empty.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "location": {
-                                      "description": "The canonical IDs of the location to replicate data. For example: ``\"us-east1\"``.",
-                                      "type": "string"
-                                    },
-                                    "customer_managed_encryption": {
-                                      "type": "object",
-                                      "properties": {
-                                        "kms_key_name": {
-                                          "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "kms_key_name"
-                                      ]
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "replicas"
-                            ]
-                          }
-                        }
-                      },
-                      "create_time": {
-                        "description": "Output only. The time at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] was created.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "labels": {
-                        "description": "The labels assigned to this Secret.  Label keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}][\\p{Ll}\\p{Lo}\\p{N}_-]{0,62}``  Label values must be between 0 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, and must conform to the following PCRE regular expression: ``[\\p{Ll}\\p{Lo}\\p{N}_-]{0,63}``  No more than 64 labels can be assigned to a given resource.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "topics": {
-                        "description": "Optional. A list of up to 10 Pub/Sub topics to which messages are published when control plane operations are called on the secret or its versions.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "description": "Required. The resource name of the Pub/Sub topic that will be published to, in the following format: ``projects/*/topics/*``. For publication to succeed, the Secret Manager service agent must have the ``pubsub.topic.publish`` permission on the topic. The Pub/Sub Publisher role (``roles/pubsub.publisher``) includes this permission.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "name"
-                          ]
-                        }
-                      },
-                      "expire_time": {
-                        "description": "Optional. Timestamp in UTC when the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to expire. This is always provided on output, regardless of what was sent on input.  This field is a member of `oneof`_ ``expiration``.",
-                        "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                      },
-                      "ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "etag": {
-                        "description": "Optional. Etag of the currently stored [Secret][google.cloud.secretmanager.v1beta2.Secret].",
-                        "type": "string"
-                      },
-                      "rotation": {
-                        "type": "object",
-                        "properties": {
-                          "next_rotation_time": {
-                            "description": "Optional. Timestamp in UTC at which the [Secret][google.cloud.secretmanager.v1beta2.Secret] is scheduled to rotate. Cannot be set to less than 300s (5 min) in the future and at most 3153600000s (100 years).  [next_rotation_time][google.cloud.secretmanager.v1beta2.Rotation.next_rotation_time] MUST be set if [rotation_period][google.cloud.secretmanager.v1beta2.Rotation.rotation_period] is set.",
-                            "type": "object",
-                            "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                          },
-                          "rotation_period": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
-                              },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "version_aliases": {
-                        "description": "Optional. Mapping from version alias to version name.  A version alias is a string with a maximum length of 63 characters and can contain uppercase and lowercase letters, numerals, and the hyphen (``-``) and underscore ('_') characters. An alias string must start with a letter and cannot be the string 'latest' or 'NEW'. No more than 50 aliases can be assigned to a given secret.  Version-Alias pairs will be viewable via GetSecret and modifiable via UpdateSecret. Access by alias is only supported for GetSecretVersion and AccessSecretVersion.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "integer"
-                        }
-                      },
-                      "annotations": {
-                        "description": "Optional. Custom metadata about the secret.  Annotations are distinct from various forms of labels. Annotations exist to allow client tools to store their own state information without requiring a database.  Annotation keys must be between 1 and 63 characters long, have a UTF-8 encoding of maximum 128 bytes, begin and end with an alphanumeric character ([a-z0-9A-Z]), and may have dashes (-), underscores (_), dots (.), and alphanumerics in between these symbols.  The total size of annotation keys and values must be less than 16KiB.",
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string"
-                        }
-                      },
-                      "version_destroy_ttl": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
-                          },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
-                          }
-                        }
-                      },
-                      "customer_managed_encryption": {
-                        "type": "object",
-                        "properties": {
-                          "kms_key_name": {
-                            "description": "Required. The resource name of the Cloud KMS CryptoKey used to encrypt secret payloads.  For secrets using the [UserManaged][google.cloud.secretmanager.v1beta2.Replication.UserManaged] replication policy type, Cloud KMS CryptoKeys must reside in the same location as the [replica location][Secret.UserManaged.Replica.location].  For secrets using the [Automatic][google.cloud.secretmanager.v1beta2.Replication.Automatic] replication policy type, Cloud KMS CryptoKeys must reside in ``global``.  The expected format is ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "kms_key_name"
-                        ]
-                      }
-                    }
-                  },
-                  "timeout": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
-                      },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "ignore_exit_status": {
-                    "description": "Normally, a non-zero exit status causes the pipeline to fail. This flag allows execution of other actions to continue instead.",
-                    "type": "boolean"
-                  },
-                  "run_in_background": {
-                    "description": "This flag allows an action to continue running in the background while executing subsequent actions. This is useful to provide services to other actions (or to provide debugging support tools like SSH servers).",
-                    "type": "boolean"
-                  },
-                  "always_run": {
-                    "description": "By default, after an action fails, no further actions are run. This flag indicates that this action must be run even if the pipeline has already failed. This is useful for actions that copy output files off of the VM or for debugging. Note that no actions will be run if image prefetching fails.",
-                    "type": "boolean"
-                  },
-                  "enable_fuse": {
-                    "description": "Enable access to the FUSE device for this action. Filesystems can then be mounted into disks shared with other actions. The other actions do not need the ``enable_fuse`` flag to access the mounted filesystem.  This has the effect of causing the container to be executed with ``CAP_SYS_ADMIN`` and exposes ``/dev/fuse`` to the container, so use it only for containers you trust.",
-                    "type": "boolean"
-                  },
-                  "publish_exposed_ports": {
-                    "description": "Exposes all ports specified by ``EXPOSE`` statements in the container. To discover the host side port numbers, consult the ``ACTION_STARTED`` event in the operation metadata.",
-                    "type": "boolean"
-                  },
-                  "disable_image_prefetch": {
-                    "description": "All container images are typically downloaded before any actions are executed. This helps prevent typos in URIs or issues like lack of disk space from wasting large amounts of compute resources.  If set, this flag prevents the worker from downloading the image until just before the action is executed.",
-                    "type": "boolean"
-                  },
-                  "disable_standard_error_capture": {
-                    "description": "A small portion of the container's standard error stream is typically captured and returned inside the ``ContainerStoppedEvent``. Setting this flag disables this functionality.",
-                    "type": "boolean"
-                  },
-                  "block_external_network": {
-                    "description": "Prevents the container from accessing the external network.",
-                    "type": "boolean"
+                  "DENY": {
+                    "value": 2
                   }
-                },
-                "required": [
-                  "image_uri"
-                ]
+                }
               },
               "rules": {
                 "description": "Optional. List of rules to match. Note that at least one of the rules must match in order for the action specified in the 'action' field to be taken. A rule is a match if there is a matching source and destination. If left blank, the action specified in the ``action`` field will be applied on every request.",
@@ -1472,9 +709,26 @@
                           "type": "string"
                         },
                         "state": {
-                          "description": "State of the condition.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.State"
+                          "type": "enum",
+                          "name": "State",
+                          "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                          "values": {
+                            "STATE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "AFFECTED": {
+                              "value": 1
+                            },
+                            "NOT_AFFECTED": {
+                              "value": 2
+                            },
+                            "FIXED": {
+                              "value": 3
+                            },
+                            "UNDER_INVESTIGATION": {
+                              "value": 4
+                            }
+                          }
                         },
                         "message": {
                           "description": "Human readable message indicating details about the current status.",
@@ -1486,24 +740,152 @@
                           "reference": "google.protobuf.timestamp_pb2.Timestamp"
                         },
                         "severity": {
-                          "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.Severity"
+                          "type": "enum",
+                          "name": "Severity",
+                          "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                          "values": {
+                            "SEVERITY_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "MINIMAL": {
+                              "value": 1
+                            },
+                            "LOW": {
+                              "value": 2
+                            },
+                            "MEDIUM": {
+                              "value": 3
+                            },
+                            "HIGH": {
+                              "value": 4
+                            },
+                            "CRITICAL": {
+                              "value": 5
+                            }
+                          }
                         },
                         "reason": {
-                          "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                          "type": "enum",
+                          "name": "CommonReason",
+                          "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                          "values": {
+                            "COMMON_REASON_UNDEFINED": {
+                              "value": 0
+                            },
+                            "UNKNOWN": {
+                              "value": 1
+                            },
+                            "REVISION_FAILED": {
+                              "value": 3
+                            },
+                            "PROGRESS_DEADLINE_EXCEEDED": {
+                              "value": 4
+                            },
+                            "CONTAINER_MISSING": {
+                              "value": 6
+                            },
+                            "CONTAINER_PERMISSION_DENIED": {
+                              "value": 7
+                            },
+                            "CONTAINER_IMAGE_UNAUTHORIZED": {
+                              "value": 8
+                            },
+                            "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                              "value": 9
+                            },
+                            "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                              "value": 10
+                            },
+                            "ENCRYPTION_KEY_CHECK_FAILED": {
+                              "value": 11
+                            },
+                            "SECRETS_ACCESS_CHECK_FAILED": {
+                              "value": 12
+                            },
+                            "WAITING_FOR_OPERATION": {
+                              "value": 13
+                            },
+                            "IMMEDIATE_RETRY": {
+                              "value": 14
+                            },
+                            "POSTPONED_RETRY": {
+                              "value": 15
+                            },
+                            "INTERNAL": {
+                              "value": 16
+                            }
+                          }
                         },
                         "revision_reason": {
-                          "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                          "type": "enum",
+                          "name": "RevisionReason",
+                          "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                          "values": {
+                            "REVISION_REASON_UNDEFINED": {
+                              "value": 0
+                            },
+                            "PENDING": {
+                              "value": 1
+                            },
+                            "RESERVE": {
+                              "value": 2
+                            },
+                            "RETIRED": {
+                              "value": 3
+                            },
+                            "RETIRING": {
+                              "value": 4
+                            },
+                            "RECREATING": {
+                              "value": 5
+                            },
+                            "HEALTH_CHECK_CONTAINER_ERROR": {
+                              "value": 6
+                            },
+                            "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                              "value": 7
+                            },
+                            "MIN_INSTANCES_NOT_PROVISIONED": {
+                              "value": 8
+                            },
+                            "ACTIVE_REVISION_LIMIT_REACHED": {
+                              "value": 9
+                            },
+                            "NO_DEPLOYMENT": {
+                              "value": 10
+                            },
+                            "HEALTH_CHECK_SKIPPED": {
+                              "value": 11
+                            },
+                            "MIN_INSTANCES_WARMING": {
+                              "value": 12
+                            }
+                          }
                         },
                         "execution_reason": {
-                          "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                          "type": "object",
-                          "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                          "type": "enum",
+                          "name": "ExecutionReason",
+                          "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                          "values": {
+                            "EXECUTION_REASON_UNDEFINED": {
+                              "value": 0
+                            },
+                            "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                              "value": 1
+                            },
+                            "NON_ZERO_EXIT_CODE": {
+                              "value": 2
+                            },
+                            "CANCELLED": {
+                              "value": 3
+                            },
+                            "CANCELLING": {
+                              "value": 4
+                            },
+                            "DELETED": {
+                              "value": 5
+                            }
+                          }
                         }
                       }
                     }

@@ -78,9 +78,26 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "state": {
-                "description": "Output only. The state of the ``Registration``",
-                "type": "object",
-                "reference": "google.cloud.domains_v1beta1.types.Registration.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "issues": {
                 "description": "Output only. The set of issues with the ``Registration`` that require attention.",
@@ -105,9 +122,29 @@
                       "type": "integer"
                     },
                     "severity": {
-                      "description": "Output only. The severity of the issue.",
-                      "type": "object",
-                      "reference": "google.shopping.merchant_datasources_v1beta.types.FileUpload.Issue.Severity"
+                      "type": "enum",
+                      "name": "Severity",
+                      "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                      "values": {
+                        "SEVERITY_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "MINIMAL": {
+                          "value": 1
+                        },
+                        "LOW": {
+                          "value": 2
+                        },
+                        "MEDIUM": {
+                          "value": 3
+                        },
+                        "HIGH": {
+                          "value": 4
+                        },
+                        "CRITICAL": {
+                          "value": 5
+                        }
+                      }
                     },
                     "documentation_uri": {
                       "description": "Output only. Link to the documentation explaining the issue in more details, if available.",
@@ -127,14 +164,36 @@
                 "type": "object",
                 "properties": {
                   "renewal_method": {
-                    "description": "Output only. The renewal method for this ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ManagementSettings.RenewalMethod"
+                    "type": "enum",
+                    "name": "RenewalMethod",
+                    "description": "Defines how the ``Registration`` is renewed.\n\nValues:\n    RENEWAL_METHOD_UNSPECIFIED (0):\n        The renewal method is undefined.\n    AUTOMATIC_RENEWAL (1):\n        The domain is automatically renewed each year .\n\n        To disable automatic renewals, delete the resource by\n        calling ``DeleteRegistration`` or export it by calling\n        ``ExportRegistration``.\n    MANUAL_RENEWAL (2):\n        The domain must be explicitly renewed each year before its\n        ``expire_time``. This option is only available when the\n        ``Registration`` is in state ``EXPORTED``.\n\n        To manage the domain's current billing and renewal settings,\n        go to `Google Domains <https://domains.google/>`__.",
+                    "values": {
+                      "RENEWAL_METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AUTOMATIC_RENEWAL": {
+                        "value": 1
+                      },
+                      "MANUAL_RENEWAL": {
+                        "value": 2
+                      }
+                    }
                   },
                   "transfer_lock_state": {
-                    "description": "Controls whether the domain can be transferred to another registrar.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.TransferLockState"
+                    "type": "enum",
+                    "name": "TransferLockState",
+                    "description": "Possible states of a ``Registration``'s transfer lock.\n\nValues:\n    TRANSFER_LOCK_STATE_UNSPECIFIED (0):\n        The state is unspecified.\n    UNLOCKED (1):\n        The domain is unlocked and can be transferred\n        to another registrar.\n    LOCKED (2):\n        The domain is locked and cannot be\n        transferred to another registrar.",
+                    "values": {
+                      "TRANSFER_LOCK_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "UNLOCKED": {
+                        "value": 1
+                      },
+                      "LOCKED": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -162,14 +221,87 @@
                               "type": "integer"
                             },
                             "algorithm": {
-                              "description": "The algorithm used to generate the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                              "type": "enum",
+                              "name": "Algorithm",
+                              "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                              "values": {
+                                "ALGORITHM_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "RSAMD5": {
+                                  "value": 1
+                                },
+                                "DH": {
+                                  "value": 2
+                                },
+                                "DSA": {
+                                  "value": 3
+                                },
+                                "ECC": {
+                                  "value": 4
+                                },
+                                "RSASHA1": {
+                                  "value": 5
+                                },
+                                "DSANSEC3SHA1": {
+                                  "value": 6
+                                },
+                                "RSASHA1NSEC3SHA1": {
+                                  "value": 7
+                                },
+                                "RSASHA256": {
+                                  "value": 8
+                                },
+                                "RSASHA512": {
+                                  "value": 10
+                                },
+                                "ECCGOST": {
+                                  "value": 12
+                                },
+                                "ECDSAP256SHA256": {
+                                  "value": 13
+                                },
+                                "ECDSAP384SHA384": {
+                                  "value": 14
+                                },
+                                "ED25519": {
+                                  "value": 15
+                                },
+                                "ED448": {
+                                  "value": 16
+                                },
+                                "INDIRECT": {
+                                  "value": 252
+                                },
+                                "PRIVATEDNS": {
+                                  "value": 253
+                                },
+                                "PRIVATEOID": {
+                                  "value": 254
+                                }
+                              }
                             },
                             "digest_type": {
-                              "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                              "type": "enum",
+                              "name": "DigestType",
+                              "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                              "values": {
+                                "DIGEST_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SHA1": {
+                                  "value": 1
+                                },
+                                "SHA256": {
+                                  "value": 2
+                                },
+                                "GOST3411": {
+                                  "value": 3
+                                },
+                                "SHA384": {
+                                  "value": 4
+                                }
+                              }
                             },
                             "digest": {
                               "description": "The digest generated from the referenced DNSKEY.",
@@ -194,9 +326,20 @@
                         }
                       },
                       "ds_state": {
-                        "description": "Required. The state of DS records for this domain. Used to enable or disable automatic DNSSEC.",
-                        "type": "object",
-                        "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsState"
+                        "type": "enum",
+                        "name": "DsState",
+                        "description": "The publication state of DS records for a ``Registration``.\n\nValues:\n    DS_STATE_UNSPECIFIED (0):\n        DS state is unspecified.\n    DS_RECORDS_UNPUBLISHED (1):\n        DNSSEC is disabled for this domain. No DS\n        records for this domain are published in the\n        parent DNS zone.\n    DS_RECORDS_PUBLISHED (2):\n        DNSSEC is enabled for this domain. Appropriate DS records\n        for this domain are published in the parent DNS zone. This\n        option is valid only if the DNS zone referenced in the\n        ``Registration``'s ``dns_provider`` field is already\n        DNSSEC-signed.",
+                        "values": {
+                          "DS_STATE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "DS_RECORDS_UNPUBLISHED": {
+                            "value": 1
+                          },
+                          "DS_RECORDS_PUBLISHED": {
+                            "value": 2
+                          }
+                        }
                       },
                       "ds_records": {
                         "description": "Output only. The list of DS records published for this domain. The list is automatically populated when ``ds_state`` is ``DS_RECORDS_PUBLISHED``, otherwise it remains empty.",
@@ -209,14 +352,87 @@
                               "type": "integer"
                             },
                             "algorithm": {
-                              "description": "The algorithm used to generate the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                              "type": "enum",
+                              "name": "Algorithm",
+                              "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                              "values": {
+                                "ALGORITHM_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "RSAMD5": {
+                                  "value": 1
+                                },
+                                "DH": {
+                                  "value": 2
+                                },
+                                "DSA": {
+                                  "value": 3
+                                },
+                                "ECC": {
+                                  "value": 4
+                                },
+                                "RSASHA1": {
+                                  "value": 5
+                                },
+                                "DSANSEC3SHA1": {
+                                  "value": 6
+                                },
+                                "RSASHA1NSEC3SHA1": {
+                                  "value": 7
+                                },
+                                "RSASHA256": {
+                                  "value": 8
+                                },
+                                "RSASHA512": {
+                                  "value": 10
+                                },
+                                "ECCGOST": {
+                                  "value": 12
+                                },
+                                "ECDSAP256SHA256": {
+                                  "value": 13
+                                },
+                                "ECDSAP384SHA384": {
+                                  "value": 14
+                                },
+                                "ED25519": {
+                                  "value": 15
+                                },
+                                "ED448": {
+                                  "value": 16
+                                },
+                                "INDIRECT": {
+                                  "value": 252
+                                },
+                                "PRIVATEDNS": {
+                                  "value": 253
+                                },
+                                "PRIVATEOID": {
+                                  "value": 254
+                                }
+                              }
                             },
                             "digest_type": {
-                              "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                              "type": "enum",
+                              "name": "DigestType",
+                              "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                              "values": {
+                                "DIGEST_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SHA1": {
+                                  "value": 1
+                                },
+                                "SHA256": {
+                                  "value": 2
+                                },
+                                "GOST3411": {
+                                  "value": 3
+                                },
+                                "SHA384": {
+                                  "value": 4
+                                }
+                              }
                             },
                             "digest": {
                               "description": "The digest generated from the referenced DNSKEY.",
@@ -266,9 +482,23 @@
                 "type": "object",
                 "properties": {
                   "privacy": {
-                    "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                    "type": "enum",
+                    "name": "ContactPrivacy",
+                    "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                    "values": {
+                      "CONTACT_PRIVACY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PUBLIC_CONTACT_DATA": {
+                        "value": 1
+                      },
+                      "PRIVATE_CONTACT_DATA": {
+                        "value": 2
+                      },
+                      "REDACTED_CONTACT_DATA": {
+                        "value": 3
+                      }
+                    }
                   },
                   "registrant_contact": {
                     "type": "object",
@@ -309,9 +539,23 @@
                 "type": "object",
                 "properties": {
                   "privacy": {
-                    "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                    "type": "enum",
+                    "name": "ContactPrivacy",
+                    "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                    "values": {
+                      "CONTACT_PRIVACY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PUBLIC_CONTACT_DATA": {
+                        "value": 1
+                      },
+                      "PRIVATE_CONTACT_DATA": {
+                        "value": 2
+                      },
+                      "REDACTED_CONTACT_DATA": {
+                        "value": 3
+                      }
+                    }
                   },
                   "registrant_contact": {
                     "type": "object",
@@ -352,8 +596,23 @@
                 "description": "Output only. Set of options for the ``contact_settings.privacy`` field that this ``Registration`` supports.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                  "type": "enum",
+                  "name": "ContactPrivacy",
+                  "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                  "values": {
+                    "CONTACT_PRIVACY_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "PUBLIC_CONTACT_DATA": {
+                      "value": 1
+                    },
+                    "PRIVATE_CONTACT_DATA": {
+                      "value": 2
+                    },
+                    "REDACTED_CONTACT_DATA": {
+                      "value": 3
+                    }
+                  }
                 }
               }
             },
@@ -366,16 +625,34 @@
             "description": "The list of domain notices that you acknowledge. Call ``RetrieveRegisterParameters`` to see the notices that need acknowledgement.",
             "type": "array",
             "items": {
-              "type": "object",
-              "reference": "google.cloud.domains_v1.types.DomainNotice"
+              "type": "enum",
+              "name": "DomainNotice",
+              "description": "Notices about special properties of certain domains.\n\nValues:\n    DOMAIN_NOTICE_UNSPECIFIED (0):\n        The notice is undefined.\n    HSTS_PRELOADED (1):\n        Indicates that the domain is preloaded on the HTTP Strict\n        Transport Security list in browsers. Serving a website on\n        such domain requires an SSL certificate. For details, see\n        `how to get an SSL\n        certificate <https://support.google.com/domains/answer/7638036>`__.",
+              "values": {
+                "DOMAIN_NOTICE_UNSPECIFIED": {
+                  "value": 0
+                },
+                "HSTS_PRELOADED": {
+                  "value": 1
+                }
+              }
             }
           },
           "contact_notices": {
             "description": "The list of contact notices that the caller acknowledges. The notices needed here depend on the values specified in ``registration.contact_settings``.",
             "type": "array",
             "items": {
-              "type": "object",
-              "reference": "google.cloud.domains_v1.types.ContactNotice"
+              "type": "enum",
+              "name": "ContactNotice",
+              "description": "Notices related to contact information.\n\nValues:\n    CONTACT_NOTICE_UNSPECIFIED (0):\n        The notice is undefined.\n    PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT (1):\n        Required when setting the ``privacy`` field of\n        ``ContactSettings`` to ``PUBLIC_CONTACT_DATA``, which\n        exposes contact data publicly.",
+              "values": {
+                "CONTACT_NOTICE_UNSPECIFIED": {
+                  "value": 0
+                },
+                "PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT": {
+                  "value": 1
+                }
+              }
             }
           },
           "yearly_price": {
@@ -451,9 +728,26 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "state": {
-                "description": "Output only. The state of the ``Registration``",
-                "type": "object",
-                "reference": "google.cloud.domains_v1beta1.types.Registration.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "issues": {
                 "description": "Output only. The set of issues with the ``Registration`` that require attention.",
@@ -478,9 +772,29 @@
                       "type": "integer"
                     },
                     "severity": {
-                      "description": "Output only. The severity of the issue.",
-                      "type": "object",
-                      "reference": "google.shopping.merchant_datasources_v1beta.types.FileUpload.Issue.Severity"
+                      "type": "enum",
+                      "name": "Severity",
+                      "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                      "values": {
+                        "SEVERITY_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "MINIMAL": {
+                          "value": 1
+                        },
+                        "LOW": {
+                          "value": 2
+                        },
+                        "MEDIUM": {
+                          "value": 3
+                        },
+                        "HIGH": {
+                          "value": 4
+                        },
+                        "CRITICAL": {
+                          "value": 5
+                        }
+                      }
                     },
                     "documentation_uri": {
                       "description": "Output only. Link to the documentation explaining the issue in more details, if available.",
@@ -500,14 +814,36 @@
                 "type": "object",
                 "properties": {
                   "renewal_method": {
-                    "description": "Output only. The renewal method for this ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ManagementSettings.RenewalMethod"
+                    "type": "enum",
+                    "name": "RenewalMethod",
+                    "description": "Defines how the ``Registration`` is renewed.\n\nValues:\n    RENEWAL_METHOD_UNSPECIFIED (0):\n        The renewal method is undefined.\n    AUTOMATIC_RENEWAL (1):\n        The domain is automatically renewed each year .\n\n        To disable automatic renewals, delete the resource by\n        calling ``DeleteRegistration`` or export it by calling\n        ``ExportRegistration``.\n    MANUAL_RENEWAL (2):\n        The domain must be explicitly renewed each year before its\n        ``expire_time``. This option is only available when the\n        ``Registration`` is in state ``EXPORTED``.\n\n        To manage the domain's current billing and renewal settings,\n        go to `Google Domains <https://domains.google/>`__.",
+                    "values": {
+                      "RENEWAL_METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AUTOMATIC_RENEWAL": {
+                        "value": 1
+                      },
+                      "MANUAL_RENEWAL": {
+                        "value": 2
+                      }
+                    }
                   },
                   "transfer_lock_state": {
-                    "description": "Controls whether the domain can be transferred to another registrar.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.TransferLockState"
+                    "type": "enum",
+                    "name": "TransferLockState",
+                    "description": "Possible states of a ``Registration``'s transfer lock.\n\nValues:\n    TRANSFER_LOCK_STATE_UNSPECIFIED (0):\n        The state is unspecified.\n    UNLOCKED (1):\n        The domain is unlocked and can be transferred\n        to another registrar.\n    LOCKED (2):\n        The domain is locked and cannot be\n        transferred to another registrar.",
+                    "values": {
+                      "TRANSFER_LOCK_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "UNLOCKED": {
+                        "value": 1
+                      },
+                      "LOCKED": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -535,14 +871,87 @@
                               "type": "integer"
                             },
                             "algorithm": {
-                              "description": "The algorithm used to generate the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                              "type": "enum",
+                              "name": "Algorithm",
+                              "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                              "values": {
+                                "ALGORITHM_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "RSAMD5": {
+                                  "value": 1
+                                },
+                                "DH": {
+                                  "value": 2
+                                },
+                                "DSA": {
+                                  "value": 3
+                                },
+                                "ECC": {
+                                  "value": 4
+                                },
+                                "RSASHA1": {
+                                  "value": 5
+                                },
+                                "DSANSEC3SHA1": {
+                                  "value": 6
+                                },
+                                "RSASHA1NSEC3SHA1": {
+                                  "value": 7
+                                },
+                                "RSASHA256": {
+                                  "value": 8
+                                },
+                                "RSASHA512": {
+                                  "value": 10
+                                },
+                                "ECCGOST": {
+                                  "value": 12
+                                },
+                                "ECDSAP256SHA256": {
+                                  "value": 13
+                                },
+                                "ECDSAP384SHA384": {
+                                  "value": 14
+                                },
+                                "ED25519": {
+                                  "value": 15
+                                },
+                                "ED448": {
+                                  "value": 16
+                                },
+                                "INDIRECT": {
+                                  "value": 252
+                                },
+                                "PRIVATEDNS": {
+                                  "value": 253
+                                },
+                                "PRIVATEOID": {
+                                  "value": 254
+                                }
+                              }
                             },
                             "digest_type": {
-                              "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                              "type": "enum",
+                              "name": "DigestType",
+                              "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                              "values": {
+                                "DIGEST_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SHA1": {
+                                  "value": 1
+                                },
+                                "SHA256": {
+                                  "value": 2
+                                },
+                                "GOST3411": {
+                                  "value": 3
+                                },
+                                "SHA384": {
+                                  "value": 4
+                                }
+                              }
                             },
                             "digest": {
                               "description": "The digest generated from the referenced DNSKEY.",
@@ -567,9 +976,20 @@
                         }
                       },
                       "ds_state": {
-                        "description": "Required. The state of DS records for this domain. Used to enable or disable automatic DNSSEC.",
-                        "type": "object",
-                        "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsState"
+                        "type": "enum",
+                        "name": "DsState",
+                        "description": "The publication state of DS records for a ``Registration``.\n\nValues:\n    DS_STATE_UNSPECIFIED (0):\n        DS state is unspecified.\n    DS_RECORDS_UNPUBLISHED (1):\n        DNSSEC is disabled for this domain. No DS\n        records for this domain are published in the\n        parent DNS zone.\n    DS_RECORDS_PUBLISHED (2):\n        DNSSEC is enabled for this domain. Appropriate DS records\n        for this domain are published in the parent DNS zone. This\n        option is valid only if the DNS zone referenced in the\n        ``Registration``'s ``dns_provider`` field is already\n        DNSSEC-signed.",
+                        "values": {
+                          "DS_STATE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "DS_RECORDS_UNPUBLISHED": {
+                            "value": 1
+                          },
+                          "DS_RECORDS_PUBLISHED": {
+                            "value": 2
+                          }
+                        }
                       },
                       "ds_records": {
                         "description": "Output only. The list of DS records published for this domain. The list is automatically populated when ``ds_state`` is ``DS_RECORDS_PUBLISHED``, otherwise it remains empty.",
@@ -582,14 +1002,87 @@
                               "type": "integer"
                             },
                             "algorithm": {
-                              "description": "The algorithm used to generate the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                              "type": "enum",
+                              "name": "Algorithm",
+                              "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                              "values": {
+                                "ALGORITHM_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "RSAMD5": {
+                                  "value": 1
+                                },
+                                "DH": {
+                                  "value": 2
+                                },
+                                "DSA": {
+                                  "value": 3
+                                },
+                                "ECC": {
+                                  "value": 4
+                                },
+                                "RSASHA1": {
+                                  "value": 5
+                                },
+                                "DSANSEC3SHA1": {
+                                  "value": 6
+                                },
+                                "RSASHA1NSEC3SHA1": {
+                                  "value": 7
+                                },
+                                "RSASHA256": {
+                                  "value": 8
+                                },
+                                "RSASHA512": {
+                                  "value": 10
+                                },
+                                "ECCGOST": {
+                                  "value": 12
+                                },
+                                "ECDSAP256SHA256": {
+                                  "value": 13
+                                },
+                                "ECDSAP384SHA384": {
+                                  "value": 14
+                                },
+                                "ED25519": {
+                                  "value": 15
+                                },
+                                "ED448": {
+                                  "value": 16
+                                },
+                                "INDIRECT": {
+                                  "value": 252
+                                },
+                                "PRIVATEDNS": {
+                                  "value": 253
+                                },
+                                "PRIVATEOID": {
+                                  "value": 254
+                                }
+                              }
                             },
                             "digest_type": {
-                              "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                              "type": "enum",
+                              "name": "DigestType",
+                              "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                              "values": {
+                                "DIGEST_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SHA1": {
+                                  "value": 1
+                                },
+                                "SHA256": {
+                                  "value": 2
+                                },
+                                "GOST3411": {
+                                  "value": 3
+                                },
+                                "SHA384": {
+                                  "value": 4
+                                }
+                              }
                             },
                             "digest": {
                               "description": "The digest generated from the referenced DNSKEY.",
@@ -639,9 +1132,23 @@
                 "type": "object",
                 "properties": {
                   "privacy": {
-                    "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                    "type": "enum",
+                    "name": "ContactPrivacy",
+                    "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                    "values": {
+                      "CONTACT_PRIVACY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PUBLIC_CONTACT_DATA": {
+                        "value": 1
+                      },
+                      "PRIVATE_CONTACT_DATA": {
+                        "value": 2
+                      },
+                      "REDACTED_CONTACT_DATA": {
+                        "value": 3
+                      }
+                    }
                   },
                   "registrant_contact": {
                     "type": "object",
@@ -682,9 +1189,23 @@
                 "type": "object",
                 "properties": {
                   "privacy": {
-                    "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                    "type": "enum",
+                    "name": "ContactPrivacy",
+                    "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                    "values": {
+                      "CONTACT_PRIVACY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PUBLIC_CONTACT_DATA": {
+                        "value": 1
+                      },
+                      "PRIVATE_CONTACT_DATA": {
+                        "value": 2
+                      },
+                      "REDACTED_CONTACT_DATA": {
+                        "value": 3
+                      }
+                    }
                   },
                   "registrant_contact": {
                     "type": "object",
@@ -725,8 +1246,23 @@
                 "description": "Output only. Set of options for the ``contact_settings.privacy`` field that this ``Registration`` supports.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                  "type": "enum",
+                  "name": "ContactPrivacy",
+                  "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                  "values": {
+                    "CONTACT_PRIVACY_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "PUBLIC_CONTACT_DATA": {
+                      "value": 1
+                    },
+                    "PRIVATE_CONTACT_DATA": {
+                      "value": 2
+                    },
+                    "REDACTED_CONTACT_DATA": {
+                      "value": 3
+                    }
+                  }
                 }
               }
             },
@@ -739,8 +1275,17 @@
             "description": "The list of contact notices that you acknowledge. The notices needed here depend on the values specified in ``registration.contact_settings``.",
             "type": "array",
             "items": {
-              "type": "object",
-              "reference": "google.cloud.domains_v1.types.ContactNotice"
+              "type": "enum",
+              "name": "ContactNotice",
+              "description": "Notices related to contact information.\n\nValues:\n    CONTACT_NOTICE_UNSPECIFIED (0):\n        The notice is undefined.\n    PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT (1):\n        Required when setting the ``privacy`` field of\n        ``ContactSettings`` to ``PUBLIC_CONTACT_DATA``, which\n        exposes contact data publicly.",
+              "values": {
+                "CONTACT_NOTICE_UNSPECIFIED": {
+                  "value": 0
+                },
+                "PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT": {
+                  "value": 1
+                }
+              }
             }
           },
           "yearly_price": {
@@ -846,9 +1391,26 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "state": {
-                "description": "Output only. The state of the ``Registration``",
-                "type": "object",
-                "reference": "google.cloud.domains_v1beta1.types.Registration.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "issues": {
                 "description": "Output only. The set of issues with the ``Registration`` that require attention.",
@@ -873,9 +1435,29 @@
                       "type": "integer"
                     },
                     "severity": {
-                      "description": "Output only. The severity of the issue.",
-                      "type": "object",
-                      "reference": "google.shopping.merchant_datasources_v1beta.types.FileUpload.Issue.Severity"
+                      "type": "enum",
+                      "name": "Severity",
+                      "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                      "values": {
+                        "SEVERITY_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "MINIMAL": {
+                          "value": 1
+                        },
+                        "LOW": {
+                          "value": 2
+                        },
+                        "MEDIUM": {
+                          "value": 3
+                        },
+                        "HIGH": {
+                          "value": 4
+                        },
+                        "CRITICAL": {
+                          "value": 5
+                        }
+                      }
                     },
                     "documentation_uri": {
                       "description": "Output only. Link to the documentation explaining the issue in more details, if available.",
@@ -895,14 +1477,36 @@
                 "type": "object",
                 "properties": {
                   "renewal_method": {
-                    "description": "Output only. The renewal method for this ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ManagementSettings.RenewalMethod"
+                    "type": "enum",
+                    "name": "RenewalMethod",
+                    "description": "Defines how the ``Registration`` is renewed.\n\nValues:\n    RENEWAL_METHOD_UNSPECIFIED (0):\n        The renewal method is undefined.\n    AUTOMATIC_RENEWAL (1):\n        The domain is automatically renewed each year .\n\n        To disable automatic renewals, delete the resource by\n        calling ``DeleteRegistration`` or export it by calling\n        ``ExportRegistration``.\n    MANUAL_RENEWAL (2):\n        The domain must be explicitly renewed each year before its\n        ``expire_time``. This option is only available when the\n        ``Registration`` is in state ``EXPORTED``.\n\n        To manage the domain's current billing and renewal settings,\n        go to `Google Domains <https://domains.google/>`__.",
+                    "values": {
+                      "RENEWAL_METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AUTOMATIC_RENEWAL": {
+                        "value": 1
+                      },
+                      "MANUAL_RENEWAL": {
+                        "value": 2
+                      }
+                    }
                   },
                   "transfer_lock_state": {
-                    "description": "Controls whether the domain can be transferred to another registrar.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.TransferLockState"
+                    "type": "enum",
+                    "name": "TransferLockState",
+                    "description": "Possible states of a ``Registration``'s transfer lock.\n\nValues:\n    TRANSFER_LOCK_STATE_UNSPECIFIED (0):\n        The state is unspecified.\n    UNLOCKED (1):\n        The domain is unlocked and can be transferred\n        to another registrar.\n    LOCKED (2):\n        The domain is locked and cannot be\n        transferred to another registrar.",
+                    "values": {
+                      "TRANSFER_LOCK_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "UNLOCKED": {
+                        "value": 1
+                      },
+                      "LOCKED": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -930,14 +1534,87 @@
                               "type": "integer"
                             },
                             "algorithm": {
-                              "description": "The algorithm used to generate the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                              "type": "enum",
+                              "name": "Algorithm",
+                              "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                              "values": {
+                                "ALGORITHM_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "RSAMD5": {
+                                  "value": 1
+                                },
+                                "DH": {
+                                  "value": 2
+                                },
+                                "DSA": {
+                                  "value": 3
+                                },
+                                "ECC": {
+                                  "value": 4
+                                },
+                                "RSASHA1": {
+                                  "value": 5
+                                },
+                                "DSANSEC3SHA1": {
+                                  "value": 6
+                                },
+                                "RSASHA1NSEC3SHA1": {
+                                  "value": 7
+                                },
+                                "RSASHA256": {
+                                  "value": 8
+                                },
+                                "RSASHA512": {
+                                  "value": 10
+                                },
+                                "ECCGOST": {
+                                  "value": 12
+                                },
+                                "ECDSAP256SHA256": {
+                                  "value": 13
+                                },
+                                "ECDSAP384SHA384": {
+                                  "value": 14
+                                },
+                                "ED25519": {
+                                  "value": 15
+                                },
+                                "ED448": {
+                                  "value": 16
+                                },
+                                "INDIRECT": {
+                                  "value": 252
+                                },
+                                "PRIVATEDNS": {
+                                  "value": 253
+                                },
+                                "PRIVATEOID": {
+                                  "value": 254
+                                }
+                              }
                             },
                             "digest_type": {
-                              "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                              "type": "enum",
+                              "name": "DigestType",
+                              "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                              "values": {
+                                "DIGEST_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SHA1": {
+                                  "value": 1
+                                },
+                                "SHA256": {
+                                  "value": 2
+                                },
+                                "GOST3411": {
+                                  "value": 3
+                                },
+                                "SHA384": {
+                                  "value": 4
+                                }
+                              }
                             },
                             "digest": {
                               "description": "The digest generated from the referenced DNSKEY.",
@@ -962,9 +1639,20 @@
                         }
                       },
                       "ds_state": {
-                        "description": "Required. The state of DS records for this domain. Used to enable or disable automatic DNSSEC.",
-                        "type": "object",
-                        "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsState"
+                        "type": "enum",
+                        "name": "DsState",
+                        "description": "The publication state of DS records for a ``Registration``.\n\nValues:\n    DS_STATE_UNSPECIFIED (0):\n        DS state is unspecified.\n    DS_RECORDS_UNPUBLISHED (1):\n        DNSSEC is disabled for this domain. No DS\n        records for this domain are published in the\n        parent DNS zone.\n    DS_RECORDS_PUBLISHED (2):\n        DNSSEC is enabled for this domain. Appropriate DS records\n        for this domain are published in the parent DNS zone. This\n        option is valid only if the DNS zone referenced in the\n        ``Registration``'s ``dns_provider`` field is already\n        DNSSEC-signed.",
+                        "values": {
+                          "DS_STATE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "DS_RECORDS_UNPUBLISHED": {
+                            "value": 1
+                          },
+                          "DS_RECORDS_PUBLISHED": {
+                            "value": 2
+                          }
+                        }
                       },
                       "ds_records": {
                         "description": "Output only. The list of DS records published for this domain. The list is automatically populated when ``ds_state`` is ``DS_RECORDS_PUBLISHED``, otherwise it remains empty.",
@@ -977,14 +1665,87 @@
                               "type": "integer"
                             },
                             "algorithm": {
-                              "description": "The algorithm used to generate the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                              "type": "enum",
+                              "name": "Algorithm",
+                              "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                              "values": {
+                                "ALGORITHM_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "RSAMD5": {
+                                  "value": 1
+                                },
+                                "DH": {
+                                  "value": 2
+                                },
+                                "DSA": {
+                                  "value": 3
+                                },
+                                "ECC": {
+                                  "value": 4
+                                },
+                                "RSASHA1": {
+                                  "value": 5
+                                },
+                                "DSANSEC3SHA1": {
+                                  "value": 6
+                                },
+                                "RSASHA1NSEC3SHA1": {
+                                  "value": 7
+                                },
+                                "RSASHA256": {
+                                  "value": 8
+                                },
+                                "RSASHA512": {
+                                  "value": 10
+                                },
+                                "ECCGOST": {
+                                  "value": 12
+                                },
+                                "ECDSAP256SHA256": {
+                                  "value": 13
+                                },
+                                "ECDSAP384SHA384": {
+                                  "value": 14
+                                },
+                                "ED25519": {
+                                  "value": 15
+                                },
+                                "ED448": {
+                                  "value": 16
+                                },
+                                "INDIRECT": {
+                                  "value": 252
+                                },
+                                "PRIVATEDNS": {
+                                  "value": 253
+                                },
+                                "PRIVATEOID": {
+                                  "value": 254
+                                }
+                              }
                             },
                             "digest_type": {
-                              "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                              "type": "object",
-                              "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                              "type": "enum",
+                              "name": "DigestType",
+                              "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                              "values": {
+                                "DIGEST_TYPE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SHA1": {
+                                  "value": 1
+                                },
+                                "SHA256": {
+                                  "value": 2
+                                },
+                                "GOST3411": {
+                                  "value": 3
+                                },
+                                "SHA384": {
+                                  "value": 4
+                                }
+                              }
                             },
                             "digest": {
                               "description": "The digest generated from the referenced DNSKEY.",
@@ -1034,9 +1795,23 @@
                 "type": "object",
                 "properties": {
                   "privacy": {
-                    "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                    "type": "enum",
+                    "name": "ContactPrivacy",
+                    "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                    "values": {
+                      "CONTACT_PRIVACY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PUBLIC_CONTACT_DATA": {
+                        "value": 1
+                      },
+                      "PRIVATE_CONTACT_DATA": {
+                        "value": 2
+                      },
+                      "REDACTED_CONTACT_DATA": {
+                        "value": 3
+                      }
+                    }
                   },
                   "registrant_contact": {
                     "type": "object",
@@ -1077,9 +1852,23 @@
                 "type": "object",
                 "properties": {
                   "privacy": {
-                    "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                    "type": "enum",
+                    "name": "ContactPrivacy",
+                    "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                    "values": {
+                      "CONTACT_PRIVACY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "PUBLIC_CONTACT_DATA": {
+                        "value": 1
+                      },
+                      "PRIVATE_CONTACT_DATA": {
+                        "value": 2
+                      },
+                      "REDACTED_CONTACT_DATA": {
+                        "value": 3
+                      }
+                    }
                   },
                   "registrant_contact": {
                     "type": "object",
@@ -1120,8 +1909,23 @@
                 "description": "Output only. Set of options for the ``contact_settings.privacy`` field that this ``Registration`` supports.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                  "type": "enum",
+                  "name": "ContactPrivacy",
+                  "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                  "values": {
+                    "CONTACT_PRIVACY_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "PUBLIC_CONTACT_DATA": {
+                      "value": 1
+                    },
+                    "PRIVATE_CONTACT_DATA": {
+                      "value": 2
+                    },
+                    "REDACTED_CONTACT_DATA": {
+                      "value": 3
+                    }
+                  }
                 }
               }
             },
@@ -1157,14 +1961,36 @@
             "type": "object",
             "properties": {
               "renewal_method": {
-                "description": "Output only. The renewal method for this ``Registration``.",
-                "type": "object",
-                "reference": "google.cloud.domains_v1beta1.types.ManagementSettings.RenewalMethod"
+                "type": "enum",
+                "name": "RenewalMethod",
+                "description": "Defines how the ``Registration`` is renewed.\n\nValues:\n    RENEWAL_METHOD_UNSPECIFIED (0):\n        The renewal method is undefined.\n    AUTOMATIC_RENEWAL (1):\n        The domain is automatically renewed each year .\n\n        To disable automatic renewals, delete the resource by\n        calling ``DeleteRegistration`` or export it by calling\n        ``ExportRegistration``.\n    MANUAL_RENEWAL (2):\n        The domain must be explicitly renewed each year before its\n        ``expire_time``. This option is only available when the\n        ``Registration`` is in state ``EXPORTED``.\n\n        To manage the domain's current billing and renewal settings,\n        go to `Google Domains <https://domains.google/>`__.",
+                "values": {
+                  "RENEWAL_METHOD_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AUTOMATIC_RENEWAL": {
+                    "value": 1
+                  },
+                  "MANUAL_RENEWAL": {
+                    "value": 2
+                  }
+                }
               },
               "transfer_lock_state": {
-                "description": "Controls whether the domain can be transferred to another registrar.",
-                "type": "object",
-                "reference": "google.cloud.domains_v1beta1.types.TransferLockState"
+                "type": "enum",
+                "name": "TransferLockState",
+                "description": "Possible states of a ``Registration``'s transfer lock.\n\nValues:\n    TRANSFER_LOCK_STATE_UNSPECIFIED (0):\n        The state is unspecified.\n    UNLOCKED (1):\n        The domain is unlocked and can be transferred\n        to another registrar.\n    LOCKED (2):\n        The domain is locked and cannot be\n        transferred to another registrar.",
+                "values": {
+                  "TRANSFER_LOCK_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "UNLOCKED": {
+                    "value": 1
+                  },
+                  "LOCKED": {
+                    "value": 2
+                  }
+                }
               }
             }
           },
@@ -1216,14 +2042,87 @@
                           "type": "integer"
                         },
                         "algorithm": {
-                          "description": "The algorithm used to generate the referenced DNSKEY.",
-                          "type": "object",
-                          "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                          "type": "enum",
+                          "name": "Algorithm",
+                          "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                          "values": {
+                            "ALGORITHM_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "RSAMD5": {
+                              "value": 1
+                            },
+                            "DH": {
+                              "value": 2
+                            },
+                            "DSA": {
+                              "value": 3
+                            },
+                            "ECC": {
+                              "value": 4
+                            },
+                            "RSASHA1": {
+                              "value": 5
+                            },
+                            "DSANSEC3SHA1": {
+                              "value": 6
+                            },
+                            "RSASHA1NSEC3SHA1": {
+                              "value": 7
+                            },
+                            "RSASHA256": {
+                              "value": 8
+                            },
+                            "RSASHA512": {
+                              "value": 10
+                            },
+                            "ECCGOST": {
+                              "value": 12
+                            },
+                            "ECDSAP256SHA256": {
+                              "value": 13
+                            },
+                            "ECDSAP384SHA384": {
+                              "value": 14
+                            },
+                            "ED25519": {
+                              "value": 15
+                            },
+                            "ED448": {
+                              "value": 16
+                            },
+                            "INDIRECT": {
+                              "value": 252
+                            },
+                            "PRIVATEDNS": {
+                              "value": 253
+                            },
+                            "PRIVATEOID": {
+                              "value": 254
+                            }
+                          }
                         },
                         "digest_type": {
-                          "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                          "type": "object",
-                          "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                          "type": "enum",
+                          "name": "DigestType",
+                          "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                          "values": {
+                            "DIGEST_TYPE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "SHA1": {
+                              "value": 1
+                            },
+                            "SHA256": {
+                              "value": 2
+                            },
+                            "GOST3411": {
+                              "value": 3
+                            },
+                            "SHA384": {
+                              "value": 4
+                            }
+                          }
                         },
                         "digest": {
                           "description": "The digest generated from the referenced DNSKEY.",
@@ -1248,9 +2147,20 @@
                     }
                   },
                   "ds_state": {
-                    "description": "Required. The state of DS records for this domain. Used to enable or disable automatic DNSSEC.",
-                    "type": "object",
-                    "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsState"
+                    "type": "enum",
+                    "name": "DsState",
+                    "description": "The publication state of DS records for a ``Registration``.\n\nValues:\n    DS_STATE_UNSPECIFIED (0):\n        DS state is unspecified.\n    DS_RECORDS_UNPUBLISHED (1):\n        DNSSEC is disabled for this domain. No DS\n        records for this domain are published in the\n        parent DNS zone.\n    DS_RECORDS_PUBLISHED (2):\n        DNSSEC is enabled for this domain. Appropriate DS records\n        for this domain are published in the parent DNS zone. This\n        option is valid only if the DNS zone referenced in the\n        ``Registration``'s ``dns_provider`` field is already\n        DNSSEC-signed.",
+                    "values": {
+                      "DS_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DS_RECORDS_UNPUBLISHED": {
+                        "value": 1
+                      },
+                      "DS_RECORDS_PUBLISHED": {
+                        "value": 2
+                      }
+                    }
                   },
                   "ds_records": {
                     "description": "Output only. The list of DS records published for this domain. The list is automatically populated when ``ds_state`` is ``DS_RECORDS_PUBLISHED``, otherwise it remains empty.",
@@ -1263,14 +2173,87 @@
                           "type": "integer"
                         },
                         "algorithm": {
-                          "description": "The algorithm used to generate the referenced DNSKEY.",
-                          "type": "object",
-                          "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.Algorithm"
+                          "type": "enum",
+                          "name": "Algorithm",
+                          "description": "List of algorithms used to create a DNSKEY. Certain\nalgorithms are not supported for particular domains.\n\nValues:\n    ALGORITHM_UNSPECIFIED (0):\n        The algorithm is unspecified.\n    RSAMD5 (1):\n        RSA/MD5. Cannot be used for new deployments.\n    DH (2):\n        Diffie-Hellman. Cannot be used for new\n        deployments.\n    DSA (3):\n        DSA/SHA1. Not recommended for new\n        deployments.\n    ECC (4):\n        ECC. Not recommended for new deployments.\n    RSASHA1 (5):\n        RSA/SHA-1. Not recommended for new\n        deployments.\n    DSANSEC3SHA1 (6):\n        DSA-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA1NSEC3SHA1 (7):\n        RSA/SHA1-NSEC3-SHA1. Not recommended for new\n        deployments.\n    RSASHA256 (8):\n        RSA/SHA-256.\n    RSASHA512 (10):\n        RSA/SHA-512.\n    ECCGOST (12):\n        GOST R 34.10-2001.\n    ECDSAP256SHA256 (13):\n        ECDSA Curve P-256 with SHA-256.\n    ECDSAP384SHA384 (14):\n        ECDSA Curve P-384 with SHA-384.\n    ED25519 (15):\n     ",
+                          "values": {
+                            "ALGORITHM_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "RSAMD5": {
+                              "value": 1
+                            },
+                            "DH": {
+                              "value": 2
+                            },
+                            "DSA": {
+                              "value": 3
+                            },
+                            "ECC": {
+                              "value": 4
+                            },
+                            "RSASHA1": {
+                              "value": 5
+                            },
+                            "DSANSEC3SHA1": {
+                              "value": 6
+                            },
+                            "RSASHA1NSEC3SHA1": {
+                              "value": 7
+                            },
+                            "RSASHA256": {
+                              "value": 8
+                            },
+                            "RSASHA512": {
+                              "value": 10
+                            },
+                            "ECCGOST": {
+                              "value": 12
+                            },
+                            "ECDSAP256SHA256": {
+                              "value": 13
+                            },
+                            "ECDSAP384SHA384": {
+                              "value": 14
+                            },
+                            "ED25519": {
+                              "value": 15
+                            },
+                            "ED448": {
+                              "value": 16
+                            },
+                            "INDIRECT": {
+                              "value": 252
+                            },
+                            "PRIVATEDNS": {
+                              "value": 253
+                            },
+                            "PRIVATEOID": {
+                              "value": 254
+                            }
+                          }
                         },
                         "digest_type": {
-                          "description": "The hash function used to generate the digest of the referenced DNSKEY.",
-                          "type": "object",
-                          "reference": "google.cloud.domains_v1beta1.types.DnsSettings.DsRecord.DigestType"
+                          "type": "enum",
+                          "name": "DigestType",
+                          "description": "List of hash functions that may have been used to generate a\ndigest of a DNSKEY.\n\nValues:\n    DIGEST_TYPE_UNSPECIFIED (0):\n        The DigestType is unspecified.\n    SHA1 (1):\n        SHA-1. Not recommended for new deployments.\n    SHA256 (2):\n        SHA-256.\n    GOST3411 (3):\n        GOST R 34.11-94.\n    SHA384 (4):\n        SHA-384.",
+                          "values": {
+                            "DIGEST_TYPE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "SHA1": {
+                              "value": 1
+                            },
+                            "SHA256": {
+                              "value": 2
+                            },
+                            "GOST3411": {
+                              "value": 3
+                            },
+                            "SHA384": {
+                              "value": 4
+                            }
+                          }
                         },
                         "digest": {
                           "description": "The digest generated from the referenced DNSKEY.",
@@ -1348,9 +2331,23 @@
             "type": "object",
             "properties": {
               "privacy": {
-                "description": "Required. Privacy setting for the contacts associated with the ``Registration``.",
-                "type": "object",
-                "reference": "google.cloud.domains_v1beta1.types.ContactPrivacy"
+                "type": "enum",
+                "name": "ContactPrivacy",
+                "description": "Defines a set of possible contact privacy settings for a\n``Registration``.\n\n`ICANN <https://icann.org/>`__ maintains the WHOIS database, a\npublicly accessible mapping from domain name to contact information,\nand requires that each domain name have an entry. Choose from these\noptions to control how much information in your ``ContactSettings``\nis published.\n\nValues:\n    CONTACT_PRIVACY_UNSPECIFIED (0):\n        The contact privacy settings are undefined.\n    PUBLIC_CONTACT_DATA (1):\n        All the data from ``ContactSettings`` is publicly available.\n        When setting this option, you must also provide a\n        ``PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT`` in the\n        ``contact_notices`` field of the request.\n    PRIVATE_CONTACT_DATA (2):\n        None of the data from ``ContactSettings`` is publicly\n        available. Instead, proxy contact data is published for your\n        domain. Email sent to the proxy email address is forwarded\n        to the registrant's email address. Cloud Domains provides\n        this ",
+                "values": {
+                  "CONTACT_PRIVACY_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "PUBLIC_CONTACT_DATA": {
+                    "value": 1
+                  },
+                  "PRIVATE_CONTACT_DATA": {
+                    "value": 2
+                  },
+                  "REDACTED_CONTACT_DATA": {
+                    "value": 3
+                  }
+                }
               },
               "registrant_contact": {
                 "type": "object",
@@ -1396,8 +2393,17 @@
             "description": "The list of contact notices that the caller acknowledges. The notices needed here depend on the values specified in ``contact_settings``.",
             "type": "array",
             "items": {
-              "type": "object",
-              "reference": "google.cloud.domains_v1.types.ContactNotice"
+              "type": "enum",
+              "name": "ContactNotice",
+              "description": "Notices related to contact information.\n\nValues:\n    CONTACT_NOTICE_UNSPECIFIED (0):\n        The notice is undefined.\n    PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT (1):\n        Required when setting the ``privacy`` field of\n        ``ContactSettings`` to ``PUBLIC_CONTACT_DATA``, which\n        exposes contact data publicly.",
+              "values": {
+                "CONTACT_NOTICE_UNSPECIFIED": {
+                  "value": 0
+                },
+                "PUBLIC_CONTACT_DATA_ACKNOWLEDGEMENT": {
+                  "value": 1
+                }
+              }
             }
           },
           "validate_only": {

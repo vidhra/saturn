@@ -11,101 +11,18 @@
             "description": "Required. Insights to compute. Currently only INSIGHT_COUNT and INSIGHT_PLACES are supported.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "description": "Name of the insight.",
-                  "type": "string"
+              "type": "enum",
+              "name": "Insight",
+              "description": "Supported insights.\n\nValues:\n    INSIGHT_UNSPECIFIED (0):\n        Not Specified.\n    INSIGHT_COUNT (1):\n        Count insight.\n\n        When this insight is specified ComputeInsights returns the\n        number of places that match the specified filter criteria.\n\n        ::\n\n           For example if the request is:\n           ComputeInsightsRequest {\n             insights: INSIGHT_COUNT\n             filter {\n               location_filter {region: <PlaceId of state of CA>}\n               type_filter {included_types: \"restaurant\"}\n               operating_status: OPERATING_STATUS_OPERATIONAL\n               price_levels: PRICE_LEVEL_FREE\n               price_levels: PRICE_LEVEL_INEXPENSIVE\n               min_rating: 4.0\n             }\n           }\n\n           The method will return the count of restaurants in California that are\n           operational, with price level free or inexpensive and have an average\n           rating of at least 4 starts.\n\n           Example response:\n           ComputeInsightsResponse",
+              "values": {
+                "INSIGHT_UNSPECIFIED": {
+                  "value": 0
                 },
-                "description": {
-                  "description": "Free-form human readable summary in English. The maximum length is 500 characters.",
-                  "type": "string"
+                "INSIGHT_COUNT": {
+                  "value": 1
                 },
-                "target_resources": {
-                  "description": "Fully qualified resource names that this insight is targeting.",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "insight_subtype": {
-                  "description": "Insight subtype. Insight content schema will be stable for a given subtype.",
-                  "type": "string"
-                },
-                "content": {
-                  "description": "A struct of custom fields to explain the insight. Example: \"grantedPermissionsCount\": \"1000\".",
-                  "type": "object",
-                  "reference": "google.protobuf.struct_pb2.Struct"
-                },
-                "last_refresh_time": {
-                  "description": "Timestamp of the latest data used to generate the insight.",
-                  "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                },
-                "observation_period": {
-                  "type": "object",
-                  "properties": {
-                    "nanos": {
-                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                      "type": "integer"
-                    },
-                    "seconds": {
-                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                      "type": "integer"
-                    }
-                  }
-                },
-                "state_info": {
-                  "type": "object",
-                  "properties": {
-                    "state": {
-                      "description": "Insight state.",
-                      "type": "object",
-                      "reference": "google.cloud.recommender_v1beta1.types.InsightStateInfo.State"
-                    },
-                    "state_metadata": {
-                      "description": "A map of metadata for the state, provided by user or automations systems.",
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "category": {
-                  "type": "object",
-                  "properties": {
-                    "category_id": {
-                      "description": "The identifier of the category.",
-                      "type": "string"
-                    },
-                    "name": {
-                      "description": "The localized name of the category.",
-                      "type": "string"
-                    }
-                  }
-                },
-                "severity": {
-                  "description": "Insight's severity.",
-                  "type": "object",
-                  "reference": "google.cloud.recommender_v1beta1.types.Insight.Severity"
-                },
-                "etag": {
-                  "description": "Fingerprint of the Insight. Provides optimistic locking when updating states.",
-                  "type": "string"
-                },
-                "associated_recommendations": {
-                  "description": "Recommendations derived from this insight.",
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "recommendation": {
-                        "description": "Recommendation resource name, e.g. projects/[PROJECT_NUMBER]/locations/[LOCATION]/recommenders/[RECOMMENDER_ID]/recommendations/[RECOMMENDATION_ID]",
-                        "type": "string"
-                      }
-                    }
-                  }
+                "INSIGHT_PLACES": {
+                  "value": 2
                 }
               }
             }
@@ -274,16 +191,52 @@
                 "description": "Optional. Restricts results to places whose operating status is included on this list. If operating_status is not set, OPERATING_STATUS_OPERATIONAL is used as default.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.maps.areainsights_v1.types.OperatingStatus"
+                  "type": "enum",
+                  "name": "OperatingStatus",
+                  "description": "Operating status of the place.\n\nValues:\n    OPERATING_STATUS_UNSPECIFIED (0):\n        Not Specified.\n    OPERATING_STATUS_OPERATIONAL (1):\n        The place is operational and its open during\n        its defined hours.\n    OPERATING_STATUS_PERMANENTLY_CLOSED (3):\n        The Place is no longer in business.\n    OPERATING_STATUS_TEMPORARILY_CLOSED (4):\n        The Place is temporarily closed and expected\n        to reopen in the future.",
+                  "values": {
+                    "OPERATING_STATUS_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "OPERATING_STATUS_OPERATIONAL": {
+                      "value": 1
+                    },
+                    "OPERATING_STATUS_PERMANENTLY_CLOSED": {
+                      "value": 3
+                    },
+                    "OPERATING_STATUS_TEMPORARILY_CLOSED": {
+                      "value": 4
+                    }
+                  }
                 }
               },
               "price_levels": {
                 "description": "Optional. Restricts results to places whose price level is included on this list. If price_level is not set, all price levels are included in the results.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.maps.areainsights_v1.types.PriceLevel"
+                  "type": "enum",
+                  "name": "PriceLevel",
+                  "description": "Price level of the place.\n\nValues:\n    PRICE_LEVEL_UNSPECIFIED (0):\n        Place price level is unspecified or unknown.\n    PRICE_LEVEL_FREE (1):\n        Place provides free services.\n    PRICE_LEVEL_INEXPENSIVE (2):\n        Place provides inexpensive services.\n    PRICE_LEVEL_MODERATE (3):\n        Place provides moderately priced services.\n    PRICE_LEVEL_EXPENSIVE (4):\n        Place provides expensive services.\n    PRICE_LEVEL_VERY_EXPENSIVE (5):\n        Place provides very expensive services.",
+                  "values": {
+                    "PRICE_LEVEL_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "PRICE_LEVEL_FREE": {
+                      "value": 1
+                    },
+                    "PRICE_LEVEL_INEXPENSIVE": {
+                      "value": 2
+                    },
+                    "PRICE_LEVEL_MODERATE": {
+                      "value": 3
+                    },
+                    "PRICE_LEVEL_EXPENSIVE": {
+                      "value": 4
+                    },
+                    "PRICE_LEVEL_VERY_EXPENSIVE": {
+                      "value": 5
+                    }
+                  }
                 }
               },
               "rating_filter": {

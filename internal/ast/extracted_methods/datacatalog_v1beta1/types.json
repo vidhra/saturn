@@ -8,33 +8,18 @@
         "type": "object",
         "properties": {
           "scope": {
-            "description": "Required. The scope of this search request. A ``scope`` that has empty ``include_org_ids``, ``include_project_ids`` AND false ``include_gcp_public_datasets`` is considered invalid. Data Catalog will return an error in such a case.",
-            "type": "object",
-            "properties": {
-              "include_org_ids": {
-                "description": "The list of organization IDs to search within. To find your organization ID, follow instructions in https://cloud.google.com/resource-manager/docs/creating-managing-organization.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+            "description": "Values:\n    SCOPE_UNSPECIFIED (0):\n        No description available.\n    SCOPE_UNCHANGED (1):\n        No description available.\n    SCOPE_CHANGED (2):\n        No description available.",
+            "type": "enum",
+            "name": "Scope",
+            "values": {
+              "SCOPE_UNSPECIFIED": {
+                "value": 0
               },
-              "include_project_ids": {
-                "description": "The list of project IDs to search within. To learn more about the distinction between project names/IDs/numbers, go to https://cloud.google.com/docs/overview/#projects.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+              "SCOPE_UNCHANGED": {
+                "value": 1
               },
-              "include_gcp_public_datasets": {
-                "description": "If ``true``, include Google Cloud public datasets in the search results. Info on Google Cloud public datasets is available at https://cloud.google.com/public-datasets/. By default, Google Cloud public datasets are excluded.",
-                "type": "boolean"
-              },
-              "restricted_locations": {
-                "description": "Optional. The list of locations to search within.  1. If empty, search will be performed in all locations; 2. If any of the locations are NOT in the valid locations list, error will be returned; 3. Otherwise, search only the given locations for matching results. Typical usage is to leave this field empty. When a location is unreachable as returned in the ``SearchCatalogResponse.unreachable`` field, users can repeat the search request with this parameter set to get additional information on the error.  Valid locations:  -  asia-east1 -  asia-east2 -  asia-northeast1 -  asia-northeast2 -  asia-northeast3 -  asia-south1 -  asia-southeast1 -  australia-southeast1 -  eu -  europe-north1 -  europe-west1 -  europe-west2 -  europe-west3 -  europe-west4 -  europe-west6 -  global -  northamerica-northeast1 -  southamerica-east1 -  us -  us-central1 -  us-east1 -  us-east4 -  us-west1 -  us-west2",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+              "SCOPE_CHANGED": {
+                "value": 2
               }
             }
           },
@@ -117,9 +102,20 @@
                 "type": "string"
               },
               "transfer_status": {
-                "description": "Output only. Denotes the transfer status of the Entry Group. It is unspecified for Entry Group created from Dataplex API.",
-                "type": "object",
-                "reference": "google.cloud.dataplex_v1.types.TransferStatus"
+                "type": "enum",
+                "name": "TransferStatus",
+                "description": "Denotes the transfer status of a resource. It is unspecified\nfor resources created from Dataplex API.\n\nValues:\n    TRANSFER_STATUS_UNSPECIFIED (0):\n        The default value. It is set for resources\n        that were not subject for migration from Data\n        Catalog service.\n    TRANSFER_STATUS_MIGRATED (1):\n        Indicates that a resource was migrated from\n        Data Catalog service but it hasn't been\n        transferred yet. In particular the resource\n        cannot be updated from Dataplex API.\n    TRANSFER_STATUS_TRANSFERRED (2):\n        Indicates that a resource was transferred\n        from Data Catalog service. The resource can only\n        be updated from Dataplex API.",
+                "values": {
+                  "TRANSFER_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "TRANSFER_STATUS_MIGRATED": {
+                    "value": 1
+                  },
+                  "TRANSFER_STATUS_TRANSFERRED": {
+                    "value": 2
+                  }
+                }
               }
             }
           }
@@ -179,9 +175,20 @@
                 "type": "string"
               },
               "transfer_status": {
-                "description": "Output only. Denotes the transfer status of the Entry Group. It is unspecified for Entry Group created from Dataplex API.",
-                "type": "object",
-                "reference": "google.cloud.dataplex_v1.types.TransferStatus"
+                "type": "enum",
+                "name": "TransferStatus",
+                "description": "Denotes the transfer status of a resource. It is unspecified\nfor resources created from Dataplex API.\n\nValues:\n    TRANSFER_STATUS_UNSPECIFIED (0):\n        The default value. It is set for resources\n        that were not subject for migration from Data\n        Catalog service.\n    TRANSFER_STATUS_MIGRATED (1):\n        Indicates that a resource was migrated from\n        Data Catalog service but it hasn't been\n        transferred yet. In particular the resource\n        cannot be updated from Dataplex API.\n    TRANSFER_STATUS_TRANSFERRED (2):\n        Indicates that a resource was transferred\n        from Data Catalog service. The resource can only\n        be updated from Dataplex API.",
+                "values": {
+                  "TRANSFER_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "TRANSFER_STATUS_MIGRATED": {
+                    "value": 1
+                  },
+                  "TRANSFER_STATUS_TRANSFERRED": {
+                    "value": 2
+                  }
+                }
               }
             }
           },
@@ -435,30 +442,33 @@
                       "type": "string"
                     },
                     "type_": {
-                      "type": "object",
-                      "properties": {
-                        "primitive_type": {
-                          "description": "Represents primitive types - string, bool etc.  This field is a member of `oneof`_ ``type_decl``.",
-                          "type": "object",
-                          "reference": "google.cloud.datacatalog_v1beta1.types.FieldType.PrimitiveType"
+                      "type": "enum",
+                      "name": "FieldType",
+                      "description": "Field value type in the Schema.\n\nValues:\n    FIELD_TYPE_UNSPECIFIED (0):\n        Field type is unspecified.\n    OBJECT (1):\n        Field value type is Object.\n    STRING (2):\n        Field value type is String.\n    NUMBER (3):\n        Field value type is Number.\n    INTEGER (4):\n        Field value type is Integer.\n    BOOLEAN (5):\n        Field value type is Boolean.\n    GEOLOCATION (6):\n        Field value type is Geolocation. Geolocation is expressed as\n        an object with the following keys:\n\n        -  ``id``: a string representing the location id\n        -  ``longitude``: a number representing the longitude\n           coordinate of the location\n        -  ``latitude``: a number repesenting the latitude\n           coordinate of the location\n        -  ``address``: a string representing the full address of\n           the location\n\n        ``latitude`` and ``longitude`` must always be provided\n        together. At least one of a) ``address`` or b)\n        ``latitude``-``longitude`` pair must be provide",
+                      "values": {
+                        "FIELD_TYPE_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "enum_type": {
-                          "type": "object",
-                          "properties": {
-                            "allowed_values": {
-                              "description": "",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "value": {
-                                    "description": "The value of this enum",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            }
-                          }
+                        "OBJECT": {
+                          "value": 1
+                        },
+                        "STRING": {
+                          "value": 2
+                        },
+                        "NUMBER": {
+                          "value": 3
+                        },
+                        "INTEGER": {
+                          "value": 4
+                        },
+                        "BOOLEAN": {
+                          "value": 5
+                        },
+                        "GEOLOCATION": {
+                          "value": 6
+                        },
+                        "DATETIME": {
+                          "value": 7
                         }
                       }
                     },
@@ -481,9 +491,17 @@
                 }
               },
               "dataplex_transfer_status": {
-                "description": "Output only. Transfer status of the TagTemplate",
-                "type": "object",
-                "reference": "google.cloud.datacatalog_v1beta1.types.TagTemplate.DataplexTransferStatus"
+                "type": "enum",
+                "name": "DataplexTransferStatus",
+                "description": "This enum describes TagTemplate transfer status to Dataplex\nservice.\n\nValues:\n    DATAPLEX_TRANSFER_STATUS_UNSPECIFIED (0):\n        Default value. TagTemplate and its tags are\n        only visible and editable in DataCatalog.\n    MIGRATED (1):\n        TagTemplate and its tags are auto-copied to\n        Dataplex service. Visible in both services.\n        Editable in DataCatalog, read-only in Dataplex.\n        Deprecated: Individual TagTemplate migration is\n        deprecated in favor of organization or project\n        wide TagTemplate migration opt-in.",
+                "values": {
+                  "DATAPLEX_TRANSFER_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MIGRATED": {
+                    "value": 1
+                  }
+                }
               }
             },
             "required": [
@@ -549,30 +567,33 @@
                       "type": "string"
                     },
                     "type_": {
-                      "type": "object",
-                      "properties": {
-                        "primitive_type": {
-                          "description": "Represents primitive types - string, bool etc.  This field is a member of `oneof`_ ``type_decl``.",
-                          "type": "object",
-                          "reference": "google.cloud.datacatalog_v1beta1.types.FieldType.PrimitiveType"
+                      "type": "enum",
+                      "name": "FieldType",
+                      "description": "Field value type in the Schema.\n\nValues:\n    FIELD_TYPE_UNSPECIFIED (0):\n        Field type is unspecified.\n    OBJECT (1):\n        Field value type is Object.\n    STRING (2):\n        Field value type is String.\n    NUMBER (3):\n        Field value type is Number.\n    INTEGER (4):\n        Field value type is Integer.\n    BOOLEAN (5):\n        Field value type is Boolean.\n    GEOLOCATION (6):\n        Field value type is Geolocation. Geolocation is expressed as\n        an object with the following keys:\n\n        -  ``id``: a string representing the location id\n        -  ``longitude``: a number representing the longitude\n           coordinate of the location\n        -  ``latitude``: a number repesenting the latitude\n           coordinate of the location\n        -  ``address``: a string representing the full address of\n           the location\n\n        ``latitude`` and ``longitude`` must always be provided\n        together. At least one of a) ``address`` or b)\n        ``latitude``-``longitude`` pair must be provide",
+                      "values": {
+                        "FIELD_TYPE_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "enum_type": {
-                          "type": "object",
-                          "properties": {
-                            "allowed_values": {
-                              "description": "",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "value": {
-                                    "description": "The value of this enum",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            }
-                          }
+                        "OBJECT": {
+                          "value": 1
+                        },
+                        "STRING": {
+                          "value": 2
+                        },
+                        "NUMBER": {
+                          "value": 3
+                        },
+                        "INTEGER": {
+                          "value": 4
+                        },
+                        "BOOLEAN": {
+                          "value": 5
+                        },
+                        "GEOLOCATION": {
+                          "value": 6
+                        },
+                        "DATETIME": {
+                          "value": 7
                         }
                       }
                     },
@@ -595,9 +616,17 @@
                 }
               },
               "dataplex_transfer_status": {
-                "description": "Output only. Transfer status of the TagTemplate",
-                "type": "object",
-                "reference": "google.cloud.datacatalog_v1beta1.types.TagTemplate.DataplexTransferStatus"
+                "type": "enum",
+                "name": "DataplexTransferStatus",
+                "description": "This enum describes TagTemplate transfer status to Dataplex\nservice.\n\nValues:\n    DATAPLEX_TRANSFER_STATUS_UNSPECIFIED (0):\n        Default value. TagTemplate and its tags are\n        only visible and editable in DataCatalog.\n    MIGRATED (1):\n        TagTemplate and its tags are auto-copied to\n        Dataplex service. Visible in both services.\n        Editable in DataCatalog, read-only in Dataplex.\n        Deprecated: Individual TagTemplate migration is\n        deprecated in favor of organization or project\n        wide TagTemplate migration opt-in.",
+                "values": {
+                  "DATAPLEX_TRANSFER_STATUS_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MIGRATED": {
+                    "value": 1
+                  }
+                }
               }
             },
             "required": [
@@ -746,30 +775,33 @@
                 "type": "string"
               },
               "type_": {
-                "type": "object",
-                "properties": {
-                  "primitive_type": {
-                    "description": "Represents primitive types - string, bool etc.  This field is a member of `oneof`_ ``type_decl``.",
-                    "type": "object",
-                    "reference": "google.cloud.datacatalog_v1beta1.types.FieldType.PrimitiveType"
+                "type": "enum",
+                "name": "FieldType",
+                "description": "Field value type in the Schema.\n\nValues:\n    FIELD_TYPE_UNSPECIFIED (0):\n        Field type is unspecified.\n    OBJECT (1):\n        Field value type is Object.\n    STRING (2):\n        Field value type is String.\n    NUMBER (3):\n        Field value type is Number.\n    INTEGER (4):\n        Field value type is Integer.\n    BOOLEAN (5):\n        Field value type is Boolean.\n    GEOLOCATION (6):\n        Field value type is Geolocation. Geolocation is expressed as\n        an object with the following keys:\n\n        -  ``id``: a string representing the location id\n        -  ``longitude``: a number representing the longitude\n           coordinate of the location\n        -  ``latitude``: a number repesenting the latitude\n           coordinate of the location\n        -  ``address``: a string representing the full address of\n           the location\n\n        ``latitude`` and ``longitude`` must always be provided\n        together. At least one of a) ``address`` or b)\n        ``latitude``-``longitude`` pair must be provide",
+                "values": {
+                  "FIELD_TYPE_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "enum_type": {
-                    "type": "object",
-                    "properties": {
-                      "allowed_values": {
-                        "description": "",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "description": "The value of this enum",
-                              "type": "string"
-                            }
-                          }
-                        }
-                      }
-                    }
+                  "OBJECT": {
+                    "value": 1
+                  },
+                  "STRING": {
+                    "value": 2
+                  },
+                  "NUMBER": {
+                    "value": 3
+                  },
+                  "INTEGER": {
+                    "value": 4
+                  },
+                  "BOOLEAN": {
+                    "value": 5
+                  },
+                  "GEOLOCATION": {
+                    "value": 6
+                  },
+                  "DATETIME": {
+                    "value": 7
                   }
                 }
               },
@@ -822,30 +854,33 @@
                 "type": "string"
               },
               "type_": {
-                "type": "object",
-                "properties": {
-                  "primitive_type": {
-                    "description": "Represents primitive types - string, bool etc.  This field is a member of `oneof`_ ``type_decl``.",
-                    "type": "object",
-                    "reference": "google.cloud.datacatalog_v1beta1.types.FieldType.PrimitiveType"
+                "type": "enum",
+                "name": "FieldType",
+                "description": "Field value type in the Schema.\n\nValues:\n    FIELD_TYPE_UNSPECIFIED (0):\n        Field type is unspecified.\n    OBJECT (1):\n        Field value type is Object.\n    STRING (2):\n        Field value type is String.\n    NUMBER (3):\n        Field value type is Number.\n    INTEGER (4):\n        Field value type is Integer.\n    BOOLEAN (5):\n        Field value type is Boolean.\n    GEOLOCATION (6):\n        Field value type is Geolocation. Geolocation is expressed as\n        an object with the following keys:\n\n        -  ``id``: a string representing the location id\n        -  ``longitude``: a number representing the longitude\n           coordinate of the location\n        -  ``latitude``: a number repesenting the latitude\n           coordinate of the location\n        -  ``address``: a string representing the full address of\n           the location\n\n        ``latitude`` and ``longitude`` must always be provided\n        together. At least one of a) ``address`` or b)\n        ``latitude``-``longitude`` pair must be provide",
+                "values": {
+                  "FIELD_TYPE_UNSPECIFIED": {
+                    "value": 0
                   },
-                  "enum_type": {
-                    "type": "object",
-                    "properties": {
-                      "allowed_values": {
-                        "description": "",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "description": "The value of this enum",
-                              "type": "string"
-                            }
-                          }
-                        }
-                      }
-                    }
+                  "OBJECT": {
+                    "value": 1
+                  },
+                  "STRING": {
+                    "value": 2
+                  },
+                  "NUMBER": {
+                    "value": 3
+                  },
+                  "INTEGER": {
+                    "value": 4
+                  },
+                  "BOOLEAN": {
+                    "value": 5
+                  },
+                  "GEOLOCATION": {
+                    "value": 6
+                  },
+                  "DATETIME": {
+                    "value": 7
                   }
                 }
               },
@@ -1056,8 +1091,20 @@
                 "description": "Optional. A list of policy types that are activated for this taxonomy. If not set, defaults to an empty list.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.datacatalog_v1beta1.types.Taxonomy.PolicyType"
+                  "type": "enum",
+                  "name": "PolicyType",
+                  "description": "Type of policy in the case of hierarchial policies.\n\nValues:\n    POLICY_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    MINIMUM (1):\n        This policy acts as a minimum to other\n        policies, lower in the hierarchy. Effective\n        policy may only be the same or stricter.\n    DEFAULT (2):\n        This policy acts as a default if no other\n        reauth policy is set.",
+                  "values": {
+                    "POLICY_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "MINIMUM": {
+                      "value": 1
+                    },
+                    "DEFAULT": {
+                      "value": 2
+                    }
+                  }
                 }
               },
               "service": {
@@ -1183,8 +1230,35 @@
                             "description": "Required. Regular business days. May not be empty.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                              "type": "enum",
+                              "name": "Weekday",
+                              "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                              "values": {
+                                "WEEKDAY_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "MONDAY": {
+                                  "value": 1
+                                },
+                                "TUESDAY": {
+                                  "value": 2
+                                },
+                                "WEDNESDAY": {
+                                  "value": 3
+                                },
+                                "THURSDAY": {
+                                  "value": 4
+                                },
+                                "FRIDAY": {
+                                  "value": 5
+                                },
+                                "SATURDAY": {
+                                  "value": 6
+                                },
+                                "SUNDAY": {
+                                  "value": 7
+                                }
+                              }
                             }
                           }
                         },
@@ -1199,8 +1273,35 @@
                             "description": "Required. Regular business days. May not be empty.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                              "type": "enum",
+                              "name": "Weekday",
+                              "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                              "values": {
+                                "WEEKDAY_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "MONDAY": {
+                                  "value": 1
+                                },
+                                "TUESDAY": {
+                                  "value": 2
+                                },
+                                "WEDNESDAY": {
+                                  "value": 3
+                                },
+                                "THURSDAY": {
+                                  "value": 4
+                                },
+                                "FRIDAY": {
+                                  "value": 5
+                                },
+                                "SATURDAY": {
+                                  "value": 6
+                                },
+                                "SUNDAY": {
+                                  "value": 7
+                                }
+                              }
                             }
                           }
                         },
@@ -1321,9 +1422,20 @@
                                         "type": "integer"
                                       },
                                       "unit": {
-                                        "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                        "type": "object",
-                                        "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                        "type": "enum",
+                                        "name": "WeightUnit",
+                                        "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                        "values": {
+                                          "WEIGHT_UNIT_UNSPECIFIED": {
+                                            "value": 0
+                                          },
+                                          "POUND": {
+                                            "value": 1
+                                          },
+                                          "KILOGRAM": {
+                                            "value": 2
+                                          }
+                                        }
                                       }
                                     },
                                     "required": [
@@ -1405,9 +1517,20 @@
                                         "type": "integer"
                                       },
                                       "unit": {
-                                        "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                        "type": "object",
-                                        "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                        "type": "enum",
+                                        "name": "WeightUnit",
+                                        "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                        "values": {
+                                          "WEIGHT_UNIT_UNSPECIFIED": {
+                                            "value": 0
+                                          },
+                                          "POUND": {
+                                            "value": 1
+                                          },
+                                          "KILOGRAM": {
+                                            "value": 2
+                                          }
+                                        }
                                       }
                                     },
                                     "required": [
@@ -1555,9 +1678,20 @@
                                           "type": "integer"
                                         },
                                         "unit": {
-                                          "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                          "type": "object",
-                                          "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                          "type": "enum",
+                                          "name": "WeightUnit",
+                                          "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                          "values": {
+                                            "WEIGHT_UNIT_UNSPECIFIED": {
+                                              "value": 0
+                                            },
+                                            "POUND": {
+                                              "value": 1
+                                            },
+                                            "KILOGRAM": {
+                                              "value": 2
+                                            }
+                                          }
                                         }
                                       },
                                       "required": [
@@ -1639,9 +1773,20 @@
                                           "type": "integer"
                                         },
                                         "unit": {
-                                          "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                          "type": "object",
-                                          "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                          "type": "enum",
+                                          "name": "WeightUnit",
+                                          "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                          "values": {
+                                            "WEIGHT_UNIT_UNSPECIFIED": {
+                                              "value": 0
+                                            },
+                                            "POUND": {
+                                              "value": 1
+                                            },
+                                            "KILOGRAM": {
+                                              "value": 2
+                                            }
+                                          }
                                         }
                                       },
                                       "required": [
@@ -1808,9 +1953,23 @@
                     }
                   },
                   "shipment_type": {
-                    "description": "Type of locations this service ships orders to.  This field is a member of `oneof`_ ``_shipment_type``.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_accounts_v1beta.types.Service.ShipmentType"
+                    "type": "enum",
+                    "name": "ShipmentType",
+                    "description": "Shipment type of shipping service.\n\nValues:\n    SHIPMENT_TYPE_UNSPECIFIED (0):\n        This service did not specify shipment type.\n    DELIVERY (1):\n        This service ships orders to an address\n        chosen by the customer.\n    LOCAL_DELIVERY (2):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a local store near by.\n    COLLECTION_POINT (3):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a collection point.",
+                    "values": {
+                      "SHIPMENT_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DELIVERY": {
+                        "value": 1
+                      },
+                      "LOCAL_DELIVERY": {
+                        "value": 2
+                      },
+                      "COLLECTION_POINT": {
+                        "value": 3
+                      }
+                    }
                   },
                   "minimum_order_value": {
                     "type": "object",
@@ -1866,9 +2025,20 @@
                     "type": "object",
                     "properties": {
                       "store_service_type": {
-                        "description": "Indicates whether all stores, or selected stores, listed by this merchant provide local delivery.  This field is a member of `oneof`_ ``_store_service_type``.",
-                        "type": "object",
-                        "reference": "google.shopping.merchant_accounts_v1beta.types.Service.StoreConfig.StoreServiceType"
+                        "type": "enum",
+                        "name": "StoreServiceType",
+                        "description": "Indicates whether all stores, or selected stores, listed by\nthe merchant provide local delivery.\n\nValues:\n    STORE_SERVICE_TYPE_UNSPECIFIED (0):\n        Did not specify store service type.\n    ALL_STORES (1):\n        Indicates whether all stores, current and\n        future, listed by this merchant provide local\n        delivery.\n    SELECTED_STORES (2):\n        Indicates that only the stores listed in ``store_codes`` are\n        eligible for local delivery.",
+                        "values": {
+                          "STORE_SERVICE_TYPE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "ALL_STORES": {
+                            "value": 1
+                          },
+                          "SELECTED_STORES": {
+                            "value": 2
+                          }
+                        }
                       },
                       "store_codes": {
                         "description": "Optional. A list of store codes that provide local delivery. If empty, then ``all_stores`` must be true.",
@@ -1911,9 +2081,20 @@
                             "type": "integer"
                           },
                           "unit": {
-                            "description": "Unit can differ based on country, it is parameterized to include miles and kilometers.  This field is a member of `oneof`_ ``_unit``.",
-                            "type": "object",
-                            "reference": "google.shopping.merchant_accounts_v1beta.types.Distance.Unit"
+                            "type": "enum",
+                            "name": "Unit",
+                            "description": "Unit can differ based on country, it is parameterized to\ninclude miles and kilometers.\n\nValues:\n    UNIT_UNSPECIFIED (0):\n        Unit unspecified\n    MILES (1):\n        Unit in miles\n    KILOMETERS (2):\n        Unit in kilometers",
+                            "values": {
+                              "UNIT_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "MILES": {
+                                "value": 1
+                              },
+                              "KILOMETERS": {
+                                "value": 2
+                              }
+                            }
                           }
                         }
                       }
@@ -2053,8 +2234,20 @@
                 "description": "Optional. A list of policy types that are activated for this taxonomy. If not set, defaults to an empty list.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.datacatalog_v1beta1.types.Taxonomy.PolicyType"
+                  "type": "enum",
+                  "name": "PolicyType",
+                  "description": "Type of policy in the case of hierarchial policies.\n\nValues:\n    POLICY_TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    MINIMUM (1):\n        This policy acts as a minimum to other\n        policies, lower in the hierarchy. Effective\n        policy may only be the same or stricter.\n    DEFAULT (2):\n        This policy acts as a default if no other\n        reauth policy is set.",
+                  "values": {
+                    "POLICY_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "MINIMUM": {
+                      "value": 1
+                    },
+                    "DEFAULT": {
+                      "value": 2
+                    }
+                  }
                 }
               },
               "service": {
@@ -2180,8 +2373,35 @@
                             "description": "Required. Regular business days. May not be empty.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                              "type": "enum",
+                              "name": "Weekday",
+                              "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                              "values": {
+                                "WEEKDAY_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "MONDAY": {
+                                  "value": 1
+                                },
+                                "TUESDAY": {
+                                  "value": 2
+                                },
+                                "WEDNESDAY": {
+                                  "value": 3
+                                },
+                                "THURSDAY": {
+                                  "value": 4
+                                },
+                                "FRIDAY": {
+                                  "value": 5
+                                },
+                                "SATURDAY": {
+                                  "value": 6
+                                },
+                                "SUNDAY": {
+                                  "value": 7
+                                }
+                              }
                             }
                           }
                         },
@@ -2196,8 +2416,35 @@
                             "description": "Required. Regular business days. May not be empty.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "reference": "google.shopping.merchant_accounts_v1beta.types.BusinessDayConfig.Weekday"
+                              "type": "enum",
+                              "name": "Weekday",
+                              "description": "Values:\n    WEEKDAY_UNSPECIFIED (0):\n        No description available.\n    MONDAY (1):\n        No description available.\n    TUESDAY (2):\n        No description available.\n    WEDNESDAY (3):\n        No description available.\n    THURSDAY (4):\n        No description available.\n    FRIDAY (5):\n        No description available.\n    SATURDAY (6):\n        No description available.\n    SUNDAY (7):\n        No description available.",
+                              "values": {
+                                "WEEKDAY_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "MONDAY": {
+                                  "value": 1
+                                },
+                                "TUESDAY": {
+                                  "value": 2
+                                },
+                                "WEDNESDAY": {
+                                  "value": 3
+                                },
+                                "THURSDAY": {
+                                  "value": 4
+                                },
+                                "FRIDAY": {
+                                  "value": 5
+                                },
+                                "SATURDAY": {
+                                  "value": 6
+                                },
+                                "SUNDAY": {
+                                  "value": 7
+                                }
+                              }
                             }
                           }
                         },
@@ -2318,9 +2565,20 @@
                                         "type": "integer"
                                       },
                                       "unit": {
-                                        "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                        "type": "object",
-                                        "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                        "type": "enum",
+                                        "name": "WeightUnit",
+                                        "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                        "values": {
+                                          "WEIGHT_UNIT_UNSPECIFIED": {
+                                            "value": 0
+                                          },
+                                          "POUND": {
+                                            "value": 1
+                                          },
+                                          "KILOGRAM": {
+                                            "value": 2
+                                          }
+                                        }
                                       }
                                     },
                                     "required": [
@@ -2402,9 +2660,20 @@
                                         "type": "integer"
                                       },
                                       "unit": {
-                                        "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                        "type": "object",
-                                        "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                        "type": "enum",
+                                        "name": "WeightUnit",
+                                        "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                        "values": {
+                                          "WEIGHT_UNIT_UNSPECIFIED": {
+                                            "value": 0
+                                          },
+                                          "POUND": {
+                                            "value": 1
+                                          },
+                                          "KILOGRAM": {
+                                            "value": 2
+                                          }
+                                        }
                                       }
                                     },
                                     "required": [
@@ -2552,9 +2821,20 @@
                                           "type": "integer"
                                         },
                                         "unit": {
-                                          "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                          "type": "object",
-                                          "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                          "type": "enum",
+                                          "name": "WeightUnit",
+                                          "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                          "values": {
+                                            "WEIGHT_UNIT_UNSPECIFIED": {
+                                              "value": 0
+                                            },
+                                            "POUND": {
+                                              "value": 1
+                                            },
+                                            "KILOGRAM": {
+                                              "value": 2
+                                            }
+                                          }
                                         }
                                       },
                                       "required": [
@@ -2636,9 +2916,20 @@
                                           "type": "integer"
                                         },
                                         "unit": {
-                                          "description": "Required. The weight unit. Acceptable values are: kg and lb",
-                                          "type": "object",
-                                          "reference": "google.shopping.type.types.Weight.WeightUnit"
+                                          "type": "enum",
+                                          "name": "WeightUnit",
+                                          "description": "The weight unit.\n\nValues:\n    WEIGHT_UNIT_UNSPECIFIED (0):\n        unit unspecified\n    POUND (1):\n        lb unit.\n    KILOGRAM (2):\n        kg unit.",
+                                          "values": {
+                                            "WEIGHT_UNIT_UNSPECIFIED": {
+                                              "value": 0
+                                            },
+                                            "POUND": {
+                                              "value": 1
+                                            },
+                                            "KILOGRAM": {
+                                              "value": 2
+                                            }
+                                          }
                                         }
                                       },
                                       "required": [
@@ -2805,9 +3096,23 @@
                     }
                   },
                   "shipment_type": {
-                    "description": "Type of locations this service ships orders to.  This field is a member of `oneof`_ ``_shipment_type``.",
-                    "type": "object",
-                    "reference": "google.shopping.merchant_accounts_v1beta.types.Service.ShipmentType"
+                    "type": "enum",
+                    "name": "ShipmentType",
+                    "description": "Shipment type of shipping service.\n\nValues:\n    SHIPMENT_TYPE_UNSPECIFIED (0):\n        This service did not specify shipment type.\n    DELIVERY (1):\n        This service ships orders to an address\n        chosen by the customer.\n    LOCAL_DELIVERY (2):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a local store near by.\n    COLLECTION_POINT (3):\n        This service ships orders to an address\n        chosen by the customer. The order is shipped\n        from a collection point.",
+                    "values": {
+                      "SHIPMENT_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DELIVERY": {
+                        "value": 1
+                      },
+                      "LOCAL_DELIVERY": {
+                        "value": 2
+                      },
+                      "COLLECTION_POINT": {
+                        "value": 3
+                      }
+                    }
                   },
                   "minimum_order_value": {
                     "type": "object",
@@ -2863,9 +3168,20 @@
                     "type": "object",
                     "properties": {
                       "store_service_type": {
-                        "description": "Indicates whether all stores, or selected stores, listed by this merchant provide local delivery.  This field is a member of `oneof`_ ``_store_service_type``.",
-                        "type": "object",
-                        "reference": "google.shopping.merchant_accounts_v1beta.types.Service.StoreConfig.StoreServiceType"
+                        "type": "enum",
+                        "name": "StoreServiceType",
+                        "description": "Indicates whether all stores, or selected stores, listed by\nthe merchant provide local delivery.\n\nValues:\n    STORE_SERVICE_TYPE_UNSPECIFIED (0):\n        Did not specify store service type.\n    ALL_STORES (1):\n        Indicates whether all stores, current and\n        future, listed by this merchant provide local\n        delivery.\n    SELECTED_STORES (2):\n        Indicates that only the stores listed in ``store_codes`` are\n        eligible for local delivery.",
+                        "values": {
+                          "STORE_SERVICE_TYPE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "ALL_STORES": {
+                            "value": 1
+                          },
+                          "SELECTED_STORES": {
+                            "value": 2
+                          }
+                        }
                       },
                       "store_codes": {
                         "description": "Optional. A list of store codes that provide local delivery. If empty, then ``all_stores`` must be true.",
@@ -2908,9 +3224,20 @@
                             "type": "integer"
                           },
                           "unit": {
-                            "description": "Unit can differ based on country, it is parameterized to include miles and kilometers.  This field is a member of `oneof`_ ``_unit``.",
-                            "type": "object",
-                            "reference": "google.shopping.merchant_accounts_v1beta.types.Distance.Unit"
+                            "type": "enum",
+                            "name": "Unit",
+                            "description": "Unit can differ based on country, it is parameterized to\ninclude miles and kilometers.\n\nValues:\n    UNIT_UNSPECIFIED (0):\n        Unit unspecified\n    MILES (1):\n        Unit in miles\n    KILOMETERS (2):\n        Unit in kilometers",
+                            "values": {
+                              "UNIT_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "MILES": {
+                                "value": 1
+                              },
+                              "KILOMETERS": {
+                                "value": 2
+                              }
+                            }
                           }
                         }
                       }

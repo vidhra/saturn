@@ -98,9 +98,20 @@
                     "type": "object",
                     "properties": {
                       "scheme": {
-                        "description": "Scheme override.  When specified, the task URI scheme is replaced by the provided value (HTTP or HTTPS).  This field is a member of `oneof`_ ``_scheme``.",
-                        "type": "object",
-                        "reference": "google.cloud.tasks_v2beta3.types.UriOverride.Scheme"
+                        "type": "enum",
+                        "name": "Scheme",
+                        "description": "The Scheme for an HTTP request. By default, it is HTTPS.\n\nValues:\n    SCHEME_UNSPECIFIED (0):\n        Scheme unspecified. Defaults to HTTPS.\n    HTTP (1):\n        Convert the scheme to HTTP, e.g.,\n        https://www.google.ca will change to\n        http://www.google.ca.\n    HTTPS (2):\n        Convert the scheme to HTTPS, e.g.,\n        http://www.google.ca will change to\n        https://www.google.ca.",
+                        "values": {
+                          "SCHEME_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "HTTP": {
+                            "value": 1
+                          },
+                          "HTTPS": {
+                            "value": 2
+                          }
+                        }
                       },
                       "host": {
                         "description": "Host override.  When specified, replaces the host part of the task URL. For example, if the task URL is \"https://www.google.com,\" and host value is set to \"example.net\", the overridden URI will be changed to \"https://example.net.\" Host value cannot be an empty string (INVALID_ARGUMENT).  This field is a member of `oneof`_ ``_host``.",
@@ -129,16 +140,53 @@
                         }
                       },
                       "uri_override_enforce_mode": {
-                        "description": "URI Override Enforce Mode  When specified, determines the Target UriOverride mode. If not specified, it defaults to ALWAYS.",
-                        "type": "object",
-                        "reference": "google.cloud.tasks_v2beta3.types.UriOverride.UriOverrideEnforceMode"
+                        "type": "enum",
+                        "name": "UriOverrideEnforceMode",
+                        "description": "UriOverrideEnforceMode mode is to define enforcing mode for\nthe override modes.\n\nValues:\n    URI_OVERRIDE_ENFORCE_MODE_UNSPECIFIED (0):\n        OverrideMode Unspecified. Defaults to ALWAYS.\n    IF_NOT_EXISTS (1):\n        In the IF_NOT_EXISTS mode, queue-level configuration is only\n        applied where task-level configuration does not exist.\n    ALWAYS (2):\n        In the ALWAYS mode, queue-level configuration\n        overrides all task-level configuration",
+                        "values": {
+                          "URI_OVERRIDE_ENFORCE_MODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "IF_NOT_EXISTS": {
+                            "value": 1
+                          },
+                          "ALWAYS": {
+                            "value": 2
+                          }
+                        }
                       }
                     }
                   },
                   "http_method": {
-                    "description": "The HTTP method to use for the request.  When specified, it overrides [HttpRequest][google.cloud.tasks.v2beta3.HttpTarget.http_method] for the task. Note that if the value is set to [HttpMethod][GET] the [HttpRequest][body] of the task will be ignored at execution time.",
-                    "type": "object",
-                    "reference": "google.cloud.tasks_v2beta3.types.HttpMethod"
+                    "type": "enum",
+                    "name": "HttpMethod",
+                    "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+                    "values": {
+                      "HTTP_METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "POST": {
+                        "value": 1
+                      },
+                      "GET": {
+                        "value": 2
+                      },
+                      "HEAD": {
+                        "value": 3
+                      },
+                      "PUT": {
+                        "value": 4
+                      },
+                      "DELETE": {
+                        "value": 5
+                      },
+                      "PATCH": {
+                        "value": 6
+                      },
+                      "OPTIONS": {
+                        "value": 7
+                      }
+                    }
                   },
                   "header_overrides": {
                     "description": "HTTP target headers.  This map contains the header field names and values. Headers will be set when running the [CreateTask][google.cloud.tasks.v2beta3.CloudTasks.CreateTask] and/or [BufferTask][google.cloud.tasks.v2beta3.CloudTasks.BufferTask].  These headers represent a subset of the headers that will be configured for the task's HTTP request. Some HTTP request headers will be ignored or replaced.  A partial list of headers that will be ignored or replaced is:  -  Several predefined headers, prefixed with \"X-CloudTasks-\", can be used to define properties of the task. -  Host: This will be computed by Cloud Tasks and derived from [HttpRequest.url][google.cloud.tasks.v2beta3.Target.HttpRequest.url]. -  Content-Length: This will be computed by Cloud Tasks.  ``Content-Type`` won't be set by Cloud Tasks. You can explicitly set ``Content-Type`` to a media type when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask]. For example,\\ ``Content-Type`` can be set to ``\"application/octet-stream\"`` or ``\"application/json\"``. The default value is set to ``\"application/json\"``.  -  User-Agent: This will be set to ``\"Google-Cloud-Tasks\"``.  Headers which can have multiple values (according to RFC2616) can be specified using comma-separated values.  The size of the headers must be less than 80KB. Queue-level headers to override headers of all the tasks in the queue.",
@@ -215,41 +263,68 @@
                     "type": "integer"
                   },
                   "max_retry_duration": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
+                    "type": "enum",
+                    "name": "Duration",
+                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                    "values": {
+                      "UNDEFINED_DURATION": {
+                        "value": 0
                       },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
+                      "DURATION_UNSPECIFIED": {
+                        "value": 529071340
+                      },
+                      "HOUR": {
+                        "value": 2223588
+                      },
+                      "MAX": {
+                        "value": 76100
+                      },
+                      "MINUTE": {
+                        "value": 126786068
                       }
                     }
                   },
                   "min_backoff": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
+                    "type": "enum",
+                    "name": "Duration",
+                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                    "values": {
+                      "UNDEFINED_DURATION": {
+                        "value": 0
                       },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
+                      "DURATION_UNSPECIFIED": {
+                        "value": 529071340
+                      },
+                      "HOUR": {
+                        "value": 2223588
+                      },
+                      "MAX": {
+                        "value": 76100
+                      },
+                      "MINUTE": {
+                        "value": 126786068
                       }
                     }
                   },
                   "max_backoff": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
+                    "type": "enum",
+                    "name": "Duration",
+                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                    "values": {
+                      "UNDEFINED_DURATION": {
+                        "value": 0
                       },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
+                      "DURATION_UNSPECIFIED": {
+                        "value": 529071340
+                      },
+                      "HOUR": {
+                        "value": 2223588
+                      },
+                      "MAX": {
+                        "value": 76100
+                      },
+                      "MINUTE": {
+                        "value": 126786068
                       }
                     }
                   },
@@ -260,9 +335,26 @@
                 }
               },
               "state": {
-                "description": "Output only. The state of the queue.  ``state`` can only be changed by called [PauseQueue][google.cloud.tasks.v2beta3.CloudTasks.PauseQueue], [ResumeQueue][google.cloud.tasks.v2beta3.CloudTasks.ResumeQueue], or uploading `queue.yaml/xml <https://cloud.google.com/appengine/docs/python/config/queueref>`__. [UpdateQueue][google.cloud.tasks.v2beta3.CloudTasks.UpdateQueue] cannot be used to change ``state``.",
-                "type": "object",
-                "reference": "google.cloud.tasks_v2beta3.types.Queue.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "purge_time": {
                 "description": "Output only. The last time this queue was purged.  All tasks that were [created][google.cloud.tasks.v2beta3.Task.create_time] before this time were purged.  A queue can be purged using [PurgeQueue][google.cloud.tasks.v2beta3.CloudTasks.PurgeQueue], the `App Engine Task Queue SDK, or the Cloud Console <https://cloud.google.com/appengine/docs/standard/python/taskqueue/push/deleting-tasks-and-queues#purging_all_tasks_from_a_queue>`__.  Purge time will be truncated to the nearest microsecond. Purge time will be unset if the queue has never been purged.",
@@ -270,28 +362,46 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "task_ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "tombstone_ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -305,9 +415,23 @@
                 }
               },
               "type_": {
-                "description": "Immutable. The type of a queue (push or pull).  ``Queue.type`` is an immutable property of the queue that is set at the queue creation time. When left unspecified, the default value of ``PUSH`` is selected.",
-                "type": "object",
-                "reference": "google.cloud.tasks_v2beta3.types.Queue.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "stats": {
                 "type": "object",
@@ -392,9 +516,20 @@
                     "type": "object",
                     "properties": {
                       "scheme": {
-                        "description": "Scheme override.  When specified, the task URI scheme is replaced by the provided value (HTTP or HTTPS).  This field is a member of `oneof`_ ``_scheme``.",
-                        "type": "object",
-                        "reference": "google.cloud.tasks_v2beta3.types.UriOverride.Scheme"
+                        "type": "enum",
+                        "name": "Scheme",
+                        "description": "The Scheme for an HTTP request. By default, it is HTTPS.\n\nValues:\n    SCHEME_UNSPECIFIED (0):\n        Scheme unspecified. Defaults to HTTPS.\n    HTTP (1):\n        Convert the scheme to HTTP, e.g.,\n        https://www.google.ca will change to\n        http://www.google.ca.\n    HTTPS (2):\n        Convert the scheme to HTTPS, e.g.,\n        http://www.google.ca will change to\n        https://www.google.ca.",
+                        "values": {
+                          "SCHEME_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "HTTP": {
+                            "value": 1
+                          },
+                          "HTTPS": {
+                            "value": 2
+                          }
+                        }
                       },
                       "host": {
                         "description": "Host override.  When specified, replaces the host part of the task URL. For example, if the task URL is \"https://www.google.com,\" and host value is set to \"example.net\", the overridden URI will be changed to \"https://example.net.\" Host value cannot be an empty string (INVALID_ARGUMENT).  This field is a member of `oneof`_ ``_host``.",
@@ -423,16 +558,53 @@
                         }
                       },
                       "uri_override_enforce_mode": {
-                        "description": "URI Override Enforce Mode  When specified, determines the Target UriOverride mode. If not specified, it defaults to ALWAYS.",
-                        "type": "object",
-                        "reference": "google.cloud.tasks_v2beta3.types.UriOverride.UriOverrideEnforceMode"
+                        "type": "enum",
+                        "name": "UriOverrideEnforceMode",
+                        "description": "UriOverrideEnforceMode mode is to define enforcing mode for\nthe override modes.\n\nValues:\n    URI_OVERRIDE_ENFORCE_MODE_UNSPECIFIED (0):\n        OverrideMode Unspecified. Defaults to ALWAYS.\n    IF_NOT_EXISTS (1):\n        In the IF_NOT_EXISTS mode, queue-level configuration is only\n        applied where task-level configuration does not exist.\n    ALWAYS (2):\n        In the ALWAYS mode, queue-level configuration\n        overrides all task-level configuration",
+                        "values": {
+                          "URI_OVERRIDE_ENFORCE_MODE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "IF_NOT_EXISTS": {
+                            "value": 1
+                          },
+                          "ALWAYS": {
+                            "value": 2
+                          }
+                        }
                       }
                     }
                   },
                   "http_method": {
-                    "description": "The HTTP method to use for the request.  When specified, it overrides [HttpRequest][google.cloud.tasks.v2beta3.HttpTarget.http_method] for the task. Note that if the value is set to [HttpMethod][GET] the [HttpRequest][body] of the task will be ignored at execution time.",
-                    "type": "object",
-                    "reference": "google.cloud.tasks_v2beta3.types.HttpMethod"
+                    "type": "enum",
+                    "name": "HttpMethod",
+                    "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+                    "values": {
+                      "HTTP_METHOD_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "POST": {
+                        "value": 1
+                      },
+                      "GET": {
+                        "value": 2
+                      },
+                      "HEAD": {
+                        "value": 3
+                      },
+                      "PUT": {
+                        "value": 4
+                      },
+                      "DELETE": {
+                        "value": 5
+                      },
+                      "PATCH": {
+                        "value": 6
+                      },
+                      "OPTIONS": {
+                        "value": 7
+                      }
+                    }
                   },
                   "header_overrides": {
                     "description": "HTTP target headers.  This map contains the header field names and values. Headers will be set when running the [CreateTask][google.cloud.tasks.v2beta3.CloudTasks.CreateTask] and/or [BufferTask][google.cloud.tasks.v2beta3.CloudTasks.BufferTask].  These headers represent a subset of the headers that will be configured for the task's HTTP request. Some HTTP request headers will be ignored or replaced.  A partial list of headers that will be ignored or replaced is:  -  Several predefined headers, prefixed with \"X-CloudTasks-\", can be used to define properties of the task. -  Host: This will be computed by Cloud Tasks and derived from [HttpRequest.url][google.cloud.tasks.v2beta3.Target.HttpRequest.url]. -  Content-Length: This will be computed by Cloud Tasks.  ``Content-Type`` won't be set by Cloud Tasks. You can explicitly set ``Content-Type`` to a media type when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask]. For example,\\ ``Content-Type`` can be set to ``\"application/octet-stream\"`` or ``\"application/json\"``. The default value is set to ``\"application/json\"``.  -  User-Agent: This will be set to ``\"Google-Cloud-Tasks\"``.  Headers which can have multiple values (according to RFC2616) can be specified using comma-separated values.  The size of the headers must be less than 80KB. Queue-level headers to override headers of all the tasks in the queue.",
@@ -509,41 +681,68 @@
                     "type": "integer"
                   },
                   "max_retry_duration": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
+                    "type": "enum",
+                    "name": "Duration",
+                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                    "values": {
+                      "UNDEFINED_DURATION": {
+                        "value": 0
                       },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
+                      "DURATION_UNSPECIFIED": {
+                        "value": 529071340
+                      },
+                      "HOUR": {
+                        "value": 2223588
+                      },
+                      "MAX": {
+                        "value": 76100
+                      },
+                      "MINUTE": {
+                        "value": 126786068
                       }
                     }
                   },
                   "min_backoff": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
+                    "type": "enum",
+                    "name": "Duration",
+                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                    "values": {
+                      "UNDEFINED_DURATION": {
+                        "value": 0
                       },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
+                      "DURATION_UNSPECIFIED": {
+                        "value": 529071340
+                      },
+                      "HOUR": {
+                        "value": 2223588
+                      },
+                      "MAX": {
+                        "value": 76100
+                      },
+                      "MINUTE": {
+                        "value": 126786068
                       }
                     }
                   },
                   "max_backoff": {
-                    "type": "object",
-                    "properties": {
-                      "nanos": {
-                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                        "type": "integer"
+                    "type": "enum",
+                    "name": "Duration",
+                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                    "values": {
+                      "UNDEFINED_DURATION": {
+                        "value": 0
                       },
-                      "seconds": {
-                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                        "type": "integer"
+                      "DURATION_UNSPECIFIED": {
+                        "value": 529071340
+                      },
+                      "HOUR": {
+                        "value": 2223588
+                      },
+                      "MAX": {
+                        "value": 76100
+                      },
+                      "MINUTE": {
+                        "value": 126786068
                       }
                     }
                   },
@@ -554,9 +753,26 @@
                 }
               },
               "state": {
-                "description": "Output only. The state of the queue.  ``state`` can only be changed by called [PauseQueue][google.cloud.tasks.v2beta3.CloudTasks.PauseQueue], [ResumeQueue][google.cloud.tasks.v2beta3.CloudTasks.ResumeQueue], or uploading `queue.yaml/xml <https://cloud.google.com/appengine/docs/python/config/queueref>`__. [UpdateQueue][google.cloud.tasks.v2beta3.CloudTasks.UpdateQueue] cannot be used to change ``state``.",
-                "type": "object",
-                "reference": "google.cloud.tasks_v2beta3.types.Queue.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "purge_time": {
                 "description": "Output only. The last time this queue was purged.  All tasks that were [created][google.cloud.tasks.v2beta3.Task.create_time] before this time were purged.  A queue can be purged using [PurgeQueue][google.cloud.tasks.v2beta3.CloudTasks.PurgeQueue], the `App Engine Task Queue SDK, or the Cloud Console <https://cloud.google.com/appengine/docs/standard/python/taskqueue/push/deleting-tasks-and-queues#purging_all_tasks_from_a_queue>`__.  Purge time will be truncated to the nearest microsecond. Purge time will be unset if the queue has never been purged.",
@@ -564,28 +780,46 @@
                 "reference": "google.protobuf.timestamp_pb2.Timestamp"
               },
               "task_ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
               "tombstone_ttl": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -599,9 +833,23 @@
                 }
               },
               "type_": {
-                "description": "Immutable. The type of a queue (push or pull).  ``Queue.type`` is an immutable property of the queue that is set at the queue creation time. When left unspecified, the default value of ``PUSH`` is selected.",
-                "type": "object",
-                "reference": "google.cloud.tasks_v2beta3.types.Queue.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "stats": {
                 "type": "object",
@@ -722,30 +970,18 @@
             "type": "string"
           },
           "response_view": {
-            "description": "The response_view specifies which subset of the [Task][google.cloud.tasks.v2.Task] will be returned.  By default response_view is [BASIC][google.cloud.tasks.v2.Task.View.BASIC]; not all information is retrieved by default because some data, such as payloads, might be desirable to return only when needed because of its large size or because of the sensitivity of data that it contains.  Authorization for [FULL][google.cloud.tasks.v2.Task.View.FULL] requires ``cloudtasks.tasks.fullView`` `Google IAM <https://cloud.google.com/iam/>`__ permission on the [Task][google.cloud.tasks.v2.Task] resource.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the view. Format:  projects/{project}/locations/{location}/views/{view}",
-                "type": "string"
+            "description": "The view specifies a subset of\n[Task][google.cloud.tasks.v2beta3.Task] data.\n\nWhen a task is returned in a response, not all information is\nretrieved by default because some data, such as payloads, might be\ndesirable to return only when needed because of its large size or\nbecause of the sensitivity of data that it contains.\n\nValues:\n    VIEW_UNSPECIFIED (0):\n        Unspecified. Defaults to BASIC.\n    BASIC (1):\n        The basic view omits fields which can be large or can\n        contain sensitive data.\n\n        This view does not include the [body in\n        AppEngineHttpRequest][google.cloud.tasks.v2beta3.AppEngineHttpRequest.body].\n        Bodies are desirable to return only when needed, because\n        they can be large and because of the sensitivity of the data\n        that you choose to store in it.\n    FULL (2):\n        All information is returned.\n\n        Authorization for\n        [FULL][google.cloud.tasks.v2beta3.Task.View.FULL] requires\n        ``cloudtasks.tasks.fullView`` `Google\n        IAM <ht",
+            "type": "enum",
+            "name": "View",
+            "values": {
+              "VIEW_UNSPECIFIED": {
+                "value": 0
               },
-              "display_name": {
-                "description": "The human-readable display name of the view.",
-                "type": "string"
+              "BASIC": {
+                "value": 1
               },
-              "create_time": {
-                "description": "Output only. The time at which this view was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The most recent time at which the view was updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "value": {
-                "description": "String with specific view properties, must be non-empty.",
-                "type": "string"
+              "FULL": {
+                "value": 2
               }
             }
           },
@@ -775,30 +1011,18 @@
             "type": "string"
           },
           "response_view": {
-            "description": "The response_view specifies which subset of the [Task][google.cloud.tasks.v2.Task] will be returned.  By default response_view is [BASIC][google.cloud.tasks.v2.Task.View.BASIC]; not all information is retrieved by default because some data, such as payloads, might be desirable to return only when needed because of its large size or because of the sensitivity of data that it contains.  Authorization for [FULL][google.cloud.tasks.v2.Task.View.FULL] requires ``cloudtasks.tasks.fullView`` `Google IAM <https://cloud.google.com/iam/>`__ permission on the [Task][google.cloud.tasks.v2.Task] resource.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the view. Format:  projects/{project}/locations/{location}/views/{view}",
-                "type": "string"
+            "description": "The view specifies a subset of\n[Task][google.cloud.tasks.v2beta3.Task] data.\n\nWhen a task is returned in a response, not all information is\nretrieved by default because some data, such as payloads, might be\ndesirable to return only when needed because of its large size or\nbecause of the sensitivity of data that it contains.\n\nValues:\n    VIEW_UNSPECIFIED (0):\n        Unspecified. Defaults to BASIC.\n    BASIC (1):\n        The basic view omits fields which can be large or can\n        contain sensitive data.\n\n        This view does not include the [body in\n        AppEngineHttpRequest][google.cloud.tasks.v2beta3.AppEngineHttpRequest.body].\n        Bodies are desirable to return only when needed, because\n        they can be large and because of the sensitivity of the data\n        that you choose to store in it.\n    FULL (2):\n        All information is returned.\n\n        Authorization for\n        [FULL][google.cloud.tasks.v2beta3.Task.View.FULL] requires\n        ``cloudtasks.tasks.fullView`` `Google\n        IAM <ht",
+            "type": "enum",
+            "name": "View",
+            "values": {
+              "VIEW_UNSPECIFIED": {
+                "value": 0
               },
-              "display_name": {
-                "description": "The human-readable display name of the view.",
-                "type": "string"
+              "BASIC": {
+                "value": 1
               },
-              "create_time": {
-                "description": "Output only. The time at which this view was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The most recent time at which the view was updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "value": {
-                "description": "String with specific view properties, must be non-empty.",
-                "type": "string"
+              "FULL": {
+                "value": 2
               }
             }
           }
@@ -828,19 +1052,61 @@
                 "type": "string"
               },
               "type_": {
-                "description": "Required. Immutable. Defines the type of the Task. For example, a break or shipment.",
-                "type": "object",
-                "reference": "google.maps.fleetengine_delivery_v1.types.Task.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "state": {
-                "description": "Required. The current execution state of the Task.",
-                "type": "object",
-                "reference": "google.maps.fleetengine_delivery_v1.types.Task.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "task_outcome": {
-                "description": "The outcome of the Task.",
-                "type": "object",
-                "reference": "google.maps.fleetengine_delivery_v1.types.Task.TaskOutcome"
+                "type": "enum",
+                "name": "TaskOutcome",
+                "description": "The outcome of attempting to execute a Task. When ``TaskState`` is\nclosed, ``TaskOutcome`` indicates whether it was completed\nsuccessfully.\n\nValues:\n    TASK_OUTCOME_UNSPECIFIED (0):\n        The Task outcome before its value is set.\n    SUCCEEDED (1):\n        The Task completed successfully.\n    FAILED (2):\n        Either the Task couldn't be completed, or it\n        was cancelled.",
+                "values": {
+                  "TASK_OUTCOME_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "SUCCEEDED": {
+                    "value": 1
+                  },
+                  "FAILED": {
+                    "value": 2
+                  }
+                }
               },
               "task_outcome_time": {
                 "description": "The timestamp that indicates when the ``Task``'s outcome was set by the provider.",
@@ -858,9 +1124,20 @@
                 }
               },
               "task_outcome_location_source": {
-                "description": "Indicates where the value of the ``task_outcome_location`` came from.",
-                "type": "object",
-                "reference": "google.maps.fleetengine_delivery_v1.types.Task.TaskOutcomeLocationSource"
+                "type": "enum",
+                "name": "TaskOutcomeLocationSource",
+                "description": "The identity of the source that populated the\n``task_outcome_location``.\n\nValues:\n    TASK_OUTCOME_LOCATION_SOURCE_UNSPECIFIED (0):\n        The task outcome before it is set.\n    PROVIDER (2):\n        The provider-specified the ``task_outcome_location``.\n    LAST_VEHICLE_LOCATION (3):\n        The provider didn't specify the ``task_outcome_location``,\n        so Fleet Engine used the last known vehicle location.",
+                "values": {
+                  "TASK_OUTCOME_LOCATION_SOURCE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "PROVIDER": {
+                    "value": 2
+                  },
+                  "LAST_VEHICLE_LOCATION": {
+                    "value": 3
+                  }
+                }
               },
               "tracking_id": {
                 "description": "Immutable. This field facilitates the storing of an ID so you can avoid using a complicated mapping. You cannot set ``tracking_id`` for Tasks of type ``UNAVAILABLE`` and ``SCHEDULED_STOP``. These IDs are subject to the following restrictions:  -  Must be a valid Unicode string. -  Limited to a maximum length of 64 characters. -  Normalized according to [Unicode Normalization Form C] (http://www.unicode.org/reports/tr15/). -  May not contain any of the following ASCII characters: '/', ':', '?', ',', or '#'.",
@@ -881,15 +1158,24 @@
                 }
               },
               "task_duration": {
-                "type": "object",
-                "properties": {
-                  "nanos": {
-                    "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                    "type": "integer"
+                "type": "enum",
+                "name": "Duration",
+                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                "values": {
+                  "UNDEFINED_DURATION": {
+                    "value": 0
                   },
-                  "seconds": {
-                    "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                    "type": "integer"
+                  "DURATION_UNSPECIFIED": {
+                    "value": 529071340
+                  },
+                  "HOUR": {
+                    "value": 2223588
+                  },
+                  "MAX": {
+                    "value": 76100
+                  },
+                  "MINUTE": {
+                    "value": 126786068
                   }
                 }
               },
@@ -959,15 +1245,24 @@
                                     "type": "string"
                                   },
                                   "task_duration": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   },
@@ -1008,9 +1303,26 @@
                               }
                             },
                             "state": {
-                              "description": "The state of the ``VehicleStop``. This field won't be populated in the response of a ``GetTask`` call.",
-                              "type": "object",
-                              "reference": "google.maps.fleetengine_delivery_v1.types.VehicleStop.State"
+                              "type": "enum",
+                              "name": "State",
+                              "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                              "values": {
+                                "STATE_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "AFFECTED": {
+                                  "value": 1
+                                },
+                                "NOT_AFFECTED": {
+                                  "value": 2
+                                },
+                                "FIXED": {
+                                  "value": 3
+                                },
+                                "UNDER_INVESTIGATION": {
+                                  "value": 4
+                                }
+                              }
                             }
                           },
                           "required": [
@@ -1023,15 +1335,24 @@
                           "reference": "google.protobuf.wrappers_pb2.Int32Value"
                         },
                         "driving_duration": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
@@ -1120,9 +1441,38 @@
                         "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       },
                       "location_sensor": {
-                        "description": "Provider of location data (for example, ``GPS``).",
-                        "type": "object",
-                        "reference": "google.maps.fleetengine_delivery_v1.types.DeliveryVehicleLocationSensor"
+                        "type": "enum",
+                        "name": "DeliveryVehicleLocationSensor",
+                        "description": "The sensor or methodology used to determine the location.\n\nValues:\n    UNKNOWN_SENSOR (0):\n        The sensor is unspecified or unknown.\n    GPS (1):\n        GPS or Assisted GPS.\n    NETWORK (2):\n        Assisted GPS, cell tower ID, or WiFi access\n        point.\n    PASSIVE (3):\n        Cell tower ID or WiFi access point.\n    ROAD_SNAPPED_LOCATION_PROVIDER (4):\n        A location determined by the mobile device to\n        be the most likely road position.\n    CUSTOMER_SUPPLIED_LOCATION (5):\n        A customer-supplied location from an independent source.\n        Typically, this value is used for a location provided from\n        sources other than the mobile device running Driver SDK. If\n        the original source is described by one of the other enum\n        values, use that value. Locations marked\n        CUSTOMER_SUPPLIED_LOCATION are typically provided via a\n        DeliveryVehicle's\n        ``last_location.supplemental_location_sensor``.\n    FLEET_ENGINE_LOCATION (6):\n        A location calculated by Fle",
+                        "values": {
+                          "UNKNOWN_SENSOR": {
+                            "value": 0
+                          },
+                          "GPS": {
+                            "value": 1
+                          },
+                          "NETWORK": {
+                            "value": 2
+                          },
+                          "PASSIVE": {
+                            "value": 3
+                          },
+                          "ROAD_SNAPPED_LOCATION_PROVIDER": {
+                            "value": 4
+                          },
+                          "CUSTOMER_SUPPLIED_LOCATION": {
+                            "value": 5
+                          },
+                          "FLEET_ENGINE_LOCATION": {
+                            "value": 6
+                          },
+                          "FUSED_LOCATION_PROVIDER": {
+                            "value": 100
+                          },
+                          "CORE_LOCATION": {
+                            "value": 200
+                          }
+                        }
                       },
                       "is_road_snapped": {
                         "type": "object",
@@ -1163,9 +1513,38 @@
                         "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       },
                       "raw_location_sensor": {
-                        "description": "Source of the raw location. Defaults to ``GPS``.",
-                        "type": "object",
-                        "reference": "google.maps.fleetengine_delivery_v1.types.DeliveryVehicleLocationSensor"
+                        "type": "enum",
+                        "name": "DeliveryVehicleLocationSensor",
+                        "description": "The sensor or methodology used to determine the location.\n\nValues:\n    UNKNOWN_SENSOR (0):\n        The sensor is unspecified or unknown.\n    GPS (1):\n        GPS or Assisted GPS.\n    NETWORK (2):\n        Assisted GPS, cell tower ID, or WiFi access\n        point.\n    PASSIVE (3):\n        Cell tower ID or WiFi access point.\n    ROAD_SNAPPED_LOCATION_PROVIDER (4):\n        A location determined by the mobile device to\n        be the most likely road position.\n    CUSTOMER_SUPPLIED_LOCATION (5):\n        A customer-supplied location from an independent source.\n        Typically, this value is used for a location provided from\n        sources other than the mobile device running Driver SDK. If\n        the original source is described by one of the other enum\n        values, use that value. Locations marked\n        CUSTOMER_SUPPLIED_LOCATION are typically provided via a\n        DeliveryVehicle's\n        ``last_location.supplemental_location_sensor``.\n    FLEET_ENGINE_LOCATION (6):\n        A location calculated by Fle",
+                        "values": {
+                          "UNKNOWN_SENSOR": {
+                            "value": 0
+                          },
+                          "GPS": {
+                            "value": 1
+                          },
+                          "NETWORK": {
+                            "value": 2
+                          },
+                          "PASSIVE": {
+                            "value": 3
+                          },
+                          "ROAD_SNAPPED_LOCATION_PROVIDER": {
+                            "value": 4
+                          },
+                          "CUSTOMER_SUPPLIED_LOCATION": {
+                            "value": 5
+                          },
+                          "FLEET_ENGINE_LOCATION": {
+                            "value": 6
+                          },
+                          "FUSED_LOCATION_PROVIDER": {
+                            "value": 100
+                          },
+                          "CORE_LOCATION": {
+                            "value": 200
+                          }
+                        }
                       },
                       "raw_location_accuracy": {
                         "description": "Accuracy of ``raw_location`` as a radius, in meters.",
@@ -1183,9 +1562,38 @@
                         "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       },
                       "supplemental_location_sensor": {
-                        "description": "Source of the supplemental location. Defaults to ``CUSTOMER_SUPPLIED_LOCATION``.",
-                        "type": "object",
-                        "reference": "google.maps.fleetengine_delivery_v1.types.DeliveryVehicleLocationSensor"
+                        "type": "enum",
+                        "name": "DeliveryVehicleLocationSensor",
+                        "description": "The sensor or methodology used to determine the location.\n\nValues:\n    UNKNOWN_SENSOR (0):\n        The sensor is unspecified or unknown.\n    GPS (1):\n        GPS or Assisted GPS.\n    NETWORK (2):\n        Assisted GPS, cell tower ID, or WiFi access\n        point.\n    PASSIVE (3):\n        Cell tower ID or WiFi access point.\n    ROAD_SNAPPED_LOCATION_PROVIDER (4):\n        A location determined by the mobile device to\n        be the most likely road position.\n    CUSTOMER_SUPPLIED_LOCATION (5):\n        A customer-supplied location from an independent source.\n        Typically, this value is used for a location provided from\n        sources other than the mobile device running Driver SDK. If\n        the original source is described by one of the other enum\n        values, use that value. Locations marked\n        CUSTOMER_SUPPLIED_LOCATION are typically provided via a\n        DeliveryVehicle's\n        ``last_location.supplemental_location_sensor``.\n    FLEET_ENGINE_LOCATION (6):\n        A location calculated by Fle",
+                        "values": {
+                          "UNKNOWN_SENSOR": {
+                            "value": 0
+                          },
+                          "GPS": {
+                            "value": 1
+                          },
+                          "NETWORK": {
+                            "value": 2
+                          },
+                          "PASSIVE": {
+                            "value": 3
+                          },
+                          "ROAD_SNAPPED_LOCATION_PROVIDER": {
+                            "value": 4
+                          },
+                          "CUSTOMER_SUPPLIED_LOCATION": {
+                            "value": 5
+                          },
+                          "FLEET_ENGINE_LOCATION": {
+                            "value": 6
+                          },
+                          "FUSED_LOCATION_PROVIDER": {
+                            "value": 100
+                          },
+                          "CORE_LOCATION": {
+                            "value": 200
+                          }
+                        }
                       },
                       "supplemental_location_accuracy": {
                         "description": "Accuracy of ``supplemental_location`` as a radius, in meters.",
@@ -1215,15 +1623,24 @@
                         "type": "integer"
                       },
                       "duration_until_estimated_arrival_time_threshold": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -1249,15 +1666,24 @@
                         "type": "integer"
                       },
                       "duration_until_estimated_arrival_time_threshold": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -1283,15 +1709,24 @@
                         "type": "integer"
                       },
                       "duration_until_estimated_arrival_time_threshold": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -1317,15 +1752,24 @@
                         "type": "integer"
                       },
                       "duration_until_estimated_arrival_time_threshold": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -1351,15 +1795,24 @@
                         "type": "integer"
                       },
                       "duration_until_estimated_arrival_time_threshold": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -1385,15 +1838,24 @@
                         "type": "integer"
                       },
                       "duration_until_estimated_arrival_time_threshold": {
-                        "type": "object",
-                        "properties": {
-                          "nanos": {
-                            "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                            "type": "integer"
+                        "type": "enum",
+                        "name": "Duration",
+                        "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                        "values": {
+                          "UNDEFINED_DURATION": {
+                            "value": 0
                           },
-                          "seconds": {
-                            "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                            "type": "integer"
+                          "DURATION_UNSPECIFIED": {
+                            "value": 529071340
+                          },
+                          "HOUR": {
+                            "value": 2223588
+                          },
+                          "MAX": {
+                            "value": 76100
+                          },
+                          "MINUTE": {
+                            "value": 126786068
                           }
                         }
                       },
@@ -1446,30 +1908,18 @@
             ]
           },
           "response_view": {
-            "description": "The response_view specifies which subset of the [Task][google.cloud.tasks.v2.Task] will be returned.  By default response_view is [BASIC][google.cloud.tasks.v2.Task.View.BASIC]; not all information is retrieved by default because some data, such as payloads, might be desirable to return only when needed because of its large size or because of the sensitivity of data that it contains.  Authorization for [FULL][google.cloud.tasks.v2.Task.View.FULL] requires ``cloudtasks.tasks.fullView`` `Google IAM <https://cloud.google.com/iam/>`__ permission on the [Task][google.cloud.tasks.v2.Task] resource.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the view. Format:  projects/{project}/locations/{location}/views/{view}",
-                "type": "string"
+            "description": "The view specifies a subset of\n[Task][google.cloud.tasks.v2beta3.Task] data.\n\nWhen a task is returned in a response, not all information is\nretrieved by default because some data, such as payloads, might be\ndesirable to return only when needed because of its large size or\nbecause of the sensitivity of data that it contains.\n\nValues:\n    VIEW_UNSPECIFIED (0):\n        Unspecified. Defaults to BASIC.\n    BASIC (1):\n        The basic view omits fields which can be large or can\n        contain sensitive data.\n\n        This view does not include the [body in\n        AppEngineHttpRequest][google.cloud.tasks.v2beta3.AppEngineHttpRequest.body].\n        Bodies are desirable to return only when needed, because\n        they can be large and because of the sensitivity of the data\n        that you choose to store in it.\n    FULL (2):\n        All information is returned.\n\n        Authorization for\n        [FULL][google.cloud.tasks.v2beta3.Task.View.FULL] requires\n        ``cloudtasks.tasks.fullView`` `Google\n        IAM <ht",
+            "type": "enum",
+            "name": "View",
+            "values": {
+              "VIEW_UNSPECIFIED": {
+                "value": 0
               },
-              "display_name": {
-                "description": "The human-readable display name of the view.",
-                "type": "string"
+              "BASIC": {
+                "value": 1
               },
-              "create_time": {
-                "description": "Output only. The time at which this view was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The most recent time at which the view was updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "value": {
-                "description": "String with specific view properties, must be non-empty.",
-                "type": "string"
+              "FULL": {
+                "value": 2
               }
             }
           }
@@ -1509,30 +1959,18 @@
             "type": "string"
           },
           "response_view": {
-            "description": "The response_view specifies which subset of the [Task][google.cloud.tasks.v2.Task] will be returned.  By default response_view is [BASIC][google.cloud.tasks.v2.Task.View.BASIC]; not all information is retrieved by default because some data, such as payloads, might be desirable to return only when needed because of its large size or because of the sensitivity of data that it contains.  Authorization for [FULL][google.cloud.tasks.v2.Task.View.FULL] requires ``cloudtasks.tasks.fullView`` `Google IAM <https://cloud.google.com/iam/>`__ permission on the [Task][google.cloud.tasks.v2.Task] resource.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the view. Format:  projects/{project}/locations/{location}/views/{view}",
-                "type": "string"
+            "description": "The view specifies a subset of\n[Task][google.cloud.tasks.v2beta3.Task] data.\n\nWhen a task is returned in a response, not all information is\nretrieved by default because some data, such as payloads, might be\ndesirable to return only when needed because of its large size or\nbecause of the sensitivity of data that it contains.\n\nValues:\n    VIEW_UNSPECIFIED (0):\n        Unspecified. Defaults to BASIC.\n    BASIC (1):\n        The basic view omits fields which can be large or can\n        contain sensitive data.\n\n        This view does not include the [body in\n        AppEngineHttpRequest][google.cloud.tasks.v2beta3.AppEngineHttpRequest.body].\n        Bodies are desirable to return only when needed, because\n        they can be large and because of the sensitivity of the data\n        that you choose to store in it.\n    FULL (2):\n        All information is returned.\n\n        Authorization for\n        [FULL][google.cloud.tasks.v2beta3.Task.View.FULL] requires\n        ``cloudtasks.tasks.fullView`` `Google\n        IAM <ht",
+            "type": "enum",
+            "name": "View",
+            "values": {
+              "VIEW_UNSPECIFIED": {
+                "value": 0
               },
-              "display_name": {
-                "description": "The human-readable display name of the view.",
-                "type": "string"
+              "BASIC": {
+                "value": 1
               },
-              "create_time": {
-                "description": "Output only. The time at which this view was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The most recent time at which the view was updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "value": {
-                "description": "String with specific view properties, must be non-empty.",
-                "type": "string"
+              "FULL": {
+                "value": 2
               }
             }
           }
@@ -1556,9 +1994,35 @@
             "type": "string"
           },
           "http_method": {
-            "description": "The HTTP method to use for the request. The default is POST.",
-            "type": "object",
-            "reference": "google.cloud.tasks_v2.types.HttpMethod"
+            "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+            "type": "enum",
+            "name": "HttpMethod",
+            "values": {
+              "HTTP_METHOD_UNSPECIFIED": {
+                "value": 0
+              },
+              "POST": {
+                "value": 1
+              },
+              "GET": {
+                "value": 2
+              },
+              "HEAD": {
+                "value": 3
+              },
+              "PUT": {
+                "value": 4
+              },
+              "DELETE": {
+                "value": 5
+              },
+              "PATCH": {
+                "value": 6
+              },
+              "OPTIONS": {
+                "value": 7
+              }
+            }
           },
           "headers": {
             "description": "HTTP request headers.  This map contains the header field names and values. Headers can be set when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask].  These headers represent a subset of the headers that will accompany the task's HTTP request. Some HTTP request headers will be ignored or replaced.  A partial list of headers that will be ignored or replaced is:  -  Host: This will be computed by Cloud Tasks and derived from [HttpRequest.url][google.cloud.tasks.v2.HttpRequest.url]. -  Content-Length: This will be computed by Cloud Tasks. -  User-Agent: This will be set to ``\"Google-Cloud-Tasks\"``. -  ``X-Google-*``: Google use only. -  ``X-AppEngine-*``: Google use only.  ``Content-Type`` won't be set by Cloud Tasks. You can explicitly set ``Content-Type`` to a media type when the [task is created][google.cloud.tasks.v2beta3.CloudTasks.CreateTask]. For example, ``Content-Type`` can be set to ``\"application/octet-stream\"`` or ``\"application/json\"``.  Headers which can have multiple values (according to RFC2616) can be specified using comma-separated values.  The size of the headers must be less than 80KB.",
@@ -1614,9 +2078,35 @@
         "type": "object",
         "properties": {
           "http_method": {
-            "description": "The HTTP method to use for the request. The default is POST.  The app's request handler for the task's target URL must be able to handle HTTP requests with this http_method, otherwise the task attempt fails with error code 405 (Method Not Allowed). See `Writing a push task request handler <https://cloud.google.com/appengine/docs/java/taskqueue/push/creating-handlers#writing_a_push_task_request_handler>`__ and the App Engine documentation for your runtime on `How Requests are Handled <https://cloud.google.com/appengine/docs/standard/python3/how-requests-are-handled>`__.",
-            "type": "object",
-            "reference": "google.cloud.tasks_v2.types.HttpMethod"
+            "description": "The HTTP method used to execute the task.\n\nValues:\n    HTTP_METHOD_UNSPECIFIED (0):\n        HTTP method unspecified\n    POST (1):\n        HTTP POST\n    GET (2):\n        HTTP GET\n    HEAD (3):\n        HTTP HEAD\n    PUT (4):\n        HTTP PUT\n    DELETE (5):\n        HTTP DELETE\n    PATCH (6):\n        HTTP PATCH\n    OPTIONS (7):\n        HTTP OPTIONS",
+            "type": "enum",
+            "name": "HttpMethod",
+            "values": {
+              "HTTP_METHOD_UNSPECIFIED": {
+                "value": 0
+              },
+              "POST": {
+                "value": 1
+              },
+              "GET": {
+                "value": 2
+              },
+              "HEAD": {
+                "value": 3
+              },
+              "PUT": {
+                "value": 4
+              },
+              "DELETE": {
+                "value": 5
+              },
+              "PATCH": {
+                "value": 6
+              },
+              "OPTIONS": {
+                "value": 7
+              }
+            }
           },
           "app_engine_routing": {
             "description": "Task-level setting for App Engine routing.  -  If [app_engine_routing_override is set on the queue][google.cloud.tasks.v2.Queue.app_engine_routing_override], this value is used for all tasks in the queue, no matter what the setting is for the [task-level app_engine_routing][google.cloud.tasks.v2.AppEngineHttpRequest.app_engine_routing].",

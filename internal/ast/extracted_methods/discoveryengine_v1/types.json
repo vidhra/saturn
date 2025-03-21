@@ -312,9 +312,26 @@
                         "type": "string"
                       },
                       "state": {
-                        "description": "State of the condition.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.State"
+                        "type": "enum",
+                        "name": "State",
+                        "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                        "values": {
+                          "STATE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "AFFECTED": {
+                            "value": 1
+                          },
+                          "NOT_AFFECTED": {
+                            "value": 2
+                          },
+                          "FIXED": {
+                            "value": 3
+                          },
+                          "UNDER_INVESTIGATION": {
+                            "value": 4
+                          }
+                        }
                       },
                       "message": {
                         "description": "Human readable message indicating details about the current status.",
@@ -326,24 +343,152 @@
                         "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       },
                       "severity": {
-                        "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.Severity"
+                        "type": "enum",
+                        "name": "Severity",
+                        "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                        "values": {
+                          "SEVERITY_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MINIMAL": {
+                            "value": 1
+                          },
+                          "LOW": {
+                            "value": 2
+                          },
+                          "MEDIUM": {
+                            "value": 3
+                          },
+                          "HIGH": {
+                            "value": 4
+                          },
+                          "CRITICAL": {
+                            "value": 5
+                          }
+                        }
                       },
                       "reason": {
-                        "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                        "type": "enum",
+                        "name": "CommonReason",
+                        "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                        "values": {
+                          "COMMON_REASON_UNDEFINED": {
+                            "value": 0
+                          },
+                          "UNKNOWN": {
+                            "value": 1
+                          },
+                          "REVISION_FAILED": {
+                            "value": 3
+                          },
+                          "PROGRESS_DEADLINE_EXCEEDED": {
+                            "value": 4
+                          },
+                          "CONTAINER_MISSING": {
+                            "value": 6
+                          },
+                          "CONTAINER_PERMISSION_DENIED": {
+                            "value": 7
+                          },
+                          "CONTAINER_IMAGE_UNAUTHORIZED": {
+                            "value": 8
+                          },
+                          "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                            "value": 9
+                          },
+                          "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                            "value": 10
+                          },
+                          "ENCRYPTION_KEY_CHECK_FAILED": {
+                            "value": 11
+                          },
+                          "SECRETS_ACCESS_CHECK_FAILED": {
+                            "value": 12
+                          },
+                          "WAITING_FOR_OPERATION": {
+                            "value": 13
+                          },
+                          "IMMEDIATE_RETRY": {
+                            "value": 14
+                          },
+                          "POSTPONED_RETRY": {
+                            "value": 15
+                          },
+                          "INTERNAL": {
+                            "value": 16
+                          }
+                        }
                       },
                       "revision_reason": {
-                        "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                        "type": "enum",
+                        "name": "RevisionReason",
+                        "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                        "values": {
+                          "REVISION_REASON_UNDEFINED": {
+                            "value": 0
+                          },
+                          "PENDING": {
+                            "value": 1
+                          },
+                          "RESERVE": {
+                            "value": 2
+                          },
+                          "RETIRED": {
+                            "value": 3
+                          },
+                          "RETIRING": {
+                            "value": 4
+                          },
+                          "RECREATING": {
+                            "value": 5
+                          },
+                          "HEALTH_CHECK_CONTAINER_ERROR": {
+                            "value": 6
+                          },
+                          "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                            "value": 7
+                          },
+                          "MIN_INSTANCES_NOT_PROVISIONED": {
+                            "value": 8
+                          },
+                          "ACTIVE_REVISION_LIMIT_REACHED": {
+                            "value": 9
+                          },
+                          "NO_DEPLOYMENT": {
+                            "value": 10
+                          },
+                          "HEALTH_CHECK_SKIPPED": {
+                            "value": 11
+                          },
+                          "MIN_INSTANCES_WARMING": {
+                            "value": 12
+                          }
+                        }
                       },
                       "execution_reason": {
-                        "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                        "type": "enum",
+                        "name": "ExecutionReason",
+                        "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                        "values": {
+                          "EXECUTION_REASON_UNDEFINED": {
+                            "value": 0
+                          },
+                          "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                            "value": 1
+                          },
+                          "NON_ZERO_EXIT_CODE": {
+                            "value": 2
+                          },
+                          "CANCELLED": {
+                            "value": 3
+                          },
+                          "CANCELLING": {
+                            "value": 4
+                          },
+                          "DELETED": {
+                            "value": 5
+                          }
+                        }
                       }
                     }
                   }
@@ -371,16 +516,37 @@
                 "description": "Required. Immutable. The solution types that the control is used for. Currently we support setting only one type of solution at creation time.  Only ``SOLUTION_TYPE_SEARCH`` value is supported at the moment. If no solution type is provided at creation time, will default to [SOLUTION_TYPE_SEARCH][google.cloud.retail.v2beta.SolutionType.SOLUTION_TYPE_SEARCH].",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.retail_v2beta.types.SolutionType"
+                  "type": "enum",
+                  "name": "SolutionType",
+                  "description": "Selector for different solution types of a reported trip.\n\nValues:\n    SOLUTION_TYPE_UNSPECIFIED (0):\n        The default value. For backwards-compatibility, the API will\n        use ``ON_DEMAND_RIDESHARING_AND_DELIVERIES`` by default\n        which is the first supported solution type.\n    ON_DEMAND_RIDESHARING_AND_DELIVERIES (1):\n        The solution is an on-demand ridesharing and\n        deliveries trip.",
+                  "values": {
+                    "SOLUTION_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "ON_DEMAND_RIDESHARING_AND_DELIVERIES": {
+                      "value": 1
+                    }
+                  }
                 }
               },
               "search_solution_use_case": {
                 "description": "Specifies the use case for the control. Affects what condition fields can be set. Only settable by search controls. Will default to [SEARCH_SOLUTION_USE_CASE_SEARCH][google.cloud.retail.v2beta.SearchSolutionUseCase.SEARCH_SOLUTION_USE_CASE_SEARCH] if not specified. Currently only allow one search_solution_use_case per control.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.retail_v2beta.types.SearchSolutionUseCase"
+                  "type": "enum",
+                  "name": "SearchSolutionUseCase",
+                  "description": "The use case of Cloud Retail Search.\n\nValues:\n    SEARCH_SOLUTION_USE_CASE_UNSPECIFIED (0):\n        The value when it's unspecified. In this case, server\n        behavior defaults to\n        [SEARCH_SOLUTION_USE_CASE_SEARCH][google.cloud.retail.v2beta.SearchSolutionUseCase.SEARCH_SOLUTION_USE_CASE_SEARCH].\n    SEARCH_SOLUTION_USE_CASE_SEARCH (1):\n        Search use case. Expects the traffic has a non-empty\n        [query][google.cloud.retail.v2beta.SearchRequest.query].\n    SEARCH_SOLUTION_USE_CASE_BROWSE (2):\n        Browse use case. Expects the traffic has an empty\n        [query][google.cloud.retail.v2beta.SearchRequest.query].",
+                  "values": {
+                    "SEARCH_SOLUTION_USE_CASE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "SEARCH_SOLUTION_USE_CASE_SEARCH": {
+                      "value": 1
+                    },
+                    "SEARCH_SOLUTION_USE_CASE_BROWSE": {
+                      "value": 2
+                    }
+                  }
                 }
               }
             },
@@ -673,9 +839,26 @@
                         "type": "string"
                       },
                       "state": {
-                        "description": "State of the condition.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.State"
+                        "type": "enum",
+                        "name": "State",
+                        "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                        "values": {
+                          "STATE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "AFFECTED": {
+                            "value": 1
+                          },
+                          "NOT_AFFECTED": {
+                            "value": 2
+                          },
+                          "FIXED": {
+                            "value": 3
+                          },
+                          "UNDER_INVESTIGATION": {
+                            "value": 4
+                          }
+                        }
                       },
                       "message": {
                         "description": "Human readable message indicating details about the current status.",
@@ -687,24 +870,152 @@
                         "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       },
                       "severity": {
-                        "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.Severity"
+                        "type": "enum",
+                        "name": "Severity",
+                        "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                        "values": {
+                          "SEVERITY_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MINIMAL": {
+                            "value": 1
+                          },
+                          "LOW": {
+                            "value": 2
+                          },
+                          "MEDIUM": {
+                            "value": 3
+                          },
+                          "HIGH": {
+                            "value": 4
+                          },
+                          "CRITICAL": {
+                            "value": 5
+                          }
+                        }
                       },
                       "reason": {
-                        "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                        "type": "enum",
+                        "name": "CommonReason",
+                        "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                        "values": {
+                          "COMMON_REASON_UNDEFINED": {
+                            "value": 0
+                          },
+                          "UNKNOWN": {
+                            "value": 1
+                          },
+                          "REVISION_FAILED": {
+                            "value": 3
+                          },
+                          "PROGRESS_DEADLINE_EXCEEDED": {
+                            "value": 4
+                          },
+                          "CONTAINER_MISSING": {
+                            "value": 6
+                          },
+                          "CONTAINER_PERMISSION_DENIED": {
+                            "value": 7
+                          },
+                          "CONTAINER_IMAGE_UNAUTHORIZED": {
+                            "value": 8
+                          },
+                          "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                            "value": 9
+                          },
+                          "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                            "value": 10
+                          },
+                          "ENCRYPTION_KEY_CHECK_FAILED": {
+                            "value": 11
+                          },
+                          "SECRETS_ACCESS_CHECK_FAILED": {
+                            "value": 12
+                          },
+                          "WAITING_FOR_OPERATION": {
+                            "value": 13
+                          },
+                          "IMMEDIATE_RETRY": {
+                            "value": 14
+                          },
+                          "POSTPONED_RETRY": {
+                            "value": 15
+                          },
+                          "INTERNAL": {
+                            "value": 16
+                          }
+                        }
                       },
                       "revision_reason": {
-                        "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                        "type": "enum",
+                        "name": "RevisionReason",
+                        "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                        "values": {
+                          "REVISION_REASON_UNDEFINED": {
+                            "value": 0
+                          },
+                          "PENDING": {
+                            "value": 1
+                          },
+                          "RESERVE": {
+                            "value": 2
+                          },
+                          "RETIRED": {
+                            "value": 3
+                          },
+                          "RETIRING": {
+                            "value": 4
+                          },
+                          "RECREATING": {
+                            "value": 5
+                          },
+                          "HEALTH_CHECK_CONTAINER_ERROR": {
+                            "value": 6
+                          },
+                          "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                            "value": 7
+                          },
+                          "MIN_INSTANCES_NOT_PROVISIONED": {
+                            "value": 8
+                          },
+                          "ACTIVE_REVISION_LIMIT_REACHED": {
+                            "value": 9
+                          },
+                          "NO_DEPLOYMENT": {
+                            "value": 10
+                          },
+                          "HEALTH_CHECK_SKIPPED": {
+                            "value": 11
+                          },
+                          "MIN_INSTANCES_WARMING": {
+                            "value": 12
+                          }
+                        }
                       },
                       "execution_reason": {
-                        "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                        "type": "object",
-                        "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                        "type": "enum",
+                        "name": "ExecutionReason",
+                        "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                        "values": {
+                          "EXECUTION_REASON_UNDEFINED": {
+                            "value": 0
+                          },
+                          "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                            "value": 1
+                          },
+                          "NON_ZERO_EXIT_CODE": {
+                            "value": 2
+                          },
+                          "CANCELLED": {
+                            "value": 3
+                          },
+                          "CANCELLING": {
+                            "value": 4
+                          },
+                          "DELETED": {
+                            "value": 5
+                          }
+                        }
                       }
                     }
                   }
@@ -732,16 +1043,37 @@
                 "description": "Required. Immutable. The solution types that the control is used for. Currently we support setting only one type of solution at creation time.  Only ``SOLUTION_TYPE_SEARCH`` value is supported at the moment. If no solution type is provided at creation time, will default to [SOLUTION_TYPE_SEARCH][google.cloud.retail.v2beta.SolutionType.SOLUTION_TYPE_SEARCH].",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.retail_v2beta.types.SolutionType"
+                  "type": "enum",
+                  "name": "SolutionType",
+                  "description": "Selector for different solution types of a reported trip.\n\nValues:\n    SOLUTION_TYPE_UNSPECIFIED (0):\n        The default value. For backwards-compatibility, the API will\n        use ``ON_DEMAND_RIDESHARING_AND_DELIVERIES`` by default\n        which is the first supported solution type.\n    ON_DEMAND_RIDESHARING_AND_DELIVERIES (1):\n        The solution is an on-demand ridesharing and\n        deliveries trip.",
+                  "values": {
+                    "SOLUTION_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "ON_DEMAND_RIDESHARING_AND_DELIVERIES": {
+                      "value": 1
+                    }
+                  }
                 }
               },
               "search_solution_use_case": {
                 "description": "Specifies the use case for the control. Affects what condition fields can be set. Only settable by search controls. Will default to [SEARCH_SOLUTION_USE_CASE_SEARCH][google.cloud.retail.v2beta.SearchSolutionUseCase.SEARCH_SOLUTION_USE_CASE_SEARCH] if not specified. Currently only allow one search_solution_use_case per control.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.retail_v2beta.types.SearchSolutionUseCase"
+                  "type": "enum",
+                  "name": "SearchSolutionUseCase",
+                  "description": "The use case of Cloud Retail Search.\n\nValues:\n    SEARCH_SOLUTION_USE_CASE_UNSPECIFIED (0):\n        The value when it's unspecified. In this case, server\n        behavior defaults to\n        [SEARCH_SOLUTION_USE_CASE_SEARCH][google.cloud.retail.v2beta.SearchSolutionUseCase.SEARCH_SOLUTION_USE_CASE_SEARCH].\n    SEARCH_SOLUTION_USE_CASE_SEARCH (1):\n        Search use case. Expects the traffic has a non-empty\n        [query][google.cloud.retail.v2beta.SearchRequest.query].\n    SEARCH_SOLUTION_USE_CASE_BROWSE (2):\n        Browse use case. Expects the traffic has an empty\n        [query][google.cloud.retail.v2beta.SearchRequest.query].",
+                  "values": {
+                    "SEARCH_SOLUTION_USE_CASE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "SEARCH_SOLUTION_USE_CASE_SEARCH": {
+                      "value": 1
+                    },
+                    "SEARCH_SOLUTION_USE_CASE_BROWSE": {
+                      "value": 2
+                    }
+                  }
                 }
               }
             },
@@ -876,9 +1208,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "The state of the Conversation.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.Conversation.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "user_pseudo_id": {
                 "description": "A unique identifier for tracking users.",
@@ -950,8 +1299,41 @@
                               "description": "Additional summary-skipped reasons. This provides the reason for ignored cases. If nothing is skipped, this field is not set.",
                               "type": "array",
                               "items": {
-                                "type": "object",
-                                "reference": "google.cloud.discoveryengine_v1beta.types.SearchResponse.Summary.SummarySkippedReason"
+                                "type": "enum",
+                                "name": "SummarySkippedReason",
+                                "description": "An Enum for summary-skipped reasons.\n\nValues:\n    SUMMARY_SKIPPED_REASON_UNSPECIFIED (0):\n        Default value. The summary skipped reason is\n        not specified.\n    ADVERSARIAL_QUERY_IGNORED (1):\n        The adversarial query ignored case.\n\n        Only used when\n        [SummarySpec.ignore_adversarial_query][google.cloud.discoveryengine.v1beta.SearchRequest.ContentSearchSpec.SummarySpec.ignore_adversarial_query]\n        is set to ``true``.\n    NON_SUMMARY_SEEKING_QUERY_IGNORED (2):\n        The non-summary seeking query ignored case.\n\n        Google skips the summary if the query is chit chat. Only\n        used when\n        [SummarySpec.ignore_non_summary_seeking_query][google.cloud.discoveryengine.v1beta.SearchRequest.ContentSearchSpec.SummarySpec.ignore_non_summary_seeking_query]\n        is set to ``true``.\n    OUT_OF_DOMAIN_QUERY_IGNORED (3):\n        The out-of-domain query ignored case.\n\n        Google skips the summary if there are no\n        high-relevance search results. For example, the\n        d",
+                                "values": {
+                                  "SUMMARY_SKIPPED_REASON_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "ADVERSARIAL_QUERY_IGNORED": {
+                                    "value": 1
+                                  },
+                                  "NON_SUMMARY_SEEKING_QUERY_IGNORED": {
+                                    "value": 2
+                                  },
+                                  "OUT_OF_DOMAIN_QUERY_IGNORED": {
+                                    "value": 3
+                                  },
+                                  "POTENTIAL_POLICY_VIOLATION": {
+                                    "value": 4
+                                  },
+                                  "LLM_ADDON_NOT_ENABLED": {
+                                    "value": 5
+                                  },
+                                  "NO_RELEVANT_CONTENT": {
+                                    "value": 6
+                                  },
+                                  "JAIL_BREAKING_QUERY_IGNORED": {
+                                    "value": 7
+                                  },
+                                  "CUSTOMER_POLICY_VIOLATION": {
+                                    "value": 8
+                                  },
+                                  "NON_SUMMARY_SEEKING_QUERY_IGNORED_V2": {
+                                    "value": 9
+                                  }
+                                }
                               }
                             },
                             "safety_attributes": {
@@ -1183,9 +1565,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "The state of the Conversation.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.Conversation.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "user_pseudo_id": {
                 "description": "A unique identifier for tracking users.",
@@ -1257,8 +1656,41 @@
                               "description": "Additional summary-skipped reasons. This provides the reason for ignored cases. If nothing is skipped, this field is not set.",
                               "type": "array",
                               "items": {
-                                "type": "object",
-                                "reference": "google.cloud.discoveryengine_v1beta.types.SearchResponse.Summary.SummarySkippedReason"
+                                "type": "enum",
+                                "name": "SummarySkippedReason",
+                                "description": "An Enum for summary-skipped reasons.\n\nValues:\n    SUMMARY_SKIPPED_REASON_UNSPECIFIED (0):\n        Default value. The summary skipped reason is\n        not specified.\n    ADVERSARIAL_QUERY_IGNORED (1):\n        The adversarial query ignored case.\n\n        Only used when\n        [SummarySpec.ignore_adversarial_query][google.cloud.discoveryengine.v1beta.SearchRequest.ContentSearchSpec.SummarySpec.ignore_adversarial_query]\n        is set to ``true``.\n    NON_SUMMARY_SEEKING_QUERY_IGNORED (2):\n        The non-summary seeking query ignored case.\n\n        Google skips the summary if the query is chit chat. Only\n        used when\n        [SummarySpec.ignore_non_summary_seeking_query][google.cloud.discoveryengine.v1beta.SearchRequest.ContentSearchSpec.SummarySpec.ignore_non_summary_seeking_query]\n        is set to ``true``.\n    OUT_OF_DOMAIN_QUERY_IGNORED (3):\n        The out-of-domain query ignored case.\n\n        Google skips the summary if there are no\n        high-relevance search results. For example, the\n        d",
+                                "values": {
+                                  "SUMMARY_SKIPPED_REASON_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "ADVERSARIAL_QUERY_IGNORED": {
+                                    "value": 1
+                                  },
+                                  "NON_SUMMARY_SEEKING_QUERY_IGNORED": {
+                                    "value": 2
+                                  },
+                                  "OUT_OF_DOMAIN_QUERY_IGNORED": {
+                                    "value": 3
+                                  },
+                                  "POTENTIAL_POLICY_VIOLATION": {
+                                    "value": 4
+                                  },
+                                  "LLM_ADDON_NOT_ENABLED": {
+                                    "value": 5
+                                  },
+                                  "NO_RELEVANT_CONTENT": {
+                                    "value": 6
+                                  },
+                                  "JAIL_BREAKING_QUERY_IGNORED": {
+                                    "value": 7
+                                  },
+                                  "CUSTOMER_POLICY_VIOLATION": {
+                                    "value": 8
+                                  },
+                                  "NON_SUMMARY_SEEKING_QUERY_IGNORED_V2": {
+                                    "value": 9
+                                  }
+                                }
                               }
                             },
                             "safety_attributes": {
@@ -1388,9 +1820,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "The state of the Conversation.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.Conversation.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "user_pseudo_id": {
                 "description": "A unique identifier for tracking users.",
@@ -1462,8 +1911,41 @@
                               "description": "Additional summary-skipped reasons. This provides the reason for ignored cases. If nothing is skipped, this field is not set.",
                               "type": "array",
                               "items": {
-                                "type": "object",
-                                "reference": "google.cloud.discoveryengine_v1beta.types.SearchResponse.Summary.SummarySkippedReason"
+                                "type": "enum",
+                                "name": "SummarySkippedReason",
+                                "description": "An Enum for summary-skipped reasons.\n\nValues:\n    SUMMARY_SKIPPED_REASON_UNSPECIFIED (0):\n        Default value. The summary skipped reason is\n        not specified.\n    ADVERSARIAL_QUERY_IGNORED (1):\n        The adversarial query ignored case.\n\n        Only used when\n        [SummarySpec.ignore_adversarial_query][google.cloud.discoveryengine.v1beta.SearchRequest.ContentSearchSpec.SummarySpec.ignore_adversarial_query]\n        is set to ``true``.\n    NON_SUMMARY_SEEKING_QUERY_IGNORED (2):\n        The non-summary seeking query ignored case.\n\n        Google skips the summary if the query is chit chat. Only\n        used when\n        [SummarySpec.ignore_non_summary_seeking_query][google.cloud.discoveryengine.v1beta.SearchRequest.ContentSearchSpec.SummarySpec.ignore_non_summary_seeking_query]\n        is set to ``true``.\n    OUT_OF_DOMAIN_QUERY_IGNORED (3):\n        The out-of-domain query ignored case.\n\n        Google skips the summary if there are no\n        high-relevance search results. For example, the\n        d",
+                                "values": {
+                                  "SUMMARY_SKIPPED_REASON_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "ADVERSARIAL_QUERY_IGNORED": {
+                                    "value": 1
+                                  },
+                                  "NON_SUMMARY_SEEKING_QUERY_IGNORED": {
+                                    "value": 2
+                                  },
+                                  "OUT_OF_DOMAIN_QUERY_IGNORED": {
+                                    "value": 3
+                                  },
+                                  "POTENTIAL_POLICY_VIOLATION": {
+                                    "value": 4
+                                  },
+                                  "LLM_ADDON_NOT_ENABLED": {
+                                    "value": 5
+                                  },
+                                  "NO_RELEVANT_CONTENT": {
+                                    "value": 6
+                                  },
+                                  "JAIL_BREAKING_QUERY_IGNORED": {
+                                    "value": 7
+                                  },
+                                  "CUSTOMER_POLICY_VIOLATION": {
+                                    "value": 8
+                                  },
+                                  "NON_SUMMARY_SEEKING_QUERY_IGNORED_V2": {
+                                    "value": 9
+                                  }
+                                }
                               }
                             },
                             "safety_attributes": {
@@ -1791,9 +2273,20 @@
                     "type": "string"
                   },
                   "search_result_mode": {
-                    "description": "Specifies the search result mode. If unspecified, the search result mode defaults to ``DOCUMENTS``. See `parse and chunk documents <https://cloud.google.com/generative-ai-app-builder/docs/parse-chunk-documents>`__",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.SearchRequest.ContentSearchSpec.SearchResultMode"
+                    "type": "enum",
+                    "name": "SearchResultMode",
+                    "description": "Specifies the search result mode. If unspecified, the search result\nmode defaults to ``DOCUMENTS``.\n\nValues:\n    SEARCH_RESULT_MODE_UNSPECIFIED (0):\n        Default value.\n    DOCUMENTS (1):\n        Returns documents in the search result.\n    CHUNKS (2):\n        Returns chunks in the search result. Only available if the\n        [DataStore.DocumentProcessingConfig.chunking_config][] is\n        specified.",
+                    "values": {
+                      "SEARCH_RESULT_MODE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DOCUMENTS": {
+                        "value": 1
+                      },
+                      "CHUNKS": {
+                        "value": 2
+                      }
+                    }
                   },
                   "data_store_specs": {
                     "description": "Specs defining dataStores to filter on in a search call and configurations for those dataStores. This is only considered for engines with multiple dataStores use case. For single dataStore within an engine, they should use the specs at the top level.",
@@ -1819,9 +2312,20 @@
                     "type": "object",
                     "properties": {
                       "filter_extraction_condition": {
-                        "description": "The condition under which filter extraction should occur. Default to [Condition.DISABLED][].",
-                        "type": "object",
-                        "reference": "google.cloud.discoveryengine_v1beta.types.SearchRequest.NaturalLanguageQueryUnderstandingSpec.FilterExtractionCondition"
+                        "type": "enum",
+                        "name": "FilterExtractionCondition",
+                        "description": "Enum describing under which condition filter extraction\nshould occur.\n\nValues:\n    CONDITION_UNSPECIFIED (0):\n        Server behavior defaults to [Condition.DISABLED][].\n    DISABLED (1):\n        Disables NL filter extraction.\n    ENABLED (2):\n        Enables NL filter extraction.",
+                        "values": {
+                          "CONDITION_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "DISABLED": {
+                            "value": 1
+                          },
+                          "ENABLED": {
+                            "value": 2
+                          }
+                        }
                       },
                       "geo_search_query_detection_field_names": {
                         "description": "Field names used for location-based filtering, where geolocation filters are detected in natural language search queries. Only valid when the FilterExtractionCondition is set to ``ENABLED``.  If this field is set, it overrides the field names set in [ServingConfig.geo_search_query_detection_field_names][google.cloud.discoveryengine.v1beta.ServingConfig.geo_search_query_detection_field_names].",
@@ -1939,8 +2443,23 @@
                     "description": "Enabled query classification types.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.discoveryengine_v1beta.types.AnswerQueryRequest.QueryUnderstandingSpec.QueryClassificationSpec.Type"
+                      "type": "enum",
+                      "name": "Type",
+                      "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                      "values": {
+                        "TYPE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                          "value": 1
+                        },
+                        "NO_RETURNS": {
+                          "value": 2
+                        },
+                        "LIFETIME_RETURNS": {
+                          "value": 3
+                        }
+                      }
                     }
                   }
                 }
@@ -2019,9 +2538,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "The state of the session.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.Session.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "user_pseudo_id": {
                 "description": "A unique identifier for tracking users.",
@@ -2083,9 +2619,26 @@
                 "type": "string"
               },
               "state": {
-                "description": "The state of the session.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.Session.State"
+                "type": "enum",
+                "name": "State",
+                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                "values": {
+                  "STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AFFECTED": {
+                    "value": 1
+                  },
+                  "NOT_AFFECTED": {
+                    "value": 2
+                  },
+                  "FIXED": {
+                    "value": 3
+                  },
+                  "UNDER_INVESTIGATION": {
+                    "value": 4
+                  }
+                }
               },
               "user_pseudo_id": {
                 "description": "A unique identifier for tracking users.",
@@ -2228,16 +2781,39 @@
                 "type": "string"
               },
               "industry_vertical": {
-                "description": "Immutable. The industry vertical that the data store registers.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.IndustryVertical"
+                "type": "enum",
+                "name": "IndustryVertical",
+                "description": "The industry vertical associated with the\n[DataStore][google.cloud.discoveryengine.v1beta.DataStore].\n\nValues:\n    INDUSTRY_VERTICAL_UNSPECIFIED (0):\n        Value used when unset.\n    GENERIC (1):\n        The generic vertical for documents that are\n        not specific to any industry vertical.\n    MEDIA (2):\n        The media industry vertical.\n    HEALTHCARE_FHIR (7):\n        The healthcare FHIR vertical.",
+                "values": {
+                  "INDUSTRY_VERTICAL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "GENERIC": {
+                    "value": 1
+                  },
+                  "MEDIA": {
+                    "value": 2
+                  },
+                  "HEALTHCARE_FHIR": {
+                    "value": 7
+                  }
+                }
               },
               "solution_types": {
                 "description": "The solutions that the data store enrolls. Available solutions for each [industry_vertical][google.cloud.discoveryengine.v1beta.DataStore.industry_vertical]:  -  ``MEDIA``: ``SOLUTION_TYPE_RECOMMENDATION`` and ``SOLUTION_TYPE_SEARCH``. -  ``SITE_SEARCH``: ``SOLUTION_TYPE_SEARCH`` is automatically enrolled. Other solutions cannot be enrolled.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.discoveryengine_v1beta.types.SolutionType"
+                  "type": "enum",
+                  "name": "SolutionType",
+                  "description": "Selector for different solution types of a reported trip.\n\nValues:\n    SOLUTION_TYPE_UNSPECIFIED (0):\n        The default value. For backwards-compatibility, the API will\n        use ``ON_DEMAND_RIDESHARING_AND_DELIVERIES`` by default\n        which is the first supported solution type.\n    ON_DEMAND_RIDESHARING_AND_DELIVERIES (1):\n        The solution is an on-demand ridesharing and\n        deliveries trip.",
+                  "values": {
+                    "SOLUTION_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "ON_DEMAND_RIDESHARING_AND_DELIVERIES": {
+                      "value": 1
+                    }
+                  }
                 }
               },
               "default_schema_id": {
@@ -2245,9 +2821,26 @@
                 "type": "string"
               },
               "content_config": {
-                "description": "Immutable. The content config of the data store. If this field is unset, the server behavior defaults to [ContentConfig.NO_CONTENT][google.cloud.discoveryengine.v1beta.DataStore.ContentConfig.NO_CONTENT].",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.DataStore.ContentConfig"
+                "type": "enum",
+                "name": "ContentConfig",
+                "description": "Content config of the data store.\n\nValues:\n    CONTENT_CONFIG_UNSPECIFIED (0):\n        Default value.\n    NO_CONTENT (1):\n        Only contains documents without any\n        [Document.content][google.cloud.discoveryengine.v1beta.Document.content].\n    CONTENT_REQUIRED (2):\n        Only contains documents with\n        [Document.content][google.cloud.discoveryengine.v1beta.Document.content].\n    PUBLIC_WEBSITE (3):\n        The data store is used for public website\n        search.\n    GOOGLE_WORKSPACE (4):\n        The data store is used for workspace search. Details of\n        workspace data store are specified in the\n        [WorkspaceConfig][google.cloud.discoveryengine.v1beta.WorkspaceConfig].",
+                "values": {
+                  "CONTENT_CONFIG_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NO_CONTENT": {
+                    "value": 1
+                  },
+                  "CONTENT_REQUIRED": {
+                    "value": 2
+                  },
+                  "PUBLIC_WEBSITE": {
+                    "value": 3
+                  },
+                  "GOOGLE_WORKSPACE": {
+                    "value": 4
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. Timestamp the [DataStore][google.cloud.discoveryengine.v1beta.DataStore] was created at.",
@@ -2279,9 +2872,20 @@
                 "type": "object",
                 "properties": {
                   "mode": {
-                    "description": "Mode of Natural Language Query Understanding. If this field is unset, the behavior defaults to [NaturalLanguageQueryUnderstandingConfig.Mode.DISABLED][google.cloud.discoveryengine.v1beta.NaturalLanguageQueryUnderstandingConfig.Mode.DISABLED].",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.NaturalLanguageQueryUnderstandingConfig.Mode"
+                    "type": "enum",
+                    "name": "Mode",
+                    "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                    "values": {
+                      "MODE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MODE_SKIP": {
+                        "value": 1
+                      },
+                      "MODE_PRESERVE": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -2321,9 +2925,23 @@
                 "type": "object",
                 "properties": {
                   "type_": {
-                    "description": "The Google Workspace data source.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.WorkspaceConfig.Type"
+                    "type": "enum",
+                    "name": "Type",
+                    "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                    "values": {
+                      "TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                        "value": 1
+                      },
+                      "NO_RETURNS": {
+                        "value": 2
+                      },
+                      "LIFETIME_RETURNS": {
+                        "value": 3
+                      }
+                    }
                   },
                   "dasher_customer_id": {
                     "description": "Obfuscated Dasher customer ID.",
@@ -2566,16 +3184,39 @@
                 "type": "string"
               },
               "industry_vertical": {
-                "description": "Immutable. The industry vertical that the data store registers.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.IndustryVertical"
+                "type": "enum",
+                "name": "IndustryVertical",
+                "description": "The industry vertical associated with the\n[DataStore][google.cloud.discoveryengine.v1beta.DataStore].\n\nValues:\n    INDUSTRY_VERTICAL_UNSPECIFIED (0):\n        Value used when unset.\n    GENERIC (1):\n        The generic vertical for documents that are\n        not specific to any industry vertical.\n    MEDIA (2):\n        The media industry vertical.\n    HEALTHCARE_FHIR (7):\n        The healthcare FHIR vertical.",
+                "values": {
+                  "INDUSTRY_VERTICAL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "GENERIC": {
+                    "value": 1
+                  },
+                  "MEDIA": {
+                    "value": 2
+                  },
+                  "HEALTHCARE_FHIR": {
+                    "value": 7
+                  }
+                }
               },
               "solution_types": {
                 "description": "The solutions that the data store enrolls. Available solutions for each [industry_vertical][google.cloud.discoveryengine.v1beta.DataStore.industry_vertical]:  -  ``MEDIA``: ``SOLUTION_TYPE_RECOMMENDATION`` and ``SOLUTION_TYPE_SEARCH``. -  ``SITE_SEARCH``: ``SOLUTION_TYPE_SEARCH`` is automatically enrolled. Other solutions cannot be enrolled.",
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "reference": "google.cloud.discoveryengine_v1beta.types.SolutionType"
+                  "type": "enum",
+                  "name": "SolutionType",
+                  "description": "Selector for different solution types of a reported trip.\n\nValues:\n    SOLUTION_TYPE_UNSPECIFIED (0):\n        The default value. For backwards-compatibility, the API will\n        use ``ON_DEMAND_RIDESHARING_AND_DELIVERIES`` by default\n        which is the first supported solution type.\n    ON_DEMAND_RIDESHARING_AND_DELIVERIES (1):\n        The solution is an on-demand ridesharing and\n        deliveries trip.",
+                  "values": {
+                    "SOLUTION_TYPE_UNSPECIFIED": {
+                      "value": 0
+                    },
+                    "ON_DEMAND_RIDESHARING_AND_DELIVERIES": {
+                      "value": 1
+                    }
+                  }
                 }
               },
               "default_schema_id": {
@@ -2583,9 +3224,26 @@
                 "type": "string"
               },
               "content_config": {
-                "description": "Immutable. The content config of the data store. If this field is unset, the server behavior defaults to [ContentConfig.NO_CONTENT][google.cloud.discoveryengine.v1beta.DataStore.ContentConfig.NO_CONTENT].",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.DataStore.ContentConfig"
+                "type": "enum",
+                "name": "ContentConfig",
+                "description": "Content config of the data store.\n\nValues:\n    CONTENT_CONFIG_UNSPECIFIED (0):\n        Default value.\n    NO_CONTENT (1):\n        Only contains documents without any\n        [Document.content][google.cloud.discoveryengine.v1beta.Document.content].\n    CONTENT_REQUIRED (2):\n        Only contains documents with\n        [Document.content][google.cloud.discoveryengine.v1beta.Document.content].\n    PUBLIC_WEBSITE (3):\n        The data store is used for public website\n        search.\n    GOOGLE_WORKSPACE (4):\n        The data store is used for workspace search. Details of\n        workspace data store are specified in the\n        [WorkspaceConfig][google.cloud.discoveryengine.v1beta.WorkspaceConfig].",
+                "values": {
+                  "CONTENT_CONFIG_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NO_CONTENT": {
+                    "value": 1
+                  },
+                  "CONTENT_REQUIRED": {
+                    "value": 2
+                  },
+                  "PUBLIC_WEBSITE": {
+                    "value": 3
+                  },
+                  "GOOGLE_WORKSPACE": {
+                    "value": 4
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. Timestamp the [DataStore][google.cloud.discoveryengine.v1beta.DataStore] was created at.",
@@ -2617,9 +3275,20 @@
                 "type": "object",
                 "properties": {
                   "mode": {
-                    "description": "Mode of Natural Language Query Understanding. If this field is unset, the behavior defaults to [NaturalLanguageQueryUnderstandingConfig.Mode.DISABLED][google.cloud.discoveryengine.v1beta.NaturalLanguageQueryUnderstandingConfig.Mode.DISABLED].",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.NaturalLanguageQueryUnderstandingConfig.Mode"
+                    "type": "enum",
+                    "name": "Mode",
+                    "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                    "values": {
+                      "MODE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MODE_SKIP": {
+                        "value": 1
+                      },
+                      "MODE_PRESERVE": {
+                        "value": 2
+                      }
+                    }
                   }
                 }
               },
@@ -2659,9 +3328,23 @@
                 "type": "object",
                 "properties": {
                   "type_": {
-                    "description": "The Google Workspace data source.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.WorkspaceConfig.Type"
+                    "type": "enum",
+                    "name": "Type",
+                    "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                    "values": {
+                      "TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                        "value": 1
+                      },
+                      "NO_RETURNS": {
+                        "value": 2
+                      },
+                      "LIFETIME_RETURNS": {
+                        "value": 3
+                      }
+                    }
                   },
                   "dasher_customer_id": {
                     "description": "Obfuscated Dasher customer ID.",
@@ -2872,9 +3555,23 @@
             "type": "object",
             "properties": {
               "type_": {
-                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
-                "type": "object",
-                "reference": "google.cloud.language_v2.types.Document.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "content": {
                 "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
@@ -2917,9 +3614,23 @@
             "type": "object",
             "properties": {
               "type_": {
-                "description": "Required. If the type is not set or is ``TYPE_UNSPECIFIED``, returns an ``INVALID_ARGUMENT`` error.",
-                "type": "object",
-                "reference": "google.cloud.language_v2.types.Document.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "content": {
                 "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
@@ -3061,16 +3772,36 @@
                 "type": "object",
                 "properties": {
                   "search_tier": {
-                    "description": "The search feature tier of this engine.  Different tiers might have different pricing. To learn more, check the pricing documentation.  Defaults to [SearchTier.SEARCH_TIER_STANDARD][google.cloud.discoveryengine.v1beta.SearchTier.SEARCH_TIER_STANDARD] if not specified.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.SearchTier"
+                    "type": "enum",
+                    "name": "SearchTier",
+                    "description": "Tiers of search features. Different tiers might have\ndifferent pricing. To learn more, check the pricing\ndocumentation.\n\nValues:\n    SEARCH_TIER_UNSPECIFIED (0):\n        Default value when the enum is unspecified.\n        This is invalid to use.\n    SEARCH_TIER_STANDARD (1):\n        Standard tier.\n    SEARCH_TIER_ENTERPRISE (2):\n        Enterprise tier.",
+                    "values": {
+                      "SEARCH_TIER_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SEARCH_TIER_STANDARD": {
+                        "value": 1
+                      },
+                      "SEARCH_TIER_ENTERPRISE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "search_add_ons": {
                     "description": "The add-on that this search engine enables.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.discoveryengine_v1beta.types.SearchAddOn"
+                      "type": "enum",
+                      "name": "SearchAddOn",
+                      "description": "Add-on that provides additional functionality for search.\n\nValues:\n    SEARCH_ADD_ON_UNSPECIFIED (0):\n        Default value when the enum is unspecified.\n        This is invalid to use.\n    SEARCH_ADD_ON_LLM (1):\n        Large language model add-on.",
+                      "values": {
+                        "SEARCH_ADD_ON_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "SEARCH_ADD_ON_LLM": {
+                          "value": 1
+                        }
+                      }
                     }
                   }
                 }
@@ -3110,14 +3841,36 @@
                 }
               },
               "solution_type": {
-                "description": "Required. The solutions of the engine.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.SolutionType"
+                "type": "enum",
+                "name": "SolutionType",
+                "description": "Selector for different solution types of a reported trip.\n\nValues:\n    SOLUTION_TYPE_UNSPECIFIED (0):\n        The default value. For backwards-compatibility, the API will\n        use ``ON_DEMAND_RIDESHARING_AND_DELIVERIES`` by default\n        which is the first supported solution type.\n    ON_DEMAND_RIDESHARING_AND_DELIVERIES (1):\n        The solution is an on-demand ridesharing and\n        deliveries trip.",
+                "values": {
+                  "SOLUTION_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ON_DEMAND_RIDESHARING_AND_DELIVERIES": {
+                    "value": 1
+                  }
+                }
               },
               "industry_vertical": {
-                "description": "The industry vertical that the engine registers. The restriction of the Engine industry vertical is based on [DataStore][google.cloud.discoveryengine.v1beta.DataStore]: If unspecified, default to ``GENERIC``. Vertical on Engine has to match vertical of the DataStore linked to the engine.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.IndustryVertical"
+                "type": "enum",
+                "name": "IndustryVertical",
+                "description": "The industry vertical associated with the\n[DataStore][google.cloud.discoveryengine.v1beta.DataStore].\n\nValues:\n    INDUSTRY_VERTICAL_UNSPECIFIED (0):\n        Value used when unset.\n    GENERIC (1):\n        The generic vertical for documents that are\n        not specific to any industry vertical.\n    MEDIA (2):\n        The media industry vertical.\n    HEALTHCARE_FHIR (7):\n        The healthcare FHIR vertical.",
+                "values": {
+                  "INDUSTRY_VERTICAL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "GENERIC": {
+                    "value": 1
+                  },
+                  "MEDIA": {
+                    "value": 2
+                  },
+                  "HEALTHCARE_FHIR": {
+                    "value": 7
+                  }
+                }
               },
               "common_config": {
                 "type": "object",
@@ -3262,16 +4015,36 @@
                 "type": "object",
                 "properties": {
                   "search_tier": {
-                    "description": "The search feature tier of this engine.  Different tiers might have different pricing. To learn more, check the pricing documentation.  Defaults to [SearchTier.SEARCH_TIER_STANDARD][google.cloud.discoveryengine.v1beta.SearchTier.SEARCH_TIER_STANDARD] if not specified.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.SearchTier"
+                    "type": "enum",
+                    "name": "SearchTier",
+                    "description": "Tiers of search features. Different tiers might have\ndifferent pricing. To learn more, check the pricing\ndocumentation.\n\nValues:\n    SEARCH_TIER_UNSPECIFIED (0):\n        Default value when the enum is unspecified.\n        This is invalid to use.\n    SEARCH_TIER_STANDARD (1):\n        Standard tier.\n    SEARCH_TIER_ENTERPRISE (2):\n        Enterprise tier.",
+                    "values": {
+                      "SEARCH_TIER_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "SEARCH_TIER_STANDARD": {
+                        "value": 1
+                      },
+                      "SEARCH_TIER_ENTERPRISE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "search_add_ons": {
                     "description": "The add-on that this search engine enables.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "reference": "google.cloud.discoveryengine_v1beta.types.SearchAddOn"
+                      "type": "enum",
+                      "name": "SearchAddOn",
+                      "description": "Add-on that provides additional functionality for search.\n\nValues:\n    SEARCH_ADD_ON_UNSPECIFIED (0):\n        Default value when the enum is unspecified.\n        This is invalid to use.\n    SEARCH_ADD_ON_LLM (1):\n        Large language model add-on.",
+                      "values": {
+                        "SEARCH_ADD_ON_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "SEARCH_ADD_ON_LLM": {
+                          "value": 1
+                        }
+                      }
                     }
                   }
                 }
@@ -3311,14 +4084,36 @@
                 }
               },
               "solution_type": {
-                "description": "Required. The solutions of the engine.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.SolutionType"
+                "type": "enum",
+                "name": "SolutionType",
+                "description": "Selector for different solution types of a reported trip.\n\nValues:\n    SOLUTION_TYPE_UNSPECIFIED (0):\n        The default value. For backwards-compatibility, the API will\n        use ``ON_DEMAND_RIDESHARING_AND_DELIVERIES`` by default\n        which is the first supported solution type.\n    ON_DEMAND_RIDESHARING_AND_DELIVERIES (1):\n        The solution is an on-demand ridesharing and\n        deliveries trip.",
+                "values": {
+                  "SOLUTION_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "ON_DEMAND_RIDESHARING_AND_DELIVERIES": {
+                    "value": 1
+                  }
+                }
               },
               "industry_vertical": {
-                "description": "The industry vertical that the engine registers. The restriction of the Engine industry vertical is based on [DataStore][google.cloud.discoveryengine.v1beta.DataStore]: If unspecified, default to ``GENERIC``. Vertical on Engine has to match vertical of the DataStore linked to the engine.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.IndustryVertical"
+                "type": "enum",
+                "name": "IndustryVertical",
+                "description": "The industry vertical associated with the\n[DataStore][google.cloud.discoveryengine.v1beta.DataStore].\n\nValues:\n    INDUSTRY_VERTICAL_UNSPECIFIED (0):\n        Value used when unset.\n    GENERIC (1):\n        The generic vertical for documents that are\n        not specific to any industry vertical.\n    MEDIA (2):\n        The media industry vertical.\n    HEALTHCARE_FHIR (7):\n        The healthcare FHIR vertical.",
+                "values": {
+                  "INDUSTRY_VERTICAL_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "GENERIC": {
+                    "value": 1
+                  },
+                  "MEDIA": {
+                    "value": 2
+                  },
+                  "HEALTHCARE_FHIR": {
+                    "value": 7
+                  }
+                }
               },
               "common_config": {
                 "type": "object",
@@ -3525,9 +4320,23 @@
                                       "type": "boolean"
                                     },
                                     "kind": {
-                                      "description": "Required. Distinguishes between sentinel MIN/MAX versions and normal versions.",
-                                      "type": "object",
-                                      "reference": "grafeas.grafeas_v1.types.Version.VersionKind"
+                                      "type": "enum",
+                                      "name": "VersionKind",
+                                      "description": "Whether this is an ordinary package version or a sentinel\nMIN/MAX version.\n\nValues:\n    VERSION_KIND_UNSPECIFIED (0):\n        Unknown.\n    NORMAL (1):\n        A standard package version.\n    MINIMUM (2):\n        A special version representing negative\n        infinity.\n    MAXIMUM (3):\n        A special version representing positive\n        infinity.",
+                                      "values": {
+                                        "VERSION_KIND_UNSPECIFIED": {
+                                          "value": 0
+                                        },
+                                        "NORMAL": {
+                                          "value": 1
+                                        },
+                                        "MINIMUM": {
+                                          "value": 2
+                                        },
+                                        "MAXIMUM": {
+                                          "value": 3
+                                        }
+                                      }
                                     },
                                     "full_name": {
                                       "description": "Human readable version string. This string is of the form <epoch>:<name>-<revision> and is only set when kind is NORMAL.",
@@ -3975,14 +4784,39 @@
                           "type": "string"
                         },
                         "encoding": {
-                          "description": "The encoding mode of the values when the type is not STRING. Acceptable encoding values are:  -  ``TEXT``: indicates values are alphanumeric text strings. -  ``BINARY``: indicates values are encoded using ``HBase Bytes.toBytes`` family of functions. This can be overridden for a specific column by listing that column in ``columns`` and specifying an encoding for it.",
-                          "type": "object",
-                          "reference": "google.cloud.discoveryengine_v1beta.types.BigtableOptions.Encoding"
+                          "type": "enum",
+                          "name": "Encoding",
+                          "description": "The encoding mode of a Bigtable column or column family.\n\nValues:\n    ENCODING_UNSPECIFIED (0):\n        The encoding is unspecified.\n    TEXT (1):\n        Text encoding.\n    BINARY (2):\n        Binary encoding.",
+                          "values": {
+                            "ENCODING_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "TEXT": {
+                              "value": 1
+                            },
+                            "BINARY": {
+                              "value": 2
+                            }
+                          }
                         },
                         "type_": {
-                          "description": "The type of values in this column family. The values are expected to be encoded using ``HBase Bytes.toBytes`` function when the encoding value is set to ``BINARY``.",
-                          "type": "object",
-                          "reference": "google.cloud.discoveryengine_v1beta.types.BigtableOptions.Type"
+                          "type": "enum",
+                          "name": "Type",
+                          "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                          "values": {
+                            "TYPE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                              "value": 1
+                            },
+                            "NO_RETURNS": {
+                              "value": 2
+                            },
+                            "LIFETIME_RETURNS": {
+                              "value": 3
+                            }
+                          }
                         },
                         "columns": {
                           "description": "The list of objects that contains column level information for each column. If a column is not present in this list it will be ignored.",
@@ -4000,14 +4834,39 @@
                                 "type": "string"
                               },
                               "encoding": {
-                                "description": "The encoding mode of the values when the type is not ``STRING``. Acceptable encoding values are:  -  ``TEXT``: indicates values are alphanumeric text strings. -  ``BINARY``: indicates values are encoded using ``HBase Bytes.toBytes`` family of functions. This can be overridden for a specific column by listing that column in ``columns`` and specifying an encoding for it.",
-                                "type": "object",
-                                "reference": "google.cloud.discoveryengine_v1beta.types.BigtableOptions.Encoding"
+                                "type": "enum",
+                                "name": "Encoding",
+                                "description": "The encoding mode of a Bigtable column or column family.\n\nValues:\n    ENCODING_UNSPECIFIED (0):\n        The encoding is unspecified.\n    TEXT (1):\n        Text encoding.\n    BINARY (2):\n        Binary encoding.",
+                                "values": {
+                                  "ENCODING_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "TEXT": {
+                                    "value": 1
+                                  },
+                                  "BINARY": {
+                                    "value": 2
+                                  }
+                                }
                               },
                               "type_": {
-                                "description": "The type of values in this column family. The values are expected to be encoded using ``HBase Bytes.toBytes`` function when the encoding value is set to ``BINARY``.",
-                                "type": "object",
-                                "reference": "google.cloud.discoveryengine_v1beta.types.BigtableOptions.Type"
+                                "type": "enum",
+                                "name": "Type",
+                                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                                "values": {
+                                  "TYPE_UNSPECIFIED": {
+                                    "value": 0
+                                  },
+                                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                                    "value": 1
+                                  },
+                                  "NO_RETURNS": {
+                                    "value": 2
+                                  },
+                                  "LIFETIME_RETURNS": {
+                                    "value": 3
+                                  }
+                                }
                               }
                             },
                             "required": [
@@ -4042,9 +4901,20 @@
             }
           },
           "reconciliation_mode": {
-            "description": "The mode of reconciliation between existing documents and the documents to be imported. Defaults to [ReconciliationMode.INCREMENTAL][google.cloud.discoveryengine.v1.ImportDocumentsRequest.ReconciliationMode.INCREMENTAL].",
-            "type": "object",
-            "reference": "google.cloud.discoveryengine_v1.types.ImportDocumentsRequest.ReconciliationMode"
+            "description": "Indicates how imported products are reconciled with the\nexisting products created or imported before.\n\nValues:\n    RECONCILIATION_MODE_UNSPECIFIED (0):\n        Defaults to INCREMENTAL.\n    INCREMENTAL (1):\n        Inserts new products or updates existing\n        products.\n    FULL (2):\n        Calculates diff and replaces the entire\n        product dataset. Existing products may be\n        deleted if they are not present in the source\n        location.",
+            "type": "enum",
+            "name": "ReconciliationMode",
+            "values": {
+              "RECONCILIATION_MODE_UNSPECIFIED": {
+                "value": 0
+              },
+              "INCREMENTAL": {
+                "value": 1
+              },
+              "FULL": {
+                "value": 2
+              }
+            }
           },
           "update_mask": {
             "description": "Indicates which fields in the provided imported documents to update. If not set, the default is to update all fields.",
@@ -5116,9 +5986,26 @@
                     "type": "string"
                   },
                   "state": {
-                    "description": "State of the condition.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "message": {
                     "description": "Human readable message indicating details about the current status.",
@@ -5130,24 +6017,152 @@
                     "reference": "google.protobuf.timestamp_pb2.Timestamp"
                   },
                   "severity": {
-                    "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.Severity"
+                    "type": "enum",
+                    "name": "Severity",
+                    "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                    "values": {
+                      "SEVERITY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MINIMAL": {
+                        "value": 1
+                      },
+                      "LOW": {
+                        "value": 2
+                      },
+                      "MEDIUM": {
+                        "value": 3
+                      },
+                      "HIGH": {
+                        "value": 4
+                      },
+                      "CRITICAL": {
+                        "value": 5
+                      }
+                    }
                   },
                   "reason": {
-                    "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                    "type": "enum",
+                    "name": "CommonReason",
+                    "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                    "values": {
+                      "COMMON_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "UNKNOWN": {
+                        "value": 1
+                      },
+                      "REVISION_FAILED": {
+                        "value": 3
+                      },
+                      "PROGRESS_DEADLINE_EXCEEDED": {
+                        "value": 4
+                      },
+                      "CONTAINER_MISSING": {
+                        "value": 6
+                      },
+                      "CONTAINER_PERMISSION_DENIED": {
+                        "value": 7
+                      },
+                      "CONTAINER_IMAGE_UNAUTHORIZED": {
+                        "value": 8
+                      },
+                      "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                        "value": 9
+                      },
+                      "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                        "value": 10
+                      },
+                      "ENCRYPTION_KEY_CHECK_FAILED": {
+                        "value": 11
+                      },
+                      "SECRETS_ACCESS_CHECK_FAILED": {
+                        "value": 12
+                      },
+                      "WAITING_FOR_OPERATION": {
+                        "value": 13
+                      },
+                      "IMMEDIATE_RETRY": {
+                        "value": 14
+                      },
+                      "POSTPONED_RETRY": {
+                        "value": 15
+                      },
+                      "INTERNAL": {
+                        "value": 16
+                      }
+                    }
                   },
                   "revision_reason": {
-                    "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                    "type": "enum",
+                    "name": "RevisionReason",
+                    "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                    "values": {
+                      "REVISION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "PENDING": {
+                        "value": 1
+                      },
+                      "RESERVE": {
+                        "value": 2
+                      },
+                      "RETIRED": {
+                        "value": 3
+                      },
+                      "RETIRING": {
+                        "value": 4
+                      },
+                      "RECREATING": {
+                        "value": 5
+                      },
+                      "HEALTH_CHECK_CONTAINER_ERROR": {
+                        "value": 6
+                      },
+                      "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                        "value": 7
+                      },
+                      "MIN_INSTANCES_NOT_PROVISIONED": {
+                        "value": 8
+                      },
+                      "ACTIVE_REVISION_LIMIT_REACHED": {
+                        "value": 9
+                      },
+                      "NO_DEPLOYMENT": {
+                        "value": 10
+                      },
+                      "HEALTH_CHECK_SKIPPED": {
+                        "value": 11
+                      },
+                      "MIN_INSTANCES_WARMING": {
+                        "value": 12
+                      }
+                    }
                   },
                   "execution_reason": {
-                    "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                    "type": "enum",
+                    "name": "ExecutionReason",
+                    "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                    "values": {
+                      "EXECUTION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                        "value": 1
+                      },
+                      "NON_ZERO_EXIT_CODE": {
+                        "value": 2
+                      },
+                      "CANCELLED": {
+                        "value": 3
+                      },
+                      "CANCELLING": {
+                        "value": 4
+                      },
+                      "DELETED": {
+                        "value": 5
+                      }
+                    }
                   }
                 }
               },
@@ -5162,9 +6177,20 @@
             "type": "object",
             "properties": {
               "mode": {
-                "description": "The mode under which spell correction should take effect to replace the original search query. Default to [Mode.AUTO][google.cloud.retail.v2beta.SearchRequest.SpellCorrectionSpec.Mode.AUTO].",
-                "type": "object",
-                "reference": "google.cloud.retail_v2beta.types.SearchRequest.SpellCorrectionSpec.Mode"
+                "type": "enum",
+                "name": "Mode",
+                "description": "Options for handling file mode attribute.\n\nValues:\n    MODE_UNSPECIFIED (0):\n        Mode behavior is unspecified.\n    MODE_SKIP (1):\n        Do not preserve mode during a transfer job.\n    MODE_PRESERVE (2):\n        Preserve mode during a transfer job.",
+                "values": {
+                  "MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MODE_SKIP": {
+                    "value": 1
+                  },
+                  "MODE_PRESERVE": {
+                    "value": 2
+                  }
+                }
               }
             }
           },
@@ -5274,9 +6300,20 @@
                 }
               },
               "search_result_mode": {
-                "description": "Specifies the search result mode. If unspecified, the search result mode defaults to ``DOCUMENTS``.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.SearchRequest.ContentSearchSpec.SearchResultMode"
+                "type": "enum",
+                "name": "SearchResultMode",
+                "description": "Specifies the search result mode. If unspecified, the search result\nmode defaults to ``DOCUMENTS``.\n\nValues:\n    SEARCH_RESULT_MODE_UNSPECIFIED (0):\n        Default value.\n    DOCUMENTS (1):\n        Returns documents in the search result.\n    CHUNKS (2):\n        Returns chunks in the search result. Only available if the\n        [DataStore.DocumentProcessingConfig.chunking_config][] is\n        specified.",
+                "values": {
+                  "SEARCH_RESULT_MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "DOCUMENTS": {
+                    "value": 1
+                  },
+                  "CHUNKS": {
+                    "value": 2
+                  }
+                }
               },
               "chunk_spec": {
                 "type": "object",
@@ -5316,9 +6353,26 @@
                     "type": "string"
                   },
                   "state": {
-                    "description": "State of the condition.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "message": {
                     "description": "Human readable message indicating details about the current status.",
@@ -5330,24 +6384,152 @@
                     "reference": "google.protobuf.timestamp_pb2.Timestamp"
                   },
                   "severity": {
-                    "description": "How to interpret failures of this condition, one of Error, Warning, Info",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.Severity"
+                    "type": "enum",
+                    "name": "Severity",
+                    "description": "Note provider assigned severity/impact ranking.\n\nValues:\n    SEVERITY_UNSPECIFIED (0):\n        Unknown.\n    MINIMAL (1):\n        Minimal severity.\n    LOW (2):\n        Low severity.\n    MEDIUM (3):\n        Medium severity.\n    HIGH (4):\n        High severity.\n    CRITICAL (5):\n        Critical severity.",
+                    "values": {
+                      "SEVERITY_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MINIMAL": {
+                        "value": 1
+                      },
+                      "LOW": {
+                        "value": 2
+                      },
+                      "MEDIUM": {
+                        "value": 3
+                      },
+                      "HIGH": {
+                        "value": 4
+                      },
+                      "CRITICAL": {
+                        "value": 5
+                      }
+                    }
                   },
                   "reason": {
-                    "description": "Output only. A common (service-level) reason for this condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.CommonReason"
+                    "type": "enum",
+                    "name": "CommonReason",
+                    "description": "Reasons common to all types of conditions.\n\nValues:\n    COMMON_REASON_UNDEFINED (0):\n        Default value.\n    UNKNOWN (1):\n        Reason unknown. Further details will be in\n        message.\n    REVISION_FAILED (3):\n        Revision creation process failed.\n    PROGRESS_DEADLINE_EXCEEDED (4):\n        Timed out waiting for completion.\n    CONTAINER_MISSING (6):\n        The container image path is incorrect.\n    CONTAINER_PERMISSION_DENIED (7):\n        Insufficient permissions on the container\n        image.\n    CONTAINER_IMAGE_UNAUTHORIZED (8):\n        Container image is not authorized by policy.\n    CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED (9):\n        Container image policy authorization check\n        failed.\n    ENCRYPTION_KEY_PERMISSION_DENIED (10):\n        Insufficient permissions on encryption key.\n    ENCRYPTION_KEY_CHECK_FAILED (11):\n        Permission check on encryption key failed.\n    SECRETS_ACCESS_CHECK_FAILED (12):\n        At least one Access check on secrets failed.\n    WAITING_FOR_OPERATION",
+                    "values": {
+                      "COMMON_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "UNKNOWN": {
+                        "value": 1
+                      },
+                      "REVISION_FAILED": {
+                        "value": 3
+                      },
+                      "PROGRESS_DEADLINE_EXCEEDED": {
+                        "value": 4
+                      },
+                      "CONTAINER_MISSING": {
+                        "value": 6
+                      },
+                      "CONTAINER_PERMISSION_DENIED": {
+                        "value": 7
+                      },
+                      "CONTAINER_IMAGE_UNAUTHORIZED": {
+                        "value": 8
+                      },
+                      "CONTAINER_IMAGE_AUTHORIZATION_CHECK_FAILED": {
+                        "value": 9
+                      },
+                      "ENCRYPTION_KEY_PERMISSION_DENIED": {
+                        "value": 10
+                      },
+                      "ENCRYPTION_KEY_CHECK_FAILED": {
+                        "value": 11
+                      },
+                      "SECRETS_ACCESS_CHECK_FAILED": {
+                        "value": 12
+                      },
+                      "WAITING_FOR_OPERATION": {
+                        "value": 13
+                      },
+                      "IMMEDIATE_RETRY": {
+                        "value": 14
+                      },
+                      "POSTPONED_RETRY": {
+                        "value": 15
+                      },
+                      "INTERNAL": {
+                        "value": 16
+                      }
+                    }
                   },
                   "revision_reason": {
-                    "description": "Output only. A reason for the revision condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.RevisionReason"
+                    "type": "enum",
+                    "name": "RevisionReason",
+                    "description": "Reasons specific to Revision resource.\n\nValues:\n    REVISION_REASON_UNDEFINED (0):\n        Default value.\n    PENDING (1):\n        Revision in Pending state.\n    RESERVE (2):\n        Revision is in Reserve state.\n    RETIRED (3):\n        Revision is Retired.\n    RETIRING (4):\n        Revision is being retired.\n    RECREATING (5):\n        Revision is being recreated.\n    HEALTH_CHECK_CONTAINER_ERROR (6):\n        There was a health check error.\n    CUSTOMIZED_PATH_RESPONSE_PENDING (7):\n        Health check failed due to user error from\n        customized path of the container. System will\n        retry.\n    MIN_INSTANCES_NOT_PROVISIONED (8):\n        A revision with min_instance_count > 0 was created and is\n        reserved, but it was not configured to serve traffic, so\n        it's not live. This can also happen momentarily during\n        traffic migration.\n    ACTIVE_REVISION_LIMIT_REACHED (9):\n        The maximum allowed number of active\n        revisions has been reached.\n    NO_DEPLOYMENT (10):\n        The",
+                    "values": {
+                      "REVISION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "PENDING": {
+                        "value": 1
+                      },
+                      "RESERVE": {
+                        "value": 2
+                      },
+                      "RETIRED": {
+                        "value": 3
+                      },
+                      "RETIRING": {
+                        "value": 4
+                      },
+                      "RECREATING": {
+                        "value": 5
+                      },
+                      "HEALTH_CHECK_CONTAINER_ERROR": {
+                        "value": 6
+                      },
+                      "CUSTOMIZED_PATH_RESPONSE_PENDING": {
+                        "value": 7
+                      },
+                      "MIN_INSTANCES_NOT_PROVISIONED": {
+                        "value": 8
+                      },
+                      "ACTIVE_REVISION_LIMIT_REACHED": {
+                        "value": 9
+                      },
+                      "NO_DEPLOYMENT": {
+                        "value": 10
+                      },
+                      "HEALTH_CHECK_SKIPPED": {
+                        "value": 11
+                      },
+                      "MIN_INSTANCES_WARMING": {
+                        "value": 12
+                      }
+                    }
                   },
                   "execution_reason": {
-                    "description": "Output only. A reason for the execution condition.  This field is a member of `oneof`_ ``reasons``.",
-                    "type": "object",
-                    "reference": "google.cloud.run_v2.types.Condition.ExecutionReason"
+                    "type": "enum",
+                    "name": "ExecutionReason",
+                    "description": "Reasons specific to Execution resource.\n\nValues:\n    EXECUTION_REASON_UNDEFINED (0):\n        Default value.\n    JOB_STATUS_SERVICE_POLLING_ERROR (1):\n        Internal system error getting execution\n        status. System will retry.\n    NON_ZERO_EXIT_CODE (2):\n        A task reached its retry limit and the last\n        attempt failed due to the user container exiting\n        with a non-zero exit code.\n    CANCELLED (3):\n        The execution was cancelled by users.\n    CANCELLING (4):\n        The execution is in the process of being\n        cancelled.\n    DELETED (5):\n        The execution was deleted.",
+                    "values": {
+                      "EXECUTION_REASON_UNDEFINED": {
+                        "value": 0
+                      },
+                      "JOB_STATUS_SERVICE_POLLING_ERROR": {
+                        "value": 1
+                      },
+                      "NON_ZERO_EXIT_CODE": {
+                        "value": 2
+                      },
+                      "CANCELLED": {
+                        "value": 3
+                      },
+                      "CANCELLING": {
+                        "value": 4
+                      },
+                      "DELETED": {
+                        "value": 5
+                      }
+                    }
                   }
                 }
               }
@@ -5496,9 +6678,23 @@
                 "type": "string"
               },
               "type_": {
-                "description": "The type of the target site, e.g., whether the site is to be included or excluded.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.TargetSite.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "exact_match": {
                 "description": "Input only. If set to false, a uri_pattern is generated to include all pages whose address contains the provided_uri_pattern. If set to true, an uri_pattern is generated to try to be an exact match of the provided_uri_pattern or just the specific page if the provided_uri_pattern is a specific one. provided_uri_pattern is always normalized to generate the URI pattern to be used by the search engine.",
@@ -5516,9 +6712,23 @@
                 "type": "object",
                 "properties": {
                   "site_verification_state": {
-                    "description": "Site verification state indicating the ownership and validity.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.SiteVerificationInfo.SiteVerificationState"
+                    "type": "enum",
+                    "name": "SiteVerificationState",
+                    "description": "Site verification state.\n\nValues:\n    SITE_VERIFICATION_STATE_UNSPECIFIED (0):\n        Defaults to VERIFIED.\n    VERIFIED (1):\n        Site ownership verified.\n    UNVERIFIED (2):\n        Site ownership pending verification or\n        verification failed.\n    EXEMPTED (3):\n        Site exempt from verification, e.g., a public\n        website that opens to all.",
+                    "values": {
+                      "SITE_VERIFICATION_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "VERIFIED": {
+                        "value": 1
+                      },
+                      "UNVERIFIED": {
+                        "value": 2
+                      },
+                      "EXEMPTED": {
+                        "value": 3
+                      }
+                    }
                   },
                   "verify_time": {
                     "description": "Latest site verification time.",
@@ -5531,9 +6741,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "Output only. State of this asset's indexing.",
-                    "type": "object",
-                    "reference": "google.cloud.visionai_v1.types.IndexingStatus.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "status_message": {
                     "description": "Detailed message describing the state.",
@@ -5550,9 +6777,20 @@
                 "type": "object",
                 "properties": {
                   "corpus_type": {
-                    "description": "DESKTOP, MOBILE, or CORPUS_TYPE_UNSPECIFIED.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.RecrawlUrisResponse.FailureInfo.FailureReason.CorpusType"
+                    "type": "enum",
+                    "name": "CorpusType",
+                    "description": "CorpusType for the failed crawling operation.\n\nValues:\n    CORPUS_TYPE_UNSPECIFIED (0):\n        Default value.\n    DESKTOP (1):\n        Denotes a crawling attempt for the desktop\n        version of a page.\n    MOBILE (2):\n        Denotes a crawling attempt for the mobile\n        version of a page.",
+                    "values": {
+                      "CORPUS_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DESKTOP": {
+                        "value": 1
+                      },
+                      "MOBILE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Reason why the URI was not crawled.",
@@ -5605,9 +6843,23 @@
                       "type": "string"
                     },
                     "type_": {
-                      "description": "The type of the target site, e.g., whether the site is to be included or excluded.",
-                      "type": "object",
-                      "reference": "google.cloud.discoveryengine_v1beta.types.TargetSite.Type"
+                      "type": "enum",
+                      "name": "Type",
+                      "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                      "values": {
+                        "TYPE_UNSPECIFIED": {
+                          "value": 0
+                        },
+                        "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                          "value": 1
+                        },
+                        "NO_RETURNS": {
+                          "value": 2
+                        },
+                        "LIFETIME_RETURNS": {
+                          "value": 3
+                        }
+                      }
                     },
                     "exact_match": {
                       "description": "Input only. If set to false, a uri_pattern is generated to include all pages whose address contains the provided_uri_pattern. If set to true, an uri_pattern is generated to try to be an exact match of the provided_uri_pattern or just the specific page if the provided_uri_pattern is a specific one. provided_uri_pattern is always normalized to generate the URI pattern to be used by the search engine.",
@@ -5625,9 +6877,23 @@
                       "type": "object",
                       "properties": {
                         "site_verification_state": {
-                          "description": "Site verification state indicating the ownership and validity.",
-                          "type": "object",
-                          "reference": "google.cloud.discoveryengine_v1beta.types.SiteVerificationInfo.SiteVerificationState"
+                          "type": "enum",
+                          "name": "SiteVerificationState",
+                          "description": "Site verification state.\n\nValues:\n    SITE_VERIFICATION_STATE_UNSPECIFIED (0):\n        Defaults to VERIFIED.\n    VERIFIED (1):\n        Site ownership verified.\n    UNVERIFIED (2):\n        Site ownership pending verification or\n        verification failed.\n    EXEMPTED (3):\n        Site exempt from verification, e.g., a public\n        website that opens to all.",
+                          "values": {
+                            "SITE_VERIFICATION_STATE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "VERIFIED": {
+                              "value": 1
+                            },
+                            "UNVERIFIED": {
+                              "value": 2
+                            },
+                            "EXEMPTED": {
+                              "value": 3
+                            }
+                          }
                         },
                         "verify_time": {
                           "description": "Latest site verification time.",
@@ -5640,9 +6906,26 @@
                       "type": "object",
                       "properties": {
                         "state": {
-                          "description": "Output only. State of this asset's indexing.",
-                          "type": "object",
-                          "reference": "google.cloud.visionai_v1.types.IndexingStatus.State"
+                          "type": "enum",
+                          "name": "State",
+                          "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                          "values": {
+                            "STATE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "AFFECTED": {
+                              "value": 1
+                            },
+                            "NOT_AFFECTED": {
+                              "value": 2
+                            },
+                            "FIXED": {
+                              "value": 3
+                            },
+                            "UNDER_INVESTIGATION": {
+                              "value": 4
+                            }
+                          }
                         },
                         "status_message": {
                           "description": "Detailed message describing the state.",
@@ -5659,9 +6942,20 @@
                       "type": "object",
                       "properties": {
                         "corpus_type": {
-                          "description": "DESKTOP, MOBILE, or CORPUS_TYPE_UNSPECIFIED.",
-                          "type": "object",
-                          "reference": "google.cloud.discoveryengine_v1beta.types.RecrawlUrisResponse.FailureInfo.FailureReason.CorpusType"
+                          "type": "enum",
+                          "name": "CorpusType",
+                          "description": "CorpusType for the failed crawling operation.\n\nValues:\n    CORPUS_TYPE_UNSPECIFIED (0):\n        Default value.\n    DESKTOP (1):\n        Denotes a crawling attempt for the desktop\n        version of a page.\n    MOBILE (2):\n        Denotes a crawling attempt for the mobile\n        version of a page.",
+                          "values": {
+                            "CORPUS_TYPE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "DESKTOP": {
+                              "value": 1
+                            },
+                            "MOBILE": {
+                              "value": 2
+                            }
+                          }
                         },
                         "error_message": {
                           "description": "Reason why the URI was not crawled.",
@@ -5725,9 +7019,23 @@
                 "type": "string"
               },
               "type_": {
-                "description": "The type of the target site, e.g., whether the site is to be included or excluded.",
-                "type": "object",
-                "reference": "google.cloud.discoveryengine_v1beta.types.TargetSite.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "exact_match": {
                 "description": "Input only. If set to false, a uri_pattern is generated to include all pages whose address contains the provided_uri_pattern. If set to true, an uri_pattern is generated to try to be an exact match of the provided_uri_pattern or just the specific page if the provided_uri_pattern is a specific one. provided_uri_pattern is always normalized to generate the URI pattern to be used by the search engine.",
@@ -5745,9 +7053,23 @@
                 "type": "object",
                 "properties": {
                   "site_verification_state": {
-                    "description": "Site verification state indicating the ownership and validity.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.SiteVerificationInfo.SiteVerificationState"
+                    "type": "enum",
+                    "name": "SiteVerificationState",
+                    "description": "Site verification state.\n\nValues:\n    SITE_VERIFICATION_STATE_UNSPECIFIED (0):\n        Defaults to VERIFIED.\n    VERIFIED (1):\n        Site ownership verified.\n    UNVERIFIED (2):\n        Site ownership pending verification or\n        verification failed.\n    EXEMPTED (3):\n        Site exempt from verification, e.g., a public\n        website that opens to all.",
+                    "values": {
+                      "SITE_VERIFICATION_STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "VERIFIED": {
+                        "value": 1
+                      },
+                      "UNVERIFIED": {
+                        "value": 2
+                      },
+                      "EXEMPTED": {
+                        "value": 3
+                      }
+                    }
                   },
                   "verify_time": {
                     "description": "Latest site verification time.",
@@ -5760,9 +7082,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "Output only. State of this asset's indexing.",
-                    "type": "object",
-                    "reference": "google.cloud.visionai_v1.types.IndexingStatus.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "status_message": {
                     "description": "Detailed message describing the state.",
@@ -5779,9 +7118,20 @@
                 "type": "object",
                 "properties": {
                   "corpus_type": {
-                    "description": "DESKTOP, MOBILE, or CORPUS_TYPE_UNSPECIFIED.",
-                    "type": "object",
-                    "reference": "google.cloud.discoveryengine_v1beta.types.RecrawlUrisResponse.FailureInfo.FailureReason.CorpusType"
+                    "type": "enum",
+                    "name": "CorpusType",
+                    "description": "CorpusType for the failed crawling operation.\n\nValues:\n    CORPUS_TYPE_UNSPECIFIED (0):\n        Default value.\n    DESKTOP (1):\n        Denotes a crawling attempt for the desktop\n        version of a page.\n    MOBILE (2):\n        Denotes a crawling attempt for the mobile\n        version of a page.",
+                    "values": {
+                      "CORPUS_TYPE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "DESKTOP": {
+                        "value": 1
+                      },
+                      "MOBILE": {
+                        "value": 2
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Reason why the URI was not crawled.",

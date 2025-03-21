@@ -88,165 +88,24 @@
                     "description": "List of input assets stored in Cloud Storage.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "key": {
-                          "description": "A unique key for this input. Must be specified when using advanced mapping and edit lists.",
-                          "type": "string"
+                      "type": "enum",
+                      "name": "Input",
+                      "description": "Determines the type of input to the data source. Based on the\ninput some settings might not be supported.\n\nValues:\n    INPUT_UNSPECIFIED (0):\n        Input unspecified.\n    API (1):\n        Represents data sources for which the data is\n        primarily provided through the API.\n    FILE (2):\n        Represents data sources for which the data is\n        primarily provided through file input. Data can\n        still be provided through the API.\n    UI (3):\n        The data source for products added directly\n        in Merchant Center.\n        This type of data source can not be created or\n        updated through this API, only by Merchant\n        Center UI.\n\n        This type of data source is read only.\n    AUTOFEED (4):\n        This is also known as `Automated\n        feeds <https://support.google.com/merchants/answer/12158480>`__\n        used to automatically build your product data. This type of\n        data source can be enabled or disabled through the Accounts\n        bundle.",
+                      "values": {
+                        "INPUT_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "uri": {
-                          "description": "URI of the media. Input files must be at least 5 seconds in duration and stored in Cloud Storage (for example, ``gs://bucket/inputs/file.mp4``). If empty, the value is populated from ``Job.input_uri``. See `Supported input and output formats <https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats>`__.",
-                          "type": "string"
+                        "API": {
+                          "value": 1
                         },
-                        "preprocessing_config": {
-                          "type": "object",
-                          "properties": {
-                            "color": {
-                              "type": "object",
-                              "properties": {
-                                "saturation": {
-                                  "description": "Control color saturation of the video. Enter a value between -1 and 1, where -1 is fully desaturated and 1 is maximum saturation. 0 is no change. The default is 0.",
-                                  "type": "number"
-                                },
-                                "contrast": {
-                                  "description": "Control black and white contrast of the video. Enter a value between -1 and 1, where -1 is minimum contrast and 1 is maximum contrast. 0 is no change. The default is 0.",
-                                  "type": "number"
-                                },
-                                "brightness": {
-                                  "description": "Control brightness of the video. Enter a value between -1 and 1, where -1 is minimum brightness and 1 is maximum brightness. 0 is no change. The default is 0.",
-                                  "type": "number"
-                                }
-                              }
-                            },
-                            "denoise": {
-                              "type": "object",
-                              "properties": {
-                                "strength": {
-                                  "description": "Set strength of the denoise. Enter a value between 0 and 1. The higher the value, the smoother the image. 0 is no denoising. The default is 0.",
-                                  "type": "number"
-                                },
-                                "tune": {
-                                  "description": "Set the denoiser mode. The default is ``standard``.  Supported denoiser modes:  -  ``standard`` -  ``grain``",
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "deblock": {
-                              "type": "object",
-                              "properties": {
-                                "strength": {
-                                  "description": "Set strength of the deblocker. Enter a value between 0 and 1. The higher the value, the stronger the block removal. 0 is no deblocking. The default is 0.",
-                                  "type": "number"
-                                },
-                                "enabled": {
-                                  "description": "Enable deblocker. The default is ``false``.",
-                                  "type": "boolean"
-                                }
-                              }
-                            },
-                            "audio": {
-                              "type": "object",
-                              "properties": {
-                                "lufs": {
-                                  "description": "Specify audio loudness normalization in loudness units relative to full scale (LUFS). Enter a value between -24 and 0 (the default), where:  -  -24 is the Advanced Television Systems Committee (ATSC A/85) standard -  -23 is the EU R128 broadcast standard -  -19 is the prior standard for online mono audio -  -18 is the ReplayGain standard -  -16 is the prior standard for stereo audio -  -14 is the new online audio standard recommended by Spotify, as well as Amazon Echo -  0 disables normalization",
-                                  "type": "number"
-                                },
-                                "high_boost": {
-                                  "description": "Enable boosting high frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                                  "type": "boolean"
-                                },
-                                "low_boost": {
-                                  "description": "Enable boosting low frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                                  "type": "boolean"
-                                }
-                              }
-                            },
-                            "crop": {
-                              "type": "object",
-                              "properties": {
-                                "top_pixels": {
-                                  "description": "The number of pixels to crop from the top. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "bottom_pixels": {
-                                  "description": "The number of pixels to crop from the bottom. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "left_pixels": {
-                                  "description": "The number of pixels to crop from the left. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "right_pixels": {
-                                  "description": "The number of pixels to crop from the right. The default is 0.",
-                                  "type": "integer"
-                                }
-                              }
-                            },
-                            "pad": {
-                              "type": "object",
-                              "properties": {
-                                "top_pixels": {
-                                  "description": "The number of pixels to add to the top. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "bottom_pixels": {
-                                  "description": "The number of pixels to add to the bottom. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "left_pixels": {
-                                  "description": "The number of pixels to add to the left. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "right_pixels": {
-                                  "description": "The number of pixels to add to the right. The default is 0.",
-                                  "type": "integer"
-                                }
-                              }
-                            },
-                            "deinterlace": {
-                              "type": "object",
-                              "properties": {
-                                "yadif": {
-                                  "type": "object",
-                                  "properties": {
-                                    "mode": {
-                                      "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                                      "type": "string"
-                                    },
-                                    "disable_spatial_interlacing": {
-                                      "description": "Disable spacial interlacing. The default is ``false``.",
-                                      "type": "boolean"
-                                    },
-                                    "parity": {
-                                      "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                                      "type": "string"
-                                    },
-                                    "deinterlace_all_frames": {
-                                      "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                                      "type": "boolean"
-                                    }
-                                  }
-                                },
-                                "bwdif": {
-                                  "type": "object",
-                                  "properties": {
-                                    "mode": {
-                                      "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                                      "type": "string"
-                                    },
-                                    "parity": {
-                                      "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                                      "type": "string"
-                                    },
-                                    "deinterlace_all_frames": {
-                                      "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                                      "type": "boolean"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
+                        "FILE": {
+                          "value": 2
+                        },
+                        "UI": {
+                          "value": 3
+                        },
+                        "AUTOFEED": {
+                          "value": 4
                         }
                       }
                     }
@@ -269,28 +128,46 @@
                           }
                         },
                         "end_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
                         "start_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         }
@@ -350,15 +227,24 @@
                                   "type": "integer"
                                 },
                                 "gop_duration": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nanos": {
-                                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                      "type": "integer"
+                                  "type": "enum",
+                                  "name": "Duration",
+                                  "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                  "values": {
+                                    "UNDEFINED_DURATION": {
+                                      "value": 0
                                     },
-                                    "seconds": {
-                                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                      "type": "integer"
+                                    "DURATION_UNSPECIFIED": {
+                                      "value": 529071340
+                                    },
+                                    "HOUR": {
+                                      "value": 2223588
+                                    },
+                                    "MAX": {
+                                      "value": 76100
+                                    },
+                                    "MINUTE": {
+                                      "value": 126786068
                                     }
                                   }
                                 },
@@ -448,15 +334,24 @@
                                   "type": "integer"
                                 },
                                 "gop_duration": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nanos": {
-                                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                      "type": "integer"
+                                  "type": "enum",
+                                  "name": "Duration",
+                                  "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                  "values": {
+                                    "UNDEFINED_DURATION": {
+                                      "value": 0
                                     },
-                                    "seconds": {
-                                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                      "type": "integer"
+                                    "DURATION_UNSPECIFIED": {
+                                      "value": 529071340
+                                    },
+                                    "HOUR": {
+                                      "value": 2223588
+                                    },
+                                    "MAX": {
+                                      "value": 76100
+                                    },
+                                    "MINUTE": {
+                                      "value": 126786068
                                     }
                                   }
                                 },
@@ -538,15 +433,24 @@
                                   "type": "integer"
                                 },
                                 "gop_duration": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nanos": {
-                                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                      "type": "integer"
+                                  "type": "enum",
+                                  "name": "Duration",
+                                  "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                  "values": {
+                                    "UNDEFINED_DURATION": {
+                                      "value": 0
                                     },
-                                    "seconds": {
-                                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                      "type": "integer"
+                                    "DURATION_UNSPECIFIED": {
+                                      "value": 529071340
+                                    },
+                                    "HOUR": {
+                                      "value": 2223588
+                                    },
+                                    "MAX": {
+                                      "value": 76100
+                                    },
+                                    "MINUTE": {
+                                      "value": 126786068
                                     }
                                   }
                                 },
@@ -716,15 +620,24 @@
                           "type": "object",
                           "properties": {
                             "segment_duration": {
-                              "type": "object",
-                              "properties": {
-                                "nanos": {
-                                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                  "type": "integer"
+                              "type": "enum",
+                              "name": "Duration",
+                              "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                              "values": {
+                                "UNDEFINED_DURATION": {
+                                  "value": 0
                                 },
-                                "seconds": {
-                                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                  "type": "integer"
+                                "DURATION_UNSPECIFIED": {
+                                  "value": 529071340
+                                },
+                                "HOUR": {
+                                  "value": 2223588
+                                },
+                                "MAX": {
+                                  "value": 76100
+                                },
+                                "MINUTE": {
+                                  "value": 126786068
                                 }
                               }
                             },
@@ -755,9 +668,20 @@
                           "type": "string"
                         },
                         "type_": {
-                          "description": "Required. Type of the manifest.",
-                          "type": "object",
-                          "reference": "google.cloud.video.transcoder_v1.types.Manifest.ManifestType"
+                          "type": "enum",
+                          "name": "ManifestType",
+                          "description": "The manifest type, which corresponds to the adaptive\nstreaming format used.\n\nValues:\n    MANIFEST_TYPE_UNSPECIFIED (0):\n        The manifest type is not specified.\n    HLS (1):\n        Create an HLS manifest. The corresponding file extension is\n        ``.m3u8``.\n    DASH (2):\n        Create an MPEG-DASH manifest. The corresponding file\n        extension is ``.mpd``.",
+                          "values": {
+                            "MANIFEST_TYPE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "HLS": {
+                              "value": 1
+                            },
+                            "DASH": {
+                              "value": 2
+                            }
+                          }
                         },
                         "mux_streams": {
                           "description": "Required. List of user given ``MuxStream.key``\\ s that should appear in this manifest.  When ``Manifest.type`` is ``HLS``, a media manifest with name ``MuxStream.key`` and ``.m3u8`` extension is generated for each element of the ``Manifest.mux_streams``.",
@@ -770,9 +694,20 @@
                           "type": "object",
                           "properties": {
                             "segment_reference_scheme": {
-                              "description": "The segment reference scheme for a ``DASH`` manifest. The default is ``SEGMENT_LIST``.",
-                              "type": "object",
-                              "reference": "google.cloud.video.transcoder_v1.types.Manifest.DashConfig.SegmentReferenceScheme"
+                              "type": "enum",
+                              "name": "SegmentReferenceScheme",
+                              "description": "The segment reference scheme for a ``DASH`` manifest.\n\nValues:\n    SEGMENT_REFERENCE_SCHEME_UNSPECIFIED (0):\n        The segment reference scheme is not\n        specified.\n    SEGMENT_LIST (1):\n        Lists the URLs of media files for each\n        segment.\n    SEGMENT_TEMPLATE_NUMBER (2):\n        Lists each segment from a template with\n        $Number$ variable.",
+                              "values": {
+                                "SEGMENT_REFERENCE_SCHEME_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SEGMENT_LIST": {
+                                  "value": 1
+                                },
+                                "SEGMENT_TEMPLATE_NUMBER": {
+                                  "value": 2
+                                }
+                              }
                             }
                           }
                         }
@@ -799,15 +734,24 @@
                       "type": "object",
                       "properties": {
                         "start_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         }
@@ -854,28 +798,46 @@
                           "type": "integer"
                         },
                         "start_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
                         "end_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
@@ -884,15 +846,24 @@
                           "type": "integer"
                         },
                         "interval": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
@@ -960,15 +931,24 @@
                                     }
                                   },
                                   "start_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -978,9 +958,20 @@
                                 "type": "object",
                                 "properties": {
                                   "fade_type": {
-                                    "description": "Required. Type of fade animation: ``FADE_IN`` or ``FADE_OUT``.",
-                                    "type": "object",
-                                    "reference": "google.cloud.video.transcoder_v1.types.Overlay.FadeType"
+                                    "type": "enum",
+                                    "name": "FadeType",
+                                    "description": "Fade type for the overlay: ``FADE_IN`` or ``FADE_OUT``.\n\nValues:\n    FADE_TYPE_UNSPECIFIED (0):\n        The fade type is not specified.\n    FADE_IN (1):\n        Fade the overlay object into view.\n    FADE_OUT (2):\n        Fade the overlay object out of view.",
+                                    "values": {
+                                      "FADE_TYPE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "FADE_IN": {
+                                        "value": 1
+                                      },
+                                      "FADE_OUT": {
+                                        "value": 2
+                                      }
+                                    }
                                   },
                                   "xy": {
                                     "type": "object",
@@ -996,28 +987,46 @@
                                     }
                                   },
                                   "start_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   },
                                   "end_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -1030,15 +1039,24 @@
                                 "type": "object",
                                 "properties": {
                                   "start_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -1123,9 +1141,23 @@
                 }
               },
               "state": {
-                "description": "Output only. The current state of the job.",
-                "type": "object",
-                "reference": "google.cloud.video.transcoder_v1.types.Job.ProcessingState"
+                "type": "enum",
+                "name": "ProcessingState",
+                "description": "The processing state of the data source.\n\nValues:\n    PROCESSING_STATE_UNSPECIFIED (0):\n        Processing state unspecified.\n    FAILED (1):\n        The data source could not be processed or all\n        the items had errors.\n    IN_PROGRESS (2):\n        The data source is being processed.\n    SUCCEEDED (3):\n        The data source was processed successfully,\n        though some items might have had errors.",
+                "values": {
+                  "PROCESSING_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "FAILED": {
+                    "value": 1
+                  },
+                  "IN_PROGRESS": {
+                    "value": 2
+                  },
+                  "SUCCEEDED": {
+                    "value": 3
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. The time the job was created.",
@@ -1157,9 +1189,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "State enum for status.",
-                    "type": "object",
-                    "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
@@ -1168,18 +1217,40 @@
                 }
               },
               "mode": {
-                "description": "The processing mode of the job. The default is ``PROCESSING_MODE_INTERACTIVE``.",
-                "type": "object",
-                "reference": "google.cloud.video.transcoder_v1.types.Job.ProcessingMode"
+                "type": "enum",
+                "name": "ProcessingMode",
+                "description": "The processing mode of the job.\n\nValues:\n    PROCESSING_MODE_UNSPECIFIED (0):\n        The job processing mode is not specified.\n    PROCESSING_MODE_INTERACTIVE (1):\n        The job processing mode is interactive mode.\n        Interactive job will either be ran or rejected\n        if quota does not allow for it.\n    PROCESSING_MODE_BATCH (2):\n        The job processing mode is batch mode.\n        Batch mode allows queuing of jobs.",
+                "values": {
+                  "PROCESSING_MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "PROCESSING_MODE_INTERACTIVE": {
+                    "value": 1
+                  },
+                  "PROCESSING_MODE_BATCH": {
+                    "value": 2
+                  }
+                }
               },
               "batch_mode_priority": {
                 "description": "The processing priority of a batch job. This field can only be set for batch mode jobs. The default value is 0. This value cannot be negative. Higher values correspond to higher priorities for the job.",
                 "type": "integer"
               },
               "optimization": {
-                "description": "Optional. The optimization strategy of the job. The default is ``AUTODETECT``.",
-                "type": "object",
-                "reference": "google.cloud.video.transcoder_v1.types.Job.OptimizationStrategy"
+                "type": "enum",
+                "name": "OptimizationStrategy",
+                "description": "The optimization strategy of the job. The default is ``AUTODETECT``.\n\nValues:\n    OPTIMIZATION_STRATEGY_UNSPECIFIED (0):\n        The optimization strategy is not specified.\n    AUTODETECT (1):\n        Prioritize job processing speed.\n    DISABLED (2):\n        Disable all optimizations.",
+                "values": {
+                  "OPTIMIZATION_STRATEGY_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AUTODETECT": {
+                    "value": 1
+                  },
+                  "DISABLED": {
+                    "value": 2
+                  }
+                }
               }
             }
           }
@@ -1224,165 +1295,24 @@
                     "description": "List of input assets stored in Cloud Storage.",
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "key": {
-                          "description": "A unique key for this input. Must be specified when using advanced mapping and edit lists.",
-                          "type": "string"
+                      "type": "enum",
+                      "name": "Input",
+                      "description": "Determines the type of input to the data source. Based on the\ninput some settings might not be supported.\n\nValues:\n    INPUT_UNSPECIFIED (0):\n        Input unspecified.\n    API (1):\n        Represents data sources for which the data is\n        primarily provided through the API.\n    FILE (2):\n        Represents data sources for which the data is\n        primarily provided through file input. Data can\n        still be provided through the API.\n    UI (3):\n        The data source for products added directly\n        in Merchant Center.\n        This type of data source can not be created or\n        updated through this API, only by Merchant\n        Center UI.\n\n        This type of data source is read only.\n    AUTOFEED (4):\n        This is also known as `Automated\n        feeds <https://support.google.com/merchants/answer/12158480>`__\n        used to automatically build your product data. This type of\n        data source can be enabled or disabled through the Accounts\n        bundle.",
+                      "values": {
+                        "INPUT_UNSPECIFIED": {
+                          "value": 0
                         },
-                        "uri": {
-                          "description": "URI of the media. Input files must be at least 5 seconds in duration and stored in Cloud Storage (for example, ``gs://bucket/inputs/file.mp4``). If empty, the value is populated from ``Job.input_uri``. See `Supported input and output formats <https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats>`__.",
-                          "type": "string"
+                        "API": {
+                          "value": 1
                         },
-                        "preprocessing_config": {
-                          "type": "object",
-                          "properties": {
-                            "color": {
-                              "type": "object",
-                              "properties": {
-                                "saturation": {
-                                  "description": "Control color saturation of the video. Enter a value between -1 and 1, where -1 is fully desaturated and 1 is maximum saturation. 0 is no change. The default is 0.",
-                                  "type": "number"
-                                },
-                                "contrast": {
-                                  "description": "Control black and white contrast of the video. Enter a value between -1 and 1, where -1 is minimum contrast and 1 is maximum contrast. 0 is no change. The default is 0.",
-                                  "type": "number"
-                                },
-                                "brightness": {
-                                  "description": "Control brightness of the video. Enter a value between -1 and 1, where -1 is minimum brightness and 1 is maximum brightness. 0 is no change. The default is 0.",
-                                  "type": "number"
-                                }
-                              }
-                            },
-                            "denoise": {
-                              "type": "object",
-                              "properties": {
-                                "strength": {
-                                  "description": "Set strength of the denoise. Enter a value between 0 and 1. The higher the value, the smoother the image. 0 is no denoising. The default is 0.",
-                                  "type": "number"
-                                },
-                                "tune": {
-                                  "description": "Set the denoiser mode. The default is ``standard``.  Supported denoiser modes:  -  ``standard`` -  ``grain``",
-                                  "type": "string"
-                                }
-                              }
-                            },
-                            "deblock": {
-                              "type": "object",
-                              "properties": {
-                                "strength": {
-                                  "description": "Set strength of the deblocker. Enter a value between 0 and 1. The higher the value, the stronger the block removal. 0 is no deblocking. The default is 0.",
-                                  "type": "number"
-                                },
-                                "enabled": {
-                                  "description": "Enable deblocker. The default is ``false``.",
-                                  "type": "boolean"
-                                }
-                              }
-                            },
-                            "audio": {
-                              "type": "object",
-                              "properties": {
-                                "lufs": {
-                                  "description": "Specify audio loudness normalization in loudness units relative to full scale (LUFS). Enter a value between -24 and 0 (the default), where:  -  -24 is the Advanced Television Systems Committee (ATSC A/85) standard -  -23 is the EU R128 broadcast standard -  -19 is the prior standard for online mono audio -  -18 is the ReplayGain standard -  -16 is the prior standard for stereo audio -  -14 is the new online audio standard recommended by Spotify, as well as Amazon Echo -  0 disables normalization",
-                                  "type": "number"
-                                },
-                                "high_boost": {
-                                  "description": "Enable boosting high frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                                  "type": "boolean"
-                                },
-                                "low_boost": {
-                                  "description": "Enable boosting low frequency components. The default is ``false``.  **Note:** This field is not supported.",
-                                  "type": "boolean"
-                                }
-                              }
-                            },
-                            "crop": {
-                              "type": "object",
-                              "properties": {
-                                "top_pixels": {
-                                  "description": "The number of pixels to crop from the top. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "bottom_pixels": {
-                                  "description": "The number of pixels to crop from the bottom. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "left_pixels": {
-                                  "description": "The number of pixels to crop from the left. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "right_pixels": {
-                                  "description": "The number of pixels to crop from the right. The default is 0.",
-                                  "type": "integer"
-                                }
-                              }
-                            },
-                            "pad": {
-                              "type": "object",
-                              "properties": {
-                                "top_pixels": {
-                                  "description": "The number of pixels to add to the top. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "bottom_pixels": {
-                                  "description": "The number of pixels to add to the bottom. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "left_pixels": {
-                                  "description": "The number of pixels to add to the left. The default is 0.",
-                                  "type": "integer"
-                                },
-                                "right_pixels": {
-                                  "description": "The number of pixels to add to the right. The default is 0.",
-                                  "type": "integer"
-                                }
-                              }
-                            },
-                            "deinterlace": {
-                              "type": "object",
-                              "properties": {
-                                "yadif": {
-                                  "type": "object",
-                                  "properties": {
-                                    "mode": {
-                                      "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                                      "type": "string"
-                                    },
-                                    "disable_spatial_interlacing": {
-                                      "description": "Disable spacial interlacing. The default is ``false``.",
-                                      "type": "boolean"
-                                    },
-                                    "parity": {
-                                      "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                                      "type": "string"
-                                    },
-                                    "deinterlace_all_frames": {
-                                      "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                                      "type": "boolean"
-                                    }
-                                  }
-                                },
-                                "bwdif": {
-                                  "type": "object",
-                                  "properties": {
-                                    "mode": {
-                                      "description": "Specifies the deinterlacing mode to adopt. The default is ``send_frame``. Supported values:  -  ``send_frame``: Output one frame for each frame -  ``send_field``: Output one frame for each field",
-                                      "type": "string"
-                                    },
-                                    "parity": {
-                                      "description": "The picture field parity assumed for the input interlaced video. The default is ``auto``. Supported values:  -  ``tff``: Assume the top field is first -  ``bff``: Assume the bottom field is first -  ``auto``: Enable automatic detection of field parity",
-                                      "type": "string"
-                                    },
-                                    "deinterlace_all_frames": {
-                                      "description": "Deinterlace all frames rather than just the frames identified as interlaced. The default is ``false``.",
-                                      "type": "boolean"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
+                        "FILE": {
+                          "value": 2
+                        },
+                        "UI": {
+                          "value": 3
+                        },
+                        "AUTOFEED": {
+                          "value": 4
                         }
                       }
                     }
@@ -1405,28 +1335,46 @@
                           }
                         },
                         "end_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
                         "start_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         }
@@ -1486,15 +1434,24 @@
                                   "type": "integer"
                                 },
                                 "gop_duration": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nanos": {
-                                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                      "type": "integer"
+                                  "type": "enum",
+                                  "name": "Duration",
+                                  "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                  "values": {
+                                    "UNDEFINED_DURATION": {
+                                      "value": 0
                                     },
-                                    "seconds": {
-                                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                      "type": "integer"
+                                    "DURATION_UNSPECIFIED": {
+                                      "value": 529071340
+                                    },
+                                    "HOUR": {
+                                      "value": 2223588
+                                    },
+                                    "MAX": {
+                                      "value": 76100
+                                    },
+                                    "MINUTE": {
+                                      "value": 126786068
                                     }
                                   }
                                 },
@@ -1584,15 +1541,24 @@
                                   "type": "integer"
                                 },
                                 "gop_duration": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nanos": {
-                                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                      "type": "integer"
+                                  "type": "enum",
+                                  "name": "Duration",
+                                  "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                  "values": {
+                                    "UNDEFINED_DURATION": {
+                                      "value": 0
                                     },
-                                    "seconds": {
-                                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                      "type": "integer"
+                                    "DURATION_UNSPECIFIED": {
+                                      "value": 529071340
+                                    },
+                                    "HOUR": {
+                                      "value": 2223588
+                                    },
+                                    "MAX": {
+                                      "value": 76100
+                                    },
+                                    "MINUTE": {
+                                      "value": 126786068
                                     }
                                   }
                                 },
@@ -1674,15 +1640,24 @@
                                   "type": "integer"
                                 },
                                 "gop_duration": {
-                                  "type": "object",
-                                  "properties": {
-                                    "nanos": {
-                                      "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                      "type": "integer"
+                                  "type": "enum",
+                                  "name": "Duration",
+                                  "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                  "values": {
+                                    "UNDEFINED_DURATION": {
+                                      "value": 0
                                     },
-                                    "seconds": {
-                                      "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                      "type": "integer"
+                                    "DURATION_UNSPECIFIED": {
+                                      "value": 529071340
+                                    },
+                                    "HOUR": {
+                                      "value": 2223588
+                                    },
+                                    "MAX": {
+                                      "value": 76100
+                                    },
+                                    "MINUTE": {
+                                      "value": 126786068
                                     }
                                   }
                                 },
@@ -1852,15 +1827,24 @@
                           "type": "object",
                           "properties": {
                             "segment_duration": {
-                              "type": "object",
-                              "properties": {
-                                "nanos": {
-                                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                  "type": "integer"
+                              "type": "enum",
+                              "name": "Duration",
+                              "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                              "values": {
+                                "UNDEFINED_DURATION": {
+                                  "value": 0
                                 },
-                                "seconds": {
-                                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                  "type": "integer"
+                                "DURATION_UNSPECIFIED": {
+                                  "value": 529071340
+                                },
+                                "HOUR": {
+                                  "value": 2223588
+                                },
+                                "MAX": {
+                                  "value": 76100
+                                },
+                                "MINUTE": {
+                                  "value": 126786068
                                 }
                               }
                             },
@@ -1891,9 +1875,20 @@
                           "type": "string"
                         },
                         "type_": {
-                          "description": "Required. Type of the manifest.",
-                          "type": "object",
-                          "reference": "google.cloud.video.transcoder_v1.types.Manifest.ManifestType"
+                          "type": "enum",
+                          "name": "ManifestType",
+                          "description": "The manifest type, which corresponds to the adaptive\nstreaming format used.\n\nValues:\n    MANIFEST_TYPE_UNSPECIFIED (0):\n        The manifest type is not specified.\n    HLS (1):\n        Create an HLS manifest. The corresponding file extension is\n        ``.m3u8``.\n    DASH (2):\n        Create an MPEG-DASH manifest. The corresponding file\n        extension is ``.mpd``.",
+                          "values": {
+                            "MANIFEST_TYPE_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "HLS": {
+                              "value": 1
+                            },
+                            "DASH": {
+                              "value": 2
+                            }
+                          }
                         },
                         "mux_streams": {
                           "description": "Required. List of user given ``MuxStream.key``\\ s that should appear in this manifest.  When ``Manifest.type`` is ``HLS``, a media manifest with name ``MuxStream.key`` and ``.m3u8`` extension is generated for each element of the ``Manifest.mux_streams``.",
@@ -1906,9 +1901,20 @@
                           "type": "object",
                           "properties": {
                             "segment_reference_scheme": {
-                              "description": "The segment reference scheme for a ``DASH`` manifest. The default is ``SEGMENT_LIST``.",
-                              "type": "object",
-                              "reference": "google.cloud.video.transcoder_v1.types.Manifest.DashConfig.SegmentReferenceScheme"
+                              "type": "enum",
+                              "name": "SegmentReferenceScheme",
+                              "description": "The segment reference scheme for a ``DASH`` manifest.\n\nValues:\n    SEGMENT_REFERENCE_SCHEME_UNSPECIFIED (0):\n        The segment reference scheme is not\n        specified.\n    SEGMENT_LIST (1):\n        Lists the URLs of media files for each\n        segment.\n    SEGMENT_TEMPLATE_NUMBER (2):\n        Lists each segment from a template with\n        $Number$ variable.",
+                              "values": {
+                                "SEGMENT_REFERENCE_SCHEME_UNSPECIFIED": {
+                                  "value": 0
+                                },
+                                "SEGMENT_LIST": {
+                                  "value": 1
+                                },
+                                "SEGMENT_TEMPLATE_NUMBER": {
+                                  "value": 2
+                                }
+                              }
                             }
                           }
                         }
@@ -1935,15 +1941,24 @@
                       "type": "object",
                       "properties": {
                         "start_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         }
@@ -1990,28 +2005,46 @@
                           "type": "integer"
                         },
                         "start_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
                         "end_time_offset": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
@@ -2020,15 +2053,24 @@
                           "type": "integer"
                         },
                         "interval": {
-                          "type": "object",
-                          "properties": {
-                            "nanos": {
-                              "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                              "type": "integer"
+                          "type": "enum",
+                          "name": "Duration",
+                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                          "values": {
+                            "UNDEFINED_DURATION": {
+                              "value": 0
                             },
-                            "seconds": {
-                              "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                              "type": "integer"
+                            "DURATION_UNSPECIFIED": {
+                              "value": 529071340
+                            },
+                            "HOUR": {
+                              "value": 2223588
+                            },
+                            "MAX": {
+                              "value": 76100
+                            },
+                            "MINUTE": {
+                              "value": 126786068
                             }
                           }
                         },
@@ -2096,15 +2138,24 @@
                                     }
                                   },
                                   "start_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -2114,9 +2165,20 @@
                                 "type": "object",
                                 "properties": {
                                   "fade_type": {
-                                    "description": "Required. Type of fade animation: ``FADE_IN`` or ``FADE_OUT``.",
-                                    "type": "object",
-                                    "reference": "google.cloud.video.transcoder_v1.types.Overlay.FadeType"
+                                    "type": "enum",
+                                    "name": "FadeType",
+                                    "description": "Fade type for the overlay: ``FADE_IN`` or ``FADE_OUT``.\n\nValues:\n    FADE_TYPE_UNSPECIFIED (0):\n        The fade type is not specified.\n    FADE_IN (1):\n        Fade the overlay object into view.\n    FADE_OUT (2):\n        Fade the overlay object out of view.",
+                                    "values": {
+                                      "FADE_TYPE_UNSPECIFIED": {
+                                        "value": 0
+                                      },
+                                      "FADE_IN": {
+                                        "value": 1
+                                      },
+                                      "FADE_OUT": {
+                                        "value": 2
+                                      }
+                                    }
                                   },
                                   "xy": {
                                     "type": "object",
@@ -2132,28 +2194,46 @@
                                     }
                                   },
                                   "start_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   },
                                   "end_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -2166,15 +2246,24 @@
                                 "type": "object",
                                 "properties": {
                                   "start_time_offset": {
-                                    "type": "object",
-                                    "properties": {
-                                      "nanos": {
-                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                        "type": "integer"
+                                    "type": "enum",
+                                    "name": "Duration",
+                                    "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                                    "values": {
+                                      "UNDEFINED_DURATION": {
+                                        "value": 0
                                       },
-                                      "seconds": {
-                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                        "type": "integer"
+                                      "DURATION_UNSPECIFIED": {
+                                        "value": 529071340
+                                      },
+                                      "HOUR": {
+                                        "value": 2223588
+                                      },
+                                      "MAX": {
+                                        "value": 76100
+                                      },
+                                      "MINUTE": {
+                                        "value": 126786068
                                       }
                                     }
                                   }
@@ -2259,9 +2348,23 @@
                 }
               },
               "state": {
-                "description": "Output only. The current state of the job.",
-                "type": "object",
-                "reference": "google.cloud.video.transcoder_v1.types.Job.ProcessingState"
+                "type": "enum",
+                "name": "ProcessingState",
+                "description": "The processing state of the data source.\n\nValues:\n    PROCESSING_STATE_UNSPECIFIED (0):\n        Processing state unspecified.\n    FAILED (1):\n        The data source could not be processed or all\n        the items had errors.\n    IN_PROGRESS (2):\n        The data source is being processed.\n    SUCCEEDED (3):\n        The data source was processed successfully,\n        though some items might have had errors.",
+                "values": {
+                  "PROCESSING_STATE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "FAILED": {
+                    "value": 1
+                  },
+                  "IN_PROGRESS": {
+                    "value": 2
+                  },
+                  "SUCCEEDED": {
+                    "value": 3
+                  }
+                }
               },
               "create_time": {
                 "description": "Output only. The time the job was created.",
@@ -2293,9 +2396,26 @@
                 "type": "object",
                 "properties": {
                   "state": {
-                    "description": "State enum for status.",
-                    "type": "object",
-                    "reference": "google.maps.mapsplatformdatasets_v1.types.Status.State"
+                    "type": "enum",
+                    "name": "State",
+                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
+                    "values": {
+                      "STATE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "AFFECTED": {
+                        "value": 1
+                      },
+                      "NOT_AFFECTED": {
+                        "value": 2
+                      },
+                      "FIXED": {
+                        "value": 3
+                      },
+                      "UNDER_INVESTIGATION": {
+                        "value": 4
+                      }
+                    }
                   },
                   "error_message": {
                     "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
@@ -2304,18 +2424,40 @@
                 }
               },
               "mode": {
-                "description": "The processing mode of the job. The default is ``PROCESSING_MODE_INTERACTIVE``.",
-                "type": "object",
-                "reference": "google.cloud.video.transcoder_v1.types.Job.ProcessingMode"
+                "type": "enum",
+                "name": "ProcessingMode",
+                "description": "The processing mode of the job.\n\nValues:\n    PROCESSING_MODE_UNSPECIFIED (0):\n        The job processing mode is not specified.\n    PROCESSING_MODE_INTERACTIVE (1):\n        The job processing mode is interactive mode.\n        Interactive job will either be ran or rejected\n        if quota does not allow for it.\n    PROCESSING_MODE_BATCH (2):\n        The job processing mode is batch mode.\n        Batch mode allows queuing of jobs.",
+                "values": {
+                  "PROCESSING_MODE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "PROCESSING_MODE_INTERACTIVE": {
+                    "value": 1
+                  },
+                  "PROCESSING_MODE_BATCH": {
+                    "value": 2
+                  }
+                }
               },
               "batch_mode_priority": {
                 "description": "The processing priority of a batch job. This field can only be set for batch mode jobs. The default value is 0. This value cannot be negative. Higher values correspond to higher priorities for the job.",
                 "type": "integer"
               },
               "optimization": {
-                "description": "Optional. The optimization strategy of the job. The default is ``AUTODETECT``.",
-                "type": "object",
-                "reference": "google.cloud.video.transcoder_v1.types.Job.OptimizationStrategy"
+                "type": "enum",
+                "name": "OptimizationStrategy",
+                "description": "The optimization strategy of the job. The default is ``AUTODETECT``.\n\nValues:\n    OPTIMIZATION_STRATEGY_UNSPECIFIED (0):\n        The optimization strategy is not specified.\n    AUTODETECT (1):\n        Prioritize job processing speed.\n    DISABLED (2):\n        Disable all optimizations.",
+                "values": {
+                  "OPTIMIZATION_STRATEGY_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "AUTODETECT": {
+                    "value": 1
+                  },
+                  "DISABLED": {
+                    "value": 2
+                  }
+                }
               }
             }
           },

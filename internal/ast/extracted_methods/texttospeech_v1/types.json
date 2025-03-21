@@ -76,9 +76,20 @@
                           "type": "string"
                         },
                         "phonetic_encoding": {
-                          "description": "The phonetic encoding of the phrase.  This field is a member of `oneof`_ ``_phonetic_encoding``.",
-                          "type": "object",
-                          "reference": "google.cloud.texttospeech_v1beta1.types.CustomPronunciationParams.PhoneticEncoding"
+                          "type": "enum",
+                          "name": "PhoneticEncoding",
+                          "description": "The phonetic encoding of the phrase.\n\nValues:\n    PHONETIC_ENCODING_UNSPECIFIED (0):\n        Not specified.\n    PHONETIC_ENCODING_IPA (1):\n        IPA. (e.g. apple -> \u02c8\u00e6p\u0259l )\n        https://en.wikipedia.org/wiki/International_Phonetic_Alphabet\n    PHONETIC_ENCODING_X_SAMPA (2):\n        X-SAMPA (e.g. apple -> \"{p@l\" )\n        https://en.wikipedia.org/wiki/X-SAMPA",
+                          "values": {
+                            "PHONETIC_ENCODING_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "PHONETIC_ENCODING_IPA": {
+                              "value": 1
+                            },
+                            "PHONETIC_ENCODING_X_SAMPA": {
+                              "value": 2
+                            }
+                          }
                         },
                         "pronunciation": {
                           "description": "The pronunciation of the phrase. This must be in the phonetic encoding specified above.  This field is a member of `oneof`_ ``_pronunciation``.",
@@ -104,9 +115,23 @@
                 "type": "string"
               },
               "ssml_gender": {
-                "description": "The preferred gender of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and name. Note that this is only a preference, not requirement; if a voice of the appropriate gender is not available, the synthesizer should substitute a voice with a different gender rather than failing the request.",
-                "type": "object",
-                "reference": "google.cloud.texttospeech_v1beta1.types.SsmlVoiceGender"
+                "type": "enum",
+                "name": "SsmlVoiceGender",
+                "description": "Gender of the voice as described in `SSML voice\nelement <https://www.w3.org/TR/speech-synthesis11/#edef_voice>`__.\n\nValues:\n    SSML_VOICE_GENDER_UNSPECIFIED (0):\n        An unspecified gender.\n        In VoiceSelectionParams, this means that the\n        client doesn't care which gender the selected\n        voice will have. In the Voice field of\n        ListVoicesResponse, this may mean that the voice\n        doesn't fit any of the other categories in this\n        enum, or that the gender of the voice isn't\n        known.\n    MALE (1):\n        A male voice.\n    FEMALE (2):\n        A female voice.\n    NEUTRAL (3):\n        A gender-neutral voice. This voice is not yet\n        supported.",
+                "values": {
+                  "SSML_VOICE_GENDER_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MALE": {
+                    "value": 1
+                  },
+                  "FEMALE": {
+                    "value": 2
+                  },
+                  "NEUTRAL": {
+                    "value": 3
+                  }
+                }
               },
               "custom_voice": {
                 "type": "object",
@@ -116,9 +141,20 @@
                     "type": "string"
                   },
                   "reported_usage": {
-                    "description": "Optional. Deprecated. The usage of the synthesized audio to be reported.",
-                    "type": "object",
-                    "reference": "google.cloud.texttospeech_v1beta1.types.CustomVoiceParams.ReportedUsage"
+                    "type": "enum",
+                    "name": "ReportedUsage",
+                    "description": "Deprecated. The usage of the synthesized audio. Usage does\nnot affect billing.\n\nValues:\n    REPORTED_USAGE_UNSPECIFIED (0):\n        Request with reported usage unspecified will\n        be rejected.\n    REALTIME (1):\n        For scenarios where the synthesized audio is\n        not downloadable and can only be used once. For\n        example, real-time request in IVR system.\n    OFFLINE (2):\n        For scenarios where the synthesized audio is\n        downloadable and can be reused. For example, the\n        synthesized audio is downloaded, stored in\n        customer service system and played repeatedly.",
+                    "values": {
+                      "REPORTED_USAGE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "REALTIME": {
+                        "value": 1
+                      },
+                      "OFFLINE": {
+                        "value": 2
+                      }
+                    }
                   }
                 },
                 "required": [
@@ -147,9 +183,32 @@
             "type": "object",
             "properties": {
               "audio_encoding": {
-                "description": "Required. The format of the audio byte stream.",
-                "type": "object",
-                "reference": "google.cloud.texttospeech_v1beta1.types.AudioEncoding"
+                "type": "enum",
+                "name": "AudioEncoding",
+                "description": "Configuration to set up audio encoder. The encoding\ndetermines the output audio format that we'd like.\n\nValues:\n    AUDIO_ENCODING_UNSPECIFIED (0):\n        Not specified. Will return result\n        [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT].\n    LINEAR16 (1):\n        Uncompressed 16-bit signed little-endian\n        samples (Linear PCM). Audio content returned as\n        LINEAR16 also contains a WAV header.\n    MP3 (2):\n        MP3 audio at 32kbps.\n    MP3_64_KBPS (4):\n        MP3 at 64kbps.\n    OGG_OPUS (3):\n        Opus encoded audio wrapped in an ogg\n        container. The result will be a file which can\n        be played natively on Android, and in browsers\n        (at least Chrome and Firefox). The quality of\n        the encoding is considerably higher than MP3\n        while using approximately the same bitrate.\n    MULAW (5):\n        8-bit samples that compand 14-bit audio\n        samples using G.711 PCMU/mu-law. Audio content\n        returned as MULAW also contains a WAV header",
+                "values": {
+                  "AUDIO_ENCODING_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "LINEAR16": {
+                    "value": 1
+                  },
+                  "MP3": {
+                    "value": 2
+                  },
+                  "MP3_64_KBPS": {
+                    "value": 4
+                  },
+                  "OGG_OPUS": {
+                    "value": 3
+                  },
+                  "MULAW": {
+                    "value": 5
+                  },
+                  "ALAW": {
+                    "value": 6
+                  }
+                }
               },
               "speaking_rate": {
                 "description": "Optional. Input only. Speaking rate/speed, in the range [0.25, 4.0]. 1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast. If unset(0.0), defaults to the native 1.0 speed. Any other values < 0.25 or > 4.0 will return an error.",
@@ -220,9 +279,23 @@
                     "type": "string"
                   },
                   "ssml_gender": {
-                    "description": "The preferred gender of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and name. Note that this is only a preference, not requirement; if a voice of the appropriate gender is not available, the synthesizer should substitute a voice with a different gender rather than failing the request.",
-                    "type": "object",
-                    "reference": "google.cloud.texttospeech_v1beta1.types.SsmlVoiceGender"
+                    "type": "enum",
+                    "name": "SsmlVoiceGender",
+                    "description": "Gender of the voice as described in `SSML voice\nelement <https://www.w3.org/TR/speech-synthesis11/#edef_voice>`__.\n\nValues:\n    SSML_VOICE_GENDER_UNSPECIFIED (0):\n        An unspecified gender.\n        In VoiceSelectionParams, this means that the\n        client doesn't care which gender the selected\n        voice will have. In the Voice field of\n        ListVoicesResponse, this may mean that the voice\n        doesn't fit any of the other categories in this\n        enum, or that the gender of the voice isn't\n        known.\n    MALE (1):\n        A male voice.\n    FEMALE (2):\n        A female voice.\n    NEUTRAL (3):\n        A gender-neutral voice. This voice is not yet\n        supported.",
+                    "values": {
+                      "SSML_VOICE_GENDER_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "MALE": {
+                        "value": 1
+                      },
+                      "FEMALE": {
+                        "value": 2
+                      },
+                      "NEUTRAL": {
+                        "value": 3
+                      }
+                    }
                   },
                   "custom_voice": {
                     "type": "object",
@@ -232,9 +305,20 @@
                         "type": "string"
                       },
                       "reported_usage": {
-                        "description": "Optional. Deprecated. The usage of the synthesized audio to be reported.",
-                        "type": "object",
-                        "reference": "google.cloud.texttospeech_v1beta1.types.CustomVoiceParams.ReportedUsage"
+                        "type": "enum",
+                        "name": "ReportedUsage",
+                        "description": "Deprecated. The usage of the synthesized audio. Usage does\nnot affect billing.\n\nValues:\n    REPORTED_USAGE_UNSPECIFIED (0):\n        Request with reported usage unspecified will\n        be rejected.\n    REALTIME (1):\n        For scenarios where the synthesized audio is\n        not downloadable and can only be used once. For\n        example, real-time request in IVR system.\n    OFFLINE (2):\n        For scenarios where the synthesized audio is\n        downloadable and can be reused. For example, the\n        synthesized audio is downloaded, stored in\n        customer service system and played repeatedly.",
+                        "values": {
+                          "REPORTED_USAGE_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "REALTIME": {
+                            "value": 1
+                          },
+                          "OFFLINE": {
+                            "value": 2
+                          }
+                        }
                       }
                     },
                     "required": [
@@ -344,9 +428,20 @@
                           "type": "string"
                         },
                         "phonetic_encoding": {
-                          "description": "The phonetic encoding of the phrase.  This field is a member of `oneof`_ ``_phonetic_encoding``.",
-                          "type": "object",
-                          "reference": "google.cloud.texttospeech_v1beta1.types.CustomPronunciationParams.PhoneticEncoding"
+                          "type": "enum",
+                          "name": "PhoneticEncoding",
+                          "description": "The phonetic encoding of the phrase.\n\nValues:\n    PHONETIC_ENCODING_UNSPECIFIED (0):\n        Not specified.\n    PHONETIC_ENCODING_IPA (1):\n        IPA. (e.g. apple -> \u02c8\u00e6p\u0259l )\n        https://en.wikipedia.org/wiki/International_Phonetic_Alphabet\n    PHONETIC_ENCODING_X_SAMPA (2):\n        X-SAMPA (e.g. apple -> \"{p@l\" )\n        https://en.wikipedia.org/wiki/X-SAMPA",
+                          "values": {
+                            "PHONETIC_ENCODING_UNSPECIFIED": {
+                              "value": 0
+                            },
+                            "PHONETIC_ENCODING_IPA": {
+                              "value": 1
+                            },
+                            "PHONETIC_ENCODING_X_SAMPA": {
+                              "value": 2
+                            }
+                          }
                         },
                         "pronunciation": {
                           "description": "The pronunciation of the phrase. This must be in the phonetic encoding specified above.  This field is a member of `oneof`_ ``_pronunciation``.",
@@ -364,9 +459,32 @@
             "type": "object",
             "properties": {
               "audio_encoding": {
-                "description": "Required. The format of the audio byte stream.",
-                "type": "object",
-                "reference": "google.cloud.texttospeech_v1beta1.types.AudioEncoding"
+                "type": "enum",
+                "name": "AudioEncoding",
+                "description": "Configuration to set up audio encoder. The encoding\ndetermines the output audio format that we'd like.\n\nValues:\n    AUDIO_ENCODING_UNSPECIFIED (0):\n        Not specified. Will return result\n        [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT].\n    LINEAR16 (1):\n        Uncompressed 16-bit signed little-endian\n        samples (Linear PCM). Audio content returned as\n        LINEAR16 also contains a WAV header.\n    MP3 (2):\n        MP3 audio at 32kbps.\n    MP3_64_KBPS (4):\n        MP3 at 64kbps.\n    OGG_OPUS (3):\n        Opus encoded audio wrapped in an ogg\n        container. The result will be a file which can\n        be played natively on Android, and in browsers\n        (at least Chrome and Firefox). The quality of\n        the encoding is considerably higher than MP3\n        while using approximately the same bitrate.\n    MULAW (5):\n        8-bit samples that compand 14-bit audio\n        samples using G.711 PCMU/mu-law. Audio content\n        returned as MULAW also contains a WAV header",
+                "values": {
+                  "AUDIO_ENCODING_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "LINEAR16": {
+                    "value": 1
+                  },
+                  "MP3": {
+                    "value": 2
+                  },
+                  "MP3_64_KBPS": {
+                    "value": 4
+                  },
+                  "OGG_OPUS": {
+                    "value": 3
+                  },
+                  "MULAW": {
+                    "value": 5
+                  },
+                  "ALAW": {
+                    "value": 6
+                  }
+                }
               },
               "speaking_rate": {
                 "description": "Optional. Input only. Speaking rate/speed, in the range [0.25, 4.0]. 1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast. If unset(0.0), defaults to the native 1.0 speed. Any other values < 0.25 or > 4.0 will return an error.",
@@ -413,9 +531,23 @@
                 "type": "string"
               },
               "ssml_gender": {
-                "description": "The preferred gender of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and name. Note that this is only a preference, not requirement; if a voice of the appropriate gender is not available, the synthesizer should substitute a voice with a different gender rather than failing the request.",
-                "type": "object",
-                "reference": "google.cloud.texttospeech_v1beta1.types.SsmlVoiceGender"
+                "type": "enum",
+                "name": "SsmlVoiceGender",
+                "description": "Gender of the voice as described in `SSML voice\nelement <https://www.w3.org/TR/speech-synthesis11/#edef_voice>`__.\n\nValues:\n    SSML_VOICE_GENDER_UNSPECIFIED (0):\n        An unspecified gender.\n        In VoiceSelectionParams, this means that the\n        client doesn't care which gender the selected\n        voice will have. In the Voice field of\n        ListVoicesResponse, this may mean that the voice\n        doesn't fit any of the other categories in this\n        enum, or that the gender of the voice isn't\n        known.\n    MALE (1):\n        A male voice.\n    FEMALE (2):\n        A female voice.\n    NEUTRAL (3):\n        A gender-neutral voice. This voice is not yet\n        supported.",
+                "values": {
+                  "SSML_VOICE_GENDER_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "MALE": {
+                    "value": 1
+                  },
+                  "FEMALE": {
+                    "value": 2
+                  },
+                  "NEUTRAL": {
+                    "value": 3
+                  }
+                }
               },
               "custom_voice": {
                 "type": "object",
@@ -425,9 +557,20 @@
                     "type": "string"
                   },
                   "reported_usage": {
-                    "description": "Optional. Deprecated. The usage of the synthesized audio to be reported.",
-                    "type": "object",
-                    "reference": "google.cloud.texttospeech_v1beta1.types.CustomVoiceParams.ReportedUsage"
+                    "type": "enum",
+                    "name": "ReportedUsage",
+                    "description": "Deprecated. The usage of the synthesized audio. Usage does\nnot affect billing.\n\nValues:\n    REPORTED_USAGE_UNSPECIFIED (0):\n        Request with reported usage unspecified will\n        be rejected.\n    REALTIME (1):\n        For scenarios where the synthesized audio is\n        not downloadable and can only be used once. For\n        example, real-time request in IVR system.\n    OFFLINE (2):\n        For scenarios where the synthesized audio is\n        downloadable and can be reused. For example, the\n        synthesized audio is downloaded, stored in\n        customer service system and played repeatedly.",
+                    "values": {
+                      "REPORTED_USAGE_UNSPECIFIED": {
+                        "value": 0
+                      },
+                      "REALTIME": {
+                        "value": 1
+                      },
+                      "OFFLINE": {
+                        "value": 2
+                      }
+                    }
                   }
                 },
                 "required": [

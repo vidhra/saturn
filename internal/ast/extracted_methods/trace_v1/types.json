@@ -12,9 +12,23 @@
             "type": "string"
           },
           "view": {
-            "description": "Optional. Type of data returned for traces in the list. Default is ``MINIMAL``.",
-            "type": "object",
-            "reference": "google.cloud.trace_v1.types.ListTracesRequest.ViewType"
+            "description": "Type of data returned for traces in the list.\n\nValues:\n    VIEW_TYPE_UNSPECIFIED (0):\n        Default is ``MINIMAL`` if unspecified.\n    MINIMAL (1):\n        Minimal view of the trace record that\n        contains only the project and trace IDs.\n    ROOTSPAN (2):\n        Root span view of the trace record that\n        returns the root spans along with the minimal\n        trace data.\n    COMPLETE (3):\n        Complete view of the trace record that contains the actual\n        trace data. This is equivalent to calling the REST ``get``\n        or RPC ``GetTrace`` method using the ID of each listed\n        trace.",
+            "type": "enum",
+            "name": "ViewType",
+            "values": {
+              "VIEW_TYPE_UNSPECIFIED": {
+                "value": 0
+              },
+              "MINIMAL": {
+                "value": 1
+              },
+              "ROOTSPAN": {
+                "value": 2
+              },
+              "COMPLETE": {
+                "value": 3
+              }
+            }
           },
           "page_size": {
             "description": "Optional. Maximum number of traces to return. If not specified or <= 0, the implementation selects a reasonable value.  The implementation may return fewer traces than the requested page size.",
@@ -110,9 +124,29 @@
                             "type": "integer"
                           },
                           "kind": {
-                            "description": "Distinguishes between spans generated in a particular context. For example, two spans with the same name may be distinguished using ``RPC_CLIENT`` and ``RPC_SERVER`` to identify queueing latency associated with the span.",
-                            "type": "object",
-                            "reference": "google.cloud.trace_v1.types.TraceSpan.SpanKind"
+                            "type": "enum",
+                            "name": "SpanKind",
+                            "description": "Type of span. Can be used to specify additional relationships\nbetween spans in addition to a parent/child relationship.\n\nValues:\n    SPAN_KIND_UNSPECIFIED (0):\n        Unspecified. Do NOT use as default.\n        Implementations MAY assume SpanKind.INTERNAL to\n        be default.\n    INTERNAL (1):\n        Indicates that the span is used internally.\n        Default value.\n    SERVER (2):\n        Indicates that the span covers server-side\n        handling of an RPC or other remote network\n        request.\n    CLIENT (3):\n        Indicates that the span covers the\n        client-side wrapper around an RPC or other\n        remote request.\n    PRODUCER (4):\n        Indicates that the span describes producer\n        sending a message to a broker. Unlike client and\n        server, there is no direct critical path latency\n        relationship between producer and consumer spans\n        (e.g. publishing a message to a pubsub service).\n    CONSUMER (5):\n        Indicates that the span describes consumer\n        receivin",
+                            "values": {
+                              "SPAN_KIND_UNSPECIFIED": {
+                                "value": 0
+                              },
+                              "INTERNAL": {
+                                "value": 1
+                              },
+                              "SERVER": {
+                                "value": 2
+                              },
+                              "CLIENT": {
+                                "value": 3
+                              },
+                              "PRODUCER": {
+                                "value": 4
+                              },
+                              "CONSUMER": {
+                                "value": 5
+                              }
+                            }
                           },
                           "name": {
                             "description": "Name of the span. Must be less than 128 bytes. The span name is sanitized and displayed in the Stackdriver Trace tool in the Google Cloud Platform Console. The name may be a method name or some other per-call site name. For the same executable and the same call point, a best practice is to use a consistent name, which makes it easier to correlate cross-trace spans.",

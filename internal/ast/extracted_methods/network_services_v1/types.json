@@ -145,58 +145,107 @@
                             "description": "Optional. A set of events during request or response processing for which this extension is called. This field is required for the ``LbTrafficExtension`` resource. It must not be set for the ``LbRouteExtension`` resource.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "type_": {
-                                  "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
-                                  "type": "string"
+                              "type": "enum",
+                              "name": "EventType",
+                              "description": "Describes the event that occurred.\n\nValues:\n    EVENT_TYPE_UNSPECIFIED (0):\n        The event type is unspecified.\n    CREATIVE_VIEW (1):\n        First frame of creative ad viewed.\n    START (2):\n        Creative ad started.\n    BREAK_START (3):\n        Start of an ad break.\n    BREAK_END (4):\n        End of an ad break.\n    IMPRESSION (5):\n        Impression.\n    FIRST_QUARTILE (6):\n        First quartile progress.\n    MIDPOINT (7):\n        Midpoint progress.\n    THIRD_QUARTILE (8):\n        Third quartile progress.\n    COMPLETE (9):\n        Ad progress completed.\n    PROGRESS (10):\n        Specific progress event with an offset.\n    MUTE (11):\n        Player muted.\n    UNMUTE (12):\n        Player unmuted.\n    PAUSE (13):\n        Player paused.\n    CLICK (14):\n        Click event.\n    CLICK_THROUGH (15):\n        Click-through event.\n    REWIND (16):\n        Player rewinding.\n    RESUME (17):\n        Player resumed.\n    ERROR (18):\n        Error event.\n    EXPAND (21):\n        Ad expanded to a larger size.\n   ",
+                              "values": {
+                                "EVENT_TYPE_UNSPECIFIED": {
+                                  "value": 0
                                 },
-                                "description": {
-                                  "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
-                                  "type": "string"
+                                "CREATIVE_VIEW": {
+                                  "value": 1
                                 },
-                                "filtering_attributes": {
-                                  "description": "Output only. Filtering attributes for the event type.",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "attribute": {
-                                        "description": "Output only. Attribute used for filtering the event type.",
-                                        "type": "string"
-                                      },
-                                      "description": {
-                                        "description": "Output only. Description of the purpose of the attribute.",
-                                        "type": "string"
-                                      },
-                                      "required": {
-                                        "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
-                                        "type": "boolean"
-                                      },
-                                      "path_pattern_supported": {
-                                        "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
-                                        "type": "boolean"
-                                      }
-                                    }
-                                  }
+                                "START": {
+                                  "value": 2
                                 },
-                                "event_schema_uri": {
-                                  "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
-                                  "type": "string"
+                                "BREAK_START": {
+                                  "value": 3
+                                },
+                                "BREAK_END": {
+                                  "value": 4
+                                },
+                                "IMPRESSION": {
+                                  "value": 5
+                                },
+                                "FIRST_QUARTILE": {
+                                  "value": 6
+                                },
+                                "MIDPOINT": {
+                                  "value": 7
+                                },
+                                "THIRD_QUARTILE": {
+                                  "value": 8
+                                },
+                                "COMPLETE": {
+                                  "value": 9
+                                },
+                                "PROGRESS": {
+                                  "value": 10
+                                },
+                                "MUTE": {
+                                  "value": 11
+                                },
+                                "UNMUTE": {
+                                  "value": 12
+                                },
+                                "PAUSE": {
+                                  "value": 13
+                                },
+                                "CLICK": {
+                                  "value": 14
+                                },
+                                "CLICK_THROUGH": {
+                                  "value": 15
+                                },
+                                "REWIND": {
+                                  "value": 16
+                                },
+                                "RESUME": {
+                                  "value": 17
+                                },
+                                "ERROR": {
+                                  "value": 18
+                                },
+                                "EXPAND": {
+                                  "value": 21
+                                },
+                                "COLLAPSE": {
+                                  "value": 22
+                                },
+                                "CLOSE": {
+                                  "value": 24
+                                },
+                                "CLOSE_LINEAR": {
+                                  "value": 25
+                                },
+                                "SKIP": {
+                                  "value": 26
+                                },
+                                "ACCEPT_INVITATION": {
+                                  "value": 27
                                 }
                               }
                             }
                           },
                           "timeout": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           },
@@ -227,9 +276,20 @@
                 }
               },
               "load_balancing_scheme": {
-                "description": "Required. All backend services and forwarding rules referenced by this extension must share the same load balancing scheme. Supported values: ``INTERNAL_MANAGED``, ``EXTERNAL_MANAGED``. For more information, refer to `Choosing a load balancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.LoadBalancingScheme"
+                "type": "enum",
+                "name": "LoadBalancingScheme",
+                "description": "Load balancing schemes supported by the ``LbTrafficExtension``\nresource and ``LbRouteExtension`` resource. For more information,\nrefer to `Choosing a load\nbalancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.\n\nValues:\n    LOAD_BALANCING_SCHEME_UNSPECIFIED (0):\n        Default value. Do not use.\n    INTERNAL_MANAGED (1):\n        Signifies that this is used for Internal\n        HTTP(S) Load Balancing.\n    EXTERNAL_MANAGED (2):\n        Signifies that this is used for External\n        Managed HTTP(S) Load Balancing.",
+                "values": {
+                  "LOAD_BALANCING_SCHEME_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "INTERNAL_MANAGED": {
+                    "value": 1
+                  },
+                  "EXTERNAL_MANAGED": {
+                    "value": 2
+                  }
+                }
               },
               "metadata": {
                 "description": "Optional. The metadata provided here is included in the ``ProcessingRequest.metadata_context.filter_metadata`` map field. The metadata is available under the key ``com.google.lb_traffic_extension.<resource_name>``. The following variables are supported in the metadata:  ``{forwarding_rule_id}`` - substituted with the forwarding rule's fully qualified resource name.",
@@ -348,58 +408,107 @@
                             "description": "Optional. A set of events during request or response processing for which this extension is called. This field is required for the ``LbTrafficExtension`` resource. It must not be set for the ``LbRouteExtension`` resource.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "type_": {
-                                  "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
-                                  "type": "string"
+                              "type": "enum",
+                              "name": "EventType",
+                              "description": "Describes the event that occurred.\n\nValues:\n    EVENT_TYPE_UNSPECIFIED (0):\n        The event type is unspecified.\n    CREATIVE_VIEW (1):\n        First frame of creative ad viewed.\n    START (2):\n        Creative ad started.\n    BREAK_START (3):\n        Start of an ad break.\n    BREAK_END (4):\n        End of an ad break.\n    IMPRESSION (5):\n        Impression.\n    FIRST_QUARTILE (6):\n        First quartile progress.\n    MIDPOINT (7):\n        Midpoint progress.\n    THIRD_QUARTILE (8):\n        Third quartile progress.\n    COMPLETE (9):\n        Ad progress completed.\n    PROGRESS (10):\n        Specific progress event with an offset.\n    MUTE (11):\n        Player muted.\n    UNMUTE (12):\n        Player unmuted.\n    PAUSE (13):\n        Player paused.\n    CLICK (14):\n        Click event.\n    CLICK_THROUGH (15):\n        Click-through event.\n    REWIND (16):\n        Player rewinding.\n    RESUME (17):\n        Player resumed.\n    ERROR (18):\n        Error event.\n    EXPAND (21):\n        Ad expanded to a larger size.\n   ",
+                              "values": {
+                                "EVENT_TYPE_UNSPECIFIED": {
+                                  "value": 0
                                 },
-                                "description": {
-                                  "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
-                                  "type": "string"
+                                "CREATIVE_VIEW": {
+                                  "value": 1
                                 },
-                                "filtering_attributes": {
-                                  "description": "Output only. Filtering attributes for the event type.",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "attribute": {
-                                        "description": "Output only. Attribute used for filtering the event type.",
-                                        "type": "string"
-                                      },
-                                      "description": {
-                                        "description": "Output only. Description of the purpose of the attribute.",
-                                        "type": "string"
-                                      },
-                                      "required": {
-                                        "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
-                                        "type": "boolean"
-                                      },
-                                      "path_pattern_supported": {
-                                        "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
-                                        "type": "boolean"
-                                      }
-                                    }
-                                  }
+                                "START": {
+                                  "value": 2
                                 },
-                                "event_schema_uri": {
-                                  "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
-                                  "type": "string"
+                                "BREAK_START": {
+                                  "value": 3
+                                },
+                                "BREAK_END": {
+                                  "value": 4
+                                },
+                                "IMPRESSION": {
+                                  "value": 5
+                                },
+                                "FIRST_QUARTILE": {
+                                  "value": 6
+                                },
+                                "MIDPOINT": {
+                                  "value": 7
+                                },
+                                "THIRD_QUARTILE": {
+                                  "value": 8
+                                },
+                                "COMPLETE": {
+                                  "value": 9
+                                },
+                                "PROGRESS": {
+                                  "value": 10
+                                },
+                                "MUTE": {
+                                  "value": 11
+                                },
+                                "UNMUTE": {
+                                  "value": 12
+                                },
+                                "PAUSE": {
+                                  "value": 13
+                                },
+                                "CLICK": {
+                                  "value": 14
+                                },
+                                "CLICK_THROUGH": {
+                                  "value": 15
+                                },
+                                "REWIND": {
+                                  "value": 16
+                                },
+                                "RESUME": {
+                                  "value": 17
+                                },
+                                "ERROR": {
+                                  "value": 18
+                                },
+                                "EXPAND": {
+                                  "value": 21
+                                },
+                                "COLLAPSE": {
+                                  "value": 22
+                                },
+                                "CLOSE": {
+                                  "value": 24
+                                },
+                                "CLOSE_LINEAR": {
+                                  "value": 25
+                                },
+                                "SKIP": {
+                                  "value": 26
+                                },
+                                "ACCEPT_INVITATION": {
+                                  "value": 27
                                 }
                               }
                             }
                           },
                           "timeout": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           },
@@ -430,9 +539,20 @@
                 }
               },
               "load_balancing_scheme": {
-                "description": "Required. All backend services and forwarding rules referenced by this extension must share the same load balancing scheme. Supported values: ``INTERNAL_MANAGED``, ``EXTERNAL_MANAGED``. For more information, refer to `Choosing a load balancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.LoadBalancingScheme"
+                "type": "enum",
+                "name": "LoadBalancingScheme",
+                "description": "Load balancing schemes supported by the ``LbTrafficExtension``\nresource and ``LbRouteExtension`` resource. For more information,\nrefer to `Choosing a load\nbalancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.\n\nValues:\n    LOAD_BALANCING_SCHEME_UNSPECIFIED (0):\n        Default value. Do not use.\n    INTERNAL_MANAGED (1):\n        Signifies that this is used for Internal\n        HTTP(S) Load Balancing.\n    EXTERNAL_MANAGED (2):\n        Signifies that this is used for External\n        Managed HTTP(S) Load Balancing.",
+                "values": {
+                  "LOAD_BALANCING_SCHEME_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "INTERNAL_MANAGED": {
+                    "value": 1
+                  },
+                  "EXTERNAL_MANAGED": {
+                    "value": 2
+                  }
+                }
               },
               "metadata": {
                 "description": "Optional. The metadata provided here is included in the ``ProcessingRequest.metadata_context.filter_metadata`` map field. The metadata is available under the key ``com.google.lb_traffic_extension.<resource_name>``. The following variables are supported in the metadata:  ``{forwarding_rule_id}`` - substituted with the forwarding rule's fully qualified resource name.",
@@ -623,58 +743,107 @@
                             "description": "Optional. A set of events during request or response processing for which this extension is called. This field is required for the ``LbTrafficExtension`` resource. It must not be set for the ``LbRouteExtension`` resource.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "type_": {
-                                  "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
-                                  "type": "string"
+                              "type": "enum",
+                              "name": "EventType",
+                              "description": "Describes the event that occurred.\n\nValues:\n    EVENT_TYPE_UNSPECIFIED (0):\n        The event type is unspecified.\n    CREATIVE_VIEW (1):\n        First frame of creative ad viewed.\n    START (2):\n        Creative ad started.\n    BREAK_START (3):\n        Start of an ad break.\n    BREAK_END (4):\n        End of an ad break.\n    IMPRESSION (5):\n        Impression.\n    FIRST_QUARTILE (6):\n        First quartile progress.\n    MIDPOINT (7):\n        Midpoint progress.\n    THIRD_QUARTILE (8):\n        Third quartile progress.\n    COMPLETE (9):\n        Ad progress completed.\n    PROGRESS (10):\n        Specific progress event with an offset.\n    MUTE (11):\n        Player muted.\n    UNMUTE (12):\n        Player unmuted.\n    PAUSE (13):\n        Player paused.\n    CLICK (14):\n        Click event.\n    CLICK_THROUGH (15):\n        Click-through event.\n    REWIND (16):\n        Player rewinding.\n    RESUME (17):\n        Player resumed.\n    ERROR (18):\n        Error event.\n    EXPAND (21):\n        Ad expanded to a larger size.\n   ",
+                              "values": {
+                                "EVENT_TYPE_UNSPECIFIED": {
+                                  "value": 0
                                 },
-                                "description": {
-                                  "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
-                                  "type": "string"
+                                "CREATIVE_VIEW": {
+                                  "value": 1
                                 },
-                                "filtering_attributes": {
-                                  "description": "Output only. Filtering attributes for the event type.",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "attribute": {
-                                        "description": "Output only. Attribute used for filtering the event type.",
-                                        "type": "string"
-                                      },
-                                      "description": {
-                                        "description": "Output only. Description of the purpose of the attribute.",
-                                        "type": "string"
-                                      },
-                                      "required": {
-                                        "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
-                                        "type": "boolean"
-                                      },
-                                      "path_pattern_supported": {
-                                        "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
-                                        "type": "boolean"
-                                      }
-                                    }
-                                  }
+                                "START": {
+                                  "value": 2
                                 },
-                                "event_schema_uri": {
-                                  "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
-                                  "type": "string"
+                                "BREAK_START": {
+                                  "value": 3
+                                },
+                                "BREAK_END": {
+                                  "value": 4
+                                },
+                                "IMPRESSION": {
+                                  "value": 5
+                                },
+                                "FIRST_QUARTILE": {
+                                  "value": 6
+                                },
+                                "MIDPOINT": {
+                                  "value": 7
+                                },
+                                "THIRD_QUARTILE": {
+                                  "value": 8
+                                },
+                                "COMPLETE": {
+                                  "value": 9
+                                },
+                                "PROGRESS": {
+                                  "value": 10
+                                },
+                                "MUTE": {
+                                  "value": 11
+                                },
+                                "UNMUTE": {
+                                  "value": 12
+                                },
+                                "PAUSE": {
+                                  "value": 13
+                                },
+                                "CLICK": {
+                                  "value": 14
+                                },
+                                "CLICK_THROUGH": {
+                                  "value": 15
+                                },
+                                "REWIND": {
+                                  "value": 16
+                                },
+                                "RESUME": {
+                                  "value": 17
+                                },
+                                "ERROR": {
+                                  "value": 18
+                                },
+                                "EXPAND": {
+                                  "value": 21
+                                },
+                                "COLLAPSE": {
+                                  "value": 22
+                                },
+                                "CLOSE": {
+                                  "value": 24
+                                },
+                                "CLOSE_LINEAR": {
+                                  "value": 25
+                                },
+                                "SKIP": {
+                                  "value": 26
+                                },
+                                "ACCEPT_INVITATION": {
+                                  "value": 27
                                 }
                               }
                             }
                           },
                           "timeout": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           },
@@ -705,9 +874,20 @@
                 }
               },
               "load_balancing_scheme": {
-                "description": "Required. All backend services and forwarding rules referenced by this extension must share the same load balancing scheme. Supported values: ``INTERNAL_MANAGED``, ``EXTERNAL_MANAGED``. For more information, refer to `Choosing a load balancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.LoadBalancingScheme"
+                "type": "enum",
+                "name": "LoadBalancingScheme",
+                "description": "Load balancing schemes supported by the ``LbTrafficExtension``\nresource and ``LbRouteExtension`` resource. For more information,\nrefer to `Choosing a load\nbalancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.\n\nValues:\n    LOAD_BALANCING_SCHEME_UNSPECIFIED (0):\n        Default value. Do not use.\n    INTERNAL_MANAGED (1):\n        Signifies that this is used for Internal\n        HTTP(S) Load Balancing.\n    EXTERNAL_MANAGED (2):\n        Signifies that this is used for External\n        Managed HTTP(S) Load Balancing.",
+                "values": {
+                  "LOAD_BALANCING_SCHEME_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "INTERNAL_MANAGED": {
+                    "value": 1
+                  },
+                  "EXTERNAL_MANAGED": {
+                    "value": 2
+                  }
+                }
               },
               "metadata": {
                 "description": "Optional. The metadata provided here is included as part of the ``metadata_context`` (of type ``google.protobuf.Struct``) in the ``ProcessingRequest`` message sent to the extension server. The metadata is available under the namespace ``com.google.lb_route_extension.<resource_name>``. The following variables are supported in the metadata Struct:  ``{forwarding_rule_id}`` - substituted with the forwarding rule's fully qualified resource name.",
@@ -826,58 +1006,107 @@
                             "description": "Optional. A set of events during request or response processing for which this extension is called. This field is required for the ``LbTrafficExtension`` resource. It must not be set for the ``LbRouteExtension`` resource.",
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "type_": {
-                                  "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
-                                  "type": "string"
+                              "type": "enum",
+                              "name": "EventType",
+                              "description": "Describes the event that occurred.\n\nValues:\n    EVENT_TYPE_UNSPECIFIED (0):\n        The event type is unspecified.\n    CREATIVE_VIEW (1):\n        First frame of creative ad viewed.\n    START (2):\n        Creative ad started.\n    BREAK_START (3):\n        Start of an ad break.\n    BREAK_END (4):\n        End of an ad break.\n    IMPRESSION (5):\n        Impression.\n    FIRST_QUARTILE (6):\n        First quartile progress.\n    MIDPOINT (7):\n        Midpoint progress.\n    THIRD_QUARTILE (8):\n        Third quartile progress.\n    COMPLETE (9):\n        Ad progress completed.\n    PROGRESS (10):\n        Specific progress event with an offset.\n    MUTE (11):\n        Player muted.\n    UNMUTE (12):\n        Player unmuted.\n    PAUSE (13):\n        Player paused.\n    CLICK (14):\n        Click event.\n    CLICK_THROUGH (15):\n        Click-through event.\n    REWIND (16):\n        Player rewinding.\n    RESUME (17):\n        Player resumed.\n    ERROR (18):\n        Error event.\n    EXPAND (21):\n        Ad expanded to a larger size.\n   ",
+                              "values": {
+                                "EVENT_TYPE_UNSPECIFIED": {
+                                  "value": 0
                                 },
-                                "description": {
-                                  "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
-                                  "type": "string"
+                                "CREATIVE_VIEW": {
+                                  "value": 1
                                 },
-                                "filtering_attributes": {
-                                  "description": "Output only. Filtering attributes for the event type.",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "attribute": {
-                                        "description": "Output only. Attribute used for filtering the event type.",
-                                        "type": "string"
-                                      },
-                                      "description": {
-                                        "description": "Output only. Description of the purpose of the attribute.",
-                                        "type": "string"
-                                      },
-                                      "required": {
-                                        "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
-                                        "type": "boolean"
-                                      },
-                                      "path_pattern_supported": {
-                                        "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
-                                        "type": "boolean"
-                                      }
-                                    }
-                                  }
+                                "START": {
+                                  "value": 2
                                 },
-                                "event_schema_uri": {
-                                  "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
-                                  "type": "string"
+                                "BREAK_START": {
+                                  "value": 3
+                                },
+                                "BREAK_END": {
+                                  "value": 4
+                                },
+                                "IMPRESSION": {
+                                  "value": 5
+                                },
+                                "FIRST_QUARTILE": {
+                                  "value": 6
+                                },
+                                "MIDPOINT": {
+                                  "value": 7
+                                },
+                                "THIRD_QUARTILE": {
+                                  "value": 8
+                                },
+                                "COMPLETE": {
+                                  "value": 9
+                                },
+                                "PROGRESS": {
+                                  "value": 10
+                                },
+                                "MUTE": {
+                                  "value": 11
+                                },
+                                "UNMUTE": {
+                                  "value": 12
+                                },
+                                "PAUSE": {
+                                  "value": 13
+                                },
+                                "CLICK": {
+                                  "value": 14
+                                },
+                                "CLICK_THROUGH": {
+                                  "value": 15
+                                },
+                                "REWIND": {
+                                  "value": 16
+                                },
+                                "RESUME": {
+                                  "value": 17
+                                },
+                                "ERROR": {
+                                  "value": 18
+                                },
+                                "EXPAND": {
+                                  "value": 21
+                                },
+                                "COLLAPSE": {
+                                  "value": 22
+                                },
+                                "CLOSE": {
+                                  "value": 24
+                                },
+                                "CLOSE_LINEAR": {
+                                  "value": 25
+                                },
+                                "SKIP": {
+                                  "value": 26
+                                },
+                                "ACCEPT_INVITATION": {
+                                  "value": 27
                                 }
                               }
                             }
                           },
                           "timeout": {
-                            "type": "object",
-                            "properties": {
-                              "nanos": {
-                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
-                                "type": "integer"
+                            "type": "enum",
+                            "name": "Duration",
+                            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
+                            "values": {
+                              "UNDEFINED_DURATION": {
+                                "value": 0
                               },
-                              "seconds": {
-                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
-                                "type": "integer"
+                              "DURATION_UNSPECIFIED": {
+                                "value": 529071340
+                              },
+                              "HOUR": {
+                                "value": 2223588
+                              },
+                              "MAX": {
+                                "value": 76100
+                              },
+                              "MINUTE": {
+                                "value": 126786068
                               }
                             }
                           },
@@ -908,9 +1137,20 @@
                 }
               },
               "load_balancing_scheme": {
-                "description": "Required. All backend services and forwarding rules referenced by this extension must share the same load balancing scheme. Supported values: ``INTERNAL_MANAGED``, ``EXTERNAL_MANAGED``. For more information, refer to `Choosing a load balancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.LoadBalancingScheme"
+                "type": "enum",
+                "name": "LoadBalancingScheme",
+                "description": "Load balancing schemes supported by the ``LbTrafficExtension``\nresource and ``LbRouteExtension`` resource. For more information,\nrefer to `Choosing a load\nbalancer <https://cloud.google.com/load-balancing/docs/backend-service>`__.\n\nValues:\n    LOAD_BALANCING_SCHEME_UNSPECIFIED (0):\n        Default value. Do not use.\n    INTERNAL_MANAGED (1):\n        Signifies that this is used for Internal\n        HTTP(S) Load Balancing.\n    EXTERNAL_MANAGED (2):\n        Signifies that this is used for External\n        Managed HTTP(S) Load Balancing.",
+                "values": {
+                  "LOAD_BALANCING_SCHEME_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "INTERNAL_MANAGED": {
+                    "value": 1
+                  },
+                  "EXTERNAL_MANAGED": {
+                    "value": 2
+                  }
+                }
               },
               "metadata": {
                 "description": "Optional. The metadata provided here is included as part of the ``metadata_context`` (of type ``google.protobuf.Struct``) in the ``ProcessingRequest`` message sent to the extension server. The metadata is available under the namespace ``com.google.lb_route_extension.<resource_name>``. The following variables are supported in the metadata Struct:  ``{forwarding_rule_id}`` - substituted with the forwarding rule's fully qualified resource name.",
@@ -1041,9 +1281,20 @@
                 }
               },
               "type_": {
-                "description": "Required. The type of endpoint policy. This is primarily used to validate the configuration.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.EndpointPolicy.EndpointPolicyType"
+                "type": "enum",
+                "name": "EndpointPolicyType",
+                "description": "The type of endpoint policy.\n\nValues:\n    ENDPOINT_POLICY_TYPE_UNSPECIFIED (0):\n        Default value. Must not be used.\n    SIDECAR_PROXY (1):\n        Represents a proxy deployed as a sidecar.\n    GRPC_SERVER (2):\n        Represents a proxyless gRPC backend.",
+                "values": {
+                  "ENDPOINT_POLICY_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "SIDECAR_PROXY": {
+                    "value": 1
+                  },
+                  "GRPC_SERVER": {
+                    "value": 2
+                  }
+                }
               },
               "authorization_policy": {
                 "description": "Optional. This field specifies the URL of AuthorizationPolicy resource that applies authorization policies to the inbound traffic at the matched endpoints. Refer to Authorization. If this field is not specified, authorization is disabled(no authz checks) for this endpoint.",
@@ -1056,9 +1307,20 @@
                     "type": "object",
                     "properties": {
                       "metadata_label_match_criteria": {
-                        "description": "Specifies how matching should be done.  Supported values are: MATCH_ANY: At least one of the Labels specified in the matcher should match the metadata presented by xDS client. MATCH_ALL: The metadata presented by the xDS client should contain all of the labels specified here.  The selection is determined based on the best match. For example, suppose there are three EndpointPolicy resources P1, P2 and P3 and if P1 has a the matcher as MATCH_ANY <A:1, B:1>, P2 has MATCH_ALL <A:1,B:1>, and P3 has MATCH_ALL <A:1,B:1,C:1>.  If a client with label <A:1> connects, the config from P1 will be selected.  If a client with label <A:1,B:1> connects, the config from P2 will be selected.  If a client with label <A:1,B:1,C:1> connects, the config from P3 will be selected.  If there is more than one best match, (for example, if a config P4 with selector <A:1,D:1> exists and if a client with label <A:1,B:1,D:1> connects), an error will be thrown.",
-                        "type": "object",
-                        "reference": "google.cloud.network_services_v1.types.EndpointMatcher.MetadataLabelMatcher.MetadataLabelMatchCriteria"
+                        "type": "enum",
+                        "name": "MetadataLabelMatchCriteria",
+                        "description": "Possible criteria values that define logic of how matching is\nmade.\n\nValues:\n    METADATA_LABEL_MATCH_CRITERIA_UNSPECIFIED (0):\n        Default value. Should not be used.\n    MATCH_ANY (1):\n        At least one of the Labels specified in the\n        matcher should match the metadata presented by\n        xDS client.\n    MATCH_ALL (2):\n        The metadata presented by the xDS client\n        should contain all of the labels specified here.",
+                        "values": {
+                          "METADATA_LABEL_MATCH_CRITERIA_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MATCH_ANY": {
+                            "value": 1
+                          },
+                          "MATCH_ALL": {
+                            "value": 2
+                          }
+                        }
                       },
                       "metadata_labels": {
                         "description": "The list of label value pairs that must match labels in the provided metadata based on filterMatchCriteria This list can have at most 64 entries. The list can be empty if the match criteria is MATCH_ANY, to specify a wildcard match (i.e this matches any client).",
@@ -1162,9 +1424,20 @@
                 }
               },
               "type_": {
-                "description": "Required. The type of endpoint policy. This is primarily used to validate the configuration.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.EndpointPolicy.EndpointPolicyType"
+                "type": "enum",
+                "name": "EndpointPolicyType",
+                "description": "The type of endpoint policy.\n\nValues:\n    ENDPOINT_POLICY_TYPE_UNSPECIFIED (0):\n        Default value. Must not be used.\n    SIDECAR_PROXY (1):\n        Represents a proxy deployed as a sidecar.\n    GRPC_SERVER (2):\n        Represents a proxyless gRPC backend.",
+                "values": {
+                  "ENDPOINT_POLICY_TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "SIDECAR_PROXY": {
+                    "value": 1
+                  },
+                  "GRPC_SERVER": {
+                    "value": 2
+                  }
+                }
               },
               "authorization_policy": {
                 "description": "Optional. This field specifies the URL of AuthorizationPolicy resource that applies authorization policies to the inbound traffic at the matched endpoints. Refer to Authorization. If this field is not specified, authorization is disabled(no authz checks) for this endpoint.",
@@ -1177,9 +1450,20 @@
                     "type": "object",
                     "properties": {
                       "metadata_label_match_criteria": {
-                        "description": "Specifies how matching should be done.  Supported values are: MATCH_ANY: At least one of the Labels specified in the matcher should match the metadata presented by xDS client. MATCH_ALL: The metadata presented by the xDS client should contain all of the labels specified here.  The selection is determined based on the best match. For example, suppose there are three EndpointPolicy resources P1, P2 and P3 and if P1 has a the matcher as MATCH_ANY <A:1, B:1>, P2 has MATCH_ALL <A:1,B:1>, and P3 has MATCH_ALL <A:1,B:1,C:1>.  If a client with label <A:1> connects, the config from P1 will be selected.  If a client with label <A:1,B:1> connects, the config from P2 will be selected.  If a client with label <A:1,B:1,C:1> connects, the config from P3 will be selected.  If there is more than one best match, (for example, if a config P4 with selector <A:1,D:1> exists and if a client with label <A:1,B:1,D:1> connects), an error will be thrown.",
-                        "type": "object",
-                        "reference": "google.cloud.network_services_v1.types.EndpointMatcher.MetadataLabelMatcher.MetadataLabelMatchCriteria"
+                        "type": "enum",
+                        "name": "MetadataLabelMatchCriteria",
+                        "description": "Possible criteria values that define logic of how matching is\nmade.\n\nValues:\n    METADATA_LABEL_MATCH_CRITERIA_UNSPECIFIED (0):\n        Default value. Should not be used.\n    MATCH_ANY (1):\n        At least one of the Labels specified in the\n        matcher should match the metadata presented by\n        xDS client.\n    MATCH_ALL (2):\n        The metadata presented by the xDS client\n        should contain all of the labels specified here.",
+                        "values": {
+                          "METADATA_LABEL_MATCH_CRITERIA_UNSPECIFIED": {
+                            "value": 0
+                          },
+                          "MATCH_ANY": {
+                            "value": 1
+                          },
+                          "MATCH_ALL": {
+                            "value": 2
+                          }
+                        }
                       },
                       "metadata_labels": {
                         "description": "The list of label value pairs that must match labels in the provided metadata based on filterMatchCriteria This list can have at most 64 entries. The list can be empty if the match criteria is MATCH_ANY, to specify a wildcard match (i.e this matches any client).",
@@ -1353,9 +1637,23 @@
                 "type": "string"
               },
               "type_": {
-                "description": "Immutable. The type of the customer managed gateway. This field is required. If unspecified, an error is returned.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.Gateway.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "ports": {
                 "description": "Required. One or more ports that the Gateway must receive traffic on. The proxy binds to the ports specified. Gateway listen on 0.0.0.0 on the ports specified below.",
@@ -1433,9 +1731,23 @@
                 "type": "string"
               },
               "type_": {
-                "description": "Immutable. The type of the customer managed gateway. This field is required. If unspecified, an error is returned.",
-                "type": "object",
-                "reference": "google.cloud.network_services_v1.types.Gateway.Type"
+                "type": "enum",
+                "name": "Type",
+                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
+                "values": {
+                  "TYPE_UNSPECIFIED": {
+                    "value": 0
+                  },
+                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
+                    "value": 1
+                  },
+                  "NO_RETURNS": {
+                    "value": 2
+                  },
+                  "LIFETIME_RETURNS": {
+                    "value": 3
+                  }
+                }
               },
               "ports": {
                 "description": "Required. One or more ports that the Gateway must receive traffic on. The proxy binds to the ports specified. Gateway listen on 0.0.0.0 on the ports specified below.",
