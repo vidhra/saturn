@@ -4,7 +4,8 @@ from openai import OpenAI
 import asyncio
 import importlib
 import os
-from google.cloud import billing_v1
+from google.cloud import billing_v1,functions_v1
+from google.protobuf import field_mask_pb2
 # Set your OpenAI API key
 api_key = "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"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "vidhra-eb3e8152e0a2.json"
@@ -26,7 +27,7 @@ Please don't forget the request type in the function call. The request type is m
 """.strip()
 
 # Define the user query
-query = "can you update the billing account info of the project vidhra to vidhra-ai"
+query = " can you create a function with the name vidhra-test-1 on us-central1 for basic node.js function"
 
 
 
@@ -54,6 +55,8 @@ def build_openai_tools(tools_json_path, types_json_path):
                 request_types_map[type_info["name"]] = type_info
 
     openai_tools = []
+    print(tools_data)
+
     
     # Process each service in tools.json
     for service_name, service_data in tools_data.items():
@@ -83,8 +86,8 @@ def build_openai_tools(tools_json_path, types_json_path):
     return openai_tools
 
 # Use the function to build tools dynamically
-tools_json_path = "billing_v1/tools.json"
-types_json_path = "billing_v1/types.json"
+tools_json_path = "functions_v1/tools.json"
+types_json_path = "functions_v1/types.json"
 openai_format_tools = build_openai_tools(tools_json_path, types_json_path)
 
 
@@ -134,17 +137,36 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
       4. Invoking the async method.
     """
     try:
-        RequestClass = getattr(billing_v1, request_type)
+        RequestClass = getattr(functions_v1, request_type)
+        RequestClassFunctionAccount = getattr(functions_v1, "CloudFunction")
 
-        billing_client = billing_v1.CloudBillingAsyncClient()
-        method = getattr(billing_client, method_name)
+        function_client = functions_v1.CloudFunctionsServiceAsyncClient()
+        method = getattr(function_client, method_name)
+
+        # Remove "account" from the original args before conversion
+        function_value = args.pop("function", None)
+        update_mask_value = args.pop("update_mask", None)
 
         # Convert any JSON strings into Python dictionaries (or lists)
         parsed_args = convert_strings_to_json(args)
 
         # Instantiate request object with the parsed arguments
         print(parsed_args)
-        request = RequestClass(**parsed_args)
+        print(function_value)
+        request = None
+
+        # Attach the "account" field to a BillingAccount object if present
+        if function_value is not None:
+            parsed_args_function = convert_strings_to_json(function_value)
+            update_mask_args = convert_strings_to_json(update_mask_value)
+            update_mask = field_mask_pb2.FieldMask(paths=update_mask_args)
+            print(parsed_args_function)
+
+
+            request = RequestClass(**parsed_args,function=RequestClassFunctionAccount(**parsed_args_function),
+                                   update_mask=update_mask)
+
+            print(request)
 
         billing_info = await method(request=request)
         print(billing_info)
@@ -161,7 +183,7 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
 
 
 content = build_prompt(task_instruction, format_instruction, openai_format_tools, query)
-
+print(content)
 #Helper function to build the prompt
 response = client.responses.create(
   model="gpt-4.5-preview",
@@ -232,8 +254,13 @@ def get_request_types_for_method(tools_json_path: str, method_name: str) -> list
 
 
 # Example usage:
-tools_json_path = "billing_v1/tools.json"
+tools_json_path = "functions_v1/tools.json"
 
+async def collect_pager_results(pager):
+    results = []
+    async for item in pager:
+        results.append(item)
+    return results
 
 # Then in your dynamic_executor or wherever you need it:
 tools = json.loads(content)
@@ -246,10 +273,10 @@ for call in tools["tool_calls"]:
 
     print(f"Found request type for {method_name}: {request_types}")
     print(request_types[0])
-    asyncio.run(dynamic_executor(
+    output = asyncio.run(dynamic_executor(
         request_types[0],
         method_name,
         call["arguments"]
     ))
-
-
+    results = asyncio.run(collect_pager_results(output))
+    print(results)
