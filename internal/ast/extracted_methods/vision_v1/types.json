@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-vision\\google\\cloud\\vision_v1\\types\\image_annotator.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-vision/google/cloud/vision_v1/types/image_annotator.py": [
     {
       "type": "function",
       "name": "AnnotateImageRequest",
@@ -9,194 +9,127 @@
         "properties": {
           "image": {
             "description": "The image to be processed.",
-            "type": "object",
-            "properties": {
-              "content": {
-                "description": "Image content, represented as a stream of bytes. Note: As with all ``bytes`` fields, protobuffers use a pure binary representation, whereas JSON representations use base64.",
-                "type": "object",
-                "reference": "bytes"
-              },
-              "source": {
-                "type": "object",
-                "properties": {
-                  "gcs_image_uri": {
-                    "description": "**Use ``image_uri`` instead.**  The Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.",
-                    "type": "string"
-                  },
-                  "image_uri": {
-                    "description": "The URI of the source image. Can be either:  1. A Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.  2. A publicly-accessible image HTTP/HTTPS URL. When fetching images from HTTP/HTTPS URLs, Google cannot guarantee that the request will be completed. Your request may fail if the specified host denies the request (e.g. due to request throttling or DOS prevention), or if Google throttles requests to the site for abuse prevention. You should not depend on externally-hosted images for production applications.  When both ``gcs_image_uri`` and ``image_uri`` are specified, ``image_uri`` takes precedence.",
-                    "type": "string"
-                  }
+            "reference": "google.cloud.vision_v1.types.Image",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "uri": {
+                  "description": "Required. URL of the image with a length limit of 5 KiB.",
+                  "type": "string"
+                },
+                "height": {
+                  "description": "Optional. Height of the image in number of pixels.",
+                  "type": "integer"
+                },
+                "width": {
+                  "description": "Optional. Width of the image in number of pixels.",
+                  "type": "integer"
                 }
-              }
+              },
+              "required": [
+                "uri"
+              ]
             }
           },
           "features": {
             "description": "Requested features.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "type_": {
-                  "type": "enum",
-                  "name": "Type",
-                  "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                  "values": {
-                    "TYPE_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                      "value": 1
-                    },
-                    "NO_RETURNS": {
-                      "value": 2
-                    },
-                    "LIFETIME_RETURNS": {
-                      "value": 3
-                    }
+              "reference": "google.cloud.vision_v1.types.Feature",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "type_": {
+                    "description": "The type of the feature that enabled for fulfillment.",
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                   }
-                },
-                "max_results": {
-                  "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                  "type": "integer"
-                },
-                "model": {
-                  "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                  "type": "string"
                 }
               }
             }
           },
           "image_context": {
             "description": "Additional context that may accompany the image.",
-            "type": "object",
-            "properties": {
-              "lat_long_rect": {
-                "type": "object",
-                "properties": {
-                  "min_lat_lng": {
-                    "description": "Min lat/long pair.",
-                    "type": "object",
-                    "reference": "google.type.latlng_pb2.LatLng"
-                  },
-                  "max_lat_lng": {
-                    "description": "Max lat/long pair.",
-                    "type": "object",
-                    "reference": "google.type.latlng_pb2.LatLng"
-                  }
-                }
-              },
-              "language_hints": {
-                "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "crop_hints_params": {
-                "type": "object",
-                "properties": {
-                  "aspect_ratios": {
-                    "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                    "type": "array",
-                    "items": {
-                      "type": "number"
-                    }
-                  }
-                }
-              },
-              "face_recognition_params": {
-                "type": "object",
-                "properties": {
-                  "celebrity_set": {
-                    "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "product_search_params": {
-                "type": "object",
-                "properties": {
-                  "bounding_poly": {
+            "reference": "google.cloud.vision_v1.types.ImageContext",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "lat_long_rect": {
+                  "description": "lat/long rectangle that specifies the location of the image.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "vertices": {
-                        "description": "The bounding polygon vertices.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "x": {
-                              "description": "X coordinate.",
-                              "type": "integer"
-                            },
-                            "y": {
-                              "description": "Y coordinate.",
-                              "type": "integer"
-                            }
-                          }
-                        }
+                      "min_lat_lng": {
+                        "description": "Min lat/long pair.",
+                        "type": "object",
+                        "reference": "google.type.latlng_pb2.LatLng"
                       },
-                      "normalized_vertices": {
-                        "description": "The bounding polygon normalized vertices.",
+                      "max_lat_lng": {
+                        "description": "Max lat/long pair.",
+                        "type": "object",
+                        "reference": "google.type.latlng_pb2.LatLng"
+                      }
+                    }
+                  }
+                },
+                "language_hints": {
+                  "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "crop_hints_params": {
+                  "description": "Parameters for crop hints annotation request.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "aspect_ratios": {
+                        "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "properties": {
-                            "x": {
-                              "description": "X coordinate.",
-                              "type": "number"
-                            },
-                            "y": {
-                              "description": "Y coordinate.",
-                              "type": "number"
-                            }
-                          }
+                          "type": "number"
                         }
                       }
                     }
-                  },
-                  "product_set": {
-                    "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                    "type": "string"
-                  },
-                  "product_categories": {
-                    "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                  }
+                },
+                "web_detection_params": {
+                  "description": "Parameters for web detection.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "include_geo_results": {
+                        "description": "Whether to include results derived from the geo information in the image.",
+                        "type": "boolean"
+                      }
                     }
-                  },
-                  "filter": {
-                    "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                    "type": "string"
                   }
-                }
-              },
-              "web_detection_params": {
-                "type": "object",
-                "properties": {
-                  "include_geo_results": {
-                    "description": "Whether to include results derived from the geo information in the image.",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "text_detection_params": {
-                "type": "object",
-                "properties": {
-                  "enable_text_detection_confidence_score": {
-                    "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                    "type": "boolean"
-                  },
-                  "advanced_ocr_options": {
-                    "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                },
+                "text_detection_params": {
+                  "description": "Parameters for text detection and document text detection.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "enable_text_detection_confidence_score": {
+                        "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                        "type": "boolean"
+                      },
+                      "advanced_ocr_options": {
+                        "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
@@ -217,196 +150,137 @@
             "description": "Required. Individual image annotation requests for this batch.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "image": {
-                  "type": "object",
-                  "properties": {
-                    "content": {
-                      "description": "Image content, represented as a stream of bytes. Note: As with all ``bytes`` fields, protobuffers use a pure binary representation, whereas JSON representations use base64.",
-                      "type": "object",
-                      "reference": "bytes"
-                    },
-                    "source": {
-                      "type": "object",
-                      "properties": {
-                        "gcs_image_uri": {
-                          "description": "**Use ``image_uri`` instead.**  The Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.",
-                          "type": "string"
-                        },
-                        "image_uri": {
-                          "description": "The URI of the source image. Can be either:  1. A Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.  2. A publicly-accessible image HTTP/HTTPS URL. When fetching images from HTTP/HTTPS URLs, Google cannot guarantee that the request will be completed. Your request may fail if the specified host denies the request (e.g. due to request throttling or DOS prevention), or if Google throttles requests to the site for abuse prevention. You should not depend on externally-hosted images for production applications.  When both ``gcs_image_uri`` and ``image_uri`` are specified, ``image_uri`` takes precedence.",
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "features": {
-                  "description": "Requested features.",
-                  "type": "array",
-                  "items": {
+              "reference": "google.cloud.vision_v1.types.AnnotateImageRequest",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "description": "The image to be processed.",
                     "type": "object",
-                    "properties": {
-                      "type_": {
-                        "type": "enum",
-                        "name": "Type",
-                        "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                        "values": {
-                          "TYPE_UNSPECIFIED": {
-                            "value": 0
-                          },
-                          "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                            "value": 1
-                          },
-                          "NO_RETURNS": {
-                            "value": 2
-                          },
-                          "LIFETIME_RETURNS": {
-                            "value": 3
-                          }
+                    "reference": "google.cloud.vision_v1p1beta1.types.Image",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "uri": {
+                          "description": "Required. URL of the image with a length limit of 5 KiB.",
+                          "type": "string"
+                        },
+                        "height": {
+                          "description": "Optional. Height of the image in number of pixels.",
+                          "type": "integer"
+                        },
+                        "width": {
+                          "description": "Optional. Width of the image in number of pixels.",
+                          "type": "integer"
                         }
                       },
-                      "max_results": {
-                        "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                        "type": "integer"
-                      },
-                      "model": {
-                        "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                        "type": "string"
+                      "required": [
+                        "uri"
+                      ]
+                    }
+                  },
+                  "features": {
+                    "description": "Requested features.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.cloud.vision_v1p1beta1.types.Feature",
+                      "resolved_schema": {
+                        "type": "object",
+                        "properties": {
+                          "type_": {
+                            "description": "The type of the feature that enabled for fulfillment.",
+                            "type": "object",
+                            "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
+                          }
+                        }
                       }
                     }
-                  }
-                },
-                "image_context": {
-                  "type": "object",
-                  "properties": {
-                    "lat_long_rect": {
+                  },
+                  "image_context": {
+                    "description": "Additional context that may accompany the image.",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1p1beta1.types.ImageContext",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "min_lat_lng": {
-                          "description": "Min lat/long pair.",
+                        "lat_long_rect": {
+                          "description": "lat/long rectangle that specifies the location of the image.",
                           "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        },
-                        "max_lat_lng": {
-                          "description": "Max lat/long pair.",
-                          "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        }
-                      }
-                    },
-                    "language_hints": {
-                      "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "crop_hints_params": {
-                      "type": "object",
-                      "properties": {
-                        "aspect_ratios": {
-                          "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                          "type": "array",
-                          "items": {
-                            "type": "number"
+                          "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "min_lat_lng": {
+                                "description": "Min lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              },
+                              "max_lat_lng": {
+                                "description": "Max lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    "face_recognition_params": {
-                      "type": "object",
-                      "properties": {
-                        "celebrity_set": {
-                          "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
+                        },
+                        "language_hints": {
+                          "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
                           "type": "array",
                           "items": {
                             "type": "string"
                           }
-                        }
-                      }
-                    },
-                    "product_search_params": {
-                      "type": "object",
-                      "properties": {
-                        "bounding_poly": {
+                        },
+                        "crop_hints_params": {
+                          "description": "Parameters for crop hints annotation request.",
                           "type": "object",
-                          "properties": {
-                            "vertices": {
-                              "description": "The bounding polygon vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "integer"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "integer"
-                                  }
-                                }
-                              }
-                            },
-                            "normalized_vertices": {
-                              "description": "The bounding polygon normalized vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "number"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "number"
-                                  }
+                          "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "aspect_ratios": {
+                                "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
                                 }
                               }
                             }
                           }
                         },
-                        "product_set": {
-                          "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                          "type": "string"
-                        },
-                        "product_categories": {
-                          "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "web_detection_params": {
+                          "description": "Parameters for web detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "include_geo_results": {
+                                "description": "Whether to include results derived from the geo information in the image.",
+                                "type": "boolean"
+                              }
+                            }
                           }
                         },
-                        "filter": {
-                          "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "web_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "include_geo_results": {
-                          "description": "Whether to include results derived from the geo information in the image.",
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "text_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "enable_text_detection_confidence_score": {
-                          "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                          "type": "boolean"
-                        },
-                        "advanced_ocr_options": {
-                          "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "text_detection_params": {
+                          "description": "Parameters for text detection and document text detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "enable_text_detection_confidence_score": {
+                                "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                                "type": "boolean"
+                              },
+                              "advanced_ocr_options": {
+                                "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -442,207 +316,205 @@
         "properties": {
           "input_config": {
             "description": "Required. Information about the input file.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
+            "reference": "google.cloud.vision_v1.types.InputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_input_configs": {
+                  "description": "Set of input BigQuery tables.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_table": {
+                          "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                          "type": "string"
+                        },
+                        "gcs_uri": {
+                          "description": "Required. Schema mapping file",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "bigquery_table",
+                        "gcs_uri"
+                      ]
+                    }
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
+                "entity_type": {
+                  "description": "Entity type",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The name of the entity type.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "Required. Indicates the kind of entity type.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                      },
+                      "auto_expansion_mode": {
+                        "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                      },
+                      "entities": {
+                        "description": "Optional. The collection of entity entries associated with the entity type.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "synonyms"
+                            ]
+                          }
+                        }
+                      },
+                      "enable_fuzzy_extraction": {
+                        "description": "Optional. Enables fuzzy entity extraction during classification.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "kind"
+                    ]
                   }
+                },
+                "previous_result_bigquery_table": {
+                  "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           },
           "features": {
             "description": "Required. Requested features.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "type_": {
-                  "type": "enum",
-                  "name": "Type",
-                  "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                  "values": {
-                    "TYPE_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                      "value": 1
-                    },
-                    "NO_RETURNS": {
-                      "value": 2
-                    },
-                    "LIFETIME_RETURNS": {
-                      "value": 3
-                    }
+              "reference": "google.cloud.vision_v1.types.Feature",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "type_": {
+                    "description": "The type of the feature that enabled for fulfillment.",
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                   }
-                },
-                "max_results": {
-                  "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                  "type": "integer"
-                },
-                "model": {
-                  "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                  "type": "string"
                 }
               }
             }
           },
           "image_context": {
             "description": "Additional context that may accompany the image(s) in the file.",
-            "type": "object",
-            "properties": {
-              "lat_long_rect": {
-                "type": "object",
-                "properties": {
-                  "min_lat_lng": {
-                    "description": "Min lat/long pair.",
-                    "type": "object",
-                    "reference": "google.type.latlng_pb2.LatLng"
-                  },
-                  "max_lat_lng": {
-                    "description": "Max lat/long pair.",
-                    "type": "object",
-                    "reference": "google.type.latlng_pb2.LatLng"
-                  }
-                }
-              },
-              "language_hints": {
-                "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "crop_hints_params": {
-                "type": "object",
-                "properties": {
-                  "aspect_ratios": {
-                    "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                    "type": "array",
-                    "items": {
-                      "type": "number"
-                    }
-                  }
-                }
-              },
-              "face_recognition_params": {
-                "type": "object",
-                "properties": {
-                  "celebrity_set": {
-                    "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "product_search_params": {
-                "type": "object",
-                "properties": {
-                  "bounding_poly": {
+            "reference": "google.cloud.vision_v1.types.ImageContext",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "lat_long_rect": {
+                  "description": "lat/long rectangle that specifies the location of the image.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "vertices": {
-                        "description": "The bounding polygon vertices.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "x": {
-                              "description": "X coordinate.",
-                              "type": "integer"
-                            },
-                            "y": {
-                              "description": "Y coordinate.",
-                              "type": "integer"
-                            }
-                          }
-                        }
+                      "min_lat_lng": {
+                        "description": "Min lat/long pair.",
+                        "type": "object",
+                        "reference": "google.type.latlng_pb2.LatLng"
                       },
-                      "normalized_vertices": {
-                        "description": "The bounding polygon normalized vertices.",
+                      "max_lat_lng": {
+                        "description": "Max lat/long pair.",
+                        "type": "object",
+                        "reference": "google.type.latlng_pb2.LatLng"
+                      }
+                    }
+                  }
+                },
+                "language_hints": {
+                  "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "crop_hints_params": {
+                  "description": "Parameters for crop hints annotation request.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "aspect_ratios": {
+                        "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "properties": {
-                            "x": {
-                              "description": "X coordinate.",
-                              "type": "number"
-                            },
-                            "y": {
-                              "description": "Y coordinate.",
-                              "type": "number"
-                            }
-                          }
+                          "type": "number"
                         }
                       }
                     }
-                  },
-                  "product_set": {
-                    "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                    "type": "string"
-                  },
-                  "product_categories": {
-                    "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                  }
+                },
+                "web_detection_params": {
+                  "description": "Parameters for web detection.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "include_geo_results": {
+                        "description": "Whether to include results derived from the geo information in the image.",
+                        "type": "boolean"
+                      }
                     }
-                  },
-                  "filter": {
-                    "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                    "type": "string"
                   }
-                }
-              },
-              "web_detection_params": {
-                "type": "object",
-                "properties": {
-                  "include_geo_results": {
-                    "description": "Whether to include results derived from the geo information in the image.",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "text_detection_params": {
-                "type": "object",
-                "properties": {
-                  "enable_text_detection_confidence_score": {
-                    "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                    "type": "boolean"
-                  },
-                  "advanced_ocr_options": {
-                    "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                },
+                "text_detection_params": {
+                  "description": "Parameters for text detection and document text detection.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "enable_text_detection_confidence_score": {
+                        "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                        "type": "boolean"
+                      },
+                      "advanced_ocr_options": {
+                        "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
@@ -674,227 +546,233 @@
             "description": "Required. The list of file annotation requests. Right now we support only one AnnotateFileRequest in BatchAnnotateFilesRequest.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "input_config": {
-                  "type": "object",
-                  "properties": {
-                    "gcs_source": {
+              "reference": "google.cloud.vision_v1.types.AnnotateFileRequest",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "input_config": {
+                    "description": "Required. Information about the input file.",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1.types.InputConfig",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "uri": {
-                          "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
+                        "bigquery_input_configs": {
+                          "description": "Set of input BigQuery tables.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "bigquery_table": {
+                                  "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                                  "type": "string"
+                                },
+                                "gcs_uri": {
+                                  "description": "Required. Schema mapping file",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "bigquery_table",
+                                "gcs_uri"
+                              ]
+                            }
+                          }
+                        },
+                        "entity_type": {
+                          "description": "Entity type",
+                          "type": "object",
+                          "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "description": "Required. The name of the entity type.",
+                                "type": "string"
+                              },
+                              "kind": {
+                                "description": "Required. Indicates the kind of entity type.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                              },
+                              "auto_expansion_mode": {
+                                "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                              },
+                              "entities": {
+                                "description": "Optional. The collection of entity entries associated with the entity type.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                        "type": "string"
+                                      },
+                                      "synonyms": {
+                                        "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "value",
+                                      "synonyms"
+                                    ]
+                                  }
+                                }
+                              },
+                              "enable_fuzzy_extraction": {
+                                "description": "Optional. Enables fuzzy entity extraction during classification.",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "display_name",
+                              "kind"
+                            ]
+                          }
+                        },
+                        "previous_result_bigquery_table": {
+                          "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
                           "type": "string"
-                        }
-                      },
-                      "required": [
-                        "uri"
-                      ]
-                    },
-                    "data_format": {
-                      "type": "enum",
-                      "name": "DataFormat",
-                      "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                      "values": {
-                        "DATA_FORMAT_UNSPECIFIED": {
-                          "value": 0
-                        },
-                        "JSON": {
-                          "value": 1
-                        },
-                        "PROTO_TEXT": {
-                          "value": 2
                         }
                       }
                     }
                   },
-                  "required": [
-                    "data_format"
-                  ]
-                },
-                "features": {
-                  "description": "Required. Requested features.",
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "type_": {
-                        "type": "enum",
-                        "name": "Type",
-                        "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                        "values": {
-                          "TYPE_UNSPECIFIED": {
-                            "value": 0
-                          },
-                          "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                            "value": 1
-                          },
-                          "NO_RETURNS": {
-                            "value": 2
-                          },
-                          "LIFETIME_RETURNS": {
-                            "value": 3
+                  "features": {
+                    "description": "Required. Requested features.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.cloud.vision_v1.types.Feature",
+                      "resolved_schema": {
+                        "type": "object",
+                        "properties": {
+                          "type_": {
+                            "description": "The type of the feature that enabled for fulfillment.",
+                            "type": "object",
+                            "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                           }
                         }
-                      },
-                      "max_results": {
-                        "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                        "type": "integer"
-                      },
-                      "model": {
-                        "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                        "type": "string"
                       }
                     }
-                  }
-                },
-                "image_context": {
-                  "type": "object",
-                  "properties": {
-                    "lat_long_rect": {
+                  },
+                  "image_context": {
+                    "description": "Additional context that may accompany the image(s) in the file.",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1.types.ImageContext",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "min_lat_lng": {
-                          "description": "Min lat/long pair.",
+                        "lat_long_rect": {
+                          "description": "lat/long rectangle that specifies the location of the image.",
                           "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        },
-                        "max_lat_lng": {
-                          "description": "Max lat/long pair.",
-                          "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        }
-                      }
-                    },
-                    "language_hints": {
-                      "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "crop_hints_params": {
-                      "type": "object",
-                      "properties": {
-                        "aspect_ratios": {
-                          "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                          "type": "array",
-                          "items": {
-                            "type": "number"
+                          "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "min_lat_lng": {
+                                "description": "Min lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              },
+                              "max_lat_lng": {
+                                "description": "Max lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    "face_recognition_params": {
-                      "type": "object",
-                      "properties": {
-                        "celebrity_set": {
-                          "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
+                        },
+                        "language_hints": {
+                          "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
                           "type": "array",
                           "items": {
                             "type": "string"
                           }
-                        }
-                      }
-                    },
-                    "product_search_params": {
-                      "type": "object",
-                      "properties": {
-                        "bounding_poly": {
+                        },
+                        "crop_hints_params": {
+                          "description": "Parameters for crop hints annotation request.",
                           "type": "object",
-                          "properties": {
-                            "vertices": {
-                              "description": "The bounding polygon vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "integer"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "integer"
-                                  }
-                                }
-                              }
-                            },
-                            "normalized_vertices": {
-                              "description": "The bounding polygon normalized vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "number"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "number"
-                                  }
+                          "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "aspect_ratios": {
+                                "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
                                 }
                               }
                             }
                           }
                         },
-                        "product_set": {
-                          "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                          "type": "string"
-                        },
-                        "product_categories": {
-                          "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "web_detection_params": {
+                          "description": "Parameters for web detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "include_geo_results": {
+                                "description": "Whether to include results derived from the geo information in the image.",
+                                "type": "boolean"
+                              }
+                            }
                           }
                         },
-                        "filter": {
-                          "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "web_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "include_geo_results": {
-                          "description": "Whether to include results derived from the geo information in the image.",
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "text_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "enable_text_detection_confidence_score": {
-                          "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                          "type": "boolean"
-                        },
-                        "advanced_ocr_options": {
-                          "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "text_detection_params": {
+                          "description": "Parameters for text detection and document text detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "enable_text_detection_confidence_score": {
+                                "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                                "type": "boolean"
+                              },
+                              "advanced_ocr_options": {
+                                "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
                           }
                         }
                       }
                     }
+                  },
+                  "pages": {
+                    "description": "Pages of the file to perform image annotation. Pages starts from 1, we assume the first page of the file is page 1. At most 5 pages are supported per request. Pages can be negative.  Page 1 means the first page. Page 2 means the second page. Page -1 means the last page. Page -2 means the second to the last page.  If the file is GIF instead of PDF or TIFF, page refers to GIF frames.  If this field is empty, by default the service performs image annotation for the first 5 pages of the file.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   }
                 },
-                "pages": {
-                  "description": "Pages of the file to perform image annotation. Pages starts from 1, we assume the first page of the file is page 1. At most 5 pages are supported per request. Pages can be negative.  Page 1 means the first page. Page 2 means the second page. Page -1 means the last page. Page -2 means the second to the last page.  If the file is GIF instead of PDF or TIFF, page refers to GIF frames.  If this field is empty, by default the service performs image annotation for the first 5 pages of the file.",
-                  "type": "array",
-                  "items": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "required": [
-                "input_config",
-                "features"
-              ]
+                "required": [
+                  "input_config",
+                  "features"
+                ]
+              }
             }
           },
           "parent": {
@@ -923,207 +801,205 @@
         "properties": {
           "input_config": {
             "description": "Required. Information about the input file.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
+            "reference": "google.cloud.vision_v1.types.InputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_input_configs": {
+                  "description": "Set of input BigQuery tables.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_table": {
+                          "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                          "type": "string"
+                        },
+                        "gcs_uri": {
+                          "description": "Required. Schema mapping file",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "bigquery_table",
+                        "gcs_uri"
+                      ]
+                    }
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
+                "entity_type": {
+                  "description": "Entity type",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The name of the entity type.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "Required. Indicates the kind of entity type.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                      },
+                      "auto_expansion_mode": {
+                        "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                      },
+                      "entities": {
+                        "description": "Optional. The collection of entity entries associated with the entity type.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "synonyms"
+                            ]
+                          }
+                        }
+                      },
+                      "enable_fuzzy_extraction": {
+                        "description": "Optional. Enables fuzzy entity extraction during classification.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "kind"
+                    ]
                   }
+                },
+                "previous_result_bigquery_table": {
+                  "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           },
           "features": {
             "description": "Required. Requested features.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "type_": {
-                  "type": "enum",
-                  "name": "Type",
-                  "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                  "values": {
-                    "TYPE_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                      "value": 1
-                    },
-                    "NO_RETURNS": {
-                      "value": 2
-                    },
-                    "LIFETIME_RETURNS": {
-                      "value": 3
-                    }
+              "reference": "google.cloud.vision_v1.types.Feature",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "type_": {
+                    "description": "The type of the feature that enabled for fulfillment.",
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                   }
-                },
-                "max_results": {
-                  "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                  "type": "integer"
-                },
-                "model": {
-                  "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                  "type": "string"
                 }
               }
             }
           },
           "image_context": {
             "description": "Additional context that may accompany the image(s) in the file.",
-            "type": "object",
-            "properties": {
-              "lat_long_rect": {
-                "type": "object",
-                "properties": {
-                  "min_lat_lng": {
-                    "description": "Min lat/long pair.",
-                    "type": "object",
-                    "reference": "google.type.latlng_pb2.LatLng"
-                  },
-                  "max_lat_lng": {
-                    "description": "Max lat/long pair.",
-                    "type": "object",
-                    "reference": "google.type.latlng_pb2.LatLng"
-                  }
-                }
-              },
-              "language_hints": {
-                "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "crop_hints_params": {
-                "type": "object",
-                "properties": {
-                  "aspect_ratios": {
-                    "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                    "type": "array",
-                    "items": {
-                      "type": "number"
-                    }
-                  }
-                }
-              },
-              "face_recognition_params": {
-                "type": "object",
-                "properties": {
-                  "celebrity_set": {
-                    "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "product_search_params": {
-                "type": "object",
-                "properties": {
-                  "bounding_poly": {
+            "reference": "google.cloud.vision_v1.types.ImageContext",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "lat_long_rect": {
+                  "description": "lat/long rectangle that specifies the location of the image.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "vertices": {
-                        "description": "The bounding polygon vertices.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "x": {
-                              "description": "X coordinate.",
-                              "type": "integer"
-                            },
-                            "y": {
-                              "description": "Y coordinate.",
-                              "type": "integer"
-                            }
-                          }
-                        }
+                      "min_lat_lng": {
+                        "description": "Min lat/long pair.",
+                        "type": "object",
+                        "reference": "google.type.latlng_pb2.LatLng"
                       },
-                      "normalized_vertices": {
-                        "description": "The bounding polygon normalized vertices.",
+                      "max_lat_lng": {
+                        "description": "Max lat/long pair.",
+                        "type": "object",
+                        "reference": "google.type.latlng_pb2.LatLng"
+                      }
+                    }
+                  }
+                },
+                "language_hints": {
+                  "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "crop_hints_params": {
+                  "description": "Parameters for crop hints annotation request.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "aspect_ratios": {
+                        "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "properties": {
-                            "x": {
-                              "description": "X coordinate.",
-                              "type": "number"
-                            },
-                            "y": {
-                              "description": "Y coordinate.",
-                              "type": "number"
-                            }
-                          }
+                          "type": "number"
                         }
                       }
                     }
-                  },
-                  "product_set": {
-                    "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                    "type": "string"
-                  },
-                  "product_categories": {
-                    "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                  }
+                },
+                "web_detection_params": {
+                  "description": "Parameters for web detection.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "include_geo_results": {
+                        "description": "Whether to include results derived from the geo information in the image.",
+                        "type": "boolean"
+                      }
                     }
-                  },
-                  "filter": {
-                    "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                    "type": "string"
                   }
-                }
-              },
-              "web_detection_params": {
-                "type": "object",
-                "properties": {
-                  "include_geo_results": {
-                    "description": "Whether to include results derived from the geo information in the image.",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "text_detection_params": {
-                "type": "object",
-                "properties": {
-                  "enable_text_detection_confidence_score": {
-                    "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                    "type": "boolean"
-                  },
-                  "advanced_ocr_options": {
-                    "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                },
+                "text_detection_params": {
+                  "description": "Parameters for text detection and document text detection.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "enable_text_detection_confidence_score": {
+                        "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                        "type": "boolean"
+                      },
+                      "advanced_ocr_options": {
+                        "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
@@ -1132,40 +1008,16 @@
           },
           "output_config": {
             "description": "Required. The desired output location and metadata (e.g. format).",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
-                  }
+            "reference": "google.cloud.vision_v1.types.OutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_dataset": {
+                  "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           }
         },
         "required": [
@@ -1186,196 +1038,137 @@
             "description": "Required. Individual image annotation requests for this batch.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "image": {
-                  "type": "object",
-                  "properties": {
-                    "content": {
-                      "description": "Image content, represented as a stream of bytes. Note: As with all ``bytes`` fields, protobuffers use a pure binary representation, whereas JSON representations use base64.",
-                      "type": "object",
-                      "reference": "bytes"
-                    },
-                    "source": {
-                      "type": "object",
-                      "properties": {
-                        "gcs_image_uri": {
-                          "description": "**Use ``image_uri`` instead.**  The Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.",
-                          "type": "string"
-                        },
-                        "image_uri": {
-                          "description": "The URI of the source image. Can be either:  1. A Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.  2. A publicly-accessible image HTTP/HTTPS URL. When fetching images from HTTP/HTTPS URLs, Google cannot guarantee that the request will be completed. Your request may fail if the specified host denies the request (e.g. due to request throttling or DOS prevention), or if Google throttles requests to the site for abuse prevention. You should not depend on externally-hosted images for production applications.  When both ``gcs_image_uri`` and ``image_uri`` are specified, ``image_uri`` takes precedence.",
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "features": {
-                  "description": "Requested features.",
-                  "type": "array",
-                  "items": {
+              "reference": "google.cloud.vision_v1.types.AnnotateImageRequest",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "description": "The image to be processed.",
                     "type": "object",
-                    "properties": {
-                      "type_": {
-                        "type": "enum",
-                        "name": "Type",
-                        "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                        "values": {
-                          "TYPE_UNSPECIFIED": {
-                            "value": 0
-                          },
-                          "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                            "value": 1
-                          },
-                          "NO_RETURNS": {
-                            "value": 2
-                          },
-                          "LIFETIME_RETURNS": {
-                            "value": 3
-                          }
+                    "reference": "google.cloud.vision_v1p1beta1.types.Image",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "uri": {
+                          "description": "Required. URL of the image with a length limit of 5 KiB.",
+                          "type": "string"
+                        },
+                        "height": {
+                          "description": "Optional. Height of the image in number of pixels.",
+                          "type": "integer"
+                        },
+                        "width": {
+                          "description": "Optional. Width of the image in number of pixels.",
+                          "type": "integer"
                         }
                       },
-                      "max_results": {
-                        "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                        "type": "integer"
-                      },
-                      "model": {
-                        "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                        "type": "string"
+                      "required": [
+                        "uri"
+                      ]
+                    }
+                  },
+                  "features": {
+                    "description": "Requested features.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.cloud.vision_v1p1beta1.types.Feature",
+                      "resolved_schema": {
+                        "type": "object",
+                        "properties": {
+                          "type_": {
+                            "description": "The type of the feature that enabled for fulfillment.",
+                            "type": "object",
+                            "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
+                          }
+                        }
                       }
                     }
-                  }
-                },
-                "image_context": {
-                  "type": "object",
-                  "properties": {
-                    "lat_long_rect": {
+                  },
+                  "image_context": {
+                    "description": "Additional context that may accompany the image.",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1p1beta1.types.ImageContext",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "min_lat_lng": {
-                          "description": "Min lat/long pair.",
+                        "lat_long_rect": {
+                          "description": "lat/long rectangle that specifies the location of the image.",
                           "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        },
-                        "max_lat_lng": {
-                          "description": "Max lat/long pair.",
-                          "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        }
-                      }
-                    },
-                    "language_hints": {
-                      "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "crop_hints_params": {
-                      "type": "object",
-                      "properties": {
-                        "aspect_ratios": {
-                          "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                          "type": "array",
-                          "items": {
-                            "type": "number"
+                          "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "min_lat_lng": {
+                                "description": "Min lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              },
+                              "max_lat_lng": {
+                                "description": "Max lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    "face_recognition_params": {
-                      "type": "object",
-                      "properties": {
-                        "celebrity_set": {
-                          "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
+                        },
+                        "language_hints": {
+                          "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
                           "type": "array",
                           "items": {
                             "type": "string"
                           }
-                        }
-                      }
-                    },
-                    "product_search_params": {
-                      "type": "object",
-                      "properties": {
-                        "bounding_poly": {
+                        },
+                        "crop_hints_params": {
+                          "description": "Parameters for crop hints annotation request.",
                           "type": "object",
-                          "properties": {
-                            "vertices": {
-                              "description": "The bounding polygon vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "integer"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "integer"
-                                  }
-                                }
-                              }
-                            },
-                            "normalized_vertices": {
-                              "description": "The bounding polygon normalized vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "number"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "number"
-                                  }
+                          "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "aspect_ratios": {
+                                "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
                                 }
                               }
                             }
                           }
                         },
-                        "product_set": {
-                          "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                          "type": "string"
-                        },
-                        "product_categories": {
-                          "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "web_detection_params": {
+                          "description": "Parameters for web detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "include_geo_results": {
+                                "description": "Whether to include results derived from the geo information in the image.",
+                                "type": "boolean"
+                              }
+                            }
                           }
                         },
-                        "filter": {
-                          "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "web_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "include_geo_results": {
-                          "description": "Whether to include results derived from the geo information in the image.",
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "text_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "enable_text_detection_confidence_score": {
-                          "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                          "type": "boolean"
-                        },
-                        "advanced_ocr_options": {
-                          "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "text_detection_params": {
+                          "description": "Parameters for text detection and document text detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "enable_text_detection_confidence_score": {
+                                "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                                "type": "boolean"
+                              },
+                              "advanced_ocr_options": {
+                                "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -1387,40 +1180,16 @@
           },
           "output_config": {
             "description": "Required. The desired output location and metadata (e.g. format).",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
-                  }
+            "reference": "google.cloud.vision_v1.types.OutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_dataset": {
+                  "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           },
           "parent": {
             "description": "Optional. Target project and location to make a call.  Format: ``projects/{project-id}/locations/{location-id}``.  If no parent is specified, a region will be chosen automatically.  Supported location-ids: ``us``: USA country only, ``asia``: East asia areas, like Japan, Taiwan, ``eu``: The European Union.  Example: ``projects/project-A/locations/eu``.",
@@ -1451,257 +1220,241 @@
             "description": "Required. Individual async file annotation requests for this batch.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "input_config": {
-                  "type": "object",
-                  "properties": {
-                    "gcs_source": {
+              "reference": "google.cloud.vision_v1.types.AsyncAnnotateFileRequest",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "input_config": {
+                    "description": "Required. Information about the input file.",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1.types.InputConfig",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "uri": {
-                          "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
+                        "bigquery_input_configs": {
+                          "description": "Set of input BigQuery tables.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "bigquery_table": {
+                                  "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                                  "type": "string"
+                                },
+                                "gcs_uri": {
+                                  "description": "Required. Schema mapping file",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "bigquery_table",
+                                "gcs_uri"
+                              ]
+                            }
+                          }
+                        },
+                        "entity_type": {
+                          "description": "Entity type",
+                          "type": "object",
+                          "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "description": "Required. The name of the entity type.",
+                                "type": "string"
+                              },
+                              "kind": {
+                                "description": "Required. Indicates the kind of entity type.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                              },
+                              "auto_expansion_mode": {
+                                "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                              },
+                              "entities": {
+                                "description": "Optional. The collection of entity entries associated with the entity type.",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                        "type": "string"
+                                      },
+                                      "synonyms": {
+                                        "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "value",
+                                      "synonyms"
+                                    ]
+                                  }
+                                }
+                              },
+                              "enable_fuzzy_extraction": {
+                                "description": "Optional. Enables fuzzy entity extraction during classification.",
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "display_name",
+                              "kind"
+                            ]
+                          }
+                        },
+                        "previous_result_bigquery_table": {
+                          "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
                           "type": "string"
-                        }
-                      },
-                      "required": [
-                        "uri"
-                      ]
-                    },
-                    "data_format": {
-                      "type": "enum",
-                      "name": "DataFormat",
-                      "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                      "values": {
-                        "DATA_FORMAT_UNSPECIFIED": {
-                          "value": 0
-                        },
-                        "JSON": {
-                          "value": 1
-                        },
-                        "PROTO_TEXT": {
-                          "value": 2
                         }
                       }
                     }
                   },
-                  "required": [
-                    "data_format"
-                  ]
-                },
-                "features": {
-                  "description": "Required. Requested features.",
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "type_": {
-                        "type": "enum",
-                        "name": "Type",
-                        "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                        "values": {
-                          "TYPE_UNSPECIFIED": {
-                            "value": 0
-                          },
-                          "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                            "value": 1
-                          },
-                          "NO_RETURNS": {
-                            "value": 2
-                          },
-                          "LIFETIME_RETURNS": {
-                            "value": 3
+                  "features": {
+                    "description": "Required. Requested features.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.cloud.vision_v1.types.Feature",
+                      "resolved_schema": {
+                        "type": "object",
+                        "properties": {
+                          "type_": {
+                            "description": "The type of the feature that enabled for fulfillment.",
+                            "type": "object",
+                            "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                           }
                         }
-                      },
-                      "max_results": {
-                        "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                        "type": "integer"
-                      },
-                      "model": {
-                        "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                        "type": "string"
                       }
                     }
-                  }
-                },
-                "image_context": {
-                  "type": "object",
-                  "properties": {
-                    "lat_long_rect": {
+                  },
+                  "image_context": {
+                    "description": "Additional context that may accompany the image(s) in the file.",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1.types.ImageContext",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "min_lat_lng": {
-                          "description": "Min lat/long pair.",
+                        "lat_long_rect": {
+                          "description": "lat/long rectangle that specifies the location of the image.",
                           "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        },
-                        "max_lat_lng": {
-                          "description": "Max lat/long pair.",
-                          "type": "object",
-                          "reference": "google.type.latlng_pb2.LatLng"
-                        }
-                      }
-                    },
-                    "language_hints": {
-                      "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "crop_hints_params": {
-                      "type": "object",
-                      "properties": {
-                        "aspect_ratios": {
-                          "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
-                          "type": "array",
-                          "items": {
-                            "type": "number"
+                          "reference": "google.cloud.vision_v1p1beta1.types.LatLongRect",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "min_lat_lng": {
+                                "description": "Min lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              },
+                              "max_lat_lng": {
+                                "description": "Max lat/long pair.",
+                                "type": "object",
+                                "reference": "google.type.latlng_pb2.LatLng"
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    "face_recognition_params": {
-                      "type": "object",
-                      "properties": {
-                        "celebrity_set": {
-                          "description": "The resource names for one or more [CelebritySet][google.cloud.vision.v1p4beta1.CelebritySet]s. A celebrity set is preloaded and can be specified as \"builtin/default\". If this is specified, the algorithm will try to match the faces detected in the input image to the Celebrities in the CelebritySets.",
+                        },
+                        "language_hints": {
+                          "description": "List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection. For languages based on the Latin alphabet, setting ``language_hints`` is not needed. In rare cases, when the language of the text in the image is known, setting a hint will help get better results (although it will be a significant hindrance if the hint is wrong). Text detection returns an error if one or more of the specified languages is not one of the `supported languages <https://cloud.google.com/vision/docs/languages>`__.",
                           "type": "array",
                           "items": {
                             "type": "string"
                           }
-                        }
-                      }
-                    },
-                    "product_search_params": {
-                      "type": "object",
-                      "properties": {
-                        "bounding_poly": {
+                        },
+                        "crop_hints_params": {
+                          "description": "Parameters for crop hints annotation request.",
                           "type": "object",
-                          "properties": {
-                            "vertices": {
-                              "description": "The bounding polygon vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "integer"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "integer"
-                                  }
-                                }
-                              }
-                            },
-                            "normalized_vertices": {
-                              "description": "The bounding polygon normalized vertices.",
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "x": {
-                                    "description": "X coordinate.",
-                                    "type": "number"
-                                  },
-                                  "y": {
-                                    "description": "Y coordinate.",
-                                    "type": "number"
-                                  }
+                          "reference": "google.cloud.vision_v1p1beta1.types.CropHintsParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "aspect_ratios": {
+                                "description": "Aspect ratios in floats, representing the ratio of the width to the height of the image. For example, if the desired aspect ratio is 4/3, the corresponding float value should be 1.33333. If not specified, the best possible crop is returned. The number of provided aspect ratios is limited to a maximum of 16; any aspect ratios provided after the 16th are ignored.",
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
                                 }
                               }
                             }
                           }
                         },
-                        "product_set": {
-                          "description": "The resource name of a [ProductSet][google.cloud.vision.v1p4beta1.ProductSet] to be searched for similar images.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.",
-                          "type": "string"
-                        },
-                        "product_categories": {
-                          "description": "The list of product categories to search in. Currently, we only consider the first category, and either \"homegoods-v2\", \"apparel-v2\", \"toys-v2\", \"packagedgoods-v1\", or \"general-v1\" should be specified. The legacy categories \"homegoods\", \"apparel\", and \"toys\" are still supported but will be deprecated. For new products, please use \"homegoods-v2\", \"apparel-v2\", or \"toys-v2\" for better product search accuracy. It is recommended to migrate existing products to these categories as well.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "web_detection_params": {
+                          "description": "Parameters for web detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.WebDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "include_geo_results": {
+                                "description": "Whether to include results derived from the geo information in the image.",
+                                "type": "boolean"
+                              }
+                            }
                           }
                         },
-                        "filter": {
-                          "description": "The filtering expression. This can be used to restrict search results based on Product labels. We currently support an AND of OR of key-value expressions, where each expression within an OR must have the same key. An '=' should be used to connect the key and value.  For example, \"(color = red OR color = blue) AND brand = Google\" is acceptable, but \"(color = red OR brand = Google)\" is not acceptable. \"color: red\" is not acceptable because it uses a ':' instead of an '='.",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "web_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "include_geo_results": {
-                          "description": "Whether to include results derived from the geo information in the image.",
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "text_detection_params": {
-                      "type": "object",
-                      "properties": {
-                        "enable_text_detection_confidence_score": {
-                          "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
-                          "type": "boolean"
-                        },
-                        "advanced_ocr_options": {
-                          "description": "A list of advanced OCR options to fine-tune OCR behavior.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "text_detection_params": {
+                          "description": "Parameters for text detection and document text detection.",
+                          "type": "object",
+                          "reference": "google.cloud.vision_v1p1beta1.types.TextDetectionParams",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "enable_text_detection_confidence_score": {
+                                "description": "By default, Cloud Vision API only includes confidence score for DOCUMENT_TEXT_DETECTION result. Set the flag to true to include confidence score for TEXT_DETECTION as well.",
+                                "type": "boolean"
+                              },
+                              "advanced_ocr_options": {
+                                "description": "A list of advanced OCR options to fine-tune OCR behavior.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
                           }
+                        }
+                      }
+                    }
+                  },
+                  "output_config": {
+                    "description": "Required. The desired output location and metadata (e.g. format).",
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1.types.OutputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_dataset": {
+                          "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
+                          "type": "string"
                         }
                       }
                     }
                   }
                 },
-                "output_config": {
-                  "type": "object",
-                  "properties": {
-                    "gcs_destination": {
-                      "type": "object",
-                      "properties": {
-                        "uri": {
-                          "description": "Required. Google Cloud Storage URI.",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "uri"
-                      ]
-                    },
-                    "data_format": {
-                      "type": "enum",
-                      "name": "DataFormat",
-                      "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                      "values": {
-                        "DATA_FORMAT_UNSPECIFIED": {
-                          "value": 0
-                        },
-                        "JSON": {
-                          "value": 1
-                        },
-                        "PROTO_TEXT": {
-                          "value": 2
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "data_format"
-                  ]
-                }
-              },
-              "required": [
-                "input_config",
-                "features",
-                "output_config"
-              ]
+                "required": [
+                  "input_config",
+                  "features",
+                  "output_config"
+                ]
+              }
             }
           },
           "parent": {
@@ -1722,7 +1475,7 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-vision\\google\\cloud\\vision_v1\\types\\product_search_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-vision/google/cloud/vision_v1/types/product_search_service.py": [
     {
       "type": "function",
       "name": "CreateProductRequest",
@@ -1736,19 +1489,22 @@
           },
           "product": {
             "description": "Required. The product to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Name of the product.",
-                "type": "string"
-              },
-              "id": {
-                "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
-                "type": "string"
-              },
-              "generic_uri": {
-                "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
-                "type": "string"
+            "reference": "google.cloud.vision_v1.types.Product",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Name of the product.",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
+                  "type": "string"
+                },
+                "generic_uri": {
+                  "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
+                  "type": "string"
+                }
               }
             }
           },
@@ -1814,19 +1570,22 @@
         "properties": {
           "product": {
             "description": "Required. The Product resource which replaces the one on the server. product.name is immutable.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Name of the product.",
-                "type": "string"
-              },
-              "id": {
-                "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
-                "type": "string"
-              },
-              "generic_uri": {
-                "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
-                "type": "string"
+            "reference": "google.cloud.vision_v1.types.Product",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Name of the product.",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "Token that identifies a product so that it can be referred to from other parts in the document. There is no predefined format as long as it uniquely identifies a group in the context of the current document.",
+                  "type": "string"
+                },
+                "generic_uri": {
+                  "description": "Contains a URI which is vendor-specific. Example: The artifact repository URL of an image.  This field is a member of `oneof`_ ``identifier``.",
+                  "type": "string"
+                }
               }
             }
           },
@@ -1871,49 +1630,49 @@
           },
           "product_set": {
             "description": "Required. The ProductSet to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the ProductSet.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.  This field is ignored when creating a ProductSet.",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "The user-provided name for this ProductSet. Must not be empty. Must be at most 4096 characters long.",
-                "type": "string"
-              },
-              "index_time": {
-                "description": "Output only. The time at which this ProductSet was last indexed. Query results will reflect all updates before this time. If this ProductSet has never been indexed, this timestamp is the default value \"1970-01-01T00:00:00Z\".  This field is ignored when creating a ProductSet.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "index_error": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
+            "reference": "google.cloud.vision_v1.types.ProductSet",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name of the ProductSet.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.  This field is ignored when creating a ProductSet.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "The user-provided name for this ProductSet. Must not be empty. Must be at most 4096 characters long.",
+                  "type": "string"
+                },
+                "index_time": {
+                  "description": "Output only. The time at which this ProductSet was last indexed. Query results will reflect all updates before this time. If this ProductSet has never been indexed, this timestamp is the default value \"1970-01-01T00:00:00Z\".  This field is ignored when creating a ProductSet.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "index_error": {
+                  "description": "Output only. If there was an error with indexing the product set, the field is populated.  This field is ignored when creating a ProductSet.",
+                  "type": "object",
+                  "reference": "google.rpc.status_pb2.Status",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "Output only. State of the metadata job.",
+                        "type": "object",
+                        "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
                       },
-                      "AFFECTED": {
-                        "value": 1
+                      "message": {
+                        "description": "Output only. Message relating to the progression of a metadata job.",
+                        "type": "string"
                       },
-                      "NOT_AFFECTED": {
-                        "value": 2
+                      "completion_percent": {
+                        "description": "Output only. Progress tracking.",
+                        "type": "integer"
                       },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
+                      "update_time": {
+                        "description": "Output only. The time when the status was updated.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       }
                     }
-                  },
-                  "error_message": {
-                    "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
-                    "type": "string"
                   }
                 }
               }
@@ -1981,49 +1740,49 @@
         "properties": {
           "product_set": {
             "description": "Required. The ProductSet resource which replaces the one on the server.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the ProductSet.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.  This field is ignored when creating a ProductSet.",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "The user-provided name for this ProductSet. Must not be empty. Must be at most 4096 characters long.",
-                "type": "string"
-              },
-              "index_time": {
-                "description": "Output only. The time at which this ProductSet was last indexed. Query results will reflect all updates before this time. If this ProductSet has never been indexed, this timestamp is the default value \"1970-01-01T00:00:00Z\".  This field is ignored when creating a ProductSet.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "index_error": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
+            "reference": "google.cloud.vision_v1.types.ProductSet",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name of the ProductSet.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID``.  This field is ignored when creating a ProductSet.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "The user-provided name for this ProductSet. Must not be empty. Must be at most 4096 characters long.",
+                  "type": "string"
+                },
+                "index_time": {
+                  "description": "Output only. The time at which this ProductSet was last indexed. Query results will reflect all updates before this time. If this ProductSet has never been indexed, this timestamp is the default value \"1970-01-01T00:00:00Z\".  This field is ignored when creating a ProductSet.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "index_error": {
+                  "description": "Output only. If there was an error with indexing the product set, the field is populated.  This field is ignored when creating a ProductSet.",
+                  "type": "object",
+                  "reference": "google.rpc.status_pb2.Status",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "Output only. State of the metadata job.",
+                        "type": "object",
+                        "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
                       },
-                      "AFFECTED": {
-                        "value": 1
+                      "message": {
+                        "description": "Output only. Message relating to the progression of a metadata job.",
+                        "type": "string"
                       },
-                      "NOT_AFFECTED": {
-                        "value": 2
+                      "completion_percent": {
+                        "description": "Output only. Progress tracking.",
+                        "type": "integer"
                       },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
+                      "update_time": {
+                        "description": "Output only. The time when the status was updated.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
                       }
                     }
-                  },
-                  "error_message": {
-                    "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
-                    "type": "string"
                   }
                 }
               }
@@ -2070,63 +1829,78 @@
           },
           "reference_image": {
             "description": "Required. The reference image to create. If an image ID is specified, it is ignored.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the reference image.  Format is:  ``projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID/referenceImages/IMAGE_ID``.  This field is ignored when creating a reference image.",
-                "type": "string"
-              },
-              "uri": {
-                "description": "Required. The Google Cloud Storage URI of the reference image.  The URI must start with ``gs://``.",
-                "type": "string"
-              },
-              "bounding_polys": {
-                "description": "Optional. Bounding polygons around the areas of interest in the reference image. If this field is empty, the system will try to detect regions of interest. At most 10 bounding polygons will be used.  The provided shape is converted into a non-rotated rectangle. Once converted, the small edge of the rectangle must be greater than or equal to 300 pixels. The aspect ratio must be 1:4 or less (i.e. 1:3 is ok; 1:5 is not).",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "vertices": {
-                      "description": "The bounding polygon vertices.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "x": {
-                            "description": "X coordinate.",
-                            "type": "integer"
-                          },
-                          "y": {
-                            "description": "Y coordinate.",
-                            "type": "integer"
+            "reference": "google.cloud.vision_v1.types.ReferenceImage",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name of the reference image.  Format is: ``projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID/referenceImages/IMAGE_ID``.  This field is ignored when creating a reference image.",
+                  "type": "string"
+                },
+                "uri": {
+                  "description": "Required. The Google Cloud Storage URI of the reference image.  The URI must start with ``gs://``.",
+                  "type": "string"
+                },
+                "bounding_polys": {
+                  "description": "Optional. Bounding polygons around the areas of interest in the reference image. If this field is empty, the system will try to detect regions of interest. At most 10 bounding polygons will be used.  The provided shape is converted into a non-rotated rectangle. Once converted, the small edge of the rectangle must be greater than or equal to 300 pixels. The aspect ratio must be 1:4 or less (i.e. 1:3 is ok; 1:5 is not).",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.vision_v1.types.BoundingPoly",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "vertices": {
+                          "description": "The bounding polygon vertices.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.documentai_v1.types.Vertex",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "description": "X coordinate.",
+                                  "type": "integer"
+                                },
+                                "y": {
+                                  "description": "Y coordinate (starts from the top of the image).",
+                                  "type": "integer"
+                                }
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    "normalized_vertices": {
-                      "description": "The bounding polygon normalized vertices.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "x": {
-                            "description": "X coordinate.",
-                            "type": "number"
-                          },
-                          "y": {
-                            "description": "Y coordinate.",
-                            "type": "number"
+                        },
+                        "normalized_vertices": {
+                          "description": "The bounding polygon normalized vertices.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.documentai_v1.types.NormalizedVertex",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "description": "X coordinate.",
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "description": "Y coordinate (starts from the top of the image).",
+                                  "type": "number"
+                                }
+                              }
+                            }
                           }
                         }
                       }
                     }
                   }
                 }
-              }
-            },
-            "required": [
-              "uri"
-            ]
+              },
+              "required": [
+                "uri"
+              ]
+            }
           },
           "reference_image_id": {
             "description": "A user-supplied resource id for the ReferenceImage to be added. If set, the server will attempt to use this value as the resource id. If it is already in use, an error is returned with code ALREADY_EXISTS. Must be at most 128 characters long. It cannot contain the character ``/``.",
@@ -2280,14 +2054,22 @@
           },
           "input_config": {
             "description": "Required. The input content for the list of requests.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "csv_file_uri": {
-                    "description": "The Google Cloud Storage URI of the input csv file.  The URI must start with ``gs://``.  The format of the input csv file should be one image per line. In each line, there are 8 columns.  1. image-uri 2. image-id 3. product-set-id 4. product-id 5. product-category 6. product-display-name 7. labels 8. bounding-poly  The ``image-uri``, ``product-set-id``, ``product-id``, and ``product-category`` columns are required. All other columns are optional.  If the ``ProductSet`` or ``Product`` specified by the ``product-set-id`` and ``product-id`` values does not exist, then the system will create a new ``ProductSet`` or ``Product`` for the image. In this case, the ``product-display-name`` column refers to [display_name][google.cloud.vision.v1p4beta1.Product.display_name], the ``product-category`` column refers to [product_category][google.cloud.vision.v1p4beta1.Product.product_category], and the ``labels`` column refers to [product_labels][google.cloud.vision.v1p4beta1.Product.product_labels].  The ``image-id`` column is optional but must be unique if provided. If it is empty, the system will automatically assign a unique id to the image.  The ``product-display-name`` column is optional. If it is empty, the system sets the [display_name][google.cloud.vision.v1p4beta1.Product.display_name] field for the product to a space (\" \"). You can update the ``display_name`` later by using the API.  If a ``Product`` with the specified ``product-id`` already exists, then the system ignores the ``product-display-name``, ``product-category``, and ``labels`` columns.  The ``labels`` column (optional) is a line containing a list of comma-separated key-value pairs, in the following format:  ::  \"key_1=value_1,key_2=value_2,...,key_n=value_n\"  The ``bounding-poly`` column (optional) identifies one region of interest from the image in the same manner as ``CreateReferenceImage``. If you do not specify the ``bounding-poly`` column, then the system will try to detect regions of interest automatically.  At most one ``bounding-poly`` column is allowed per line. If the image contains multiple regions of interest, add a line to the CSV file that includes the same product information, and the ``bounding-poly`` values for each region of interest.  The ``bounding-poly`` column must contain an even number of comma-separated numbers, in the format \"p1_x,p1_y,p2_x,p2_y,...,pn_x,pn_y\". Use non-negative integers for absolute bounding polygons, and float values in [0, 1] for normalized bounding polygons.  The system will resize the image if the image resolution is too large to process (larger than 20MP).",
-                    "type": "string"
+            "reference": "google.cloud.vision_v1.types.ImportProductSetsInputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_source": {
+                  "description": "The Google Cloud Storage location for a csv file which preserves a list of ImportProductSetRequests in each line.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "google.cloud.vision_v1.types.ImportProductSetsGcsSource",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "csv_file_uri": {
+                        "description": "The Google Cloud Storage URI of the input csv file.  The URI must start with ``gs://``.  The format of the input csv file should be one image per line. In each line, there are 8 columns.  1. image-uri 2. image-id 3. product-set-id 4. product-id 5. product-category 6. product-display-name 7. labels 8. bounding-poly  The ``image-uri``, ``product-set-id``, ``product-id``, and ``product-category`` columns are required. All other columns are optional.  If the ``ProductSet`` or ``Product`` specified by the ``product-set-id`` and ``product-id`` values does not exist, then the system will create a new ``ProductSet`` or ``Product`` for the image. In this case, the ``product-display-name`` column refers to [display_name][google.cloud.vision.v1.Product.display_name], the ``product-category`` column refers to [product_category][google.cloud.vision.v1.Product.product_category], and the ``labels`` column refers to [product_labels][google.cloud.vision.v1.Product.product_labels].  The ``image-id`` column is optional but must be unique if provided. If it is empty, the system will automatically assign a unique id to the image.  The ``product-display-name`` column is optional. If it is empty, the system sets the [display_name][google.cloud.vision.v1.Product.display_name] field for the product to a space (\" \"). You can update the ``display_name`` later by using the API.  If a ``Product`` with the specified ``product-id`` already exists, then the system ignores the ``product-display-name``, ``product-category``, and ``labels`` columns.  The ``labels`` column (optional) is a line containing a list of comma-separated key-value pairs, in the following format:  ::  \"key_1=value_1,key_2=value_2,...,key_n=value_n\"  The ``bounding-poly`` column (optional) identifies one region of interest from the image in the same manner as ``CreateReferenceImage``. If you do not specify the ``bounding-poly`` column, then the system will try to detect regions of interest automatically.  At most one ``bounding-poly`` column is allowed per line. If the image contains multiple regions of interest, add a line to the CSV file that includes the same product information, and the ``bounding-poly`` values for each region of interest.  The ``bounding-poly`` column must contain an even number of comma-separated numbers, in the format \"p1_x,p1_y,p2_x,p2_y,...,pn_x,pn_y\". Use non-negative integers for absolute bounding polygons, and float values in [0, 1] for normalized bounding polygons.  The system will resize the image if the image resolution is too large to process (larger than 20MP).",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
@@ -2309,11 +2091,14 @@
         "properties": {
           "product_set_purge_config": {
             "description": "Specify which ProductSet contains the Products to be deleted.  This field is a member of `oneof`_ ``target``.",
-            "type": "object",
-            "properties": {
-              "product_set_id": {
-                "description": "The ProductSet that contains the Products to delete. If a Product is a member of product_set_id in addition to other ProductSets, the Product will still be deleted.",
-                "type": "string"
+            "reference": "google.cloud.vision_v1.types.ProductSetPurgeConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "product_set_id": {
+                  "description": "The ProductSet that contains the Products to delete. If a Product is a member of product_set_id in addition to other ProductSets, the Product will still be deleted.",
+                  "type": "string"
+                }
               }
             }
           },

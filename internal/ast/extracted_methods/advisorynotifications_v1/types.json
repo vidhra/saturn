@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-advisorynotifications\\google\\cloud\\advisorynotifications_v1\\types\\service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-advisorynotifications/google/cloud/advisorynotifications_v1/types/service.py": [
     {
       "type": "function",
       "name": "ListNotificationsRequest",
@@ -20,20 +20,9 @@
             "type": "string"
           },
           "view": {
-            "description": "Notification view.\n\nValues:\n    NOTIFICATION_VIEW_UNSPECIFIED (0):\n        Not specified, equivalent to BASIC.\n    BASIC (1):\n        Server responses only include title, creation\n        time and Notification ID. Note: for internal use\n        responses also include the last update time, the\n        latest message text and whether notification has\n        attachments.\n    FULL (2):\n        Include everything.",
-            "type": "enum",
-            "name": "NotificationView",
-            "values": {
-              "NOTIFICATION_VIEW_UNSPECIFIED": {
-                "value": 0
-              },
-              "BASIC": {
-                "value": 1
-              },
-              "FULL": {
-                "value": 2
-              }
-            }
+            "description": "Specifies which parts of the notification resource should be returned in the response.",
+            "type": "object",
+            "reference": "google.cloud.advisorynotifications_v1.types.NotificationView"
           },
           "language_code": {
             "description": "ISO code for requested localization language. If unset, will be interpereted as \"en\". If the requested language is valid, but not supported for this notification, English will be returned with an \"Not applicable\" LocalizationState. If the ISO code is invalid (i.e. not a real language), this RPC will throw an error.",
@@ -92,16 +81,40 @@
         "properties": {
           "settings": {
             "description": "Required. New settings.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. The name of the resource.",
-                "type": "string"
+            "reference": "google.cloud.advisorynotifications_v1.types.Settings",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the settings to retrieve. Format:  organizations/{organization}/locations/{location}/settings or projects/{projects}/locations/{location}/settings.",
+                  "type": "string"
+                },
+                "notification_settings": {
+                  "description": "Required. Map of each notification type and its settings to get/set all settings at once. The server will validate the value for each notification type.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "reference": "google.cloud.advisorynotifications_v1.types.NotificationSettings",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "enabled": {
+                          "description": "Whether the associated NotificationType is enabled.",
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "etag": {
+                  "description": "Required. Fingerprint for optimistic concurrency returned in Get requests. Must be provided for Update requests. If the value provided does not match the value known to the server, ABORTED will be thrown, and the client should retry the read-modify-write cycle.",
+                  "type": "string"
+                }
               },
-              "preference_set": {
-                "description": "The preference set used by default for a project.",
-                "type": "string"
-              }
+              "required": [
+                "notification_settings",
+                "etag"
+              ]
             }
           }
         },

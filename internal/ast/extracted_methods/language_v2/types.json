@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-language\\google\\cloud\\language_v2\\types\\language_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-language/google/cloud/language_v2/types/language_service.py": [
     {
       "type": "function",
       "name": "AnalyzeSentimentRequest",
@@ -9,62 +9,110 @@
         "properties": {
           "document": {
             "description": "Required. Input document.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
+            "reference": "google.cloud.language_v2.types.Document",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. The document resource name. The name must be empty when creating a document. Format: ``projects/<Project ID>/locations/<Location ID>/knowledgeBases/<Knowledge Base ID>/documents/<Document ID>``.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the document. The name must be 1024 bytes or less; otherwise, the creation request fails.",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "description": "Required. The MIME type of this document.",
+                  "type": "string"
+                },
+                "knowledge_types": {
+                  "description": "Required. The knowledge type of document content.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Document.KnowledgeType"
                   }
+                },
+                "content_uri": {
+                  "description": "The URI where the file content is located.  For documents stored in Google Cloud Storage, these URIs must have the form ``gs://<bucket-name>/<object-name>``.  NOTE: External URLs must correspond to public webpages, i.e., they must be indexed by Google Search. In particular, URLs for showing documents in Google Cloud Storage (i.e. the URL in your browser) are not supported. Instead use the ``gs://`` format URI described above.  This field is a member of `oneof`_ ``source``.",
+                  "type": "string"
+                },
+                "raw_content": {
+                  "description": "The raw content of the document. This field is only permitted for EXTRACTIVE_QA and FAQ knowledge types.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "bytes"
+                },
+                "enable_auto_reload": {
+                  "description": "Optional. If true, we try to automatically reload the document every day (at a time picked by the system). If false or unspecified, we don't try to automatically reload the document.  Currently you can only enable automatic reload for documents sourced from a public url, see ``source`` field for the source types.  Reload status can be tracked in ``latest_reload_status``. If a reload fails, we will keep the document unchanged.  If a reload fails with internal errors, the system will try to reload the document on the next day. If a reload fails with non-retriable errors (e.g. PERMISSION_DENIED), the system will not try to reload the document anymore. You need to manually reload the document successfully by calling ``ReloadDocument`` and clear the errors.",
+                  "type": "boolean"
+                },
+                "latest_reload_status": {
+                  "description": "Output only. The time and status of the latest reload. This reload may have been triggered automatically or manually and may not have succeeded.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.ReloadStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "description": "The time of a reload attempt. This reload may have been triggered automatically or manually and may not have succeeded.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "status": {
+                        "description": "The status of a reload attempt or the initial load.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string"
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "metadata": {
+                  "description": "Optional. Metadata for the document. The metadata supports arbitrary key-value pairs. Suggested use cases include storing a document's title, an external URL distinct from the document's content_uri, etc. The max size of a ``key`` or a ``value`` of the metadata is 1024 bytes.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "state": {
+                  "description": "Output only. The current state of the document.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.State"
                 }
               },
-              "content": {
-                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "gcs_content_uri": {
-                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "language_code": {
-                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "type_"
-            ]
+              "required": [
+                "display_name",
+                "mime_type",
+                "knowledge_types"
+              ]
+            }
           },
           "encoding_type": {
-            "description": "Represents the text encoding that the caller uses to process the\noutput. Providing an ``EncodingType`` is recommended because the API\nprovides the beginning offsets for various outputs, such as tokens\nand mentions, and languages that natively use different text\nencodings may access offsets differently.\n\nValues:\n    NONE (0):\n        If ``EncodingType`` is not specified, encoding-dependent\n        information (such as ``begin_offset``) will be set at\n        ``-1``.\n    UTF8 (1):\n        Encoding-dependent information (such as ``begin_offset``) is\n        calculated based on the UTF-8 encoding of the input. C++ and\n        Go are examples of languages that use this encoding\n        natively.\n    UTF16 (2):\n        Encoding-dependent information (such as ``begin_offset``) is\n        calculated based on the UTF-16 encoding of the input. Java\n        and JavaScript are examples of languages that use this\n        encoding natively.\n    UTF32 (3):\n        Encoding-dependent information (such as ``begin_offset``) is",
-            "type": "enum",
-            "name": "EncodingType",
-            "values": {
-              "NONE": {
-                "value": 0
-              },
-              "UTF8": {
-                "value": 1
-              },
-              "UTF16": {
-                "value": 2
-              },
-              "UTF32": {
-                "value": 3
-              }
-            }
+            "description": "The encoding type used by the API to calculate sentence offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v2.types.EncodingType"
           }
         },
         "required": [
@@ -81,62 +129,110 @@
         "properties": {
           "document": {
             "description": "Required. Input document.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
+            "reference": "google.cloud.language_v2.types.Document",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. The document resource name. The name must be empty when creating a document. Format: ``projects/<Project ID>/locations/<Location ID>/knowledgeBases/<Knowledge Base ID>/documents/<Document ID>``.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the document. The name must be 1024 bytes or less; otherwise, the creation request fails.",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "description": "Required. The MIME type of this document.",
+                  "type": "string"
+                },
+                "knowledge_types": {
+                  "description": "Required. The knowledge type of document content.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Document.KnowledgeType"
                   }
+                },
+                "content_uri": {
+                  "description": "The URI where the file content is located.  For documents stored in Google Cloud Storage, these URIs must have the form ``gs://<bucket-name>/<object-name>``.  NOTE: External URLs must correspond to public webpages, i.e., they must be indexed by Google Search. In particular, URLs for showing documents in Google Cloud Storage (i.e. the URL in your browser) are not supported. Instead use the ``gs://`` format URI described above.  This field is a member of `oneof`_ ``source``.",
+                  "type": "string"
+                },
+                "raw_content": {
+                  "description": "The raw content of the document. This field is only permitted for EXTRACTIVE_QA and FAQ knowledge types.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "bytes"
+                },
+                "enable_auto_reload": {
+                  "description": "Optional. If true, we try to automatically reload the document every day (at a time picked by the system). If false or unspecified, we don't try to automatically reload the document.  Currently you can only enable automatic reload for documents sourced from a public url, see ``source`` field for the source types.  Reload status can be tracked in ``latest_reload_status``. If a reload fails, we will keep the document unchanged.  If a reload fails with internal errors, the system will try to reload the document on the next day. If a reload fails with non-retriable errors (e.g. PERMISSION_DENIED), the system will not try to reload the document anymore. You need to manually reload the document successfully by calling ``ReloadDocument`` and clear the errors.",
+                  "type": "boolean"
+                },
+                "latest_reload_status": {
+                  "description": "Output only. The time and status of the latest reload. This reload may have been triggered automatically or manually and may not have succeeded.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.ReloadStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "description": "The time of a reload attempt. This reload may have been triggered automatically or manually and may not have succeeded.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "status": {
+                        "description": "The status of a reload attempt or the initial load.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string"
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "metadata": {
+                  "description": "Optional. Metadata for the document. The metadata supports arbitrary key-value pairs. Suggested use cases include storing a document's title, an external URL distinct from the document's content_uri, etc. The max size of a ``key`` or a ``value`` of the metadata is 1024 bytes.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "state": {
+                  "description": "Output only. The current state of the document.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.State"
                 }
               },
-              "content": {
-                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "gcs_content_uri": {
-                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "language_code": {
-                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "type_"
-            ]
+              "required": [
+                "display_name",
+                "mime_type",
+                "knowledge_types"
+              ]
+            }
           },
           "encoding_type": {
-            "description": "Represents the text encoding that the caller uses to process the\noutput. Providing an ``EncodingType`` is recommended because the API\nprovides the beginning offsets for various outputs, such as tokens\nand mentions, and languages that natively use different text\nencodings may access offsets differently.\n\nValues:\n    NONE (0):\n        If ``EncodingType`` is not specified, encoding-dependent\n        information (such as ``begin_offset``) will be set at\n        ``-1``.\n    UTF8 (1):\n        Encoding-dependent information (such as ``begin_offset``) is\n        calculated based on the UTF-8 encoding of the input. C++ and\n        Go are examples of languages that use this encoding\n        natively.\n    UTF16 (2):\n        Encoding-dependent information (such as ``begin_offset``) is\n        calculated based on the UTF-16 encoding of the input. Java\n        and JavaScript are examples of languages that use this\n        encoding natively.\n    UTF32 (3):\n        Encoding-dependent information (such as ``begin_offset``) is",
-            "type": "enum",
-            "name": "EncodingType",
-            "values": {
-              "NONE": {
-                "value": 0
-              },
-              "UTF8": {
-                "value": 1
-              },
-              "UTF16": {
-                "value": 2
-              },
-              "UTF32": {
-                "value": 3
-              }
-            }
+            "description": "The encoding type used by the API to calculate offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v2.types.EncodingType"
           }
         },
         "required": [
@@ -153,43 +249,105 @@
         "properties": {
           "document": {
             "description": "Required. Input document.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
+            "reference": "google.cloud.language_v2.types.Document",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. The document resource name. The name must be empty when creating a document. Format: ``projects/<Project ID>/locations/<Location ID>/knowledgeBases/<Knowledge Base ID>/documents/<Document ID>``.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the document. The name must be 1024 bytes or less; otherwise, the creation request fails.",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "description": "Required. The MIME type of this document.",
+                  "type": "string"
+                },
+                "knowledge_types": {
+                  "description": "Required. The knowledge type of document content.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Document.KnowledgeType"
                   }
+                },
+                "content_uri": {
+                  "description": "The URI where the file content is located.  For documents stored in Google Cloud Storage, these URIs must have the form ``gs://<bucket-name>/<object-name>``.  NOTE: External URLs must correspond to public webpages, i.e., they must be indexed by Google Search. In particular, URLs for showing documents in Google Cloud Storage (i.e. the URL in your browser) are not supported. Instead use the ``gs://`` format URI described above.  This field is a member of `oneof`_ ``source``.",
+                  "type": "string"
+                },
+                "raw_content": {
+                  "description": "The raw content of the document. This field is only permitted for EXTRACTIVE_QA and FAQ knowledge types.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "bytes"
+                },
+                "enable_auto_reload": {
+                  "description": "Optional. If true, we try to automatically reload the document every day (at a time picked by the system). If false or unspecified, we don't try to automatically reload the document.  Currently you can only enable automatic reload for documents sourced from a public url, see ``source`` field for the source types.  Reload status can be tracked in ``latest_reload_status``. If a reload fails, we will keep the document unchanged.  If a reload fails with internal errors, the system will try to reload the document on the next day. If a reload fails with non-retriable errors (e.g. PERMISSION_DENIED), the system will not try to reload the document anymore. You need to manually reload the document successfully by calling ``ReloadDocument`` and clear the errors.",
+                  "type": "boolean"
+                },
+                "latest_reload_status": {
+                  "description": "Output only. The time and status of the latest reload. This reload may have been triggered automatically or manually and may not have succeeded.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.ReloadStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "description": "The time of a reload attempt. This reload may have been triggered automatically or manually and may not have succeeded.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "status": {
+                        "description": "The status of a reload attempt or the initial load.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string"
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "metadata": {
+                  "description": "Optional. Metadata for the document. The metadata supports arbitrary key-value pairs. Suggested use cases include storing a document's title, an external URL distinct from the document's content_uri, etc. The max size of a ``key`` or a ``value`` of the metadata is 1024 bytes.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "state": {
+                  "description": "Output only. The current state of the document.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.State"
                 }
               },
-              "content": {
-                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "gcs_content_uri": {
-                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "language_code": {
-                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "type_"
-            ]
+              "required": [
+                "display_name",
+                "mime_type",
+                "knowledge_types"
+              ]
+            }
           }
         },
         "required": [
@@ -206,59 +364,110 @@
         "properties": {
           "document": {
             "description": "Required. Input document.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
+            "reference": "google.cloud.language_v2.types.Document",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. The document resource name. The name must be empty when creating a document. Format: ``projects/<Project ID>/locations/<Location ID>/knowledgeBases/<Knowledge Base ID>/documents/<Document ID>``.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the document. The name must be 1024 bytes or less; otherwise, the creation request fails.",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "description": "Required. The MIME type of this document.",
+                  "type": "string"
+                },
+                "knowledge_types": {
+                  "description": "Required. The knowledge type of document content.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Document.KnowledgeType"
                   }
+                },
+                "content_uri": {
+                  "description": "The URI where the file content is located.  For documents stored in Google Cloud Storage, these URIs must have the form ``gs://<bucket-name>/<object-name>``.  NOTE: External URLs must correspond to public webpages, i.e., they must be indexed by Google Search. In particular, URLs for showing documents in Google Cloud Storage (i.e. the URL in your browser) are not supported. Instead use the ``gs://`` format URI described above.  This field is a member of `oneof`_ ``source``.",
+                  "type": "string"
+                },
+                "raw_content": {
+                  "description": "The raw content of the document. This field is only permitted for EXTRACTIVE_QA and FAQ knowledge types.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "bytes"
+                },
+                "enable_auto_reload": {
+                  "description": "Optional. If true, we try to automatically reload the document every day (at a time picked by the system). If false or unspecified, we don't try to automatically reload the document.  Currently you can only enable automatic reload for documents sourced from a public url, see ``source`` field for the source types.  Reload status can be tracked in ``latest_reload_status``. If a reload fails, we will keep the document unchanged.  If a reload fails with internal errors, the system will try to reload the document on the next day. If a reload fails with non-retriable errors (e.g. PERMISSION_DENIED), the system will not try to reload the document anymore. You need to manually reload the document successfully by calling ``ReloadDocument`` and clear the errors.",
+                  "type": "boolean"
+                },
+                "latest_reload_status": {
+                  "description": "Output only. The time and status of the latest reload. This reload may have been triggered automatically or manually and may not have succeeded.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.ReloadStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "description": "The time of a reload attempt. This reload may have been triggered automatically or manually and may not have succeeded.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "status": {
+                        "description": "The status of a reload attempt or the initial load.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string"
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "metadata": {
+                  "description": "Optional. Metadata for the document. The metadata supports arbitrary key-value pairs. Suggested use cases include storing a document's title, an external URL distinct from the document's content_uri, etc. The max size of a ``key`` or a ``value`` of the metadata is 1024 bytes.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "state": {
+                  "description": "Output only. The current state of the document.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.State"
                 }
               },
-              "content": {
-                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "gcs_content_uri": {
-                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "language_code": {
-                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "type_"
-            ]
+              "required": [
+                "display_name",
+                "mime_type",
+                "knowledge_types"
+              ]
+            }
           },
           "model_version": {
-            "description": "The model version to use for ModerateText.\n\nValues:\n    MODEL_VERSION_UNSPECIFIED (0):\n        The default model version.\n    MODEL_VERSION_1 (1):\n        Use the v1 model, this model is used by\n        default when not provided. The v1 model only\n        returns probability (confidence) score for each\n        category.\n    MODEL_VERSION_2 (2):\n        Use the v2 model.\n        The v2 model only returns probability\n        (confidence) score for each category, and\n        returns severity score for a subset of the\n        categories.",
-            "type": "enum",
-            "name": "ModelVersion",
-            "values": {
-              "MODEL_VERSION_UNSPECIFIED": {
-                "value": 0
-              },
-              "MODEL_VERSION_1": {
-                "value": 1
-              },
-              "MODEL_VERSION_2": {
-                "value": 2
-              }
-            }
+            "description": "Optional. The model version to use for ModerateText.",
+            "type": "object",
+            "reference": "google.cloud.language_v2.types.ModerateTextRequest.ModelVersion"
           }
         },
         "required": [
@@ -275,84 +484,177 @@
         "properties": {
           "document": {
             "description": "Required. Input document.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
+            "reference": "google.cloud.language_v2.types.Document",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. The document resource name. The name must be empty when creating a document. Format: ``projects/<Project ID>/locations/<Location ID>/knowledgeBases/<Knowledge Base ID>/documents/<Document ID>``.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the document. The name must be 1024 bytes or less; otherwise, the creation request fails.",
+                  "type": "string"
+                },
+                "mime_type": {
+                  "description": "Required. The MIME type of this document.",
+                  "type": "string"
+                },
+                "knowledge_types": {
+                  "description": "Required. The knowledge type of document content.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Document.KnowledgeType"
                   }
+                },
+                "content_uri": {
+                  "description": "The URI where the file content is located.  For documents stored in Google Cloud Storage, these URIs must have the form ``gs://<bucket-name>/<object-name>``.  NOTE: External URLs must correspond to public webpages, i.e., they must be indexed by Google Search. In particular, URLs for showing documents in Google Cloud Storage (i.e. the URL in your browser) are not supported. Instead use the ``gs://`` format URI described above.  This field is a member of `oneof`_ ``source``.",
+                  "type": "string"
+                },
+                "raw_content": {
+                  "description": "The raw content of the document. This field is only permitted for EXTRACTIVE_QA and FAQ knowledge types.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "bytes"
+                },
+                "enable_auto_reload": {
+                  "description": "Optional. If true, we try to automatically reload the document every day (at a time picked by the system). If false or unspecified, we don't try to automatically reload the document.  Currently you can only enable automatic reload for documents sourced from a public url, see ``source`` field for the source types.  Reload status can be tracked in ``latest_reload_status``. If a reload fails, we will keep the document unchanged.  If a reload fails with internal errors, the system will try to reload the document on the next day. If a reload fails with non-retriable errors (e.g. PERMISSION_DENIED), the system will not try to reload the document anymore. You need to manually reload the document successfully by calling ``ReloadDocument`` and clear the errors.",
+                  "type": "boolean"
+                },
+                "latest_reload_status": {
+                  "description": "Output only. The time and status of the latest reload. This reload may have been triggered automatically or manually and may not have succeeded.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.ReloadStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "description": "The time of a reload attempt. This reload may have been triggered automatically or manually and may not have succeeded.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "status": {
+                        "description": "The status of a reload attempt or the initial load.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string"
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "metadata": {
+                  "description": "Optional. Metadata for the document. The metadata supports arbitrary key-value pairs. Suggested use cases include storing a document's title, an external URL distinct from the document's content_uri, etc. The max size of a ``key`` or a ``value`` of the metadata is 1024 bytes.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "state": {
+                  "description": "Output only. The current state of the document.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Document.State"
                 }
               },
-              "content": {
-                "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "gcs_content_uri": {
-                "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
-                "type": "string"
-              },
-              "language_code": {
-                "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "type_"
-            ]
+              "required": [
+                "display_name",
+                "mime_type",
+                "knowledge_types"
+              ]
+            }
           },
           "features": {
             "description": "Required. The enabled features.",
-            "type": "object",
-            "properties": {
-              "extract_entities": {
-                "description": "Optional. Extract entities.",
-                "type": "boolean"
-              },
-              "extract_document_sentiment": {
-                "description": "Optional. Extract document-level sentiment.",
-                "type": "boolean"
-              },
-              "classify_text": {
-                "description": "Optional. Classify the full document into categories.",
-                "type": "boolean"
-              },
-              "moderate_text": {
-                "description": "Optional. Moderate the document for harmful and sensitive categories.",
-                "type": "boolean"
+            "reference": "google.cloud.language_v2.types.AnnotateTextRequest.Features",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "extract_syntax": {
+                  "description": "Extract syntax information.",
+                  "type": "boolean"
+                },
+                "extract_entities": {
+                  "description": "Extract entities.",
+                  "type": "boolean"
+                },
+                "extract_document_sentiment": {
+                  "description": "Extract document-level sentiment.",
+                  "type": "boolean"
+                },
+                "extract_entity_sentiment": {
+                  "description": "Extract entities and their associated sentiment.",
+                  "type": "boolean"
+                },
+                "classify_text": {
+                  "description": "Classify the full document into categories. If this is true, the API will use the default model which classifies into a `predefined taxonomy <https://cloud.google.com/natural-language/docs/categories>`__.",
+                  "type": "boolean"
+                },
+                "moderate_text": {
+                  "description": "Moderate the document for harmful and sensitive categories.",
+                  "type": "boolean"
+                },
+                "classification_model_options": {
+                  "description": "The model options to use for classification. Defaults to v1 options if not specified. Only used if ``classify_text`` is set to true.",
+                  "type": "object",
+                  "reference": "google.cloud.language_v1beta2.types.ClassificationModelOptions",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "v1_model": {
+                        "description": "Setting this field will use the V1 model and V1 content categories version. The V1 model is a legacy model; support for this will be discontinued in the future.  This field is a member of `oneof`_ ``model_type``.",
+                        "type": "object",
+                        "reference": "google.cloud.language_v1beta2.types.ClassificationModelOptions.V1Model",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      },
+                      "v2_model": {
+                        "description": "Setting this field will use the V2 model with the appropriate content categories version. The V2 model is a better performing model.  This field is a member of `oneof`_ ``model_type``.",
+                        "type": "object",
+                        "reference": "google.cloud.language_v1beta2.types.ClassificationModelOptions.V2Model",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "content_categories_version": {
+                              "description": "The content categories used for classification.",
+                              "type": "object",
+                              "reference": "google.cloud.language_v1beta2.types.ClassificationModelOptions.V2Model.ContentCategoriesVersion"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
           "encoding_type": {
-            "description": "Represents the text encoding that the caller uses to process the\noutput. Providing an ``EncodingType`` is recommended because the API\nprovides the beginning offsets for various outputs, such as tokens\nand mentions, and languages that natively use different text\nencodings may access offsets differently.\n\nValues:\n    NONE (0):\n        If ``EncodingType`` is not specified, encoding-dependent\n        information (such as ``begin_offset``) will be set at\n        ``-1``.\n    UTF8 (1):\n        Encoding-dependent information (such as ``begin_offset``) is\n        calculated based on the UTF-8 encoding of the input. C++ and\n        Go are examples of languages that use this encoding\n        natively.\n    UTF16 (2):\n        Encoding-dependent information (such as ``begin_offset``) is\n        calculated based on the UTF-16 encoding of the input. Java\n        and JavaScript are examples of languages that use this\n        encoding natively.\n    UTF32 (3):\n        Encoding-dependent information (such as ``begin_offset``) is",
-            "type": "enum",
-            "name": "EncodingType",
-            "values": {
-              "NONE": {
-                "value": 0
-              },
-              "UTF8": {
-                "value": 1
-              },
-              "UTF16": {
-                "value": 2
-              },
-              "UTF32": {
-                "value": 3
-              }
-            }
+            "description": "The encoding type used by the API to calculate offsets.",
+            "type": "object",
+            "reference": "google.cloud.language_v2.types.EncodingType"
           }
         },
         "required": [

@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-redis\\google\\cloud\\redis_v1\\types\\cloud_redis.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-redis/google/cloud/redis_v1/types/cloud_redis.py": [
     {
       "type": "function",
       "name": "RescheduleMaintenanceRequest",
@@ -12,23 +12,9 @@
             "type": "string"
           },
           "reschedule_type": {
-            "description": "Reschedule options.\n\nValues:\n    RESCHEDULE_TYPE_UNSPECIFIED (0):\n        Not set.\n    IMMEDIATE (1):\n        If the user wants to schedule the maintenance\n        to happen now.\n    NEXT_AVAILABLE_WINDOW (2):\n        If the user wants to use the existing\n        maintenance policy to find the next available\n        window.\n    SPECIFIC_TIME (3):\n        If the user wants to reschedule the\n        maintenance to a specific time.",
-            "type": "enum",
-            "name": "RescheduleType",
-            "values": {
-              "RESCHEDULE_TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "IMMEDIATE": {
-                "value": 1
-              },
-              "NEXT_AVAILABLE_WINDOW": {
-                "value": 2
-              },
-              "SPECIFIC_TIME": {
-                "value": 3
-              }
-            }
+            "description": "Required. If reschedule type is SPECIFIC_TIME, must set up schedule_time as well.",
+            "type": "object",
+            "reference": "google.cloud.redis_v1.types.RescheduleMaintenanceRequest.RescheduleType"
           },
           "schedule_time": {
             "description": "Optional. Timestamp when the maintenance shall be rescheduled to if reschedule_type=SPECIFIC_TIME, in RFC 3339 format, for example ``2012-11-15T16:19:00.094Z``.",
@@ -118,477 +104,110 @@
           },
           "instance": {
             "description": "Required. A Redis [Instance] resource",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. name of resource",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. [Output only] Create timestamp",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. [Output only] Update timestamp",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "labels": {
-                "description": "Labels as key value pairs",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.redis_v1.types.Instance",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. A unique identifier for an instance. The name should be of the format: ``projects/{project_number}/locations/{location_id}/instances/{instance_id}``  ``project_number``: Maps to a unique int64 id assigned to each project.  ``location_id``: Refers to the region where the instance will be deployed. Since Secure Source Manager is a regional service, it must be one of the valid GCP regions.  ``instance_id``: User provided name for the instance, must be unique for a project_number and location_id combination.",
                   "type": "string"
-                }
-              },
-              "display_name": {
-                "description": "Required. A user friendly display name for the solution.",
-                "type": "string"
-              },
-              "description": {
-                "description": "A description for this application.",
-                "type": "string"
-              },
-              "input_resources": {
-                "description": "The input resources for the current application instance. For example: input_resources: visionai.googleapis.com/v1/projects/123/locations/us-central1/clusters/456/streams/stream-a",
-                "type": "array",
-                "items": {
+                },
+                "create_time": {
+                  "description": "Output only. Create timestamp.",
                   "type": "object",
-                  "properties": {
-                    "input_resource": {
-                      "description": "The direct input resource name.  This field is a member of `oneof`_ ``input_resource_information``.",
-                      "type": "string"
-                    },
-                    "annotated_stream": {
-                      "type": "object",
-                      "properties": {
-                        "stream": {
-                          "description": "Vision AI Stream resource name.",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Update timestamp.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "labels": {
+                  "description": "Optional. Labels as key value pairs.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "private_config": {
+                  "description": "Optional. Private settings for private instance.",
+                  "type": "object",
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.PrivateConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "is_private": {
+                        "description": "Required. Immutable. Indicate if it's private instance.",
+                        "type": "boolean"
+                      },
+                      "ca_pool": {
+                        "description": "Required. Immutable. CA pool resource, resource must in the format of ``projects/{project}/locations/{location}/caPools/{ca_pool}``.",
+                        "type": "string"
+                      },
+                      "http_service_attachment": {
+                        "description": "Output only. Service Attachment for HTTP, resource is in the format of ``projects/{project}/regions/{region}/serviceAttachments/{service_attachment}``.",
+                        "type": "string"
+                      },
+                      "ssh_service_attachment": {
+                        "description": "Output only. Service Attachment for SSH, resource is in the format of ``projects/{project}/regions/{region}/serviceAttachments/{service_attachment}``.",
+                        "type": "string"
+                      },
+                      "psc_allowed_projects": {
+                        "description": "Optional. Additional allowed projects for setting up PSC connections. Instance host project is automatically allowed and does not need to be included in this list.",
+                        "type": "array",
+                        "items": {
                           "type": "string"
-                        },
-                        "application_annotations": {
-                          "description": "Annotations that will be applied to the whole application.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "active_zone": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "crossing_line": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "A sequence of vertices connected by straight lines.",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "id": {
-                                "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                "type": "string"
-                              },
-                              "display_name": {
-                                "description": "User-friendly name for the annotation.",
-                                "type": "string"
-                              },
-                              "source_stream": {
-                                "description": "The Vision AI stream resource name.",
-                                "type": "string"
-                              },
-                              "type_": {
-                                "type": "enum",
-                                "name": "StreamAnnotationType",
-                                "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                "values": {
-                                  "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                    "value": 0
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                    "value": 1
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                    "value": 2
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "node_annotations": {
-                          "description": "Annotations that will be applied to the specific node of the application. If the same type of the annotations is applied to both application and node, the node annotation will be added in addition to the global application one. For example, if there is one active zone annotation for the whole application and one active zone annotation for the Occupancy Analytic processor, then the Occupancy Analytic processor will have two active zones defined.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "node": {
-                                "description": "The node name of the application graph.",
-                                "type": "string"
-                              },
-                              "annotations": {
-                                "description": "The node specific stream annotations.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "active_zone": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "crossing_line": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "A sequence of vertices connected by straight lines.",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "id": {
-                                      "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                      "type": "string"
-                                    },
-                                    "display_name": {
-                                      "description": "User-friendly name for the annotation.",
-                                      "type": "string"
-                                    },
-                                    "source_stream": {
-                                      "description": "The Vision AI stream resource name.",
-                                      "type": "string"
-                                    },
-                                    "type_": {
-                                      "type": "enum",
-                                      "name": "StreamAnnotationType",
-                                      "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                      "values": {
-                                        "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                          "value": 0
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                          "value": 1
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                          "value": 2
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
                         }
                       }
                     },
-                    "consumer_node": {
-                      "description": "The name of graph node who receives the input resource. For example: input_resource: visionai.googleapis.com/v1/projects/123/locations/us-central1/clusters/456/streams/input-stream-a consumer_node: stream-input",
-                      "type": "string"
-                    },
-                    "input_resource_binding": {
-                      "description": "The specific input resource binding which will consume the current Input Resource, can be ignored is there is only 1 input binding.",
-                      "type": "string"
-                    },
-                    "annotations": {
-                      "type": "object",
-                      "properties": {
-                        "application_annotations": {
-                          "description": "Annotations that will be applied to the whole application.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "active_zone": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "crossing_line": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "A sequence of vertices connected by straight lines.",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "id": {
-                                "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                "type": "string"
-                              },
-                              "display_name": {
-                                "description": "User-friendly name for the annotation.",
-                                "type": "string"
-                              },
-                              "source_stream": {
-                                "description": "The Vision AI stream resource name.",
-                                "type": "string"
-                              },
-                              "type_": {
-                                "type": "enum",
-                                "name": "StreamAnnotationType",
-                                "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                "values": {
-                                  "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                    "value": 0
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                    "value": 1
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                    "value": 2
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "node_annotations": {
-                          "description": "Annotations that will be applied to the specific node of the application. If the same type of the annotations is applied to both application and node, the node annotation will be added in addition to the global application one. For example, if there is one active zone annotation for the whole application and one active zone annotation for the Occupancy Analytic processor, then the Occupancy Analytic processor will have two active zones defined.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "node": {
-                                "description": "The node name of the application graph.",
-                                "type": "string"
-                              },
-                              "annotations": {
-                                "description": "The node specific stream annotations.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "active_zone": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "crossing_line": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "A sequence of vertices connected by straight lines.",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "id": {
-                                      "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                      "type": "string"
-                                    },
-                                    "display_name": {
-                                      "description": "User-friendly name for the annotation.",
-                                      "type": "string"
-                                    },
-                                    "source_stream": {
-                                      "description": "The Vision AI stream resource name.",
-                                      "type": "string"
-                                    },
-                                    "type_": {
-                                      "type": "enum",
-                                      "name": "StreamAnnotationType",
-                                      "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                      "values": {
-                                        "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                          "value": 0
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                          "value": 1
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                          "value": 2
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                    "required": [
+                      "is_private",
+                      "ca_pool"
+                    ]
                   }
-                }
-              },
-              "output_resources": {
-                "description": "All the output resources associated to one application instance.",
-                "type": "array",
-                "items": {
+                },
+                "state": {
+                  "description": "Output only. Current state of the instance.",
                   "type": "object",
-                  "properties": {
-                    "output_resource": {
-                      "description": "The output resource name for the current application instance.",
-                      "type": "string"
-                    },
-                    "producer_node": {
-                      "description": "The name of graph node who produces the output resource name. For example: output_resource: /projects/123/locations/us-central1/clusters/456/streams/output-application-789-stream-a-occupancy-counting producer_node: occupancy-counting",
-                      "type": "string"
-                    },
-                    "output_resource_binding": {
-                      "description": "The specific output resource binding which produces the current OutputResource.",
-                      "type": "string"
-                    },
-                    "is_temporary": {
-                      "description": "Output only. Whether the output resource is temporary which means the resource is generated during the deployment of the application. Temporary resource will be deleted during the undeployment of the application.",
-                      "type": "boolean"
-                    },
-                    "autogen": {
-                      "description": "Output only. Whether the output resource is created automatically by the Vision AI App Platform.",
-                      "type": "boolean"
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.State"
+                },
+                "state_note": {
+                  "description": "Output only. An optional field providing information about the current instance state.",
+                  "type": "object",
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.StateNote"
+                },
+                "kms_key": {
+                  "description": "Optional. Immutable. Customer-managed encryption key name, in the format projects/\\ */locations/*/keyRings/*/cryptoKeys/*.",
+                  "type": "string"
+                },
+                "host_config": {
+                  "description": "Output only. A list of hostnames for this instance.",
+                  "type": "object",
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.HostConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "html": {
+                        "description": "Output only. HTML hostname.",
+                        "type": "string"
+                      },
+                      "api": {
+                        "description": "Output only. API hostname. This is the hostname to use for **Host: Data Plane** endpoints.",
+                        "type": "string"
+                      },
+                      "git_http": {
+                        "description": "Output only. Git HTTP hostname.",
+                        "type": "string"
+                      },
+                      "git_ssh": {
+                        "description": "Output only. Git SSH hostname.",
+                        "type": "string"
+                      }
                     }
-                  }
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
                   }
                 }
               }
-            },
-            "required": [
-              "display_name"
-            ]
+            }
           }
         },
         "required": [
@@ -612,477 +231,110 @@
           },
           "instance": {
             "description": "Required. Update description. Only fields specified in update_mask are updated.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. name of resource",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. [Output only] Create timestamp",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. [Output only] Update timestamp",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "labels": {
-                "description": "Labels as key value pairs",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.redis_v1.types.Instance",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Optional. A unique identifier for an instance. The name should be of the format: ``projects/{project_number}/locations/{location_id}/instances/{instance_id}``  ``project_number``: Maps to a unique int64 id assigned to each project.  ``location_id``: Refers to the region where the instance will be deployed. Since Secure Source Manager is a regional service, it must be one of the valid GCP regions.  ``instance_id``: User provided name for the instance, must be unique for a project_number and location_id combination.",
                   "type": "string"
-                }
-              },
-              "display_name": {
-                "description": "Required. A user friendly display name for the solution.",
-                "type": "string"
-              },
-              "description": {
-                "description": "A description for this application.",
-                "type": "string"
-              },
-              "input_resources": {
-                "description": "The input resources for the current application instance. For example: input_resources: visionai.googleapis.com/v1/projects/123/locations/us-central1/clusters/456/streams/stream-a",
-                "type": "array",
-                "items": {
+                },
+                "create_time": {
+                  "description": "Output only. Create timestamp.",
                   "type": "object",
-                  "properties": {
-                    "input_resource": {
-                      "description": "The direct input resource name.  This field is a member of `oneof`_ ``input_resource_information``.",
-                      "type": "string"
-                    },
-                    "annotated_stream": {
-                      "type": "object",
-                      "properties": {
-                        "stream": {
-                          "description": "Vision AI Stream resource name.",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Update timestamp.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "labels": {
+                  "description": "Optional. Labels as key value pairs.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "private_config": {
+                  "description": "Optional. Private settings for private instance.",
+                  "type": "object",
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.PrivateConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "is_private": {
+                        "description": "Required. Immutable. Indicate if it's private instance.",
+                        "type": "boolean"
+                      },
+                      "ca_pool": {
+                        "description": "Required. Immutable. CA pool resource, resource must in the format of ``projects/{project}/locations/{location}/caPools/{ca_pool}``.",
+                        "type": "string"
+                      },
+                      "http_service_attachment": {
+                        "description": "Output only. Service Attachment for HTTP, resource is in the format of ``projects/{project}/regions/{region}/serviceAttachments/{service_attachment}``.",
+                        "type": "string"
+                      },
+                      "ssh_service_attachment": {
+                        "description": "Output only. Service Attachment for SSH, resource is in the format of ``projects/{project}/regions/{region}/serviceAttachments/{service_attachment}``.",
+                        "type": "string"
+                      },
+                      "psc_allowed_projects": {
+                        "description": "Optional. Additional allowed projects for setting up PSC connections. Instance host project is automatically allowed and does not need to be included in this list.",
+                        "type": "array",
+                        "items": {
                           "type": "string"
-                        },
-                        "application_annotations": {
-                          "description": "Annotations that will be applied to the whole application.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "active_zone": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "crossing_line": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "A sequence of vertices connected by straight lines.",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "id": {
-                                "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                "type": "string"
-                              },
-                              "display_name": {
-                                "description": "User-friendly name for the annotation.",
-                                "type": "string"
-                              },
-                              "source_stream": {
-                                "description": "The Vision AI stream resource name.",
-                                "type": "string"
-                              },
-                              "type_": {
-                                "type": "enum",
-                                "name": "StreamAnnotationType",
-                                "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                "values": {
-                                  "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                    "value": 0
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                    "value": 1
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                    "value": 2
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "node_annotations": {
-                          "description": "Annotations that will be applied to the specific node of the application. If the same type of the annotations is applied to both application and node, the node annotation will be added in addition to the global application one. For example, if there is one active zone annotation for the whole application and one active zone annotation for the Occupancy Analytic processor, then the Occupancy Analytic processor will have two active zones defined.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "node": {
-                                "description": "The node name of the application graph.",
-                                "type": "string"
-                              },
-                              "annotations": {
-                                "description": "The node specific stream annotations.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "active_zone": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "crossing_line": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "A sequence of vertices connected by straight lines.",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "id": {
-                                      "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                      "type": "string"
-                                    },
-                                    "display_name": {
-                                      "description": "User-friendly name for the annotation.",
-                                      "type": "string"
-                                    },
-                                    "source_stream": {
-                                      "description": "The Vision AI stream resource name.",
-                                      "type": "string"
-                                    },
-                                    "type_": {
-                                      "type": "enum",
-                                      "name": "StreamAnnotationType",
-                                      "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                      "values": {
-                                        "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                          "value": 0
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                          "value": 1
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                          "value": 2
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
                         }
                       }
                     },
-                    "consumer_node": {
-                      "description": "The name of graph node who receives the input resource. For example: input_resource: visionai.googleapis.com/v1/projects/123/locations/us-central1/clusters/456/streams/input-stream-a consumer_node: stream-input",
-                      "type": "string"
-                    },
-                    "input_resource_binding": {
-                      "description": "The specific input resource binding which will consume the current Input Resource, can be ignored is there is only 1 input binding.",
-                      "type": "string"
-                    },
-                    "annotations": {
-                      "type": "object",
-                      "properties": {
-                        "application_annotations": {
-                          "description": "Annotations that will be applied to the whole application.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "active_zone": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "crossing_line": {
-                                "type": "object",
-                                "properties": {
-                                  "normalized_vertices": {
-                                    "description": "A sequence of vertices connected by straight lines.",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "properties": {
-                                        "x": {
-                                          "description": "X coordinate.",
-                                          "type": "number"
-                                        },
-                                        "y": {
-                                          "description": "Y coordinate.",
-                                          "type": "number"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                              "id": {
-                                "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                "type": "string"
-                              },
-                              "display_name": {
-                                "description": "User-friendly name for the annotation.",
-                                "type": "string"
-                              },
-                              "source_stream": {
-                                "description": "The Vision AI stream resource name.",
-                                "type": "string"
-                              },
-                              "type_": {
-                                "type": "enum",
-                                "name": "StreamAnnotationType",
-                                "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                "values": {
-                                  "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                    "value": 0
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                    "value": 1
-                                  },
-                                  "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                    "value": 2
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "node_annotations": {
-                          "description": "Annotations that will be applied to the specific node of the application. If the same type of the annotations is applied to both application and node, the node annotation will be added in addition to the global application one. For example, if there is one active zone annotation for the whole application and one active zone annotation for the Occupancy Analytic processor, then the Occupancy Analytic processor will have two active zones defined.",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "node": {
-                                "description": "The node name of the application graph.",
-                                "type": "string"
-                              },
-                              "annotations": {
-                                "description": "The node specific stream annotations.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "active_zone": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "The bounding polygon normalized vertices. Top left corner of the image will be [0, 0].",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "crossing_line": {
-                                      "type": "object",
-                                      "properties": {
-                                        "normalized_vertices": {
-                                          "description": "A sequence of vertices connected by straight lines.",
-                                          "type": "array",
-                                          "items": {
-                                            "type": "object",
-                                            "properties": {
-                                              "x": {
-                                                "description": "X coordinate.",
-                                                "type": "number"
-                                              },
-                                              "y": {
-                                                "description": "Y coordinate.",
-                                                "type": "number"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "id": {
-                                      "description": "ID of the annotation. It must be unique when used in the certain context. For example, all the annotations to one input streams of a Vision AI application.",
-                                      "type": "string"
-                                    },
-                                    "display_name": {
-                                      "description": "User-friendly name for the annotation.",
-                                      "type": "string"
-                                    },
-                                    "source_stream": {
-                                      "description": "The Vision AI stream resource name.",
-                                      "type": "string"
-                                    },
-                                    "type_": {
-                                      "type": "enum",
-                                      "name": "StreamAnnotationType",
-                                      "description": "Enum describing all possible types of a stream annotation.\n\nValues:\n    STREAM_ANNOTATION_TYPE_UNSPECIFIED (0):\n        Type UNSPECIFIED.\n    STREAM_ANNOTATION_TYPE_ACTIVE_ZONE (1):\n        active_zone annotation defines a polygon on top of the\n        content from an image/video based stream, following\n        processing will only focus on the content inside the active\n        zone.\n    STREAM_ANNOTATION_TYPE_CROSSING_LINE (2):\n        crossing_line annotation defines a polyline on top of the\n        content from an image/video based Vision AI stream, events\n        happening across the line will be captured. For example, the\n        counts of people who goes acroos the line in Occupancy\n        Analytic Processor.",
-                                      "values": {
-                                        "STREAM_ANNOTATION_TYPE_UNSPECIFIED": {
-                                          "value": 0
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_ACTIVE_ZONE": {
-                                          "value": 1
-                                        },
-                                        "STREAM_ANNOTATION_TYPE_CROSSING_LINE": {
-                                          "value": 2
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                    "required": [
+                      "is_private",
+                      "ca_pool"
+                    ]
                   }
-                }
-              },
-              "output_resources": {
-                "description": "All the output resources associated to one application instance.",
-                "type": "array",
-                "items": {
+                },
+                "state": {
+                  "description": "Output only. Current state of the instance.",
                   "type": "object",
-                  "properties": {
-                    "output_resource": {
-                      "description": "The output resource name for the current application instance.",
-                      "type": "string"
-                    },
-                    "producer_node": {
-                      "description": "The name of graph node who produces the output resource name. For example: output_resource: /projects/123/locations/us-central1/clusters/456/streams/output-application-789-stream-a-occupancy-counting producer_node: occupancy-counting",
-                      "type": "string"
-                    },
-                    "output_resource_binding": {
-                      "description": "The specific output resource binding which produces the current OutputResource.",
-                      "type": "string"
-                    },
-                    "is_temporary": {
-                      "description": "Output only. Whether the output resource is temporary which means the resource is generated during the deployment of the application. Temporary resource will be deleted during the undeployment of the application.",
-                      "type": "boolean"
-                    },
-                    "autogen": {
-                      "description": "Output only. Whether the output resource is created automatically by the Vision AI App Platform.",
-                      "type": "boolean"
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.State"
+                },
+                "state_note": {
+                  "description": "Output only. An optional field providing information about the current instance state.",
+                  "type": "object",
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.StateNote"
+                },
+                "kms_key": {
+                  "description": "Optional. Immutable. Customer-managed encryption key name, in the format projects/\\ */locations/*/keyRings/*/cryptoKeys/*.",
+                  "type": "string"
+                },
+                "host_config": {
+                  "description": "Output only. A list of hostnames for this instance.",
+                  "type": "object",
+                  "reference": "google.cloud.securesourcemanager_v1.types.Instance.HostConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "html": {
+                        "description": "Output only. HTML hostname.",
+                        "type": "string"
+                      },
+                      "api": {
+                        "description": "Output only. API hostname. This is the hostname to use for **Host: Data Plane** endpoints.",
+                        "type": "string"
+                      },
+                      "git_http": {
+                        "description": "Output only. Git HTTP hostname.",
+                        "type": "string"
+                      },
+                      "git_ssh": {
+                        "description": "Output only. Git SSH hostname.",
+                        "type": "string"
+                      }
                     }
-                  }
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
                   }
                 }
               }
-            },
-            "required": [
-              "display_name"
-            ]
+            }
           }
         },
         "required": [
@@ -1143,40 +395,105 @@
           },
           "input_config": {
             "description": "Required. Specify data to be imported.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
+            "reference": "google.cloud.redis_v1.types.InputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_input_configs": {
+                  "description": "Set of input BigQuery tables.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_table": {
+                          "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                          "type": "string"
+                        },
+                        "gcs_uri": {
+                          "description": "Required. Schema mapping file",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "bigquery_table",
+                        "gcs_uri"
+                      ]
+                    }
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
+                "entity_type": {
+                  "description": "Entity type",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The name of the entity type.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "Required. Indicates the kind of entity type.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                      },
+                      "auto_expansion_mode": {
+                        "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                      },
+                      "entities": {
+                        "description": "Optional. The collection of entity entries associated with the entity type.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "synonyms"
+                            ]
+                          }
+                        }
+                      },
+                      "enable_fuzzy_extraction": {
+                        "description": "Optional. Enables fuzzy entity extraction during classification.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "kind"
+                    ]
                   }
+                },
+                "previous_result_bigquery_table": {
+                  "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           }
         },
         "required": [
@@ -1198,40 +515,16 @@
           },
           "output_config": {
             "description": "Required. Specify data to be exported.",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
-                  }
+            "reference": "google.cloud.redis_v1.types.OutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_dataset": {
+                  "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           }
         },
         "required": [
@@ -1252,20 +545,9 @@
             "type": "string"
           },
           "data_protection_mode": {
-            "description": "Specifies different modes of operation in relation to the\ndata retention.\n\nValues:\n    DATA_PROTECTION_MODE_UNSPECIFIED (0):\n        Defaults to LIMITED_DATA_LOSS if a data protection mode is\n        not specified.\n    LIMITED_DATA_LOSS (1):\n        Instance failover will be protected with data\n        loss control. More specifically, the failover\n        will only be performed if the current\n        replication offset diff between primary and\n        replica is under a certain threshold.\n    FORCE_DATA_LOSS (2):\n        Instance failover will be performed without\n        data loss control.",
-            "type": "enum",
-            "name": "DataProtectionMode",
-            "values": {
-              "DATA_PROTECTION_MODE_UNSPECIFIED": {
-                "value": 0
-              },
-              "LIMITED_DATA_LOSS": {
-                "value": 1
-              },
-              "FORCE_DATA_LOSS": {
-                "value": 2
-              }
-            }
+            "description": "Optional. Available data protection modes that the user can choose. If it's unspecified, data protection mode will be LIMITED_DATA_LOSS by default.",
+            "type": "object",
+            "reference": "google.cloud.redis_v1.types.FailoverInstanceRequest.DataProtectionMode"
           }
         },
         "required": [

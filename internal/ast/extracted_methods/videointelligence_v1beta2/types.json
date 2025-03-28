@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-videointelligence\\google\\cloud\\videointelligence_v1beta2\\types\\video_intelligence.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-videointelligence/google/cloud/videointelligence_v1beta2/types/video_intelligence.py": [
     {
       "type": "function",
       "name": "AnnotateVideoRequest",
@@ -20,268 +20,141 @@
             "description": "Required. Requested video annotation features.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "type_": {
-                  "type": "enum",
-                  "name": "Type",
-                  "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                  "values": {
-                    "TYPE_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                      "value": 1
-                    },
-                    "NO_RETURNS": {
-                      "value": 2
-                    },
-                    "LIFETIME_RETURNS": {
-                      "value": 3
-                    }
+              "reference": "google.cloud.videointelligence_v1beta2.types.Feature",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "type_": {
+                    "description": "The type of the feature that enabled for fulfillment.",
+                    "type": "object",
+                    "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                   }
-                },
-                "max_results": {
-                  "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                  "type": "integer"
-                },
-                "model": {
-                  "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                  "type": "string"
                 }
               }
             }
           },
           "video_context": {
             "description": "Additional video context and/or feature-specific parameters.",
-            "type": "object",
-            "properties": {
-              "segments": {
-                "description": "Video segments to annotate. The segments may overlap and are not required to be contiguous or span the whole video. If unspecified, each video is treated as a single segment.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "start_time_offset": {
-                      "type": "enum",
-                      "name": "Duration",
-                      "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-                      "values": {
-                        "UNDEFINED_DURATION": {
-                          "value": 0
-                        },
-                        "DURATION_UNSPECIFIED": {
-                          "value": 529071340
-                        },
-                        "HOUR": {
-                          "value": 2223588
-                        },
-                        "MAX": {
-                          "value": 76100
-                        },
-                        "MINUTE": {
-                          "value": 126786068
-                        }
-                      }
-                    },
-                    "end_time_offset": {
-                      "type": "enum",
-                      "name": "Duration",
-                      "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-                      "values": {
-                        "UNDEFINED_DURATION": {
-                          "value": 0
-                        },
-                        "DURATION_UNSPECIFIED": {
-                          "value": 529071340
-                        },
-                        "HOUR": {
-                          "value": 2223588
-                        },
-                        "MAX": {
-                          "value": 76100
-                        },
-                        "MINUTE": {
-                          "value": 126786068
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "label_detection_config": {
-                "type": "object",
-                "properties": {
-                  "label_detection_mode": {
-                    "type": "enum",
-                    "name": "LabelDetectionMode",
-                    "description": "Label detection mode.\n\nValues:\n    LABEL_DETECTION_MODE_UNSPECIFIED (0):\n        Unspecified.\n    SHOT_MODE (1):\n        Detect shot-level labels.\n    FRAME_MODE (2):\n        Detect frame-level labels.\n    SHOT_AND_FRAME_MODE (3):\n        Detect both shot-level and frame-level\n        labels.",
-                    "values": {
-                      "LABEL_DETECTION_MODE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "SHOT_MODE": {
-                        "value": 1
-                      },
-                      "FRAME_MODE": {
-                        "value": 2
-                      },
-                      "SHOT_AND_FRAME_MODE": {
-                        "value": 3
-                      }
-                    }
-                  },
-                  "stationary_camera": {
-                    "description": "Whether the video has been shot from a stationary (i.e., non-moving) camera. When set to true, might improve detection accuracy for moving objects. Should be used with ``SHOT_AND_FRAME_MODE`` enabled.",
-                    "type": "boolean"
-                  },
-                  "model": {
-                    "description": "Model to use for label detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
-                    "type": "string"
-                  },
-                  "frame_confidence_threshold": {
-                    "description": "The confidence threshold we perform filtering on the labels from frame-level detection. If not set, it is set to 0.4 by default. The valid range for this threshold is [0.1, 0.9]. Any value set outside of this range will be clipped. Note: For best results, follow the default threshold. We will update the default threshold everytime when we release a new model.",
-                    "type": "number"
-                  },
-                  "video_confidence_threshold": {
-                    "description": "The confidence threshold we perform filtering on the labels from video-level and shot-level detections. If not set, it's set to 0.3 by default. The valid range for this threshold is [0.1, 0.9]. Any value set outside of this range will be clipped. Note: For best results, follow the default threshold. We will update the default threshold everytime when we release a new model.",
-                    "type": "number"
-                  }
-                }
-              },
-              "shot_change_detection_config": {
-                "type": "object",
-                "properties": {
-                  "model": {
-                    "description": "Model to use for shot change detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
-                    "type": "string"
-                  }
-                }
-              },
-              "explicit_content_detection_config": {
-                "type": "object",
-                "properties": {
-                  "model": {
-                    "description": "Model to use for explicit content detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
-                    "type": "string"
-                  }
-                }
-              },
-              "face_detection_config": {
-                "type": "object",
-                "properties": {
-                  "model": {
-                    "description": "Model to use for face detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
-                    "type": "string"
-                  },
-                  "include_bounding_boxes": {
-                    "description": "Whether bounding boxes are included in the face annotation output.",
-                    "type": "boolean"
-                  },
-                  "include_attributes": {
-                    "description": "Whether to enable face attributes detection, such as glasses, dark_glasses, mouth_open etc. Ignored if 'include_bounding_boxes' is set to false.",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "speech_transcription_config": {
-                "type": "object",
-                "properties": {
-                  "language_code": {
-                    "description": "Required. *Required* The language of the supplied audio as a `BCP-47 <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>`__ language tag. Example: \"en-US\". See `Language Support <https://cloud.google.com/speech/docs/languages>`__ for a list of the currently supported language codes.",
-                    "type": "string"
-                  },
-                  "max_alternatives": {
-                    "description": "Optional. Maximum number of recognition hypotheses to be returned. Specifically, the maximum number of ``SpeechRecognitionAlternative`` messages within each ``SpeechTranscription``. The server may return fewer than ``max_alternatives``. Valid values are ``0``-``30``. A value of ``0`` or ``1`` will return a maximum of one. If omitted, will return a maximum of one.",
-                    "type": "integer"
-                  },
-                  "filter_profanity": {
-                    "description": "Optional. If set to ``true``, the server will attempt to filter out profanities, replacing all but the initial character in each filtered word with asterisks, e.g. \"f***\". If set to ``false`` or omitted, profanities won't be filtered out.",
-                    "type": "boolean"
-                  },
-                  "speech_contexts": {
-                    "description": "Optional. A means to provide context to assist the speech recognition.",
-                    "type": "array",
-                    "items": {
+            "reference": "google.cloud.videointelligence_v1beta2.types.VideoContext",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "segments": {
+                  "description": "Video segments to annotate. The segments may overlap and are not required to be contiguous or span the whole video. If unspecified, each video is treated as a single segment.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.videointelligence_v1beta2.types.VideoSegment",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "phrases": {
-                          "description": "Optional. A list of strings containing words and phrases \"hints\" so that the speech recognition is more likely to recognize them. This can be used to improve the accuracy for specific words and phrases, for example, if specific commands are typically spoken by the user. This can also be used to add additional words to the vocabulary of the recognizer. See `usage limits <https://cloud.google.com/speech/limits#content>`__.",
-                          "type": "array",
-                          "items": {
-                            "type": "string"
+                        "start_time_offset": {
+                          "description": "Time-offset, relative to the beginning of the video, corresponding to the start of the segment (inclusive).",
+                          "type": "object",
+                          "reference": "google.protobuf.duration_pb2.Duration",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "nanos": {
+                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                "type": "integer"
+                              },
+                              "seconds": {
+                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        },
+                        "end_time_offset": {
+                          "description": "Time-offset, relative to the beginning of the video, corresponding to the end of the segment (inclusive).",
+                          "type": "object",
+                          "reference": "google.protobuf.duration_pb2.Duration",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "nanos": {
+                                "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                "type": "integer"
+                              },
+                              "seconds": {
+                                "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                "type": "integer"
+                              }
+                            }
                           }
                         }
                       }
                     }
-                  },
-                  "enable_automatic_punctuation": {
-                    "description": "Optional. If 'true', adds punctuation to recognition result hypotheses. This feature is only available in select languages. Setting this for requests in other languages has no effect at all. The default 'false' value does not add punctuation to result hypotheses. NOTE: \"This is currently offered as an experimental service, complimentary to all users. In the future this may be exclusively available as a premium feature.\".",
-                    "type": "boolean"
-                  },
-                  "audio_tracks": {
-                    "description": "Optional. For file formats, such as MXF or MKV, supporting multiple audio tracks, specify up to two tracks. Default: track 0.",
-                    "type": "array",
-                    "items": {
-                      "type": "integer"
-                    }
-                  },
-                  "enable_speaker_diarization": {
-                    "description": "Optional. If 'true', enables speaker detection for each recognized word in the top alternative of the recognition result using a speaker_tag provided in the WordInfo. Note: When this is true, we send all the words from the beginning of the audio for the top alternative in every consecutive response. This is done in order to improve our speaker tags as our models learn to identify the speakers in the conversation over time.",
-                    "type": "boolean"
-                  },
-                  "diarization_speaker_count": {
-                    "description": "Optional. If set, specifies the estimated number of speakers in the conversation. If not set, defaults to '2'. Ignored unless enable_speaker_diarization is set to true.",
-                    "type": "integer"
-                  },
-                  "enable_word_confidence": {
-                    "description": "Optional. If ``true``, the top result includes a list of words and the confidence for those words. If ``false``, no word-level confidence information is returned. The default is ``false``.",
-                    "type": "boolean"
                   }
                 },
-                "required": [
-                  "language_code"
-                ]
-              },
-              "text_detection_config": {
-                "type": "object",
-                "properties": {
-                  "language_hints": {
-                    "description": "Language hint can be specified if the language to be detected is known a priori. It can increase the accuracy of the detection. Language hint must be language code in BCP-47 format.  Automatic language detection is performed if no hint is provided.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                "label_detection_config": {
+                  "description": "Config for LABEL_DETECTION.",
+                  "type": "object",
+                  "reference": "google.cloud.videointelligence_v1beta2.types.LabelDetectionConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "label_detection_mode": {
+                        "description": "What labels should be detected with LABEL_DETECTION, in addition to video-level labels or segment-level labels. If unspecified, defaults to ``SHOT_MODE``.",
+                        "type": "object",
+                        "reference": "google.cloud.videointelligence_v1beta2.types.LabelDetectionMode"
+                      },
+                      "stationary_camera": {
+                        "description": "Whether the video has been shot from a stationary (i.e. non-moving) camera. When set to true, might improve detection accuracy for moving objects. Should be used with ``SHOT_AND_FRAME_MODE`` enabled.",
+                        "type": "boolean"
+                      },
+                      "model": {
+                        "description": "Model to use for label detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                        "type": "string"
+                      }
                     }
-                  },
-                  "model": {
-                    "description": "Model to use for text detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
-                    "type": "string"
                   }
-                }
-              },
-              "person_detection_config": {
-                "type": "object",
-                "properties": {
-                  "include_bounding_boxes": {
-                    "description": "Whether bounding boxes are included in the person detection annotation output.",
-                    "type": "boolean"
-                  },
-                  "include_pose_landmarks": {
-                    "description": "Whether to enable pose landmarks detection. Ignored if 'include_bounding_boxes' is set to false.",
-                    "type": "boolean"
-                  },
-                  "include_attributes": {
-                    "description": "Whether to enable person attributes detection, such as cloth color (black, blue, etc), type (coat, dress, etc), pattern (plain, floral, etc), hair, etc. Ignored if 'include_bounding_boxes' is set to false.",
-                    "type": "boolean"
+                },
+                "shot_change_detection_config": {
+                  "description": "Config for SHOT_CHANGE_DETECTION.",
+                  "type": "object",
+                  "reference": "google.cloud.videointelligence_v1beta2.types.ShotChangeDetectionConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "model": {
+                        "description": "Model to use for shot change detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                        "type": "string"
+                      }
+                    }
                   }
-                }
-              },
-              "object_tracking_config": {
-                "type": "object",
-                "properties": {
-                  "model": {
-                    "description": "Model to use for object tracking. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
-                    "type": "string"
+                },
+                "explicit_content_detection_config": {
+                  "description": "Config for EXPLICIT_CONTENT_DETECTION.",
+                  "type": "object",
+                  "reference": "google.cloud.videointelligence_v1beta2.types.ExplicitContentDetectionConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "model": {
+                        "description": "Model to use for explicit content detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "face_detection_config": {
+                  "description": "Config for FACE_DETECTION.",
+                  "type": "object",
+                  "reference": "google.cloud.videointelligence_v1beta2.types.FaceDetectionConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "model": {
+                        "description": "Model to use for face detection. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\".",
+                        "type": "string"
+                      },
+                      "include_bounding_boxes": {
+                        "description": "Whether bounding boxes be included in the face annotation output.",
+                        "type": "boolean"
+                      }
+                    }
                   }
                 }
               }

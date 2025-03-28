@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\catalog_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-recommendations-ai/google/cloud/recommendationengine_v1beta1/types/catalog_service.py": [
     {
       "type": "function",
       "name": "CreateCatalogItemRequest",
@@ -13,198 +13,219 @@
           },
           "catalog_item": {
             "description": "Required. The catalog item to create.",
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Required. Catalog item identifier. UTF-8 encoded string with a length limit of 128 bytes.  This id must be unique among all catalog items within the same catalog. It should also be used when logging user events in order for the user events to be joined with the Catalog.",
-                "type": "string"
-              },
-              "category_hierarchies": {
-                "description": "Required. Catalog item categories. This field is repeated for supporting one catalog item belonging to several parallel category hierarchies.  For example, if a shoes product belongs to both [\"Shoes & Accessories\" -> \"Shoes\"] and [\"Sports & Fitness\" -> \"Athletic Clothing\" -> \"Shoes\"], it could be represented as:  ::  \"categoryHierarchies\": [ { \"categories\": [\"Shoes & Accessories\", \"Shoes\"]}, { \"categories\": [\"Sports & Fitness\", \"Athletic Clothing\", \"Shoes\"] } ]",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "categories": {
-                      "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific).",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "required": [
-                    "categories"
-                  ]
-                }
-              },
-              "title": {
-                "description": "Required. Catalog item title. UTF-8 encoded string with a length limit of 1 KiB.",
-                "type": "string"
-              },
-              "description": {
-                "description": "Optional. Catalog item description. UTF-8 encoded string with a length limit of 5 KiB.",
-                "type": "string"
-              },
-              "item_attributes": {
-                "type": "object",
-                "properties": {
-                  "categorical_features": {
-                    "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.CatalogItem",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Required. Catalog item identifier. UTF-8 encoded string with a length limit of 128 bytes.  This id must be unique among all catalog items within the same catalog. It should also be used when logging user events in order for the user events to be joined with the Catalog.",
+                  "type": "string"
+                },
+                "category_hierarchies": {
+                  "description": "Required. Catalog item categories. This field is repeated for supporting one catalog item belonging to several parallel category hierarchies.  For example, if a shoes product belongs to both [\"Shoes & Accessories\" -> \"Shoes\"] and [\"Sports & Fitness\" -> \"Athletic Clothing\" -> \"Shoes\"], it could be represented as:  ::  \"categoryHierarchies\": [ { \"categories\": [\"Shoes & Accessories\", \"Shoes\"]}, { \"categories\": [\"Sports & Fitness\", \"Athletic Clothing\", \"Shoes\"] } ]",
+                  "type": "array",
+                  "items": {
                     "type": "object",
-                    "additionalProperties": {
+                    "reference": "google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "value": {
-                          "description": "String feature value with a length limit of 128 bytes.",
+                        "categories": {
+                          "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific).",
                           "type": "array",
                           "items": {
                             "type": "string"
                           }
                         }
-                      }
-                    }
-                  },
-                  "numerical_features": {
-                    "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "object",
-                      "properties": {
-                        "value": {
-                          "description": "Float feature value.",
-                          "type": "array",
-                          "items": {
-                            "type": "number"
-                          }
-                        }
-                      }
+                      },
+                      "required": [
+                        "categories"
+                      ]
                     }
                   }
-                }
-              },
-              "language_code": {
-                "description": "Optional. Language of the title/description/item_attributes. Use language tags defined by BCP 47. https://www.rfc-editor.org/rfc/bcp/bcp47.txt. Our supported language codes include 'en', 'es', 'fr', 'de', 'ar', 'fa', 'zh', 'ja', 'ko', 'sv', 'ro', 'nl'. For other languages, contact your Google account manager.",
-                "type": "string"
-              },
-              "tags": {
-                "description": "Optional. Filtering tags associated with the catalog item. Each tag should be a UTF-8 encoded string with a length limit of 1 KiB.  This tag can be used for filtering recommendation results by passing the tag as part of the predict request filter.",
-                "type": "array",
-                "items": {
+                },
+                "title": {
+                  "description": "Required. Catalog item title. UTF-8 encoded string with a length limit of 1 KiB.",
                   "type": "string"
-                }
-              },
-              "item_group_id": {
-                "description": "Optional. Variant group identifier for prediction results. UTF-8 encoded string with a length limit of 128 bytes.  This field must be enabled before it can be used. `Learn more </recommendations-ai/docs/catalog#item-group-id>`__.",
-                "type": "string"
-              },
-              "product_metadata": {
-                "type": "object",
-                "properties": {
-                  "exact_price": {
+                },
+                "description": {
+                  "description": "Optional. Catalog item description. UTF-8 encoded string with a length limit of 5 KiB.",
+                  "type": "string"
+                },
+                "item_attributes": {
+                  "description": "Optional. Highly encouraged. Extra catalog item attributes to be included in the recommendation model. For example, for retail products, this could include the store name, vendor, style, color, etc. These are very strong signals for recommendation model, thus we highly recommend providing the item attributes here.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "display_price": {
-                        "description": "Optional. Display price of the product.",
-                        "type": "number"
-                      },
-                      "original_price": {
-                        "description": "Optional. Price of the product without any discount. If zero, by default set to be the 'displayPrice'.",
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "price_range": {
-                    "type": "object",
-                    "properties": {
-                      "start_price": {
-                        "description": "The low end of the price range (inclusive). Price should be at or above this amount.",
+                      "categorical_features": {
+                        "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
                         "type": "object",
-                        "reference": "google.type.money_pb2.Money"
+                        "additionalProperties": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "values": {
+                                "description": "The values",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
                       },
-                      "end_price": {
-                        "description": "The high end of the price range (exclusive). Price should be lower than this amount.",
+                      "numerical_features": {
+                        "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
                         "type": "object",
-                        "reference": "google.type.money_pb2.Money"
-                      }
-                    }
-                  },
-                  "costs": {
-                    "description": "Optional. A map to pass the costs associated with the product.  For example: {\"manufacturing\": 45.5} The profit of selling this item is computed like so:  -  If 'exactPrice' is provided, profit = displayPrice - sum(costs) -  If 'priceRange' is provided, profit = minPrice - sum(costs)",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "number"
-                    }
-                  },
-                  "currency_code": {
-                    "description": "Optional. Only required if the price is set. Currency code for price/costs. Use three-character ISO-4217 code.",
-                    "type": "string"
-                  },
-                  "stock_state": {
-                    "type": "enum",
-                    "name": "StockState",
-                    "description": "Item stock state. If this field is unspecified, the item is\nassumed to be in stock.\n\nValues:\n    STOCK_STATE_UNSPECIFIED (0):\n        Default item stock status. Should never be\n        used.\n    IN_STOCK (0):\n        Item in stock.\n    OUT_OF_STOCK (1):\n        Item out of stock.\n    PREORDER (2):\n        Item that is in pre-order state.\n    BACKORDER (3):\n        Item that is back-ordered (i.e. temporarily\n        out of stock).",
-                    "values": {
-                      "STOCK_STATE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "IN_STOCK": {
-                        "value": 0
-                      },
-                      "OUT_OF_STOCK": {
-                        "value": 1
-                      },
-                      "PREORDER": {
-                        "value": 2
-                      },
-                      "BACKORDER": {
-                        "value": 3
-                      }
-                    }
-                  },
-                  "available_quantity": {
-                    "description": "Optional. The available quantity of the item.",
-                    "type": "integer"
-                  },
-                  "canonical_product_uri": {
-                    "description": "Optional. Canonical URL directly linking to the item detail page with a length limit of 5 KiB..",
-                    "type": "string"
-                  },
-                  "images": {
-                    "description": "Optional. Product images for the catalog item.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "content": {
-                          "description": "Image content, represented as a stream of bytes. Note: As with all ``bytes`` fields, protobuffers use a pure binary representation, whereas JSON representations use base64.",
+                        "additionalProperties": {
                           "type": "object",
-                          "reference": "bytes"
-                        },
-                        "source": {
-                          "type": "object",
-                          "properties": {
-                            "gcs_image_uri": {
-                              "description": "**Use ``image_uri`` instead.**  The Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.",
-                              "type": "string"
-                            },
-                            "image_uri": {
-                              "description": "The URI of the source image. Can be either:  1. A Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.  2. A publicly-accessible image HTTP/HTTPS URL. When fetching images from HTTP/HTTPS URLs, Google cannot guarantee that the request will be completed. Your request may fail if the specified host denies the request (e.g. due to request throttling or DOS prevention), or if Google throttles requests to the site for abuse prevention. You should not depend on externally-hosted images for production applications.  When both ``gcs_image_uri`` and ``image_uri`` are specified, ``image_uri`` takes precedence.",
-                              "type": "string"
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Float feature value.",
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
                             }
                           }
                         }
                       }
                     }
                   }
+                },
+                "language_code": {
+                  "description": "Optional. Language of the title/description/item_attributes. Use language tags defined by BCP 47. https://www.rfc-editor.org/rfc/bcp/bcp47.txt. Our supported language codes include 'en', 'es', 'fr', 'de', 'ar', 'fa', 'zh', 'ja', 'ko', 'sv', 'ro', 'nl'. For other languages, contact your Google account manager.",
+                  "type": "string"
+                },
+                "tags": {
+                  "description": "Optional. Filtering tags associated with the catalog item. Each tag should be a UTF-8 encoded string with a length limit of 1 KiB.  This tag can be used for filtering recommendation results by passing the tag as part of the predict request filter.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "item_group_id": {
+                  "description": "Optional. Variant group identifier for prediction results. UTF-8 encoded string with a length limit of 128 bytes.  This field must be enabled before it can be used. `Learn more </recommendations-ai/docs/catalog#item-group-id>`__.",
+                  "type": "string"
+                },
+                "product_metadata": {
+                  "description": "Optional. Metadata specific to retail products.  This field is a member of `oneof`_ ``recommendation_type``.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "exact_price": {
+                        "description": "Optional. The exact product price.  This field is a member of `oneof`_ ``price``.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.ExactPrice",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "display_price": {
+                              "description": "Optional. Display price of the product.",
+                              "type": "number"
+                            },
+                            "original_price": {
+                              "description": "Optional. Price of the product without any discount. If zero, by default set to be the 'displayPrice'.",
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "price_range": {
+                        "description": "Optional. The product price range.  This field is a member of `oneof`_ ``price``.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.PriceRange",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "min_": {
+                              "description": "Required. The minimum product price.",
+                              "type": "number"
+                            },
+                            "max_": {
+                              "description": "Required. The maximum product price.",
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "min_",
+                            "max_"
+                          ]
+                        }
+                      },
+                      "costs": {
+                        "description": "Optional. A map to pass the costs associated with the product.  For example: {\"manufacturing\": 45.5} The profit of selling this item is computed like so:  -  If 'exactPrice' is provided, profit = displayPrice - sum(costs) -  If 'priceRange' is provided, profit = minPrice - sum(costs)",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "number"
+                        }
+                      },
+                      "currency_code": {
+                        "description": "Optional. Only required if the price is set. Currency code for price/costs. Use three-character ISO-4217 code.",
+                        "type": "string"
+                      },
+                      "stock_state": {
+                        "description": "Optional. Online stock state of the catalog item. Default is ``IN_STOCK``.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState"
+                      },
+                      "available_quantity": {
+                        "description": "Optional. The available quantity of the item.",
+                        "type": "integer"
+                      },
+                      "canonical_product_uri": {
+                        "description": "Optional. Canonical URL directly linking to the item detail page with a length limit of 5 KiB..",
+                        "type": "string"
+                      },
+                      "images": {
+                        "description": "Optional. Product images for the catalog item.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.Image",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "Required. URL of the image with a length limit of 5 KiB.",
+                                "type": "string"
+                              },
+                              "height": {
+                                "description": "Optional. Height of the image in number of pixels.",
+                                "type": "integer"
+                              },
+                              "width": {
+                                "description": "Optional. Width of the image in number of pixels.",
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "uri"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
-              }
-            },
-            "required": [
-              "id",
-              "category_hierarchies",
-              "title"
-            ]
+              },
+              "required": [
+                "id",
+                "category_hierarchies",
+                "title"
+              ]
+            }
           }
         },
         "required": [
@@ -272,198 +293,219 @@
           },
           "catalog_item": {
             "description": "Required. The catalog item to update/create. The 'catalog_item_id' field has to match that in the 'name'.",
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Required. Catalog item identifier. UTF-8 encoded string with a length limit of 128 bytes.  This id must be unique among all catalog items within the same catalog. It should also be used when logging user events in order for the user events to be joined with the Catalog.",
-                "type": "string"
-              },
-              "category_hierarchies": {
-                "description": "Required. Catalog item categories. This field is repeated for supporting one catalog item belonging to several parallel category hierarchies.  For example, if a shoes product belongs to both [\"Shoes & Accessories\" -> \"Shoes\"] and [\"Sports & Fitness\" -> \"Athletic Clothing\" -> \"Shoes\"], it could be represented as:  ::  \"categoryHierarchies\": [ { \"categories\": [\"Shoes & Accessories\", \"Shoes\"]}, { \"categories\": [\"Sports & Fitness\", \"Athletic Clothing\", \"Shoes\"] } ]",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "categories": {
-                      "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific).",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "required": [
-                    "categories"
-                  ]
-                }
-              },
-              "title": {
-                "description": "Required. Catalog item title. UTF-8 encoded string with a length limit of 1 KiB.",
-                "type": "string"
-              },
-              "description": {
-                "description": "Optional. Catalog item description. UTF-8 encoded string with a length limit of 5 KiB.",
-                "type": "string"
-              },
-              "item_attributes": {
-                "type": "object",
-                "properties": {
-                  "categorical_features": {
-                    "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.CatalogItem",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Required. Catalog item identifier. UTF-8 encoded string with a length limit of 128 bytes.  This id must be unique among all catalog items within the same catalog. It should also be used when logging user events in order for the user events to be joined with the Catalog.",
+                  "type": "string"
+                },
+                "category_hierarchies": {
+                  "description": "Required. Catalog item categories. This field is repeated for supporting one catalog item belonging to several parallel category hierarchies.  For example, if a shoes product belongs to both [\"Shoes & Accessories\" -> \"Shoes\"] and [\"Sports & Fitness\" -> \"Athletic Clothing\" -> \"Shoes\"], it could be represented as:  ::  \"categoryHierarchies\": [ { \"categories\": [\"Shoes & Accessories\", \"Shoes\"]}, { \"categories\": [\"Sports & Fitness\", \"Athletic Clothing\", \"Shoes\"] } ]",
+                  "type": "array",
+                  "items": {
                     "type": "object",
-                    "additionalProperties": {
+                    "reference": "google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "value": {
-                          "description": "String feature value with a length limit of 128 bytes.",
+                        "categories": {
+                          "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific).",
                           "type": "array",
                           "items": {
                             "type": "string"
                           }
                         }
-                      }
-                    }
-                  },
-                  "numerical_features": {
-                    "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "object",
-                      "properties": {
-                        "value": {
-                          "description": "Float feature value.",
-                          "type": "array",
-                          "items": {
-                            "type": "number"
-                          }
-                        }
-                      }
+                      },
+                      "required": [
+                        "categories"
+                      ]
                     }
                   }
-                }
-              },
-              "language_code": {
-                "description": "Optional. Language of the title/description/item_attributes. Use language tags defined by BCP 47. https://www.rfc-editor.org/rfc/bcp/bcp47.txt. Our supported language codes include 'en', 'es', 'fr', 'de', 'ar', 'fa', 'zh', 'ja', 'ko', 'sv', 'ro', 'nl'. For other languages, contact your Google account manager.",
-                "type": "string"
-              },
-              "tags": {
-                "description": "Optional. Filtering tags associated with the catalog item. Each tag should be a UTF-8 encoded string with a length limit of 1 KiB.  This tag can be used for filtering recommendation results by passing the tag as part of the predict request filter.",
-                "type": "array",
-                "items": {
+                },
+                "title": {
+                  "description": "Required. Catalog item title. UTF-8 encoded string with a length limit of 1 KiB.",
                   "type": "string"
-                }
-              },
-              "item_group_id": {
-                "description": "Optional. Variant group identifier for prediction results. UTF-8 encoded string with a length limit of 128 bytes.  This field must be enabled before it can be used. `Learn more </recommendations-ai/docs/catalog#item-group-id>`__.",
-                "type": "string"
-              },
-              "product_metadata": {
-                "type": "object",
-                "properties": {
-                  "exact_price": {
+                },
+                "description": {
+                  "description": "Optional. Catalog item description. UTF-8 encoded string with a length limit of 5 KiB.",
+                  "type": "string"
+                },
+                "item_attributes": {
+                  "description": "Optional. Highly encouraged. Extra catalog item attributes to be included in the recommendation model. For example, for retail products, this could include the store name, vendor, style, color, etc. These are very strong signals for recommendation model, thus we highly recommend providing the item attributes here.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "display_price": {
-                        "description": "Optional. Display price of the product.",
-                        "type": "number"
-                      },
-                      "original_price": {
-                        "description": "Optional. Price of the product without any discount. If zero, by default set to be the 'displayPrice'.",
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "price_range": {
-                    "type": "object",
-                    "properties": {
-                      "start_price": {
-                        "description": "The low end of the price range (inclusive). Price should be at or above this amount.",
+                      "categorical_features": {
+                        "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
                         "type": "object",
-                        "reference": "google.type.money_pb2.Money"
+                        "additionalProperties": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "values": {
+                                "description": "The values",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
                       },
-                      "end_price": {
-                        "description": "The high end of the price range (exclusive). Price should be lower than this amount.",
+                      "numerical_features": {
+                        "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
                         "type": "object",
-                        "reference": "google.type.money_pb2.Money"
-                      }
-                    }
-                  },
-                  "costs": {
-                    "description": "Optional. A map to pass the costs associated with the product.  For example: {\"manufacturing\": 45.5} The profit of selling this item is computed like so:  -  If 'exactPrice' is provided, profit = displayPrice - sum(costs) -  If 'priceRange' is provided, profit = minPrice - sum(costs)",
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "number"
-                    }
-                  },
-                  "currency_code": {
-                    "description": "Optional. Only required if the price is set. Currency code for price/costs. Use three-character ISO-4217 code.",
-                    "type": "string"
-                  },
-                  "stock_state": {
-                    "type": "enum",
-                    "name": "StockState",
-                    "description": "Item stock state. If this field is unspecified, the item is\nassumed to be in stock.\n\nValues:\n    STOCK_STATE_UNSPECIFIED (0):\n        Default item stock status. Should never be\n        used.\n    IN_STOCK (0):\n        Item in stock.\n    OUT_OF_STOCK (1):\n        Item out of stock.\n    PREORDER (2):\n        Item that is in pre-order state.\n    BACKORDER (3):\n        Item that is back-ordered (i.e. temporarily\n        out of stock).",
-                    "values": {
-                      "STOCK_STATE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "IN_STOCK": {
-                        "value": 0
-                      },
-                      "OUT_OF_STOCK": {
-                        "value": 1
-                      },
-                      "PREORDER": {
-                        "value": 2
-                      },
-                      "BACKORDER": {
-                        "value": 3
-                      }
-                    }
-                  },
-                  "available_quantity": {
-                    "description": "Optional. The available quantity of the item.",
-                    "type": "integer"
-                  },
-                  "canonical_product_uri": {
-                    "description": "Optional. Canonical URL directly linking to the item detail page with a length limit of 5 KiB..",
-                    "type": "string"
-                  },
-                  "images": {
-                    "description": "Optional. Product images for the catalog item.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "content": {
-                          "description": "Image content, represented as a stream of bytes. Note: As with all ``bytes`` fields, protobuffers use a pure binary representation, whereas JSON representations use base64.",
+                        "additionalProperties": {
                           "type": "object",
-                          "reference": "bytes"
-                        },
-                        "source": {
-                          "type": "object",
-                          "properties": {
-                            "gcs_image_uri": {
-                              "description": "**Use ``image_uri`` instead.**  The Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.",
-                              "type": "string"
-                            },
-                            "image_uri": {
-                              "description": "The URI of the source image. Can be either:  1. A Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.  2. A publicly-accessible image HTTP/HTTPS URL. When fetching images from HTTP/HTTPS URLs, Google cannot guarantee that the request will be completed. Your request may fail if the specified host denies the request (e.g. due to request throttling or DOS prevention), or if Google throttles requests to the site for abuse prevention. You should not depend on externally-hosted images for production applications.  When both ``gcs_image_uri`` and ``image_uri`` are specified, ``image_uri`` takes precedence.",
-                              "type": "string"
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Float feature value.",
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
                             }
                           }
                         }
                       }
                     }
                   }
+                },
+                "language_code": {
+                  "description": "Optional. Language of the title/description/item_attributes. Use language tags defined by BCP 47. https://www.rfc-editor.org/rfc/bcp/bcp47.txt. Our supported language codes include 'en', 'es', 'fr', 'de', 'ar', 'fa', 'zh', 'ja', 'ko', 'sv', 'ro', 'nl'. For other languages, contact your Google account manager.",
+                  "type": "string"
+                },
+                "tags": {
+                  "description": "Optional. Filtering tags associated with the catalog item. Each tag should be a UTF-8 encoded string with a length limit of 1 KiB.  This tag can be used for filtering recommendation results by passing the tag as part of the predict request filter.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "item_group_id": {
+                  "description": "Optional. Variant group identifier for prediction results. UTF-8 encoded string with a length limit of 128 bytes.  This field must be enabled before it can be used. `Learn more </recommendations-ai/docs/catalog#item-group-id>`__.",
+                  "type": "string"
+                },
+                "product_metadata": {
+                  "description": "Optional. Metadata specific to retail products.  This field is a member of `oneof`_ ``recommendation_type``.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "exact_price": {
+                        "description": "Optional. The exact product price.  This field is a member of `oneof`_ ``price``.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.ExactPrice",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "display_price": {
+                              "description": "Optional. Display price of the product.",
+                              "type": "number"
+                            },
+                            "original_price": {
+                              "description": "Optional. Price of the product without any discount. If zero, by default set to be the 'displayPrice'.",
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "price_range": {
+                        "description": "Optional. The product price range.  This field is a member of `oneof`_ ``price``.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.PriceRange",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "min_": {
+                              "description": "Required. The minimum product price.",
+                              "type": "number"
+                            },
+                            "max_": {
+                              "description": "Required. The maximum product price.",
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "min_",
+                            "max_"
+                          ]
+                        }
+                      },
+                      "costs": {
+                        "description": "Optional. A map to pass the costs associated with the product.  For example: {\"manufacturing\": 45.5} The profit of selling this item is computed like so:  -  If 'exactPrice' is provided, profit = displayPrice - sum(costs) -  If 'priceRange' is provided, profit = minPrice - sum(costs)",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "number"
+                        }
+                      },
+                      "currency_code": {
+                        "description": "Optional. Only required if the price is set. Currency code for price/costs. Use three-character ISO-4217 code.",
+                        "type": "string"
+                      },
+                      "stock_state": {
+                        "description": "Optional. Online stock state of the catalog item. Default is ``IN_STOCK``.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState"
+                      },
+                      "available_quantity": {
+                        "description": "Optional. The available quantity of the item.",
+                        "type": "integer"
+                      },
+                      "canonical_product_uri": {
+                        "description": "Optional. Canonical URL directly linking to the item detail page with a length limit of 5 KiB..",
+                        "type": "string"
+                      },
+                      "images": {
+                        "description": "Optional. Product images for the catalog item.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.Image",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "Required. URL of the image with a length limit of 5 KiB.",
+                                "type": "string"
+                              },
+                              "height": {
+                                "description": "Optional. Height of the image in number of pixels.",
+                                "type": "integer"
+                              },
+                              "width": {
+                                "description": "Optional. Width of the image in number of pixels.",
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "uri"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
-              }
-            },
-            "required": [
-              "id",
-              "category_hierarchies",
-              "title"
-            ]
+              },
+              "required": [
+                "id",
+                "category_hierarchies",
+                "title"
+              ]
+            }
           },
           "update_mask": {
             "description": "Optional. Indicates which fields in the provided 'item' to update. If not set, will by default update all fields.",
@@ -495,147 +537,406 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\import_.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-recommendations-ai/google/cloud/recommendationengine_v1beta1/types/prediction_service.py": [
     {
       "type": "function",
-      "name": "ImportCatalogItemsRequest",
-      "description": "Request message for Import methods.\n\nAttributes:\n    parent (str):\n        Required.\n        ``projects/1234/locations/global/catalogs/default_catalog``\n    request_id (str):\n        Optional. Unique identifier provided by\n        client, within the ancestor dataset scope.\n        Ensures idempotency and used for request\n        deduplication. Server-generated if unspecified.\n        Up to 128 characters long. This is returned as\n        google.longrunning.Operation.name in the\n        response.\n    input_config (google.cloud.recommendationengine_v1beta1.types.InputConfig):\n        Required. The desired input location of the\n        data.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Optional. The desired location of errors\n        incurred during the Import.",
+      "name": "PredictRequest",
+      "description": "Request message for Predict method.\n\nAttributes:\n    name (str):\n        Required. Full resource name of the format:\n        ``{name=projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/placements/*}``\n        The id of the recommendation engine placement. This id is\n        used to identify the set of models that will be used to make\n        the prediction.\n\n        We currently support three placements with the following IDs\n        by default:\n\n        -  ``shopping_cart``: Predicts items frequently bought\n           together with one or more catalog items in the same\n           shopping session. Commonly displayed after\n           ``add-to-cart`` events, on product detail pages, or on\n           the shopping cart page.\n\n        -  ``home_page``: Predicts the next product that a user will\n           most likely engage with or purchase based on the shopping\n           or viewing history of the specified ``userId`` or\n           ``visitorId``. For example - Recommendations for",
       "parameters": {
         "type": "object",
         "properties": {
-          "parent": {
-            "description": "Required. ``projects/1234/locations/global/catalogs/default_catalog``",
+          "name": {
+            "description": "Required. Full resource name of the format: ``{name=projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/placements/*}`` The id of the recommendation engine placement. This id is used to identify the set of models that will be used to make the prediction.  We currently support three placements with the following IDs by default:  -  ``shopping_cart``: Predicts items frequently bought together with one or more catalog items in the same shopping session. Commonly displayed after ``add-to-cart`` events, on product detail pages, or on the shopping cart page.  -  ``home_page``: Predicts the next product that a user will most likely engage with or purchase based on the shopping or viewing history of the specified ``userId`` or ``visitorId``. For example - Recommendations for you.  -  ``product_detail``: Predicts the next product that a user will most likely engage with or purchase. The prediction is based on the shopping or viewing history of the specified ``userId`` or ``visitorId`` and its relevance to a specified ``CatalogItem``. Typically used on product detail pages. For example - More items like this.  -  ``recently_viewed_default``: Returns up to 75 items recently viewed by the specified ``userId`` or ``visitorId``, most recent ones first. Returns nothing if neither of them has viewed any items yet. For example - Recently viewed.  The full list of available placements can be seen at https://console.cloud.google.com/recommendation/datafeeds/default_catalog/dashboard",
             "type": "string"
           },
-          "request_id": {
-            "description": "Optional. Unique identifier provided by client, within the ancestor dataset scope. Ensures idempotency and used for request deduplication. Server-generated if unspecified. Up to 128 characters long. This is returned as google.longrunning.Operation.name in the response.",
-            "type": "string"
-          },
-          "input_config": {
-            "description": "Required. The desired input location of the data.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
+          "user_event": {
+            "description": "Required. Context about the user, what they are looking at and what action they took to trigger the predict request. Note that this user event detail won't be ingested to userEvent logs. Thus, a separate userEvent write request is required for event logging.",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.UserEvent",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "event_type": {
+                  "description": "Required. User event type. Allowed values are:  -  ``add-to-cart`` Products being added to cart. -  ``add-to-list`` Items being added to a list (shopping list, favorites etc). -  ``category-page-view`` Special pages such as sale or promotion pages viewed. -  ``checkout-start`` User starting a checkout process. -  ``detail-page-view`` Products detail page viewed. -  ``home-page-view`` Homepage viewed. -  ``page-visit`` Generic page visits not included in the event types above. -  ``purchase-complete`` User finishing a purchase. -  ``refund`` Purchased items being refunded or returned. -  ``remove-from-cart`` Products being removed from cart. -  ``remove-from-list`` Items being removed from a list. -  ``search`` Product search. -  ``shopping-cart-page-view`` User viewing a shopping cart. -  ``impression`` List of items displayed. Used by Google Tag Manager.",
+                  "type": "string"
+                },
+                "user_info": {
+                  "description": "Required. User information.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.UserInfo",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "visitor_id": {
+                        "description": "Required. A unique identifier for tracking visitors with a length limit of 128 bytes.  For example, this could be implemented with a http cookie, which should be able to uniquely identify a visitor on a single device. This unique identifier should not change if the visitor log in/out of the website. Maximum length 128 bytes. Cannot be empty.",
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "description": "Optional. Unique identifier for logged-in user with a length limit of 128 bytes. Required only for logged-in users.",
+                        "type": "string"
+                      },
+                      "ip_address": {
+                        "description": "Optional. IP address of the user. This could be either IPv4 (e.g. 104.133.9.80) or IPv6 (e.g. 2001:0db8:85a3:0000:0000:8a2e:0370:7334). This should *not* be set when using the javascript pixel or if ``direct_user_request`` is set. Used to extract location information for personalization.",
+                        "type": "string"
+                      },
+                      "user_agent": {
+                        "description": "Optional. User agent as included in the HTTP header. UTF-8 encoded string with a length limit of 1 KiB.  This should *not* be set when using the JavaScript pixel or if ``directUserRequest`` is set.",
+                        "type": "string"
+                      },
+                      "direct_user_request": {
+                        "description": "Optional. Indicates if the request is made directly from the end user in which case the user_agent and ip_address fields can be populated from the HTTP request. This should *not* be set when using the javascript pixel. This flag should be set only if the API request is made directly from the end user such as a mobile app (and not if a gateway or a server is processing and pushing the user events).",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "visitor_id"
+                    ]
                   }
                 },
-                "required": [
-                  "uri"
-                ]
+                "event_detail": {
+                  "description": "Optional. User event detailed information common across different recommendation types.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.EventDetail",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "Optional. Complete url (window.location.href) of the user's current page. When using the JavaScript pixel, this value is filled in automatically. Maximum length 5KB.",
+                        "type": "string"
+                      },
+                      "referrer_uri": {
+                        "description": "Optional. The referrer url of the current page. When using the JavaScript pixel, this value is filled in automatically.",
+                        "type": "string"
+                      },
+                      "page_view_id": {
+                        "description": "Optional. A unique id of a web page view. This should be kept the same for all user events triggered from the same pageview. For example, an item detail page view could trigger multiple events as the user is browsing the page. The ``pageViewId`` property should be kept the same for all these events so that they can be grouped together properly. This ``pageViewId`` will be automatically generated if using the JavaScript pixel.",
+                        "type": "string"
+                      },
+                      "experiment_ids": {
+                        "description": "Optional. A list of identifiers for the independent experiment groups this user event belongs to. This is used to distinguish between user events associated with different experiment setups (e.g. using Recommendation Engine system, using different recommendation models).",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "recommendation_token": {
+                        "description": "Optional. Recommendation token included in the recommendation prediction response.  This field enables accurate attribution of recommendation model performance.  This token enables us to accurately attribute page view or purchase back to the event and the particular predict response containing this clicked/purchased item. If user clicks on product K in the recommendation results, pass the ``PredictResponse.recommendationToken`` property as a url parameter to product K's page. When recording events on product K's page, log the PredictResponse.recommendation_token to this field.  Optional, but highly encouraged for user events that are the result of a recommendation prediction query.",
+                        "type": "string"
+                      },
+                      "event_attributes": {
+                        "description": "Optional. Extra user event features to include in the recommendation model.  For product recommendation, an example of extra user information is traffic_channel, i.e. how user arrives at the site. Users can arrive at the site by coming to the site directly, or coming through Google search, and etc.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "categorical_features": {
+                              "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "values": {
+                                      "description": "The values",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "numerical_features": {
+                              "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "description": "Float feature value.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "product_event_detail": {
+                  "description": "Optional. Retail product specific user event metadata.  This field is required for the following event types:  -  ``add-to-cart`` -  ``add-to-list`` -  ``category-page-view`` -  ``checkout-start`` -  ``detail-page-view`` -  ``purchase-complete`` -  ``refund`` -  ``remove-from-cart`` -  ``remove-from-list`` -  ``search``  This field is optional for the following event types:  -  ``page-visit`` -  ``shopping-cart-page-view`` - note that 'product_event_detail' should be set for this unless the shopping cart is empty.  This field is not allowed for the following event types:  -  ``home-page-view``",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.ProductEventDetail",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "search_query": {
+                        "description": "Required for ``search`` events. Other event types should not set this field. The user's search query as UTF-8 encoded text with a length limit of 5 KiB.",
+                        "type": "string"
+                      },
+                      "page_categories": {
+                        "description": "Required for ``category-page-view`` events. Other event types should not set this field. The categories associated with a category page. Category pages include special pages such as sales or promotions. For instance, a special sale page may have the category hierarchy: categories : [\"Sales\", \"2017 Black Friday Deals\"].",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "categories": {
+                                "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific).",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "categories"
+                            ]
+                          }
+                        }
+                      },
+                      "product_details": {
+                        "description": "The main product details related to the event.  This field is required for the following event types:  -  ``add-to-cart`` -  ``add-to-list`` -  ``checkout-start`` -  ``detail-page-view`` -  ``purchase-complete`` -  ``refund`` -  ``remove-from-cart`` -  ``remove-from-list``  This field is optional for the following event types:  -  ``page-visit`` -  ``shopping-cart-page-view`` - note that 'product_details' should be set for this unless the shopping cart is empty.  This field is not allowed for the following event types:  -  ``category-page-view`` -  ``home-page-view`` -  ``search``",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.ProductDetail",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "description": "Required. Catalog item ID. UTF-8 encoded string with a length limit of 128 characters.",
+                                "type": "string"
+                              },
+                              "currency_code": {
+                                "description": "Optional. Currency code for price/costs. Use three-character ISO-4217 code. Required only if originalPrice or displayPrice is set.",
+                                "type": "string"
+                              },
+                              "original_price": {
+                                "description": "Optional. Original price of the product. If provided, this will override the original price in Catalog for this product.",
+                                "type": "number"
+                              },
+                              "display_price": {
+                                "description": "Optional. Display price of the product (e.g. discounted price). If provided, this will override the display price in Catalog for this product.",
+                                "type": "number"
+                              },
+                              "stock_state": {
+                                "description": "Optional. Item stock state. If provided, this overrides the stock state in Catalog for items in this event.",
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState"
+                              },
+                              "quantity": {
+                                "description": "Optional. Quantity of the product associated with the user event. For example, this field will be 2 if two products are added to the shopping cart for ``add-to-cart`` event. Required for ``add-to-cart``, ``add-to-list``, ``remove-from-cart``, ``checkout-start``, ``purchase-complete``, ``refund`` event types.",
+                                "type": "integer"
+                              },
+                              "available_quantity": {
+                                "description": "Optional. Quantity of the products in stock when a user event happens. Optional. If provided, this overrides the available quantity in Catalog for this event. and can only be set if ``stock_status`` is set to ``IN_STOCK``.  Note that if an item is out of stock, you must set the ``stock_state`` field to be ``OUT_OF_STOCK``. Leaving this field unspecified / as zero is not sufficient to mark the item out of stock.",
+                                "type": "integer"
+                              },
+                              "item_attributes": {
+                                "description": "Optional. Extra features associated with a product in the user event.",
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "categorical_features": {
+                                      "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "object",
+                                        "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "values": {
+                                              "description": "The values",
+                                              "type": "array",
+                                              "items": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "numerical_features": {
+                                      "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "object",
+                                        "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "description": "Float feature value.",
+                                              "type": "array",
+                                              "items": {
+                                                "type": "number"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        }
+                      },
+                      "list_id": {
+                        "description": "Required for ``add-to-list`` and ``remove-from-list`` events. The id or name of the list that the item is being added to or removed from. Other event types should not set this field.",
+                        "type": "string"
+                      },
+                      "cart_id": {
+                        "description": "Optional. The id or name of the associated shopping cart. This id is used to associate multiple items added or present in the cart before purchase.  This can only be set for ``add-to-cart``, ``remove-from-cart``, ``checkout-start``, ``purchase-complete``, or ``shopping-cart-page-view`` events.",
+                        "type": "string"
+                      },
+                      "purchase_transaction": {
+                        "description": "Optional. A transaction represents the entire purchase transaction. Required for ``purchase-complete`` events. Optional for ``checkout-start`` events. Other event types should not set this field.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.PurchaseTransaction",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "description": "Optional. The transaction ID with a length limit of 128 bytes.",
+                              "type": "string"
+                            },
+                            "revenue": {
+                              "description": "Required. Total revenue or grand total associated with the transaction. This value include shipping, tax, or other adjustments to total revenue that you want to include as part of your revenue calculations. This field is not required if the event type is ``refund``.",
+                              "type": "number"
+                            },
+                            "taxes": {
+                              "description": "Optional. All the taxes associated with the transaction.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "number"
+                              }
+                            },
+                            "costs": {
+                              "description": "Optional. All the costs associated with the product. These can be manufacturing costs, shipping expenses not borne by the end user, or any other costs.  Total product cost such that profit = revenue - (sum(taxes) + sum(costs)) If product_cost is not set, then profit = revenue - tax - shipping - sum(CatalogItem.costs).  If CatalogItem.cost is not specified for one of the items, CatalogItem.cost based profit *cannot* be calculated for this Transaction.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "number"
+                              }
+                            },
+                            "currency_code": {
+                              "description": "Required. Currency code. Use three-character ISO-4217 code. This field is not required if the event type is ``refund``.",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "revenue",
+                            "currency_code"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "search_query",
+                      "page_categories",
+                      "list_id"
+                    ]
+                  }
+                },
+                "event_time": {
+                  "description": "Optional. Only required for ImportUserEvents method. Timestamp of user event created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "event_source": {
+                  "description": "Optional. This field should *not* be set when using JavaScript pixel or the Recommendations AI Tag. Defaults to ``EVENT_SOURCE_UNSPECIFIED``.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.UserEvent.EventSource"
+                }
               },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
+              "required": [
+                "event_type",
+                "user_info"
+              ]
+            }
+          },
+          "page_size": {
+            "description": "Optional. Maximum number of results to return per page. Set this property to the number of prediction results required. If zero, the service will choose a reasonable default.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "Optional. The previous PredictResponse.next_page_token.",
+            "type": "string"
+          },
+          "filter": {
+            "description": "Optional. Filter for restricting prediction results. Accepts values for tags and the ``filterOutOfStockItems`` flag.  -  Tag expressions. Restricts predictions to items that match all of the specified tags. Boolean operators ``OR`` and ``NOT`` are supported if the expression is enclosed in parentheses, and must be separated from the tag values by a space. ``-\"tagA\"`` is also supported and is equivalent to ``NOT \"tagA\"``. Tag values must be double quoted UTF-8 encoded strings with a size limit of 1 KiB.  -  filterOutOfStockItems. Restricts predictions to items that do not have a stockState value of OUT_OF_STOCK.  Examples:  -  tag=(\"Red\" OR \"Blue\") tag=\"New-Arrival\" tag=(NOT \"promotional\") -  filterOutOfStockItems tag=(-\"promotional\") -  filterOutOfStockItems",
+            "type": "string"
+          },
+          "dry_run": {
+            "description": "Optional. Use dryRun mode for this prediction query. If set to true, a dummy model will be used that returns arbitrary catalog items. Note that the dryRun mode should only be used for testing the API, or if the model is not ready.",
+            "type": "boolean"
+          },
+          "params": {
+            "description": "Optional. Additional domain specific parameters for the predictions.  Allowed values:  -  ``returnCatalogItem``: Boolean. If set to true, the associated catalogItem object will be returned in the ``PredictResponse.PredictionResult.itemMetadata`` object in the method response. -  ``returnItemScore``: Boolean. If set to true, the prediction 'score' corresponding to each returned item will be set in the ``metadata`` field in the prediction response. The given 'score' indicates the probability of an item being clicked/purchased given the user's context and history.",
+            "type": "object",
+            "additionalProperties": {
+              "reference": "google.protobuf.struct_pb2.Value",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "dropdown_value": {
+                    "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
+                    "type": "integer"
                   },
-                  "JSON": {
-                    "value": 1
+                  "string_value": {
+                    "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
+                    "type": "string"
                   },
-                  "PROTO_TEXT": {
-                    "value": 2
+                  "number_value": {
+                    "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                    "type": "number"
+                  },
+                  "toggle_value": {
+                    "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                    "type": "boolean"
                   }
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           },
-          "errors_config": {
-            "description": "Optional. The desired location of errors incurred during the Import.",
+          "labels": {
+            "description": "Optional. The labels for the predict request.  -  Label keys can contain lowercase letters, digits and hyphens, must start with a letter, and must end with a letter or digit. -  Non-zero label values can contain lowercase letters, digits and hyphens, must start with a letter, and must end with a letter or digit. -  No more than 64 labels can be associated with a given request.  See https://goo.gl/xmQnxf for more information on and examples of labels.",
             "type": "object",
-            "properties": {
-              "gcs_prefix": {
-                "description": "Google Cloud Storage prefix for import errors. This must be an empty, existing Cloud Storage directory. Import errors are written to sharded files in this directory, one per line, as a JSON-encoded ``google.rpc.Status`` message.  This field is a member of `oneof`_ ``destination``.",
-                "type": "string"
-              }
+            "additionalProperties": {
+              "type": "string"
             }
           }
         },
         "required": [
-          "parent",
-          "input_config"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "ImportUserEventsRequest",
-      "description": "Request message for the ImportUserEvents request.\n\nAttributes:\n    parent (str):\n        Required.\n        ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``\n    request_id (str):\n        Optional. Unique identifier provided by client, within the\n        ancestor dataset scope. Ensures idempotency for expensive\n        long running operations. Server-generated if unspecified. Up\n        to 128 characters long. This is returned as\n        google.longrunning.Operation.name in the response. Note that\n        this field must not be set if the desired input config is\n        catalog_inline_source.\n    input_config (google.cloud.recommendationengine_v1beta1.types.InputConfig):\n        Required. The desired input location of the\n        data.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Optional. The desired location of errors\n        incurred during the Import.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "parent": {
-            "description": "Required. ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``",
-            "type": "string"
-          },
-          "request_id": {
-            "description": "Optional. Unique identifier provided by client, within the ancestor dataset scope. Ensures idempotency for expensive long running operations. Server-generated if unspecified. Up to 128 characters long. This is returned as google.longrunning.Operation.name in the response. Note that this field must not be set if the desired input config is catalog_inline_source.",
-            "type": "string"
-          },
-          "input_config": {
-            "description": "Required. The desired input location of the data.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
-                  }
-                }
-              }
-            },
-            "required": [
-              "data_format"
-            ]
-          },
-          "errors_config": {
-            "description": "Optional. The desired location of errors incurred during the Import.",
-            "type": "object",
-            "properties": {
-              "gcs_prefix": {
-                "description": "Google Cloud Storage prefix for import errors. This must be an empty, existing Cloud Storage directory. Import errors are written to sharded files in this directory, one per line, as a JSON-encoded ``google.rpc.Status`` message.  This field is a member of `oneof`_ ``destination``.",
-                "type": "string"
-              }
-            }
-          }
-        },
-        "required": [
-          "parent",
-          "input_config"
+          "name",
+          "user_event"
         ]
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\prediction_apikey_registry_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-recommendations-ai/google/cloud/recommendationengine_v1beta1/types/prediction_apikey_registry_service.py": [
     {
       "type": "function",
       "name": "CreatePredictionApiKeyRegistrationRequest",
@@ -649,11 +950,14 @@
           },
           "prediction_api_key_registration": {
             "description": "Required. The prediction API key registration.",
-            "type": "object",
-            "properties": {
-              "api_key": {
-                "description": "The API key.",
-                "type": "string"
+            "reference": "google.cloud.recommendationengine_v1beta1.types.PredictionApiKeyRegistration",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "api_key": {
+                  "description": "The API key.",
+                  "type": "string"
+                }
               }
             }
           }
@@ -707,282 +1011,7 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\prediction_service.py": [
-    {
-      "type": "function",
-      "name": "PredictRequest",
-      "description": "Request message for Predict method.\n\nAttributes:\n    name (str):\n        Required. Full resource name of the format:\n        ``{name=projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/placements/*}``\n        The id of the recommendation engine placement. This id is\n        used to identify the set of models that will be used to make\n        the prediction.\n\n        We currently support three placements with the following IDs\n        by default:\n\n        -  ``shopping_cart``: Predicts items frequently bought\n           together with one or more catalog items in the same\n           shopping session. Commonly displayed after\n           ``add-to-cart`` events, on product detail pages, or on\n           the shopping cart page.\n\n        -  ``home_page``: Predicts the next product that a user will\n           most likely engage with or purchase based on the shopping\n           or viewing history of the specified ``userId`` or\n           ``visitorId``. For example - Recommendations for",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. Full resource name of the format: ``{name=projects/*/locations/global/catalogs/default_catalog/eventStores/default_event_store/placements/*}`` The id of the recommendation engine placement. This id is used to identify the set of models that will be used to make the prediction.  We currently support three placements with the following IDs by default:  -  ``shopping_cart``: Predicts items frequently bought together with one or more catalog items in the same shopping session. Commonly displayed after ``add-to-cart`` events, on product detail pages, or on the shopping cart page.  -  ``home_page``: Predicts the next product that a user will most likely engage with or purchase based on the shopping or viewing history of the specified ``userId`` or ``visitorId``. For example - Recommendations for you.  -  ``product_detail``: Predicts the next product that a user will most likely engage with or purchase. The prediction is based on the shopping or viewing history of the specified ``userId`` or ``visitorId`` and its relevance to a specified ``CatalogItem``. Typically used on product detail pages. For example - More items like this.  -  ``recently_viewed_default``: Returns up to 75 items recently viewed by the specified ``userId`` or ``visitorId``, most recent ones first. Returns nothing if neither of them has viewed any items yet. For example - Recently viewed.  The full list of available placements can be seen at https://console.cloud.google.com/recommendation/datafeeds/default_catalog/dashboard",
-            "type": "string"
-          },
-          "user_event": {
-            "description": "Required. Context about the user, what they are looking at and what action they took to trigger the predict request. Note that this user event detail won't be ingested to userEvent logs. Thus, a separate userEvent write request is required for event logging.",
-            "type": "object",
-            "properties": {
-              "event_type": {
-                "description": "Required. User event type. Allowed values are:  -  ``add-to-cart``: Products being added to cart. -  ``remove-from-cart``: Products being removed from cart. -  ``category-page-view``: Special pages such as sale or promotion pages viewed. -  ``detail-page-view``: Products detail page viewed. -  ``home-page-view``: Homepage viewed. -  ``promotion-offered``: Promotion is offered to a user. -  ``promotion-not-offered``: Promotion is not offered to a user. -  ``purchase-complete``: User finishing a purchase. -  ``search``: Product search. -  ``shopping-cart-page-view``: User viewing a shopping cart.",
-                "type": "string"
-              },
-              "visitor_id": {
-                "description": "Required. A unique identifier for tracking visitors.  For example, this could be implemented with an HTTP cookie, which should be able to uniquely identify a visitor on a single device. This unique identifier should not change if the visitor log in/out of the website.  Don't set the field to the same fixed ID for different users. This mixes the event history of those users together, which results in degraded model quality.  The field must be a UTF-8 encoded string with a length limit of 128 characters. Otherwise, an INVALID_ARGUMENT error is returned.  The field should not contain PII or user-data. We recommend to use Google Analytics `Client ID <https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#clientId>`__ for this field.",
-                "type": "string"
-              },
-              "session_id": {
-                "description": "A unique identifier for tracking a visitor session with a length limit of 128 bytes. A session is an aggregation of an end user behavior in a time span.  A general guideline to populate the sesion_id:  1. If user has no activity for 30 min, a new session_id should be assigned. 2. The session_id should be unique across users, suggest use uuid or add visitor_id as prefix.",
-                "type": "string"
-              },
-              "event_time": {
-                "description": "Only required for [UserEventService.ImportUserEvents][google.cloud.retail.v2beta.UserEventService.ImportUserEvents] method. Timestamp of when the user event happened.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "experiment_ids": {
-                "description": "A list of identifiers for the independent experiment groups this user event belongs to. This is used to distinguish between user events associated with different experiment setups (e.g. using Retail API, using different recommendation models).",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "attribution_token": {
-                "description": "Highly recommended for user events that are the result of [PredictionService.Predict][google.cloud.retail.v2beta.PredictionService.Predict]. This field enables accurate attribution of recommendation model performance.  The value must be a valid [PredictResponse.attribution_token][google.cloud.retail.v2beta.PredictResponse.attribution_token] for user events that are the result of [PredictionService.Predict][google.cloud.retail.v2beta.PredictionService.Predict]. The value must be a valid [SearchResponse.attribution_token][google.cloud.retail.v2beta.SearchResponse.attribution_token] for user events that are the result of [SearchService.Search][google.cloud.retail.v2beta.SearchService.Search].  This token enables us to accurately attribute page view or purchase back to the event and the particular predict response containing this clicked/purchased product. If user clicks on product K in the recommendation results, pass [PredictResponse.attribution_token][google.cloud.retail.v2beta.PredictResponse.attribution_token] as a URL parameter to product K's page. When recording events on product K's page, log the [PredictResponse.attribution_token][google.cloud.retail.v2beta.PredictResponse.attribution_token] to this field.",
-                "type": "string"
-              },
-              "product_details": {
-                "description": "The main product details related to the event.  This field is optional except for the following event types:  -  ``add-to-cart`` -  ``detail-page-view`` -  ``purchase-complete``  In a ``search`` event, this field represents the products returned to the end user on the current page (the end user may have not finished browsing the whole page yet). When a new page is returned to the end user, after pagination/filtering/ordering even for the same query, a new ``search`` event with different [product_details][google.cloud.retail.v2beta.UserEvent.product_details] is desired. The end user may have not finished browsing the whole page yet.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "section_name": {
-                      "description": "The section header used to group a set of product details.",
-                      "type": "string"
-                    },
-                    "attribute_name": {
-                      "description": "The name of the product detail.",
-                      "type": "string"
-                    },
-                    "attribute_value": {
-                      "description": "The value of the product detail.",
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "completion_detail": {
-                "type": "object",
-                "properties": {
-                  "completion_attribution_token": {
-                    "description": "Completion attribution token in [CompleteQueryResponse.attribution_token][google.cloud.retail.v2beta.CompleteQueryResponse.attribution_token].",
-                    "type": "string"
-                  },
-                  "selected_suggestion": {
-                    "description": "End user selected [CompleteQueryResponse.CompletionResult.suggestion][google.cloud.retail.v2beta.CompleteQueryResponse.CompletionResult.suggestion].",
-                    "type": "string"
-                  },
-                  "selected_position": {
-                    "description": "End user selected [CompleteQueryResponse.CompletionResult.suggestion][google.cloud.retail.v2beta.CompleteQueryResponse.CompletionResult.suggestion] position, starting from 0.",
-                    "type": "integer"
-                  }
-                }
-              },
-              "attributes": {
-                "description": "Extra user event features to include in the recommendation model.  If you provide custom attributes for ingested user events, also include them in the user events that you associate with prediction requests. Custom attribute formatting must be consistent between imported events and events provided with prediction requests. This lets the Retail API use those custom attributes when training models and serving predictions, which helps improve recommendation quality.  This field needs to pass all below criteria, otherwise an INVALID_ARGUMENT error is returned:  -  The key must be a UTF-8 encoded string with a length limit of 5,000 characters. -  For text attributes, at most 400 values are allowed. Empty values are not allowed. Each value must be a UTF-8 encoded string with a length limit of 256 characters. -  For number attributes, at most 400 values are allowed.  For product recommendations, an example of extra user information is traffic_channel, which is how a user arrives at the site. Users can arrive at the site by coming to the site directly, coming through Google search, or in other ways.",
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "description": "The name of the attribute.  This field is a member of `oneof`_ ``_name``.",
-                      "type": "string"
-                    },
-                    "value": {
-                      "description": "The value of the attribute. If ``value`` is not empty, ``group_values`` must be empty.  This field is a member of `oneof`_ ``_value``.",
-                      "type": "string"
-                    },
-                    "group_values": {
-                      "description": "Subattributes within this attribute group. If ``group_values`` is not empty, ``value`` must be empty.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "reference": "google.shopping.type.types.CustomAttribute"
-                      }
-                    }
-                  }
-                }
-              },
-              "cart_id": {
-                "description": "The ID or name of the associated shopping cart. This ID is used to associate multiple items added or present in the cart before purchase.  This can only be set for ``add-to-cart``, ``purchase-complete``, or ``shopping-cart-page-view`` events.",
-                "type": "string"
-              },
-              "purchase_transaction": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "description": "The transaction ID with a length limit of 128 characters.",
-                    "type": "string"
-                  },
-                  "revenue": {
-                    "description": "Required. Total non-zero revenue or grand total associated with the transaction. This value include shipping, tax, or other adjustments to total revenue that you want to include as part of your revenue calculations.",
-                    "type": "number"
-                  },
-                  "tax": {
-                    "description": "All the taxes associated with the transaction.",
-                    "type": "number"
-                  },
-                  "cost": {
-                    "description": "All the costs associated with the products. These can be manufacturing costs, shipping expenses not borne by the end user, or any other costs, such that:  -  Profit = [revenue][google.cloud.retail.v2beta.PurchaseTransaction.revenue] - [tax][google.cloud.retail.v2beta.PurchaseTransaction.tax] - [cost][google.cloud.retail.v2beta.PurchaseTransaction.cost]",
-                    "type": "number"
-                  },
-                  "currency_code": {
-                    "description": "Required. Currency code. Use three-character ISO-4217 code.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "revenue",
-                  "currency_code"
-                ]
-              },
-              "search_query": {
-                "description": "The user's search query.  See [SearchRequest.query][google.cloud.retail.v2beta.SearchRequest.query] for definition.  The value must be a UTF-8 encoded string with a length limit of 5,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.  At least one of [search_query][google.cloud.retail.v2beta.UserEvent.search_query] or [page_categories][google.cloud.retail.v2beta.UserEvent.page_categories] is required for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "string"
-              },
-              "filter": {
-                "description": "The filter syntax consists of an expression language for constructing a predicate from one or more fields of the products being filtered.  See [SearchRequest.filter][google.cloud.retail.v2beta.SearchRequest.filter] for definition and syntax.  The value must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "string"
-              },
-              "order_by": {
-                "description": "The order in which products are returned.  See [SearchRequest.order_by][google.cloud.retail.v2beta.SearchRequest.order_by] for definition and syntax.  The value must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.  This can only be set for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "string"
-              },
-              "offset": {
-                "description": "An integer that specifies the current offset for pagination (the 0-indexed starting location, amongst the products deemed by the API as relevant).  See [SearchRequest.offset][google.cloud.retail.v2beta.SearchRequest.offset] for definition.  If this field is negative, an INVALID_ARGUMENT is returned.  This can only be set for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "integer"
-              },
-              "page_categories": {
-                "description": "The categories associated with a category page.  To represent full path of category, use '>' sign to separate different hierarchies. If '>' is part of the category name, replace it with other character(s).  Category pages include special pages such as sales or promotions. For instance, a special sale page may have the category hierarchy: \"pageCategories\" : [\"Sales > 2017 Black Friday Deals\"].  Required for ``category-page-view`` events. At least one of [search_query][google.cloud.retail.v2beta.UserEvent.search_query] or [page_categories][google.cloud.retail.v2beta.UserEvent.page_categories] is required for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "user_info": {
-                "type": "object",
-                "properties": {
-                  "user_id": {
-                    "description": "Highly recommended for logged-in users. Unique identifier for logged-in user, such as a user name. Don't set for anonymous users.  Always use a hashed value for this ID.  Don't set the field to the same fixed ID for different users. This mixes the event history of those users together, which results in degraded model quality.  The field must be a UTF-8 encoded string with a length limit of 128 characters. Otherwise, an INVALID_ARGUMENT error is returned.",
-                    "type": "string"
-                  },
-                  "ip_address": {
-                    "description": "The end user's IP address. This field is used to extract location information for personalization.  This field must be either an IPv4 address (e.g. \"104.133.9.80\") or an IPv6 address (e.g. \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"). Otherwise, an INVALID_ARGUMENT error is returned.  This should not be set when:  -  setting [SearchRequest.user_info][google.cloud.retail.v2beta.SearchRequest.user_info]. -  using the JavaScript tag in [UserEventService.CollectUserEvent][google.cloud.retail.v2beta.UserEventService.CollectUserEvent] or if [direct_user_request][google.cloud.retail.v2beta.UserInfo.direct_user_request] is set.",
-                    "type": "string"
-                  },
-                  "user_agent": {
-                    "description": "User agent as included in the HTTP header. Required for getting [SearchResponse.sponsored_results][google.cloud.retail.v2beta.SearchResponse.sponsored_results].  The field must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.  This should not be set when using the client side event reporting with GTM or JavaScript tag in [UserEventService.CollectUserEvent][google.cloud.retail.v2beta.UserEventService.CollectUserEvent] or if [direct_user_request][google.cloud.retail.v2beta.UserInfo.direct_user_request] is set.",
-                    "type": "string"
-                  },
-                  "direct_user_request": {
-                    "description": "True if the request is made directly from the end user, in which case the [ip_address][google.cloud.retail.v2beta.UserInfo.ip_address] and [user_agent][google.cloud.retail.v2beta.UserInfo.user_agent] can be populated from the HTTP request. This flag should be set only if the API request is made directly from the end user such as a mobile app (and not if a gateway or a server is processing and pushing the user events).  This should not be set when using the JavaScript tag in [UserEventService.CollectUserEvent][google.cloud.retail.v2beta.UserEventService.CollectUserEvent].",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "uri": {
-                "description": "Complete URL (window.location.href) of the user's current page. When using the client side event reporting with JavaScript pixel and Google Tag Manager, this value is filled in automatically. Maximum length 5,000 characters.",
-                "type": "string"
-              },
-              "referrer_uri": {
-                "description": "The referrer URL of the current page.  When using the client side event reporting with JavaScript pixel and Google Tag Manager, this value is filled in automatically.",
-                "type": "string"
-              },
-              "page_view_id": {
-                "description": "A unique ID of a web page view.  This should be kept the same for all user events triggered from the same pageview. For example, an item detail page view could trigger multiple events as the user is browsing the page. The ``pageViewId`` property should be kept the same for all these events so that they can be grouped together properly.  When using the client side event reporting with JavaScript pixel and Google Tag Manager, this value is filled in automatically.",
-                "type": "string"
-              },
-              "entity": {
-                "description": "The entity for customers that may run multiple different entities, domains, sites or regions, for example, ``Google US``, ``Google Ads``, ``Waymo``, ``google.com``, ``youtube.com``, etc. We recommend that you set this field to get better per-entity search, completion, and prediction results.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "event_type",
-              "visitor_id"
-            ]
-          },
-          "page_size": {
-            "description": "Optional. Maximum number of results to return per page. Set this property to the number of prediction results required. If zero, the service will choose a reasonable default.",
-            "type": "integer"
-          },
-          "page_token": {
-            "description": "Optional. The previous PredictResponse.next_page_token.",
-            "type": "string"
-          },
-          "filter": {
-            "description": "Optional. Filter for restricting prediction results. Accepts values for tags and the ``filterOutOfStockItems`` flag.  -  Tag expressions. Restricts predictions to items that match all of the specified tags. Boolean operators ``OR`` and ``NOT`` are supported if the expression is enclosed in parentheses, and must be separated from the tag values by a space. ``-\"tagA\"`` is also supported and is equivalent to ``NOT \"tagA\"``. Tag values must be double quoted UTF-8 encoded strings with a size limit of 1 KiB.  -  filterOutOfStockItems. Restricts predictions to items that do not have a stockState value of OUT_OF_STOCK.  Examples:  -  tag=(\"Red\" OR \"Blue\") tag=\"New-Arrival\" tag=(NOT \"promotional\") -  filterOutOfStockItems tag=(-\"promotional\") -  filterOutOfStockItems",
-            "type": "string"
-          },
-          "dry_run": {
-            "description": "Optional. Use dryRun mode for this prediction query. If set to true, a dummy model will be used that returns arbitrary catalog items. Note that the dryRun mode should only be used for testing the API, or if the model is not ready.",
-            "type": "boolean"
-          },
-          "params": {
-            "description": "Optional. Additional domain specific parameters for the predictions.  Allowed values:  -  ``returnCatalogItem``: Boolean. If set to true, the associated catalogItem object will be returned in the ``PredictResponse.PredictionResult.itemMetadata`` object in the method response. -  ``returnItemScore``: Boolean. If set to true, the prediction 'score' corresponding to each returned item will be set in the ``metadata`` field in the prediction response. The given 'score' indicates the probability of an item being clicked/purchased given the user's context and history.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "no_shipping": {
-                  "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
-                  "type": "boolean"
-                },
-                "flat_rate": {
-                  "type": "object",
-                  "properties": {
-                    "amount_micros": {
-                      "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
-                      "type": "integer"
-                    },
-                    "currency_code": {
-                      "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
-                      "type": "string"
-                    }
-                  }
-                },
-                "price_percentage": {
-                  "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
-                  "type": "string"
-                },
-                "carrier_rate": {
-                  "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
-                  "type": "string"
-                },
-                "subtable": {
-                  "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "labels": {
-            "description": "Optional. The labels for the predict request.  -  Label keys can contain lowercase letters, digits and hyphens, must start with a letter, and must end with a letter or digit. -  Non-zero label values can contain lowercase letters, digits and hyphens, must start with a letter, and must end with a letter or digit. -  No more than 64 labels can be associated with a given request.  See https://goo.gl/xmQnxf for more information on and examples of labels.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "name",
-          "user_event"
-        ]
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-recommendations-ai\\google\\cloud\\recommendationengine_v1beta1\\types\\user_event_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-recommendations-ai/google/cloud/recommendationengine_v1beta1/types/user_event_service.py": [
     {
       "type": "function",
       "name": "PurgeUserEventsRequest",
@@ -1022,197 +1051,331 @@
           },
           "user_event": {
             "description": "Required. User event to write.",
-            "type": "object",
-            "properties": {
-              "event_type": {
-                "description": "Required. User event type. Allowed values are:  -  ``add-to-cart``: Products being added to cart. -  ``remove-from-cart``: Products being removed from cart. -  ``category-page-view``: Special pages such as sale or promotion pages viewed. -  ``detail-page-view``: Products detail page viewed. -  ``home-page-view``: Homepage viewed. -  ``promotion-offered``: Promotion is offered to a user. -  ``promotion-not-offered``: Promotion is not offered to a user. -  ``purchase-complete``: User finishing a purchase. -  ``search``: Product search. -  ``shopping-cart-page-view``: User viewing a shopping cart.",
-                "type": "string"
-              },
-              "visitor_id": {
-                "description": "Required. A unique identifier for tracking visitors.  For example, this could be implemented with an HTTP cookie, which should be able to uniquely identify a visitor on a single device. This unique identifier should not change if the visitor log in/out of the website.  Don't set the field to the same fixed ID for different users. This mixes the event history of those users together, which results in degraded model quality.  The field must be a UTF-8 encoded string with a length limit of 128 characters. Otherwise, an INVALID_ARGUMENT error is returned.  The field should not contain PII or user-data. We recommend to use Google Analytics `Client ID <https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#clientId>`__ for this field.",
-                "type": "string"
-              },
-              "session_id": {
-                "description": "A unique identifier for tracking a visitor session with a length limit of 128 bytes. A session is an aggregation of an end user behavior in a time span.  A general guideline to populate the sesion_id:  1. If user has no activity for 30 min, a new session_id should be assigned. 2. The session_id should be unique across users, suggest use uuid or add visitor_id as prefix.",
-                "type": "string"
-              },
-              "event_time": {
-                "description": "Only required for [UserEventService.ImportUserEvents][google.cloud.retail.v2beta.UserEventService.ImportUserEvents] method. Timestamp of when the user event happened.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "experiment_ids": {
-                "description": "A list of identifiers for the independent experiment groups this user event belongs to. This is used to distinguish between user events associated with different experiment setups (e.g. using Retail API, using different recommendation models).",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.recommendationengine_v1beta1.types.UserEvent",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "event_type": {
+                  "description": "Required. User event type. Allowed values are:  -  ``add-to-cart`` Products being added to cart. -  ``add-to-list`` Items being added to a list (shopping list, favorites etc). -  ``category-page-view`` Special pages such as sale or promotion pages viewed. -  ``checkout-start`` User starting a checkout process. -  ``detail-page-view`` Products detail page viewed. -  ``home-page-view`` Homepage viewed. -  ``page-visit`` Generic page visits not included in the event types above. -  ``purchase-complete`` User finishing a purchase. -  ``refund`` Purchased items being refunded or returned. -  ``remove-from-cart`` Products being removed from cart. -  ``remove-from-list`` Items being removed from a list. -  ``search`` Product search. -  ``shopping-cart-page-view`` User viewing a shopping cart. -  ``impression`` List of items displayed. Used by Google Tag Manager.",
                   "type": "string"
-                }
-              },
-              "attribution_token": {
-                "description": "Highly recommended for user events that are the result of [PredictionService.Predict][google.cloud.retail.v2beta.PredictionService.Predict]. This field enables accurate attribution of recommendation model performance.  The value must be a valid [PredictResponse.attribution_token][google.cloud.retail.v2beta.PredictResponse.attribution_token] for user events that are the result of [PredictionService.Predict][google.cloud.retail.v2beta.PredictionService.Predict]. The value must be a valid [SearchResponse.attribution_token][google.cloud.retail.v2beta.SearchResponse.attribution_token] for user events that are the result of [SearchService.Search][google.cloud.retail.v2beta.SearchService.Search].  This token enables us to accurately attribute page view or purchase back to the event and the particular predict response containing this clicked/purchased product. If user clicks on product K in the recommendation results, pass [PredictResponse.attribution_token][google.cloud.retail.v2beta.PredictResponse.attribution_token] as a URL parameter to product K's page. When recording events on product K's page, log the [PredictResponse.attribution_token][google.cloud.retail.v2beta.PredictResponse.attribution_token] to this field.",
-                "type": "string"
-              },
-              "product_details": {
-                "description": "The main product details related to the event.  This field is optional except for the following event types:  -  ``add-to-cart`` -  ``detail-page-view`` -  ``purchase-complete``  In a ``search`` event, this field represents the products returned to the end user on the current page (the end user may have not finished browsing the whole page yet). When a new page is returned to the end user, after pagination/filtering/ordering even for the same query, a new ``search`` event with different [product_details][google.cloud.retail.v2beta.UserEvent.product_details] is desired. The end user may have not finished browsing the whole page yet.",
-                "type": "array",
-                "items": {
+                },
+                "user_info": {
+                  "description": "Required. User information.",
                   "type": "object",
-                  "properties": {
-                    "section_name": {
-                      "description": "The section header used to group a set of product details.",
-                      "type": "string"
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.UserInfo",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "visitor_id": {
+                        "description": "Required. A unique identifier for tracking visitors with a length limit of 128 bytes.  For example, this could be implemented with a http cookie, which should be able to uniquely identify a visitor on a single device. This unique identifier should not change if the visitor log in/out of the website. Maximum length 128 bytes. Cannot be empty.",
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "description": "Optional. Unique identifier for logged-in user with a length limit of 128 bytes. Required only for logged-in users.",
+                        "type": "string"
+                      },
+                      "ip_address": {
+                        "description": "Optional. IP address of the user. This could be either IPv4 (e.g. 104.133.9.80) or IPv6 (e.g. 2001:0db8:85a3:0000:0000:8a2e:0370:7334). This should *not* be set when using the javascript pixel or if ``direct_user_request`` is set. Used to extract location information for personalization.",
+                        "type": "string"
+                      },
+                      "user_agent": {
+                        "description": "Optional. User agent as included in the HTTP header. UTF-8 encoded string with a length limit of 1 KiB.  This should *not* be set when using the JavaScript pixel or if ``directUserRequest`` is set.",
+                        "type": "string"
+                      },
+                      "direct_user_request": {
+                        "description": "Optional. Indicates if the request is made directly from the end user in which case the user_agent and ip_address fields can be populated from the HTTP request. This should *not* be set when using the javascript pixel. This flag should be set only if the API request is made directly from the end user such as a mobile app (and not if a gateway or a server is processing and pushing the user events).",
+                        "type": "boolean"
+                      }
                     },
-                    "attribute_name": {
-                      "description": "The name of the product detail.",
-                      "type": "string"
-                    },
-                    "attribute_value": {
-                      "description": "The value of the product detail.",
-                      "type": "string"
-                    }
+                    "required": [
+                      "visitor_id"
+                    ]
                   }
-                }
-              },
-              "completion_detail": {
-                "type": "object",
-                "properties": {
-                  "completion_attribution_token": {
-                    "description": "Completion attribution token in [CompleteQueryResponse.attribution_token][google.cloud.retail.v2beta.CompleteQueryResponse.attribution_token].",
-                    "type": "string"
-                  },
-                  "selected_suggestion": {
-                    "description": "End user selected [CompleteQueryResponse.CompletionResult.suggestion][google.cloud.retail.v2beta.CompleteQueryResponse.CompletionResult.suggestion].",
-                    "type": "string"
-                  },
-                  "selected_position": {
-                    "description": "End user selected [CompleteQueryResponse.CompletionResult.suggestion][google.cloud.retail.v2beta.CompleteQueryResponse.CompletionResult.suggestion] position, starting from 0.",
-                    "type": "integer"
-                  }
-                }
-              },
-              "attributes": {
-                "description": "Extra user event features to include in the recommendation model.  If you provide custom attributes for ingested user events, also include them in the user events that you associate with prediction requests. Custom attribute formatting must be consistent between imported events and events provided with prediction requests. This lets the Retail API use those custom attributes when training models and serving predictions, which helps improve recommendation quality.  This field needs to pass all below criteria, otherwise an INVALID_ARGUMENT error is returned:  -  The key must be a UTF-8 encoded string with a length limit of 5,000 characters. -  For text attributes, at most 400 values are allowed. Empty values are not allowed. Each value must be a UTF-8 encoded string with a length limit of 256 characters. -  For number attributes, at most 400 values are allowed.  For product recommendations, an example of extra user information is traffic_channel, which is how a user arrives at the site. Users can arrive at the site by coming to the site directly, coming through Google search, or in other ways.",
-                "type": "object",
-                "additionalProperties": {
+                },
+                "event_detail": {
+                  "description": "Optional. User event detailed information common across different recommendation types.",
                   "type": "object",
-                  "properties": {
-                    "name": {
-                      "description": "The name of the attribute.  This field is a member of `oneof`_ ``_name``.",
-                      "type": "string"
-                    },
-                    "value": {
-                      "description": "The value of the attribute. If ``value`` is not empty, ``group_values`` must be empty.  This field is a member of `oneof`_ ``_value``.",
-                      "type": "string"
-                    },
-                    "group_values": {
-                      "description": "Subattributes within this attribute group. If ``group_values`` is not empty, ``value`` must be empty.",
-                      "type": "array",
-                      "items": {
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.EventDetail",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "Optional. Complete url (window.location.href) of the user's current page. When using the JavaScript pixel, this value is filled in automatically. Maximum length 5KB.",
+                        "type": "string"
+                      },
+                      "referrer_uri": {
+                        "description": "Optional. The referrer url of the current page. When using the JavaScript pixel, this value is filled in automatically.",
+                        "type": "string"
+                      },
+                      "page_view_id": {
+                        "description": "Optional. A unique id of a web page view. This should be kept the same for all user events triggered from the same pageview. For example, an item detail page view could trigger multiple events as the user is browsing the page. The ``pageViewId`` property should be kept the same for all these events so that they can be grouped together properly. This ``pageViewId`` will be automatically generated if using the JavaScript pixel.",
+                        "type": "string"
+                      },
+                      "experiment_ids": {
+                        "description": "Optional. A list of identifiers for the independent experiment groups this user event belongs to. This is used to distinguish between user events associated with different experiment setups (e.g. using Recommendation Engine system, using different recommendation models).",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "recommendation_token": {
+                        "description": "Optional. Recommendation token included in the recommendation prediction response.  This field enables accurate attribution of recommendation model performance.  This token enables us to accurately attribute page view or purchase back to the event and the particular predict response containing this clicked/purchased item. If user clicks on product K in the recommendation results, pass the ``PredictResponse.recommendationToken`` property as a url parameter to product K's page. When recording events on product K's page, log the PredictResponse.recommendation_token to this field.  Optional, but highly encouraged for user events that are the result of a recommendation prediction query.",
+                        "type": "string"
+                      },
+                      "event_attributes": {
+                        "description": "Optional. Extra user event features to include in the recommendation model.  For product recommendation, an example of extra user information is traffic_channel, i.e. how user arrives at the site. Users can arrive at the site by coming to the site directly, or coming through Google search, and etc.",
                         "type": "object",
-                        "reference": "google.shopping.type.types.CustomAttribute"
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "categorical_features": {
+                              "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "values": {
+                                      "description": "The values",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "numerical_features": {
+                              "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "description": "Float feature value.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
-                }
-              },
-              "cart_id": {
-                "description": "The ID or name of the associated shopping cart. This ID is used to associate multiple items added or present in the cart before purchase.  This can only be set for ``add-to-cart``, ``purchase-complete``, or ``shopping-cart-page-view`` events.",
-                "type": "string"
-              },
-              "purchase_transaction": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "description": "The transaction ID with a length limit of 128 characters.",
-                    "type": "string"
-                  },
-                  "revenue": {
-                    "description": "Required. Total non-zero revenue or grand total associated with the transaction. This value include shipping, tax, or other adjustments to total revenue that you want to include as part of your revenue calculations.",
-                    "type": "number"
-                  },
-                  "tax": {
-                    "description": "All the taxes associated with the transaction.",
-                    "type": "number"
-                  },
-                  "cost": {
-                    "description": "All the costs associated with the products. These can be manufacturing costs, shipping expenses not borne by the end user, or any other costs, such that:  -  Profit = [revenue][google.cloud.retail.v2beta.PurchaseTransaction.revenue] - [tax][google.cloud.retail.v2beta.PurchaseTransaction.tax] - [cost][google.cloud.retail.v2beta.PurchaseTransaction.cost]",
-                    "type": "number"
-                  },
-                  "currency_code": {
-                    "description": "Required. Currency code. Use three-character ISO-4217 code.",
-                    "type": "string"
+                },
+                "product_event_detail": {
+                  "description": "Optional. Retail product specific user event metadata.  This field is required for the following event types:  -  ``add-to-cart`` -  ``add-to-list`` -  ``category-page-view`` -  ``checkout-start`` -  ``detail-page-view`` -  ``purchase-complete`` -  ``refund`` -  ``remove-from-cart`` -  ``remove-from-list`` -  ``search``  This field is optional for the following event types:  -  ``page-visit`` -  ``shopping-cart-page-view`` - note that 'product_event_detail' should be set for this unless the shopping cart is empty.  This field is not allowed for the following event types:  -  ``home-page-view``",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.ProductEventDetail",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "search_query": {
+                        "description": "Required for ``search`` events. Other event types should not set this field. The user's search query as UTF-8 encoded text with a length limit of 5 KiB.",
+                        "type": "string"
+                      },
+                      "page_categories": {
+                        "description": "Required for ``category-page-view`` events. Other event types should not set this field. The categories associated with a category page. Category pages include special pages such as sales or promotions. For instance, a special sale page may have the category hierarchy: categories : [\"Sales\", \"2017 Black Friday Deals\"].",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.CatalogItem.CategoryHierarchy",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "categories": {
+                                "description": "Required. Catalog item categories. Each category should be a UTF-8 encoded string with a length limit of 2 KiB.  Note that the order in the list denotes the specificity (from least to most specific).",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "categories"
+                            ]
+                          }
+                        }
+                      },
+                      "product_details": {
+                        "description": "The main product details related to the event.  This field is required for the following event types:  -  ``add-to-cart`` -  ``add-to-list`` -  ``checkout-start`` -  ``detail-page-view`` -  ``purchase-complete`` -  ``refund`` -  ``remove-from-cart`` -  ``remove-from-list``  This field is optional for the following event types:  -  ``page-visit`` -  ``shopping-cart-page-view`` - note that 'product_details' should be set for this unless the shopping cart is empty.  This field is not allowed for the following event types:  -  ``category-page-view`` -  ``home-page-view`` -  ``search``",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.recommendationengine_v1beta1.types.ProductDetail",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "description": "Required. Catalog item ID. UTF-8 encoded string with a length limit of 128 characters.",
+                                "type": "string"
+                              },
+                              "currency_code": {
+                                "description": "Optional. Currency code for price/costs. Use three-character ISO-4217 code. Required only if originalPrice or displayPrice is set.",
+                                "type": "string"
+                              },
+                              "original_price": {
+                                "description": "Optional. Original price of the product. If provided, this will override the original price in Catalog for this product.",
+                                "type": "number"
+                              },
+                              "display_price": {
+                                "description": "Optional. Display price of the product (e.g. discounted price). If provided, this will override the display price in Catalog for this product.",
+                                "type": "number"
+                              },
+                              "stock_state": {
+                                "description": "Optional. Item stock state. If provided, this overrides the stock state in Catalog for items in this event.",
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.ProductCatalogItem.StockState"
+                              },
+                              "quantity": {
+                                "description": "Optional. Quantity of the product associated with the user event. For example, this field will be 2 if two products are added to the shopping cart for ``add-to-cart`` event. Required for ``add-to-cart``, ``add-to-list``, ``remove-from-cart``, ``checkout-start``, ``purchase-complete``, ``refund`` event types.",
+                                "type": "integer"
+                              },
+                              "available_quantity": {
+                                "description": "Optional. Quantity of the products in stock when a user event happens. Optional. If provided, this overrides the available quantity in Catalog for this event. and can only be set if ``stock_status`` is set to ``IN_STOCK``.  Note that if an item is out of stock, you must set the ``stock_state`` field to be ``OUT_OF_STOCK``. Leaving this field unspecified / as zero is not sufficient to mark the item out of stock.",
+                                "type": "integer"
+                              },
+                              "item_attributes": {
+                                "description": "Optional. Extra features associated with a product in the user event.",
+                                "type": "object",
+                                "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "categorical_features": {
+                                      "description": "Categorical features that can take on one of a limited number of possible values. Some examples would be the brand/maker of a product, or country of a customer.  Feature names and values must be UTF-8 encoded strings.  For example: ``{ \"colors\": {\"value\": [\"yellow\", \"green\"]}, \"sizes\": {\"value\":[\"S\", \"M\"]}``",
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "object",
+                                        "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.StringList",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "values": {
+                                              "description": "The values",
+                                              "type": "array",
+                                              "items": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "numerical_features": {
+                                      "description": "Numerical features. Some examples would be the height/weight of a product, or age of a customer.  Feature names must be UTF-8 encoded strings.  For example: ``{ \"lengths_cm\": {\"value\":[2.3, 15.4]}, \"heights_cm\": {\"value\":[8.1, 6.4]} }``",
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "object",
+                                        "reference": "google.cloud.recommendationengine_v1beta1.types.FeatureMap.FloatList",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "description": "Float feature value.",
+                                              "type": "array",
+                                              "items": {
+                                                "type": "number"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        }
+                      },
+                      "list_id": {
+                        "description": "Required for ``add-to-list`` and ``remove-from-list`` events. The id or name of the list that the item is being added to or removed from. Other event types should not set this field.",
+                        "type": "string"
+                      },
+                      "cart_id": {
+                        "description": "Optional. The id or name of the associated shopping cart. This id is used to associate multiple items added or present in the cart before purchase.  This can only be set for ``add-to-cart``, ``remove-from-cart``, ``checkout-start``, ``purchase-complete``, or ``shopping-cart-page-view`` events.",
+                        "type": "string"
+                      },
+                      "purchase_transaction": {
+                        "description": "Optional. A transaction represents the entire purchase transaction. Required for ``purchase-complete`` events. Optional for ``checkout-start`` events. Other event types should not set this field.",
+                        "type": "object",
+                        "reference": "google.cloud.recommendationengine_v1beta1.types.PurchaseTransaction",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "description": "Optional. The transaction ID with a length limit of 128 bytes.",
+                              "type": "string"
+                            },
+                            "revenue": {
+                              "description": "Required. Total revenue or grand total associated with the transaction. This value include shipping, tax, or other adjustments to total revenue that you want to include as part of your revenue calculations. This field is not required if the event type is ``refund``.",
+                              "type": "number"
+                            },
+                            "taxes": {
+                              "description": "Optional. All the taxes associated with the transaction.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "number"
+                              }
+                            },
+                            "costs": {
+                              "description": "Optional. All the costs associated with the product. These can be manufacturing costs, shipping expenses not borne by the end user, or any other costs.  Total product cost such that profit = revenue - (sum(taxes) + sum(costs)) If product_cost is not set, then profit = revenue - tax - shipping - sum(CatalogItem.costs).  If CatalogItem.cost is not specified for one of the items, CatalogItem.cost based profit *cannot* be calculated for this Transaction.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "number"
+                              }
+                            },
+                            "currency_code": {
+                              "description": "Required. Currency code. Use three-character ISO-4217 code. This field is not required if the event type is ``refund``.",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "revenue",
+                            "currency_code"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "search_query",
+                      "page_categories",
+                      "list_id"
+                    ]
                   }
                 },
-                "required": [
-                  "revenue",
-                  "currency_code"
-                ]
-              },
-              "search_query": {
-                "description": "The user's search query.  See [SearchRequest.query][google.cloud.retail.v2beta.SearchRequest.query] for definition.  The value must be a UTF-8 encoded string with a length limit of 5,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.  At least one of [search_query][google.cloud.retail.v2beta.UserEvent.search_query] or [page_categories][google.cloud.retail.v2beta.UserEvent.page_categories] is required for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "string"
-              },
-              "filter": {
-                "description": "The filter syntax consists of an expression language for constructing a predicate from one or more fields of the products being filtered.  See [SearchRequest.filter][google.cloud.retail.v2beta.SearchRequest.filter] for definition and syntax.  The value must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "string"
-              },
-              "order_by": {
-                "description": "The order in which products are returned.  See [SearchRequest.order_by][google.cloud.retail.v2beta.SearchRequest.order_by] for definition and syntax.  The value must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.  This can only be set for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "string"
-              },
-              "offset": {
-                "description": "An integer that specifies the current offset for pagination (the 0-indexed starting location, amongst the products deemed by the API as relevant).  See [SearchRequest.offset][google.cloud.retail.v2beta.SearchRequest.offset] for definition.  If this field is negative, an INVALID_ARGUMENT is returned.  This can only be set for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "integer"
-              },
-              "page_categories": {
-                "description": "The categories associated with a category page.  To represent full path of category, use '>' sign to separate different hierarchies. If '>' is part of the category name, replace it with other character(s).  Category pages include special pages such as sales or promotions. For instance, a special sale page may have the category hierarchy: \"pageCategories\" : [\"Sales > 2017 Black Friday Deals\"].  Required for ``category-page-view`` events. At least one of [search_query][google.cloud.retail.v2beta.UserEvent.search_query] or [page_categories][google.cloud.retail.v2beta.UserEvent.page_categories] is required for ``search`` events. Other event types should not set this field. Otherwise, an INVALID_ARGUMENT error is returned.",
-                "type": "array",
-                "items": {
-                  "type": "string"
+                "event_time": {
+                  "description": "Optional. Only required for ImportUserEvents method. Timestamp of user event created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "event_source": {
+                  "description": "Optional. This field should *not* be set when using JavaScript pixel or the Recommendations AI Tag. Defaults to ``EVENT_SOURCE_UNSPECIFIED``.",
+                  "type": "object",
+                  "reference": "google.cloud.recommendationengine_v1beta1.types.UserEvent.EventSource"
                 }
               },
-              "user_info": {
-                "type": "object",
-                "properties": {
-                  "user_id": {
-                    "description": "Highly recommended for logged-in users. Unique identifier for logged-in user, such as a user name. Don't set for anonymous users.  Always use a hashed value for this ID.  Don't set the field to the same fixed ID for different users. This mixes the event history of those users together, which results in degraded model quality.  The field must be a UTF-8 encoded string with a length limit of 128 characters. Otherwise, an INVALID_ARGUMENT error is returned.",
-                    "type": "string"
-                  },
-                  "ip_address": {
-                    "description": "The end user's IP address. This field is used to extract location information for personalization.  This field must be either an IPv4 address (e.g. \"104.133.9.80\") or an IPv6 address (e.g. \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"). Otherwise, an INVALID_ARGUMENT error is returned.  This should not be set when:  -  setting [SearchRequest.user_info][google.cloud.retail.v2beta.SearchRequest.user_info]. -  using the JavaScript tag in [UserEventService.CollectUserEvent][google.cloud.retail.v2beta.UserEventService.CollectUserEvent] or if [direct_user_request][google.cloud.retail.v2beta.UserInfo.direct_user_request] is set.",
-                    "type": "string"
-                  },
-                  "user_agent": {
-                    "description": "User agent as included in the HTTP header. Required for getting [SearchResponse.sponsored_results][google.cloud.retail.v2beta.SearchResponse.sponsored_results].  The field must be a UTF-8 encoded string with a length limit of 1,000 characters. Otherwise, an INVALID_ARGUMENT error is returned.  This should not be set when using the client side event reporting with GTM or JavaScript tag in [UserEventService.CollectUserEvent][google.cloud.retail.v2beta.UserEventService.CollectUserEvent] or if [direct_user_request][google.cloud.retail.v2beta.UserInfo.direct_user_request] is set.",
-                    "type": "string"
-                  },
-                  "direct_user_request": {
-                    "description": "True if the request is made directly from the end user, in which case the [ip_address][google.cloud.retail.v2beta.UserInfo.ip_address] and [user_agent][google.cloud.retail.v2beta.UserInfo.user_agent] can be populated from the HTTP request. This flag should be set only if the API request is made directly from the end user such as a mobile app (and not if a gateway or a server is processing and pushing the user events).  This should not be set when using the JavaScript tag in [UserEventService.CollectUserEvent][google.cloud.retail.v2beta.UserEventService.CollectUserEvent].",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "uri": {
-                "description": "Complete URL (window.location.href) of the user's current page. When using the client side event reporting with JavaScript pixel and Google Tag Manager, this value is filled in automatically. Maximum length 5,000 characters.",
-                "type": "string"
-              },
-              "referrer_uri": {
-                "description": "The referrer URL of the current page.  When using the client side event reporting with JavaScript pixel and Google Tag Manager, this value is filled in automatically.",
-                "type": "string"
-              },
-              "page_view_id": {
-                "description": "A unique ID of a web page view.  This should be kept the same for all user events triggered from the same pageview. For example, an item detail page view could trigger multiple events as the user is browsing the page. The ``pageViewId`` property should be kept the same for all these events so that they can be grouped together properly.  When using the client side event reporting with JavaScript pixel and Google Tag Manager, this value is filled in automatically.",
-                "type": "string"
-              },
-              "entity": {
-                "description": "The entity for customers that may run multiple different entities, domains, sites or regions, for example, ``Google US``, ``Google Ads``, ``Waymo``, ``google.com``, ``youtube.com``, etc. We recommend that you set this field to get better per-entity search, completion, and prediction results.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "event_type",
-              "visitor_id"
-            ]
+              "required": [
+                "event_type",
+                "user_info"
+              ]
+            }
           }
         },
         "required": [
@@ -1277,6 +1440,282 @@
         },
         "required": [
           "parent"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-recommendations-ai/google/cloud/recommendationengine_v1beta1/types/import_.py": [
+    {
+      "type": "function",
+      "name": "ImportCatalogItemsRequest",
+      "description": "Request message for Import methods.\n\nAttributes:\n    parent (str):\n        Required.\n        ``projects/1234/locations/global/catalogs/default_catalog``\n    request_id (str):\n        Optional. Unique identifier provided by\n        client, within the ancestor dataset scope.\n        Ensures idempotency and used for request\n        deduplication. Server-generated if unspecified.\n        Up to 128 characters long. This is returned as\n        google.longrunning.Operation.name in the\n        response.\n    input_config (google.cloud.recommendationengine_v1beta1.types.InputConfig):\n        Required. The desired input location of the\n        data.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Optional. The desired location of errors\n        incurred during the Import.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. ``projects/1234/locations/global/catalogs/default_catalog``",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. Unique identifier provided by client, within the ancestor dataset scope. Ensures idempotency and used for request deduplication. Server-generated if unspecified. Up to 128 characters long. This is returned as google.longrunning.Operation.name in the response.",
+            "type": "string"
+          },
+          "input_config": {
+            "description": "Required. The desired input location of the data.",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.InputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_input_configs": {
+                  "description": "Set of input BigQuery tables.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_table": {
+                          "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                          "type": "string"
+                        },
+                        "gcs_uri": {
+                          "description": "Required. Schema mapping file",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "bigquery_table",
+                        "gcs_uri"
+                      ]
+                    }
+                  }
+                },
+                "entity_type": {
+                  "description": "Entity type",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The name of the entity type.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "Required. Indicates the kind of entity type.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                      },
+                      "auto_expansion_mode": {
+                        "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                      },
+                      "entities": {
+                        "description": "Optional. The collection of entity entries associated with the entity type.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "synonyms"
+                            ]
+                          }
+                        }
+                      },
+                      "enable_fuzzy_extraction": {
+                        "description": "Optional. Enables fuzzy entity extraction during classification.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "kind"
+                    ]
+                  }
+                },
+                "previous_result_bigquery_table": {
+                  "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "errors_config": {
+            "description": "Optional. The desired location of errors incurred during the Import.",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_prefix": {
+                  "description": "Google Cloud Storage path for import errors. This must be an empty, existing Cloud Storage bucket. Import errors will be written to a file in this bucket, one per line, as a JSON-encoded ``google.rpc.Status`` message.  This field is a member of `oneof`_ ``destination``.",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "parent",
+          "input_config"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ImportUserEventsRequest",
+      "description": "Request message for the ImportUserEvents request.\n\nAttributes:\n    parent (str):\n        Required.\n        ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``\n    request_id (str):\n        Optional. Unique identifier provided by client, within the\n        ancestor dataset scope. Ensures idempotency for expensive\n        long running operations. Server-generated if unspecified. Up\n        to 128 characters long. This is returned as\n        google.longrunning.Operation.name in the response. Note that\n        this field must not be set if the desired input config is\n        catalog_inline_source.\n    input_config (google.cloud.recommendationengine_v1beta1.types.InputConfig):\n        Required. The desired input location of the\n        data.\n    errors_config (google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig):\n        Optional. The desired location of errors\n        incurred during the Import.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. ``projects/1234/locations/global/catalogs/default_catalog/eventStores/default_event_store``",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Optional. Unique identifier provided by client, within the ancestor dataset scope. Ensures idempotency for expensive long running operations. Server-generated if unspecified. Up to 128 characters long. This is returned as google.longrunning.Operation.name in the response. Note that this field must not be set if the desired input config is catalog_inline_source.",
+            "type": "string"
+          },
+          "input_config": {
+            "description": "Required. The desired input location of the data.",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.InputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_input_configs": {
+                  "description": "Set of input BigQuery tables.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_table": {
+                          "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                          "type": "string"
+                        },
+                        "gcs_uri": {
+                          "description": "Required. Schema mapping file",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "bigquery_table",
+                        "gcs_uri"
+                      ]
+                    }
+                  }
+                },
+                "entity_type": {
+                  "description": "Entity type",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The name of the entity type.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "Required. Indicates the kind of entity type.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                      },
+                      "auto_expansion_mode": {
+                        "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                      },
+                      "entities": {
+                        "description": "Optional. The collection of entity entries associated with the entity type.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "synonyms"
+                            ]
+                          }
+                        }
+                      },
+                      "enable_fuzzy_extraction": {
+                        "description": "Optional. Enables fuzzy entity extraction during classification.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "kind"
+                    ]
+                  }
+                },
+                "previous_result_bigquery_table": {
+                  "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "errors_config": {
+            "description": "Optional. The desired location of errors incurred during the Import.",
+            "reference": "google.cloud.recommendationengine_v1beta1.types.ImportErrorsConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_prefix": {
+                  "description": "Google Cloud Storage path for import errors. This must be an empty, existing Cloud Storage bucket. Import errors will be written to a file in this bucket, one per line, as a JSON-encoded ``google.rpc.Status`` message.  This field is a member of `oneof`_ ``destination``.",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "parent",
+          "input_config"
         ]
       }
     }

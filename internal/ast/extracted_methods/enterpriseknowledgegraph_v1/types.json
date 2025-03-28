@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-enterpriseknowledgegraph\\google\\cloud\\enterpriseknowledgegraph_v1\\types\\service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-enterpriseknowledgegraph/google/cloud/enterpriseknowledgegraph_v1/types/service.py": [
     {
       "type": "function",
       "name": "CreateEntityReconciliationJobRequest",
@@ -13,217 +13,255 @@
           },
           "entity_reconciliation_job": {
             "description": "Required. The EntityReconciliationJob to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. Resource name of the EntityReconciliationJob.",
-                "type": "string"
-              },
-              "input_config": {
-                "type": "object",
-                "properties": {
-                  "gcs_source": {
+            "reference": "google.cloud.enterpriseknowledgegraph_v1.types.EntityReconciliationJob",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Output only. Resource name of the EntityReconciliationJob.",
+                  "type": "string"
+                },
+                "input_config": {
+                  "description": "Required. Information about the input BigQuery tables.",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "uri": {
-                        "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
+                      "bigquery_input_configs": {
+                        "description": "Set of input BigQuery tables.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "bigquery_table": {
+                                "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                                "type": "string"
+                              },
+                              "gcs_uri": {
+                                "description": "Required. Schema mapping file",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "bigquery_table",
+                              "gcs_uri"
+                            ]
+                          }
+                        }
+                      },
+                      "entity_type": {
+                        "description": "Entity type",
+                        "type": "object",
+                        "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                              "type": "string"
+                            },
+                            "display_name": {
+                              "description": "Required. The name of the entity type.",
+                              "type": "string"
+                            },
+                            "kind": {
+                              "description": "Required. Indicates the kind of entity type.",
+                              "type": "object",
+                              "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                            },
+                            "auto_expansion_mode": {
+                              "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                              "type": "object",
+                              "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                            },
+                            "entities": {
+                              "description": "Optional. The collection of entity entries associated with the entity type.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                      "type": "string"
+                                    },
+                                    "synonyms": {
+                                      "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "value",
+                                    "synonyms"
+                                  ]
+                                }
+                              }
+                            },
+                            "enable_fuzzy_extraction": {
+                              "description": "Optional. Enables fuzzy entity extraction during classification.",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "display_name",
+                            "kind"
+                          ]
+                        }
+                      },
+                      "previous_result_bigquery_table": {
+                        "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
                         "type": "string"
-                      }
-                    },
-                    "required": [
-                      "uri"
-                    ]
-                  },
-                  "data_format": {
-                    "type": "enum",
-                    "name": "DataFormat",
-                    "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                    "values": {
-                      "DATA_FORMAT_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "JSON": {
-                        "value": 1
-                      },
-                      "PROTO_TEXT": {
-                        "value": 2
                       }
                     }
                   }
                 },
-                "required": [
-                  "data_format"
-                ]
-              },
-              "output_config": {
-                "type": "object",
-                "properties": {
-                  "gcs_destination": {
+                "output_config": {
+                  "description": "Required. The desired output location.",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.OutputConfig",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "uri": {
-                        "description": "Required. Google Cloud Storage URI.",
+                      "bigquery_dataset": {
+                        "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
                         "type": "string"
-                      }
-                    },
-                    "required": [
-                      "uri"
-                    ]
-                  },
-                  "data_format": {
-                    "type": "enum",
-                    "name": "DataFormat",
-                    "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                    "values": {
-                      "DATA_FORMAT_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "JSON": {
-                        "value": 1
-                      },
-                      "PROTO_TEXT": {
-                        "value": 2
                       }
                     }
                   }
                 },
-                "required": [
-                  "data_format"
-                ]
-              },
-              "state": {
-                "type": "enum",
-                "name": "JobState",
-                "description": "Describes the state of a job.\n\nValues:\n    JOB_STATE_UNSPECIFIED (0):\n        The job state is unspecified.\n    JOB_STATE_PENDING (9):\n        The service is preparing to run the job.\n    JOB_STATE_RUNNING (1):\n        The job is in progress.\n    JOB_STATE_SUCCEEDED (2):\n        The job completed successfully.\n    JOB_STATE_FAILED (3):\n        The job failed.\n    JOB_STATE_CANCELLED (4):\n        The job has been cancelled.\n    JOB_STATE_KNOWLEDGE_EXTRACTION (5):\n        Entity Recon API: The knowledge extraction\n        job is running.\n    JOB_STATE_RECON_PREPROCESSING (6):\n        Entity Recon API: The preprocessing job is\n        running.\n    JOB_STATE_CLUSTERING (7):\n        Entity Recon API: The clustering job is\n        running.\n    JOB_STATE_EXPORTING_CLUSTERS (8):\n        Entity Recon API: The exporting clusters job\n        is running.",
-                "values": {
-                  "JOB_STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JOB_STATE_PENDING": {
-                    "value": 9
-                  },
-                  "JOB_STATE_RUNNING": {
-                    "value": 1
-                  },
-                  "JOB_STATE_SUCCEEDED": {
-                    "value": 2
-                  },
-                  "JOB_STATE_FAILED": {
-                    "value": 3
-                  },
-                  "JOB_STATE_CANCELLED": {
-                    "value": 4
-                  },
-                  "JOB_STATE_KNOWLEDGE_EXTRACTION": {
-                    "value": 5
-                  },
-                  "JOB_STATE_RECON_PREPROCESSING": {
-                    "value": 6
-                  },
-                  "JOB_STATE_CLUSTERING": {
-                    "value": 7
-                  },
-                  "JOB_STATE_EXPORTING_CLUSTERS": {
-                    "value": 8
-                  }
-                }
-              },
-              "error": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "AFFECTED": {
-                        "value": 1
-                      },
-                      "NOT_AFFECTED": {
-                        "value": 2
-                      },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
-                      }
-                    }
-                  },
-                  "error_message": {
-                    "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
-                    "type": "string"
-                  }
-                }
-              },
-              "create_time": {
-                "description": "Output only. Time when the EntityReconciliationJob was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "Output only. Time when the EntityReconciliationJob entered any of the following states: ``JOB_STATE_SUCCEEDED``, ``JOB_STATE_FAILED``, ``JOB_STATE_CANCELLED``.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Time when the EntityReconciliationJob was most recently updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "recon_config": {
-                "type": "object",
-                "properties": {
-                  "connected_components_config": {
+                "state": {
+                  "description": "Output only. The detailed state of the job.",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.JobState"
+                },
+                "error": {
+                  "description": "Output only. Only populated when the job's state is JOB_STATE_FAILED or JOB_STATE_CANCELLED.",
+                  "type": "object",
+                  "reference": "google.rpc.status_pb2.Status",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "weight_threshold": {
-                        "description": "Threshold used for connected components. Default value is 0.85.",
-                        "type": "number"
-                      }
-                    }
-                  },
-                  "affinity_clustering_config": {
-                    "type": "object",
-                    "properties": {
-                      "compression_round_count": {
-                        "description": "Number of iterations to perform. Default value is 1.",
+                      "state": {
+                        "description": "Output only. State of the metadata job.",
+                        "type": "object",
+                        "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                      },
+                      "message": {
+                        "description": "Output only. Message relating to the progression of a metadata job.",
+                        "type": "string"
+                      },
+                      "completion_percent": {
+                        "description": "Output only. Progress tracking.",
                         "type": "integer"
-                      }
-                    }
-                  },
-                  "options": {
-                    "type": "object",
-                    "properties": {
-                      "enable_geocoding_separation": {
-                        "description": "If true, separate clusters by their geographic region (from geocoding). Uses the following entity features:  - schema.org/addressLocality - schema.org/addressRegion - schema.org/addressCountry  Warning: processing will no longer be regionalized!",
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "model_config": {
-                    "type": "object",
-                    "properties": {
-                      "model_name": {
-                        "description": "Model name. Refer to external documentation for valid names. If unspecified, it defaults to the one mentioned in the documentation.",
-                        "type": "string"
                       },
-                      "version_tag": {
-                        "description": "Model version tag. Refer to external documentation for valid tags. If unspecified, it defaults to the one mentioned in the documentation.",
-                        "type": "string"
+                      "update_time": {
+                        "description": "Output only. The time when the status was updated.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      }
+                    }
+                  }
+                },
+                "create_time": {
+                  "description": "Output only. Time when the EntityReconciliationJob was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "Output only. Time when the EntityReconciliationJob entered any of the following states: ``JOB_STATE_SUCCEEDED``, ``JOB_STATE_FAILED``, ``JOB_STATE_CANCELLED``.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Time when the EntityReconciliationJob was most recently updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "recon_config": {
+                  "description": "Optional. Recon configs to adjust the clustering behavior.",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.ReconConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "connected_components_config": {
+                        "description": "Configs for connected components.  This field is a member of `oneof`_ ``clustering_config``.",
+                        "type": "object",
+                        "reference": "google.cloud.enterpriseknowledgegraph_v1.types.ConnectedComponentsConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "weight_threshold": {
+                              "description": "Threshold used for connected components. Default value is 0.85.",
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "affinity_clustering_config": {
+                        "description": "Configs for affinity clustering.  This field is a member of `oneof`_ ``clustering_config``.",
+                        "type": "object",
+                        "reference": "google.cloud.enterpriseknowledgegraph_v1.types.AffinityClusteringConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "compression_round_count": {
+                              "description": "Number of iterations to perform. Default value is 1.",
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      },
+                      "options": {
+                        "description": "Extra options that affect entity clustering behavior.",
+                        "type": "object",
+                        "reference": "google.cloud.enterpriseknowledgegraph_v1.types.ReconConfig.Options",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enable_geocoding_separation": {
+                              "description": "If true, separate clusters by their geographic region (from geocoding). Uses the following entity features:  - schema.org/addressLocality - schema.org/addressRegion - schema.org/addressCountry  Warning: processing will no longer be regionalized!",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      },
+                      "model_config": {
+                        "description": "Model Configs",
+                        "type": "object",
+                        "reference": "google.cloud.enterpriseknowledgegraph_v1.types.ReconConfig.ModelConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "model_name": {
+                              "description": "Model name. Refer to external documentation for valid names. If unspecified, it defaults to the one mentioned in the documentation.",
+                              "type": "string"
+                            },
+                            "version_tag": {
+                              "description": "Model version tag. Refer to external documentation for valid tags. If unspecified, it defaults to the one mentioned in the documentation.",
+                              "type": "string"
+                            }
+                          }
+                        }
                       }
                     }
                   }
                 }
-              }
-            },
-            "required": [
-              "input_config",
-              "output_config"
-            ]
+              },
+              "required": [
+                "input_config",
+                "output_config"
+              ]
+            }
           }
         },
         "required": [

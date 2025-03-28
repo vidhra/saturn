@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-asset\\google\\cloud\\asset_v1\\types\\asset_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-asset/google/cloud/asset_v1/types/asset_service.py": [
     {
       "type": "function",
       "name": "ExportAssetsRequest",
@@ -24,57 +24,22 @@
             }
           },
           "content_type": {
-            "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
-            "type": "enum",
-            "name": "ContentType",
-            "values": {
-              "TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "URL_ENCODED": {
-                "value": 1
-              },
-              "USER_PROVIDED": {
-                "value": 2
-              }
-            }
+            "description": "Asset content type. If not specified, no content but the asset name will be returned.",
+            "type": "object",
+            "reference": "google.cloud.asset_v1.types.ContentType"
           },
           "output_config": {
             "description": "Required. Output configuration indicating where the results will be output to.",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
-                  }
+            "reference": "google.cloud.asset_v1.types.OutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_dataset": {
+                  "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           },
           "relationship_types": {
             "description": "A list of relationship types to export, for example: ``INSTANCE_TO_INSTANCEGROUP``. This field should only be specified if content_type=RELATIONSHIP.  -  If specified: it snapshots specified relationships. It returns an error if any of the [relationship_types] doesn't belong to the supported relationship types of the [asset_types] or if any of the [asset_types] doesn't belong to the source types of the [relationship_types]. -  Otherwise: it snapshots the supported relationships for all [asset_types] or returns an error if any of the [asset_types] has no relationship support. An unspecified asset types field means all supported asset_types. See `Introduction to Cloud Asset Inventory <https://cloud.google.com/asset-inventory/docs/overview>`__ for all supported asset types and relationship types.",
@@ -114,20 +79,9 @@
             }
           },
           "content_type": {
-            "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
-            "type": "enum",
-            "name": "ContentType",
-            "values": {
-              "TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "URL_ENCODED": {
-                "value": 1
-              },
-              "USER_PROVIDED": {
-                "value": 2
-              }
-            }
+            "description": "Asset content type. If not specified, no content but the asset name will be returned.",
+            "type": "object",
+            "reference": "google.cloud.asset_v1.types.ContentType"
           },
           "page_size": {
             "description": "The maximum number of assets to be returned in a single response. Default is 100, minimum is 1, and maximum is 1000.",
@@ -169,52 +123,71 @@
             }
           },
           "content_type": {
-            "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
-            "type": "enum",
-            "name": "ContentType",
-            "values": {
-              "TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "URL_ENCODED": {
-                "value": 1
-              },
-              "USER_PROVIDED": {
-                "value": 2
-              }
-            }
+            "description": "Optional. The content type.",
+            "type": "object",
+            "reference": "google.cloud.asset_v1.types.ContentType"
           },
           "read_time_window": {
             "description": "Optional. The time window for the asset history. Both start_time and end_time are optional and if set, it must be after the current time minus 35 days. If end_time is not set, it is default to current timestamp. If start_time is not set, the snapshot of the assets at end_time will be returned. The returned results contain all temporal assets whose time window overlap with read_time_window.",
-            "type": "object",
-            "properties": {
-              "start_time": {
-                "description": "The hard time window start time. If unspecified it will be set to ``ShipmentModel.global_start_time``.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "The hard time window end time. If unspecified it will be set to ``ShipmentModel.global_end_time``.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "soft_start_time": {
-                "description": "The soft start time of the time window.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "soft_end_time": {
-                "description": "The soft end time of the time window.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "cost_per_hour_before_soft_start_time": {
-                "description": "A cost per hour added to other costs in the model if the event occurs before soft_start_time, computed as:  ::  max(0, soft_start_time - t.seconds) * cost_per_hour_before_soft_start_time / 3600, t being the time of the event.  This cost must be positive, and the field can only be set if soft_start_time has been set.  This field is a member of `oneof`_ ``_cost_per_hour_before_soft_start_time``.",
-                "type": "number"
-              },
-              "cost_per_hour_after_soft_end_time": {
-                "description": "A cost per hour added to other costs in the model if the event occurs after ``soft_end_time``, computed as:  ::  max(0, t.seconds - soft_end_time.seconds) * cost_per_hour_after_soft_end_time / 3600, t being the time of the event.  This cost must be positive, and the field can only be set if ``soft_end_time`` has been set.  This field is a member of `oneof`_ ``_cost_per_hour_after_soft_end_time``.",
-                "type": "number"
+            "reference": "google.cloud.asset_v1.types.TimeWindow",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "maintenance_exclusion_options": {
+                  "description": "MaintenanceExclusionOptions provides maintenance exclusion related options.  This field is a member of `oneof`_ ``options``.",
+                  "type": "object",
+                  "reference": "google.cloud.container_v1beta1.types.MaintenanceExclusionOptions",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "scope": {
+                        "description": "Scope specifies the upgrade scope which upgrades are blocked by the exclusion.",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.MaintenanceExclusionOptions.Scope",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "include_org_ids": {
+                              "description": "The list of organization IDs to search within. To find your organization ID, follow instructions in https://cloud.google.com/resource-manager/docs/creating-managing-organization.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "include_project_ids": {
+                              "description": "The list of project IDs to search within. To learn more about the distinction between project names/IDs/numbers, go to https://cloud.google.com/docs/overview/#projects.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "include_gcp_public_datasets": {
+                              "description": "If ``true``, include Google Cloud public datasets in the search results. Info on Google Cloud public datasets is available at https://cloud.google.com/public-datasets/. By default, Google Cloud public datasets are excluded.",
+                              "type": "boolean"
+                            },
+                            "restricted_locations": {
+                              "description": "Optional. The list of locations to search within.  1. If empty, search will be performed in all locations; 2. If any of the locations are NOT in the valid locations list, error will be returned; 3. Otherwise, search only the given locations for matching results. Typical usage is to leave this field empty. When a location is unreachable as returned in the ``SearchCatalogResponse.unreachable`` field, users can repeat the search request with this parameter set to get additional information on the error.  Valid locations:  -  asia-east1 -  asia-east2 -  asia-northeast1 -  asia-northeast2 -  asia-northeast3 -  asia-south1 -  asia-southeast1 -  australia-southeast1 -  eu -  europe-north1 -  europe-west1 -  europe-west2 -  europe-west3 -  europe-west4 -  europe-west6 -  global -  northamerica-northeast1 -  southamerica-east1 -  us -  us-central1 -  us-east1 -  us-east4 -  us-west1 -  us-west2",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "start_time": {
+                  "description": "The time that the window first starts.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "The time that the window ends. The end time should take place after the start time.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                }
               }
             }
           },
@@ -248,61 +221,63 @@
           },
           "feed": {
             "description": "Required. The feed details. The field ``name`` must be empty and it will be generated in the format of: projects/project_number/feeds/feed_id folders/folder_number/feeds/feed_id organizations/organization_number/feeds/feed_id",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Required. The format will be projects/{project_number}/feeds/{client-assigned_feed_identifier} or folders/{folder_number}/feeds/{client-assigned_feed_identifier} or organizations/{organization_number}/feeds/{client-assigned_feed_identifier}  The client-assigned feed identifier must be unique within the parent project/folder/organization.",
-                "type": "string"
-              },
-              "asset_names": {
-                "description": "A list of the full names of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: ``//compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1``. See `Resource Names <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ for more info.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.asset_v1.types.Feed",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Required. The format will be projects/{project_number}/feeds/{client-assigned_feed_identifier} or folders/{folder_number}/feeds/{client-assigned_feed_identifier} or organizations/{organization_number}/feeds/{client-assigned_feed_identifier}  The client-assigned feed identifier must be unique within the parent project/folder/organization.",
                   "type": "string"
-                }
-              },
-              "asset_types": {
-                "description": "A list of types of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: \"compute.googleapis.com/Disk\" See `Introduction to Cloud Asset Inventory <https://cloud.google.com/resource-manager/docs/cloud-asset-inventory/overview>`__ for all supported asset types.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "content_type": {
-                "type": "enum",
-                "name": "ContentType",
-                "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "URL_ENCODED": {
-                    "value": 1
-                  },
-                  "USER_PROVIDED": {
-                    "value": 2
+                },
+                "asset_names": {
+                  "description": "A list of the full names of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: ``//compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1``. See `Resource Names <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ for more info.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
                   }
-                }
-              },
-              "feed_output_config": {
-                "type": "object",
-                "properties": {
-                  "pubsub_destination": {
+                },
+                "asset_types": {
+                  "description": "A list of types of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: \"compute.googleapis.com/Disk\" See `Introduction to Cloud Asset Inventory <https://cloud.google.com/resource-manager/docs/cloud-asset-inventory/overview>`__ for all supported asset types.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "content_type": {
+                  "description": "Asset content type. If not specified, no content but the asset name and type will be returned.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p2beta1.types.ContentType"
+                },
+                "feed_output_config": {
+                  "description": "Required. Feed output configuration defining where the asset updates are published to.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p2beta1.types.FeedOutputConfig",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "topic": {
-                        "description": "The name of the Pub/Sub topic to publish job completion notification to. For example: ``projects/{project}/topics/{topic}``.",
-                        "type": "string"
+                      "pubsub_destination": {
+                        "description": "Destination on Pub/Sub.  This field is a member of `oneof`_ ``destination``.",
+                        "type": "object",
+                        "reference": "google.cloud.asset_v1p2beta1.types.PubsubDestination",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "topic": {
+                              "description": "The name of the Pub/Sub topic to publish to. For example: ``projects/PROJECT_ID/topics/TOPIC_ID``.",
+                              "type": "string"
+                            }
+                          }
+                        }
                       }
                     }
                   }
                 }
-              }
-            },
-            "required": [
-              "name",
-              "feed_output_config"
-            ]
+              },
+              "required": [
+                "name",
+                "feed_output_config"
+              ]
+            }
           }
         },
         "required": [
@@ -355,61 +330,63 @@
         "properties": {
           "feed": {
             "description": "Required. The new values of feed details. It must match an existing feed and the field ``name`` must be in the format of: projects/project_number/feeds/feed_id or folders/folder_number/feeds/feed_id or organizations/organization_number/feeds/feed_id.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Required. The format will be projects/{project_number}/feeds/{client-assigned_feed_identifier} or folders/{folder_number}/feeds/{client-assigned_feed_identifier} or organizations/{organization_number}/feeds/{client-assigned_feed_identifier}  The client-assigned feed identifier must be unique within the parent project/folder/organization.",
-                "type": "string"
-              },
-              "asset_names": {
-                "description": "A list of the full names of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: ``//compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1``. See `Resource Names <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ for more info.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.asset_v1.types.Feed",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Required. The format will be projects/{project_number}/feeds/{client-assigned_feed_identifier} or folders/{folder_number}/feeds/{client-assigned_feed_identifier} or organizations/{organization_number}/feeds/{client-assigned_feed_identifier}  The client-assigned feed identifier must be unique within the parent project/folder/organization.",
                   "type": "string"
-                }
-              },
-              "asset_types": {
-                "description": "A list of types of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: \"compute.googleapis.com/Disk\" See `Introduction to Cloud Asset Inventory <https://cloud.google.com/resource-manager/docs/cloud-asset-inventory/overview>`__ for all supported asset types.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "content_type": {
-                "type": "enum",
-                "name": "ContentType",
-                "description": "Header options corresponding to the content type of a HTTP\nrequest body.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        No content type specified.\n    URL_ENCODED (1):\n        ``body`` is in URL-encoded form. Equivalent to setting the\n        ``Content-Type`` to ``application/x-www-form-urlencoded`` in\n        the HTTP request.\n    USER_PROVIDED (2):\n        ``body`` is in ``custom_content_type`` form. Equivalent to\n        setting the ``Content-Type`` to the contents of\n        ``custom_content_type`` in the HTTP request.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "URL_ENCODED": {
-                    "value": 1
-                  },
-                  "USER_PROVIDED": {
-                    "value": 2
+                },
+                "asset_names": {
+                  "description": "A list of the full names of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: ``//compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1``. See `Resource Names <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ for more info.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
                   }
-                }
-              },
-              "feed_output_config": {
-                "type": "object",
-                "properties": {
-                  "pubsub_destination": {
+                },
+                "asset_types": {
+                  "description": "A list of types of the assets to receive updates. You must specify either or both of asset_names and asset_types. Only asset updates matching specified asset_names or asset_types are exported to the feed. For example: \"compute.googleapis.com/Disk\" See `Introduction to Cloud Asset Inventory <https://cloud.google.com/resource-manager/docs/cloud-asset-inventory/overview>`__ for all supported asset types.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "content_type": {
+                  "description": "Asset content type. If not specified, no content but the asset name and type will be returned.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p2beta1.types.ContentType"
+                },
+                "feed_output_config": {
+                  "description": "Required. Feed output configuration defining where the asset updates are published to.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p2beta1.types.FeedOutputConfig",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "topic": {
-                        "description": "The name of the Pub/Sub topic to publish job completion notification to. For example: ``projects/{project}/topics/{topic}``.",
-                        "type": "string"
+                      "pubsub_destination": {
+                        "description": "Destination on Pub/Sub.  This field is a member of `oneof`_ ``destination``.",
+                        "type": "object",
+                        "reference": "google.cloud.asset_v1p2beta1.types.PubsubDestination",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "topic": {
+                              "description": "The name of the Pub/Sub topic to publish to. For example: ``projects/PROJECT_ID/topics/TOPIC_ID``.",
+                              "type": "string"
+                            }
+                          }
+                        }
                       }
                     }
                   }
                 }
-              }
-            },
-            "required": [
-              "name",
-              "feed_output_config"
-            ]
+              },
+              "required": [
+                "name",
+                "feed_output_config"
+              ]
+            }
           },
           "update_mask": {
             "description": "Required. Only updates the ``feed`` fields indicated by this mask. The field mask must not be empty, and it must not contain fields that are immutable or only set by the server.",
@@ -534,79 +511,92 @@
         "properties": {
           "analysis_query": {
             "description": "Required. The request query.",
-            "type": "object",
-            "properties": {
-              "parent": {
-                "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
-                "type": "string"
-              },
-              "resource_selector": {
-                "type": "object",
-                "properties": {
-                  "resource_types": {
-                    "description": "Optional. The resource types to run the detector on.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+            "reference": "google.cloud.asset_v1.types.IamPolicyAnalysisQuery",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
+                  "type": "string"
+                },
+                "resource_selector": {
+                  "description": "Optional. Specifies a resource for analysis. Leaving it empty means ANY.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.ResourceSelector",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "full_resource_name": {
+                        "description": "Required. The `full resource name <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ .",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "full_resource_name"
+                    ]
+                  }
+                },
+                "identity_selector": {
+                  "description": "Optional. Specifies an identity for analysis. Leaving it empty means ANY.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.IdentitySelector",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "identity": {
+                        "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "identity"
+                    ]
+                  }
+                },
+                "access_selector": {
+                  "description": "Optional. Specifies roles or permissions for analysis. Leaving it empty means ANY.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.AccessSelector",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "roles": {
+                        "description": "Optional. The roles to appear in result.",
+                        "type": "object",
+                        "reference": "Sequence[str]"
+                      },
+                      "permissions": {
+                        "description": "Optional. The permissions to appear in result.",
+                        "type": "object",
+                        "reference": "Sequence[str]"
+                      }
                     }
                   }
                 }
               },
-              "identity_selector": {
-                "type": "object",
-                "properties": {
-                  "identity": {
-                    "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "identity"
-                ]
-              },
-              "access_selector": {
-                "type": "object",
-                "properties": {
-                  "roles": {
-                    "description": "Optional. The roles to appear in result.",
-                    "type": "object",
-                    "reference": "Sequence[str]"
-                  },
-                  "permissions": {
-                    "description": "Optional. The permissions to appear in result.",
-                    "type": "object",
-                    "reference": "Sequence[str]"
-                  }
-                }
-              }
-            },
-            "required": [
-              "parent"
-            ]
+              "required": [
+                "parent"
+              ]
+            }
           },
           "saved_analysis_query": {
             "description": "Optional. The name of a saved query, which must be in the format of:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id  If both ``analysis_query`` and ``saved_analysis_query`` are provided, they will be merged together with the ``saved_analysis_query`` as base and the ``analysis_query`` as overrides. For more details of the merge behavior, refer to the `MergeFrom <https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.message#Message.MergeFrom.details>`__ page.  Note that you cannot override primitive fields with default value, such as 0 or empty string, etc., because we use proto3, which doesn't support field presence yet.",
             "type": "string"
           },
           "execution_timeout": {
-            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-            "type": "enum",
-            "name": "Duration",
-            "values": {
-              "UNDEFINED_DURATION": {
-                "value": 0
-              },
-              "DURATION_UNSPECIFIED": {
-                "value": 529071340
-              },
-              "HOUR": {
-                "value": 2223588
-              },
-              "MAX": {
-                "value": 76100
-              },
-              "MINUTE": {
-                "value": 126786068
+            "description": "Optional. Amount of time executable has to complete. See JSON representation of `Duration <https://developers.google.com/protocol-buffers/docs/proto3#json>`__.  If this field is set with a value less than the RPC deadline, and the execution of your query hasn't finished in the specified execution timeout, you will get a response with partial result. Otherwise, your query's execution will continue until the RPC deadline. If it's not finished until then, you will get a DEADLINE_EXCEEDED error.  Default is empty.",
+            "reference": "google.protobuf.duration_pb2.Duration",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "nanos": {
+                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                  "type": "integer"
+                },
+                "seconds": {
+                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                  "type": "integer"
+                }
               }
             }
           }
@@ -625,55 +615,73 @@
         "properties": {
           "analysis_query": {
             "description": "Required. The request query.",
-            "type": "object",
-            "properties": {
-              "parent": {
-                "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
-                "type": "string"
-              },
-              "resource_selector": {
-                "type": "object",
-                "properties": {
-                  "resource_types": {
-                    "description": "Optional. The resource types to run the detector on.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+            "reference": "google.cloud.asset_v1.types.IamPolicyAnalysisQuery",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
+                  "type": "string"
+                },
+                "resource_selector": {
+                  "description": "Optional. Specifies a resource for analysis. Leaving it empty means ANY.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.ResourceSelector",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "full_resource_name": {
+                        "description": "Required. The `full resource name <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ .",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "full_resource_name"
+                    ]
+                  }
+                },
+                "identity_selector": {
+                  "description": "Optional. Specifies an identity for analysis. Leaving it empty means ANY.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.IdentitySelector",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "identity": {
+                        "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "identity"
+                    ]
+                  }
+                },
+                "access_selector": {
+                  "description": "Optional. Specifies roles or permissions for analysis. Leaving it empty means ANY.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.AccessSelector",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "roles": {
+                        "description": "Optional. The roles to appear in result.",
+                        "type": "object",
+                        "reference": "Sequence[str]"
+                      },
+                      "permissions": {
+                        "description": "Optional. The permissions to appear in result.",
+                        "type": "object",
+                        "reference": "Sequence[str]"
+                      }
                     }
                   }
                 }
               },
-              "identity_selector": {
-                "type": "object",
-                "properties": {
-                  "identity": {
-                    "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "identity"
-                ]
-              },
-              "access_selector": {
-                "type": "object",
-                "properties": {
-                  "roles": {
-                    "description": "Optional. The roles to appear in result.",
-                    "type": "object",
-                    "reference": "Sequence[str]"
-                  },
-                  "permissions": {
-                    "description": "Optional. The permissions to appear in result.",
-                    "type": "object",
-                    "reference": "Sequence[str]"
-                  }
-                }
-              }
-            },
-            "required": [
-              "parent"
-            ]
+              "required": [
+                "parent"
+              ]
+            }
           },
           "saved_analysis_query": {
             "description": "Optional. The name of a saved query, which must be in the format of:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id  If both ``analysis_query`` and ``saved_analysis_query`` are provided, they will be merged together with the ``saved_analysis_query`` as base and the ``analysis_query`` as overrides. For more details of the merge behavior, refer to the `MergeFrom <https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.message#Message.MergeFrom.details>`__ doc.  Note that you cannot override primitive fields with default value, such as 0 or empty string, etc., because we use proto3, which doesn't support field presence yet.",
@@ -681,19 +689,24 @@
           },
           "output_config": {
             "description": "Required. Output configuration indicating where the results will be output to.",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
+            "reference": "google.cloud.asset_v1.types.IamPolicyAnalysisOutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_destination": {
+                  "description": "Destination on Cloud Storage.  This field is a member of `oneof`_ ``destination``.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisOutputConfig.GcsDestination",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "The URI of the Cloud Storage object. It's the same URI that is used by gsutil. For example: \"gs://bucket_name/object_name\". See `Viewing and Editing Object Metadata <https://cloud.google.com/storage/docs/viewing-editing-metadata>`__ for more information.  This field is a member of `oneof`_ ``object_uri``.",
+                        "type": "string"
+                      }
+                    }
                   }
-                },
-                "required": [
-                  "uri"
-                ]
+                }
               }
             }
           }
@@ -717,94 +730,122 @@
           },
           "saved_query": {
             "description": "Required. The saved_query details. The ``name`` field must be empty as it will be generated based on the parent and saved_query_id.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the saved query. The format must be:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id",
-                "type": "string"
-              },
-              "description": {
-                "description": "The description of this saved query. This value should be fewer than 255 characters.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The create time of this saved query.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "creator": {
-                "description": "Output only. The account's email address who has created this saved query.",
-                "type": "string"
-              },
-              "last_update_time": {
-                "description": "Output only. The last update time of this saved query.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "last_updater": {
-                "description": "Output only. The account's email address who has updated this saved query most recently.",
-                "type": "string"
-              },
-              "labels": {
-                "description": "Labels applied on the resource. This value should not contain more than 10 entries. The key and value of each entry must be non-empty and fewer than 64 characters.",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.asset_v1.types.SavedQuery",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name of the saved query. The format must be:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id",
                   "type": "string"
-                }
-              },
-              "content": {
-                "type": "object",
-                "properties": {
-                  "iam_policy_analysis_query": {
+                },
+                "description": {
+                  "description": "The description of this saved query. This value should be fewer than 255 characters.",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. The create time of this saved query.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "creator": {
+                  "description": "Output only. The account's email address who has created this saved query.",
+                  "type": "string"
+                },
+                "last_update_time": {
+                  "description": "Output only. The last update time of this saved query.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "last_updater": {
+                  "description": "Output only. The account's email address who has updated this saved query most recently.",
+                  "type": "string"
+                },
+                "labels": {
+                  "description": "Labels applied on the resource. This value should not contain more than 10 entries. The key and value of each entry must be non-empty and fewer than 64 characters.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "content": {
+                  "description": "The query content.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1.types.SavedQuery.QueryContent",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "parent": {
-                        "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
-                        "type": "string"
-                      },
-                      "resource_selector": {
+                      "iam_policy_analysis_query": {
+                        "description": "An IAM Policy Analysis query, which could be used in the [AssetService.AnalyzeIamPolicy][google.cloud.asset.v1.AssetService.AnalyzeIamPolicy] RPC or the [AssetService.AnalyzeIamPolicyLongrunning][google.cloud.asset.v1.AssetService.AnalyzeIamPolicyLongrunning] RPC.  This field is a member of `oneof`_ ``query_content``.",
                         "type": "object",
-                        "properties": {
-                          "resource_types": {
-                            "description": "Optional. The resource types to run the detector on.",
-                            "type": "array",
-                            "items": {
+                        "reference": "google.cloud.asset_v1.types.IamPolicyAnalysisQuery",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "parent": {
+                              "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
                               "type": "string"
+                            },
+                            "resource_selector": {
+                              "description": "Optional. Specifies a resource for analysis. Leaving it empty means ANY.",
+                              "type": "object",
+                              "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.ResourceSelector",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "full_resource_name": {
+                                    "description": "Required. The `full resource name <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ .",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "full_resource_name"
+                                ]
+                              }
+                            },
+                            "identity_selector": {
+                              "description": "Optional. Specifies an identity for analysis. Leaving it empty means ANY.",
+                              "type": "object",
+                              "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.IdentitySelector",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "identity": {
+                                    "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "identity"
+                                ]
+                              }
+                            },
+                            "access_selector": {
+                              "description": "Optional. Specifies roles or permissions for analysis. Leaving it empty means ANY.",
+                              "type": "object",
+                              "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.AccessSelector",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "roles": {
+                                    "description": "Optional. The roles to appear in result.",
+                                    "type": "object",
+                                    "reference": "Sequence[str]"
+                                  },
+                                  "permissions": {
+                                    "description": "Optional. The permissions to appear in result.",
+                                    "type": "object",
+                                    "reference": "Sequence[str]"
+                                  }
+                                }
+                              }
                             }
-                          }
-                        }
-                      },
-                      "identity_selector": {
-                        "type": "object",
-                        "properties": {
-                          "identity": {
-                            "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "identity"
-                        ]
-                      },
-                      "access_selector": {
-                        "type": "object",
-                        "properties": {
-                          "roles": {
-                            "description": "Optional. The roles to appear in result.",
-                            "type": "object",
-                            "reference": "Sequence[str]"
                           },
-                          "permissions": {
-                            "description": "Optional. The permissions to appear in result.",
-                            "type": "object",
-                            "reference": "Sequence[str]"
-                          }
+                          "required": [
+                            "parent"
+                          ]
                         }
                       }
-                    },
-                    "required": [
-                      "parent"
-                    ]
+                    }
                   }
                 }
               }
@@ -877,94 +918,122 @@
         "properties": {
           "saved_query": {
             "description": "Required. The saved query to update.  The saved query's ``name`` field is used to identify the one to update, which has format as below:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the saved query. The format must be:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id",
-                "type": "string"
-              },
-              "description": {
-                "description": "The description of this saved query. This value should be fewer than 255 characters.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The create time of this saved query.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "creator": {
-                "description": "Output only. The account's email address who has created this saved query.",
-                "type": "string"
-              },
-              "last_update_time": {
-                "description": "Output only. The last update time of this saved query.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "last_updater": {
-                "description": "Output only. The account's email address who has updated this saved query most recently.",
-                "type": "string"
-              },
-              "labels": {
-                "description": "Labels applied on the resource. This value should not contain more than 10 entries. The key and value of each entry must be non-empty and fewer than 64 characters.",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.asset_v1.types.SavedQuery",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name of the saved query. The format must be:  -  projects/project_number/savedQueries/saved_query_id -  folders/folder_number/savedQueries/saved_query_id -  organizations/organization_number/savedQueries/saved_query_id",
                   "type": "string"
-                }
-              },
-              "content": {
-                "type": "object",
-                "properties": {
-                  "iam_policy_analysis_query": {
+                },
+                "description": {
+                  "description": "The description of this saved query. This value should be fewer than 255 characters.",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. The create time of this saved query.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "creator": {
+                  "description": "Output only. The account's email address who has created this saved query.",
+                  "type": "string"
+                },
+                "last_update_time": {
+                  "description": "Output only. The last update time of this saved query.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "last_updater": {
+                  "description": "Output only. The account's email address who has updated this saved query most recently.",
+                  "type": "string"
+                },
+                "labels": {
+                  "description": "Labels applied on the resource. This value should not contain more than 10 entries. The key and value of each entry must be non-empty and fewer than 64 characters.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "content": {
+                  "description": "The query content.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1.types.SavedQuery.QueryContent",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "parent": {
-                        "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
-                        "type": "string"
-                      },
-                      "resource_selector": {
+                      "iam_policy_analysis_query": {
+                        "description": "An IAM Policy Analysis query, which could be used in the [AssetService.AnalyzeIamPolicy][google.cloud.asset.v1.AssetService.AnalyzeIamPolicy] RPC or the [AssetService.AnalyzeIamPolicyLongrunning][google.cloud.asset.v1.AssetService.AnalyzeIamPolicyLongrunning] RPC.  This field is a member of `oneof`_ ``query_content``.",
                         "type": "object",
-                        "properties": {
-                          "resource_types": {
-                            "description": "Optional. The resource types to run the detector on.",
-                            "type": "array",
-                            "items": {
+                        "reference": "google.cloud.asset_v1.types.IamPolicyAnalysisQuery",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "parent": {
+                              "description": "Required. The relative name of the root asset. Only resources and IAM policies within the parent will be analyzed. This can only be an organization number (such as \"organizations/123\") or a folder number (such as \"folders/123\").",
                               "type": "string"
+                            },
+                            "resource_selector": {
+                              "description": "Optional. Specifies a resource for analysis. Leaving it empty means ANY.",
+                              "type": "object",
+                              "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.ResourceSelector",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "full_resource_name": {
+                                    "description": "Required. The `full resource name <https://cloud.google.com/apis/design/resource_names#full_resource_name>`__ .",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "full_resource_name"
+                                ]
+                              }
+                            },
+                            "identity_selector": {
+                              "description": "Optional. Specifies an identity for analysis. Leaving it empty means ANY.",
+                              "type": "object",
+                              "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.IdentitySelector",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "identity": {
+                                    "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "identity"
+                                ]
+                              }
+                            },
+                            "access_selector": {
+                              "description": "Optional. Specifies roles or permissions for analysis. Leaving it empty means ANY.",
+                              "type": "object",
+                              "reference": "google.cloud.asset_v1p4beta1.types.IamPolicyAnalysisQuery.AccessSelector",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "roles": {
+                                    "description": "Optional. The roles to appear in result.",
+                                    "type": "object",
+                                    "reference": "Sequence[str]"
+                                  },
+                                  "permissions": {
+                                    "description": "Optional. The permissions to appear in result.",
+                                    "type": "object",
+                                    "reference": "Sequence[str]"
+                                  }
+                                }
+                              }
                             }
-                          }
-                        }
-                      },
-                      "identity_selector": {
-                        "type": "object",
-                        "properties": {
-                          "identity": {
-                            "description": "Required. The identity appear in the form of members in `IAM policy binding <https://cloud.google.com/iam/reference/rest/v1/Binding>`__.",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "identity"
-                        ]
-                      },
-                      "access_selector": {
-                        "type": "object",
-                        "properties": {
-                          "roles": {
-                            "description": "Optional. The roles to appear in result.",
-                            "type": "object",
-                            "reference": "Sequence[str]"
                           },
-                          "permissions": {
-                            "description": "Optional. The permissions to appear in result.",
-                            "type": "object",
-                            "reference": "Sequence[str]"
-                          }
+                          "required": [
+                            "parent"
+                          ]
                         }
                       }
-                    },
-                    "required": [
-                      "parent"
-                    ]
+                    }
                   }
                 }
               }
@@ -1015,20 +1084,9 @@
             "type": "string"
           },
           "view": {
-            "description": "View enum for supporting partial analysis responses.\n\nValues:\n    ANALYSIS_VIEW_UNSPECIFIED (0):\n        The default/unset value.\n        The API will default to the FULL view.\n    FULL (1):\n        Full analysis including all level of impacts\n        of the specified resource move.\n    BASIC (2):\n        Basic analysis only including blockers which\n        will prevent the specified resource move at\n        runtime.",
-            "type": "enum",
-            "name": "AnalysisView",
-            "values": {
-              "ANALYSIS_VIEW_UNSPECIFIED": {
-                "value": 0
-              },
-              "FULL": {
-                "value": 1
-              },
-              "BASIC": {
-                "value": 2
-              }
-            }
+            "description": "Analysis view indicating what information should be included in the analysis response. If unspecified, the default view is FULL.",
+            "type": "object",
+            "reference": "google.cloud.asset_v1.types.AnalyzeMoveRequest.AnalysisView"
           }
         },
         "required": [
@@ -1065,58 +1123,83 @@
             "type": "string"
           },
           "timeout": {
-            "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-            "type": "enum",
-            "name": "Duration",
-            "values": {
-              "UNDEFINED_DURATION": {
-                "value": 0
-              },
-              "DURATION_UNSPECIFIED": {
-                "value": 529071340
-              },
-              "HOUR": {
-                "value": 2223588
-              },
-              "MAX": {
-                "value": 76100
-              },
-              "MINUTE": {
-                "value": 126786068
+            "description": "Optional. Specifies the maximum amount of time that the client is willing to wait for the query to complete. By default, this limit is 5 min for the first query, and 1 minute for the following queries. If the query is complete, the ``done`` field in the ``QueryAssetsResponse`` is true, otherwise false.  Like BigQuery `jobs.query API <https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query#queryrequest>`__ The call is not guaranteed to wait for the specified timeout; it typically returns after around 200 seconds (200,000 milliseconds), even if the query is not complete.  The field will be ignored when [output_config] is specified.",
+            "reference": "google.protobuf.duration_pb2.Duration",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "nanos": {
+                  "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                  "type": "integer"
+                },
+                "seconds": {
+                  "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                  "type": "integer"
+                }
               }
             }
           },
           "read_time_window": {
             "description": "Optional. [start_time] is required. [start_time] must be less than [end_time] Defaults [end_time] to now if [start_time] is set and [end_time] isn't. Maximum permitted time range is 7 days.  This field is a member of `oneof`_ ``time``.",
-            "type": "object",
-            "properties": {
-              "start_time": {
-                "description": "The hard time window start time. If unspecified it will be set to ``ShipmentModel.global_start_time``.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "The hard time window end time. If unspecified it will be set to ``ShipmentModel.global_end_time``.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "soft_start_time": {
-                "description": "The soft start time of the time window.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "soft_end_time": {
-                "description": "The soft end time of the time window.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "cost_per_hour_before_soft_start_time": {
-                "description": "A cost per hour added to other costs in the model if the event occurs before soft_start_time, computed as:  ::  max(0, soft_start_time - t.seconds) * cost_per_hour_before_soft_start_time / 3600, t being the time of the event.  This cost must be positive, and the field can only be set if soft_start_time has been set.  This field is a member of `oneof`_ ``_cost_per_hour_before_soft_start_time``.",
-                "type": "number"
-              },
-              "cost_per_hour_after_soft_end_time": {
-                "description": "A cost per hour added to other costs in the model if the event occurs after ``soft_end_time``, computed as:  ::  max(0, t.seconds - soft_end_time.seconds) * cost_per_hour_after_soft_end_time / 3600, t being the time of the event.  This cost must be positive, and the field can only be set if ``soft_end_time`` has been set.  This field is a member of `oneof`_ ``_cost_per_hour_after_soft_end_time``.",
-                "type": "number"
+            "reference": "google.cloud.asset_v1.types.TimeWindow",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "maintenance_exclusion_options": {
+                  "description": "MaintenanceExclusionOptions provides maintenance exclusion related options.  This field is a member of `oneof`_ ``options``.",
+                  "type": "object",
+                  "reference": "google.cloud.container_v1beta1.types.MaintenanceExclusionOptions",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "scope": {
+                        "description": "Scope specifies the upgrade scope which upgrades are blocked by the exclusion.",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.MaintenanceExclusionOptions.Scope",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "include_org_ids": {
+                              "description": "The list of organization IDs to search within. To find your organization ID, follow instructions in https://cloud.google.com/resource-manager/docs/creating-managing-organization.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "include_project_ids": {
+                              "description": "The list of project IDs to search within. To learn more about the distinction between project names/IDs/numbers, go to https://cloud.google.com/docs/overview/#projects.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "include_gcp_public_datasets": {
+                              "description": "If ``true``, include Google Cloud public datasets in the search results. Info on Google Cloud public datasets is available at https://cloud.google.com/public-datasets/. By default, Google Cloud public datasets are excluded.",
+                              "type": "boolean"
+                            },
+                            "restricted_locations": {
+                              "description": "Optional. The list of locations to search within.  1. If empty, search will be performed in all locations; 2. If any of the locations are NOT in the valid locations list, error will be returned; 3. Otherwise, search only the given locations for matching results. Typical usage is to leave this field empty. When a location is unreachable as returned in the ``SearchCatalogResponse.unreachable`` field, users can repeat the search request with this parameter set to get additional information on the error.  Valid locations:  -  asia-east1 -  asia-east2 -  asia-northeast1 -  asia-northeast2 -  asia-northeast3 -  asia-south1 -  asia-southeast1 -  australia-southeast1 -  eu -  europe-north1 -  europe-west1 -  europe-west2 -  europe-west3 -  europe-west4 -  europe-west6 -  global -  northamerica-northeast1 -  southamerica-east1 -  us -  us-central1 -  us-east1 -  us-east4 -  us-west1 -  us-west2",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "start_time": {
+                  "description": "The time that the window first starts.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "The time that the window ends. The end time should take place after the start time.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                }
               }
             }
           },
@@ -1127,29 +1210,24 @@
           },
           "output_config": {
             "description": "Optional. Destination where the query results will be saved.  When this field is specified, the query results won't be saved in the [QueryAssetsResponse.query_result]. Instead [QueryAssetsResponse.output_config] will be set.  Meanwhile, [QueryAssetsResponse.job_reference] will be set and can be used to check the status of the query job when passed to a following [QueryAssets] API call.",
-            "type": "object",
-            "properties": {
-              "bigquery_destination": {
-                "type": "object",
-                "properties": {
-                  "dataset_id": {
-                    "description": "Required. The ID of a BigQuery Dataset.",
-                    "type": "string"
-                  },
-                  "table_id_prefix": {
-                    "description": "Required. The prefix of exported BigQuery tables.",
-                    "type": "string"
-                  },
-                  "table_type": {
-                    "description": "Required. Describes the table type. The following values are supported:  -  ``table``: A BigQuery native table. -  ``view``: A virtual table defined by a SQL query.",
-                    "type": "string"
+            "reference": "google.cloud.asset_v1.types.QueryAssetsOutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_destination": {
+                  "description": "BigQuery destination where the query results will be saved.",
+                  "type": "object",
+                  "reference": "google.cloud.asset_v1.types.QueryAssetsOutputConfig.BigQueryDestination",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "dataset_id": {
+                        "description": "The ID of a BigQuery Dataset.",
+                        "type": "string"
+                      }
+                    }
                   }
-                },
-                "required": [
-                  "dataset_id",
-                  "table_id_prefix",
-                  "table_type"
-                ]
+                }
               }
             }
           }

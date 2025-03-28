@@ -1,5 +1,33 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-orchestration-airflow\\google\\cloud\\orchestration\\airflow\\service_v1\\types\\environments.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-orchestration-airflow/google/cloud/orchestration/airflow/service_v1/types/image_versions.py": [
+    {
+      "type": "function",
+      "name": "ListImageVersionsRequest",
+      "description": "List ImageVersions in a project and location.\n\nAttributes:\n    parent (str):\n        List ImageVersions in the given project and\n        location, in the form:\n        \"projects/{projectId}/locations/{locationId}\".\n    page_size (int):\n        The maximum number of image_versions to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    include_past_releases (bool):\n        Whether or not image versions from old\n        releases should be included.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "List ImageVersions in the given project and location, in the form: \"projects/{projectId}/locations/{locationId}\".",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "The maximum number of image_versions to return.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "The next_page_token value returned from a previous List request, if any.",
+            "type": "string"
+          },
+          "include_past_releases": {
+            "description": "Whether or not image versions from old releases should be included.",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-orchestration-airflow/google/cloud/orchestration/airflow/service_v1/types/environments.py": [
     {
       "type": "function",
       "name": "CreateEnvironmentRequest",
@@ -13,69 +41,190 @@
           },
           "environment": {
             "description": "The environment to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. Full name of this resource, in the format ``users/{owner_email}/environments/{environment_id}``. ``{owner_email}`` is the email address of the user to whom this environment belongs, and ``{environment_id}`` is the identifier of this environment. For example, ``users/someone@example.com/environments/default``.",
-                "type": "string"
-              },
-              "id": {
-                "description": "Output only. The environment's identifier, unique among the user's environments.",
-                "type": "string"
-              },
-              "docker_image": {
-                "description": "Required. Immutable. Full path to the Docker image used to run this environment, e.g. \"gcr.io/dev-con/cloud-devshell:latest\".",
-                "type": "string"
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
+            "reference": "google.cloud.orchestration.airflow.service_v1.types.Environment",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Output only. The unique identifier of this agent environment. Supported formats:  -  ``projects/<Project ID>/agent/environments/<Environment ID>`` -  ``projects/<Project ID>/locations/<Location ID>/agent/environments/<Environment ID>``  The environment ID for the default environment is ``-``.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Optional. The developer-provided description for this environment. The maximum length is 500 characters. If exceeded, the request is rejected.",
+                  "type": "string"
+                },
+                "agent_version": {
+                  "description": "Optional. The agent version loaded into this environment. Supported formats:  -  ``projects/<Project ID>/agent/versions/<Version ID>`` -  ``projects/<Project ID>/locations/<Location ID>/agent/versions/<Version ID>``",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Output only. The state of this environment. This field is read-only, i.e., it cannot be set by create and update methods.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Environment.State"
+                },
+                "update_time": {
+                  "description": "Output only. The last update time of this environment. This field is read-only, i.e., it cannot be set by create and update methods.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "text_to_speech_settings": {
+                  "description": "Optional. Text to speech settings for this environment.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.TextToSpeechSettings",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "enable_text_to_speech": {
+                        "description": "Optional. Indicates whether text to speech is enabled. Even when this field is false, other settings in this proto are still retained.",
+                        "type": "boolean"
+                      },
+                      "output_audio_encoding": {
+                        "description": "Required. Audio encoding of the synthesized audio content.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.OutputAudioEncoding"
+                      },
+                      "sample_rate_hertz": {
+                        "description": "Optional. The synthesis sample rate (in hertz) for this audio. If not provided, then the synthesizer will use the default sample rate based on the audio encoding. If this is different from the voice's natural sample rate, then the synthesizer will honor this request by converting to the desired sample rate (which might result in worse audio quality).",
+                        "type": "integer"
+                      },
+                      "synthesize_speech_configs": {
+                        "description": "Optional. Configuration of how speech should be synthesized, mapping from language (https://cloud.google.com/dialogflow/docs/reference/language) to SynthesizeSpeechConfig.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.SynthesizeSpeechConfig",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "speaking_rate": {
+                                "description": "Optional. Speaking rate/speed, in the range [0.25, 4.0]. 1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast. If unset(0.0), defaults to the native 1.0 speed. Any other values < 0.25 or > 4.0 will return an error.",
+                                "type": "number"
+                              },
+                              "pitch": {
+                                "description": "Optional. Speaking pitch, in the range [-20.0, 20.0]. 20 means increase 20 semitones from the original pitch. -20 means decrease 20 semitones from the original pitch.",
+                                "type": "number"
+                              },
+                              "volume_gain_db": {
+                                "description": "Optional. Volume gain (in dB) of the normal native volume supported by the specific voice, in the range [-96.0, 16.0]. If unset, or set to a value of 0.0 (dB), will play at normal native signal amplitude. A value of -6.0 (dB) will play at approximately half the amplitude of the normal native signal amplitude. A value of +6.0 (dB) will play at approximately twice the amplitude of the normal native signal amplitude. We strongly recommend not to exceed +10 (dB) as there's usually no effective increase in loudness for any value greater than that.",
+                                "type": "number"
+                              },
+                              "effects_profile_id": {
+                                "description": "Optional. An identifier which selects 'audio effects' profiles that are applied on (post synthesized) text to speech. Effects are applied on top of each other in the order they are given.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "voice": {
+                                "description": "Optional. The desired voice of the synthesized audio.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.VoiceSelectionParams",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "description": "Optional. The name of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and [ssml_gender][google.cloud.dialogflow.v2.VoiceSelectionParams.ssml_gender].",
+                                      "type": "string"
+                                    },
+                                    "ssml_gender": {
+                                      "description": "Optional. The preferred gender of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and [name][google.cloud.dialogflow.v2.VoiceSelectionParams.name]. Note that this is only a preference, not requirement. If a voice of the appropriate gender is not available, the synthesizer should substitute a voice with a different gender rather than failing the request.",
+                                      "type": "object",
+                                      "reference": "google.cloud.dialogflow_v2.types.SsmlVoiceGender"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "output_audio_encoding"
+                    ]
+                  }
+                },
+                "fulfillment": {
+                  "description": "Optional. The fulfillment settings to use for this environment.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Fulfillment",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "Required. The unique identifier of the fulfillment. Supported formats:  -  ``projects/<Project ID>/agent/fulfillment`` -  ``projects/<Project ID>/locations/<Location ID>/agent/fulfillment``  This field is not used for Fulfillment in an Environment.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Optional. The human-readable name of the fulfillment, unique within the agent.  This field is not used for Fulfillment in an Environment.",
+                        "type": "string"
+                      },
+                      "generic_web_service": {
+                        "description": "Configuration for a generic web service.  This field is a member of `oneof`_ ``fulfillment``.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.Fulfillment.GenericWebService",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "uri": {
+                              "description": "Required. The fulfillment URI for receiving POST requests. It must use https protocol.",
+                              "type": "string"
+                            },
+                            "username": {
+                              "description": "Optional. The user name for HTTP Basic authentication.",
+                              "type": "string"
+                            },
+                            "password": {
+                              "description": "Optional. The password for HTTP Basic authentication.",
+                              "type": "string"
+                            },
+                            "request_headers": {
+                              "description": "Optional. The HTTP request headers to send together with fulfillment requests.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "is_cloud_function": {
+                              "description": "Optional. Indicates if generic web service is created through Cloud Functions integration. Defaults to false.  is_cloud_function is deprecated. Cloud functions can be configured by its uri as a regular web service now.",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "uri"
+                          ]
+                        }
+                      },
+                      "enabled": {
+                        "description": "Optional. Whether fulfillment is enabled.",
+                        "type": "boolean"
+                      },
+                      "features": {
+                        "description": "Optional. The field defines whether the fulfillment is enabled for certain features.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "type_": {
+                                "description": "The type of the feature that enabled for fulfillment.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
                   }
                 }
-              },
-              "web_host": {
-                "description": "Output only. Host to which clients can connect to initiate HTTPS or WSS connections with the environment.",
-                "type": "string"
-              },
-              "ssh_username": {
-                "description": "Output only. Username that clients should use when initiating SSH sessions with the environment.",
-                "type": "string"
-              },
-              "ssh_host": {
-                "description": "Output only. Host to which clients can connect to initiate SSH sessions with the environment.",
-                "type": "string"
-              },
-              "ssh_port": {
-                "description": "Output only. Port to which clients can connect to initiate SSH sessions with the environment.",
-                "type": "integer"
-              },
-              "public_keys": {
-                "description": "Output only. Public keys associated with the environment. Clients can connect to this environment via SSH only if they possess a private key corresponding to at least one of these public keys. Keys can be added to or removed from the environment using the AddPublicKey and RemovePublicKey methods.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
               }
-            },
-            "required": [
-              "docker_image"
-            ]
+            }
           }
         }
       }
@@ -143,69 +292,190 @@
           },
           "environment": {
             "description": "A patch environment. Fields specified by the ``updateMask`` will be copied from the patch environment into the environment under update.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. Full name of this resource, in the format ``users/{owner_email}/environments/{environment_id}``. ``{owner_email}`` is the email address of the user to whom this environment belongs, and ``{environment_id}`` is the identifier of this environment. For example, ``users/someone@example.com/environments/default``.",
-                "type": "string"
-              },
-              "id": {
-                "description": "Output only. The environment's identifier, unique among the user's environments.",
-                "type": "string"
-              },
-              "docker_image": {
-                "description": "Required. Immutable. Full path to the Docker image used to run this environment, e.g. \"gcr.io/dev-con/cloud-devshell:latest\".",
-                "type": "string"
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
+            "reference": "google.cloud.orchestration.airflow.service_v1.types.Environment",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Output only. The unique identifier of this agent environment. Supported formats:  -  ``projects/<Project ID>/agent/environments/<Environment ID>`` -  ``projects/<Project ID>/locations/<Location ID>/agent/environments/<Environment ID>``  The environment ID for the default environment is ``-``.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Optional. The developer-provided description for this environment. The maximum length is 500 characters. If exceeded, the request is rejected.",
+                  "type": "string"
+                },
+                "agent_version": {
+                  "description": "Optional. The agent version loaded into this environment. Supported formats:  -  ``projects/<Project ID>/agent/versions/<Version ID>`` -  ``projects/<Project ID>/locations/<Location ID>/agent/versions/<Version ID>``",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Output only. The state of this environment. This field is read-only, i.e., it cannot be set by create and update methods.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Environment.State"
+                },
+                "update_time": {
+                  "description": "Output only. The last update time of this environment. This field is read-only, i.e., it cannot be set by create and update methods.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "text_to_speech_settings": {
+                  "description": "Optional. Text to speech settings for this environment.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.TextToSpeechSettings",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "enable_text_to_speech": {
+                        "description": "Optional. Indicates whether text to speech is enabled. Even when this field is false, other settings in this proto are still retained.",
+                        "type": "boolean"
+                      },
+                      "output_audio_encoding": {
+                        "description": "Required. Audio encoding of the synthesized audio content.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.OutputAudioEncoding"
+                      },
+                      "sample_rate_hertz": {
+                        "description": "Optional. The synthesis sample rate (in hertz) for this audio. If not provided, then the synthesizer will use the default sample rate based on the audio encoding. If this is different from the voice's natural sample rate, then the synthesizer will honor this request by converting to the desired sample rate (which might result in worse audio quality).",
+                        "type": "integer"
+                      },
+                      "synthesize_speech_configs": {
+                        "description": "Optional. Configuration of how speech should be synthesized, mapping from language (https://cloud.google.com/dialogflow/docs/reference/language) to SynthesizeSpeechConfig.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.SynthesizeSpeechConfig",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "speaking_rate": {
+                                "description": "Optional. Speaking rate/speed, in the range [0.25, 4.0]. 1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast. If unset(0.0), defaults to the native 1.0 speed. Any other values < 0.25 or > 4.0 will return an error.",
+                                "type": "number"
+                              },
+                              "pitch": {
+                                "description": "Optional. Speaking pitch, in the range [-20.0, 20.0]. 20 means increase 20 semitones from the original pitch. -20 means decrease 20 semitones from the original pitch.",
+                                "type": "number"
+                              },
+                              "volume_gain_db": {
+                                "description": "Optional. Volume gain (in dB) of the normal native volume supported by the specific voice, in the range [-96.0, 16.0]. If unset, or set to a value of 0.0 (dB), will play at normal native signal amplitude. A value of -6.0 (dB) will play at approximately half the amplitude of the normal native signal amplitude. A value of +6.0 (dB) will play at approximately twice the amplitude of the normal native signal amplitude. We strongly recommend not to exceed +10 (dB) as there's usually no effective increase in loudness for any value greater than that.",
+                                "type": "number"
+                              },
+                              "effects_profile_id": {
+                                "description": "Optional. An identifier which selects 'audio effects' profiles that are applied on (post synthesized) text to speech. Effects are applied on top of each other in the order they are given.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "voice": {
+                                "description": "Optional. The desired voice of the synthesized audio.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.VoiceSelectionParams",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "description": "Optional. The name of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and [ssml_gender][google.cloud.dialogflow.v2.VoiceSelectionParams.ssml_gender].",
+                                      "type": "string"
+                                    },
+                                    "ssml_gender": {
+                                      "description": "Optional. The preferred gender of the voice. If not set, the service will choose a voice based on the other parameters such as language_code and [name][google.cloud.dialogflow.v2.VoiceSelectionParams.name]. Note that this is only a preference, not requirement. If a voice of the appropriate gender is not available, the synthesizer should substitute a voice with a different gender rather than failing the request.",
+                                      "type": "object",
+                                      "reference": "google.cloud.dialogflow_v2.types.SsmlVoiceGender"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "output_audio_encoding"
+                    ]
+                  }
+                },
+                "fulfillment": {
+                  "description": "Optional. The fulfillment settings to use for this environment.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Fulfillment",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "Required. The unique identifier of the fulfillment. Supported formats:  -  ``projects/<Project ID>/agent/fulfillment`` -  ``projects/<Project ID>/locations/<Location ID>/agent/fulfillment``  This field is not used for Fulfillment in an Environment.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Optional. The human-readable name of the fulfillment, unique within the agent.  This field is not used for Fulfillment in an Environment.",
+                        "type": "string"
+                      },
+                      "generic_web_service": {
+                        "description": "Configuration for a generic web service.  This field is a member of `oneof`_ ``fulfillment``.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.Fulfillment.GenericWebService",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "uri": {
+                              "description": "Required. The fulfillment URI for receiving POST requests. It must use https protocol.",
+                              "type": "string"
+                            },
+                            "username": {
+                              "description": "Optional. The user name for HTTP Basic authentication.",
+                              "type": "string"
+                            },
+                            "password": {
+                              "description": "Optional. The password for HTTP Basic authentication.",
+                              "type": "string"
+                            },
+                            "request_headers": {
+                              "description": "Optional. The HTTP request headers to send together with fulfillment requests.",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "is_cloud_function": {
+                              "description": "Optional. Indicates if generic web service is created through Cloud Functions integration. Defaults to false.  is_cloud_function is deprecated. Cloud functions can be configured by its uri as a regular web service now.",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "uri"
+                          ]
+                        }
+                      },
+                      "enabled": {
+                        "description": "Optional. Whether fulfillment is enabled.",
+                        "type": "boolean"
+                      },
+                      "features": {
+                        "description": "Optional. The field defines whether the fulfillment is enabled for certain features.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "type_": {
+                                "description": "The type of the feature that enabled for fulfillment.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
                   }
                 }
-              },
-              "web_host": {
-                "description": "Output only. Host to which clients can connect to initiate HTTPS or WSS connections with the environment.",
-                "type": "string"
-              },
-              "ssh_username": {
-                "description": "Output only. Username that clients should use when initiating SSH sessions with the environment.",
-                "type": "string"
-              },
-              "ssh_host": {
-                "description": "Output only. Host to which clients can connect to initiate SSH sessions with the environment.",
-                "type": "string"
-              },
-              "ssh_port": {
-                "description": "Output only. Port to which clients can connect to initiate SSH sessions with the environment.",
-                "type": "integer"
-              },
-              "public_keys": {
-                "description": "Output only. Public keys associated with the environment. Clients can connect to this environment via SSH only if they possess a private key corresponding to at least one of these public keys. Keys can be added to or removed from the environment using the AddPublicKey and RemovePublicKey methods.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
               }
-            },
-            "required": [
-              "docker_image"
-            ]
+            }
           },
           "update_mask": {
             "description": "Required. A comma-separated list of paths, relative to ``Environment``, of fields to update. For example, to set the version of scikit-learn to install in the environment to 0.19.0 and to remove an existing installation of numpy, the ``updateMask`` parameter would include the following two ``paths`` values: \"config.softwareConfig.pypiPackages.scikit-learn\" and \"config.softwareConfig.pypiPackages.numpy\". The included patch environment would specify the scikit-learn version as follows:  ::  { \"config\":{ \"softwareConfig\":{ \"pypiPackages\":{ \"scikit-learn\":\"==0.19.0\" } } } }  Note that in the above example, any existing PyPI packages other than scikit-learn and numpy will be unaffected.  Only one update type may be included in a single request's ``updateMask``. For example, one cannot update both the PyPI packages and labels in the same request. However, it is possible to update multiple members of a map field simultaneously in the same request. For example, to set the labels \"label1\" and \"label2\" while clearing \"label3\" (assuming it already exists), one can provide the paths \"labels.label1\", \"labels.label2\", and \"labels.label3\" and populate the patch environment as follows:  ::  { \"labels\":{ \"label1\":\"new-label1-value\" \"label2\":\"new-label2-value\" } }  Note that in the above example, any existing labels that are not included in the ``updateMask`` will be unaffected.  It is also possible to replace an entire map field by providing the map field's path in the ``updateMask``. The new value of the field will be that which is provided in the patch environment. For example, to delete all pre-existing user-specified PyPI packages and install botocore at version 1.7.14, the ``updateMask`` would contain the path \"config.softwareConfig.pypiPackages\", and the patch environment would be the following:  ::  { \"config\":{ \"softwareConfig\":{ \"pypiPackages\":{ \"botocore\":\"==1.7.14\" } } } }  **Note:** Only the following fields can be updated:  -  ``config.softwareConfig.pypiPackages``  -  Replace all custom custom PyPI packages. If a replacement package map is not included in ``environment``, all custom PyPI packages are cleared. It is an error to provide both this mask and a mask specifying an individual package.  -  ``config.softwareConfig.pypiPackages.``\\ packagename  -  Update the custom PyPI package *packagename*, preserving other packages. To delete the package, include it in ``updateMask``, and omit the mapping for it in ``environment.config.softwareConfig.pypiPackages``. It is an error to provide both a mask of this form and the ``config.softwareConfig.pypiPackages`` mask.  -  ``labels``  -  Replace all environment labels. If a replacement labels map is not included in ``environment``, all labels are cleared. It is an error to provide both this mask and a mask specifying one or more individual labels.  -  ``labels.``\\ labelName  -  Set the label named *labelName*, while preserving other labels. To delete the label, include it in ``updateMask`` and omit its mapping in ``environment.labels``. It is an error to provide both a mask of this form and the ``labels`` mask.  -  ``config.nodeCount``  -  Horizontally scale the number of nodes in the environment. An integer greater than or equal to 3 must be provided in the ``config.nodeCount`` field. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.webServerNetworkAccessControl``  -  Replace the environment's current ``WebServerNetworkAccessControl``.  -  ``config.softwareConfig.airflowConfigOverrides``  -  Replace all Apache Airflow config overrides. If a replacement config overrides map is not included in ``environment``, all config overrides are cleared. It is an error to provide both this mask and a mask specifying one or more individual config overrides.  -  ``config.softwareConfig.airflowConfigOverrides.``\\ section-name  -  Override the Apache Airflow config property *name* in the section named *section*, preserving other properties. To delete the property override, include it in ``updateMask`` and omit its mapping in ``environment.config.softwareConfig.airflowConfigOverrides``. It is an error to provide both a mask of this form and the ``config.softwareConfig.airflowConfigOverrides`` mask.  -  ``config.softwareConfig.envVariables``  -  Replace all environment variables. If a replacement environment variable map is not included in ``environment``, all custom environment variables are cleared.  -  ``config.softwareConfig.schedulerCount``  -  Horizontally scale the number of schedulers in Airflow. A positive integer not greater than the number of nodes must be provided in the ``config.softwareConfig.schedulerCount`` field. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-2.*.*.  -  ``config.databaseConfig.machineType``  -  Cloud SQL machine type used by Airflow database. It has to be one of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.  -  ``config.webServerConfig.machineType``  -  Machine type on which Airflow web server is running. It has to be one of: composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8. Supported for Cloud Composer environments in versions composer-1.\\ *.*-airflow-*.*.*.",
@@ -320,17 +590,20 @@
           },
           "user_workloads_secret": {
             "description": "Required. User workloads Secret to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
-                "type": "string"
-              },
-              "data": {
-                "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.orchestration.airflow.service_v1.types.UserWorkloadsSecret",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
                   "type": "string"
+                },
+                "data": {
+                  "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -393,17 +666,20 @@
         "properties": {
           "user_workloads_secret": {
             "description": "Optional. User workloads Secret to override.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
-                "type": "string"
-              },
-              "data": {
-                "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.orchestration.airflow.service_v1.types.UserWorkloadsSecret",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the Secret, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsSecrets/{userWorkloadsSecretId}\".",
                   "type": "string"
+                },
+                "data": {
+                  "description": "Optional. The \"data\" field of Kubernetes Secret, organized in key-value pairs, which can contain sensitive values such as a password, a token, or a key. The values for all keys have to be base64-encoded strings. For details see: https://kubernetes.io/docs/concepts/configuration/secret/",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -441,17 +717,20 @@
           },
           "user_workloads_config_map": {
             "description": "Required. User workloads ConfigMap to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
-                "type": "string"
-              },
-              "data": {
-                "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.orchestration.airflow.service_v1.types.UserWorkloadsConfigMap",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
                   "type": "string"
+                },
+                "data": {
+                  "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -514,17 +793,20 @@
         "properties": {
           "user_workloads_config_map": {
             "description": "Optional. User workloads ConfigMap to override.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
-                "type": "string"
-              },
-              "data": {
-                "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.orchestration.airflow.service_v1.types.UserWorkloadsConfigMap",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the ConfigMap, in the form: \"projects/{projectId}/locations/{locationId}/environments/{environmentId}/userWorkloadsConfigMaps/{userWorkloadsConfigMapId}\".",
                   "type": "string"
+                },
+                "data": {
+                  "description": "Optional. The \"data\" field of Kubernetes ConfigMap, organized in key-value pairs. For details see:  https://kubernetes.io/docs/concepts/configuration/configmap/",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -680,34 +962,6 @@
         "required": [
           "environment"
         ]
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-orchestration-airflow\\google\\cloud\\orchestration\\airflow\\service_v1\\types\\image_versions.py": [
-    {
-      "type": "function",
-      "name": "ListImageVersionsRequest",
-      "description": "List ImageVersions in a project and location.\n\nAttributes:\n    parent (str):\n        List ImageVersions in the given project and\n        location, in the form:\n        \"projects/{projectId}/locations/{locationId}\".\n    page_size (int):\n        The maximum number of image_versions to return.\n    page_token (str):\n        The next_page_token value returned from a previous List\n        request, if any.\n    include_past_releases (bool):\n        Whether or not image versions from old\n        releases should be included.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "parent": {
-            "description": "List ImageVersions in the given project and location, in the form: \"projects/{projectId}/locations/{locationId}\".",
-            "type": "string"
-          },
-          "page_size": {
-            "description": "The maximum number of image_versions to return.",
-            "type": "integer"
-          },
-          "page_token": {
-            "description": "The next_page_token value returned from a previous List request, if any.",
-            "type": "string"
-          },
-          "include_past_releases": {
-            "description": "Whether or not image versions from old releases should be included.",
-            "type": "boolean"
-          }
-        }
       }
     }
   ]
