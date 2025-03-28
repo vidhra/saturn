@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-iam\\google\\cloud\\iam_admin_v1\\types\\iam.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-iam/google/cloud/iam_admin_v1/types/iam.py": [
     {
       "type": "function",
       "name": "CreateServiceAccountRequest",
@@ -17,17 +17,20 @@
           },
           "service_account": {
             "description": "The [ServiceAccount][google.iam.admin.v1.ServiceAccount] resource to create. Currently, only the following values are user assignable: ``display_name`` and ``description``.",
-            "type": "object",
-            "properties": {
-              "email": {
-                "description": "Email address of the service account. If empty, default Compute service account will be used.",
-                "type": "string"
-              },
-              "scope": {
-                "description": "The list of scopes to be made available for this service account. If empty, access to all Cloud APIs will be allowed.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.iam_admin_v1.types.ServiceAccount",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "Email address of the service account. If not specified, the default Compute Engine service account for the project will be used.",
                   "type": "string"
+                },
+                "scopes": {
+                  "description": "List of scopes to be enabled for this service account on the VM, in addition to the cloud-platform API scope that will be added by default.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -107,17 +110,20 @@
         "properties": {
           "service_account": {
             "description": "",
-            "type": "object",
-            "properties": {
-              "email": {
-                "description": "Email address of the service account. If empty, default Compute service account will be used.",
-                "type": "string"
-              },
-              "scope": {
-                "description": "The list of scopes to be made available for this service account. If empty, access to all Cloud APIs will be allowed.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.iam_admin_v1.types.ServiceAccount",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "Email address of the service account. If not specified, the default Compute Engine service account for the project will be used.",
                   "type": "string"
+                },
+                "scopes": {
+                  "description": "List of scopes to be enabled for this service account on the VM, in addition to the cloud-platform API scope that will be added by default.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -187,20 +193,8 @@
             "description": "Filters the types of keys the user wants to include in the list response. Duplicate key types are not allowed. If no key type is provided, all keys are returned.",
             "type": "array",
             "items": {
-              "type": "enum",
-              "name": "KeyType",
-              "description": "Types of public keys that are supported. At a minimum, we support\nRSA and ECDSA, for the key sizes or curves listed:\nhttps://cloud.google.com/kms/docs/algorithms#asymmetric_signing_algorithms\n\nValues:\n    KEY_TYPE_UNSPECIFIED (0):\n        Default unspecified value.\n    PEM_RSA_KEY (1):\n        A PEM-encoded PKCS#1/RFC 3447 RSAPrivateKey\n        structure.\n    PEM_EC_KEY (2):\n        A PEM-encoded compressed NIST\n        P-256/secp256r1/prime256v1 or P-384 key.",
-              "values": {
-                "KEY_TYPE_UNSPECIFIED": {
-                  "value": 0
-                },
-                "PEM_RSA_KEY": {
-                  "value": 1
-                },
-                "PEM_EC_KEY": {
-                  "value": 2
-                }
-              }
+              "type": "object",
+              "reference": "google.cloud.iam_admin_v1.types.ListServiceAccountKeysRequest.KeyType"
             }
           }
         },
@@ -221,20 +215,9 @@
             "type": "string"
           },
           "public_key_type": {
-            "description": "Supported public key output formats.\n\nValues:\n    TYPE_NONE (0):\n        Do not return the public key.\n    TYPE_X509_PEM_FILE (1):\n        X509 PEM format.\n    TYPE_RAW_PUBLIC_KEY (2):\n        Raw public key.",
-            "type": "enum",
-            "name": "ServiceAccountPublicKeyType",
-            "values": {
-              "TYPE_NONE": {
-                "value": 0
-              },
-              "TYPE_X509_PEM_FILE": {
-                "value": 1
-              },
-              "TYPE_RAW_PUBLIC_KEY": {
-                "value": 2
-              }
-            }
+            "description": "Optional. The output format of the public key. The default is ``TYPE_NONE``, which means that the public key is not returned.",
+            "type": "object",
+            "reference": "google.cloud.iam_admin_v1.types.ServiceAccountPublicKeyType"
           }
         },
         "required": [
@@ -254,36 +237,14 @@
             "type": "string"
           },
           "private_key_type": {
-            "description": "Supported private key output formats.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Unspecified. Equivalent to ``TYPE_GOOGLE_CREDENTIALS_FILE``.\n    TYPE_PKCS12_FILE (1):\n        PKCS12 format. The password for the PKCS12 file is\n        ``notasecret``. For more information, see\n        https://tools.ietf.org/html/rfc7292.\n    TYPE_GOOGLE_CREDENTIALS_FILE (2):\n        Google Credentials File format.",
-            "type": "enum",
-            "name": "ServiceAccountPrivateKeyType",
-            "values": {
-              "TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "TYPE_PKCS12_FILE": {
-                "value": 1
-              },
-              "TYPE_GOOGLE_CREDENTIALS_FILE": {
-                "value": 2
-              }
-            }
+            "description": "The output format of the private key. The default value is ``TYPE_GOOGLE_CREDENTIALS_FILE``, which is the Google Credentials File format.",
+            "type": "object",
+            "reference": "google.cloud.iam_admin_v1.types.ServiceAccountPrivateKeyType"
           },
           "key_algorithm": {
-            "description": "Supported key algorithms.\n\nValues:\n    KEY_ALG_UNSPECIFIED (0):\n        An unspecified key algorithm.\n    KEY_ALG_RSA_1024 (1):\n        1k RSA Key.\n    KEY_ALG_RSA_2048 (2):\n        2k RSA Key.",
-            "type": "enum",
-            "name": "ServiceAccountKeyAlgorithm",
-            "values": {
-              "KEY_ALG_UNSPECIFIED": {
-                "value": 0
-              },
-              "KEY_ALG_RSA_1024": {
-                "value": 1
-              },
-              "KEY_ALG_RSA_2048": {
-                "value": 2
-              }
-            }
+            "description": "Which type of key and algorithm to use for the key. The default is currently a 2K RSA key. However this may change in the future.",
+            "type": "object",
+            "reference": "google.cloud.iam_admin_v1.types.ServiceAccountKeyAlgorithm"
           }
         },
         "required": [
@@ -418,17 +379,9 @@
             "type": "string"
           },
           "view": {
-            "description": "A view for Role objects.\n\nValues:\n    BASIC (0):\n        Omits the ``included_permissions`` field. This is the\n        default value.\n    FULL (1):\n        Returns all fields.",
-            "type": "enum",
-            "name": "RoleView",
-            "values": {
-              "BASIC": {
-                "value": 0
-              },
-              "FULL": {
-                "value": 1
-              }
-            }
+            "description": "",
+            "type": "object",
+            "reference": "google.cloud.iam_admin_v1.types.RoleView"
           },
           "page_size": {
             "description": "Optional limit on the number of roles to include in the response. The default is 300, and the maximum is 1,000.",
@@ -464,17 +417,9 @@
             "type": "string"
           },
           "view": {
-            "description": "A view for Role objects.\n\nValues:\n    BASIC (0):\n        Omits the ``included_permissions`` field. This is the\n        default value.\n    FULL (1):\n        Returns all fields.",
-            "type": "enum",
-            "name": "RoleView",
-            "values": {
-              "BASIC": {
-                "value": 0
-              },
-              "FULL": {
-                "value": 1
-              }
-            }
+            "description": "Optional view for the returned Role objects. When ``FULL`` is specified, the ``includedPermissions`` field is returned, which includes a list of all permissions in the role. The default value is ``BASIC``, which does not return the ``includedPermissions`` field.",
+            "type": "object",
+            "reference": "google.cloud.iam_admin_v1.types.RoleView"
           },
           "show_deleted": {
             "description": "Include Roles that have been deleted.",
@@ -514,35 +459,39 @@
           },
           "role": {
             "description": "The Role resource to create.",
-            "type": "object",
-            "properties": {
-              "kind": {
-                "type": "enum",
-                "name": "Kind",
-                "description": "The type of an alias.\n\nValues:\n    KIND_UNSPECIFIED (0):\n        Unknown.\n    FIXED (1):\n        Git tag.\n    MOVABLE (2):\n        Git branch.\n    OTHER (4):\n        Used to specify non-standard aliases. For\n        example, if a Git repo has a ref named\n        \"refs/foo/bar\".",
-                "values": {
-                  "KIND_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "FIXED": {
-                    "value": 1
-                  },
-                  "MOVABLE": {
-                    "value": 2
-                  },
-                  "OTHER": {
-                    "value": 4
-                  }
+            "reference": "google.cloud.iam_admin_v1.types.Role",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the ``Role``. Format: ``networks/{network_code}/roles/{role_id}``",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "Output only. ``Role`` ID.",
+                  "type": "integer"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the ``Role``.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Optional. The description of the ``Role``.",
+                  "type": "string"
+                },
+                "built_in": {
+                  "description": "Output only. Whether the ``Role`` is a built-in or custom user role.",
+                  "type": "boolean"
+                },
+                "status": {
+                  "description": "Output only. The status of the ``Role``.",
+                  "type": "object",
+                  "reference": "google.ads.admanager_v1.types.RoleStatusEnum.RoleStatus"
                 }
               },
-              "ns": {
-                "description": "Role namespace.",
-                "type": "string"
-              },
-              "name": {
-                "description": "Role name.",
-                "type": "string"
-              }
+              "required": [
+                "display_name"
+              ]
             }
           }
         }
@@ -561,35 +510,39 @@
           },
           "role": {
             "description": "The updated role.",
-            "type": "object",
-            "properties": {
-              "kind": {
-                "type": "enum",
-                "name": "Kind",
-                "description": "The type of an alias.\n\nValues:\n    KIND_UNSPECIFIED (0):\n        Unknown.\n    FIXED (1):\n        Git tag.\n    MOVABLE (2):\n        Git branch.\n    OTHER (4):\n        Used to specify non-standard aliases. For\n        example, if a Git repo has a ref named\n        \"refs/foo/bar\".",
-                "values": {
-                  "KIND_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "FIXED": {
-                    "value": 1
-                  },
-                  "MOVABLE": {
-                    "value": 2
-                  },
-                  "OTHER": {
-                    "value": 4
-                  }
+            "reference": "google.cloud.iam_admin_v1.types.Role",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The resource name of the ``Role``. Format: ``networks/{network_code}/roles/{role_id}``",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "Output only. ``Role`` ID.",
+                  "type": "integer"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the ``Role``.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Optional. The description of the ``Role``.",
+                  "type": "string"
+                },
+                "built_in": {
+                  "description": "Output only. Whether the ``Role`` is a built-in or custom user role.",
+                  "type": "boolean"
+                },
+                "status": {
+                  "description": "Output only. The status of the ``Role``.",
+                  "type": "object",
+                  "reference": "google.ads.admanager_v1.types.RoleStatusEnum.RoleStatus"
                 }
               },
-              "ns": {
-                "description": "Role namespace.",
-                "type": "string"
-              },
-              "name": {
-                "description": "Role name.",
-                "type": "string"
-              }
+              "required": [
+                "display_name"
+              ]
             }
           },
           "update_mask": {
@@ -693,23 +646,26 @@
           },
           "condition": {
             "description": "[google.iam.v1.Binding.condition] [google.iam.v1.Binding.condition] object to be linted.  This field is a member of `oneof`_ ``lint_object``.",
-            "type": "object",
-            "properties": {
-              "description": {
-                "description": "Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.  This field is a member of `oneof`_ ``_description``.",
-                "type": "string"
-              },
-              "expression": {
-                "description": "Textual representation of an expression in Common Expression Language syntax.  This field is a member of `oneof`_ ``_expression``.",
-                "type": "string"
-              },
-              "location": {
-                "description": "Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.  This field is a member of `oneof`_ ``_location``.",
-                "type": "string"
-              },
-              "title": {
-                "description": "Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.  This field is a member of `oneof`_ ``_title``.",
-                "type": "string"
+            "reference": "google.type.expr_pb2.Expr",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.  This field is a member of `oneof`_ ``_description``.",
+                  "type": "string"
+                },
+                "expression": {
+                  "description": "Textual representation of an expression in Common Expression Language syntax.  This field is a member of `oneof`_ ``_expression``.",
+                  "type": "string"
+                },
+                "location": {
+                  "description": "Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.  This field is a member of `oneof`_ ``_location``.",
+                  "type": "string"
+                },
+                "title": {
+                  "description": "Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.  This field is a member of `oneof`_ ``_title``.",
+                  "type": "string"
+                }
               }
             }
           }

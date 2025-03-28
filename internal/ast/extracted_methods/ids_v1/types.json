@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-ids\\google\\cloud\\ids_v1\\types\\ids.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-ids/google/cloud/ids_v1/types/ids.py": [
     {
       "type": "function",
       "name": "ListEndpointsRequest",
@@ -67,44 +67,115 @@
           },
           "endpoint": {
             "description": "Required. The endpoint to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name for the endpoint in the format ``projects/*/locations/*/namespaces/*/services/*/endpoints/*``.",
-                "type": "string"
-              },
-              "address": {
-                "description": "Optional. An IPv4 or IPv6 address. Service Directory rejects bad addresses like:  -  ``8.8.8`` -  ``8.8.8.8:53`` -  ``test:bad:address`` -  ``[::1]`` -  ``[::1]:8080``  Limited to 45 characters.",
-                "type": "string"
-              },
-              "port": {
-                "description": "Optional. Service Directory rejects values outside of ``[0, 65535]``.",
-                "type": "integer"
-              },
-              "metadata": {
-                "description": "Optional. Metadata for the endpoint. This data can be consumed by service clients.  Restrictions:  -  The entire metadata dictionary may contain up to 512 characters, spread accoss all key-value pairs. Metadata that goes beyond this limit are rejected -  Valid metadata keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Metadata that fails to meet these requirements are rejected  Note: This field is equivalent to the ``annotations`` field in the v1 API. They have the same syntax and read/write to the same location in Service Directory.",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.ids_v1.types.Endpoint",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "ip_address": {
+                  "description": "The IP address of the endpoint, which can be an external or internal IP.",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "The IP protocol port of the endpoint. Only applicable when protocol is TCP or UDP.",
+                  "type": "integer"
+                },
+                "instance": {
+                  "description": "A Compute Engine instance URI.",
+                  "type": "string"
+                },
+                "forwarding_rule": {
+                  "description": "A forwarding rule and its corresponding IP address represent the frontend configuration of a Google Cloud load balancer. Forwarding rules are also used for protocol forwarding, Private Service Connect and other network services to provide forwarding information in the control plane. Format:  projects/{project}/global/forwardingRules/{id} or projects/{project}/regions/{region}/forwardingRules/{id}",
+                  "type": "string"
+                },
+                "forwarding_rule_target": {
+                  "description": "Output only. Specifies the type of the target of the forwarding rule.  This field is a member of `oneof`_ ``_forwarding_rule_target``.",
+                  "type": "object",
+                  "reference": "google.cloud.network_management_v1.types.Endpoint.ForwardingRuleTarget"
+                },
+                "load_balancer_id": {
+                  "description": "Output only. ID of the load balancer the forwarding rule points to. Empty for forwarding rules not related to load balancers.  This field is a member of `oneof`_ ``_load_balancer_id``.",
+                  "type": "string"
+                },
+                "load_balancer_type": {
+                  "description": "Output only. Type of the load balancer the forwarding rule points to.  This field is a member of `oneof`_ ``_load_balancer_type``.",
+                  "type": "object",
+                  "reference": "google.cloud.network_management_v1.types.LoadBalancerType"
+                },
+                "gke_master_cluster": {
+                  "description": "A cluster URI for `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__.",
+                  "type": "string"
+                },
+                "fqdn": {
+                  "description": "DNS endpoint of `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__. Requires gke_master_cluster to be set, can't be used simultaneoulsly with ip_address or network. Applicable only to destination endpoint.",
+                  "type": "string"
+                },
+                "cloud_sql_instance": {
+                  "description": "A `Cloud SQL <https://cloud.google.com/sql>`__ instance URI.",
+                  "type": "string"
+                },
+                "redis_instance": {
+                  "description": "A `Redis Instance <https://cloud.google.com/memorystore/docs/redis>`__ URI.",
+                  "type": "string"
+                },
+                "redis_cluster": {
+                  "description": "A `Redis Cluster <https://cloud.google.com/memorystore/docs/cluster>`__ URI.",
+                  "type": "string"
+                },
+                "cloud_function": {
+                  "description": "A `Cloud Function <https://cloud.google.com/functions>`__.",
+                  "type": "object",
+                  "reference": "google.cloud.network_management_v1.types.Endpoint.CloudFunctionEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "A `Cloud Function <https://cloud.google.com/functions>`__ name.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "app_engine_version": {
+                  "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__.",
+                  "type": "object",
+                  "reference": "google.cloud.network_management_v1.types.Endpoint.AppEngineVersionEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__ name.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "cloud_run_revision": {
+                  "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__",
+                  "type": "object",
+                  "reference": "google.cloud.network_management_v1.types.Endpoint.CloudRunRevisionEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__ URI. The format is: projects/{project}/locations/{location}/revisions/{revision}",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "network": {
+                  "description": "A Compute Engine network URI.",
+                  "type": "string"
+                },
+                "network_type": {
+                  "description": "Type of the network where the endpoint is located. Applicable only to source endpoint, as destination network type can be inferred from the source.",
+                  "type": "object",
+                  "reference": "google.cloud.network_management_v1.types.Endpoint.NetworkType"
+                },
+                "project_id": {
+                  "description": "Project ID where the endpoint is located. The Project ID can be derived from the URI if you provide a VM instance or network URI. The following are two cases where you must provide the project ID:  1. Only the IP address is specified, and the IP address is within a Google Cloud project. 2. When you are using Shared VPC and the IP address that you provide is from the service project. In this case, the network that the IP address resides in is defined in the host project.",
                   "type": "string"
                 }
-              },
-              "network": {
-                "description": "Immutable. The Google Compute Engine network (VPC) of the endpoint in the format ``projects/<project number>/locations/global/networks/*``.  The project must be specified by project number (project id is rejected). Incorrectly formatted networks are rejected, but no other validation is performed on this field (ex. network or project existence, reachability, or permissions).",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The timestamp when the endpoint was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The timestamp when the endpoint was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "uid": {
-                "description": "Output only. A globally unique identifier (in UUID4 format) for this endpoint.",
-                "type": "string"
               }
             }
           },

@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-ai-generativelanguage\\google\\ai\\generativelanguage_v1beta2\\types\\discuss_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-ai-generativelanguage/google/ai/generativelanguage_v1beta2/types/discuss_service.py": [
     {
       "type": "function",
       "name": "GenerateMessageRequest",
@@ -13,495 +13,450 @@
           },
           "prompt": {
             "description": "Required. The structured textual input given to the model as a prompt. Given a prompt, the model will return what it predicts is the next message in the discussion.",
-            "type": "object",
-            "properties": {
-              "context": {
-                "description": "Optional. Text that should be provided to the model first to ground the response.  If not empty, this ``context`` will be given to the model first before the ``examples`` and ``messages``. When using a ``context`` be sure to provide it with every request to maintain continuity.  This field can be a description of your prompt to the model to help provide context and guide the responses. Examples: \"Translate the phrase from English to French.\" or \"Given a statement, classify the sentiment as happy, sad or neutral.\"  Anything included in this field will take precedence over message history if the total input size exceeds the model's ``input_token_limit`` and the input request is truncated.",
-                "type": "string"
-              },
-              "examples": {
-                "description": "Optional. Examples of what the model should generate.  This includes both user input and the response that the model should emulate.  These ``examples`` are treated identically to conversation messages except that they take precedence over the history in ``messages``: If the total input size exceeds the model's ``input_token_limit`` the input will be truncated. Items will be dropped from ``messages`` before ``examples``.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "description": "Output only. The resource name of the example, in form of ``projects/{project-number-or-id}/locations/{location_id}/datasets/{dataset_id}/examples/{example_id}``",
-                      "type": "string"
-                    },
-                    "source_text": {
-                      "description": "Sentence in source language.",
-                      "type": "string"
-                    },
-                    "target_text": {
-                      "description": "Sentence in target language.",
-                      "type": "string"
-                    },
-                    "usage": {
-                      "description": "Output only. Usage of the sentence pair. Options are TRAIN|VALIDATION|TEST.",
-                      "type": "string"
+            "reference": "google.ai.generativelanguage_v1beta2.types.MessagePrompt",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "context": {
+                  "description": "Optional. Text that should be provided to the model first to ground the response.  If not empty, this ``context`` will be given to the model first before the ``examples`` and ``messages``. When using a ``context`` be sure to provide it with every request to maintain continuity.  This field can be a description of your prompt to the model to help provide context and guide the responses. Examples: \"Translate the phrase from English to French.\" or \"Given a statement, classify the sentiment as happy, sad or neutral.\"  Anything included in this field will take precedence over message history if the total input size exceeds the model's ``input_token_limit`` and the input request is truncated.",
+                  "type": "string"
+                },
+                "examples": {
+                  "description": "Optional. Examples of what the model should generate.  This includes both user input and the response that the model should emulate.  These ``examples`` are treated identically to conversation messages except that they take precedence over the history in ``messages``: If the total input size exceeds the model's ``input_token_limit`` the input will be truncated. Items will be dropped from ``messages`` before ``examples``.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.ai.generativelanguage_v1beta3.types.Example",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "The unique identifier of the playbook example. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/playbooks/<PlaybookID>/examples/<ExampleID>``.",
+                          "type": "string"
+                        },
+                        "playbook_input": {
+                          "description": "Optional. The input to the playbook in the example.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflowcx_v3beta1.types.PlaybookInput",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "preceding_conversation_summary": {
+                                "description": "Optional. Summary string of the preceding conversation for the child playbook invocation.",
+                                "type": "string"
+                              },
+                              "action_parameters": {
+                                "description": "Optional. A list of input parameters for the action.",
+                                "type": "object",
+                                "reference": "google.protobuf.struct_pb2.Struct"
+                              }
+                            }
+                          }
+                        },
+                        "playbook_output": {
+                          "description": "Optional. The output of the playbook in the example.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflowcx_v3beta1.types.PlaybookOutput",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "execution_summary": {
+                                "description": "Optional. Summary string of the execution result of the child playbook.",
+                                "type": "string"
+                              },
+                              "action_parameters": {
+                                "description": "Optional. A Struct object of output parameters for the action.",
+                                "type": "object",
+                                "reference": "google.protobuf.struct_pb2.Struct"
+                              }
+                            }
+                          }
+                        },
+                        "actions": {
+                          "description": "Required. The ordered list of actions performed by the end user and the Dialogflow agent.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.dialogflowcx_v3beta1.types.Action",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "container_name": {
+                                  "description": "An optional name for the container. The container hostname will be set to this name, making it useful for inter-container communication. The name must contain only upper and lowercase alphanumeric characters and hyphens and cannot start with a hyphen.",
+                                  "type": "string"
+                                },
+                                "image_uri": {
+                                  "description": "Required. The URI to pull the container image from. Note that all images referenced by actions in the pipeline are pulled before the first action runs. If multiple actions reference the same image, it is only pulled once, ensuring that the same image is used for all actions in a single pipeline.  The image URI can be either a complete host and image specification (e.g., quay.io/biocontainers/samtools), a library and image name (e.g., google/cloud-sdk) or a bare image name ('bash') to pull from the default library. No schema is required in any of these cases.  If the specified image is not public, the service account specified for the Virtual Machine must have access to pull the images from GCR, or appropriate credentials must be specified in the [google.cloud.lifesciences.v2beta.Action.credentials][google.cloud.lifesciences.v2beta.Action.credentials] field.",
+                                  "type": "string"
+                                },
+                                "commands": {
+                                  "description": "If specified, overrides the ``CMD`` specified in the container. If the container also has an ``ENTRYPOINT`` the values are used as entrypoint arguments. Otherwise, they are used as a command and arguments to run inside the container.",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "entrypoint": {
+                                  "description": "If specified, overrides the ``ENTRYPOINT`` specified in the container.",
+                                  "type": "string"
+                                },
+                                "environment": {
+                                  "description": "The environment to pass into the container. This environment is merged with values specified in the [google.cloud.lifesciences.v2beta.Pipeline][google.cloud.lifesciences.v2beta.Pipeline] message, overwriting any duplicate values.  In addition to the values passed here, a few other values are automatically injected into the environment. These cannot be hidden or overwritten.  ``GOOGLE_PIPELINE_FAILED`` will be set to \"1\" if the pipeline failed because an action has exited with a non-zero status (and did not have the ``IGNORE_EXIT_STATUS`` flag set). This can be used to determine if additional debug or logging actions should execute.  ``GOOGLE_LAST_EXIT_STATUS`` will be set to the exit status of the last non-background action that executed. This can be used by workflow engine authors to determine whether an individual action has succeeded or failed.",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  }
+                                },
+                                "encrypted_environment": {
+                                  "description": "The encrypted environment to pass into the container. This environment is merged with values specified in the [google.cloud.lifesciences.v2beta.Pipeline][google.cloud.lifesciences.v2beta.Pipeline] message, overwriting any duplicate values.  The secret must decrypt to a JSON-encoded dictionary where key-value pairs serve as environment variable names and their values. The decoded environment variables can overwrite the values specified by the ``environment`` field.",
+                                  "type": "object",
+                                  "reference": "google.cloud.lifesciences_v2beta.types.Secret",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key_name": {
+                                        "description": "The name of the Cloud KMS key that will be used to decrypt the secret value. The VM service account must have the required permissions and authentication scopes to invoke the ``decrypt`` method on the specified key.",
+                                        "type": "string"
+                                      },
+                                      "cipher_text": {
+                                        "description": "The value of the cipherText response from the ``encrypt`` method. This field is intentionally unaudited.",
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "pid_namespace": {
+                                  "description": "An optional identifier for a PID namespace to run the action inside. Multiple actions should use the same string to share a namespace.  If unspecified, a separate isolated namespace is used.",
+                                  "type": "string"
+                                },
+                                "port_mappings": {
+                                  "description": "A map of containers to host port mappings for this container. If the container already specifies exposed ports, use the ``PUBLISH_EXPOSED_PORTS`` flag instead.  The host port number must be less than 65536. If it is zero, an unused random port is assigned. To determine the resulting port number, consult the ``ContainerStartedEvent`` in the operation metadata.",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "mounts": {
+                                  "description": "A list of mounts to make available to the action.  In addition to the values specified here, every action has a special virtual disk mounted under ``/google`` that contains log files and other operational components.  .. raw:: html  <ul> <li><code>/google/logs</code> All logs written during the pipeline execution.</li> <li><code>/google/logs/output</code> The combined standard output and standard error of all actions run as part of the pipeline execution.</li> <li><code>/google/logs/action/*/stdout</code> The complete contents of each individual action's standard output.</li> <li><code>/google/logs/action/*/stderr</code> The complete contents of each individual action's standard error output.</li> </ul>",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "reference": "google.cloud.lifesciences_v2beta.types.Mount",
+                                    "resolved_schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "disk": {
+                                          "description": "The name of the disk to mount, as specified in the resources section.",
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "description": "The path to mount the disk inside the container.",
+                                          "type": "string"
+                                        },
+                                        "read_only": {
+                                          "description": "If true, the disk is mounted read-only inside the container.",
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "labels": {
+                                  "description": "Labels to associate with the action. This field is provided to assist workflow engine authors in identifying actions (for example, to indicate what sort of action they perform, such as localization or debugging). They are returned in the operation metadata, but are otherwise ignored.",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  }
+                                },
+                                "credentials": {
+                                  "description": "If the specified image is hosted on a private registry other than Google Container Registry, the credentials required to pull the image must be specified here as an encrypted secret.  The secret must decrypt to a JSON-encoded dictionary containing both ``username`` and ``password`` keys.",
+                                  "type": "object",
+                                  "reference": "google.cloud.lifesciences_v2beta.types.Secret",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key_name": {
+                                        "description": "The name of the Cloud KMS key that will be used to decrypt the secret value. The VM service account must have the required permissions and authentication scopes to invoke the ``decrypt`` method on the specified key.",
+                                        "type": "string"
+                                      },
+                                      "cipher_text": {
+                                        "description": "The value of the cipherText response from the ``encrypt`` method. This field is intentionally unaudited.",
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "timeout": {
+                                  "description": "The maximum amount of time to give the action to complete. If the action fails to complete before the timeout, it will be terminated and the exit status will be non-zero. The pipeline will continue or terminate based on the rules defined by the ``ALWAYS_RUN`` and ``IGNORE_EXIT_STATUS`` flags.",
+                                  "type": "object",
+                                  "reference": "google.protobuf.duration_pb2.Duration",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "nanos": {
+                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                        "type": "integer"
+                                      },
+                                      "seconds": {
+                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                        "type": "integer"
+                                      }
+                                    }
+                                  }
+                                },
+                                "ignore_exit_status": {
+                                  "description": "Normally, a non-zero exit status causes the pipeline to fail. This flag allows execution of other actions to continue instead.",
+                                  "type": "boolean"
+                                },
+                                "run_in_background": {
+                                  "description": "This flag allows an action to continue running in the background while executing subsequent actions. This is useful to provide services to other actions (or to provide debugging support tools like SSH servers).",
+                                  "type": "boolean"
+                                },
+                                "always_run": {
+                                  "description": "By default, after an action fails, no further actions are run. This flag indicates that this action must be run even if the pipeline has already failed. This is useful for actions that copy output files off of the VM or for debugging. Note that no actions will be run if image prefetching fails.",
+                                  "type": "boolean"
+                                },
+                                "enable_fuse": {
+                                  "description": "Enable access to the FUSE device for this action. Filesystems can then be mounted into disks shared with other actions. The other actions do not need the ``enable_fuse`` flag to access the mounted filesystem.  This has the effect of causing the container to be executed with ``CAP_SYS_ADMIN`` and exposes ``/dev/fuse`` to the container, so use it only for containers you trust.",
+                                  "type": "boolean"
+                                },
+                                "publish_exposed_ports": {
+                                  "description": "Exposes all ports specified by ``EXPOSE`` statements in the container. To discover the host side port numbers, consult the ``ACTION_STARTED`` event in the operation metadata.",
+                                  "type": "boolean"
+                                },
+                                "disable_image_prefetch": {
+                                  "description": "All container images are typically downloaded before any actions are executed. This helps prevent typos in URIs or issues like lack of disk space from wasting large amounts of compute resources.  If set, this flag prevents the worker from downloading the image until just before the action is executed.",
+                                  "type": "boolean"
+                                },
+                                "disable_standard_error_capture": {
+                                  "description": "A small portion of the container's standard error stream is typically captured and returned inside the ``ContainerStoppedEvent``. Setting this flag disables this functionality.",
+                                  "type": "boolean"
+                                },
+                                "block_external_network": {
+                                  "description": "Prevents the container from accessing the external network.",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "image_uri"
+                              ]
+                            }
+                          }
+                        },
+                        "display_name": {
+                          "description": "Required. The display name of the example.",
+                          "type": "string"
+                        },
+                        "description": {
+                          "description": "Optional. The high level concise description of the example. The max number of characters is 200.",
+                          "type": "string"
+                        },
+                        "token_count": {
+                          "description": "Output only. Estimated number of tokes current example takes when sent to the LLM.",
+                          "type": "integer"
+                        },
+                        "create_time": {
+                          "description": "Output only. The timestamp of initial example creation.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "update_time": {
+                          "description": "Output only. Last time the example was updated.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "conversation_state": {
+                          "description": "Required. Example's output state.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflowcx_v3beta1.types.OutputState"
+                        },
+                        "language_code": {
+                          "description": "Optional. The language code of the example. If not specified, the agent's default language is used. Note: languages must be enabled in the agent before they can be used. Note: example's language code is not currently used in dialogflow agents.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "actions",
+                        "display_name",
+                        "conversation_state"
+                      ]
+                    }
+                  }
+                },
+                "messages": {
+                  "description": "Required. A snapshot of the recent conversation history sorted chronologically.  Turns alternate between two authors.  If the total input size exceeds the model's ``input_token_limit`` the input will be truncated: The oldest items will be dropped from ``messages``.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.ai.generativelanguage_v1beta3.types.Message",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "Optional. The unique identifier of the message. Format: ``projects/<Project ID>/locations/<Location ID>/conversations/<Conversation ID>/messages/<Message ID>``.",
+                          "type": "string"
+                        },
+                        "content": {
+                          "description": "Required. The message content.",
+                          "type": "string"
+                        },
+                        "language_code": {
+                          "description": "Optional. The message language. This should be a `BCP-47 <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>`__ language tag. Example: \"en-US\".",
+                          "type": "string"
+                        },
+                        "participant": {
+                          "description": "Output only. The participant that sends this message.",
+                          "type": "string"
+                        },
+                        "participant_role": {
+                          "description": "Output only. The role of the participant.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.Participant.Role",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Identifier. The resource name of the ``Role``. Format: ``networks/{network_code}/roles/{role_id}``",
+                                "type": "string"
+                              },
+                              "role_id": {
+                                "description": "Output only. ``Role`` ID.",
+                                "type": "integer"
+                              },
+                              "display_name": {
+                                "description": "Required. The display name of the ``Role``.",
+                                "type": "string"
+                              },
+                              "description": {
+                                "description": "Optional. The description of the ``Role``.",
+                                "type": "string"
+                              },
+                              "built_in": {
+                                "description": "Output only. Whether the ``Role`` is a built-in or custom user role.",
+                                "type": "boolean"
+                              },
+                              "status": {
+                                "description": "Output only. The status of the ``Role``.",
+                                "type": "object",
+                                "reference": "google.ads.admanager_v1.types.RoleStatusEnum.RoleStatus"
+                              }
+                            },
+                            "required": [
+                              "display_name"
+                            ]
+                          }
+                        },
+                        "create_time": {
+                          "description": "Output only. The time when the message was created in Contact Center AI.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "send_time": {
+                          "description": "Optional. The time when the message was sent.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "message_annotation": {
+                          "description": "Output only. The annotation for the message.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.MessageAnnotation",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "parts": {
+                                "description": "The collection of annotated message parts ordered by their position in the message. You can recover the annotated message by concatenating [AnnotatedMessagePart.text].",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.cloud.dialogflow_v2.types.AnnotatedMessagePart",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "text": {
+                                        "description": "A part of a message possibly annotated with an entity.",
+                                        "type": "string"
+                                      },
+                                      "entity_type": {
+                                        "description": "The `Dialogflow system entity type <https://cloud.google.com/dialogflow/docs/reference/system-entities>`__ of this message part. If this is empty, Dialogflow could not annotate the phrase part with a system entity.",
+                                        "type": "string"
+                                      },
+                                      "formatted_value": {
+                                        "description": "The `Dialogflow system entity formatted value <https://cloud.google.com/dialogflow/docs/reference/system-entities>`__ of this message part. For example for a system entity of type ``@sys.unit-currency``, this may contain:  .. raw:: html  <pre> { \"amount\": 5, \"currency\": \"USD\" } </pre>",
+                                        "type": "object",
+                                        "reference": "google.protobuf.struct_pb2.Value",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "dropdown_value": {
+                                              "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "integer"
+                                            },
+                                            "string_value": {
+                                              "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "string"
+                                            },
+                                            "number_value": {
+                                              "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "number"
+                                            },
+                                            "toggle_value": {
+                                              "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "contain_entities": {
+                                "description": "Indicates whether the text message contains entities.",
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        },
+                        "sentiment_analysis": {
+                          "description": "Output only. The sentiment analysis result for the message.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.SentimentAnalysisResult",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "query_text_sentiment": {
+                                "description": "The sentiment analysis result for ``query_text``.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.Sentiment",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "score": {
+                                      "description": "Sentiment score between -1.0 (negative sentiment) and 1.0 (positive sentiment).",
+                                      "type": "number"
+                                    },
+                                    "magnitude": {
+                                      "description": "A non-negative number in the [0, +inf) range, which represents the absolute magnitude of sentiment, regardless of score (positive or negative).",
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "content"
+                      ]
                     }
                   }
                 }
               },
-              "messages": {
-                "description": "Required. A snapshot of the recent conversation history sorted chronologically.  Turns alternate between two authors.  If the total input size exceeds the model's ``input_token_limit`` the input will be truncated: The oldest items will be dropped from ``messages``.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "description": "Optional. The unique identifier of the message. Format: ``projects/<Project ID>/locations/<Location ID>/conversations/<Conversation ID>/messages/<Message ID>``.",
-                      "type": "string"
-                    },
-                    "content": {
-                      "description": "Required. The message content.",
-                      "type": "string"
-                    },
-                    "response_messages": {
-                      "description": "Optional. Automated agent responses.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "text": {
-                            "type": "object",
-                            "properties": {
-                              "content": {
-                                "description": "The text content to be displayed.",
-                                "type": "string"
-                              },
-                              "format_": {
-                                "type": "enum",
-                                "name": "Format",
-                                "description": "The format type of the text content.\n\nValues:\n    FORMAT_UNSPECIFIED (0):\n        Format is unspecified. Defaults to MARKDOWN.\n    MARKDOWN (1):\n        The text contains Markdown formatting.\n    RAW (2):\n        The text contains no special formatting.",
-                                "values": {
-                                  "FORMAT_UNSPECIFIED": {
-                                    "value": 0
-                                  },
-                                  "MARKDOWN": {
-                                    "value": 1
-                                  },
-                                  "RAW": {
-                                    "value": 2
-                                  }
-                                }
-                              },
-                              "style": {
-                                "type": "object",
-                                "properties": {
-                                  "background_color": {
-                                    "description": "The background color as a hex string. \"#RRGGBB\" or \"#RGB\".",
-                                    "type": "string"
-                                  },
-                                  "text_color": {
-                                    "description": "The text color as a hex string. \"#RRGGBB\" or \"#RGB\".",
-                                    "type": "string"
-                                  },
-                                  "horizontal_alignment": {
-                                    "type": "enum",
-                                    "name": "HorizontalAlignment",
-                                    "description": "The horizontal alignment of both the title and content on a\ntext widget\n\nValues:\n    HORIZONTAL_ALIGNMENT_UNSPECIFIED (0):\n        No horizontal alignment specified, will default to H_LEFT\n    H_LEFT (1):\n        Left-align\n    H_CENTER (2):\n        Center-align\n    H_RIGHT (3):\n        Right-align",
-                                    "values": {
-                                      "HORIZONTAL_ALIGNMENT_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "H_LEFT": {
-                                        "value": 1
-                                      },
-                                      "H_CENTER": {
-                                        "value": 2
-                                      },
-                                      "H_RIGHT": {
-                                        "value": 3
-                                      }
-                                    }
-                                  },
-                                  "vertical_alignment": {
-                                    "type": "enum",
-                                    "name": "VerticalAlignment",
-                                    "description": "The vertical alignment of both the title and content on a\ntext widget\n\nValues:\n    VERTICAL_ALIGNMENT_UNSPECIFIED (0):\n        No vertical alignment specified, will default to V_TOP\n    V_TOP (1):\n        Top-align\n    V_CENTER (2):\n        Center-align\n    V_BOTTOM (3):\n        Bottom-align",
-                                    "values": {
-                                      "VERTICAL_ALIGNMENT_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "V_TOP": {
-                                        "value": 1
-                                      },
-                                      "V_CENTER": {
-                                        "value": 2
-                                      },
-                                      "V_BOTTOM": {
-                                        "value": 3
-                                      }
-                                    }
-                                  },
-                                  "padding": {
-                                    "type": "enum",
-                                    "name": "PaddingSize",
-                                    "description": "Specifies padding size around a text widget\n\nValues:\n    PADDING_SIZE_UNSPECIFIED (0):\n        No padding size specified, will default to P_EXTRA_SMALL\n    P_EXTRA_SMALL (1):\n        Extra small padding\n    P_SMALL (2):\n        Small padding\n    P_MEDIUM (3):\n        Medium padding\n    P_LARGE (4):\n        Large padding\n    P_EXTRA_LARGE (5):\n        Extra large padding",
-                                    "values": {
-                                      "PADDING_SIZE_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "P_EXTRA_SMALL": {
-                                        "value": 1
-                                      },
-                                      "P_SMALL": {
-                                        "value": 2
-                                      },
-                                      "P_MEDIUM": {
-                                        "value": 3
-                                      },
-                                      "P_LARGE": {
-                                        "value": 4
-                                      },
-                                      "P_EXTRA_LARGE": {
-                                        "value": 5
-                                      }
-                                    }
-                                  },
-                                  "font_size": {
-                                    "type": "enum",
-                                    "name": "FontSize",
-                                    "description": "Specifies a font size for the title and content of a text\nwidget\n\nValues:\n    FONT_SIZE_UNSPECIFIED (0):\n        No font size specified, will default to FS_LARGE\n    FS_EXTRA_SMALL (1):\n        Extra small font size\n    FS_SMALL (2):\n        Small font size\n    FS_MEDIUM (3):\n        Medium font size\n    FS_LARGE (4):\n        Large font size\n    FS_EXTRA_LARGE (5):\n        Extra large font size",
-                                    "values": {
-                                      "FONT_SIZE_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "FS_EXTRA_SMALL": {
-                                        "value": 1
-                                      },
-                                      "FS_SMALL": {
-                                        "value": 2
-                                      },
-                                      "FS_MEDIUM": {
-                                        "value": 3
-                                      },
-                                      "FS_LARGE": {
-                                        "value": 4
-                                      },
-                                      "FS_EXTRA_LARGE": {
-                                        "value": 5
-                                      }
-                                    }
-                                  },
-                                  "pointer_location": {
-                                    "type": "enum",
-                                    "name": "PointerLocation",
-                                    "description": "Specifies where a visual pointer is placed on a text widget\n(also sometimes called a \"tail\")\n\nValues:\n    POINTER_LOCATION_UNSPECIFIED (0):\n        No visual pointer\n    PL_TOP (1):\n        Placed in the middle of the top of the widget\n    PL_RIGHT (2):\n        Placed in the middle of the right side of the\n        widget\n    PL_BOTTOM (3):\n        Placed in the middle of the bottom of the\n        widget\n    PL_LEFT (4):\n        Placed in the middle of the left side of the\n        widget\n    PL_TOP_LEFT (5):\n        Placed on the left side of the top of the\n        widget\n    PL_TOP_RIGHT (6):\n        Placed on the right side of the top of the\n        widget\n    PL_RIGHT_TOP (7):\n        Placed on the top of the right side of the\n        widget\n    PL_RIGHT_BOTTOM (8):\n        Placed on the bottom of the right side of the\n        widget\n    PL_BOTTOM_RIGHT (9):\n        Placed on the right side of the bottom of the\n        widget\n    PL_BOTTOM_LEFT (10):\n        Placed on the left side of the bottom of the\n    ",
-                                    "values": {
-                                      "POINTER_LOCATION_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "PL_TOP": {
-                                        "value": 1
-                                      },
-                                      "PL_RIGHT": {
-                                        "value": 2
-                                      },
-                                      "PL_BOTTOM": {
-                                        "value": 3
-                                      },
-                                      "PL_LEFT": {
-                                        "value": 4
-                                      },
-                                      "PL_TOP_LEFT": {
-                                        "value": 5
-                                      },
-                                      "PL_TOP_RIGHT": {
-                                        "value": 6
-                                      },
-                                      "PL_RIGHT_TOP": {
-                                        "value": 7
-                                      },
-                                      "PL_RIGHT_BOTTOM": {
-                                        "value": 8
-                                      },
-                                      "PL_BOTTOM_RIGHT": {
-                                        "value": 9
-                                      },
-                                      "PL_BOTTOM_LEFT": {
-                                        "value": 10
-                                      },
-                                      "PL_LEFT_BOTTOM": {
-                                        "value": 11
-                                      },
-                                      "PL_LEFT_TOP": {
-                                        "value": 12
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "payload": {
-                            "description": "Returns a response containing a custom, platform-specific payload.  This field is a member of `oneof`_ ``message``.",
-                            "type": "object",
-                            "reference": "google.protobuf.struct_pb2.Struct"
-                          },
-                          "conversation_success": {
-                            "type": "object",
-                            "properties": {
-                              "metadata": {
-                                "description": "Custom metadata. Dialogflow doesn't impose any structure on this.",
-                                "type": "object",
-                                "reference": "google.protobuf.struct_pb2.Struct"
-                              }
-                            }
-                          },
-                          "output_audio_text": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "description": "The raw text to be synthesized.  This field is a member of `oneof`_ ``source``.",
-                                "type": "string"
-                              },
-                              "ssml": {
-                                "description": "The SSML text to be synthesized. For more information, see `SSML </speech/text-to-speech/docs/ssml>`__.  This field is a member of `oneof`_ ``source``.",
-                                "type": "string"
-                              },
-                              "allow_playback_interruption": {
-                                "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
-                                "type": "boolean"
-                              }
-                            }
-                          },
-                          "live_agent_handoff": {
-                            "type": "object",
-                            "properties": {
-                              "metadata": {
-                                "description": "Custom metadata for your handoff procedure. Dialogflow doesn't impose any structure on this.",
-                                "type": "object",
-                                "reference": "google.protobuf.struct_pb2.Struct"
-                              }
-                            }
-                          },
-                          "end_interaction": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "play_audio": {
-                            "type": "object",
-                            "properties": {
-                              "audio_uri": {
-                                "description": "Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.",
-                                "type": "string"
-                              },
-                              "allow_playback_interruption": {
-                                "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "audio_uri"
-                            ]
-                          },
-                          "mixed_audio": {
-                            "type": "object",
-                            "properties": {
-                              "segments": {
-                                "description": "Segments this audio response is composed of.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "audio": {
-                                      "description": "Raw audio synthesized from the Dialogflow agent's response using the output config specified in the request.  This field is a member of `oneof`_ ``content``.",
-                                      "type": "object",
-                                      "reference": "bytes"
-                                    },
-                                    "uri": {
-                                      "description": "Client-specific URI that points to an audio clip accessible to the client. Dialogflow does not impose any validation on it.  This field is a member of `oneof`_ ``content``.",
-                                      "type": "string"
-                                    },
-                                    "allow_playback_interruption": {
-                                      "description": "Output only. Whether the playback of this segment can be interrupted by the end user's speech and the client should then start the next Dialogflow request.",
-                                      "type": "boolean"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "telephony_transfer_call": {
-                            "type": "object",
-                            "properties": {
-                              "phone_number": {
-                                "description": "Transfer the call to a phone number in `E.164 format <https://en.wikipedia.org/wiki/E.164>`__.  This field is a member of `oneof`_ ``endpoint``.",
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "knowledge_info_card": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "tool_call": {
-                            "type": "object",
-                            "properties": {
-                              "tool": {
-                                "description": "The [tool][Tool] associated with this call. Format: ``projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/tools/<Tool ID>``.",
-                                "type": "string"
-                              },
-                              "action": {
-                                "description": "The name of the tool's action associated with this call.",
-                                "type": "string"
-                              },
-                              "input_parameters": {
-                                "description": "The action's input parameters.",
-                                "type": "object",
-                                "reference": "google.protobuf.struct_pb2.Struct"
-                              }
-                            }
-                          },
-                          "channel": {
-                            "description": "The channel which the response is associated with. Clients can specify the channel via [QueryParameters.channel][google.cloud.dialogflow.cx.v3beta1.QueryParameters.channel], and only associated channel response will be returned.",
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "language_code": {
-                      "description": "Optional. The message language. This should be a `BCP-47 <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>`__ language tag. Example: \"en-US\".",
-                      "type": "string"
-                    },
-                    "participant": {
-                      "description": "Output only. The participant that sends this message.",
-                      "type": "string"
-                    },
-                    "participant_role": {
-                      "type": "object",
-                      "properties": {
-                        "kind": {
-                          "type": "enum",
-                          "name": "Kind",
-                          "description": "The type of an alias.\n\nValues:\n    KIND_UNSPECIFIED (0):\n        Unknown.\n    FIXED (1):\n        Git tag.\n    MOVABLE (2):\n        Git branch.\n    OTHER (4):\n        Used to specify non-standard aliases. For\n        example, if a Git repo has a ref named\n        \"refs/foo/bar\".",
-                          "values": {
-                            "KIND_UNSPECIFIED": {
-                              "value": 0
-                            },
-                            "FIXED": {
-                              "value": 1
-                            },
-                            "MOVABLE": {
-                              "value": 2
-                            },
-                            "OTHER": {
-                              "value": 4
-                            }
-                          }
-                        },
-                        "ns": {
-                          "description": "Role namespace.",
-                          "type": "string"
-                        },
-                        "name": {
-                          "description": "Role name.",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "create_time": {
-                      "description": "Output only. The time when the message was created in Contact Center AI.",
-                      "type": "object",
-                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                    },
-                    "send_time": {
-                      "description": "Optional. The time when the message was sent.",
-                      "type": "object",
-                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                    },
-                    "message_annotation": {
-                      "type": "object",
-                      "properties": {
-                        "parts": {
-                          "description": "Optional. The collection of annotated message parts ordered by their position in the message. You can recover the annotated message by concatenating [AnnotatedMessagePart.text].",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "description": "Required. A part of a message possibly annotated with an entity.",
-                                "type": "string"
-                              },
-                              "entity_type": {
-                                "description": "Optional. The `Dialogflow system entity type <https://cloud.google.com/dialogflow/docs/reference/system-entities>`__ of this message part. If this is empty, Dialogflow could not annotate the phrase part with a system entity.",
-                                "type": "string"
-                              },
-                              "formatted_value": {
-                                "type": "object",
-                                "properties": {
-                                  "no_shipping": {
-                                    "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
-                                    "type": "boolean"
-                                  },
-                                  "flat_rate": {
-                                    "type": "object",
-                                    "properties": {
-                                      "amount_micros": {
-                                        "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
-                                        "type": "integer"
-                                      },
-                                      "currency_code": {
-                                        "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
-                                        "type": "string"
-                                      }
-                                    }
-                                  },
-                                  "price_percentage": {
-                                    "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
-                                    "type": "string"
-                                  },
-                                  "carrier_rate": {
-                                    "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
-                                    "type": "string"
-                                  },
-                                  "subtable": {
-                                    "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "text"
-                            ]
-                          }
-                        },
-                        "contain_entities": {
-                          "description": "Required. Indicates whether the text message contains entities.",
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "contain_entities"
-                      ]
-                    },
-                    "sentiment_analysis": {
-                      "type": "object",
-                      "properties": {
-                        "score": {
-                          "description": "Sentiment score between -1.0 (negative sentiment) and 1.0 (positive  sentiment).",
-                          "type": "number"
-                        },
-                        "magnitude": {
-                          "description": "A non-negative number in the [0, +inf) range, which represents the absolute magnitude of sentiment, regardless of score (positive or negative).",
-                          "type": "number"
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "content"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "messages"
-            ]
+              "required": [
+                "messages"
+              ]
+            }
           },
           "temperature": {
             "description": "Optional. Controls the randomness of the output.  Values can range over ``[0.0,1.0]``, inclusive. A value closer to ``1.0`` will produce responses that are more varied, while a value closer to ``0.0`` will typically result in less surprising responses from the model.  This field is a member of `oneof`_ ``_temperature``.",
@@ -539,495 +494,450 @@
           },
           "prompt": {
             "description": "Required. The prompt, whose token count is to be returned.",
-            "type": "object",
-            "properties": {
-              "context": {
-                "description": "Optional. Text that should be provided to the model first to ground the response.  If not empty, this ``context`` will be given to the model first before the ``examples`` and ``messages``. When using a ``context`` be sure to provide it with every request to maintain continuity.  This field can be a description of your prompt to the model to help provide context and guide the responses. Examples: \"Translate the phrase from English to French.\" or \"Given a statement, classify the sentiment as happy, sad or neutral.\"  Anything included in this field will take precedence over message history if the total input size exceeds the model's ``input_token_limit`` and the input request is truncated.",
-                "type": "string"
-              },
-              "examples": {
-                "description": "Optional. Examples of what the model should generate.  This includes both user input and the response that the model should emulate.  These ``examples`` are treated identically to conversation messages except that they take precedence over the history in ``messages``: If the total input size exceeds the model's ``input_token_limit`` the input will be truncated. Items will be dropped from ``messages`` before ``examples``.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "description": "Output only. The resource name of the example, in form of ``projects/{project-number-or-id}/locations/{location_id}/datasets/{dataset_id}/examples/{example_id}``",
-                      "type": "string"
-                    },
-                    "source_text": {
-                      "description": "Sentence in source language.",
-                      "type": "string"
-                    },
-                    "target_text": {
-                      "description": "Sentence in target language.",
-                      "type": "string"
-                    },
-                    "usage": {
-                      "description": "Output only. Usage of the sentence pair. Options are TRAIN|VALIDATION|TEST.",
-                      "type": "string"
+            "reference": "google.ai.generativelanguage_v1beta2.types.MessagePrompt",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "context": {
+                  "description": "Optional. Text that should be provided to the model first to ground the response.  If not empty, this ``context`` will be given to the model first before the ``examples`` and ``messages``. When using a ``context`` be sure to provide it with every request to maintain continuity.  This field can be a description of your prompt to the model to help provide context and guide the responses. Examples: \"Translate the phrase from English to French.\" or \"Given a statement, classify the sentiment as happy, sad or neutral.\"  Anything included in this field will take precedence over message history if the total input size exceeds the model's ``input_token_limit`` and the input request is truncated.",
+                  "type": "string"
+                },
+                "examples": {
+                  "description": "Optional. Examples of what the model should generate.  This includes both user input and the response that the model should emulate.  These ``examples`` are treated identically to conversation messages except that they take precedence over the history in ``messages``: If the total input size exceeds the model's ``input_token_limit`` the input will be truncated. Items will be dropped from ``messages`` before ``examples``.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.ai.generativelanguage_v1beta3.types.Example",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "The unique identifier of the playbook example. Format: ``projects/<ProjectID>/locations/<LocationID>/agents/<AgentID>/playbooks/<PlaybookID>/examples/<ExampleID>``.",
+                          "type": "string"
+                        },
+                        "playbook_input": {
+                          "description": "Optional. The input to the playbook in the example.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflowcx_v3beta1.types.PlaybookInput",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "preceding_conversation_summary": {
+                                "description": "Optional. Summary string of the preceding conversation for the child playbook invocation.",
+                                "type": "string"
+                              },
+                              "action_parameters": {
+                                "description": "Optional. A list of input parameters for the action.",
+                                "type": "object",
+                                "reference": "google.protobuf.struct_pb2.Struct"
+                              }
+                            }
+                          }
+                        },
+                        "playbook_output": {
+                          "description": "Optional. The output of the playbook in the example.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflowcx_v3beta1.types.PlaybookOutput",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "execution_summary": {
+                                "description": "Optional. Summary string of the execution result of the child playbook.",
+                                "type": "string"
+                              },
+                              "action_parameters": {
+                                "description": "Optional. A Struct object of output parameters for the action.",
+                                "type": "object",
+                                "reference": "google.protobuf.struct_pb2.Struct"
+                              }
+                            }
+                          }
+                        },
+                        "actions": {
+                          "description": "Required. The ordered list of actions performed by the end user and the Dialogflow agent.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.dialogflowcx_v3beta1.types.Action",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "container_name": {
+                                  "description": "An optional name for the container. The container hostname will be set to this name, making it useful for inter-container communication. The name must contain only upper and lowercase alphanumeric characters and hyphens and cannot start with a hyphen.",
+                                  "type": "string"
+                                },
+                                "image_uri": {
+                                  "description": "Required. The URI to pull the container image from. Note that all images referenced by actions in the pipeline are pulled before the first action runs. If multiple actions reference the same image, it is only pulled once, ensuring that the same image is used for all actions in a single pipeline.  The image URI can be either a complete host and image specification (e.g., quay.io/biocontainers/samtools), a library and image name (e.g., google/cloud-sdk) or a bare image name ('bash') to pull from the default library. No schema is required in any of these cases.  If the specified image is not public, the service account specified for the Virtual Machine must have access to pull the images from GCR, or appropriate credentials must be specified in the [google.cloud.lifesciences.v2beta.Action.credentials][google.cloud.lifesciences.v2beta.Action.credentials] field.",
+                                  "type": "string"
+                                },
+                                "commands": {
+                                  "description": "If specified, overrides the ``CMD`` specified in the container. If the container also has an ``ENTRYPOINT`` the values are used as entrypoint arguments. Otherwise, they are used as a command and arguments to run inside the container.",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "entrypoint": {
+                                  "description": "If specified, overrides the ``ENTRYPOINT`` specified in the container.",
+                                  "type": "string"
+                                },
+                                "environment": {
+                                  "description": "The environment to pass into the container. This environment is merged with values specified in the [google.cloud.lifesciences.v2beta.Pipeline][google.cloud.lifesciences.v2beta.Pipeline] message, overwriting any duplicate values.  In addition to the values passed here, a few other values are automatically injected into the environment. These cannot be hidden or overwritten.  ``GOOGLE_PIPELINE_FAILED`` will be set to \"1\" if the pipeline failed because an action has exited with a non-zero status (and did not have the ``IGNORE_EXIT_STATUS`` flag set). This can be used to determine if additional debug or logging actions should execute.  ``GOOGLE_LAST_EXIT_STATUS`` will be set to the exit status of the last non-background action that executed. This can be used by workflow engine authors to determine whether an individual action has succeeded or failed.",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  }
+                                },
+                                "encrypted_environment": {
+                                  "description": "The encrypted environment to pass into the container. This environment is merged with values specified in the [google.cloud.lifesciences.v2beta.Pipeline][google.cloud.lifesciences.v2beta.Pipeline] message, overwriting any duplicate values.  The secret must decrypt to a JSON-encoded dictionary where key-value pairs serve as environment variable names and their values. The decoded environment variables can overwrite the values specified by the ``environment`` field.",
+                                  "type": "object",
+                                  "reference": "google.cloud.lifesciences_v2beta.types.Secret",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key_name": {
+                                        "description": "The name of the Cloud KMS key that will be used to decrypt the secret value. The VM service account must have the required permissions and authentication scopes to invoke the ``decrypt`` method on the specified key.",
+                                        "type": "string"
+                                      },
+                                      "cipher_text": {
+                                        "description": "The value of the cipherText response from the ``encrypt`` method. This field is intentionally unaudited.",
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "pid_namespace": {
+                                  "description": "An optional identifier for a PID namespace to run the action inside. Multiple actions should use the same string to share a namespace.  If unspecified, a separate isolated namespace is used.",
+                                  "type": "string"
+                                },
+                                "port_mappings": {
+                                  "description": "A map of containers to host port mappings for this container. If the container already specifies exposed ports, use the ``PUBLISH_EXPOSED_PORTS`` flag instead.  The host port number must be less than 65536. If it is zero, an unused random port is assigned. To determine the resulting port number, consult the ``ContainerStartedEvent`` in the operation metadata.",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "mounts": {
+                                  "description": "A list of mounts to make available to the action.  In addition to the values specified here, every action has a special virtual disk mounted under ``/google`` that contains log files and other operational components.  .. raw:: html  <ul> <li><code>/google/logs</code> All logs written during the pipeline execution.</li> <li><code>/google/logs/output</code> The combined standard output and standard error of all actions run as part of the pipeline execution.</li> <li><code>/google/logs/action/*/stdout</code> The complete contents of each individual action's standard output.</li> <li><code>/google/logs/action/*/stderr</code> The complete contents of each individual action's standard error output.</li> </ul>",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "reference": "google.cloud.lifesciences_v2beta.types.Mount",
+                                    "resolved_schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "disk": {
+                                          "description": "The name of the disk to mount, as specified in the resources section.",
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "description": "The path to mount the disk inside the container.",
+                                          "type": "string"
+                                        },
+                                        "read_only": {
+                                          "description": "If true, the disk is mounted read-only inside the container.",
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "labels": {
+                                  "description": "Labels to associate with the action. This field is provided to assist workflow engine authors in identifying actions (for example, to indicate what sort of action they perform, such as localization or debugging). They are returned in the operation metadata, but are otherwise ignored.",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string"
+                                  }
+                                },
+                                "credentials": {
+                                  "description": "If the specified image is hosted on a private registry other than Google Container Registry, the credentials required to pull the image must be specified here as an encrypted secret.  The secret must decrypt to a JSON-encoded dictionary containing both ``username`` and ``password`` keys.",
+                                  "type": "object",
+                                  "reference": "google.cloud.lifesciences_v2beta.types.Secret",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key_name": {
+                                        "description": "The name of the Cloud KMS key that will be used to decrypt the secret value. The VM service account must have the required permissions and authentication scopes to invoke the ``decrypt`` method on the specified key.",
+                                        "type": "string"
+                                      },
+                                      "cipher_text": {
+                                        "description": "The value of the cipherText response from the ``encrypt`` method. This field is intentionally unaudited.",
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "timeout": {
+                                  "description": "The maximum amount of time to give the action to complete. If the action fails to complete before the timeout, it will be terminated and the exit status will be non-zero. The pipeline will continue or terminate based on the rules defined by the ``ALWAYS_RUN`` and ``IGNORE_EXIT_STATUS`` flags.",
+                                  "type": "object",
+                                  "reference": "google.protobuf.duration_pb2.Duration",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "nanos": {
+                                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                                        "type": "integer"
+                                      },
+                                      "seconds": {
+                                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                                        "type": "integer"
+                                      }
+                                    }
+                                  }
+                                },
+                                "ignore_exit_status": {
+                                  "description": "Normally, a non-zero exit status causes the pipeline to fail. This flag allows execution of other actions to continue instead.",
+                                  "type": "boolean"
+                                },
+                                "run_in_background": {
+                                  "description": "This flag allows an action to continue running in the background while executing subsequent actions. This is useful to provide services to other actions (or to provide debugging support tools like SSH servers).",
+                                  "type": "boolean"
+                                },
+                                "always_run": {
+                                  "description": "By default, after an action fails, no further actions are run. This flag indicates that this action must be run even if the pipeline has already failed. This is useful for actions that copy output files off of the VM or for debugging. Note that no actions will be run if image prefetching fails.",
+                                  "type": "boolean"
+                                },
+                                "enable_fuse": {
+                                  "description": "Enable access to the FUSE device for this action. Filesystems can then be mounted into disks shared with other actions. The other actions do not need the ``enable_fuse`` flag to access the mounted filesystem.  This has the effect of causing the container to be executed with ``CAP_SYS_ADMIN`` and exposes ``/dev/fuse`` to the container, so use it only for containers you trust.",
+                                  "type": "boolean"
+                                },
+                                "publish_exposed_ports": {
+                                  "description": "Exposes all ports specified by ``EXPOSE`` statements in the container. To discover the host side port numbers, consult the ``ACTION_STARTED`` event in the operation metadata.",
+                                  "type": "boolean"
+                                },
+                                "disable_image_prefetch": {
+                                  "description": "All container images are typically downloaded before any actions are executed. This helps prevent typos in URIs or issues like lack of disk space from wasting large amounts of compute resources.  If set, this flag prevents the worker from downloading the image until just before the action is executed.",
+                                  "type": "boolean"
+                                },
+                                "disable_standard_error_capture": {
+                                  "description": "A small portion of the container's standard error stream is typically captured and returned inside the ``ContainerStoppedEvent``. Setting this flag disables this functionality.",
+                                  "type": "boolean"
+                                },
+                                "block_external_network": {
+                                  "description": "Prevents the container from accessing the external network.",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "image_uri"
+                              ]
+                            }
+                          }
+                        },
+                        "display_name": {
+                          "description": "Required. The display name of the example.",
+                          "type": "string"
+                        },
+                        "description": {
+                          "description": "Optional. The high level concise description of the example. The max number of characters is 200.",
+                          "type": "string"
+                        },
+                        "token_count": {
+                          "description": "Output only. Estimated number of tokes current example takes when sent to the LLM.",
+                          "type": "integer"
+                        },
+                        "create_time": {
+                          "description": "Output only. The timestamp of initial example creation.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "update_time": {
+                          "description": "Output only. Last time the example was updated.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "conversation_state": {
+                          "description": "Required. Example's output state.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflowcx_v3beta1.types.OutputState"
+                        },
+                        "language_code": {
+                          "description": "Optional. The language code of the example. If not specified, the agent's default language is used. Note: languages must be enabled in the agent before they can be used. Note: example's language code is not currently used in dialogflow agents.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "actions",
+                        "display_name",
+                        "conversation_state"
+                      ]
+                    }
+                  }
+                },
+                "messages": {
+                  "description": "Required. A snapshot of the recent conversation history sorted chronologically.  Turns alternate between two authors.  If the total input size exceeds the model's ``input_token_limit`` the input will be truncated: The oldest items will be dropped from ``messages``.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.ai.generativelanguage_v1beta3.types.Message",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "Optional. The unique identifier of the message. Format: ``projects/<Project ID>/locations/<Location ID>/conversations/<Conversation ID>/messages/<Message ID>``.",
+                          "type": "string"
+                        },
+                        "content": {
+                          "description": "Required. The message content.",
+                          "type": "string"
+                        },
+                        "language_code": {
+                          "description": "Optional. The message language. This should be a `BCP-47 <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>`__ language tag. Example: \"en-US\".",
+                          "type": "string"
+                        },
+                        "participant": {
+                          "description": "Output only. The participant that sends this message.",
+                          "type": "string"
+                        },
+                        "participant_role": {
+                          "description": "Output only. The role of the participant.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.Participant.Role",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Identifier. The resource name of the ``Role``. Format: ``networks/{network_code}/roles/{role_id}``",
+                                "type": "string"
+                              },
+                              "role_id": {
+                                "description": "Output only. ``Role`` ID.",
+                                "type": "integer"
+                              },
+                              "display_name": {
+                                "description": "Required. The display name of the ``Role``.",
+                                "type": "string"
+                              },
+                              "description": {
+                                "description": "Optional. The description of the ``Role``.",
+                                "type": "string"
+                              },
+                              "built_in": {
+                                "description": "Output only. Whether the ``Role`` is a built-in or custom user role.",
+                                "type": "boolean"
+                              },
+                              "status": {
+                                "description": "Output only. The status of the ``Role``.",
+                                "type": "object",
+                                "reference": "google.ads.admanager_v1.types.RoleStatusEnum.RoleStatus"
+                              }
+                            },
+                            "required": [
+                              "display_name"
+                            ]
+                          }
+                        },
+                        "create_time": {
+                          "description": "Output only. The time when the message was created in Contact Center AI.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "send_time": {
+                          "description": "Optional. The time when the message was sent.",
+                          "type": "object",
+                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        },
+                        "message_annotation": {
+                          "description": "Output only. The annotation for the message.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.MessageAnnotation",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "parts": {
+                                "description": "The collection of annotated message parts ordered by their position in the message. You can recover the annotated message by concatenating [AnnotatedMessagePart.text].",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "reference": "google.cloud.dialogflow_v2.types.AnnotatedMessagePart",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "text": {
+                                        "description": "A part of a message possibly annotated with an entity.",
+                                        "type": "string"
+                                      },
+                                      "entity_type": {
+                                        "description": "The `Dialogflow system entity type <https://cloud.google.com/dialogflow/docs/reference/system-entities>`__ of this message part. If this is empty, Dialogflow could not annotate the phrase part with a system entity.",
+                                        "type": "string"
+                                      },
+                                      "formatted_value": {
+                                        "description": "The `Dialogflow system entity formatted value <https://cloud.google.com/dialogflow/docs/reference/system-entities>`__ of this message part. For example for a system entity of type ``@sys.unit-currency``, this may contain:  .. raw:: html  <pre> { \"amount\": 5, \"currency\": \"USD\" } </pre>",
+                                        "type": "object",
+                                        "reference": "google.protobuf.struct_pb2.Value",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "dropdown_value": {
+                                              "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "integer"
+                                            },
+                                            "string_value": {
+                                              "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "string"
+                                            },
+                                            "number_value": {
+                                              "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "number"
+                                            },
+                                            "toggle_value": {
+                                              "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                                              "type": "boolean"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "contain_entities": {
+                                "description": "Indicates whether the text message contains entities.",
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        },
+                        "sentiment_analysis": {
+                          "description": "Output only. The sentiment analysis result for the message.",
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.SentimentAnalysisResult",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "query_text_sentiment": {
+                                "description": "The sentiment analysis result for ``query_text``.",
+                                "type": "object",
+                                "reference": "google.cloud.dialogflow_v2.types.Sentiment",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "score": {
+                                      "description": "Sentiment score between -1.0 (negative sentiment) and 1.0 (positive sentiment).",
+                                      "type": "number"
+                                    },
+                                    "magnitude": {
+                                      "description": "A non-negative number in the [0, +inf) range, which represents the absolute magnitude of sentiment, regardless of score (positive or negative).",
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "content"
+                      ]
                     }
                   }
                 }
               },
-              "messages": {
-                "description": "Required. A snapshot of the recent conversation history sorted chronologically.  Turns alternate between two authors.  If the total input size exceeds the model's ``input_token_limit`` the input will be truncated: The oldest items will be dropped from ``messages``.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "description": "Optional. The unique identifier of the message. Format: ``projects/<Project ID>/locations/<Location ID>/conversations/<Conversation ID>/messages/<Message ID>``.",
-                      "type": "string"
-                    },
-                    "content": {
-                      "description": "Required. The message content.",
-                      "type": "string"
-                    },
-                    "response_messages": {
-                      "description": "Optional. Automated agent responses.",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "text": {
-                            "type": "object",
-                            "properties": {
-                              "content": {
-                                "description": "The text content to be displayed.",
-                                "type": "string"
-                              },
-                              "format_": {
-                                "type": "enum",
-                                "name": "Format",
-                                "description": "The format type of the text content.\n\nValues:\n    FORMAT_UNSPECIFIED (0):\n        Format is unspecified. Defaults to MARKDOWN.\n    MARKDOWN (1):\n        The text contains Markdown formatting.\n    RAW (2):\n        The text contains no special formatting.",
-                                "values": {
-                                  "FORMAT_UNSPECIFIED": {
-                                    "value": 0
-                                  },
-                                  "MARKDOWN": {
-                                    "value": 1
-                                  },
-                                  "RAW": {
-                                    "value": 2
-                                  }
-                                }
-                              },
-                              "style": {
-                                "type": "object",
-                                "properties": {
-                                  "background_color": {
-                                    "description": "The background color as a hex string. \"#RRGGBB\" or \"#RGB\".",
-                                    "type": "string"
-                                  },
-                                  "text_color": {
-                                    "description": "The text color as a hex string. \"#RRGGBB\" or \"#RGB\".",
-                                    "type": "string"
-                                  },
-                                  "horizontal_alignment": {
-                                    "type": "enum",
-                                    "name": "HorizontalAlignment",
-                                    "description": "The horizontal alignment of both the title and content on a\ntext widget\n\nValues:\n    HORIZONTAL_ALIGNMENT_UNSPECIFIED (0):\n        No horizontal alignment specified, will default to H_LEFT\n    H_LEFT (1):\n        Left-align\n    H_CENTER (2):\n        Center-align\n    H_RIGHT (3):\n        Right-align",
-                                    "values": {
-                                      "HORIZONTAL_ALIGNMENT_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "H_LEFT": {
-                                        "value": 1
-                                      },
-                                      "H_CENTER": {
-                                        "value": 2
-                                      },
-                                      "H_RIGHT": {
-                                        "value": 3
-                                      }
-                                    }
-                                  },
-                                  "vertical_alignment": {
-                                    "type": "enum",
-                                    "name": "VerticalAlignment",
-                                    "description": "The vertical alignment of both the title and content on a\ntext widget\n\nValues:\n    VERTICAL_ALIGNMENT_UNSPECIFIED (0):\n        No vertical alignment specified, will default to V_TOP\n    V_TOP (1):\n        Top-align\n    V_CENTER (2):\n        Center-align\n    V_BOTTOM (3):\n        Bottom-align",
-                                    "values": {
-                                      "VERTICAL_ALIGNMENT_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "V_TOP": {
-                                        "value": 1
-                                      },
-                                      "V_CENTER": {
-                                        "value": 2
-                                      },
-                                      "V_BOTTOM": {
-                                        "value": 3
-                                      }
-                                    }
-                                  },
-                                  "padding": {
-                                    "type": "enum",
-                                    "name": "PaddingSize",
-                                    "description": "Specifies padding size around a text widget\n\nValues:\n    PADDING_SIZE_UNSPECIFIED (0):\n        No padding size specified, will default to P_EXTRA_SMALL\n    P_EXTRA_SMALL (1):\n        Extra small padding\n    P_SMALL (2):\n        Small padding\n    P_MEDIUM (3):\n        Medium padding\n    P_LARGE (4):\n        Large padding\n    P_EXTRA_LARGE (5):\n        Extra large padding",
-                                    "values": {
-                                      "PADDING_SIZE_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "P_EXTRA_SMALL": {
-                                        "value": 1
-                                      },
-                                      "P_SMALL": {
-                                        "value": 2
-                                      },
-                                      "P_MEDIUM": {
-                                        "value": 3
-                                      },
-                                      "P_LARGE": {
-                                        "value": 4
-                                      },
-                                      "P_EXTRA_LARGE": {
-                                        "value": 5
-                                      }
-                                    }
-                                  },
-                                  "font_size": {
-                                    "type": "enum",
-                                    "name": "FontSize",
-                                    "description": "Specifies a font size for the title and content of a text\nwidget\n\nValues:\n    FONT_SIZE_UNSPECIFIED (0):\n        No font size specified, will default to FS_LARGE\n    FS_EXTRA_SMALL (1):\n        Extra small font size\n    FS_SMALL (2):\n        Small font size\n    FS_MEDIUM (3):\n        Medium font size\n    FS_LARGE (4):\n        Large font size\n    FS_EXTRA_LARGE (5):\n        Extra large font size",
-                                    "values": {
-                                      "FONT_SIZE_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "FS_EXTRA_SMALL": {
-                                        "value": 1
-                                      },
-                                      "FS_SMALL": {
-                                        "value": 2
-                                      },
-                                      "FS_MEDIUM": {
-                                        "value": 3
-                                      },
-                                      "FS_LARGE": {
-                                        "value": 4
-                                      },
-                                      "FS_EXTRA_LARGE": {
-                                        "value": 5
-                                      }
-                                    }
-                                  },
-                                  "pointer_location": {
-                                    "type": "enum",
-                                    "name": "PointerLocation",
-                                    "description": "Specifies where a visual pointer is placed on a text widget\n(also sometimes called a \"tail\")\n\nValues:\n    POINTER_LOCATION_UNSPECIFIED (0):\n        No visual pointer\n    PL_TOP (1):\n        Placed in the middle of the top of the widget\n    PL_RIGHT (2):\n        Placed in the middle of the right side of the\n        widget\n    PL_BOTTOM (3):\n        Placed in the middle of the bottom of the\n        widget\n    PL_LEFT (4):\n        Placed in the middle of the left side of the\n        widget\n    PL_TOP_LEFT (5):\n        Placed on the left side of the top of the\n        widget\n    PL_TOP_RIGHT (6):\n        Placed on the right side of the top of the\n        widget\n    PL_RIGHT_TOP (7):\n        Placed on the top of the right side of the\n        widget\n    PL_RIGHT_BOTTOM (8):\n        Placed on the bottom of the right side of the\n        widget\n    PL_BOTTOM_RIGHT (9):\n        Placed on the right side of the bottom of the\n        widget\n    PL_BOTTOM_LEFT (10):\n        Placed on the left side of the bottom of the\n    ",
-                                    "values": {
-                                      "POINTER_LOCATION_UNSPECIFIED": {
-                                        "value": 0
-                                      },
-                                      "PL_TOP": {
-                                        "value": 1
-                                      },
-                                      "PL_RIGHT": {
-                                        "value": 2
-                                      },
-                                      "PL_BOTTOM": {
-                                        "value": 3
-                                      },
-                                      "PL_LEFT": {
-                                        "value": 4
-                                      },
-                                      "PL_TOP_LEFT": {
-                                        "value": 5
-                                      },
-                                      "PL_TOP_RIGHT": {
-                                        "value": 6
-                                      },
-                                      "PL_RIGHT_TOP": {
-                                        "value": 7
-                                      },
-                                      "PL_RIGHT_BOTTOM": {
-                                        "value": 8
-                                      },
-                                      "PL_BOTTOM_RIGHT": {
-                                        "value": 9
-                                      },
-                                      "PL_BOTTOM_LEFT": {
-                                        "value": 10
-                                      },
-                                      "PL_LEFT_BOTTOM": {
-                                        "value": 11
-                                      },
-                                      "PL_LEFT_TOP": {
-                                        "value": 12
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "payload": {
-                            "description": "Returns a response containing a custom, platform-specific payload.  This field is a member of `oneof`_ ``message``.",
-                            "type": "object",
-                            "reference": "google.protobuf.struct_pb2.Struct"
-                          },
-                          "conversation_success": {
-                            "type": "object",
-                            "properties": {
-                              "metadata": {
-                                "description": "Custom metadata. Dialogflow doesn't impose any structure on this.",
-                                "type": "object",
-                                "reference": "google.protobuf.struct_pb2.Struct"
-                              }
-                            }
-                          },
-                          "output_audio_text": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "description": "The raw text to be synthesized.  This field is a member of `oneof`_ ``source``.",
-                                "type": "string"
-                              },
-                              "ssml": {
-                                "description": "The SSML text to be synthesized. For more information, see `SSML </speech/text-to-speech/docs/ssml>`__.  This field is a member of `oneof`_ ``source``.",
-                                "type": "string"
-                              },
-                              "allow_playback_interruption": {
-                                "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
-                                "type": "boolean"
-                              }
-                            }
-                          },
-                          "live_agent_handoff": {
-                            "type": "object",
-                            "properties": {
-                              "metadata": {
-                                "description": "Custom metadata for your handoff procedure. Dialogflow doesn't impose any structure on this.",
-                                "type": "object",
-                                "reference": "google.protobuf.struct_pb2.Struct"
-                              }
-                            }
-                          },
-                          "end_interaction": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "play_audio": {
-                            "type": "object",
-                            "properties": {
-                              "audio_uri": {
-                                "description": "Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.",
-                                "type": "string"
-                              },
-                              "allow_playback_interruption": {
-                                "description": "Output only. Whether the playback of this message can be interrupted by the end user's speech and the client can then starts the next Dialogflow request.",
-                                "type": "boolean"
-                              }
-                            },
-                            "required": [
-                              "audio_uri"
-                            ]
-                          },
-                          "mixed_audio": {
-                            "type": "object",
-                            "properties": {
-                              "segments": {
-                                "description": "Segments this audio response is composed of.",
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "audio": {
-                                      "description": "Raw audio synthesized from the Dialogflow agent's response using the output config specified in the request.  This field is a member of `oneof`_ ``content``.",
-                                      "type": "object",
-                                      "reference": "bytes"
-                                    },
-                                    "uri": {
-                                      "description": "Client-specific URI that points to an audio clip accessible to the client. Dialogflow does not impose any validation on it.  This field is a member of `oneof`_ ``content``.",
-                                      "type": "string"
-                                    },
-                                    "allow_playback_interruption": {
-                                      "description": "Output only. Whether the playback of this segment can be interrupted by the end user's speech and the client should then start the next Dialogflow request.",
-                                      "type": "boolean"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "telephony_transfer_call": {
-                            "type": "object",
-                            "properties": {
-                              "phone_number": {
-                                "description": "Transfer the call to a phone number in `E.164 format <https://en.wikipedia.org/wiki/E.164>`__.  This field is a member of `oneof`_ ``endpoint``.",
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "knowledge_info_card": {
-                            "type": "object",
-                            "properties": {}
-                          },
-                          "tool_call": {
-                            "type": "object",
-                            "properties": {
-                              "tool": {
-                                "description": "The [tool][Tool] associated with this call. Format: ``projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/tools/<Tool ID>``.",
-                                "type": "string"
-                              },
-                              "action": {
-                                "description": "The name of the tool's action associated with this call.",
-                                "type": "string"
-                              },
-                              "input_parameters": {
-                                "description": "The action's input parameters.",
-                                "type": "object",
-                                "reference": "google.protobuf.struct_pb2.Struct"
-                              }
-                            }
-                          },
-                          "channel": {
-                            "description": "The channel which the response is associated with. Clients can specify the channel via [QueryParameters.channel][google.cloud.dialogflow.cx.v3beta1.QueryParameters.channel], and only associated channel response will be returned.",
-                            "type": "string"
-                          }
-                        }
-                      }
-                    },
-                    "language_code": {
-                      "description": "Optional. The message language. This should be a `BCP-47 <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>`__ language tag. Example: \"en-US\".",
-                      "type": "string"
-                    },
-                    "participant": {
-                      "description": "Output only. The participant that sends this message.",
-                      "type": "string"
-                    },
-                    "participant_role": {
-                      "type": "object",
-                      "properties": {
-                        "kind": {
-                          "type": "enum",
-                          "name": "Kind",
-                          "description": "The type of an alias.\n\nValues:\n    KIND_UNSPECIFIED (0):\n        Unknown.\n    FIXED (1):\n        Git tag.\n    MOVABLE (2):\n        Git branch.\n    OTHER (4):\n        Used to specify non-standard aliases. For\n        example, if a Git repo has a ref named\n        \"refs/foo/bar\".",
-                          "values": {
-                            "KIND_UNSPECIFIED": {
-                              "value": 0
-                            },
-                            "FIXED": {
-                              "value": 1
-                            },
-                            "MOVABLE": {
-                              "value": 2
-                            },
-                            "OTHER": {
-                              "value": 4
-                            }
-                          }
-                        },
-                        "ns": {
-                          "description": "Role namespace.",
-                          "type": "string"
-                        },
-                        "name": {
-                          "description": "Role name.",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "create_time": {
-                      "description": "Output only. The time when the message was created in Contact Center AI.",
-                      "type": "object",
-                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                    },
-                    "send_time": {
-                      "description": "Optional. The time when the message was sent.",
-                      "type": "object",
-                      "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                    },
-                    "message_annotation": {
-                      "type": "object",
-                      "properties": {
-                        "parts": {
-                          "description": "Optional. The collection of annotated message parts ordered by their position in the message. You can recover the annotated message by concatenating [AnnotatedMessagePart.text].",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "description": "Required. A part of a message possibly annotated with an entity.",
-                                "type": "string"
-                              },
-                              "entity_type": {
-                                "description": "Optional. The `Dialogflow system entity type <https://cloud.google.com/dialogflow/docs/reference/system-entities>`__ of this message part. If this is empty, Dialogflow could not annotate the phrase part with a system entity.",
-                                "type": "string"
-                              },
-                              "formatted_value": {
-                                "type": "object",
-                                "properties": {
-                                  "no_shipping": {
-                                    "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
-                                    "type": "boolean"
-                                  },
-                                  "flat_rate": {
-                                    "type": "object",
-                                    "properties": {
-                                      "amount_micros": {
-                                        "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
-                                        "type": "integer"
-                                      },
-                                      "currency_code": {
-                                        "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
-                                        "type": "string"
-                                      }
-                                    }
-                                  },
-                                  "price_percentage": {
-                                    "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
-                                    "type": "string"
-                                  },
-                                  "carrier_rate": {
-                                    "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
-                                    "type": "string"
-                                  },
-                                  "subtable": {
-                                    "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "text"
-                            ]
-                          }
-                        },
-                        "contain_entities": {
-                          "description": "Required. Indicates whether the text message contains entities.",
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "contain_entities"
-                      ]
-                    },
-                    "sentiment_analysis": {
-                      "type": "object",
-                      "properties": {
-                        "score": {
-                          "description": "Sentiment score between -1.0 (negative sentiment) and 1.0 (positive  sentiment).",
-                          "type": "number"
-                        },
-                        "magnitude": {
-                          "description": "A non-negative number in the [0, +inf) range, which represents the absolute magnitude of sentiment, regardless of score (positive or negative).",
-                          "type": "number"
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "content"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "messages"
-            ]
+              "required": [
+                "messages"
+              ]
+            }
           }
         },
         "required": [
@@ -1037,7 +947,7 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-ai-generativelanguage\\google\\ai\\generativelanguage_v1beta2\\types\\model_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-ai-generativelanguage/google/ai/generativelanguage_v1beta2/types/model_service.py": [
     {
       "type": "function",
       "name": "GetModelRequest",
@@ -1074,7 +984,7 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-ai-generativelanguage\\google\\ai\\generativelanguage_v1beta2\\types\\text_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-ai-generativelanguage/google/ai/generativelanguage_v1beta2/types/text_service.py": [
     {
       "type": "function",
       "name": "GenerateTextRequest",
@@ -1088,16 +998,19 @@
           },
           "prompt": {
             "description": "Required. The free-form input text given to the model as a prompt. Given a prompt, the model will generate a TextCompletion response it predicts as the completion of the input text.",
-            "type": "object",
-            "properties": {
-              "text": {
-                "description": "Required. The prompt text.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "text"
-            ]
+            "reference": "google.ai.generativelanguage_v1beta2.types.TextPrompt",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "description": "Required. The prompt text.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
           },
           "temperature": {
             "description": "Controls the randomness of the output. Note: The default value varies by model, see the ``Model.temperature`` attribute of the ``Model`` returned the ``getModel`` function.  Values can range from [0.0,1.0], inclusive. A value closer to 1.0 will produce responses that are more varied and creative, while a value closer to 0.0 will typically result in more straightforward responses from the model.  This field is a member of `oneof`_ ``_temperature``.",
@@ -1123,63 +1036,26 @@
             "description": "A list of unique ``SafetySetting`` instances for blocking unsafe content.  that will be enforced on the ``GenerateTextRequest.prompt`` and ``GenerateTextResponse.candidates``. There should not be more than one setting for each ``SafetyCategory`` type. The API will block any prompts and responses that fail to meet the thresholds set by these settings. This list overrides the default settings for each ``SafetyCategory`` specified in the safety_settings. If there is no ``SafetySetting`` for a given ``SafetyCategory`` provided in the list, the API will use the default safety setting for that category.",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "category": {
-                  "type": "enum",
-                  "name": "HarmCategory",
-                  "description": "The category of a rating.\n\nThese categories cover various kinds of harms that developers\nmay wish to adjust.\n\nValues:\n    HARM_CATEGORY_UNSPECIFIED (0):\n        Category is unspecified.\n    HARM_CATEGORY_DEROGATORY (1):\n        Negative or harmful comments targeting\n        identity and/or protected attribute.\n    HARM_CATEGORY_TOXICITY (2):\n        Content that is rude, disrepspectful, or\n        profane.\n    HARM_CATEGORY_VIOLENCE (3):\n        Describes scenarios depictng violence against\n        an individual or group, or general descriptions\n        of gore.\n    HARM_CATEGORY_SEXUAL (4):\n        Contains references to sexual acts or other\n        lewd content.\n    HARM_CATEGORY_MEDICAL (5):\n        Promotes unchecked medical advice.\n    HARM_CATEGORY_DANGEROUS (6):\n        Dangerous content that promotes, facilitates,\n        or encourages harmful acts.",
-                  "values": {
-                    "HARM_CATEGORY_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "HARM_CATEGORY_DEROGATORY": {
-                      "value": 1
-                    },
-                    "HARM_CATEGORY_TOXICITY": {
-                      "value": 2
-                    },
-                    "HARM_CATEGORY_VIOLENCE": {
-                      "value": 3
-                    },
-                    "HARM_CATEGORY_SEXUAL": {
-                      "value": 4
-                    },
-                    "HARM_CATEGORY_MEDICAL": {
-                      "value": 5
-                    },
-                    "HARM_CATEGORY_DANGEROUS": {
-                      "value": 6
-                    }
+              "reference": "google.ai.generativelanguage_v1beta2.types.SafetySetting",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "description": "Required. The category for this setting.",
+                    "type": "object",
+                    "reference": "google.ai.generativelanguage_v1beta3.types.HarmCategory"
+                  },
+                  "threshold": {
+                    "description": "Required. Controls the probability threshold at which harm is blocked.",
+                    "type": "object",
+                    "reference": "google.ai.generativelanguage_v1beta3.types.SafetySetting.HarmBlockThreshold"
                   }
                 },
-                "threshold": {
-                  "type": "enum",
-                  "name": "HarmBlockThreshold",
-                  "description": "Block at and beyond a specified harm probability.\n\nValues:\n    HARM_BLOCK_THRESHOLD_UNSPECIFIED (0):\n        Threshold is unspecified.\n    BLOCK_LOW_AND_ABOVE (1):\n        Content with NEGLIGIBLE will be allowed.\n    BLOCK_MEDIUM_AND_ABOVE (2):\n        Content with NEGLIGIBLE and LOW will be\n        allowed.\n    BLOCK_ONLY_HIGH (3):\n        Content with NEGLIGIBLE, LOW, and MEDIUM will\n        be allowed.\n    BLOCK_NONE (4):\n        All content will be allowed.",
-                  "values": {
-                    "HARM_BLOCK_THRESHOLD_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "BLOCK_LOW_AND_ABOVE": {
-                      "value": 1
-                    },
-                    "BLOCK_MEDIUM_AND_ABOVE": {
-                      "value": 2
-                    },
-                    "BLOCK_ONLY_HIGH": {
-                      "value": 3
-                    },
-                    "BLOCK_NONE": {
-                      "value": 4
-                    }
-                  }
-                }
-              },
-              "required": [
-                "category",
-                "threshold"
-              ]
+                "required": [
+                  "category",
+                  "threshold"
+                ]
+              }
             }
           },
           "stop_sequences": {

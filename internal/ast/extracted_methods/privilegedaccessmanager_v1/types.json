@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-privilegedaccessmanager\\google\\cloud\\privilegedaccessmanager_v1\\types\\privilegedaccessmanager.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-privilegedaccessmanager/google/cloud/privilegedaccessmanager_v1/types/privilegedaccessmanager.py": [
     {
       "type": "function",
       "name": "CheckOnboardingStatusRequest",
@@ -62,20 +62,9 @@
             "type": "string"
           },
           "caller_access_type": {
-            "description": "Different types of access a user can have on the entitlement\nresource.\n\nValues:\n    CALLER_ACCESS_TYPE_UNSPECIFIED (0):\n        Unspecified access type.\n    GRANT_REQUESTER (1):\n        The user has access to create grants using\n        this entitlement.\n    GRANT_APPROVER (2):\n        The user has access to approve/deny grants\n        created under this entitlement.",
-            "type": "enum",
-            "name": "CallerAccessType",
-            "values": {
-              "CALLER_ACCESS_TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "GRANT_REQUESTER": {
-                "value": 1
-              },
-              "GRANT_APPROVER": {
-                "value": 2
-              }
-            }
+            "description": "Required. Only entitlements where the calling user has this access are returned.",
+            "type": "object",
+            "reference": "google.cloud.privilegedaccessmanager_v1.types.SearchEntitlementsRequest.CallerAccessType"
           },
           "filter": {
             "description": "Optional. Only entitlements matching this filter are returned in the response.",
@@ -130,197 +119,51 @@
           },
           "entitlement": {
             "description": "Required. The resource being created",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. Name of the entitlement. Possible formats:  -  ``organizations/{organization-number}/locations/{region}/entitlements/{entitlement-id}`` -  ``folders/{folder-number}/locations/{region}/entitlements/{entitlement-id}`` -  ``projects/{project-id|project-number}/locations/{region}/entitlements/{entitlement-id}``",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. Create time stamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Update time stamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "eligible_users": {
-                "description": "Optional. Who can create grants using this entitlement. This list should contain at most one entry.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.privilegedaccessmanager_v1.types.Entitlement",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The name of the Entitlement resource with the format: projects/{project}/locations/{region}/entitlements/{entitlement}",
+                  "type": "string"
+                },
+                "cloud_account_details": {
+                  "description": "Details of the OCI Cloud Account.",
                   "type": "object",
-                  "properties": {
-                    "principals": {
-                      "description": "Optional. Users who are allowed for the operation. Each entry should be a valid v1 IAM principal identifier. The format for these is documented at:  https://cloud.google.com/iam/docs/principal-identifiers#v1",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              },
-              "approval_workflow": {
-                "type": "object",
-                "properties": {
-                  "manual_approvals": {
+                  "reference": "google.cloud.oracledatabase_v1.types.CloudAccountDetails",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "require_approver_justification": {
-                        "description": "Optional. Do the approvers need to provide a justification for their actions?",
-                        "type": "boolean"
+                      "cloud_account": {
+                        "description": "Output only. OCI account name.",
+                        "type": "string"
                       },
-                      "steps": {
-                        "description": "Optional. List of approval steps in this workflow. These steps are followed in the specified order sequentially. Only 1 step is supported.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "routine": {
-                              "description": "Name of a routine within the workflow.",
-                              "type": "string"
-                            },
-                            "step": {
-                              "description": "Name of a step within the routine.",
-                              "type": "string"
-                            }
-                          }
-                        }
+                      "cloud_account_home_region": {
+                        "description": "Output only. OCI account home region.",
+                        "type": "string"
+                      },
+                      "link_existing_account_uri": {
+                        "description": "Output only. URL to link an existing account.  This field is a member of `oneof`_ ``_link_existing_account_uri``.",
+                        "type": "string"
+                      },
+                      "account_creation_uri": {
+                        "description": "Output only. URL to create a new account and link.  This field is a member of `oneof`_ ``_account_creation_uri``.",
+                        "type": "string"
                       }
                     }
                   }
+                },
+                "entitlement_id": {
+                  "description": "Output only. Google Cloud Marketplace order ID (aka entitlement ID)",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Output only. Entitlement State.",
+                  "type": "object",
+                  "reference": "google.cloud.oracledatabase_v1.types.Entitlement.State"
                 }
-              },
-              "privileged_access": {
-                "type": "object",
-                "properties": {
-                  "gcp_iam_access": {
-                    "type": "object",
-                    "properties": {
-                      "resource_type": {
-                        "description": "Required. The type of this resource.",
-                        "type": "string"
-                      },
-                      "resource": {
-                        "description": "Required. Name of the resource.",
-                        "type": "string"
-                      },
-                      "role_bindings": {
-                        "description": "Required. Role bindings that are created on successful grant.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "role": {
-                              "description": "Required. IAM role to be granted. https://cloud.google.com/iam/docs/roles-overview.",
-                              "type": "string"
-                            },
-                            "condition_expression": {
-                              "description": "Optional. The expression field of the IAM condition to be associated with the role. If specified, a user with an active grant for this entitlement is able to access the resource only if this condition evaluates to true for their request.  This field uses the same CEL format as IAM and supports all attributes that IAM supports, except tags. https://cloud.google.com/iam/docs/conditions-overview#attributes.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "role"
-                          ]
-                        }
-                      }
-                    },
-                    "required": [
-                      "resource_type",
-                      "resource",
-                      "role_bindings"
-                    ]
-                  }
-                }
-              },
-              "max_request_duration": {
-                "type": "enum",
-                "name": "Duration",
-                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-                "values": {
-                  "UNDEFINED_DURATION": {
-                    "value": 0
-                  },
-                  "DURATION_UNSPECIFIED": {
-                    "value": 529071340
-                  },
-                  "HOUR": {
-                    "value": 2223588
-                  },
-                  "MAX": {
-                    "value": 76100
-                  },
-                  "MINUTE": {
-                    "value": 126786068
-                  }
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
-                  }
-                }
-              },
-              "requester_justification_config": {
-                "type": "object",
-                "properties": {
-                  "not_mandatory": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "unstructured": {
-                    "type": "object",
-                    "properties": {}
-                  }
-                }
-              },
-              "additional_notification_targets": {
-                "type": "object",
-                "properties": {
-                  "admin_email_recipients": {
-                    "description": "Optional. Additional email addresses to be notified when a principal (requester) is granted access.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "requester_email_recipients": {
-                    "description": "Optional. Additional email address to be notified about an eligible entitlement.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "etag": {
-                "description": "An ``etag`` is used for optimistic concurrency control as a way to prevent simultaneous updates to the same entitlement. An ``etag`` is returned in the response to ``GetEntitlement`` and the caller should put the ``etag`` in the request to ``UpdateEntitlement`` so that their change is applied on the same version. If this field is omitted or if there is a mismatch while updating an entitlement, then the server rejects the request.",
-                "type": "string"
               }
-            },
-            "required": [
-              "max_request_duration",
-              "requester_justification_config"
-            ]
+            }
           },
           "request_id": {
             "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees this for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, ignores the second request and returns the previous operation's response. This prevents clients from accidentally creating duplicate entitlements.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
@@ -368,197 +211,51 @@
         "properties": {
           "entitlement": {
             "description": "Required. The entitlement resource that is updated.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. Name of the entitlement. Possible formats:  -  ``organizations/{organization-number}/locations/{region}/entitlements/{entitlement-id}`` -  ``folders/{folder-number}/locations/{region}/entitlements/{entitlement-id}`` -  ``projects/{project-id|project-number}/locations/{region}/entitlements/{entitlement-id}``",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. Create time stamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Update time stamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "eligible_users": {
-                "description": "Optional. Who can create grants using this entitlement. This list should contain at most one entry.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.privilegedaccessmanager_v1.types.Entitlement",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The name of the Entitlement resource with the format: projects/{project}/locations/{region}/entitlements/{entitlement}",
+                  "type": "string"
+                },
+                "cloud_account_details": {
+                  "description": "Details of the OCI Cloud Account.",
                   "type": "object",
-                  "properties": {
-                    "principals": {
-                      "description": "Optional. Users who are allowed for the operation. Each entry should be a valid v1 IAM principal identifier. The format for these is documented at:  https://cloud.google.com/iam/docs/principal-identifiers#v1",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              },
-              "approval_workflow": {
-                "type": "object",
-                "properties": {
-                  "manual_approvals": {
+                  "reference": "google.cloud.oracledatabase_v1.types.CloudAccountDetails",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "require_approver_justification": {
-                        "description": "Optional. Do the approvers need to provide a justification for their actions?",
-                        "type": "boolean"
+                      "cloud_account": {
+                        "description": "Output only. OCI account name.",
+                        "type": "string"
                       },
-                      "steps": {
-                        "description": "Optional. List of approval steps in this workflow. These steps are followed in the specified order sequentially. Only 1 step is supported.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "routine": {
-                              "description": "Name of a routine within the workflow.",
-                              "type": "string"
-                            },
-                            "step": {
-                              "description": "Name of a step within the routine.",
-                              "type": "string"
-                            }
-                          }
-                        }
+                      "cloud_account_home_region": {
+                        "description": "Output only. OCI account home region.",
+                        "type": "string"
+                      },
+                      "link_existing_account_uri": {
+                        "description": "Output only. URL to link an existing account.  This field is a member of `oneof`_ ``_link_existing_account_uri``.",
+                        "type": "string"
+                      },
+                      "account_creation_uri": {
+                        "description": "Output only. URL to create a new account and link.  This field is a member of `oneof`_ ``_account_creation_uri``.",
+                        "type": "string"
                       }
                     }
                   }
+                },
+                "entitlement_id": {
+                  "description": "Output only. Google Cloud Marketplace order ID (aka entitlement ID)",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Output only. Entitlement State.",
+                  "type": "object",
+                  "reference": "google.cloud.oracledatabase_v1.types.Entitlement.State"
                 }
-              },
-              "privileged_access": {
-                "type": "object",
-                "properties": {
-                  "gcp_iam_access": {
-                    "type": "object",
-                    "properties": {
-                      "resource_type": {
-                        "description": "Required. The type of this resource.",
-                        "type": "string"
-                      },
-                      "resource": {
-                        "description": "Required. Name of the resource.",
-                        "type": "string"
-                      },
-                      "role_bindings": {
-                        "description": "Required. Role bindings that are created on successful grant.",
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "role": {
-                              "description": "Required. IAM role to be granted. https://cloud.google.com/iam/docs/roles-overview.",
-                              "type": "string"
-                            },
-                            "condition_expression": {
-                              "description": "Optional. The expression field of the IAM condition to be associated with the role. If specified, a user with an active grant for this entitlement is able to access the resource only if this condition evaluates to true for their request.  This field uses the same CEL format as IAM and supports all attributes that IAM supports, except tags. https://cloud.google.com/iam/docs/conditions-overview#attributes.",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "role"
-                          ]
-                        }
-                      }
-                    },
-                    "required": [
-                      "resource_type",
-                      "resource",
-                      "role_bindings"
-                    ]
-                  }
-                }
-              },
-              "max_request_duration": {
-                "type": "enum",
-                "name": "Duration",
-                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-                "values": {
-                  "UNDEFINED_DURATION": {
-                    "value": 0
-                  },
-                  "DURATION_UNSPECIFIED": {
-                    "value": 529071340
-                  },
-                  "HOUR": {
-                    "value": 2223588
-                  },
-                  "MAX": {
-                    "value": 76100
-                  },
-                  "MINUTE": {
-                    "value": 126786068
-                  }
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
-                  }
-                }
-              },
-              "requester_justification_config": {
-                "type": "object",
-                "properties": {
-                  "not_mandatory": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "unstructured": {
-                    "type": "object",
-                    "properties": {}
-                  }
-                }
-              },
-              "additional_notification_targets": {
-                "type": "object",
-                "properties": {
-                  "admin_email_recipients": {
-                    "description": "Optional. Additional email addresses to be notified when a principal (requester) is granted access.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "requester_email_recipients": {
-                    "description": "Optional. Additional email address to be notified about an eligible entitlement.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "etag": {
-                "description": "An ``etag`` is used for optimistic concurrency control as a way to prevent simultaneous updates to the same entitlement. An ``etag`` is returned in the response to ``GetEntitlement`` and the caller should put the ``etag`` in the request to ``UpdateEntitlement`` so that their change is applied on the same version. If this field is omitted or if there is a mismatch while updating an entitlement, then the server rejects the request.",
-                "type": "string"
               }
-            },
-            "required": [
-              "max_request_duration",
-              "requester_justification_config"
-            ]
+            }
           },
           "update_mask": {
             "description": "Required. The list of fields to update. A field is overwritten if, and only if, it is in the mask. Any immutable fields set in the mask are ignored by the server. Repeated fields and map fields are only allowed in the last position of a ``paths`` string and overwrite the existing values. Hence an update to a repeated field or a map should contain the entire list of values. The fields specified in the update_mask are relative to the resource and not to the request. (e.g. ``MaxRequestDuration``; *not* ``entitlement.MaxRequestDuration``) A value of '*' for this field refers to full replacement of the resource.",
@@ -617,23 +314,9 @@
             "type": "string"
           },
           "caller_relationship": {
-            "description": "Different types of relationships a user can have with a\ngrant.\n\nValues:\n    CALLER_RELATIONSHIP_TYPE_UNSPECIFIED (0):\n        Unspecified caller relationship type.\n    HAD_CREATED (1):\n        The user created this grant by calling ``CreateGrant``\n        earlier.\n    CAN_APPROVE (2):\n        The user is an approver for the entitlement\n        that this grant is parented under and can\n        currently approve/deny it.\n    HAD_APPROVED (3):\n        The caller had successfully approved/denied\n        this grant earlier.",
-            "type": "enum",
-            "name": "CallerRelationshipType",
-            "values": {
-              "CALLER_RELATIONSHIP_TYPE_UNSPECIFIED": {
-                "value": 0
-              },
-              "HAD_CREATED": {
-                "value": 1
-              },
-              "CAN_APPROVE": {
-                "value": 2
-              },
-              "HAD_APPROVED": {
-                "value": 3
-              }
-            }
+            "description": "Required. Only grants which the caller is related to by this relationship are returned in the response.",
+            "type": "object",
+            "reference": "google.cloud.privilegedaccessmanager_v1.types.SearchGrantsRequest.CallerRelationshipType"
           },
           "filter": {
             "description": "Optional. Only grants matching this filter are returned in the response.",
@@ -747,257 +430,382 @@
           },
           "grant": {
             "description": "Required. The resource being created.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Identifier. Name of this grant. Possible formats:  -  ``organizations/{organization-number}/locations/{region}/entitlements/{entitlement-id}/grants/{grant-id}`` -  ``folders/{folder-number}/locations/{region}/entitlements/{entitlement-id}/grants/{grant-id}`` -  ``projects/{project-id|project-number}/locations/{region}/entitlements/{entitlement-id}/grants/{grant-id}``  The last segment of this name (``{grant-id}``) is autogenerated.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. Create time stamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Update time stamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "requester": {
-                "description": "Output only. Username of the user who created this grant.",
-                "type": "string"
-              },
-              "requested_duration": {
-                "type": "enum",
-                "name": "Duration",
-                "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-                "values": {
-                  "UNDEFINED_DURATION": {
-                    "value": 0
-                  },
-                  "DURATION_UNSPECIFIED": {
-                    "value": 529071340
-                  },
-                  "HOUR": {
-                    "value": 2223588
-                  },
-                  "MAX": {
-                    "value": 76100
-                  },
-                  "MINUTE": {
-                    "value": 126786068
-                  }
-                }
-              },
-              "justification": {
-                "type": "object",
-                "properties": {
-                  "justification_type": {
-                    "type": "enum",
-                    "name": "JustificationType",
-                    "description": "Provides the type of justification.\n\nValues:\n    JUSTIFICATION_TYPE_UNSPECIFIED (0):\n        JUSTIFICATION_TYPE_UNSPECIFIED.\n    COMPONENT_NOT_PRESENT (1):\n        The vulnerable component is not present in\n        the product.\n    VULNERABLE_CODE_NOT_PRESENT (2):\n        The vulnerable code is not present. Typically\n        this case occurs when source code is configured\n        or built in a way that excludes the vulnerable\n        code.\n    VULNERABLE_CODE_NOT_IN_EXECUTE_PATH (3):\n        The vulnerable code can not be executed.\n        Typically this case occurs when the product\n        includes the vulnerable code but does not call\n        or use the vulnerable code.\n    VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY (4):\n        The vulnerable code cannot be controlled by\n        an attacker to exploit the vulnerability.\n    INLINE_MITIGATIONS_ALREADY_EXIST (5):\n        The product includes built-in protections or\n        features that prevent exploitation of the\n        vulnerability. These built-in",
-                    "values": {
-                      "JUSTIFICATION_TYPE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "COMPONENT_NOT_PRESENT": {
-                        "value": 1
-                      },
-                      "VULNERABLE_CODE_NOT_PRESENT": {
-                        "value": 2
-                      },
-                      "VULNERABLE_CODE_NOT_IN_EXECUTE_PATH": {
-                        "value": 3
-                      },
-                      "VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY": {
-                        "value": 4
-                      },
-                      "INLINE_MITIGATIONS_ALREADY_EXIST": {
-                        "value": 5
-                      }
-                    }
-                  },
-                  "details": {
-                    "description": "Additional details on why this justification was chosen.",
-                    "type": "string"
-                  }
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
-                  }
-                }
-              },
-              "timeline": {
-                "type": "object",
-                "properties": {
-                  "events": {
-                    "description": "Output only. The events that have occurred on this grant. This list contains entries in the same order as they occurred. The first entry is always be of type ``Requested`` and there is always at least one entry in this array.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "description": "Name of the resource.",
-                          "type": "string"
-                        },
-                        "create_time": {
-                          "description": "Output only. The create timestamp.",
-                          "type": "object",
-                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                        },
-                        "update_time": {
-                          "description": "Output only. The update timestamp.",
-                          "type": "object",
-                          "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                        },
-                        "labels": {
-                          "description": "Labels as key value pairs.",
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "string"
-                          }
-                        },
-                        "annotations": {
-                          "description": "Annotations to allow clients to store small amounts of arbitrary data.",
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "string"
-                          }
-                        },
-                        "alignment_clock": {
-                          "type": "enum",
-                          "name": "Clock",
-                          "description": "Clock that will be used for joining streams.\n\nValues:\n    CLOCK_UNSPECIFIED (0):\n        Clock is not specified.\n    CAPTURE (1):\n        Use the timestamp when the data is captured.\n        Clients need to sync the clock.\n    INGEST (2):\n        Use the timestamp when the data is received.",
-                          "values": {
-                            "CLOCK_UNSPECIFIED": {
-                              "value": 0
-                            },
-                            "CAPTURE": {
-                              "value": 1
-                            },
-                            "INGEST": {
-                              "value": 2
-                            }
-                          }
-                        },
-                        "grace_period": {
-                          "type": "enum",
-                          "name": "Duration",
-                          "description": "From how long ago in the past these intervals were observed.\n\nValues:\n    UNDEFINED_DURATION (0):\n        A value indicating that the enum field is not\n        set.\n    DURATION_UNSPECIFIED (529071340):\n        No description available.\n    HOUR (2223588):\n        No description available.\n    MAX (76100):\n        From BfdSession object creation time.\n    MINUTE (126786068):\n        No description available.",
-                          "values": {
-                            "UNDEFINED_DURATION": {
-                              "value": 0
-                            },
-                            "DURATION_UNSPECIFIED": {
-                              "value": 529071340
-                            },
-                            "HOUR": {
-                              "value": 2223588
-                            },
-                            "MAX": {
-                              "value": 76100
-                            },
-                            "MINUTE": {
-                              "value": 126786068
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "privileged_access": {
-                "type": "object",
-                "properties": {
-                  "gcp_iam_access": {
+            "reference": "google.cloud.privilegedaccessmanager_v1.types.Grant",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. Name of this grant. Possible formats:  -  ``organizations/{organization-number}/locations/{region}/entitlements/{entitlement-id}/grants/{grant-id}`` -  ``folders/{folder-number}/locations/{region}/entitlements/{entitlement-id}/grants/{grant-id}`` -  ``projects/{project-id|project-number}/locations/{region}/entitlements/{entitlement-id}/grants/{grant-id}``  The last segment of this name (``{grant-id}``) is autogenerated.",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. Create time stamp.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Update time stamp.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "requester": {
+                  "description": "Output only. Username of the user who created this grant.",
+                  "type": "string"
+                },
+                "requested_duration": {
+                  "description": "Required. The amount of time access is needed for. This value should be less than the ``max_request_duration`` value of the entitlement.",
+                  "type": "object",
+                  "reference": "google.protobuf.duration_pb2.Duration",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "resource_type": {
-                        "description": "Required. The type of this resource.",
-                        "type": "string"
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
                       },
-                      "resource": {
-                        "description": "Required. Name of the resource.",
-                        "type": "string"
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "justification": {
+                  "description": "Optional. Justification of why this access is needed.",
+                  "type": "object",
+                  "reference": "google.cloud.privilegedaccessmanager_v1.types.Justification",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "justification_type": {
+                        "description": "The justification type for this vulnerability.",
+                        "type": "object",
+                        "reference": "grafeas.grafeas_v1.types.VulnerabilityAssessmentNote.Assessment.Justification.JustificationType"
                       },
-                      "role_bindings": {
-                        "description": "Required. Role bindings that are created on successful grant.",
+                      "details": {
+                        "description": "Additional details on why this justification was chosen.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "state": {
+                  "description": "Output only. Current state of this grant.",
+                  "type": "object",
+                  "reference": "google.cloud.privilegedaccessmanager_v1.types.Grant.State"
+                },
+                "timeline": {
+                  "description": "Output only. Timeline of this grant.",
+                  "type": "object",
+                  "reference": "google.cloud.privilegedaccessmanager_v1.types.Grant.Timeline",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "events": {
+                        "description": "Output only. The events that have occurred on this grant. This list contains entries in the same order as they occurred. The first entry is always be of type ``Requested`` and there is always at least one entry in this array.",
                         "type": "array",
                         "items": {
                           "type": "object",
+                          "reference": "google.cloud.privilegedaccessmanager_v1.types.Grant.Timeline.Event",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "timestamp": {
+                                "description": "The time at which the event occurred.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                              },
+                              "description": {
+                                "description": "A human-readable description of the event. Note that these strings can change at any time without notice. Any application logic must use the information in the ``details`` field.",
+                                "type": "string"
+                              },
+                              "delayed": {
+                                "description": "See [google.cloud.lifesciences.v2beta.DelayedEvent][google.cloud.lifesciences.v2beta.DelayedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.DelayedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "cause": {
+                                      "description": "A textual description of the cause of the delay. The string can change without notice because it is often generated by another service (such as Compute Engine).",
+                                      "type": "string"
+                                    },
+                                    "metrics": {
+                                      "description": "If the delay was caused by a resource shortage, this field lists the Compute Engine metrics that are preventing this operation from running (for example, ``CPUS`` or ``INSTANCES``). If the particular metric is not known, a single ``UNKNOWN`` metric will be present.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "worker_assigned": {
+                                "description": "See [google.cloud.lifesciences.v2beta.WorkerAssignedEvent][google.cloud.lifesciences.v2beta.WorkerAssignedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.WorkerAssignedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "zone": {
+                                      "description": "The zone the worker is running in.",
+                                      "type": "string"
+                                    },
+                                    "instance": {
+                                      "description": "The worker's instance name.",
+                                      "type": "string"
+                                    },
+                                    "machine_type": {
+                                      "description": "The machine type that was assigned for the worker.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "worker_released": {
+                                "description": "See [google.cloud.lifesciences.v2beta.WorkerReleasedEvent][google.cloud.lifesciences.v2beta.WorkerReleasedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.WorkerReleasedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "zone": {
+                                      "description": "The zone the worker was running in.",
+                                      "type": "string"
+                                    },
+                                    "instance": {
+                                      "description": "The worker's instance name.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "pull_started": {
+                                "description": "See [google.cloud.lifesciences.v2beta.PullStartedEvent][google.cloud.lifesciences.v2beta.PullStartedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.PullStartedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "image_uri": {
+                                      "description": "The URI of the image that was pulled.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "pull_stopped": {
+                                "description": "See [google.cloud.lifesciences.v2beta.PullStoppedEvent][google.cloud.lifesciences.v2beta.PullStoppedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.PullStoppedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "image_uri": {
+                                      "description": "The URI of the image that was pulled.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "container_started": {
+                                "description": "See [google.cloud.lifesciences.v2beta.ContainerStartedEvent][google.cloud.lifesciences.v2beta.ContainerStartedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.ContainerStartedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "action_id": {
+                                      "description": "The numeric ID of the action that started this container.",
+                                      "type": "integer"
+                                    },
+                                    "port_mappings": {
+                                      "description": "The container-to-host port mappings installed for this container. This set will contain any ports exposed using the ``PUBLISH_EXPOSED_PORTS`` flag as well as any specified in the ``Action`` definition.",
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "ip_address": {
+                                      "description": "The public IP address that can be used to connect to the container. This field is only populated when at least one port mapping is present. If the instance was created with a private address, this field will be empty even if port mappings exist.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "container_stopped": {
+                                "description": "See [google.cloud.lifesciences.v2beta.ContainerStoppedEvent][google.cloud.lifesciences.v2beta.ContainerStoppedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.ContainerStoppedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "action_id": {
+                                      "description": "The numeric ID of the action that started this container.",
+                                      "type": "integer"
+                                    },
+                                    "exit_status": {
+                                      "description": "The exit status of the container.",
+                                      "type": "integer"
+                                    },
+                                    "stderr": {
+                                      "description": "The tail end of any content written to standard error by the container. If the content emits large amounts of debugging noise or contains sensitive information, you can prevent the content from being printed by setting the ``DISABLE_STANDARD_ERROR_CAPTURE`` flag.  Note that only a small amount of the end of the stream is captured here. The entire stream is stored in the ``/google/logs`` directory mounted into each action, and can be copied off the machine as described elsewhere.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "container_killed": {
+                                "description": "See [google.cloud.lifesciences.v2beta.ContainerKilledEvent][google.cloud.lifesciences.v2beta.ContainerKilledEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.ContainerKilledEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "action_id": {
+                                      "description": "The numeric ID of the action that started the container.",
+                                      "type": "integer"
+                                    }
+                                  }
+                                }
+                              },
+                              "unexpected_exit_status": {
+                                "description": "See [google.cloud.lifesciences.v2beta.UnexpectedExitStatusEvent][google.cloud.lifesciences.v2beta.UnexpectedExitStatusEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.UnexpectedExitStatusEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "action_id": {
+                                      "description": "The numeric ID of the action that started the container.",
+                                      "type": "integer"
+                                    },
+                                    "exit_status": {
+                                      "description": "The exit status of the container.",
+                                      "type": "integer"
+                                    }
+                                  }
+                                }
+                              },
+                              "failed": {
+                                "description": "See [google.cloud.lifesciences.v2beta.FailedEvent][google.cloud.lifesciences.v2beta.FailedEvent].  This field is a member of `oneof`_ ``details``.",
+                                "type": "object",
+                                "reference": "google.cloud.lifesciences_v2beta.types.FailedEvent",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "code": {
+                                      "description": "The Google standard error code that best describes this failure.",
+                                      "type": "object",
+                                      "reference": "google.rpc.code_pb2.Code"
+                                    },
+                                    "cause": {
+                                      "description": "The human-readable description of the cause of the failure.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "privileged_access": {
+                  "description": "Output only. The access that would be granted by this grant.",
+                  "type": "object",
+                  "reference": "google.cloud.privilegedaccessmanager_v1.types.PrivilegedAccess",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "gcp_iam_access": {
+                        "description": "Access to a Google Cloud resource through IAM.  This field is a member of `oneof`_ ``access_type``.",
+                        "type": "object",
+                        "reference": "google.cloud.privilegedaccessmanager_v1.types.PrivilegedAccess.GcpIamAccess",
+                        "resolved_schema": {
+                          "type": "object",
                           "properties": {
-                            "role": {
-                              "description": "Required. IAM role to be granted. https://cloud.google.com/iam/docs/roles-overview.",
+                            "resource_type": {
+                              "description": "Required. The type of this resource.",
                               "type": "string"
                             },
-                            "condition_expression": {
-                              "description": "Optional. The expression field of the IAM condition to be associated with the role. If specified, a user with an active grant for this entitlement is able to access the resource only if this condition evaluates to true for their request.  This field uses the same CEL format as IAM and supports all attributes that IAM supports, except tags. https://cloud.google.com/iam/docs/conditions-overview#attributes.",
+                            "resource": {
+                              "description": "Required. Name of the resource.",
                               "type": "string"
+                            },
+                            "role_bindings": {
+                              "description": "Required. Role bindings that are created on successful grant.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.privilegedaccessmanager_v1.types.PrivilegedAccess.GcpIamAccess.RoleBinding",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "role": {
+                                      "description": "Required. IAM role to be granted. https://cloud.google.com/iam/docs/roles-overview.",
+                                      "type": "string"
+                                    },
+                                    "condition_expression": {
+                                      "description": "Optional. The expression field of the IAM condition to be associated with the role. If specified, a user with an active grant for this entitlement is able to access the resource only if this condition evaluates to true for their request.  This field uses the same CEL format as IAM and supports all attributes that IAM supports, except tags. https://cloud.google.com/iam/docs/conditions-overview#attributes.",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "role"
+                                  ]
+                                }
+                              }
                             }
                           },
                           "required": [
-                            "role"
+                            "resource_type",
+                            "resource",
+                            "role_bindings"
                           ]
                         }
                       }
-                    },
-                    "required": [
-                      "resource_type",
-                      "resource",
-                      "role_bindings"
-                    ]
+                    }
                   }
-                }
-              },
-              "audit_trail": {
-                "type": "object",
-                "properties": {
-                  "access_grant_time": {
-                    "description": "Output only. The time at which access was given.",
+                },
+                "audit_trail": {
+                  "description": "Output only. Audit trail of access provided by this grant. If unspecified then access was never granted.",
+                  "type": "object",
+                  "reference": "google.cloud.privilegedaccessmanager_v1.types.Grant.AuditTrail",
+                  "resolved_schema": {
                     "type": "object",
-                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
-                  },
-                  "access_remove_time": {
-                    "description": "Output only. The time at which the system removed access. This could be because of an automatic expiry or because of a revocation.  If unspecified, then access hasn't been removed yet.",
-                    "type": "object",
-                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                    "properties": {
+                      "access_grant_time": {
+                        "description": "Output only. The time at which access was given.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "access_remove_time": {
+                        "description": "Output only. The time at which the system removed access. This could be because of an automatic expiry or because of a revocation.  If unspecified, then access hasn't been removed yet.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      }
+                    }
                   }
+                },
+                "additional_email_recipients": {
+                  "description": "Optional. Additional email addresses to notify for all the actions performed on the grant.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "externally_modified": {
+                  "description": "Output only. Flag set by the PAM system to indicate that policy bindings made by this grant have been modified from outside PAM.  After it is set, this flag remains set forever irrespective of the grant state. A ``true`` value here indicates that PAM no longer has any certainty on the access a user has because of this grant.",
+                  "type": "boolean"
                 }
               },
-              "additional_email_recipients": {
-                "description": "Optional. Additional email addresses to notify for all the actions performed on the grant.",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "externally_modified": {
-                "description": "Output only. Flag set by the PAM system to indicate that policy bindings made by this grant have been modified from outside PAM.  After it is set, this flag remains set forever irrespective of the grant state. A ``true`` value here indicates that PAM no longer has any certainty on the access a user has because of this grant.",
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "requested_duration"
-            ]
+              "required": [
+                "requested_duration"
+              ]
+            }
           },
           "request_id": {
             "description": "Optional. An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server knows to ignore the request if it has already been completed. The server guarantees this for at least 60 minutes after the first request.  For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, ignores the second request. This prevents clients from accidentally creating duplicate grants.  The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",

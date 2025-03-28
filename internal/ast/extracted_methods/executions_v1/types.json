@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-workflows\\google\\cloud\\workflows\\executions_v1\\types\\executions.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-workflows/google/cloud/workflows/executions_v1/types/executions.py": [
     {
       "type": "function",
       "name": "ListExecutionsRequest",
@@ -20,20 +20,9 @@
             "type": "string"
           },
           "view": {
-            "description": "Defines possible views for execution resource.\n\nValues:\n    EXECUTION_VIEW_UNSPECIFIED (0):\n        The default / unset value.\n    BASIC (1):\n        Includes only basic metadata about the execution. Following\n        fields are returned: name, start_time, end_time, state and\n        workflow_revision_id.\n    FULL (2):\n        Includes all data.",
-            "type": "enum",
-            "name": "ExecutionView",
-            "values": {
-              "EXECUTION_VIEW_UNSPECIFIED": {
-                "value": 0
-              },
-              "BASIC": {
-                "value": 1
-              },
-              "FULL": {
-                "value": 2
-              }
-            }
+            "description": "Optional. A view defining which fields should be filled in the returned executions. The API will default to the BASIC view.",
+            "type": "object",
+            "reference": "google.cloud.workflows.executions_v1.types.ExecutionView"
           },
           "filter": {
             "description": "Optional. Filters applied to the [Executions.ListExecutions] results. The following fields are supported for filtering: executionID, state, startTime, endTime, duration, workflowRevisionID, stepName, and label.",
@@ -62,68 +51,165 @@
           },
           "execution": {
             "description": "Required. Execution to be created.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. The resource name of the execution. Format:  projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}",
-                "type": "string"
-              },
-              "start_time": {
-                "description": "Output only. Marks the beginning of execution.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "Output only. Marks the end of execution, successful or not.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
+            "reference": "google.cloud.workflows.executions_v1.types.Execution",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "execution_template": {
+                  "description": "execute metadata including name, hardware spec, region, labels, etc.",
+                  "type": "object",
+                  "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "scale_tier": {
+                        "description": "Required. Scale tier of the hardware used for notebook execution. DEPRECATED Will be discontinued. As right now only CUSTOM is supported.",
+                        "type": "object",
+                        "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate.ScaleTier"
+                      },
+                      "master_type": {
+                        "description": "Specifies the type of virtual machine to use for your training job's master worker. You must specify this field when ``scaleTier`` is set to ``CUSTOM``.  You can use certain Compute Engine machine types directly in this field. The following types are supported:  -  ``n1-standard-4`` -  ``n1-standard-8`` -  ``n1-standard-16`` -  ``n1-standard-32`` -  ``n1-standard-64`` -  ``n1-standard-96`` -  ``n1-highmem-2`` -  ``n1-highmem-4`` -  ``n1-highmem-8`` -  ``n1-highmem-16`` -  ``n1-highmem-32`` -  ``n1-highmem-64`` -  ``n1-highmem-96`` -  ``n1-highcpu-16`` -  ``n1-highcpu-32`` -  ``n1-highcpu-64`` -  ``n1-highcpu-96``  Alternatively, you can use the following legacy machine types:  -  ``standard`` -  ``large_model`` -  ``complex_model_s`` -  ``complex_model_m`` -  ``complex_model_l`` -  ``standard_gpu`` -  ``complex_model_m_gpu`` -  ``complex_model_l_gpu`` -  ``standard_p100`` -  ``complex_model_m_p100`` -  ``standard_v100`` -  ``large_model_v100`` -  ``complex_model_m_v100`` -  ``complex_model_l_v100``  Finally, if you want to use a TPU for training, specify ``cloud_tpu`` in this field. Learn more about the `special configuration options for training with TPU <https://cloud.google.com/ai-platform/training/docs/using-tpus#configuring_a_custom_tpu_machine>`__.",
+                        "type": "string"
+                      },
+                      "accelerator_config": {
+                        "description": "Configuration (count and accelerator type) for hardware running notebook execution.",
+                        "type": "object",
+                        "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate.SchedulerAcceleratorConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "type_": {
+                              "description": "Type of this accelerator.",
+                              "type": "object",
+                              "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate.SchedulerAcceleratorType"
+                            },
+                            "core_count": {
+                              "description": "Count of cores of this accelerator.",
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      },
+                      "labels": {
+                        "description": "Labels for execution. If execution is scheduled, a field included will be 'nbs-scheduled'. Otherwise, it is an immediate execution, and an included field will be 'nbs-immediate'. Use fields to efficiently index between various types of executions.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "input_notebook_file": {
+                        "description": "Path to the notebook file to execute. Must be in a Google Cloud Storage bucket. Format: ``gs://{bucket_name}/{folder}/{notebook_file_name}`` Ex: ``gs://notebook_user/scheduled_notebooks/sentiment_notebook.ipynb``",
+                        "type": "string"
+                      },
+                      "container_image_uri": {
+                        "description": "Container Image URI to a DLVM Example: 'gcr.io/deeplearning-platform-release/base-cu100' More examples can be found at:  https://cloud.google.com/ai-platform/deep-learning-containers/docs/choosing-container",
+                        "type": "string"
+                      },
+                      "output_notebook_folder": {
+                        "description": "Path to the notebook folder to write to. Must be in a Google Cloud Storage bucket path. Format: ``gs://{bucket_name}/{folder}`` Ex: ``gs://notebook_user/scheduled_notebooks``",
+                        "type": "string"
+                      },
+                      "params_yaml_file": {
+                        "description": "Parameters to be overridden in the notebook during execution. Ref https://papermill.readthedocs.io/en/latest/usage-parameterize.html on how to specifying parameters in the input notebook and pass them here in an YAML file. Ex: ``gs://notebook_user/scheduled_notebooks/sentiment_notebook_params.yaml``",
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "description": "Parameters used within the 'input_notebook_file' notebook.",
+                        "type": "string"
+                      },
+                      "service_account": {
+                        "description": "The email address of a service account to use when running the execution. You must have the ``iam.serviceAccounts.actAs`` permission for the specified service account.",
+                        "type": "string"
+                      },
+                      "job_type": {
+                        "description": "The type of Job to be used on this execution.",
+                        "type": "object",
+                        "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate.JobType"
+                      },
+                      "dataproc_parameters": {
+                        "description": "Parameters used in Dataproc JobType executions.  This field is a member of `oneof`_ ``job_parameters``.",
+                        "type": "object",
+                        "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate.DataprocParameters",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "cluster": {
+                              "description": "URI for cluster used to run Dataproc execution. Format: ``projects/{PROJECT_ID}/regions/{REGION}/clusters/{CLUSTER_NAME}``",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "vertex_ai_parameters": {
+                        "description": "Parameters used in Vertex AI JobType executions.  This field is a member of `oneof`_ ``job_parameters``.",
+                        "type": "object",
+                        "reference": "google.cloud.notebooks_v1.types.ExecutionTemplate.VertexAIParameters",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "network": {
+                              "description": "The full name of the Compute Engine `network <https://cloud.google.com/compute/docs/networks-and-firewalls#networks>`__ to which the Job should be peered. For example, ``projects/12345/global/networks/myVPC``. `Format <https://cloud.google.com/compute/docs/reference/rest/v1/networks/insert>`__ is of the form ``projects/{project}/global/networks/{network}``. Where ``{project}`` is a project number, as in ``12345``, and ``{network}`` is a network name.  Private services access must already be configured for the network. If left unspecified, the job is not peered with any network.",
+                              "type": "string"
+                            },
+                            "env": {
+                              "description": "Environment variables. At most 100 environment variables can be specified and unique. Example: ``GCP_BUCKET=gs://my-bucket/samples/``",
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "kernel_spec": {
+                        "description": "Name of the kernel spec to use. This must be specified if the kernel spec name on the execution target does not match the name in the input notebook file.",
+                        "type": "string"
+                      },
+                      "tensorboard": {
+                        "description": "The name of a Vertex AI [Tensorboard] resource to which this execution will upload Tensorboard logs. Format: ``projects/{project}/locations/{location}/tensorboards/{tensorboard}``",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "scale_tier"
+                    ]
                   }
+                },
+                "name": {
+                  "description": "Output only. The resource name of the execute. Format: ``projects/{project_id}/locations/{location}/executions/{execution_id}``",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Output only. Name used for UI purposes. Name can only contain alphanumeric characters and underscores '_'.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "A brief description of this execution.",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. Time the Execution was instantiated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Time the Execution was last updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "state": {
+                  "description": "Output only. State of the underlying AI Platform job.",
+                  "type": "object",
+                  "reference": "google.cloud.notebooks_v1.types.Execution.State"
+                },
+                "output_notebook_file": {
+                  "description": "Output notebook file generated by this execution",
+                  "type": "string"
+                },
+                "job_uri": {
+                  "description": "Output only. The URI of the external job used to execute the notebook.",
+                  "type": "string"
                 }
-              },
-              "argument": {
-                "description": "Input parameters of the execution represented as a JSON string. The size limit is 32KB.",
-                "type": "string"
-              },
-              "result": {
-                "description": "Output only. Output of the execution represented as a JSON string. The value can only be present if the execution's state is ``SUCCEEDED``.",
-                "type": "string"
-              },
-              "error": {
-                "type": "object",
-                "properties": {
-                  "payload": {
-                    "description": "Error payload returned by the execution, represented as a JSON string.",
-                    "type": "string"
-                  },
-                  "context": {
-                    "description": "Human readable error context, helpful for debugging purposes.",
-                    "type": "string"
-                  }
-                }
-              },
-              "workflow_revision_id": {
-                "description": "Output only. Revision of the workflow this execution is using.",
-                "type": "string"
               }
             }
           }
@@ -146,20 +232,9 @@
             "type": "string"
           },
           "view": {
-            "description": "Defines possible views for execution resource.\n\nValues:\n    EXECUTION_VIEW_UNSPECIFIED (0):\n        The default / unset value.\n    BASIC (1):\n        Includes only basic metadata about the execution. Following\n        fields are returned: name, start_time, end_time, state and\n        workflow_revision_id.\n    FULL (2):\n        Includes all data.",
-            "type": "enum",
-            "name": "ExecutionView",
-            "values": {
-              "EXECUTION_VIEW_UNSPECIFIED": {
-                "value": 0
-              },
-              "BASIC": {
-                "value": 1
-              },
-              "FULL": {
-                "value": 2
-              }
-            }
+            "description": "Optional. A view defining which fields should be filled in the returned execution. The API will default to the FULL view.",
+            "type": "object",
+            "reference": "google.cloud.workflows.executions_v1.types.ExecutionView"
           }
         },
         "required": [

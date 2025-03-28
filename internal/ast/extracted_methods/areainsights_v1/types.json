@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-maps-areainsights\\google\\maps\\areainsights_v1\\types\\area_insights_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-maps-areainsights/google/maps/areainsights_v1/types/area_insights_service.py": [
     {
       "type": "function",
       "name": "ComputeInsightsRequest",
@@ -11,252 +11,189 @@
             "description": "Required. Insights to compute. Currently only INSIGHT_COUNT and INSIGHT_PLACES are supported.",
             "type": "array",
             "items": {
-              "type": "enum",
-              "name": "Insight",
-              "description": "Supported insights.\n\nValues:\n    INSIGHT_UNSPECIFIED (0):\n        Not Specified.\n    INSIGHT_COUNT (1):\n        Count insight.\n\n        When this insight is specified ComputeInsights returns the\n        number of places that match the specified filter criteria.\n\n        ::\n\n           For example if the request is:\n           ComputeInsightsRequest {\n             insights: INSIGHT_COUNT\n             filter {\n               location_filter {region: <PlaceId of state of CA>}\n               type_filter {included_types: \"restaurant\"}\n               operating_status: OPERATING_STATUS_OPERATIONAL\n               price_levels: PRICE_LEVEL_FREE\n               price_levels: PRICE_LEVEL_INEXPENSIVE\n               min_rating: 4.0\n             }\n           }\n\n           The method will return the count of restaurants in California that are\n           operational, with price level free or inexpensive and have an average\n           rating of at least 4 starts.\n\n           Example response:\n           ComputeInsightsResponse",
-              "values": {
-                "INSIGHT_UNSPECIFIED": {
-                  "value": 0
-                },
-                "INSIGHT_COUNT": {
-                  "value": 1
-                },
-                "INSIGHT_PLACES": {
-                  "value": 2
+              "reference": "google.maps.areainsights_v1.types.Insight",
+              "resolved_schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Name of the insight.",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "Free-form human readable summary in English. The maximum length is 500 characters.",
+                    "type": "string"
+                  },
+                  "target_resources": {
+                    "description": "Fully qualified resource names that this insight is targeting.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "insight_subtype": {
+                    "description": "Insight subtype. Insight content schema will be stable for a given subtype.",
+                    "type": "string"
+                  },
+                  "content": {
+                    "description": "A struct of custom fields to explain the insight. Example: \"grantedPermissionsCount\": \"1000\".",
+                    "type": "object",
+                    "reference": "google.protobuf.struct_pb2.Struct"
+                  },
+                  "last_refresh_time": {
+                    "description": "Timestamp of the latest data used to generate the insight.",
+                    "type": "object",
+                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  },
+                  "observation_period": {
+                    "description": "Observation period that led to the insight. The source data used to generate the insight ends at last_refresh_time and begins at (last_refresh_time - observation_period).",
+                    "type": "object",
+                    "reference": "google.protobuf.duration_pb2.Duration",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "nanos": {
+                          "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                          "type": "integer"
+                        },
+                        "seconds": {
+                          "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "state_info": {
+                    "description": "Information state and metadata.",
+                    "type": "object",
+                    "reference": "google.cloud.recommender_v1beta1.types.InsightStateInfo",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "description": "Insight state.",
+                          "type": "object",
+                          "reference": "google.cloud.recommender_v1beta1.types.InsightStateInfo.State"
+                        },
+                        "state_metadata": {
+                          "description": "A map of metadata for the state, provided by user or automations systems.",
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "category": {
+                    "description": "Category being targeted by the insight.",
+                    "type": "object",
+                    "reference": "google.cloud.recommender_v1beta1.types.Insight.Category",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "category_id": {
+                          "description": "The identifier of the category.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "The localized name of the category.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "severity": {
+                    "description": "Insight's severity.",
+                    "type": "object",
+                    "reference": "google.cloud.recommender_v1beta1.types.Insight.Severity"
+                  },
+                  "etag": {
+                    "description": "Fingerprint of the Insight. Provides optimistic locking when updating states.",
+                    "type": "string"
+                  },
+                  "associated_recommendations": {
+                    "description": "Recommendations derived from this insight.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "reference": "google.cloud.recommender_v1beta1.types.Insight.RecommendationReference",
+                      "resolved_schema": {
+                        "type": "object",
+                        "properties": {
+                          "recommendation": {
+                            "description": "Recommendation resource name, e.g. projects/[PROJECT_NUMBER]/locations/[LOCATION]/recommenders/[RECOMMENDER_ID]/recommendations/[RECOMMENDATION_ID]",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           },
           "filter": {
             "description": "Required. Insight filter.",
-            "type": "object",
-            "properties": {
-              "location_filter": {
-                "type": "object",
-                "properties": {
-                  "circle": {
+            "reference": "google.maps.areainsights_v1.types.Filter",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "event_type": {
+                  "description": "Event types to allowlist.",
+                  "type": "array",
+                  "items": {
                     "type": "object",
-                    "properties": {
-                      "center": {
-                        "description": "Required. Center latitude and longitude.  The range of latitude must be within [-90.0, 90.0]. The range of the longitude must be within [-180.0, 180.0].",
-                        "type": "object",
-                        "reference": "google.type.latlng_pb2.LatLng"
-                      },
-                      "radius": {
-                        "description": "Required. Radius measured in meters. The radius must be within [0.0, 50000.0].",
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "center",
-                      "radius"
-                    ]
-                  },
-                  "region": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "description": "Identifier. The resource name of the region. Format: ``accounts/{account}/regions/{region}``",
-                        "type": "string"
-                      },
-                      "display_name": {
-                        "description": "Optional. The display name of the region.  This field is a member of `oneof`_ ``_display_name``.",
-                        "type": "string"
-                      },
-                      "postal_code_area": {
-                        "type": "object",
-                        "properties": {
-                          "region_code": {
-                            "description": "Required. `CLDR territory code <http://www.unicode.org/repos/cldr/tags/latest/common/main/en.xml>`__ or the country the postal code group applies to.",
-                            "type": "string"
-                          },
-                          "postal_codes": {
-                            "description": "Required. A range of postal codes.",
-                            "type": "array",
-                            "items": {
+                    "reference": "google.cloud.container_v1beta1.types.NotificationConfig.EventType",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "type_": {
+                          "description": "Output only. The full name of the event type (for example, \"google.cloud.storage.object.v1.finalized\"). In the form of {provider-specific-prefix}.{resource}.{version}.{verb}. Types MUST be versioned and event schemas are guaranteed to remain backward compatible within one version. Note that event type versions and API versions do not need to match.",
+                          "type": "string"
+                        },
+                        "description": {
+                          "description": "Output only. Human friendly description of what the event type is about. For example \"Bucket created in Cloud Storage\".",
+                          "type": "string"
+                        },
+                        "filtering_attributes": {
+                          "description": "Output only. Filtering attributes for the event type.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.eventarc_v1.types.FilteringAttribute",
+                            "resolved_schema": {
                               "type": "object",
                               "properties": {
-                                "begin": {
-                                  "description": "Required. A postal code or a pattern of the form prefix\\* denoting the inclusive lower bound of the range defining the area. Examples values: ``94108``, ``9410*``, ``9*``.",
+                                "attribute": {
+                                  "description": "Output only. Attribute used for filtering the event type.",
                                   "type": "string"
                                 },
-                                "end": {
-                                  "description": "Optional. A postal code or a pattern of the form ``prefix*`` denoting the inclusive upper bound of the range defining the area. It must have the same length as postalCodeRangeBegin: if postalCodeRangeBegin is a postal code then postalCodeRangeEnd must be a postal code too; if postalCodeRangeBegin is a pattern then postalCodeRangeEnd must be a pattern with the same prefix length. Optional: if not set, then the area is defined as being all the postal codes matching postalCodeRangeBegin.",
+                                "description": {
+                                  "description": "Output only. Description of the purpose of the attribute.",
                                   "type": "string"
+                                },
+                                "required": {
+                                  "description": "Output only. If true, the triggers for this provider should always specify a filter on these attributes. Trigger creation will fail otherwise.",
+                                  "type": "boolean"
+                                },
+                                "path_pattern_supported": {
+                                  "description": "Output only. If true, the attribute accepts matching expressions in the Eventarc PathPattern format.",
+                                  "type": "boolean"
                                 }
-                              },
-                              "required": [
-                                "begin"
-                              ]
+                              }
                             }
                           }
                         },
-                        "required": [
-                          "region_code",
-                          "postal_codes"
-                        ]
-                      },
-                      "geotarget_area": {
-                        "type": "object",
-                        "properties": {
-                          "geotarget_criteria_ids": {
-                            "description": "Required. A non-empty list of `location IDs <https://developers.google.com/adwords/api/docs/appendix/geotargeting>`__. They must all be of the same location type (for example, state).",
-                            "type": "array",
-                            "items": {
-                              "type": "integer"
-                            }
-                          }
-                        },
-                        "required": [
-                          "geotarget_criteria_ids"
-                        ]
-                      },
-                      "regional_inventory_eligible": {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "description": "",
-                            "type": "boolean"
-                          }
-                        }
-                      },
-                      "shipping_eligible": {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "description": "",
-                            "type": "boolean"
-                          }
+                        "event_schema_uri": {
+                          "description": "Output only. URI for the event schema. For example \"https://github.com/googleapis/google-cloudevents/blob/master/proto/google/events/cloud/storage/v1/events.proto\".",
+                          "type": "string"
                         }
                       }
                     }
-                  },
-                  "custom_area": {
-                    "type": "object",
-                    "properties": {
-                      "polygon": {
-                        "type": "object",
-                        "properties": {
-                          "coordinates": {
-                            "description": "Optional. The coordinates that define the polygon.",
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "reference": "google.type.latlng_pb2.LatLng"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "required": [
-                      "polygon"
-                    ]
-                  }
-                }
-              },
-              "type_filter": {
-                "type": "object",
-                "properties": {
-                  "included_types": {
-                    "description": "Optional. Included Place types.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "excluded_types": {
-                    "description": "Optional. Excluded Place types.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "included_primary_types": {
-                    "description": "Optional. Included primary Place types.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "excluded_primary_types": {
-                    "description": "Optional. Excluded primary Place types.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "operating_status": {
-                "description": "Optional. Restricts results to places whose operating status is included on this list. If operating_status is not set, OPERATING_STATUS_OPERATIONAL is used as default.",
-                "type": "array",
-                "items": {
-                  "type": "enum",
-                  "name": "OperatingStatus",
-                  "description": "Operating status of the place.\n\nValues:\n    OPERATING_STATUS_UNSPECIFIED (0):\n        Not Specified.\n    OPERATING_STATUS_OPERATIONAL (1):\n        The place is operational and its open during\n        its defined hours.\n    OPERATING_STATUS_PERMANENTLY_CLOSED (3):\n        The Place is no longer in business.\n    OPERATING_STATUS_TEMPORARILY_CLOSED (4):\n        The Place is temporarily closed and expected\n        to reopen in the future.",
-                  "values": {
-                    "OPERATING_STATUS_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "OPERATING_STATUS_OPERATIONAL": {
-                      "value": 1
-                    },
-                    "OPERATING_STATUS_PERMANENTLY_CLOSED": {
-                      "value": 3
-                    },
-                    "OPERATING_STATUS_TEMPORARILY_CLOSED": {
-                      "value": 4
-                    }
-                  }
-                }
-              },
-              "price_levels": {
-                "description": "Optional. Restricts results to places whose price level is included on this list. If price_level is not set, all price levels are included in the results.",
-                "type": "array",
-                "items": {
-                  "type": "enum",
-                  "name": "PriceLevel",
-                  "description": "Price level of the place.\n\nValues:\n    PRICE_LEVEL_UNSPECIFIED (0):\n        Place price level is unspecified or unknown.\n    PRICE_LEVEL_FREE (1):\n        Place provides free services.\n    PRICE_LEVEL_INEXPENSIVE (2):\n        Place provides inexpensive services.\n    PRICE_LEVEL_MODERATE (3):\n        Place provides moderately priced services.\n    PRICE_LEVEL_EXPENSIVE (4):\n        Place provides expensive services.\n    PRICE_LEVEL_VERY_EXPENSIVE (5):\n        Place provides very expensive services.",
-                  "values": {
-                    "PRICE_LEVEL_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "PRICE_LEVEL_FREE": {
-                      "value": 1
-                    },
-                    "PRICE_LEVEL_INEXPENSIVE": {
-                      "value": 2
-                    },
-                    "PRICE_LEVEL_MODERATE": {
-                      "value": 3
-                    },
-                    "PRICE_LEVEL_EXPENSIVE": {
-                      "value": 4
-                    },
-                    "PRICE_LEVEL_VERY_EXPENSIVE": {
-                      "value": 5
-                    }
-                  }
-                }
-              },
-              "rating_filter": {
-                "type": "object",
-                "properties": {
-                  "min_rating": {
-                    "description": "Optional. Restricts results to places whose average user rating is greater than or equal to min_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_min_rating``.",
-                    "type": "number"
-                  },
-                  "max_rating": {
-                    "description": "Optional. Restricts results to places whose average user rating is strictly less than or equal to max_rating. Values must be between 1.0 and 5.0.  This field is a member of `oneof`_ ``_max_rating``.",
-                    "type": "number"
                   }
                 }
               }
-            },
-            "required": [
-              "location_filter",
-              "type_filter"
-            ]
+            }
           }
         },
         "required": [

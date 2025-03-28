@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-shopping-merchant-datasources\\google\\shopping\\merchant_datasources_v1beta\\types\\datasources.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-shopping-merchant-datasources/google/shopping/merchant_datasources_v1beta/types/datasources.py": [
     {
       "type": "function",
       "name": "GetDataSourceRequest",
@@ -55,281 +55,184 @@
           },
           "data_source": {
             "description": "Required. The data source to create.",
-            "type": "object",
-            "properties": {
-              "primary_product_data_source": {
-                "type": "object",
-                "properties": {
-                  "channel": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "feed_label": {
-                    "description": "Optional. Immutable. The feed label that is specified on the data source level.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset for data sources with product content type. They must be set for data sources with a file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept products without that restriction.  This field is a member of `oneof`_ ``_feed_label``.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Optional. Immutable. The two-letter ISO 639-1 language of the items in the data source.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset. The fields can only be unset for data sources without file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept products without that restriction.  This field is a member of `oneof`_ ``_content_language``.",
-                    "type": "string"
-                  },
-                  "countries": {
-                    "description": "Optional. The countries where the items may be displayed. Represented as a `CLDR territory code <https://github.com/unicode-org/cldr/blob/latest/common/main/en.xml>`__.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "default_rule": {
+            "reference": "google.shopping.merchant_datasources_v1beta.types.DataSource",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "service": {
+                  "description": "Service that physically stores the data.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_v1.types.DataSource.Service",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "take_from_data_sources": {
-                        "description": "Required. The list of data sources linked in the `default rule <https://support.google.com/merchants/answer/7450276>`__. This list is ordered by the default rule priority of joining the data. It might include none or multiple references to ``self`` and supplemental data sources.  The list must not be empty.  To link the data source to the default rule, you need to add a new reference to this list (in sequential order).  To unlink the data source from the default rule, you need to remove the given reference from this list. To create attribute rules that are different from the default rule, see `Set up your attribute rules <//support.google.com/merchants/answer/14994083>`__.  Changing the order of this list will result in changing the priority of data sources in the default rule.  For example, providing the following list: [``1001``, ``self``] will take attribute values from supplemental data source ``1001``, and fallback to ``self`` if the attribute is not set in ``1001``.",
+                      "name": {
+                        "description": "Immutable. The resource name for the service in the format ``projects/*/locations/*/namespaces/*/services/*``.",
+                        "type": "string"
+                      },
+                      "annotations": {
+                        "description": "Optional. Annotations for the service. This data can be consumed by service clients.  Restrictions:  -  The entire annotations dictionary may contain up to 2000 characters, spread accoss all key-value pairs. Annotations that go beyond this limit are rejected -  Valid annotation keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Annotations that fails to meet these requirements are rejected  Note: This field is equivalent to the ``metadata`` field in the v1beta1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "endpoints": {
+                        "description": "Output only. Endpoints associated with this service. Returned on [LookupService.ResolveService][google.cloud.servicedirectory.v1.LookupService.ResolveService]. Control plane clients should use [RegistrationService.ListEndpoints][google.cloud.servicedirectory.v1.RegistrationService.ListEndpoints].",
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "properties": {
-                            "self_": {
-                              "description": "Self should be used to reference the primary data source itself.  This field is a member of `oneof`_ ``data_source_id``.",
-                              "type": "boolean"
-                            },
-                            "primary_data_source_name": {
-                              "description": "Optional. The name of the primary data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                              "type": "string"
-                            },
-                            "supplemental_data_source_name": {
-                              "description": "Optional. The name of the supplemental data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                              "type": "string"
+                          "reference": "google.cloud.servicedirectory_v1.types.Endpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "ip_address": {
+                                "description": "The IP address of the endpoint, which can be an external or internal IP.",
+                                "type": "string"
+                              },
+                              "port": {
+                                "description": "The IP protocol port of the endpoint. Only applicable when protocol is TCP or UDP.",
+                                "type": "integer"
+                              },
+                              "instance": {
+                                "description": "A Compute Engine instance URI.",
+                                "type": "string"
+                              },
+                              "forwarding_rule": {
+                                "description": "A forwarding rule and its corresponding IP address represent the frontend configuration of a Google Cloud load balancer. Forwarding rules are also used for protocol forwarding, Private Service Connect and other network services to provide forwarding information in the control plane. Format:  projects/{project}/global/forwardingRules/{id} or projects/{project}/regions/{region}/forwardingRules/{id}",
+                                "type": "string"
+                              },
+                              "forwarding_rule_target": {
+                                "description": "Output only. Specifies the type of the target of the forwarding rule.  This field is a member of `oneof`_ ``_forwarding_rule_target``.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.ForwardingRuleTarget"
+                              },
+                              "load_balancer_id": {
+                                "description": "Output only. ID of the load balancer the forwarding rule points to. Empty for forwarding rules not related to load balancers.  This field is a member of `oneof`_ ``_load_balancer_id``.",
+                                "type": "string"
+                              },
+                              "load_balancer_type": {
+                                "description": "Output only. Type of the load balancer the forwarding rule points to.  This field is a member of `oneof`_ ``_load_balancer_type``.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.LoadBalancerType"
+                              },
+                              "gke_master_cluster": {
+                                "description": "A cluster URI for `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__.",
+                                "type": "string"
+                              },
+                              "fqdn": {
+                                "description": "DNS endpoint of `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__. Requires gke_master_cluster to be set, can't be used simultaneoulsly with ip_address or network. Applicable only to destination endpoint.",
+                                "type": "string"
+                              },
+                              "cloud_sql_instance": {
+                                "description": "A `Cloud SQL <https://cloud.google.com/sql>`__ instance URI.",
+                                "type": "string"
+                              },
+                              "redis_instance": {
+                                "description": "A `Redis Instance <https://cloud.google.com/memorystore/docs/redis>`__ URI.",
+                                "type": "string"
+                              },
+                              "redis_cluster": {
+                                "description": "A `Redis Cluster <https://cloud.google.com/memorystore/docs/cluster>`__ URI.",
+                                "type": "string"
+                              },
+                              "cloud_function": {
+                                "description": "A `Cloud Function <https://cloud.google.com/functions>`__.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.CloudFunctionEndpoint",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "description": "A `Cloud Function <https://cloud.google.com/functions>`__ name.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "app_engine_version": {
+                                "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.AppEngineVersionEndpoint",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__ name.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "cloud_run_revision": {
+                                "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.CloudRunRevisionEndpoint",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__ URI. The format is: projects/{project}/locations/{location}/revisions/{revision}",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "network": {
+                                "description": "A Compute Engine network URI.",
+                                "type": "string"
+                              },
+                              "network_type": {
+                                "description": "Type of the network where the endpoint is located. Applicable only to source endpoint, as destination network type can be inferred from the source.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.NetworkType"
+                              },
+                              "project_id": {
+                                "description": "Project ID where the endpoint is located. The Project ID can be derived from the URI if you provide a VM instance or network URI. The following are two cases where you must provide the project ID:  1. Only the IP address is specified, and the IP address is within a Google Cloud project. 2. When you are using Shared VPC and the IP address that you provide is from the service project. In this case, the network that the IP address resides in is defined in the host project.",
+                                "type": "string"
+                              }
                             }
                           }
                         }
-                      }
-                    },
-                    "required": [
-                      "take_from_data_sources"
-                    ]
-                  }
-                },
-                "required": [
-                  "channel"
-                ]
-              },
-              "supplemental_product_data_source": {
-                "type": "object",
-                "properties": {
-                  "feed_label": {
-                    "description": "Optional. Immutable. The feed label that is specified on the data source level.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset for data sources with product content type. They must be set for data sources with a file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept produts without that restriction.  This field is a member of `oneof`_ ``_feed_label``.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Optional. Immutable. The two-letter ISO 639-1 language of the items in the data source.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset. The fields can only be unset for data sources without file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept produts without that restriction.  This field is a member of `oneof`_ ``_content_language``.",
-                    "type": "string"
-                  },
-                  "referencing_primary_data_sources": {
-                    "description": "Output only. The (unordered and deduplicated) list of all primary data sources linked to this data source in either default or custom rules. Supplemental data source cannot be deleted before all links are removed.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "self_": {
-                          "description": "Self should be used to reference the primary data source itself.  This field is a member of `oneof`_ ``data_source_id``.",
-                          "type": "boolean"
-                        },
-                        "primary_data_source_name": {
-                          "description": "Optional. The name of the primary data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                          "type": "string"
-                        },
-                        "supplemental_data_source_name": {
-                          "description": "Optional. The name of the supplemental data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                          "type": "string"
-                        }
+                      },
+                      "uid": {
+                        "description": "Output only. The globally unique identifier of the service in the UUID4 format.",
+                        "type": "string"
                       }
                     }
                   }
-                }
-              },
-              "local_inventory_data_source": {
-                "type": "object",
-                "properties": {
-                  "feed_label": {
-                    "description": "Required. Immutable. The feed label of the offers to which the local inventory is provided.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Required. Immutable. The two-letter ISO 639-1 language of the items to which the local inventory is provided.",
-                    "type": "string"
-                  }
                 },
-                "required": [
-                  "feed_label",
-                  "content_language"
-                ]
-              },
-              "regional_inventory_data_source": {
-                "type": "object",
-                "properties": {
-                  "feed_label": {
-                    "description": "Required. Immutable. The feed label of the offers to which the regional inventory is provided.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Required. Immutable. The two-letter ISO 639-1 language of the items to which the regional inventory is provided.",
-                    "type": "string"
-                  }
+                "resource": {
+                  "description": "Full name of a resource as defined by the service. For example:  ``//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}``",
+                  "type": "string"
                 },
-                "required": [
-                  "feed_label",
-                  "content_language"
-                ]
-              },
-              "promotion_data_source": {
-                "type": "object",
-                "properties": {
-                  "target_country": {
-                    "description": "Required. Immutable. The target country used as part of the unique identifier. Represented as a `CLDR territory code <https://github.com/unicode-org/cldr/blob/latest/common/main/en.xml>`__.  Promotions are only available in selected `countries <https://support.google.com/merchants/answer/4588460>`__.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Required. Immutable. The two-letter ISO 639-1 language of the items in the data source.",
-                    "type": "string"
-                  }
+                "source_entry": {
+                  "description": "Output only. Data Catalog entry name, if applicable.",
+                  "type": "string"
                 },
-                "required": [
-                  "target_country",
-                  "content_language"
-                ]
-              },
-              "name": {
-                "description": "Identifier. The name of the data source. Format: ``{datasource.name=accounts/{account}/dataSources/{datasource}}``",
-                "type": "string"
-              },
-              "data_source_id": {
-                "description": "Output only. The data source id.",
-                "type": "integer"
-              },
-              "display_name": {
-                "description": "Required. The displayed data source name in the Merchant Center UI.",
-                "type": "string"
-              },
-              "input": {
-                "type": "enum",
-                "name": "Input",
-                "description": "Determines the type of input to the data source. Based on the\ninput some settings might not be supported.\n\nValues:\n    INPUT_UNSPECIFIED (0):\n        Input unspecified.\n    API (1):\n        Represents data sources for which the data is\n        primarily provided through the API.\n    FILE (2):\n        Represents data sources for which the data is\n        primarily provided through file input. Data can\n        still be provided through the API.\n    UI (3):\n        The data source for products added directly\n        in Merchant Center.\n        This type of data source can not be created or\n        updated through this API, only by Merchant\n        Center UI.\n\n        This type of data source is read only.\n    AUTOFEED (4):\n        This is also known as `Automated\n        feeds <https://support.google.com/merchants/answer/12158480>`__\n        used to automatically build your product data. This type of\n        data source can be enabled or disabled through the Accounts\n        bundle.",
-                "values": {
-                  "INPUT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "API": {
-                    "value": 1
-                  },
-                  "FILE": {
-                    "value": 2
-                  },
-                  "UI": {
-                    "value": 3
-                  },
-                  "AUTOFEED": {
-                    "value": 4
-                  }
-                }
-              },
-              "file_input": {
-                "type": "object",
-                "properties": {
-                  "fetch_settings": {
+                "storage_properties": {
+                  "description": "Detailed properties of the underlying storage.  This field is a member of `oneof`_ ``properties``.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_v1.types.StorageProperties",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "enabled": {
-                        "description": "Optional. Enables or pauses the fetch schedule.",
-                        "type": "boolean"
-                      },
-                      "day_of_month": {
-                        "description": "Optional. The day of the month when the data source file should be fetched (1-31). This field can only be set for monthly frequency.",
-                        "type": "integer"
-                      },
-                      "time_of_day": {
-                        "description": "Optional. The hour of the day when the data source file should be fetched. Minutes and seconds are not supported and will be ignored.",
-                        "type": "object",
-                        "reference": "google.type.timeofday_pb2.TimeOfDay"
-                      },
-                      "day_of_week": {
-                        "description": "Optional. The day of the week when the data source file should be fetched. This field can only be set for weekly frequency.",
-                        "type": "object",
-                        "reference": "google.type.dayofweek_pb2.DayOfWeek"
-                      },
-                      "time_zone": {
-                        "description": "Optional. `Time zone <https://cldr.unicode.org>`__ used for schedule. UTC by default. For example, \"America/Los_Angeles\".",
-                        "type": "string"
-                      },
-                      "frequency": {
-                        "type": "enum",
-                        "name": "Frequency",
-                        "description": "The required fields vary based on the frequency of fetching. For a\nmonthly fetch schedule, [day of\nmonth][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_month]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a weekly fetch schedule, [day of\nweek][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_week]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a daily fetch schedule, only an [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nis required.\n\nValues:\n    FREQUENCY_UNSPECIFIED (0):\n        Frequency unspecified.\n    FREQUENCY_DAILY (1):\n        The fetch happens every day.\n    FREQUENCY_WEEKLY (2):\n        The fetch happens every week.\n    FREQUENCY_MONTHLY (3):\n        The fetch happens every month.",
-                        "values": {
-                          "FREQUENCY_UNSPECIFIED": {
-                            "value": 0
-                          },
-                          "FREQUENCY_DAILY": {
-                            "value": 1
-                          },
-                          "FREQUENCY_WEEKLY": {
-                            "value": 2
-                          },
-                          "FREQUENCY_MONTHLY": {
-                            "value": 3
-                          }
+                      "file_pattern": {
+                        "description": "Patterns to identify a set of files for this fileset.  Examples of a valid ``file_pattern``:  -  ``gs://bucket_name/dir/*``: matches all files in the ``bucket_name/dir`` directory -  ``gs://bucket_name/dir/**``: matches all files in the ``bucket_name/dir`` and all subdirectories recursively -  ``gs://bucket_name/file*``: matches files prefixed by ``file`` in ``bucket_name`` -  ``gs://bucket_name/??.txt``: matches files with two characters followed by ``.txt`` in ``bucket_name`` -  ``gs://bucket_name/[aeiou].txt``: matches files that contain a single vowel character followed by ``.txt`` in ``bucket_name`` -  ``gs://bucket_name/[a-m].txt``: matches files that contain ``a``, ``b``, ... or ``m`` followed by ``.txt`` in ``bucket_name`` -  ``gs://bucket_name/a/*/b``: matches all files in ``bucket_name`` that match the ``a/*/b`` pattern, such as ``a/c/b``, ``a/d/b`` -  ``gs://another_bucket/a.txt``: matches ``gs://another_bucket/a.txt``",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
                         }
                       },
-                      "fetch_uri": {
-                        "description": "Optional. The URL where the data source file can be fetched. Google Merchant Center supports automatic scheduled uploads using the HTTP, HTTPS or SFTP protocols, so the value will need to be a valid link using one of those three protocols. Immutable for Google Sheets files.",
+                      "file_type": {
+                        "description": "File type in MIME format, for example, ``text/plain``.",
                         "type": "string"
-                      },
-                      "username": {
-                        "description": "Optional. An optional user name for [fetch url][google.shopping.content.bundles.DataSources.FileInput.fetch_url]. Used for `submitting data sources through SFTP <https://support.google.com/merchants/answer/13813117>`__.",
-                        "type": "string"
-                      },
-                      "password": {
-                        "description": "Optional. An optional password for [fetch url][google.shopping.content.bundles.DataSources.FileInput.fetch_url]. Used for `submitting data sources through SFTP <https://support.google.com/merchants/answer/13813117>`__.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "frequency"
-                    ]
-                  },
-                  "file_name": {
-                    "description": "Optional. The file name of the data source. Required for ``UPLOAD`` file input type.",
-                    "type": "string"
-                  },
-                  "file_input_type": {
-                    "type": "enum",
-                    "name": "FileInputType",
-                    "description": "The method of file delivery.\n\nValues:\n    FILE_INPUT_TYPE_UNSPECIFIED (0):\n        File input type unspecified.\n    UPLOAD (1):\n        The file is uploaded through SFTP, Google\n        Cloud Storage or manually in the Merchant\n        Center.\n    FETCH (2):\n        The file is fetched from the configured\n        [fetch_uri][google.shopping.content.bundles.DataSources.FileInput.FetchSettings.fetch_uri].\n    GOOGLE_SHEETS (3):\n        The file is fetched from Google Sheets specified in the\n        [fetch_uri][google.shopping.content.bundles.DataSources.FileInput.FetchSettings.fetch_uri].",
-                    "values": {
-                      "FILE_INPUT_TYPE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "UPLOAD": {
-                        "value": 1
-                      },
-                      "FETCH": {
-                        "value": 2
-                      },
-                      "GOOGLE_SHEETS": {
-                        "value": 3
                       }
                     }
                   }
                 }
               }
-            },
-            "required": [
-              "primary_product_data_source",
-              "supplemental_product_data_source",
-              "local_inventory_data_source",
-              "regional_inventory_data_source",
-              "promotion_data_source",
-              "display_name"
-            ]
+            }
           }
         },
         "required": [
@@ -347,281 +250,184 @@
         "properties": {
           "data_source": {
             "description": "Required. The data source resource to update.",
-            "type": "object",
-            "properties": {
-              "primary_product_data_source": {
-                "type": "object",
-                "properties": {
-                  "channel": {
-                    "type": "object",
-                    "properties": {}
-                  },
-                  "feed_label": {
-                    "description": "Optional. Immutable. The feed label that is specified on the data source level.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset for data sources with product content type. They must be set for data sources with a file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept products without that restriction.  This field is a member of `oneof`_ ``_feed_label``.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Optional. Immutable. The two-letter ISO 639-1 language of the items in the data source.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset. The fields can only be unset for data sources without file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept products without that restriction.  This field is a member of `oneof`_ ``_content_language``.",
-                    "type": "string"
-                  },
-                  "countries": {
-                    "description": "Optional. The countries where the items may be displayed. Represented as a `CLDR territory code <https://github.com/unicode-org/cldr/blob/latest/common/main/en.xml>`__.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "default_rule": {
+            "reference": "google.shopping.merchant_datasources_v1beta.types.DataSource",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "service": {
+                  "description": "Service that physically stores the data.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_v1.types.DataSource.Service",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "take_from_data_sources": {
-                        "description": "Required. The list of data sources linked in the `default rule <https://support.google.com/merchants/answer/7450276>`__. This list is ordered by the default rule priority of joining the data. It might include none or multiple references to ``self`` and supplemental data sources.  The list must not be empty.  To link the data source to the default rule, you need to add a new reference to this list (in sequential order).  To unlink the data source from the default rule, you need to remove the given reference from this list. To create attribute rules that are different from the default rule, see `Set up your attribute rules <//support.google.com/merchants/answer/14994083>`__.  Changing the order of this list will result in changing the priority of data sources in the default rule.  For example, providing the following list: [``1001``, ``self``] will take attribute values from supplemental data source ``1001``, and fallback to ``self`` if the attribute is not set in ``1001``.",
+                      "name": {
+                        "description": "Immutable. The resource name for the service in the format ``projects/*/locations/*/namespaces/*/services/*``.",
+                        "type": "string"
+                      },
+                      "annotations": {
+                        "description": "Optional. Annotations for the service. This data can be consumed by service clients.  Restrictions:  -  The entire annotations dictionary may contain up to 2000 characters, spread accoss all key-value pairs. Annotations that go beyond this limit are rejected -  Valid annotation keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Annotations that fails to meet these requirements are rejected  Note: This field is equivalent to the ``metadata`` field in the v1beta1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "endpoints": {
+                        "description": "Output only. Endpoints associated with this service. Returned on [LookupService.ResolveService][google.cloud.servicedirectory.v1.LookupService.ResolveService]. Control plane clients should use [RegistrationService.ListEndpoints][google.cloud.servicedirectory.v1.RegistrationService.ListEndpoints].",
                         "type": "array",
                         "items": {
                           "type": "object",
-                          "properties": {
-                            "self_": {
-                              "description": "Self should be used to reference the primary data source itself.  This field is a member of `oneof`_ ``data_source_id``.",
-                              "type": "boolean"
-                            },
-                            "primary_data_source_name": {
-                              "description": "Optional. The name of the primary data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                              "type": "string"
-                            },
-                            "supplemental_data_source_name": {
-                              "description": "Optional. The name of the supplemental data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                              "type": "string"
+                          "reference": "google.cloud.servicedirectory_v1.types.Endpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "ip_address": {
+                                "description": "The IP address of the endpoint, which can be an external or internal IP.",
+                                "type": "string"
+                              },
+                              "port": {
+                                "description": "The IP protocol port of the endpoint. Only applicable when protocol is TCP or UDP.",
+                                "type": "integer"
+                              },
+                              "instance": {
+                                "description": "A Compute Engine instance URI.",
+                                "type": "string"
+                              },
+                              "forwarding_rule": {
+                                "description": "A forwarding rule and its corresponding IP address represent the frontend configuration of a Google Cloud load balancer. Forwarding rules are also used for protocol forwarding, Private Service Connect and other network services to provide forwarding information in the control plane. Format:  projects/{project}/global/forwardingRules/{id} or projects/{project}/regions/{region}/forwardingRules/{id}",
+                                "type": "string"
+                              },
+                              "forwarding_rule_target": {
+                                "description": "Output only. Specifies the type of the target of the forwarding rule.  This field is a member of `oneof`_ ``_forwarding_rule_target``.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.ForwardingRuleTarget"
+                              },
+                              "load_balancer_id": {
+                                "description": "Output only. ID of the load balancer the forwarding rule points to. Empty for forwarding rules not related to load balancers.  This field is a member of `oneof`_ ``_load_balancer_id``.",
+                                "type": "string"
+                              },
+                              "load_balancer_type": {
+                                "description": "Output only. Type of the load balancer the forwarding rule points to.  This field is a member of `oneof`_ ``_load_balancer_type``.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.LoadBalancerType"
+                              },
+                              "gke_master_cluster": {
+                                "description": "A cluster URI for `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__.",
+                                "type": "string"
+                              },
+                              "fqdn": {
+                                "description": "DNS endpoint of `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__. Requires gke_master_cluster to be set, can't be used simultaneoulsly with ip_address or network. Applicable only to destination endpoint.",
+                                "type": "string"
+                              },
+                              "cloud_sql_instance": {
+                                "description": "A `Cloud SQL <https://cloud.google.com/sql>`__ instance URI.",
+                                "type": "string"
+                              },
+                              "redis_instance": {
+                                "description": "A `Redis Instance <https://cloud.google.com/memorystore/docs/redis>`__ URI.",
+                                "type": "string"
+                              },
+                              "redis_cluster": {
+                                "description": "A `Redis Cluster <https://cloud.google.com/memorystore/docs/cluster>`__ URI.",
+                                "type": "string"
+                              },
+                              "cloud_function": {
+                                "description": "A `Cloud Function <https://cloud.google.com/functions>`__.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.CloudFunctionEndpoint",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "description": "A `Cloud Function <https://cloud.google.com/functions>`__ name.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "app_engine_version": {
+                                "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.AppEngineVersionEndpoint",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__ name.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "cloud_run_revision": {
+                                "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.CloudRunRevisionEndpoint",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__ URI. The format is: projects/{project}/locations/{location}/revisions/{revision}",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "network": {
+                                "description": "A Compute Engine network URI.",
+                                "type": "string"
+                              },
+                              "network_type": {
+                                "description": "Type of the network where the endpoint is located. Applicable only to source endpoint, as destination network type can be inferred from the source.",
+                                "type": "object",
+                                "reference": "google.cloud.network_management_v1.types.Endpoint.NetworkType"
+                              },
+                              "project_id": {
+                                "description": "Project ID where the endpoint is located. The Project ID can be derived from the URI if you provide a VM instance or network URI. The following are two cases where you must provide the project ID:  1. Only the IP address is specified, and the IP address is within a Google Cloud project. 2. When you are using Shared VPC and the IP address that you provide is from the service project. In this case, the network that the IP address resides in is defined in the host project.",
+                                "type": "string"
+                              }
                             }
                           }
                         }
-                      }
-                    },
-                    "required": [
-                      "take_from_data_sources"
-                    ]
-                  }
-                },
-                "required": [
-                  "channel"
-                ]
-              },
-              "supplemental_product_data_source": {
-                "type": "object",
-                "properties": {
-                  "feed_label": {
-                    "description": "Optional. Immutable. The feed label that is specified on the data source level.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset for data sources with product content type. They must be set for data sources with a file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept produts without that restriction.  This field is a member of `oneof`_ ``_feed_label``.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Optional. Immutable. The two-letter ISO 639-1 language of the items in the data source.  ``feedLabel`` and ``contentLanguage`` must be either both set or unset. The fields can only be unset for data sources without file input.  If set, the data source will only accept products matching this combination. If unset, the data source will accept produts without that restriction.  This field is a member of `oneof`_ ``_content_language``.",
-                    "type": "string"
-                  },
-                  "referencing_primary_data_sources": {
-                    "description": "Output only. The (unordered and deduplicated) list of all primary data sources linked to this data source in either default or custom rules. Supplemental data source cannot be deleted before all links are removed.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "self_": {
-                          "description": "Self should be used to reference the primary data source itself.  This field is a member of `oneof`_ ``data_source_id``.",
-                          "type": "boolean"
-                        },
-                        "primary_data_source_name": {
-                          "description": "Optional. The name of the primary data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                          "type": "string"
-                        },
-                        "supplemental_data_source_name": {
-                          "description": "Optional. The name of the supplemental data source. Format: ``accounts/{account}/dataSources/{datasource}``  This field is a member of `oneof`_ ``data_source_id``.",
-                          "type": "string"
-                        }
+                      },
+                      "uid": {
+                        "description": "Output only. The globally unique identifier of the service in the UUID4 format.",
+                        "type": "string"
                       }
                     }
                   }
-                }
-              },
-              "local_inventory_data_source": {
-                "type": "object",
-                "properties": {
-                  "feed_label": {
-                    "description": "Required. Immutable. The feed label of the offers to which the local inventory is provided.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Required. Immutable. The two-letter ISO 639-1 language of the items to which the local inventory is provided.",
-                    "type": "string"
-                  }
                 },
-                "required": [
-                  "feed_label",
-                  "content_language"
-                ]
-              },
-              "regional_inventory_data_source": {
-                "type": "object",
-                "properties": {
-                  "feed_label": {
-                    "description": "Required. Immutable. The feed label of the offers to which the regional inventory is provided.  Must be less than or equal to 20 uppercase letters (A-Z), numbers (0-9), and dashes (-).  See also `migration to feed labels <https://developers.google.com/shopping-content/guides/products/feed-labels>`__.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Required. Immutable. The two-letter ISO 639-1 language of the items to which the regional inventory is provided.",
-                    "type": "string"
-                  }
+                "resource": {
+                  "description": "Full name of a resource as defined by the service. For example:  ``//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}``",
+                  "type": "string"
                 },
-                "required": [
-                  "feed_label",
-                  "content_language"
-                ]
-              },
-              "promotion_data_source": {
-                "type": "object",
-                "properties": {
-                  "target_country": {
-                    "description": "Required. Immutable. The target country used as part of the unique identifier. Represented as a `CLDR territory code <https://github.com/unicode-org/cldr/blob/latest/common/main/en.xml>`__.  Promotions are only available in selected `countries <https://support.google.com/merchants/answer/4588460>`__.",
-                    "type": "string"
-                  },
-                  "content_language": {
-                    "description": "Required. Immutable. The two-letter ISO 639-1 language of the items in the data source.",
-                    "type": "string"
-                  }
+                "source_entry": {
+                  "description": "Output only. Data Catalog entry name, if applicable.",
+                  "type": "string"
                 },
-                "required": [
-                  "target_country",
-                  "content_language"
-                ]
-              },
-              "name": {
-                "description": "Identifier. The name of the data source. Format: ``{datasource.name=accounts/{account}/dataSources/{datasource}}``",
-                "type": "string"
-              },
-              "data_source_id": {
-                "description": "Output only. The data source id.",
-                "type": "integer"
-              },
-              "display_name": {
-                "description": "Required. The displayed data source name in the Merchant Center UI.",
-                "type": "string"
-              },
-              "input": {
-                "type": "enum",
-                "name": "Input",
-                "description": "Determines the type of input to the data source. Based on the\ninput some settings might not be supported.\n\nValues:\n    INPUT_UNSPECIFIED (0):\n        Input unspecified.\n    API (1):\n        Represents data sources for which the data is\n        primarily provided through the API.\n    FILE (2):\n        Represents data sources for which the data is\n        primarily provided through file input. Data can\n        still be provided through the API.\n    UI (3):\n        The data source for products added directly\n        in Merchant Center.\n        This type of data source can not be created or\n        updated through this API, only by Merchant\n        Center UI.\n\n        This type of data source is read only.\n    AUTOFEED (4):\n        This is also known as `Automated\n        feeds <https://support.google.com/merchants/answer/12158480>`__\n        used to automatically build your product data. This type of\n        data source can be enabled or disabled through the Accounts\n        bundle.",
-                "values": {
-                  "INPUT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "API": {
-                    "value": 1
-                  },
-                  "FILE": {
-                    "value": 2
-                  },
-                  "UI": {
-                    "value": 3
-                  },
-                  "AUTOFEED": {
-                    "value": 4
-                  }
-                }
-              },
-              "file_input": {
-                "type": "object",
-                "properties": {
-                  "fetch_settings": {
+                "storage_properties": {
+                  "description": "Detailed properties of the underlying storage.  This field is a member of `oneof`_ ``properties``.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_v1.types.StorageProperties",
+                  "resolved_schema": {
                     "type": "object",
                     "properties": {
-                      "enabled": {
-                        "description": "Optional. Enables or pauses the fetch schedule.",
-                        "type": "boolean"
-                      },
-                      "day_of_month": {
-                        "description": "Optional. The day of the month when the data source file should be fetched (1-31). This field can only be set for monthly frequency.",
-                        "type": "integer"
-                      },
-                      "time_of_day": {
-                        "description": "Optional. The hour of the day when the data source file should be fetched. Minutes and seconds are not supported and will be ignored.",
-                        "type": "object",
-                        "reference": "google.type.timeofday_pb2.TimeOfDay"
-                      },
-                      "day_of_week": {
-                        "description": "Optional. The day of the week when the data source file should be fetched. This field can only be set for weekly frequency.",
-                        "type": "object",
-                        "reference": "google.type.dayofweek_pb2.DayOfWeek"
-                      },
-                      "time_zone": {
-                        "description": "Optional. `Time zone <https://cldr.unicode.org>`__ used for schedule. UTC by default. For example, \"America/Los_Angeles\".",
-                        "type": "string"
-                      },
-                      "frequency": {
-                        "type": "enum",
-                        "name": "Frequency",
-                        "description": "The required fields vary based on the frequency of fetching. For a\nmonthly fetch schedule, [day of\nmonth][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_month]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a weekly fetch schedule, [day of\nweek][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.day_of_week]\nand [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nare required. For a daily fetch schedule, only an [hour of\nday][google.shopping.content.bundles.DataSources.FileInput.FetchSchedule.time_of_day]\nis required.\n\nValues:\n    FREQUENCY_UNSPECIFIED (0):\n        Frequency unspecified.\n    FREQUENCY_DAILY (1):\n        The fetch happens every day.\n    FREQUENCY_WEEKLY (2):\n        The fetch happens every week.\n    FREQUENCY_MONTHLY (3):\n        The fetch happens every month.",
-                        "values": {
-                          "FREQUENCY_UNSPECIFIED": {
-                            "value": 0
-                          },
-                          "FREQUENCY_DAILY": {
-                            "value": 1
-                          },
-                          "FREQUENCY_WEEKLY": {
-                            "value": 2
-                          },
-                          "FREQUENCY_MONTHLY": {
-                            "value": 3
-                          }
+                      "file_pattern": {
+                        "description": "Patterns to identify a set of files for this fileset.  Examples of a valid ``file_pattern``:  -  ``gs://bucket_name/dir/*``: matches all files in the ``bucket_name/dir`` directory -  ``gs://bucket_name/dir/**``: matches all files in the ``bucket_name/dir`` and all subdirectories recursively -  ``gs://bucket_name/file*``: matches files prefixed by ``file`` in ``bucket_name`` -  ``gs://bucket_name/??.txt``: matches files with two characters followed by ``.txt`` in ``bucket_name`` -  ``gs://bucket_name/[aeiou].txt``: matches files that contain a single vowel character followed by ``.txt`` in ``bucket_name`` -  ``gs://bucket_name/[a-m].txt``: matches files that contain ``a``, ``b``, ... or ``m`` followed by ``.txt`` in ``bucket_name`` -  ``gs://bucket_name/a/*/b``: matches all files in ``bucket_name`` that match the ``a/*/b`` pattern, such as ``a/c/b``, ``a/d/b`` -  ``gs://another_bucket/a.txt``: matches ``gs://another_bucket/a.txt``",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
                         }
                       },
-                      "fetch_uri": {
-                        "description": "Optional. The URL where the data source file can be fetched. Google Merchant Center supports automatic scheduled uploads using the HTTP, HTTPS or SFTP protocols, so the value will need to be a valid link using one of those three protocols. Immutable for Google Sheets files.",
+                      "file_type": {
+                        "description": "File type in MIME format, for example, ``text/plain``.",
                         "type": "string"
-                      },
-                      "username": {
-                        "description": "Optional. An optional user name for [fetch url][google.shopping.content.bundles.DataSources.FileInput.fetch_url]. Used for `submitting data sources through SFTP <https://support.google.com/merchants/answer/13813117>`__.",
-                        "type": "string"
-                      },
-                      "password": {
-                        "description": "Optional. An optional password for [fetch url][google.shopping.content.bundles.DataSources.FileInput.fetch_url]. Used for `submitting data sources through SFTP <https://support.google.com/merchants/answer/13813117>`__.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "frequency"
-                    ]
-                  },
-                  "file_name": {
-                    "description": "Optional. The file name of the data source. Required for ``UPLOAD`` file input type.",
-                    "type": "string"
-                  },
-                  "file_input_type": {
-                    "type": "enum",
-                    "name": "FileInputType",
-                    "description": "The method of file delivery.\n\nValues:\n    FILE_INPUT_TYPE_UNSPECIFIED (0):\n        File input type unspecified.\n    UPLOAD (1):\n        The file is uploaded through SFTP, Google\n        Cloud Storage or manually in the Merchant\n        Center.\n    FETCH (2):\n        The file is fetched from the configured\n        [fetch_uri][google.shopping.content.bundles.DataSources.FileInput.FetchSettings.fetch_uri].\n    GOOGLE_SHEETS (3):\n        The file is fetched from Google Sheets specified in the\n        [fetch_uri][google.shopping.content.bundles.DataSources.FileInput.FetchSettings.fetch_uri].",
-                    "values": {
-                      "FILE_INPUT_TYPE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "UPLOAD": {
-                        "value": 1
-                      },
-                      "FETCH": {
-                        "value": 2
-                      },
-                      "GOOGLE_SHEETS": {
-                        "value": 3
                       }
                     }
                   }
                 }
               }
-            },
-            "required": [
-              "primary_product_data_source",
-              "supplemental_product_data_source",
-              "local_inventory_data_source",
-              "regional_inventory_data_source",
-              "promotion_data_source",
-              "display_name"
-            ]
+            }
           },
           "update_mask": {
             "description": "Required. The list of data source fields to be updated.  Fields specified in the update mask without a value specified in the body will be deleted from the data source.  Providing special \"*\" value for full data source replacement is not supported.",
@@ -670,7 +476,7 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-shopping-merchant-datasources\\google\\shopping\\merchant_datasources_v1beta\\types\\fileuploads.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-shopping-merchant-datasources/google/shopping/merchant_datasources_v1beta/types/fileuploads.py": [
     {
       "type": "function",
       "name": "GetFileUploadRequest",

@@ -4,7 +4,7 @@ from openai import OpenAI
 import asyncio
 import importlib
 import os
-from google.cloud import billing_v1,functions_v1
+from google.cloud import functions_v1,vpcaccess_v1
 from google.protobuf import field_mask_pb2
 # Set your OpenAI API key
 api_key = "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"
@@ -20,14 +20,14 @@ If the given question lacks the parameters required by the function, also point 
 
 # Define the format instruction
 format_instruction = """
-The output MUST strictly adhere to the following JSON format, and NO other text MUST be included.
+The output MUST strictly adhere to the following JSON format if only the parameters are understandable, and NO other text MUST be included.
 The example format is as follows. Please make sure the parameter type is correct. If no function call is needed, please make tool_calls an empty list '[]'. 
 Please don't forget the request type in the function call. The request type is mentioned as the request_types in the function call.
 { "tool_calls": [ {"name": "func_name1", "arguments": {"argument1": "value1", "argument2": "value2"}}, ... (more tool calls as required) ] }
 """.strip()
 
 # Define the user query
-query = " can you create a function with the name vidhra-test-1 on us-central1 for basic node.js function"
+query = " Can you create vpc access connectors in the project vidhra us-central1?"
 
 
 
@@ -39,64 +39,134 @@ types_data = {}
 
 def build_openai_tools(tools_json_path, types_json_path):
     """
-    Builds OpenAI function definitions by combining tools.json and types.json information.
+    Builds OpenAI function definitions by combining tools.json and types.json.
+    Any 'enum' definitions like:
+      {
+        "type": "enum",
+        "values": {
+          "SECURE_ALWAYS": {"value": 1},
+          "SECURE_OPTIONAL": {"value": 2}
+        }
+      }
+    will be turned into:
+      {
+        "type": "string",
+        "enum": ["SECURE_ALWAYS", "SECURE_OPTIONAL"]
+      }
+    and your final list of tools will now each have "type": "function".
     """
-    with open(tools_json_path, 'r') as f:
+    import json
+
+    with open(tools_json_path, "r", encoding="utf-8") as f:
         tools_data = json.load(f)
-    
-    with open(types_json_path, 'r') as f:
+
+    with open(types_json_path, "r", encoding="utf-8") as f:
         types_data = json.load(f)
 
-    # Extract all request types from types.json for quick lookup
+    # A map { "CreateFunctionRequest": { ... }, ... } from types.json
     request_types_map = {}
     for file_types in types_data.values():
         for type_info in file_types:
             if type_info["type"] == "function":
                 request_types_map[type_info["name"]] = type_info
 
-    openai_tools = []
-    print(tools_data)
+    def transform_fields(schema_fragment):
+        """
+        Recursively walks the schema, and:
+          1. Converts any enum references into { "type": "string", "enum": [...] }.
+          2. If 'resolved_schema' is present, merges its properties into the parent object.
+        """
+        if not isinstance(schema_fragment, dict):
+            return schema_fragment
 
-    
-    # Process each service in tools.json
+        # Merge properties from resolved_schema into schema_fragment
+        if "resolved_schema" in schema_fragment and isinstance(schema_fragment["resolved_schema"], dict):
+            resolved = schema_fragment.pop("resolved_schema")
+
+            # Merge 'properties' from resolved_schema into the parent
+            if "properties" in resolved and isinstance(resolved["properties"], dict):
+                if "properties" not in schema_fragment:
+                    schema_fragment["properties"] = {}
+                for prop_name, prop_value in resolved["properties"].items():
+                    schema_fragment["properties"][prop_name] = prop_value
+
+            # Merge any other top-level fields from resolved_schema
+            for key, val in resolved.items():
+                if key != "properties":
+                    schema_fragment[key] = val
+        print(schema_fragment)
+
+        # Convert enumerations
+        if schema_fragment.get("type") == "enum" and "values" in schema_fragment:
+            enum_vals = schema_fragment.pop("values")
+            schema_fragment["type"] = "string"
+            schema_fragment["enum"] = list(enum_vals.keys())
+
+        # Recurse into 'properties'
+        if "properties" in schema_fragment and isinstance(schema_fragment["properties"], dict):
+            for prop_name, prop_value in schema_fragment["properties"].items():
+                schema_fragment["properties"][prop_name] = transform_fields(prop_value)
+
+        # Recurse into 'items'
+        if "items" in schema_fragment:
+            if isinstance(schema_fragment["items"], dict):
+                schema_fragment["items"] = transform_fields(schema_fragment["items"])
+            elif isinstance(schema_fragment["items"], list):
+                schema_fragment["items"] = [transform_fields(x) for x in schema_fragment["items"]]
+
+        # Recurse into 'additionalProperties'
+        if "additionalProperties" in schema_fragment and isinstance(schema_fragment["additionalProperties"], dict):
+            schema_fragment["additionalProperties"] = transform_fields(schema_fragment["additionalProperties"])
+
+        return schema_fragment
+
+    openai_tools = []
+
+    # For each function method found in tools.json, look up the corresponding type schema
     for service_name, service_data in tools_data.items():
         for method in service_data["methods"]:
-            # Get the request type from the method
             request_types = method["function"].get("request_types", [])
             if not request_types:
                 continue
-                
-            # Use the first request type to build the function definition
-            request_type = request_types[0]
-            type_info = request_types_map.get(request_type)
-            
-            if not type_info:
+            request_type_name = request_types[0]
+            if request_type_name not in request_types_map:
                 continue
 
-            # Build the OpenAI function definition
+            import copy
+            type_info = request_types_map[request_type_name]
+            parameters_copy = copy.deepcopy(type_info["parameters"])
+
+            # Transform any enums -> { type: "string", enum: [...] }
+            parameters_copy = transform_fields(parameters_copy)
+
+            # Build your final tool definition (note the "type": "function" fix)
             print(method["function"]["name"])
-            tool = {
+            openai_tools.append({
                 "type": "function",
                 "name": method["function"]["name"],
                 "description": type_info["description"],
-                "parameters": type_info["parameters"]
-            }
-            openai_tools.append(tool)
+                "parameters": parameters_copy,
+            })
 
     return openai_tools
 
 # Use the function to build tools dynamically
-tools_json_path = "functions_v1/tools.json"
-types_json_path = "functions_v1/types.json"
+tools_json_path = "vpcaccess_v1/tools.json"
+types_json_path = "vpcaccess_v1/types.json"
 openai_format_tools = build_openai_tools(tools_json_path, types_json_path)
 
+def build_prompt_system(task_instruction: str, format_instruction: str):
+    prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
+    prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
+    return prompt
 
-def build_prompt(task_instruction: str, format_instruction: str, tools: list, query: str):
+def build_prompt_user(tools: list, query: str):
     prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
     prompt += f"[BEGIN OF AVAILABLE TOOLS]\n{json.dumps(openai_format_tools)}\n[END OF AVAILABLE TOOLS]\n\n"
     prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
     prompt += f"[BEGIN OF QUERY]\n{query}\n[END OF QUERY]\n\n"
     return prompt
+
 
 def convert_strings_to_json(data: dict) -> dict:
     """Recursively attempt to parse any string fields as JSON objects."""
@@ -137,36 +207,29 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
       4. Invoking the async method.
     """
     try:
-        RequestClass = getattr(functions_v1, request_type)
-        RequestClassFunctionAccount = getattr(functions_v1, "CloudFunction")
+        RequestClass = getattr(vpcaccess_v1, request_type)
+        # RequestClassFunctionAccount = getattr(vpcaccess_v1, "VpcAccess")
 
-        function_client = functions_v1.CloudFunctionsServiceAsyncClient()
+        function_client = vpcaccess_v1.VpcAccessServiceAsyncClient()
         method = getattr(function_client, method_name)
 
         # Remove "account" from the original args before conversion
         function_value = args.pop("function", None)
-        update_mask_value = args.pop("update_mask", None)
 
         # Convert any JSON strings into Python dictionaries (or lists)
         parsed_args = convert_strings_to_json(args)
 
-        # Instantiate request object with the parsed arguments
-        print(parsed_args)
-        print(function_value)
+
         request = None
 
-        # Attach the "account" field to a BillingAccount object if present
-        if function_value is not None:
-            parsed_args_function = convert_strings_to_json(function_value)
-            update_mask_args = convert_strings_to_json(update_mask_value)
-            update_mask = field_mask_pb2.FieldMask(paths=update_mask_args)
-            print(parsed_args_function)
+        # # Attach the "account" field to a BillingAccount object if present
+        # if function_value is not None:
+        #     parsed_args_function = convert_strings_to_json(function_value)
+        #     request = RequestClass(**parsed_args,function=RequestClassFunctionAccount(**parsed_args_function))
+        # else:
+        request = RequestClass(**parsed_args)
 
 
-            request = RequestClass(**parsed_args,function=RequestClassFunctionAccount(**parsed_args_function),
-                                   update_mask=update_mask)
-
-            print(request)
 
         billing_info = await method(request=request)
         print(billing_info)
@@ -182,14 +245,14 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
 
 
 
-content = build_prompt(task_instruction, format_instruction, openai_format_tools, query)
-print(content)
+content = build_prompt_system(task_instruction, format_instruction)
+
 #Helper function to build the prompt
 response = client.responses.create(
   model="gpt-4.5-preview",
   input=[
     {
-      "role": "user",
+      "role": "system",
       "content": [
         {
           "type": "input_text",
@@ -197,10 +260,19 @@ response = client.responses.create(
         }
       ]
     },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "input_text",
+          "text": query
+        }
+      ]
+    },
   ],
   text={
     "format": {
-      "type": "json_object"
+      "type": "text"
     }
   },
   tools=openai_format_tools,
@@ -224,8 +296,8 @@ def extract_args(arguments: dict,start_key='request',end_key='retry'):
 #Call the API to get the response
 # tool_calls = response.choices[0].message.tool_calls
 # content = response.choices[0].message.content
-content = response.output_text
-print(content)
+content = response
+
 
 
 def get_request_types_for_method(tools_json_path: str, method_name: str) -> list:
@@ -238,7 +310,7 @@ def get_request_types_for_method(tools_json_path: str, method_name: str) -> list
     with open(tools_json_path, "r", encoding="utf-8") as f:
         tools_data = json.load(f)
 
-    # We’ll search across all services for this method
+    # We'll search across all services for this method
     all_request_types = set()
 
     for service_name, service_data in tools_data.items():
@@ -249,12 +321,12 @@ def get_request_types_for_method(tools_json_path: str, method_name: str) -> list
                 req_types = fn_info.get("request_types", [])
                 for rt in req_types:
                     all_request_types.add(rt)
-
+    print(all_request_types)
     return sorted(all_request_types)
 
 
 # Example usage:
-tools_json_path = "functions_v1/tools.json"
+tools_json_path = "vpcaccess_v1/tools.json"
 
 async def collect_pager_results(pager):
     results = []
@@ -262,10 +334,15 @@ async def collect_pager_results(pager):
         results.append(item)
     return results
 
+
 # Then in your dynamic_executor or wherever you need it:
-tools = json.loads(content)
+print(content.output_text)
+tools = json.loads(content.output_text)
 for call in tools["tool_calls"]:
     # Suppose the call includes "service_name" and "method_name"
+    if call["name"].startswith("functions."):
+        call["name"] = call["name"][len("functions.") :]
+
     method_name = call["name"]
 
     # Find the corresponding request type
@@ -278,5 +355,6 @@ for call in tools["tool_calls"]:
         method_name,
         call["arguments"]
     ))
+    print(output)
     results = asyncio.run(collect_pager_results(output))
-    print(results)
+

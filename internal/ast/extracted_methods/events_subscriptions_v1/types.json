@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-apps-events-subscriptions\\google\\apps\\events_subscriptions_v1\\types\\subscriptions_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-apps-events-subscriptions/google/apps/events_subscriptions_v1/types/subscriptions_service.py": [
     {
       "type": "function",
       "name": "CreateSubscriptionRequest",
@@ -9,22 +9,123 @@
         "properties": {
           "subscription": {
             "description": "Required. The subscription resource to create.",
-            "type": "object",
-            "properties": {
-              "start_time": {
-                "description": "The timestamp when the subscription begins, if applicable.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+            "reference": "google.apps.events_subscriptions_v1.types.Subscription",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "expire_time": {
+                  "description": "Non-empty default. The timestamp in UTC when the subscription expires. Always displayed on output, regardless of what was used on input.  This field is a member of `oneof`_ ``expiration``.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "ttl": {
+                  "description": "Input only. The time-to-live (TTL) or duration for the subscription. If unspecified or set to ``0``, uses the maximum possible duration.  This field is a member of `oneof`_ ``expiration``.",
+                  "type": "object",
+                  "reference": "google.protobuf.duration_pb2.Duration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "name": {
+                  "description": "Optional. Immutable. Identifier. Resource name of the subscription.  Format: ``subscriptions/{subscription}``",
+                  "type": "string"
+                },
+                "uid": {
+                  "description": "Output only. System-assigned unique identifier for the subscription.",
+                  "type": "string"
+                },
+                "target_resource": {
+                  "description": "Required. Immutable. The Google Workspace resource that's monitored for events, formatted as the `full resource name <https://google.aip.dev/122#full-resource-names>`__. To learn about target resources and the events that they support, see `Supported Google Workspace events <https://developers.google.com/workspace/events#supported-events>`__.  A user can only authorize your app to create one subscription for a given target resource. If your app tries to create another subscription with the same user credentials, the request returns an ``ALREADY_EXISTS`` error.",
+                  "type": "string"
+                },
+                "event_types": {
+                  "description": "Required. Immutable. Unordered list. Input for creating a subscription. Otherwise, output only. One or more types of events to receive about the target resource. Formatted according to the CloudEvents specification.  The supported event types depend on the target resource of your subscription. For details, see `Supported Google Workspace events <https://developers.google.com/workspace/events/guides#supported-events>`__.  By default, you also receive events about the `lifecycle of your subscription <https://developers.google.com/workspace/events/guides/events-lifecycle>`__. You don't need to specify lifecycle events for this field.  If you specify an event type that doesn't exist for the target resource, the request returns an HTTP ``400 Bad Request`` status code.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "payload_options": {
+                  "description": "Optional. Options about what data to include in the event payload. Only supported for Google Chat events.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.PayloadOptions",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "include_resource": {
+                        "description": "Optional. Whether the event payload includes data about the resource that changed. For example, for an event where a Google Chat message was created, whether the payload contains data about the ```Message`` <https://developers.google.com/chat/api/reference/rest/v1/spaces.messages>`__ resource. If false, the event payload only includes the name of the changed resource.",
+                        "type": "boolean"
+                      },
+                      "field_mask": {
+                        "description": "Optional. If ``include_resource`` is set to ``true``, the list of fields to include in the event payload. Separate fields with a comma. For example, to include a Google Chat message's sender and create time, enter ``message.sender,message.createTime``. If omitted, the payload includes all fields for the resource.  If you specify a field that doesn't exist for the resource, the system ignores the field.",
+                        "type": "object",
+                        "reference": "google.protobuf.field_mask_pb2.FieldMask"
+                      }
+                    }
+                  }
+                },
+                "notification_endpoint": {
+                  "description": "Required. Immutable. The endpoint where the subscription delivers events, such as a Pub/Sub topic.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.NotificationEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "pubsub_topic": {
+                        "description": "Immutable. The Cloud Pub/Sub topic that receives events for the subscription.  Format: ``projects/{project}/topics/{topic}``  You must create the topic in the same Google Cloud project where you create this subscription.  When the topic receives events, the events are encoded as Cloud Pub/Sub messages. For details, see the `Google Cloud Pub/Sub Protocol Binding for CloudEvents <https://github.com/googleapis/google-cloudevents/blob/main/docs/spec/pubsub.md>`__.  This field is a member of `oneof`_ ``endpoint``.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "state": {
+                  "description": "Output only. The state of the subscription. Determines whether the subscription can receive events and deliver them to the notification endpoint.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.Subscription.State"
+                },
+                "suspension_reason": {
+                  "description": "Output only. The error that suspended the subscription.  To reactivate the subscription, resolve the error and call the [``ReactivateSubscription``][google.apps.events.subscriptions.v1.SubscriptionsService.ReactivateSubscription] method.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.Subscription.ErrorType"
+                },
+                "authority": {
+                  "description": "Output only. The user who authorized the creation of the subscription.  Format: ``users/{user}``  For Google Workspace users, the ``{user}`` value is the ```user.id`` <https://developers.google.com/admin-sdk/directory/reference/rest/v1/users#User.FIELDS.ids>`__ field from the Directory API.",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. The time when the subscription is created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. The last time that the subscription is updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "reconciling": {
+                  "description": "Output only. If ``true``, the subscription is in the process of being updated.",
+                  "type": "boolean"
+                },
+                "etag": {
+                  "description": "Optional. This checksum is computed by the server based on the value of other fields, and might be sent on update requests to ensure the client has an up-to-date value before proceeding.",
+                  "type": "string"
+                }
               },
-              "end_time": {
-                "description": "The timestamp when the subscription ends, if applicable.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "auto_renewal_enabled": {
-                "description": "Whether auto renewal is enabled by user choice on current subscription. This field indicates order/subscription status after pending plan change is cancelled or rejected.",
-                "type": "boolean"
-              }
+              "required": [
+                "target_resource",
+                "event_types",
+                "notification_endpoint"
+              ]
             }
           },
           "validate_only": {
@@ -92,22 +193,123 @@
         "properties": {
           "subscription": {
             "description": "Required. The subscription to update.  The subscription's ``name`` field is used to identify the subscription to update.",
-            "type": "object",
-            "properties": {
-              "start_time": {
-                "description": "The timestamp when the subscription begins, if applicable.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
+            "reference": "google.apps.events_subscriptions_v1.types.Subscription",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "expire_time": {
+                  "description": "Non-empty default. The timestamp in UTC when the subscription expires. Always displayed on output, regardless of what was used on input.  This field is a member of `oneof`_ ``expiration``.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "ttl": {
+                  "description": "Input only. The time-to-live (TTL) or duration for the subscription. If unspecified or set to ``0``, uses the maximum possible duration.  This field is a member of `oneof`_ ``expiration``.",
+                  "type": "object",
+                  "reference": "google.protobuf.duration_pb2.Duration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "name": {
+                  "description": "Optional. Immutable. Identifier. Resource name of the subscription.  Format: ``subscriptions/{subscription}``",
+                  "type": "string"
+                },
+                "uid": {
+                  "description": "Output only. System-assigned unique identifier for the subscription.",
+                  "type": "string"
+                },
+                "target_resource": {
+                  "description": "Required. Immutable. The Google Workspace resource that's monitored for events, formatted as the `full resource name <https://google.aip.dev/122#full-resource-names>`__. To learn about target resources and the events that they support, see `Supported Google Workspace events <https://developers.google.com/workspace/events#supported-events>`__.  A user can only authorize your app to create one subscription for a given target resource. If your app tries to create another subscription with the same user credentials, the request returns an ``ALREADY_EXISTS`` error.",
+                  "type": "string"
+                },
+                "event_types": {
+                  "description": "Required. Immutable. Unordered list. Input for creating a subscription. Otherwise, output only. One or more types of events to receive about the target resource. Formatted according to the CloudEvents specification.  The supported event types depend on the target resource of your subscription. For details, see `Supported Google Workspace events <https://developers.google.com/workspace/events/guides#supported-events>`__.  By default, you also receive events about the `lifecycle of your subscription <https://developers.google.com/workspace/events/guides/events-lifecycle>`__. You don't need to specify lifecycle events for this field.  If you specify an event type that doesn't exist for the target resource, the request returns an HTTP ``400 Bad Request`` status code.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "payload_options": {
+                  "description": "Optional. Options about what data to include in the event payload. Only supported for Google Chat events.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.PayloadOptions",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "include_resource": {
+                        "description": "Optional. Whether the event payload includes data about the resource that changed. For example, for an event where a Google Chat message was created, whether the payload contains data about the ```Message`` <https://developers.google.com/chat/api/reference/rest/v1/spaces.messages>`__ resource. If false, the event payload only includes the name of the changed resource.",
+                        "type": "boolean"
+                      },
+                      "field_mask": {
+                        "description": "Optional. If ``include_resource`` is set to ``true``, the list of fields to include in the event payload. Separate fields with a comma. For example, to include a Google Chat message's sender and create time, enter ``message.sender,message.createTime``. If omitted, the payload includes all fields for the resource.  If you specify a field that doesn't exist for the resource, the system ignores the field.",
+                        "type": "object",
+                        "reference": "google.protobuf.field_mask_pb2.FieldMask"
+                      }
+                    }
+                  }
+                },
+                "notification_endpoint": {
+                  "description": "Required. Immutable. The endpoint where the subscription delivers events, such as a Pub/Sub topic.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.NotificationEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "pubsub_topic": {
+                        "description": "Immutable. The Cloud Pub/Sub topic that receives events for the subscription.  Format: ``projects/{project}/topics/{topic}``  You must create the topic in the same Google Cloud project where you create this subscription.  When the topic receives events, the events are encoded as Cloud Pub/Sub messages. For details, see the `Google Cloud Pub/Sub Protocol Binding for CloudEvents <https://github.com/googleapis/google-cloudevents/blob/main/docs/spec/pubsub.md>`__.  This field is a member of `oneof`_ ``endpoint``.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "state": {
+                  "description": "Output only. The state of the subscription. Determines whether the subscription can receive events and deliver them to the notification endpoint.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.Subscription.State"
+                },
+                "suspension_reason": {
+                  "description": "Output only. The error that suspended the subscription.  To reactivate the subscription, resolve the error and call the [``ReactivateSubscription``][google.apps.events.subscriptions.v1.SubscriptionsService.ReactivateSubscription] method.",
+                  "type": "object",
+                  "reference": "google.apps.events_subscriptions_v1.types.Subscription.ErrorType"
+                },
+                "authority": {
+                  "description": "Output only. The user who authorized the creation of the subscription.  Format: ``users/{user}``  For Google Workspace users, the ``{user}`` value is the ```user.id`` <https://developers.google.com/admin-sdk/directory/reference/rest/v1/users#User.FIELDS.ids>`__ field from the Directory API.",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. The time when the subscription is created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. The last time that the subscription is updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "reconciling": {
+                  "description": "Output only. If ``true``, the subscription is in the process of being updated.",
+                  "type": "boolean"
+                },
+                "etag": {
+                  "description": "Optional. This checksum is computed by the server based on the value of other fields, and might be sent on update requests to ensure the client has an up-to-date value before proceeding.",
+                  "type": "string"
+                }
               },
-              "end_time": {
-                "description": "The timestamp when the subscription ends, if applicable.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "auto_renewal_enabled": {
-                "description": "Whether auto renewal is enabled by user choice on current subscription. This field indicates order/subscription status after pending plan change is cancelled or rejected.",
-                "type": "boolean"
-              }
+              "required": [
+                "target_resource",
+                "event_types",
+                "notification_endpoint"
+              ]
             }
           },
           "update_mask": {

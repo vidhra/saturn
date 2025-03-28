@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-gke-hub\\google\\cloud\\gkehub_v1\\types\\service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-gke-hub/google/cloud/gkehub_v1/types/service.py": [
     {
       "type": "function",
       "name": "ListMembershipsRequest",
@@ -66,24 +66,846 @@
             "type": "string"
           },
           "resource": {
-            "description": "Whether the binding includes the principal.\n\nValues:\n    MEMBERSHIP_UNSPECIFIED (0):\n        Default value. This value is unused.\n    MEMBERSHIP_INCLUDED (1):\n        The binding includes the principal. The principal can be\n        included directly or indirectly. For example:\n\n        -  A principal is included directly if that principal is\n           listed in the binding.\n        -  A principal is included indirectly if that principal is\n           in a Google group or Google Workspace domain that is\n           listed in the binding.\n    MEMBERSHIP_NOT_INCLUDED (2):\n        The binding does not include the principal.\n    MEMBERSHIP_UNKNOWN_INFO_DENIED (3):\n        The user who created the\n        [Replay][google.cloud.policysimulator.v1.Replay] is not\n        allowed to access the binding.\n    MEMBERSHIP_UNKNOWN_UNSUPPORTED (4):\n        The principal is an unsupported type. Only\n        Google Accounts and service accounts are\n        supported.",
-            "type": "enum",
-            "name": "Membership",
-            "values": {
-              "MEMBERSHIP_UNSPECIFIED": {
-                "value": 0
-              },
-              "MEMBERSHIP_INCLUDED": {
-                "value": 1
-              },
-              "MEMBERSHIP_NOT_INCLUDED": {
-                "value": 2
-              },
-              "MEMBERSHIP_UNKNOWN_INFO_DENIED": {
-                "value": 3
-              },
-              "MEMBERSHIP_UNKNOWN_UNSUPPORTED": {
-                "value": 4
+            "description": "Required. The membership to create.",
+            "reference": "google.cloud.gkehub_v1.types.Membership",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "endpoint": {
+                  "description": "Optional. Endpoint information to reach this member.  This field is a member of `oneof`_ ``type``.",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.MembershipEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "gke_cluster": {
+                        "description": "Optional. GKE-specific information. Only present if this Membership is a GKE cluster.",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub_v1.types.GkeCluster",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "cluster": {
+                              "description": "Optional. Information specifying a GKE Cluster. Format is ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``.",
+                              "type": "string"
+                            },
+                            "internal_ip": {
+                              "description": "Optional. If true, ``cluster`` is accessed using the private IP address of the control plane endpoint. Otherwise, the default IP address of the control plane endpoint is used. The default IP address is the private IP address for clusters with private control-plane endpoints and the public IP address otherwise.  Only specify this option when ``cluster`` is a `private GKE cluster <https://cloud.google.com/kubernetes-engine/docs/concepts/private-cluster-concept>`__.",
+                              "type": "boolean"
+                            },
+                            "proxy_url": {
+                              "description": "Optional. If set, used to configure a `proxy <https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#proxy>`__ to the Kubernetes server.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "kubernetes_metadata": {
+                        "description": "Output only. Useful Kubernetes-specific metadata.",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub_v1.types.KubernetesMetadata",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "kubernetes_api_server_version": {
+                              "description": "Output only. Kubernetes API server version string as reported by ``/version``.",
+                              "type": "string"
+                            },
+                            "node_provider_id": {
+                              "description": "Output only. Node providerID as reported by the first node in the list of nodes on the Kubernetes endpoint. On Kubernetes platforms that support zero-node clusters (like GKE-on-GCP), the node_count will be zero and the node_provider_id will be empty.",
+                              "type": "string"
+                            },
+                            "node_count": {
+                              "description": "Output only. Node count as reported by Kubernetes nodes resources.",
+                              "type": "integer"
+                            },
+                            "vcpu_count": {
+                              "description": "Output only. vCPU count as reported by Kubernetes nodes resources.",
+                              "type": "integer"
+                            },
+                            "memory_mb": {
+                              "description": "Output only. The total memory capacity as reported by the sum of all Kubernetes nodes resources, defined in MB.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time at which these details were last updated. This update_time is different from the Membership-level update_time since EndpointDetails are updated internally for API consumers.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      },
+                      "kubernetes_resource": {
+                        "description": "Optional. The in-cluster Kubernetes Resources that should be applied for a correctly registered cluster, in the steady state. These resources:  -  Ensure that the cluster is exclusively registered to one and only one Hub Membership. -  Propagate Workload Pool Information available in the Membership Authority field. -  Ensure proper initial configuration of default Hub Features.",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub_v1.types.KubernetesResource",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "membership_cr_manifest": {
+                              "description": "Input only. The YAML representation of the Membership CR. This field is ignored for GKE clusters where Hub can read the CR directly.  Callers should provide the CR that is currently present in the cluster during CreateMembership or UpdateMembership, or leave this field empty if none exists. The CR manifest is used to validate the cluster has not been registered with another Membership.",
+                              "type": "string"
+                            },
+                            "membership_resources": {
+                              "description": "Output only. Additional Kubernetes resources that need to be applied to the cluster after Membership creation, and after every update.  This field is only populated in the Membership returned from a successful long-running operation from CreateMembership or UpdateMembership. It is not populated during normal GetMembership or ListMemberships requests. To get the resource manifest after the initial registration, the caller should make a UpdateMembership call with an empty field mask.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub_v1.types.ResourceManifest",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "manifest": {
+                                      "description": "YAML manifest of the resource.",
+                                      "type": "string"
+                                    },
+                                    "cluster_scoped": {
+                                      "description": "Whether the resource provided in the manifest is ``cluster_scoped``. If unset, the manifest is assumed to be namespace scoped.  This field is used for REST mapping when applying the resource in a cluster.",
+                                      "type": "boolean"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "connect_resources": {
+                              "description": "Output only. The Kubernetes resources for installing the GKE Connect agent This field is only populated in the Membership returned from a successful long-running operation from CreateMembership or UpdateMembership. It is not populated during normal GetMembership or ListMemberships requests. To get the resource manifest after the initial registration, the caller should make a UpdateMembership call with an empty field mask.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub_v1.types.ResourceManifest",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "manifest": {
+                                      "description": "YAML manifest of the resource.",
+                                      "type": "string"
+                                    },
+                                    "cluster_scoped": {
+                                      "description": "Whether the resource provided in the manifest is ``cluster_scoped``. If unset, the manifest is assumed to be namespace scoped.  This field is used for REST mapping when applying the resource in a cluster.",
+                                      "type": "boolean"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "resource_options": {
+                              "description": "Optional. Options for Kubernetes resource generation.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub_v1.types.ResourceOptions",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "connect_version": {
+                                    "description": "Optional. The Connect agent version to use for connect_resources. Defaults to the latest GKE Connect version. The version must be a currently supported version, obsolete versions will be rejected.",
+                                    "type": "string"
+                                  },
+                                  "v1beta1_crd": {
+                                    "description": "Optional. Use ``apiextensions/v1beta1`` instead of ``apiextensions/v1`` for CustomResourceDefinition resources. This option should be set for clusters with Kubernetes apiserver versions <1.16.",
+                                    "type": "boolean"
+                                  },
+                                  "k8s_version": {
+                                    "description": "Optional. Major version of the Kubernetes cluster. This is only used to determine which version to use for the CustomResourceDefinition resources, ``apiextensions/v1beta1`` or\\ ``apiextensions/v1``.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "google_managed": {
+                        "description": "Output only. Whether the lifecycle of this membership is managed by a google cluster platform service.",
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "name": {
+                  "description": "Output only. The full, unique name of this Membership resource in the format ``projects/*/locations/*/memberships/{membership_id}``, set during creation.  ``membership_id`` must be a valid RFC 1123 compliant DNS label:  1. At most 63 characters in length 2. It must consist of lower case alphanumeric characters or ``-`` 3. It must start and end with an alphanumeric character  Which can be expressed as the regex: ``[a-z0-9]([-a-z0-9]*[a-z0-9])?``, with a maximum length of 63 characters.",
+                  "type": "string"
+                },
+                "labels": {
+                  "description": "Optional. Labels for this membership.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "description": {
+                  "description": "Output only. Description of this membership, limited to 63 characters. Must match the regex: ``[a-zA-Z0-9][a-zA-Z0-9_\\-\\.\\ ]*``  This field is present for legacy purposes.",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Output only. State of the Membership resource.",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.MembershipState",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "cluster_name": {
+                        "description": "This field is set to the ``cluster_name`` field of the Membership Spec if it is not empty. Otherwise, it is set to the cluster's fleet membership name.",
+                        "type": "string"
+                      },
+                      "membership_spec": {
+                        "description": "Membership configuration in the cluster. This represents the actual state in the cluster, while the MembershipSpec in the FeatureSpec represents the intended state",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.MembershipSpec",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "config_sync": {
+                              "description": "Config Sync configuration for the cluster.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSync",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "git": {
+                                    "description": "Git repo configuration for the cluster.",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.GitConfig",
+                                    "resolved_schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "sync_repo": {
+                                          "description": "The URL of the Git repository to use as the source of truth.",
+                                          "type": "string"
+                                        },
+                                        "sync_branch": {
+                                          "description": "The branch of the repository to sync from. Default: master.",
+                                          "type": "string"
+                                        },
+                                        "policy_dir": {
+                                          "description": "The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.",
+                                          "type": "string"
+                                        },
+                                        "sync_wait_secs": {
+                                          "description": "Period in seconds between consecutive syncs. Default: 15.",
+                                          "type": "integer"
+                                        },
+                                        "sync_rev": {
+                                          "description": "Git revision (tag or hash) to check out. Default HEAD.",
+                                          "type": "string"
+                                        },
+                                        "secret_type": {
+                                          "description": "Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.",
+                                          "type": "string"
+                                        },
+                                        "https_proxy": {
+                                          "description": "URL for the HTTPS proxy to be used when communicating with the Git repo.",
+                                          "type": "string"
+                                        },
+                                        "gcp_service_account_email": {
+                                          "description": "The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.",
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "source_format": {
+                                    "description": "Specifies whether the Config Sync Repo is in \"hierarchical\" or \"unstructured\" mode.",
+                                    "type": "string"
+                                  },
+                                  "enabled": {
+                                    "description": "Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.  This field is a member of `oneof`_ ``_enabled``.",
+                                    "type": "boolean"
+                                  },
+                                  "prevent_drift": {
+                                    "description": "Set to true to enable the Config Sync admission webhook to prevent drifts. If set to ``false``, disables the Config Sync admission webhook and does not prevent drifts.",
+                                    "type": "boolean"
+                                  },
+                                  "oci": {
+                                    "description": "OCI repo configuration for the cluster",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.OciConfig",
+                                    "resolved_schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "sync_repo": {
+                                          "description": "The OCI image repository URL for the package to sync from. e.g. ``LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME``.",
+                                          "type": "string"
+                                        },
+                                        "policy_dir": {
+                                          "description": "The absolute path of the directory that contains the local resources.  Default: the root directory of the image.",
+                                          "type": "string"
+                                        },
+                                        "sync_wait_secs": {
+                                          "description": "Period in seconds between consecutive syncs. Default: 15.",
+                                          "type": "integer"
+                                        },
+                                        "secret_type": {
+                                          "description": "Type of secret configured for access to the Git repo.",
+                                          "type": "string"
+                                        },
+                                        "gcp_service_account_email": {
+                                          "description": "The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.",
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "metrics_gcp_service_account_email": {
+                                    "description": "The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount ``default`` in the namespace ``config-management-monitoring`` should be bound to the GSA.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "policy_controller": {
+                              "description": "Policy Controller configuration for the cluster.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.PolicyController",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "description": "Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.",
+                                    "type": "boolean"
+                                  },
+                                  "template_library_installed": {
+                                    "description": "Installs the default template library along with Policy Controller.  This field is a member of `oneof`_ ``_template_library_installed``.",
+                                    "type": "boolean"
+                                  },
+                                  "audit_interval_seconds": {
+                                    "description": "Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.  This field is a member of `oneof`_ ``_audit_interval_seconds``.",
+                                    "type": "integer"
+                                  },
+                                  "exemptable_namespaces": {
+                                    "description": "The set of namespaces that are excluded from Policy Controller checks. Namespaces do not need to currently exist on the cluster.",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "referential_rules_enabled": {
+                                    "description": "Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.",
+                                    "type": "boolean"
+                                  },
+                                  "log_denies_enabled": {
+                                    "description": "Logs all denies and dry run failures.",
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            },
+                            "hierarchy_controller": {
+                              "description": "Hierarchy Controller configuration for the cluster.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerConfig",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "description": "Whether Hierarchy Controller is enabled in this cluster.",
+                                    "type": "boolean"
+                                  },
+                                  "enable_pod_tree_labels": {
+                                    "description": "Whether pod tree labels are enabled in this cluster.",
+                                    "type": "boolean"
+                                  },
+                                  "enable_hierarchical_resource_quota": {
+                                    "description": "Whether hierarchical resource quota is enabled in this cluster.",
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            },
+                            "version": {
+                              "description": "Version of ACM installed.",
+                              "type": "string"
+                            },
+                            "cluster": {
+                              "description": "The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster's fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster's fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.",
+                              "type": "string"
+                            },
+                            "management": {
+                              "description": "Enables automatic Feature management.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.MembershipSpec.Management"
+                            }
+                          }
+                        }
+                      },
+                      "operator_state": {
+                        "description": "Current install status of ACM's Operator",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.OperatorState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The semenatic version number of the operator",
+                              "type": "string"
+                            },
+                            "deployment_state": {
+                              "description": "The state of the Operator's deployment",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                            },
+                            "errors": {
+                              "description": "Install errors.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub.configmanagement_v1.types.InstallError",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "error_message": {
+                                      "description": "A string representing the user facing error message",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "config_sync_state": {
+                        "description": "Current sync status",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The version of ConfigSync deployed",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncVersion",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "importer": {
+                                    "description": "Version of the deployed importer pod",
+                                    "type": "string"
+                                  },
+                                  "syncer": {
+                                    "description": "Version of the deployed syncer pod",
+                                    "type": "string"
+                                  },
+                                  "git_sync": {
+                                    "description": "Version of the deployed git-sync pod",
+                                    "type": "string"
+                                  },
+                                  "monitor": {
+                                    "description": "Version of the deployed monitor pod",
+                                    "type": "string"
+                                  },
+                                  "reconciler_manager": {
+                                    "description": "Version of the deployed reconciler-manager pod",
+                                    "type": "string"
+                                  },
+                                  "root_reconciler": {
+                                    "description": "Version of the deployed reconciler container in root-reconciler pod",
+                                    "type": "string"
+                                  },
+                                  "admission_webhook": {
+                                    "description": "Version of the deployed admission_webhook pod",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "deployment_state": {
+                              "description": "Information about the deployment of ConfigSync, including the version of the various Pods deployed",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncDeploymentState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "importer": {
+                                    "description": "Deployment state of the importer pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "syncer": {
+                                    "description": "Deployment state of the syncer pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "git_sync": {
+                                    "description": "Deployment state of the git-sync pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "monitor": {
+                                    "description": "Deployment state of the monitor pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "reconciler_manager": {
+                                    "description": "Deployment state of reconciler-manager pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "root_reconciler": {
+                                    "description": "Deployment state of root-reconciler",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "admission_webhook": {
+                                    "description": "Deployment state of admission-webhook",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  }
+                                }
+                              }
+                            },
+                            "sync_state": {
+                              "description": "The state of ConfigSync's process to sync configs to a cluster",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.SyncState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "source_token": {
+                                    "description": "Token indicating the state of the repo.",
+                                    "type": "string"
+                                  },
+                                  "import_token": {
+                                    "description": "Token indicating the state of the importer.",
+                                    "type": "string"
+                                  },
+                                  "sync_token": {
+                                    "description": "Token indicating the state of the syncer.",
+                                    "type": "string"
+                                  },
+                                  "last_sync": {
+                                    "description": "Deprecated: use last_sync_time instead. Timestamp of when ACM last successfully synced the repo The time format is specified in https://golang.org/pkg/time/#Time.String",
+                                    "type": "string"
+                                  },
+                                  "last_sync_time": {
+                                    "description": "Timestamp type of when ACM last successfully synced the repo",
+                                    "type": "object",
+                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  },
+                                  "code": {
+                                    "description": "Sync status code",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.SyncState.SyncCode"
+                                  },
+                                  "errors": {
+                                    "description": "A list of errors resulting from problematic configs. This list will be truncated after 100 errors, although it is unlikely for that many errors to simultaneously exist.",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "reference": "google.cloud.gkehub.configmanagement_v1.types.SyncError",
+                                      "resolved_schema": {
+                                        "type": "object",
+                                        "properties": {
+                                          "code": {
+                                            "description": "An ACM defined error code",
+                                            "type": "string"
+                                          },
+                                          "error_message": {
+                                            "description": "A description of the error",
+                                            "type": "string"
+                                          },
+                                          "error_resources": {
+                                            "description": "A list of config(s) associated with the error, if any",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ErrorResource",
+                                              "resolved_schema": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "source_path": {
+                                                    "description": "Path in the git repo of the erroneous config",
+                                                    "type": "string"
+                                                  },
+                                                  "resource_name": {
+                                                    "description": "Metadata name of the resource that is causing an error",
+                                                    "type": "string"
+                                                  },
+                                                  "resource_namespace": {
+                                                    "description": "Namespace of the resource that is causing an error",
+                                                    "type": "string"
+                                                  },
+                                                  "resource_gvk": {
+                                                    "description": "Group/version/kind of the resource that is causing an error",
+                                                    "type": "object",
+                                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.GroupVersionKind",
+                                                    "resolved_schema": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "group": {
+                                                          "description": "Kubernetes Group",
+                                                          "type": "string"
+                                                        },
+                                                        "version": {
+                                                          "description": "Kubernetes Version",
+                                                          "type": "string"
+                                                        },
+                                                        "kind": {
+                                                          "description": "Kubernetes Kind",
+                                                          "type": "string"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "errors": {
+                              "description": "Errors pertaining to the installation of Config Sync.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncError",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "error_message": {
+                                      "description": "A string representing the user facing error message",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "rootsync_crd": {
+                              "description": "The state of the RootSync CRD",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState.CRDState"
+                            },
+                            "reposync_crd": {
+                              "description": "The state of the Reposync CRD",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState.CRDState"
+                            },
+                            "state": {
+                              "description": "The state of CS This field summarizes the other fields in this message.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState.State"
+                            }
+                          }
+                        }
+                      },
+                      "policy_controller_state": {
+                        "description": "PolicyController status",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.PolicyControllerState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The version of Gatekeeper Policy Controller deployed.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.PolicyControllerVersion",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "version": {
+                                    "description": "The gatekeeper image tag that is composed of ACM version, git tag, build number.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "deployment_state": {
+                              "description": "The state about the policy controller installation.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.GatekeeperDeploymentState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "gatekeeper_controller_manager_state": {
+                                    "description": "Status of gatekeeper-controller-manager pod.",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "gatekeeper_audit": {
+                                    "description": "Status of gatekeeper-audit deployment.",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "hierarchy_controller_state": {
+                        "description": "Hierarchy Controller status",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The version for Hierarchy Controller",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerVersion",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "hnc": {
+                                    "description": "Version for open source HNC",
+                                    "type": "string"
+                                  },
+                                  "extension": {
+                                    "description": "Version for Hierarchy Controller extension",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "state": {
+                              "description": "The deployment state for Hierarchy Controller",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerDeploymentState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "hnc": {
+                                    "description": "The deployment state for open source HNC (e.g. v0.7.0-hc.0)",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "extension": {
+                                    "description": "The deployment state for Hierarchy Controller extension (e.g. v0.7.0-hc.1)",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "create_time": {
+                  "description": "Output only. When the Membership was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. When the Membership was last updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "delete_time": {
+                  "description": "Output only. When the Membership was deleted.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "external_id": {
+                  "description": "Optional. An externally-generated and managed ID for this Membership. This ID may be modified after creation, but this is not recommended.  The ID must match the regex: ``[a-zA-Z0-9][a-zA-Z0-9_\\-\\.]*``  If this Membership represents a Kubernetes cluster, this value should be set to the UID of the ``kube-system`` namespace object.",
+                  "type": "string"
+                },
+                "last_connection_time": {
+                  "description": "Output only. For clusters using Connect, the timestamp of the most recent connection established with Google Cloud. This time is updated every several minutes, not continuously. For clusters that do not use GKE Connect, or that have never connected successfully, this field will be unset.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "unique_id": {
+                  "description": "Output only. Google-generated UUID for this resource. This is unique across all Membership resources. If a Membership resource is deleted and another resource with the same name is created, it gets a different unique_id.",
+                  "type": "string"
+                },
+                "authority": {
+                  "description": "Optional. How to identify workloads from this Membership. See the documentation on Workload Identity for more details:  https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.Authority",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "issuer": {
+                        "description": "Optional. A JSON Web Token (JWT) issuer URI. ``issuer`` must start with ``https://`` and be a valid URL with length <2000 characters.  If set, then Google will allow valid OIDC tokens from this issuer to authenticate within the workload_identity_pool. OIDC discovery will be performed on this URI to validate tokens from the issuer.  Clearing ``issuer`` disables Workload Identity. ``issuer`` cannot be directly modified; it must be cleared (and Workload Identity disabled) before using a new issuer (and re-enabling Workload Identity).",
+                        "type": "string"
+                      },
+                      "workload_identity_pool": {
+                        "description": "Output only. The name of the workload identity pool in which ``issuer`` will be recognized.  There is a single Workload Identity Pool per Hub that is shared between all Memberships that belong to that Hub. For a Hub hosted in {PROJECT_ID}, the workload pool format is ``{PROJECT_ID}.hub.id.goog``, although this is subject to change in newer versions of this API.",
+                        "type": "string"
+                      },
+                      "identity_provider": {
+                        "description": "Output only. An identity provider that reflects the ``issuer`` in the workload identity pool.",
+                        "type": "string"
+                      },
+                      "oidc_jwks": {
+                        "description": "Optional. OIDC verification keys for this Membership in JWKS format (RFC 7517).  When this field is set, OIDC discovery will NOT be performed on ``issuer``, and instead OIDC tokens will be validated using this field.",
+                        "type": "object",
+                        "reference": "bytes"
+                      }
+                    }
+                  }
+                },
+                "monitoring_config": {
+                  "description": "Optional. The monitoring config information for this membership.",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.MonitoringConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "component_config": {
+                        "description": "Monitoring components configuration",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.MonitoringComponentConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enable_components": {
+                              "description": "Select components to collect metrics. An empty set would disable all monitoring.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.container_v1beta1.types.MonitoringComponentConfig.Component"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "managed_prometheus_config": {
+                        "description": "Enable Google Cloud Managed Service for Prometheus in the cluster.",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.ManagedPrometheusConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enabled": {
+                              "description": "Enable Managed Collection.",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      },
+                      "advanced_datapath_observability_config": {
+                        "description": "Configuration of Advanced Datapath Observability features.",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.AdvancedDatapathObservabilityConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enable_metrics": {
+                              "description": "Expose flow metrics on nodes",
+                              "type": "boolean"
+                            },
+                            "relay_mode": {
+                              "description": "Method used to make Relay available",
+                              "type": "object",
+                              "reference": "google.cloud.container_v1beta1.types.AdvancedDatapathObservabilityConfig.RelayMode"
+                            },
+                            "enable_relay": {
+                              "description": "Enable Relay component  This field is a member of `oneof`_ ``_enable_relay``.",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -141,24 +963,846 @@
             "reference": "google.protobuf.field_mask_pb2.FieldMask"
           },
           "resource": {
-            "description": "Whether the binding includes the principal.\n\nValues:\n    MEMBERSHIP_UNSPECIFIED (0):\n        Default value. This value is unused.\n    MEMBERSHIP_INCLUDED (1):\n        The binding includes the principal. The principal can be\n        included directly or indirectly. For example:\n\n        -  A principal is included directly if that principal is\n           listed in the binding.\n        -  A principal is included indirectly if that principal is\n           in a Google group or Google Workspace domain that is\n           listed in the binding.\n    MEMBERSHIP_NOT_INCLUDED (2):\n        The binding does not include the principal.\n    MEMBERSHIP_UNKNOWN_INFO_DENIED (3):\n        The user who created the\n        [Replay][google.cloud.policysimulator.v1.Replay] is not\n        allowed to access the binding.\n    MEMBERSHIP_UNKNOWN_UNSUPPORTED (4):\n        The principal is an unsupported type. Only\n        Google Accounts and service accounts are\n        supported.",
-            "type": "enum",
-            "name": "Membership",
-            "values": {
-              "MEMBERSHIP_UNSPECIFIED": {
-                "value": 0
-              },
-              "MEMBERSHIP_INCLUDED": {
-                "value": 1
-              },
-              "MEMBERSHIP_NOT_INCLUDED": {
-                "value": 2
-              },
-              "MEMBERSHIP_UNKNOWN_INFO_DENIED": {
-                "value": 3
-              },
-              "MEMBERSHIP_UNKNOWN_UNSUPPORTED": {
-                "value": 4
+            "description": "Required. Only fields specified in update_mask are updated. If you specify a field in the update_mask but don't specify its value here that field will be deleted. If you are updating a map field, set the value of a key to null or empty string to delete the key from the map. It's not possible to update a key's value to the empty string. If you specify the update_mask to be a special path \"*\", fully replaces all user-modifiable fields to match ``resource``.",
+            "reference": "google.cloud.gkehub_v1.types.Membership",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "endpoint": {
+                  "description": "Optional. Endpoint information to reach this member.  This field is a member of `oneof`_ ``type``.",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.MembershipEndpoint",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "gke_cluster": {
+                        "description": "Optional. GKE-specific information. Only present if this Membership is a GKE cluster.",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub_v1.types.GkeCluster",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "cluster": {
+                              "description": "Optional. Information specifying a GKE Cluster. Format is ``projects/{project_id}/locations/{location_id}/clusters/{cluster_id}``.",
+                              "type": "string"
+                            },
+                            "internal_ip": {
+                              "description": "Optional. If true, ``cluster`` is accessed using the private IP address of the control plane endpoint. Otherwise, the default IP address of the control plane endpoint is used. The default IP address is the private IP address for clusters with private control-plane endpoints and the public IP address otherwise.  Only specify this option when ``cluster`` is a `private GKE cluster <https://cloud.google.com/kubernetes-engine/docs/concepts/private-cluster-concept>`__.",
+                              "type": "boolean"
+                            },
+                            "proxy_url": {
+                              "description": "Optional. If set, used to configure a `proxy <https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#proxy>`__ to the Kubernetes server.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "kubernetes_metadata": {
+                        "description": "Output only. Useful Kubernetes-specific metadata.",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub_v1.types.KubernetesMetadata",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "kubernetes_api_server_version": {
+                              "description": "Output only. Kubernetes API server version string as reported by ``/version``.",
+                              "type": "string"
+                            },
+                            "node_provider_id": {
+                              "description": "Output only. Node providerID as reported by the first node in the list of nodes on the Kubernetes endpoint. On Kubernetes platforms that support zero-node clusters (like GKE-on-GCP), the node_count will be zero and the node_provider_id will be empty.",
+                              "type": "string"
+                            },
+                            "node_count": {
+                              "description": "Output only. Node count as reported by Kubernetes nodes resources.",
+                              "type": "integer"
+                            },
+                            "vcpu_count": {
+                              "description": "Output only. vCPU count as reported by Kubernetes nodes resources.",
+                              "type": "integer"
+                            },
+                            "memory_mb": {
+                              "description": "Output only. The total memory capacity as reported by the sum of all Kubernetes nodes resources, defined in MB.",
+                              "type": "integer"
+                            },
+                            "update_time": {
+                              "description": "Output only. The time at which these details were last updated. This update_time is different from the Membership-level update_time since EndpointDetails are updated internally for API consumers.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            }
+                          }
+                        }
+                      },
+                      "kubernetes_resource": {
+                        "description": "Optional. The in-cluster Kubernetes Resources that should be applied for a correctly registered cluster, in the steady state. These resources:  -  Ensure that the cluster is exclusively registered to one and only one Hub Membership. -  Propagate Workload Pool Information available in the Membership Authority field. -  Ensure proper initial configuration of default Hub Features.",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub_v1.types.KubernetesResource",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "membership_cr_manifest": {
+                              "description": "Input only. The YAML representation of the Membership CR. This field is ignored for GKE clusters where Hub can read the CR directly.  Callers should provide the CR that is currently present in the cluster during CreateMembership or UpdateMembership, or leave this field empty if none exists. The CR manifest is used to validate the cluster has not been registered with another Membership.",
+                              "type": "string"
+                            },
+                            "membership_resources": {
+                              "description": "Output only. Additional Kubernetes resources that need to be applied to the cluster after Membership creation, and after every update.  This field is only populated in the Membership returned from a successful long-running operation from CreateMembership or UpdateMembership. It is not populated during normal GetMembership or ListMemberships requests. To get the resource manifest after the initial registration, the caller should make a UpdateMembership call with an empty field mask.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub_v1.types.ResourceManifest",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "manifest": {
+                                      "description": "YAML manifest of the resource.",
+                                      "type": "string"
+                                    },
+                                    "cluster_scoped": {
+                                      "description": "Whether the resource provided in the manifest is ``cluster_scoped``. If unset, the manifest is assumed to be namespace scoped.  This field is used for REST mapping when applying the resource in a cluster.",
+                                      "type": "boolean"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "connect_resources": {
+                              "description": "Output only. The Kubernetes resources for installing the GKE Connect agent This field is only populated in the Membership returned from a successful long-running operation from CreateMembership or UpdateMembership. It is not populated during normal GetMembership or ListMemberships requests. To get the resource manifest after the initial registration, the caller should make a UpdateMembership call with an empty field mask.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub_v1.types.ResourceManifest",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "manifest": {
+                                      "description": "YAML manifest of the resource.",
+                                      "type": "string"
+                                    },
+                                    "cluster_scoped": {
+                                      "description": "Whether the resource provided in the manifest is ``cluster_scoped``. If unset, the manifest is assumed to be namespace scoped.  This field is used for REST mapping when applying the resource in a cluster.",
+                                      "type": "boolean"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "resource_options": {
+                              "description": "Optional. Options for Kubernetes resource generation.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub_v1.types.ResourceOptions",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "connect_version": {
+                                    "description": "Optional. The Connect agent version to use for connect_resources. Defaults to the latest GKE Connect version. The version must be a currently supported version, obsolete versions will be rejected.",
+                                    "type": "string"
+                                  },
+                                  "v1beta1_crd": {
+                                    "description": "Optional. Use ``apiextensions/v1beta1`` instead of ``apiextensions/v1`` for CustomResourceDefinition resources. This option should be set for clusters with Kubernetes apiserver versions <1.16.",
+                                    "type": "boolean"
+                                  },
+                                  "k8s_version": {
+                                    "description": "Optional. Major version of the Kubernetes cluster. This is only used to determine which version to use for the CustomResourceDefinition resources, ``apiextensions/v1beta1`` or\\ ``apiextensions/v1``.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "google_managed": {
+                        "description": "Output only. Whether the lifecycle of this membership is managed by a google cluster platform service.",
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "name": {
+                  "description": "Output only. The full, unique name of this Membership resource in the format ``projects/*/locations/*/memberships/{membership_id}``, set during creation.  ``membership_id`` must be a valid RFC 1123 compliant DNS label:  1. At most 63 characters in length 2. It must consist of lower case alphanumeric characters or ``-`` 3. It must start and end with an alphanumeric character  Which can be expressed as the regex: ``[a-z0-9]([-a-z0-9]*[a-z0-9])?``, with a maximum length of 63 characters.",
+                  "type": "string"
+                },
+                "labels": {
+                  "description": "Optional. Labels for this membership.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "description": {
+                  "description": "Output only. Description of this membership, limited to 63 characters. Must match the regex: ``[a-zA-Z0-9][a-zA-Z0-9_\\-\\.\\ ]*``  This field is present for legacy purposes.",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Output only. State of the Membership resource.",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.MembershipState",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "cluster_name": {
+                        "description": "This field is set to the ``cluster_name`` field of the Membership Spec if it is not empty. Otherwise, it is set to the cluster's fleet membership name.",
+                        "type": "string"
+                      },
+                      "membership_spec": {
+                        "description": "Membership configuration in the cluster. This represents the actual state in the cluster, while the MembershipSpec in the FeatureSpec represents the intended state",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.MembershipSpec",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "config_sync": {
+                              "description": "Config Sync configuration for the cluster.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSync",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "git": {
+                                    "description": "Git repo configuration for the cluster.",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.GitConfig",
+                                    "resolved_schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "sync_repo": {
+                                          "description": "The URL of the Git repository to use as the source of truth.",
+                                          "type": "string"
+                                        },
+                                        "sync_branch": {
+                                          "description": "The branch of the repository to sync from. Default: master.",
+                                          "type": "string"
+                                        },
+                                        "policy_dir": {
+                                          "description": "The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.",
+                                          "type": "string"
+                                        },
+                                        "sync_wait_secs": {
+                                          "description": "Period in seconds between consecutive syncs. Default: 15.",
+                                          "type": "integer"
+                                        },
+                                        "sync_rev": {
+                                          "description": "Git revision (tag or hash) to check out. Default HEAD.",
+                                          "type": "string"
+                                        },
+                                        "secret_type": {
+                                          "description": "Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.",
+                                          "type": "string"
+                                        },
+                                        "https_proxy": {
+                                          "description": "URL for the HTTPS proxy to be used when communicating with the Git repo.",
+                                          "type": "string"
+                                        },
+                                        "gcp_service_account_email": {
+                                          "description": "The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.",
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "source_format": {
+                                    "description": "Specifies whether the Config Sync Repo is in \"hierarchical\" or \"unstructured\" mode.",
+                                    "type": "string"
+                                  },
+                                  "enabled": {
+                                    "description": "Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.  This field is a member of `oneof`_ ``_enabled``.",
+                                    "type": "boolean"
+                                  },
+                                  "prevent_drift": {
+                                    "description": "Set to true to enable the Config Sync admission webhook to prevent drifts. If set to ``false``, disables the Config Sync admission webhook and does not prevent drifts.",
+                                    "type": "boolean"
+                                  },
+                                  "oci": {
+                                    "description": "OCI repo configuration for the cluster",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.OciConfig",
+                                    "resolved_schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "sync_repo": {
+                                          "description": "The OCI image repository URL for the package to sync from. e.g. ``LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME``.",
+                                          "type": "string"
+                                        },
+                                        "policy_dir": {
+                                          "description": "The absolute path of the directory that contains the local resources.  Default: the root directory of the image.",
+                                          "type": "string"
+                                        },
+                                        "sync_wait_secs": {
+                                          "description": "Period in seconds between consecutive syncs. Default: 15.",
+                                          "type": "integer"
+                                        },
+                                        "secret_type": {
+                                          "description": "Type of secret configured for access to the Git repo.",
+                                          "type": "string"
+                                        },
+                                        "gcp_service_account_email": {
+                                          "description": "The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.",
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "metrics_gcp_service_account_email": {
+                                    "description": "The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount ``default`` in the namespace ``config-management-monitoring`` should be bound to the GSA.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "policy_controller": {
+                              "description": "Policy Controller configuration for the cluster.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.PolicyController",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "description": "Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.",
+                                    "type": "boolean"
+                                  },
+                                  "template_library_installed": {
+                                    "description": "Installs the default template library along with Policy Controller.  This field is a member of `oneof`_ ``_template_library_installed``.",
+                                    "type": "boolean"
+                                  },
+                                  "audit_interval_seconds": {
+                                    "description": "Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.  This field is a member of `oneof`_ ``_audit_interval_seconds``.",
+                                    "type": "integer"
+                                  },
+                                  "exemptable_namespaces": {
+                                    "description": "The set of namespaces that are excluded from Policy Controller checks. Namespaces do not need to currently exist on the cluster.",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "referential_rules_enabled": {
+                                    "description": "Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.",
+                                    "type": "boolean"
+                                  },
+                                  "log_denies_enabled": {
+                                    "description": "Logs all denies and dry run failures.",
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            },
+                            "hierarchy_controller": {
+                              "description": "Hierarchy Controller configuration for the cluster.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerConfig",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "description": "Whether Hierarchy Controller is enabled in this cluster.",
+                                    "type": "boolean"
+                                  },
+                                  "enable_pod_tree_labels": {
+                                    "description": "Whether pod tree labels are enabled in this cluster.",
+                                    "type": "boolean"
+                                  },
+                                  "enable_hierarchical_resource_quota": {
+                                    "description": "Whether hierarchical resource quota is enabled in this cluster.",
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            },
+                            "version": {
+                              "description": "Version of ACM installed.",
+                              "type": "string"
+                            },
+                            "cluster": {
+                              "description": "The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster's fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster's fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.",
+                              "type": "string"
+                            },
+                            "management": {
+                              "description": "Enables automatic Feature management.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.MembershipSpec.Management"
+                            }
+                          }
+                        }
+                      },
+                      "operator_state": {
+                        "description": "Current install status of ACM's Operator",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.OperatorState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The semenatic version number of the operator",
+                              "type": "string"
+                            },
+                            "deployment_state": {
+                              "description": "The state of the Operator's deployment",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                            },
+                            "errors": {
+                              "description": "Install errors.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub.configmanagement_v1.types.InstallError",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "error_message": {
+                                      "description": "A string representing the user facing error message",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "config_sync_state": {
+                        "description": "Current sync status",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The version of ConfigSync deployed",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncVersion",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "importer": {
+                                    "description": "Version of the deployed importer pod",
+                                    "type": "string"
+                                  },
+                                  "syncer": {
+                                    "description": "Version of the deployed syncer pod",
+                                    "type": "string"
+                                  },
+                                  "git_sync": {
+                                    "description": "Version of the deployed git-sync pod",
+                                    "type": "string"
+                                  },
+                                  "monitor": {
+                                    "description": "Version of the deployed monitor pod",
+                                    "type": "string"
+                                  },
+                                  "reconciler_manager": {
+                                    "description": "Version of the deployed reconciler-manager pod",
+                                    "type": "string"
+                                  },
+                                  "root_reconciler": {
+                                    "description": "Version of the deployed reconciler container in root-reconciler pod",
+                                    "type": "string"
+                                  },
+                                  "admission_webhook": {
+                                    "description": "Version of the deployed admission_webhook pod",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "deployment_state": {
+                              "description": "Information about the deployment of ConfigSync, including the version of the various Pods deployed",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncDeploymentState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "importer": {
+                                    "description": "Deployment state of the importer pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "syncer": {
+                                    "description": "Deployment state of the syncer pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "git_sync": {
+                                    "description": "Deployment state of the git-sync pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "monitor": {
+                                    "description": "Deployment state of the monitor pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "reconciler_manager": {
+                                    "description": "Deployment state of reconciler-manager pod",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "root_reconciler": {
+                                    "description": "Deployment state of root-reconciler",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "admission_webhook": {
+                                    "description": "Deployment state of admission-webhook",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  }
+                                }
+                              }
+                            },
+                            "sync_state": {
+                              "description": "The state of ConfigSync's process to sync configs to a cluster",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.SyncState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "source_token": {
+                                    "description": "Token indicating the state of the repo.",
+                                    "type": "string"
+                                  },
+                                  "import_token": {
+                                    "description": "Token indicating the state of the importer.",
+                                    "type": "string"
+                                  },
+                                  "sync_token": {
+                                    "description": "Token indicating the state of the syncer.",
+                                    "type": "string"
+                                  },
+                                  "last_sync": {
+                                    "description": "Deprecated: use last_sync_time instead. Timestamp of when ACM last successfully synced the repo The time format is specified in https://golang.org/pkg/time/#Time.String",
+                                    "type": "string"
+                                  },
+                                  "last_sync_time": {
+                                    "description": "Timestamp type of when ACM last successfully synced the repo",
+                                    "type": "object",
+                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  },
+                                  "code": {
+                                    "description": "Sync status code",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.SyncState.SyncCode"
+                                  },
+                                  "errors": {
+                                    "description": "A list of errors resulting from problematic configs. This list will be truncated after 100 errors, although it is unlikely for that many errors to simultaneously exist.",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "reference": "google.cloud.gkehub.configmanagement_v1.types.SyncError",
+                                      "resolved_schema": {
+                                        "type": "object",
+                                        "properties": {
+                                          "code": {
+                                            "description": "An ACM defined error code",
+                                            "type": "string"
+                                          },
+                                          "error_message": {
+                                            "description": "A description of the error",
+                                            "type": "string"
+                                          },
+                                          "error_resources": {
+                                            "description": "A list of config(s) associated with the error, if any",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ErrorResource",
+                                              "resolved_schema": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "source_path": {
+                                                    "description": "Path in the git repo of the erroneous config",
+                                                    "type": "string"
+                                                  },
+                                                  "resource_name": {
+                                                    "description": "Metadata name of the resource that is causing an error",
+                                                    "type": "string"
+                                                  },
+                                                  "resource_namespace": {
+                                                    "description": "Namespace of the resource that is causing an error",
+                                                    "type": "string"
+                                                  },
+                                                  "resource_gvk": {
+                                                    "description": "Group/version/kind of the resource that is causing an error",
+                                                    "type": "object",
+                                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.GroupVersionKind",
+                                                    "resolved_schema": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "group": {
+                                                          "description": "Kubernetes Group",
+                                                          "type": "string"
+                                                        },
+                                                        "version": {
+                                                          "description": "Kubernetes Version",
+                                                          "type": "string"
+                                                        },
+                                                        "kind": {
+                                                          "description": "Kubernetes Kind",
+                                                          "type": "string"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "errors": {
+                              "description": "Errors pertaining to the installation of Config Sync.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncError",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "error_message": {
+                                      "description": "A string representing the user facing error message",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "rootsync_crd": {
+                              "description": "The state of the RootSync CRD",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState.CRDState"
+                            },
+                            "reposync_crd": {
+                              "description": "The state of the Reposync CRD",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState.CRDState"
+                            },
+                            "state": {
+                              "description": "The state of CS This field summarizes the other fields in this message.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.ConfigSyncState.State"
+                            }
+                          }
+                        }
+                      },
+                      "policy_controller_state": {
+                        "description": "PolicyController status",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.PolicyControllerState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The version of Gatekeeper Policy Controller deployed.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.PolicyControllerVersion",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "version": {
+                                    "description": "The gatekeeper image tag that is composed of ACM version, git tag, build number.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "deployment_state": {
+                              "description": "The state about the policy controller installation.",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.GatekeeperDeploymentState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "gatekeeper_controller_manager_state": {
+                                    "description": "Status of gatekeeper-controller-manager pod.",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "gatekeeper_audit": {
+                                    "description": "Status of gatekeeper-audit deployment.",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "hierarchy_controller_state": {
+                        "description": "Hierarchy Controller status",
+                        "type": "object",
+                        "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerState",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "description": "The version for Hierarchy Controller",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerVersion",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "hnc": {
+                                    "description": "Version for open source HNC",
+                                    "type": "string"
+                                  },
+                                  "extension": {
+                                    "description": "Version for Hierarchy Controller extension",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "state": {
+                              "description": "The deployment state for Hierarchy Controller",
+                              "type": "object",
+                              "reference": "google.cloud.gkehub.configmanagement_v1.types.HierarchyControllerDeploymentState",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "hnc": {
+                                    "description": "The deployment state for open source HNC (e.g. v0.7.0-hc.0)",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  },
+                                  "extension": {
+                                    "description": "The deployment state for Hierarchy Controller extension (e.g. v0.7.0-hc.1)",
+                                    "type": "object",
+                                    "reference": "google.cloud.gkehub.configmanagement_v1.types.DeploymentState"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "create_time": {
+                  "description": "Output only. When the Membership was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. When the Membership was last updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "delete_time": {
+                  "description": "Output only. When the Membership was deleted.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "external_id": {
+                  "description": "Optional. An externally-generated and managed ID for this Membership. This ID may be modified after creation, but this is not recommended.  The ID must match the regex: ``[a-zA-Z0-9][a-zA-Z0-9_\\-\\.]*``  If this Membership represents a Kubernetes cluster, this value should be set to the UID of the ``kube-system`` namespace object.",
+                  "type": "string"
+                },
+                "last_connection_time": {
+                  "description": "Output only. For clusters using Connect, the timestamp of the most recent connection established with Google Cloud. This time is updated every several minutes, not continuously. For clusters that do not use GKE Connect, or that have never connected successfully, this field will be unset.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "unique_id": {
+                  "description": "Output only. Google-generated UUID for this resource. This is unique across all Membership resources. If a Membership resource is deleted and another resource with the same name is created, it gets a different unique_id.",
+                  "type": "string"
+                },
+                "authority": {
+                  "description": "Optional. How to identify workloads from this Membership. See the documentation on Workload Identity for more details:  https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.Authority",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "issuer": {
+                        "description": "Optional. A JSON Web Token (JWT) issuer URI. ``issuer`` must start with ``https://`` and be a valid URL with length <2000 characters.  If set, then Google will allow valid OIDC tokens from this issuer to authenticate within the workload_identity_pool. OIDC discovery will be performed on this URI to validate tokens from the issuer.  Clearing ``issuer`` disables Workload Identity. ``issuer`` cannot be directly modified; it must be cleared (and Workload Identity disabled) before using a new issuer (and re-enabling Workload Identity).",
+                        "type": "string"
+                      },
+                      "workload_identity_pool": {
+                        "description": "Output only. The name of the workload identity pool in which ``issuer`` will be recognized.  There is a single Workload Identity Pool per Hub that is shared between all Memberships that belong to that Hub. For a Hub hosted in {PROJECT_ID}, the workload pool format is ``{PROJECT_ID}.hub.id.goog``, although this is subject to change in newer versions of this API.",
+                        "type": "string"
+                      },
+                      "identity_provider": {
+                        "description": "Output only. An identity provider that reflects the ``issuer`` in the workload identity pool.",
+                        "type": "string"
+                      },
+                      "oidc_jwks": {
+                        "description": "Optional. OIDC verification keys for this Membership in JWKS format (RFC 7517).  When this field is set, OIDC discovery will NOT be performed on ``issuer``, and instead OIDC tokens will be validated using this field.",
+                        "type": "object",
+                        "reference": "bytes"
+                      }
+                    }
+                  }
+                },
+                "monitoring_config": {
+                  "description": "Optional. The monitoring config information for this membership.",
+                  "type": "object",
+                  "reference": "google.cloud.gkehub_v1.types.MonitoringConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "component_config": {
+                        "description": "Monitoring components configuration",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.MonitoringComponentConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enable_components": {
+                              "description": "Select components to collect metrics. An empty set would disable all monitoring.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.container_v1beta1.types.MonitoringComponentConfig.Component"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "managed_prometheus_config": {
+                        "description": "Enable Google Cloud Managed Service for Prometheus in the cluster.",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.ManagedPrometheusConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enabled": {
+                              "description": "Enable Managed Collection.",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      },
+                      "advanced_datapath_observability_config": {
+                        "description": "Configuration of Advanced Datapath Observability features.",
+                        "type": "object",
+                        "reference": "google.cloud.container_v1beta1.types.AdvancedDatapathObservabilityConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "enable_metrics": {
+                              "description": "Expose flow metrics on nodes",
+                              "type": "boolean"
+                            },
+                            "relay_mode": {
+                              "description": "Method used to make Relay available",
+                              "type": "object",
+                              "reference": "google.cloud.container_v1beta1.types.AdvancedDatapathObservabilityConfig.RelayMode"
+                            },
+                            "enable_relay": {
+                              "description": "Enable Relay component  This field is a member of `oneof`_ ``_enable_relay``.",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -284,34 +1928,15 @@
           },
           "resource": {
             "description": "The Feature resource to create.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
-                  }
+            "reference": "google.cloud.gkehub_v1.types.Feature",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "type_": {
+                  "description": "The type of the feature that enabled for fulfillment.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                 }
-              },
-              "max_results": {
-                "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                "type": "integer"
-              },
-              "model": {
-                "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                "type": "string"
               }
             }
           },
@@ -368,34 +1993,15 @@
           },
           "resource": {
             "description": "Only fields specified in update_mask are updated. If you specify a field in the update_mask but don't specify its value here that field will be deleted. If you are updating a map field, set the value of a key to null or empty string to delete the key from the map. It's not possible to update a key's value to the empty string. If you specify the update_mask to be a special path \"*\", fully replaces all user-modifiable fields to match ``resource``.",
-            "type": "object",
-            "properties": {
-              "type_": {
-                "type": "enum",
-                "name": "Type",
-                "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                "values": {
-                  "TYPE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                    "value": 1
-                  },
-                  "NO_RETURNS": {
-                    "value": 2
-                  },
-                  "LIFETIME_RETURNS": {
-                    "value": 3
-                  }
+            "reference": "google.cloud.gkehub_v1.types.Feature",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "type_": {
+                  "description": "The type of the feature that enabled for fulfillment.",
+                  "type": "object",
+                  "reference": "google.cloud.dialogflow_v2.types.Fulfillment.Feature.Type"
                 }
-              },
-              "max_results": {
-                "description": "Maximum number of results of this type. Does not apply to ``TEXT_DETECTION``, ``DOCUMENT_TEXT_DETECTION``, or ``CROP_HINTS``.",
-                "type": "integer"
-              },
-              "model": {
-                "description": "Model to use for the feature. Supported values: \"builtin/stable\" (the default if unset) and \"builtin/latest\". ``DOCUMENT_TEXT_DETECTION`` and ``TEXT_DETECTION`` also support \"builtin/weekly\" for the bleeding edge release updated weekly.",
-                "type": "string"
               }
             }
           },

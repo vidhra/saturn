@@ -1,284 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-automl\\google\\cloud\\automl_v1\\types\\prediction_service.py": [
-    {
-      "type": "function",
-      "name": "PredictRequest",
-      "description": "Request message for\n[PredictionService.Predict][google.cloud.automl.v1.PredictionService.Predict].\n\nAttributes:\n    name (str):\n        Required. Name of the model requested to\n        serve the prediction.\n    payload (google.cloud.automl_v1.types.ExamplePayload):\n        Required. Payload to perform a prediction on.\n        The payload must match the problem type that the\n        model was trained to solve.\n    params (MutableMapping[str, str]):\n        Additional domain-specific parameters, any string must be up\n        to 25000 characters long.\n\n        AutoML Vision Classification\n\n        ``score_threshold`` : (float) A value from 0.0 to 1.0. When\n        the model makes predictions for an image, it will only\n        produce results that have at least this confidence score.\n        The default is 0.5.\n\n        AutoML Vision Object Detection\n\n        ``score_threshold`` : (float) When Model detects objects on\n        the image, it will only produce bounding boxes which have at\n        least this confiden",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. Name of the model requested to serve the prediction.",
-            "type": "string"
-          },
-          "payload": {
-            "description": "Required. Payload to perform a prediction on. The payload must match the problem type that the model was trained to solve.",
-            "type": "object",
-            "properties": {
-              "image": {
-                "type": "object",
-                "properties": {
-                  "content": {
-                    "description": "Image content, represented as a stream of bytes. Note: As with all ``bytes`` fields, protobuffers use a pure binary representation, whereas JSON representations use base64.",
-                    "type": "object",
-                    "reference": "bytes"
-                  },
-                  "source": {
-                    "type": "object",
-                    "properties": {
-                      "gcs_image_uri": {
-                        "description": "**Use ``image_uri`` instead.**  The Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.",
-                        "type": "string"
-                      },
-                      "image_uri": {
-                        "description": "The URI of the source image. Can be either:  1. A Google Cloud Storage URI of the form ``gs://bucket_name/object_name``. Object versioning is not supported. See `Google Cloud Storage Request URIs <https://cloud.google.com/storage/docs/reference-uris>`__ for more info.  2. A publicly-accessible image HTTP/HTTPS URL. When fetching images from HTTP/HTTPS URLs, Google cannot guarantee that the request will be completed. Your request may fail if the specified host denies the request (e.g. due to request throttling or DOS prevention), or if Google throttles requests to the site for abuse prevention. You should not depend on externally-hosted images for production applications.  When both ``gcs_image_uri`` and ``image_uri`` are specified, ``image_uri`` takes precedence.",
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              },
-              "text_snippet": {
-                "type": "object",
-                "properties": {
-                  "content": {
-                    "description": "Required. The content of the text snippet as a string. Up to 250000 characters long.",
-                    "type": "string"
-                  },
-                  "mime_type": {
-                    "description": "Optional. The format of [content][google.cloud.automl.v1beta1.TextSnippet.content]. Currently the only two allowed values are \"text/html\" and \"text/plain\". If left blank, the format is automatically determined from the type of the uploaded [content][google.cloud.automl.v1beta1.TextSnippet.content].",
-                    "type": "string"
-                  },
-                  "content_uri": {
-                    "description": "Output only. HTTP URI where you can download the content.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "content"
-                ]
-              },
-              "document": {
-                "type": "object",
-                "properties": {
-                  "type_": {
-                    "type": "enum",
-                    "name": "Type",
-                    "description": "Return policy types.\n\nValues:\n    TYPE_UNSPECIFIED (0):\n        Default value. This value is unused.\n    NUMBER_OF_DAYS_AFTER_DELIVERY (1):\n        The number of days within which a return is\n        valid after delivery.\n    NO_RETURNS (2):\n        No returns.\n    LIFETIME_RETURNS (3):\n        Life time returns.",
-                    "values": {
-                      "TYPE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "NUMBER_OF_DAYS_AFTER_DELIVERY": {
-                        "value": 1
-                      },
-                      "NO_RETURNS": {
-                        "value": 2
-                      },
-                      "LIFETIME_RETURNS": {
-                        "value": 3
-                      }
-                    }
-                  },
-                  "content": {
-                    "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.  This field is a member of `oneof`_ ``source``.",
-                    "type": "string"
-                  },
-                  "gcs_content_uri": {
-                    "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: gs://bucket_name/object_name. For more details, see https://cloud.google.com/storage/docs/reference-uris. NOTE: Cloud Storage object versioning is not supported.  This field is a member of `oneof`_ ``source``.",
-                    "type": "string"
-                  },
-                  "language_code": {
-                    "description": "Optional. The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted. `Language Support <https://cloud.google.com/natural-language/docs/languages>`__ lists currently supported languages for each API method. If the language (either specified by the caller or automatically detected) is not supported by the called API method, an ``INVALID_ARGUMENT`` error is returned.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "type_"
-                ]
-              },
-              "row": {
-                "type": "object",
-                "properties": {
-                  "cells": {
-                    "description": "Required. The list of cells that constitute the row. Must have the same length as ``columnHeaders`` for two-dimensional tables, a length of 1 for one-dimensional tables.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "no_shipping": {
-                          "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
-                          "type": "boolean"
-                        },
-                        "flat_rate": {
-                          "type": "object",
-                          "properties": {
-                            "amount_micros": {
-                              "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
-                              "type": "integer"
-                            },
-                            "currency_code": {
-                              "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "price_percentage": {
-                          "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
-                          "type": "string"
-                        },
-                        "carrier_rate": {
-                          "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
-                          "type": "string"
-                        },
-                        "subtable": {
-                          "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "required": [
-                  "cells"
-                ]
-              }
-            }
-          },
-          "params": {
-            "description": "Additional domain-specific parameters, any string must be up to 25000 characters long.  AutoML Vision Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for an image, it will only produce results that have at least this confidence score. The default is 0.5.  AutoML Vision Object Detection  ``score_threshold`` : (float) When Model detects objects on the image, it will only produce bounding boxes which have at least this confidence score. Value in 0 to 1 range, default is 0.5.  ``max_bounding_box_count`` : (int64) The maximum number of bounding boxes returned. The default is 100. The number of returned bounding boxes might be limited by the server.  AutoML Tables  ``feature_importance`` : (boolean) Whether [feature_importance][google.cloud.automl.v1.TablesModelColumnInfo.feature_importance] is populated in the returned list of [TablesAnnotation][google.cloud.automl.v1.TablesAnnotation] objects. The default is false.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "name",
-          "payload"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "BatchPredictRequest",
-      "description": "Request message for\n[PredictionService.BatchPredict][google.cloud.automl.v1.PredictionService.BatchPredict].\n\nAttributes:\n    name (str):\n        Required. Name of the model requested to\n        serve the batch prediction.\n    input_config (google.cloud.automl_v1.types.BatchPredictInputConfig):\n        Required. The input configuration for batch\n        prediction.\n    output_config (google.cloud.automl_v1.types.BatchPredictOutputConfig):\n        Required. The Configuration specifying where\n        output predictions should be written.\n    params (MutableMapping[str, str]):\n        Additional domain-specific parameters for the predictions,\n        any string must be up to 25000 characters long.\n\n        AutoML Natural Language Classification\n\n        ``score_threshold`` : (float) A value from 0.0 to 1.0. When\n        the model makes predictions for a text snippet, it will only\n        produce results that have at least this confidence score.\n        The default is 0.5.\n\n        AutoML Vision Classification\n\n ",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Required. Name of the model requested to serve the batch prediction.",
-            "type": "string"
-          },
-          "input_config": {
-            "description": "Required. The input configuration for batch prediction.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "bigquery_source": {
-                "type": "object",
-                "properties": {
-                  "partition_date": {
-                    "description": "BigQuery time partitioned table's \\_PARTITIONDATE in YYYY-MM-DD format.  Only supported in [ImportProductsRequest][google.cloud.retail.v2beta.ImportProductsRequest].  This field is a member of `oneof`_ ``partition``.",
-                    "type": "object",
-                    "reference": "google.type.date_pb2.Date"
-                  },
-                  "project_id": {
-                    "description": "The project ID (can be project # or ID) that the BigQuery source is in with a length limit of 128 characters. If not specified, inherits the project ID from the parent request.",
-                    "type": "string"
-                  },
-                  "dataset_id": {
-                    "description": "Required. The BigQuery data set to copy the data from with a length limit of 1,024 characters.",
-                    "type": "string"
-                  },
-                  "table_id": {
-                    "description": "Required. The BigQuery table to copy the data from with a length limit of 1,024 characters.",
-                    "type": "string"
-                  },
-                  "gcs_staging_dir": {
-                    "description": "Intermediate Cloud Storage directory used for the import with a length limit of 2,000 characters. Can be specified if one wants to have the BigQuery export to a specific Cloud Storage directory.",
-                    "type": "string"
-                  },
-                  "data_schema": {
-                    "description": "The schema to use when parsing the data from the source.  Supported values for product imports:  -  ``product`` (default): One JSON [Product][google.cloud.retail.v2beta.Product] per line. Each product must have a valid [Product.id][google.cloud.retail.v2beta.Product.id]. -  ``product_merchant_center``: See `Importing catalog data from Merchant Center <https://cloud.google.com/retail/recommendations-ai/docs/upload-catalog#mc>`__.  Supported values for user events imports:  -  ``user_event`` (default): One JSON [UserEvent][google.cloud.retail.v2beta.UserEvent] per line. -  ``user_event_ga360``: The schema is available here: https://support.google.com/analytics/answer/3437719. -  ``user_event_ga4``: The schema is available here: https://support.google.com/analytics/answer/7029846.  Supported values for autocomplete imports:  -  ``suggestions`` (default): One JSON completion suggestion per line. -  ``denylist``: One JSON deny suggestion per line. -  ``allowlist``: One JSON allow suggestion per line.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "dataset_id",
-                  "table_id"
-                ]
-              }
-            }
-          },
-          "output_config": {
-            "description": "Required. The Configuration specifying where output predictions should be written.",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "bigquery_destination": {
-                "type": "object",
-                "properties": {
-                  "dataset_id": {
-                    "description": "Required. The ID of a BigQuery Dataset.",
-                    "type": "string"
-                  },
-                  "table_id_prefix": {
-                    "description": "Required. The prefix of exported BigQuery tables.",
-                    "type": "string"
-                  },
-                  "table_type": {
-                    "description": "Required. Describes the table type. The following values are supported:  -  ``table``: A BigQuery native table. -  ``view``: A virtual table defined by a SQL query.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "dataset_id",
-                  "table_id_prefix",
-                  "table_type"
-                ]
-              }
-            }
-          },
-          "params": {
-            "description": "Additional domain-specific parameters for the predictions, any string must be up to 25000 characters long.  AutoML Natural Language Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for a text snippet, it will only produce results that have at least this confidence score. The default is 0.5.  AutoML Vision Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for an image, it will only produce results that have at least this confidence score. The default is 0.5.  AutoML Vision Object Detection  ``score_threshold`` : (float) When Model detects objects on the image, it will only produce bounding boxes which have at least this confidence score. Value in 0 to 1 range, default is 0.5.  ``max_bounding_box_count`` : (int64) The maximum number of bounding boxes returned per image. The default is 100, the number of bounding boxes returned might be limited by the server. AutoML Video Intelligence Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for a video, it will only produce results that have at least this confidence score. The default is 0.5.  ``segment_classification`` : (boolean) Set to true to request segment-level classification. AutoML Video Intelligence returns labels and their confidence scores for the entire segment of the video that user specified in the request configuration. The default is true.  ``shot_classification`` : (boolean) Set to true to request shot-level classification. AutoML Video Intelligence determines the boundaries for each camera shot in the entire segment of the video that user specified in the request configuration. AutoML Video Intelligence then returns labels and their confidence scores for each detected shot, along with the start and end time of the shot. The default is false.  WARNING: Model evaluation is not done for this classification type, the quality of it depends on training data, but there are no metrics provided to describe that quality.  ``1s_interval_classification`` : (boolean) Set to true to request classification for a video at one-second intervals. AutoML Video Intelligence returns labels and their confidence scores for each second of the entire segment of the video that user specified in the request configuration. The default is false.  WARNING: Model evaluation is not done for this classification type, the quality of it depends on training data, but there are no metrics provided to describe that quality.  AutoML Video Intelligence Object Tracking  ``score_threshold`` : (float) When Model detects objects on video frames, it will only produce bounding boxes which have at least this confidence score. Value in 0 to 1 range, default is 0.5.  ``max_bounding_box_count`` : (int64) The maximum number of bounding boxes returned per image. The default is 100, the number of bounding boxes returned might be limited by the server.  ``min_bounding_box_size`` : (float) Only bounding boxes with shortest edge at least that long as a relative value of video frame size are returned. Value in 0 to 1 range. Default is 0.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "name",
-          "input_config",
-          "output_config"
-        ]
-      }
-    }
-  ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-automl\\google\\cloud\\automl_v1\\types\\service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-automl/google/cloud/automl_v1/types/service.py": [
     {
       "type": "function",
       "name": "CreateDatasetRequest",
@@ -292,130 +13,146 @@
           },
           "dataset": {
             "description": "Required. The dataset to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Resource name. Format: projects/{project}/datasets/{dataset_id}",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "Human readable name, shown in the console UI.  Must be unique within a project.",
-                "type": "string"
-              },
-              "description": {
-                "description": "A description of this dataset.",
-                "type": "string"
-              },
-              "version_id": {
-                "description": "The version ID of the dataset.",
-                "type": "string"
-              },
-              "usage": {
-                "description": "Specified use case for this dataset.",
-                "type": "array",
-                "items": {
-                  "type": "enum",
-                  "name": "Usage",
-                  "description": "Usage specifies where the data is intended to be used to\ninform how to process the data.\n\nValues:\n    USAGE_UNSPECIFIED (0):\n        The usage of this dataset is not set.\n    USAGE_DATA_DRIVEN_STYLING (1):\n        This dataset will be used for data driven\n        styling.",
-                  "values": {
-                    "USAGE_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "USAGE_DATA_DRIVEN_STYLING": {
-                      "value": 1
-                    }
-                  }
-                }
-              },
-              "local_file_source": {
-                "type": "object",
-                "properties": {
-                  "filename": {
-                    "description": "The file name of the uploaded file.",
-                    "type": "string"
-                  },
-                  "file_format": {
-                    "type": "enum",
-                    "name": "FileFormat",
-                    "description": "The format of the file being uploaded.\n\nValues:\n    FILE_FORMAT_UNSPECIFIED (0):\n        Unspecified file format.\n    FILE_FORMAT_GEOJSON (1):\n        GeoJson file.\n    FILE_FORMAT_KML (2):\n        KML file.\n    FILE_FORMAT_CSV (3):\n        CSV file.",
-                    "values": {
-                      "FILE_FORMAT_UNSPECIFIED": {
-                        "value": 0
+            "reference": "google.cloud.automl_v1.types.Dataset",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "dataset_name": {
+                  "description": "The name of the dataset.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.DatasetName",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "project_id": {
+                        "description": "The project ID.",
+                        "type": "string"
                       },
-                      "FILE_FORMAT_GEOJSON": {
-                        "value": 1
-                      },
-                      "FILE_FORMAT_KML": {
-                        "value": 2
-                      },
-                      "FILE_FORMAT_CSV": {
-                        "value": 3
+                      "dataset_id": {
+                        "description": "The dataset ID within the project.",
+                        "type": "string"
                       }
                     }
-                  }
-                }
-              },
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "status": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
+                "info": {
+                  "description": "User-provided metadata for the dataset.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.DatasetInfo",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "friendly_name": {
+                        "description": "A short name for the dataset, such as\\ ``\"Analytics Data 2011\"``.",
+                        "type": "string"
                       },
-                      "AFFECTED": {
-                        "value": 1
+                      "description": {
+                        "description": "A long description, perhaps several paragraphs, describing the dataset contents in detail.",
+                        "type": "string"
                       },
-                      "NOT_AFFECTED": {
-                        "value": 2
-                      },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
+                      "labels": {
+                        "description": "Labels provided for the dataset.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
                       }
                     }
-                  },
-                  "error_message": {
-                    "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
-                    "type": "string"
+                  }
+                },
+                "create_time": {
+                  "description": "The time the dataset was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "The time the dataset was last modified.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "acl": {
+                  "description": "The access control list for the dataset.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.BigQueryAcl",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "entries": {
+                        "description": "Access control entry list.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.BigQueryAcl.Entry",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "description": "The granted role, which can be ``READER``, ``WRITER``, or ``OWNER``.",
+                                "type": "string"
+                              },
+                              "group_email": {
+                                "description": "Grants access to a group identified by an email address.",
+                                "type": "string"
+                              },
+                              "user_email": {
+                                "description": "Grants access to a user identified by an email address.",
+                                "type": "string"
+                              },
+                              "domain": {
+                                "description": "Grants access to all members of a domain.",
+                                "type": "string"
+                              },
+                              "special_group": {
+                                "description": "Grants access to special groups. Valid groups are ``PROJECT_OWNERS``, ``PROJECT_READERS``, ``PROJECT_WRITERS`` and ``ALL_AUTHENTICATED_USERS``.",
+                                "type": "string"
+                              },
+                              "view_name": {
+                                "description": "Grants access to a BigQuery View.",
+                                "type": "object",
+                                "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "project_id": {
+                                      "description": "The project ID.",
+                                      "type": "string"
+                                    },
+                                    "dataset_id": {
+                                      "description": "The dataset ID within the project.",
+                                      "type": "string"
+                                    },
+                                    "table_id": {
+                                      "description": "The table ID of the table within the dataset.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "default_table_expire_duration": {
+                  "description": "If this field is present, each table that does not specify an expiration time is assigned an expiration time by adding this duration to the table's ``createTime``. If this field is empty, there is no default table expiration time.",
+                  "type": "object",
+                  "reference": "google.protobuf.duration_pb2.Duration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
                   }
                 }
-              },
-              "create_time": {
-                "description": "Output only. Time when the dataset was first created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Time when the dataset metadata was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "version_create_time": {
-                "description": "Output only. Time when this version was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "version_description": {
-                "description": "Output only. The description for this version of dataset. It is provided when importing data to the dataset.",
-                "type": "string"
               }
             }
           }
@@ -481,130 +218,146 @@
         "properties": {
           "dataset": {
             "description": "Required. The dataset which replaces the resource on the server.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Resource name. Format: projects/{project}/datasets/{dataset_id}",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "Human readable name, shown in the console UI.  Must be unique within a project.",
-                "type": "string"
-              },
-              "description": {
-                "description": "A description of this dataset.",
-                "type": "string"
-              },
-              "version_id": {
-                "description": "The version ID of the dataset.",
-                "type": "string"
-              },
-              "usage": {
-                "description": "Specified use case for this dataset.",
-                "type": "array",
-                "items": {
-                  "type": "enum",
-                  "name": "Usage",
-                  "description": "Usage specifies where the data is intended to be used to\ninform how to process the data.\n\nValues:\n    USAGE_UNSPECIFIED (0):\n        The usage of this dataset is not set.\n    USAGE_DATA_DRIVEN_STYLING (1):\n        This dataset will be used for data driven\n        styling.",
-                  "values": {
-                    "USAGE_UNSPECIFIED": {
-                      "value": 0
-                    },
-                    "USAGE_DATA_DRIVEN_STYLING": {
-                      "value": 1
-                    }
-                  }
-                }
-              },
-              "local_file_source": {
-                "type": "object",
-                "properties": {
-                  "filename": {
-                    "description": "The file name of the uploaded file.",
-                    "type": "string"
-                  },
-                  "file_format": {
-                    "type": "enum",
-                    "name": "FileFormat",
-                    "description": "The format of the file being uploaded.\n\nValues:\n    FILE_FORMAT_UNSPECIFIED (0):\n        Unspecified file format.\n    FILE_FORMAT_GEOJSON (1):\n        GeoJson file.\n    FILE_FORMAT_KML (2):\n        KML file.\n    FILE_FORMAT_CSV (3):\n        CSV file.",
-                    "values": {
-                      "FILE_FORMAT_UNSPECIFIED": {
-                        "value": 0
+            "reference": "google.cloud.automl_v1.types.Dataset",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "dataset_name": {
+                  "description": "The name of the dataset.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.DatasetName",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "project_id": {
+                        "description": "The project ID.",
+                        "type": "string"
                       },
-                      "FILE_FORMAT_GEOJSON": {
-                        "value": 1
-                      },
-                      "FILE_FORMAT_KML": {
-                        "value": 2
-                      },
-                      "FILE_FORMAT_CSV": {
-                        "value": 3
+                      "dataset_id": {
+                        "description": "The dataset ID within the project.",
+                        "type": "string"
                       }
                     }
-                  }
-                }
-              },
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "status": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
+                "info": {
+                  "description": "User-provided metadata for the dataset.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.DatasetInfo",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "friendly_name": {
+                        "description": "A short name for the dataset, such as\\ ``\"Analytics Data 2011\"``.",
+                        "type": "string"
                       },
-                      "AFFECTED": {
-                        "value": 1
+                      "description": {
+                        "description": "A long description, perhaps several paragraphs, describing the dataset contents in detail.",
+                        "type": "string"
                       },
-                      "NOT_AFFECTED": {
-                        "value": 2
-                      },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
+                      "labels": {
+                        "description": "Labels provided for the dataset.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
                       }
                     }
-                  },
-                  "error_message": {
-                    "description": "Error message indicating reason of failure. It is empty if the datasets is not in a failed state.",
-                    "type": "string"
+                  }
+                },
+                "create_time": {
+                  "description": "The time the dataset was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "The time the dataset was last modified.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "acl": {
+                  "description": "The access control list for the dataset.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.BigQueryAcl",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "entries": {
+                        "description": "Access control entry list.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.BigQueryAcl.Entry",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "role": {
+                                "description": "The granted role, which can be ``READER``, ``WRITER``, or ``OWNER``.",
+                                "type": "string"
+                              },
+                              "group_email": {
+                                "description": "Grants access to a group identified by an email address.",
+                                "type": "string"
+                              },
+                              "user_email": {
+                                "description": "Grants access to a user identified by an email address.",
+                                "type": "string"
+                              },
+                              "domain": {
+                                "description": "Grants access to all members of a domain.",
+                                "type": "string"
+                              },
+                              "special_group": {
+                                "description": "Grants access to special groups. Valid groups are ``PROJECT_OWNERS``, ``PROJECT_READERS``, ``PROJECT_WRITERS`` and ``ALL_AUTHENTICATED_USERS``.",
+                                "type": "string"
+                              },
+                              "view_name": {
+                                "description": "Grants access to a BigQuery View.",
+                                "type": "object",
+                                "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "project_id": {
+                                      "description": "The project ID.",
+                                      "type": "string"
+                                    },
+                                    "dataset_id": {
+                                      "description": "The dataset ID within the project.",
+                                      "type": "string"
+                                    },
+                                    "table_id": {
+                                      "description": "The table ID of the table within the dataset.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "default_table_expire_duration": {
+                  "description": "If this field is present, each table that does not specify an expiration time is assigned an expiration time by adding this duration to the table's ``createTime``. If this field is empty, there is no default table expiration time.",
+                  "type": "object",
+                  "reference": "google.protobuf.duration_pb2.Duration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
                   }
                 }
-              },
-              "create_time": {
-                "description": "Output only. Time when the dataset was first created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Time when the dataset metadata was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "version_create_time": {
-                "description": "Output only. Time when this version was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "version_description": {
-                "description": "Output only. The description for this version of dataset. It is provided when importing data to the dataset.",
-                "type": "string"
               }
             }
           },
@@ -650,40 +403,105 @@
           },
           "input_config": {
             "description": "Required. The desired input location and its domain specific semantics, if any.",
-            "type": "object",
-            "properties": {
-              "gcs_source": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. URI of a Google Cloud Storage object with the format ``gs://bucket/path/to/object``.",
-                    "type": "string"
+            "reference": "google.cloud.automl_v1.types.InputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_input_configs": {
+                  "description": "Set of input BigQuery tables.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.enterpriseknowledgegraph_v1.types.BigQueryInputConfig",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "bigquery_table": {
+                          "description": "Required. Format is ``projects/*/datasets/*/tables/*``.",
+                          "type": "string"
+                        },
+                        "gcs_uri": {
+                          "description": "Required. Schema mapping file",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "bigquery_table",
+                        "gcs_uri"
+                      ]
+                    }
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
+                "entity_type": {
+                  "description": "Entity type",
+                  "type": "object",
+                  "reference": "google.cloud.enterpriseknowledgegraph_v1.types.InputConfig.EntityType",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The unique identifier of the entity type. Required for [EntityTypes.UpdateEntityType][google.cloud.dialogflow.v2.EntityTypes.UpdateEntityType] and [EntityTypes.BatchUpdateEntityTypes][google.cloud.dialogflow.v2.EntityTypes.BatchUpdateEntityTypes] methods. Format: ``projects/<Project ID>/agent/entityTypes/<Entity Type ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The name of the entity type.",
+                        "type": "string"
+                      },
+                      "kind": {
+                        "description": "Required. Indicates the kind of entity type.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.Kind"
+                      },
+                      "auto_expansion_mode": {
+                        "description": "Optional. Indicates whether the entity type can be automatically expanded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.EntityType.AutoExpansionMode"
+                      },
+                      "entities": {
+                        "description": "Optional. The collection of entity entries associated with the entity type.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.EntityType.Entity",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "synonyms"
+                            ]
+                          }
+                        }
+                      },
+                      "enable_fuzzy_extraction": {
+                        "description": "Optional. Enables fuzzy entity extraction during classification.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "kind"
+                    ]
                   }
+                },
+                "previous_result_bigquery_table": {
+                  "description": "Optional. Provide the bigquery table containing the previous results if cluster ID stability is desired. Format is ``projects/*/datasets/*/tables/*``.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           }
         },
         "required": [
@@ -705,40 +523,16 @@
           },
           "output_config": {
             "description": "Required. The desired output location.",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "uri"
-                ]
-              },
-              "data_format": {
-                "type": "enum",
-                "name": "DataFormat",
-                "description": "Data formats for input and output files.\n\nValues:\n    DATA_FORMAT_UNSPECIFIED (0):\n        Invalid value, format must not be\n        UNSPECIFIED.\n    JSON (1):\n        JavaScript Object Notation.\n    PROTO_TEXT (2):\n        Protocol Buffers text format.  See\n        https://protobuf.dev/reference/protobuf/textformat-spec/",
-                "values": {
-                  "DATA_FORMAT_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "JSON": {
-                    "value": 1
-                  },
-                  "PROTO_TEXT": {
-                    "value": 2
-                  }
+            "reference": "google.cloud.automl_v1.types.OutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bigquery_dataset": {
+                  "description": "Format is \u201cprojects/\\ */datasets/*\\ \u201d.",
+                  "type": "string"
                 }
               }
-            },
-            "required": [
-              "data_format"
-            ]
+            }
           }
         },
         "required": [
@@ -777,50 +571,121 @@
           },
           "model": {
             "description": "Required. The model to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the model, in form of ``projects/{project-number-or-id}/locations/{location_id}/models/{model_id}``",
-                "type": "string"
+            "reference": "google.cloud.automl_v1.types.Model",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Required. The fully qualified resource name of the model.  Format: ``projects/{project_number}/locations/{location_id}/catalogs/{catalog_id}/models/{model_id}`` catalog_id has char limit of 50. recommendation_model_id has char limit of 40.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the model.  Should be human readable, used to display Recommendation Models in the Retail Cloud Console Dashboard. UTF-8 encoded string with limit of 1024 characters.",
+                  "type": "string"
+                },
+                "training_state": {
+                  "description": "Optional. The training state that the model is in (e.g. ``TRAINING`` or ``PAUSED``).  Since part of the cost of running the service is frequency of training - this can be used to determine when to train model in order to control cost. If not specified: the default value for ``CreateModel`` method is ``TRAINING``. The default value for ``UpdateModel`` method is to keep the state the same as before.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.TrainingState"
+                },
+                "serving_state": {
+                  "description": "Output only. The serving state of the model: ``ACTIVE``, ``NOT_ACTIVE``.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.ServingState"
+                },
+                "create_time": {
+                  "description": "Output only. Timestamp the Recommendation Model was created at.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Timestamp the Recommendation Model was last updated. E.g. if a Recommendation Model was paused - this would be the time the pause was initiated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "type_": {
+                  "description": "Required. The type of model e.g. ``home-page``.  Currently supported values: ``recommended-for-you``, ``others-you-may-like``, ``frequently-bought-together``, ``page-optimization``, ``similar-items``, ``buy-it-again``, ``on-sale-items``, and ``recently-viewed``\\ (readonly value).  This field together with [optimization_objective][google.cloud.retail.v2.Model.optimization_objective] describe model metadata to use to control model training and serving. See https://cloud.google.com/retail/docs/models for more details on what the model metadata control and which combination of parameters are valid. For invalid combinations of parameters (e.g. type = ``frequently-bought-together`` and optimization_objective = ``ctr``), you receive an error 400 if you try to create/update a recommendation with this set of knobs.",
+                  "type": "string"
+                },
+                "optimization_objective": {
+                  "description": "Optional. The optimization objective e.g. ``cvr``.  Currently supported values: ``ctr``, ``cvr``, ``revenue-per-order``.  If not specified, we choose default based on model type. Default depends on type of recommendation:  ``recommended-for-you`` => ``ctr``  ``others-you-may-like`` => ``ctr``  ``frequently-bought-together`` => ``revenue_per_order``  This field together with [optimization_objective][google.cloud.retail.v2.Model.type] describe model metadata to use to control model training and serving. See https://cloud.google.com/retail/docs/models for more details on what the model metadata control and which combination of parameters are valid. For invalid combinations of parameters (e.g. type = ``frequently-bought-together`` and optimization_objective = ``ctr``), you receive an error 400 if you try to create/update a recommendation with this set of knobs.",
+                  "type": "string"
+                },
+                "periodic_tuning_state": {
+                  "description": "Optional. The state of periodic tuning.  The period we use is 3 months - to do a one-off tune earlier use the ``TuneModel`` method. Default value is ``PERIODIC_TUNING_ENABLED``.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.PeriodicTuningState"
+                },
+                "last_tune_time": {
+                  "description": "Output only. The timestamp when the latest successful tune finished.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "tuning_operation": {
+                  "description": "Output only. The tune operation associated with the model. Can be used to determine if there is an ongoing tune for this recommendation. Empty field implies no tune is goig on.",
+                  "type": "string"
+                },
+                "data_state": {
+                  "description": "Output only. The state of data requirements for this model: ``DATA_OK`` and ``DATA_ERROR``.  Recommendation model cannot be trained if the data is in ``DATA_ERROR`` state. Recommendation model can have ``DATA_ERROR`` state even if serving state is ``ACTIVE``: models were trained successfully before, but cannot be refreshed because model no longer has sufficient data for training.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.DataState"
+                },
+                "filtering_option": {
+                  "description": "Optional. If ``RECOMMENDATIONS_FILTERING_ENABLED``, recommendation filtering by attributes is enabled for the model.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.RecommendationsFilteringOption"
+                },
+                "serving_config_lists": {
+                  "description": "Output only. The list of valid serving configs associated with the PageOptimizationConfig.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.retail_v2.types.Model.ServingConfigList",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "serving_config_ids": {
+                          "description": "Optional. A set of valid serving configs that may be used for ``PAGE_OPTIMIZATION``.",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "model_features_config": {
+                  "description": "Optional. Additional model features config.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.ModelFeaturesConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "frequently_bought_together_config": {
+                        "description": "Additional configs for frequently-bought-together models.  This field is a member of `oneof`_ ``type_dedicated_config``.",
+                        "type": "object",
+                        "reference": "google.cloud.retail_v2.types.Model.FrequentlyBoughtTogetherFeaturesConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "context_products_type": {
+                              "description": "Optional. Specifies the context of the model when it is used in predict requests. Can only be set for the ``frequently-bought-together`` type. If it isn't specified, it defaults to [MULTIPLE_CONTEXT_PRODUCTS][google.cloud.retail.v2.Model.ContextProductsType.MULTIPLE_CONTEXT_PRODUCTS].",
+                              "type": "object",
+                              "reference": "google.cloud.retail_v2.types.Model.ContextProductsType"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               },
-              "display_name": {
-                "description": "The name of the model to show in the interface. The name can be up to 32 characters long and can consist only of ASCII Latin letters A-Z and a-z, underscores (_), and ASCII digits 0-9.",
-                "type": "string"
-              },
-              "dataset": {
-                "description": "The dataset from which the model is trained, in form of ``projects/{project-number-or-id}/locations/{location_id}/datasets/{dataset_id}``",
-                "type": "string"
-              },
-              "source_language_code": {
-                "description": "Output only. The BCP-47 language code of the source language.",
-                "type": "string"
-              },
-              "target_language_code": {
-                "description": "Output only. The BCP-47 language code of the target language.",
-                "type": "string"
-              },
-              "train_example_count": {
-                "description": "Output only. Number of examples (sentence pairs) used to train the model.",
-                "type": "integer"
-              },
-              "validate_example_count": {
-                "description": "Output only. Number of examples (sentence pairs) used to validate the model.",
-                "type": "integer"
-              },
-              "test_example_count": {
-                "description": "Output only. Number of examples (sentence pairs) used to test the model.",
-                "type": "integer"
-              },
-              "create_time": {
-                "description": "Output only. Timestamp when the model resource was created, which is also when the training started.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Timestamp when this model was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              }
+              "required": [
+                "name",
+                "display_name",
+                "type_"
+              ]
             }
           }
         },
@@ -902,50 +767,121 @@
         "properties": {
           "model": {
             "description": "Required. The model which replaces the resource on the server.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name of the model, in form of ``projects/{project-number-or-id}/locations/{location_id}/models/{model_id}``",
-                "type": "string"
+            "reference": "google.cloud.automl_v1.types.Model",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Required. The fully qualified resource name of the model.  Format: ``projects/{project_number}/locations/{location_id}/catalogs/{catalog_id}/models/{model_id}`` catalog_id has char limit of 50. recommendation_model_id has char limit of 40.",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Required. The display name of the model.  Should be human readable, used to display Recommendation Models in the Retail Cloud Console Dashboard. UTF-8 encoded string with limit of 1024 characters.",
+                  "type": "string"
+                },
+                "training_state": {
+                  "description": "Optional. The training state that the model is in (e.g. ``TRAINING`` or ``PAUSED``).  Since part of the cost of running the service is frequency of training - this can be used to determine when to train model in order to control cost. If not specified: the default value for ``CreateModel`` method is ``TRAINING``. The default value for ``UpdateModel`` method is to keep the state the same as before.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.TrainingState"
+                },
+                "serving_state": {
+                  "description": "Output only. The serving state of the model: ``ACTIVE``, ``NOT_ACTIVE``.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.ServingState"
+                },
+                "create_time": {
+                  "description": "Output only. Timestamp the Recommendation Model was created at.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. Timestamp the Recommendation Model was last updated. E.g. if a Recommendation Model was paused - this would be the time the pause was initiated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "type_": {
+                  "description": "Required. The type of model e.g. ``home-page``.  Currently supported values: ``recommended-for-you``, ``others-you-may-like``, ``frequently-bought-together``, ``page-optimization``, ``similar-items``, ``buy-it-again``, ``on-sale-items``, and ``recently-viewed``\\ (readonly value).  This field together with [optimization_objective][google.cloud.retail.v2.Model.optimization_objective] describe model metadata to use to control model training and serving. See https://cloud.google.com/retail/docs/models for more details on what the model metadata control and which combination of parameters are valid. For invalid combinations of parameters (e.g. type = ``frequently-bought-together`` and optimization_objective = ``ctr``), you receive an error 400 if you try to create/update a recommendation with this set of knobs.",
+                  "type": "string"
+                },
+                "optimization_objective": {
+                  "description": "Optional. The optimization objective e.g. ``cvr``.  Currently supported values: ``ctr``, ``cvr``, ``revenue-per-order``.  If not specified, we choose default based on model type. Default depends on type of recommendation:  ``recommended-for-you`` => ``ctr``  ``others-you-may-like`` => ``ctr``  ``frequently-bought-together`` => ``revenue_per_order``  This field together with [optimization_objective][google.cloud.retail.v2.Model.type] describe model metadata to use to control model training and serving. See https://cloud.google.com/retail/docs/models for more details on what the model metadata control and which combination of parameters are valid. For invalid combinations of parameters (e.g. type = ``frequently-bought-together`` and optimization_objective = ``ctr``), you receive an error 400 if you try to create/update a recommendation with this set of knobs.",
+                  "type": "string"
+                },
+                "periodic_tuning_state": {
+                  "description": "Optional. The state of periodic tuning.  The period we use is 3 months - to do a one-off tune earlier use the ``TuneModel`` method. Default value is ``PERIODIC_TUNING_ENABLED``.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.PeriodicTuningState"
+                },
+                "last_tune_time": {
+                  "description": "Output only. The timestamp when the latest successful tune finished.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "tuning_operation": {
+                  "description": "Output only. The tune operation associated with the model. Can be used to determine if there is an ongoing tune for this recommendation. Empty field implies no tune is goig on.",
+                  "type": "string"
+                },
+                "data_state": {
+                  "description": "Output only. The state of data requirements for this model: ``DATA_OK`` and ``DATA_ERROR``.  Recommendation model cannot be trained if the data is in ``DATA_ERROR`` state. Recommendation model can have ``DATA_ERROR`` state even if serving state is ``ACTIVE``: models were trained successfully before, but cannot be refreshed because model no longer has sufficient data for training.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.DataState"
+                },
+                "filtering_option": {
+                  "description": "Optional. If ``RECOMMENDATIONS_FILTERING_ENABLED``, recommendation filtering by attributes is enabled for the model.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.RecommendationsFilteringOption"
+                },
+                "serving_config_lists": {
+                  "description": "Output only. The list of valid serving configs associated with the PageOptimizationConfig.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.retail_v2.types.Model.ServingConfigList",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "serving_config_ids": {
+                          "description": "Optional. A set of valid serving configs that may be used for ``PAGE_OPTIMIZATION``.",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "model_features_config": {
+                  "description": "Optional. Additional model features config.",
+                  "type": "object",
+                  "reference": "google.cloud.retail_v2.types.Model.ModelFeaturesConfig",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "frequently_bought_together_config": {
+                        "description": "Additional configs for frequently-bought-together models.  This field is a member of `oneof`_ ``type_dedicated_config``.",
+                        "type": "object",
+                        "reference": "google.cloud.retail_v2.types.Model.FrequentlyBoughtTogetherFeaturesConfig",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "context_products_type": {
+                              "description": "Optional. Specifies the context of the model when it is used in predict requests. Can only be set for the ``frequently-bought-together`` type. If it isn't specified, it defaults to [MULTIPLE_CONTEXT_PRODUCTS][google.cloud.retail.v2.Model.ContextProductsType.MULTIPLE_CONTEXT_PRODUCTS].",
+                              "type": "object",
+                              "reference": "google.cloud.retail_v2.types.Model.ContextProductsType"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               },
-              "display_name": {
-                "description": "The name of the model to show in the interface. The name can be up to 32 characters long and can consist only of ASCII Latin letters A-Z and a-z, underscores (_), and ASCII digits 0-9.",
-                "type": "string"
-              },
-              "dataset": {
-                "description": "The dataset from which the model is trained, in form of ``projects/{project-number-or-id}/locations/{location_id}/datasets/{dataset_id}``",
-                "type": "string"
-              },
-              "source_language_code": {
-                "description": "Output only. The BCP-47 language code of the source language.",
-                "type": "string"
-              },
-              "target_language_code": {
-                "description": "Output only. The BCP-47 language code of the target language.",
-                "type": "string"
-              },
-              "train_example_count": {
-                "description": "Output only. Number of examples (sentence pairs) used to train the model.",
-                "type": "integer"
-              },
-              "validate_example_count": {
-                "description": "Output only. Number of examples (sentence pairs) used to validate the model.",
-                "type": "integer"
-              },
-              "test_example_count": {
-                "description": "Output only. Number of examples (sentence pairs) used to test the model.",
-                "type": "integer"
-              },
-              "create_time": {
-                "description": "Output only. Timestamp when the model resource was created, which is also when the training started.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. Timestamp when this model was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              }
+              "required": [
+                "name",
+                "display_name",
+                "type_"
+              ]
             }
           },
           "update_mask": {
@@ -969,21 +905,27 @@
         "properties": {
           "image_object_detection_model_deployment_metadata": {
             "description": "Model deployment metadata specific to Image Object Detection.  This field is a member of `oneof`_ ``model_deployment_metadata``.",
-            "type": "object",
-            "properties": {
-              "node_count": {
-                "description": "Input only. The number of nodes to deploy the model on. A node is an abstraction of a machine resource, which can handle online prediction QPS as given in the model's  [qps_per_node][google.cloud.automl.v1beta1.ImageObjectDetectionModelMetadata.qps_per_node]. Must be between 1 and 100, inclusive on both ends.",
-                "type": "integer"
+            "reference": "google.cloud.automl_v1.types.ImageObjectDetectionModelDeploymentMetadata",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "node_count": {
+                  "description": "Input only. The number of nodes to deploy the model on. A node is an abstraction of a machine resource, which can handle online prediction QPS as given in the model's [qps_per_node][google.cloud.automl.v1.ImageObjectDetectionModelMetadata.qps_per_node]. Must be between 1 and 100, inclusive on both ends.",
+                  "type": "integer"
+                }
               }
             }
           },
           "image_classification_model_deployment_metadata": {
             "description": "Model deployment metadata specific to Image Classification.  This field is a member of `oneof`_ ``model_deployment_metadata``.",
-            "type": "object",
-            "properties": {
-              "node_count": {
-                "description": "Input only. The number of nodes to deploy the model on. A node is an abstraction of a machine resource, which can handle online prediction QPS as given in the model's  [node_qps][google.cloud.automl.v1beta1.ImageClassificationModelMetadata.node_qps]. Must be between 1 and 100, inclusive on both ends.",
-                "type": "integer"
+            "reference": "google.cloud.automl_v1.types.ImageClassificationModelDeploymentMetadata",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "node_count": {
+                  "description": "Input only. The number of nodes to deploy the model on. A node is an abstraction of a machine resource, which can handle online prediction QPS as given in the model's [node_qps][google.cloud.automl.v1.ImageClassificationModelMetadata.node_qps]. Must be between 1 and 100, inclusive on both ends.",
+                  "type": "integer"
+                }
               }
             }
           },
@@ -1027,43 +969,39 @@
           },
           "output_config": {
             "description": "Required. The desired output location and configuration.",
-            "type": "object",
-            "properties": {
-              "gcs_destination": {
-                "type": "object",
-                "properties": {
-                  "uri": {
-                    "description": "Required. Google Cloud Storage URI.",
-                    "type": "string"
+            "reference": "google.cloud.automl_v1.types.ModelExportOutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_destination": {
+                  "description": "Required. The Google Cloud Storage location where the model is to be written to. This location may only be set for the following model formats: \"tflite\", \"edgetpu_tflite\", \"tf_saved_model\", \"tf_js\", \"core_ml\".  Under the directory given as the destination a new one with name \"model-export--\", where timestamp is in YYYY-MM-DDThh:mm:ss.sssZ ISO-8601 format, will be created. Inside the model and any of its supporting files will be written.  This field is a member of `oneof`_ ``destination``.",
+                  "type": "object",
+                  "reference": "google.cloud.automl_v1.types.GcsDestination",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "The URI of the Cloud Storage object. It's the same URI that is used by gsutil. For example: \"gs://bucket_name/object_name\". See `Viewing and Editing Object Metadata <https://cloud.google.com/storage/docs/viewing-editing-metadata>`__ for more information.  This field is a member of `oneof`_ ``object_uri``.",
+                        "type": "string"
+                      }
+                    }
                   }
                 },
-                "required": [
-                  "uri"
-                ]
-              },
-              "gcr_destination": {
-                "type": "object",
-                "properties": {
-                  "output_uri": {
-                    "description": "Required. Google Contained Registry URI of the new image, up to 2000 characters long. See  https: //cloud.google.com/container-registry/do // cs/pushing-and-pulling#pushing_an_image_to_a_registry Accepted forms:  -  [HOSTNAME]/[PROJECT-ID]/[IMAGE] -  [HOSTNAME]/[PROJECT-ID]/[IMAGE]:[TAG]  The requesting user must have permission to push images the project.",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "output_uri"
-                ]
-              },
-              "model_format": {
-                "description": "The format in which the model must be exported. The available, and default, formats depend on the problem and model type (if given problem and type combination doesn't have a format listed, it means its models are not exportable):  -  For Image Classification mobile-low-latency-1, mobile-versatile-1, mobile-high-accuracy-1: \"tflite\" (default), \"edgetpu_tflite\", \"tf_saved_model\", \"tf_js\", \"docker\".  -  For Image Classification mobile-core-ml-low-latency-1, mobile-core-ml-versatile-1, mobile-core-ml-high-accuracy-1: \"core_ml\" (default).  -  For Image Object Detection mobile-low-latency-1, mobile-versatile-1, mobile-high-accuracy-1: \"tflite\", \"tf_saved_model\", \"tf_js\".  -  For Video Classification cloud, \"tf_saved_model\".  -  For Video Object Tracking cloud, \"tf_saved_model\".  -  For Video Object Tracking mobile-versatile-1: \"tflite\", \"edgetpu_tflite\", \"tf_saved_model\", \"docker\".  -  For Video Object Tracking mobile-coral-versatile-1: \"tflite\", \"edgetpu_tflite\", \"docker\".  -  For Video Object Tracking mobile-coral-low-latency-1: \"tflite\", \"edgetpu_tflite\", \"docker\".  -  For Video Object Tracking mobile-jetson-versatile-1: \"tf_saved_model\", \"docker\".  -  For Tables: \"docker\".  Formats description:  -  tflite - Used for Android mobile devices. -  edgetpu_tflite - Used for `Edge TPU <https://cloud.google.com/edge-tpu/>`__ devices. -  tf_saved_model - A tensorflow model in SavedModel format. -  tf_js - A `TensorFlow.js <https://www.tensorflow.org/js>`__ model that can be used in the browser and in Node.js using JavaScript. -  docker - Used for Docker containers. Use the params field to customize the container. The container is verified to work correctly on ubuntu 16.04 operating system. See more at [containers  quickstart](https: //cloud.google.com/vision/automl/docs/containers-gcs-quickstart)  -  core_ml - Used for iOS mobile devices.",
-                "type": "string"
-              },
-              "params": {
-                "description": "Additional model-type and format specific parameters describing the requirements for the to be exported model files, any string must be up to 25000 characters long.  -  For ``docker`` format: ``cpu_architecture`` - (string) \"x86_64\" (default). ``gpu_architecture`` - (string) \"none\" (default), \"nvidia\".",
-                "type": "object",
-                "additionalProperties": {
+                "model_format": {
+                  "description": "The format in which the model must be exported. The available, and default, formats depend on the problem and model type (if given problem and type combination doesn't have a format listed, it means its models are not exportable):  -  For Image Classification mobile-low-latency-1, mobile-versatile-1, mobile-high-accuracy-1: \"tflite\" (default), \"edgetpu_tflite\", \"tf_saved_model\", \"tf_js\", \"docker\".  -  For Image Classification mobile-core-ml-low-latency-1, mobile-core-ml-versatile-1, mobile-core-ml-high-accuracy-1: \"core_ml\" (default).  -  For Image Object Detection mobile-low-latency-1, mobile-versatile-1, mobile-high-accuracy-1: \"tflite\", \"tf_saved_model\", \"tf_js\". Formats description:  -  tflite - Used for Android mobile devices.  -  edgetpu_tflite - Used for `Edge TPU <https://cloud.google.com/edge-tpu/>`__ devices.  -  tf_saved_model - A tensorflow model in SavedModel format.  -  tf_js - A `TensorFlow.js <https://www.tensorflow.org/js>`__ model that can be used in the browser and in Node.js using JavaScript.  -  docker - Used for Docker containers. Use the params field to customize the container. The container is verified to work correctly on ubuntu 16.04 operating system. See more at `containers quickstart <https://cloud.google.com/vision/automl/docs/containers-gcs-quickstart>`__  -  core_ml - Used for iOS mobile devices.",
                   "type": "string"
+                },
+                "params": {
+                  "description": "Additional model-type and format specific parameters describing the requirements for the to be exported model files, any string must be up to 25000 characters long.  -  For ``docker`` format: ``cpu_architecture`` - (string) \"x86_64\" (default). ``gpu_architecture`` - (string) \"none\" (default), \"nvidia\".",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
                 }
-              }
+              },
+              "required": [
+                "gcs_destination"
+              ]
             }
           }
         },
@@ -1117,6 +1055,279 @@
         "required": [
           "parent",
           "filter"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-automl/google/cloud/automl_v1/types/prediction_service.py": [
+    {
+      "type": "function",
+      "name": "PredictRequest",
+      "description": "Request message for\n[PredictionService.Predict][google.cloud.automl.v1.PredictionService.Predict].\n\nAttributes:\n    name (str):\n        Required. Name of the model requested to\n        serve the prediction.\n    payload (google.cloud.automl_v1.types.ExamplePayload):\n        Required. Payload to perform a prediction on.\n        The payload must match the problem type that the\n        model was trained to solve.\n    params (MutableMapping[str, str]):\n        Additional domain-specific parameters, any string must be up\n        to 25000 characters long.\n\n        AutoML Vision Classification\n\n        ``score_threshold`` : (float) A value from 0.0 to 1.0. When\n        the model makes predictions for an image, it will only\n        produce results that have at least this confidence score.\n        The default is 0.5.\n\n        AutoML Vision Object Detection\n\n        ``score_threshold`` : (float) When Model detects objects on\n        the image, it will only produce bounding boxes which have at\n        least this confiden",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the model requested to serve the prediction.",
+            "type": "string"
+          },
+          "payload": {
+            "description": "Required. Payload to perform a prediction on. The payload must match the problem type that the model was trained to solve.",
+            "reference": "google.cloud.automl_v1.types.ExamplePayload",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "description": "Example image.  This field is a member of `oneof`_ ``payload``.",
+                  "type": "object",
+                  "reference": "google.cloud.automl_v1.types.Image",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "Required. URL of the image with a length limit of 5 KiB.",
+                        "type": "string"
+                      },
+                      "height": {
+                        "description": "Optional. Height of the image in number of pixels.",
+                        "type": "integer"
+                      },
+                      "width": {
+                        "description": "Optional. Width of the image in number of pixels.",
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "uri"
+                    ]
+                  }
+                },
+                "text_snippet": {
+                  "description": "Example text.  This field is a member of `oneof`_ ``payload``.",
+                  "type": "object",
+                  "reference": "google.cloud.automl_v1.types.TextSnippet",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "content": {
+                        "description": "Required. The content of the text snippet as a string. Up to 250000 characters long.",
+                        "type": "string"
+                      },
+                      "mime_type": {
+                        "description": "Optional. The format of [content][google.cloud.automl.v1.TextSnippet.content]. Currently the only two allowed values are \"text/html\" and \"text/plain\". If left blank, the format is automatically determined from the type of the uploaded [content][google.cloud.automl.v1.TextSnippet.content].",
+                        "type": "string"
+                      },
+                      "content_uri": {
+                        "description": "Output only. HTTP URI where you can download the content.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "content"
+                    ]
+                  }
+                },
+                "document": {
+                  "description": "Example document.  This field is a member of `oneof`_ ``payload``.",
+                  "type": "object",
+                  "reference": "google.cloud.automl_v1.types.Document",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "Optional. The document resource name. The name must be empty when creating a document. Format: ``projects/<Project ID>/locations/<Location ID>/knowledgeBases/<Knowledge Base ID>/documents/<Document ID>``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Required. The display name of the document. The name must be 1024 bytes or less; otherwise, the creation request fails.",
+                        "type": "string"
+                      },
+                      "mime_type": {
+                        "description": "Required. The MIME type of this document.",
+                        "type": "string"
+                      },
+                      "knowledge_types": {
+                        "description": "Required. The knowledge type of document content.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.dialogflow_v2.types.Document.KnowledgeType"
+                        }
+                      },
+                      "content_uri": {
+                        "description": "The URI where the file content is located.  For documents stored in Google Cloud Storage, these URIs must have the form ``gs://<bucket-name>/<object-name>``.  NOTE: External URLs must correspond to public webpages, i.e., they must be indexed by Google Search. In particular, URLs for showing documents in Google Cloud Storage (i.e. the URL in your browser) are not supported. Instead use the ``gs://`` format URI described above.  This field is a member of `oneof`_ ``source``.",
+                        "type": "string"
+                      },
+                      "raw_content": {
+                        "description": "The raw content of the document. This field is only permitted for EXTRACTIVE_QA and FAQ knowledge types.  This field is a member of `oneof`_ ``source``.",
+                        "type": "object",
+                        "reference": "bytes"
+                      },
+                      "enable_auto_reload": {
+                        "description": "Optional. If true, we try to automatically reload the document every day (at a time picked by the system). If false or unspecified, we don't try to automatically reload the document.  Currently you can only enable automatic reload for documents sourced from a public url, see ``source`` field for the source types.  Reload status can be tracked in ``latest_reload_status``. If a reload fails, we will keep the document unchanged.  If a reload fails with internal errors, the system will try to reload the document on the next day. If a reload fails with non-retriable errors (e.g. PERMISSION_DENIED), the system will not try to reload the document anymore. You need to manually reload the document successfully by calling ``ReloadDocument`` and clear the errors.",
+                        "type": "boolean"
+                      },
+                      "latest_reload_status": {
+                        "description": "Output only. The time and status of the latest reload. This reload may have been triggered automatically or manually and may not have succeeded.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.Document.ReloadStatus",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "time": {
+                              "description": "The time of a reload attempt. This reload may have been triggered automatically or manually and may not have succeeded.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                            },
+                            "status": {
+                              "description": "The status of a reload attempt or the initial load.",
+                              "type": "object",
+                              "reference": "google.rpc.status_pb2.Status",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "state": {
+                                    "description": "Output only. State of the metadata job.",
+                                    "type": "object",
+                                    "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State"
+                                  },
+                                  "message": {
+                                    "description": "Output only. Message relating to the progression of a metadata job.",
+                                    "type": "string"
+                                  },
+                                  "completion_percent": {
+                                    "description": "Output only. Progress tracking.",
+                                    "type": "integer"
+                                  },
+                                  "update_time": {
+                                    "description": "Output only. The time when the status was updated.",
+                                    "type": "object",
+                                    "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "description": "Optional. Metadata for the document. The metadata supports arbitrary key-value pairs. Suggested use cases include storing a document's title, an external URL distinct from the document's content_uri, etc. The max size of a ``key`` or a ``value`` of the metadata is 1024 bytes.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "state": {
+                        "description": "Output only. The current state of the document.",
+                        "type": "object",
+                        "reference": "google.cloud.dialogflow_v2.types.Document.State"
+                      }
+                    },
+                    "required": [
+                      "display_name",
+                      "mime_type",
+                      "knowledge_types"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "params": {
+            "description": "Additional domain-specific parameters, any string must be up to 25000 characters long.  AutoML Vision Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for an image, it will only produce results that have at least this confidence score. The default is 0.5.  AutoML Vision Object Detection  ``score_threshold`` : (float) When Model detects objects on the image, it will only produce bounding boxes which have at least this confidence score. Value in 0 to 1 range, default is 0.5.  ``max_bounding_box_count`` : (int64) The maximum number of bounding boxes returned. The default is 100. The number of returned bounding boxes might be limited by the server.  AutoML Tables  ``feature_importance`` : (boolean) Whether [feature_importance][google.cloud.automl.v1.TablesModelColumnInfo.feature_importance] is populated in the returned list of [TablesAnnotation][google.cloud.automl.v1.TablesAnnotation] objects. The default is false.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "payload"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "BatchPredictRequest",
+      "description": "Request message for\n[PredictionService.BatchPredict][google.cloud.automl.v1.PredictionService.BatchPredict].\n\nAttributes:\n    name (str):\n        Required. Name of the model requested to\n        serve the batch prediction.\n    input_config (google.cloud.automl_v1.types.BatchPredictInputConfig):\n        Required. The input configuration for batch\n        prediction.\n    output_config (google.cloud.automl_v1.types.BatchPredictOutputConfig):\n        Required. The Configuration specifying where\n        output predictions should be written.\n    params (MutableMapping[str, str]):\n        Additional domain-specific parameters for the predictions,\n        any string must be up to 25000 characters long.\n\n        AutoML Natural Language Classification\n\n        ``score_threshold`` : (float) A value from 0.0 to 1.0. When\n        the model makes predictions for a text snippet, it will only\n        produce results that have at least this confidence score.\n        The default is 0.5.\n\n        AutoML Vision Classification\n\n ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. Name of the model requested to serve the batch prediction.",
+            "type": "string"
+          },
+          "input_config": {
+            "description": "Required. The input configuration for batch prediction.",
+            "reference": "google.cloud.automl_v1.types.BatchPredictInputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_source": {
+                  "description": "Required. The Google Cloud Storage location for the input content.  This field is a member of `oneof`_ ``source``.",
+                  "type": "object",
+                  "reference": "google.cloud.automl_v1.types.GcsSource",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "input_uris": {
+                        "description": "Required. Google Cloud Storage URIs to input files. URI can be up to 2000 characters long. URIs can match the full object path (for example, ``gs://bucket/directory/object.json``) or a pattern matching one or more files, such as ``gs://bucket/directory/*.json``. A request can contain at most 100 files, and each file can be up to 2 GB. See `Importing catalog information </recommendations-ai/docs/upload-catalog>`__ for the expected file format and setup instructions.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "input_uris"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "gcs_source"
+              ]
+            }
+          },
+          "output_config": {
+            "description": "Required. The Configuration specifying where output predictions should be written.",
+            "reference": "google.cloud.automl_v1.types.BatchPredictOutputConfig",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "gcs_destination": {
+                  "description": "Required. The Google Cloud Storage location of the directory where the output is to be written to.  This field is a member of `oneof`_ ``destination``.",
+                  "type": "object",
+                  "reference": "google.cloud.automl_v1.types.GcsDestination",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "description": "The URI of the Cloud Storage object. It's the same URI that is used by gsutil. For example: \"gs://bucket_name/object_name\". See `Viewing and Editing Object Metadata <https://cloud.google.com/storage/docs/viewing-editing-metadata>`__ for more information.  This field is a member of `oneof`_ ``object_uri``.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "gcs_destination"
+              ]
+            }
+          },
+          "params": {
+            "description": "Additional domain-specific parameters for the predictions, any string must be up to 25000 characters long.  AutoML Natural Language Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for a text snippet, it will only produce results that have at least this confidence score. The default is 0.5.  AutoML Vision Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for an image, it will only produce results that have at least this confidence score. The default is 0.5.  AutoML Vision Object Detection  ``score_threshold`` : (float) When Model detects objects on the image, it will only produce bounding boxes which have at least this confidence score. Value in 0 to 1 range, default is 0.5.  ``max_bounding_box_count`` : (int64) The maximum number of bounding boxes returned per image. The default is 100, the number of bounding boxes returned might be limited by the server. AutoML Video Intelligence Classification  ``score_threshold`` : (float) A value from 0.0 to 1.0. When the model makes predictions for a video, it will only produce results that have at least this confidence score. The default is 0.5.  ``segment_classification`` : (boolean) Set to true to request segment-level classification. AutoML Video Intelligence returns labels and their confidence scores for the entire segment of the video that user specified in the request configuration. The default is true.  ``shot_classification`` : (boolean) Set to true to request shot-level classification. AutoML Video Intelligence determines the boundaries for each camera shot in the entire segment of the video that user specified in the request configuration. AutoML Video Intelligence then returns labels and their confidence scores for each detected shot, along with the start and end time of the shot. The default is false.  WARNING: Model evaluation is not done for this classification type, the quality of it depends on training data, but there are no metrics provided to describe that quality.  ``1s_interval_classification`` : (boolean) Set to true to request classification for a video at one-second intervals. AutoML Video Intelligence returns labels and their confidence scores for each second of the entire segment of the video that user specified in the request configuration. The default is false.  WARNING: Model evaluation is not done for this classification type, the quality of it depends on training data, but there are no metrics provided to describe that quality.  AutoML Video Intelligence Object Tracking  ``score_threshold`` : (float) When Model detects objects on video frames, it will only produce bounding boxes which have at least this confidence score. Value in 0 to 1 range, default is 0.5.  ``max_bounding_box_count`` : (int64) The maximum number of bounding boxes returned per image. The default is 100, the number of bounding boxes returned might be limited by the server.  ``min_bounding_box_size`` : (float) Only bounding boxes with shortest edge at least that long as a relative value of video frame size are returned. Value in 0 to 1 range. Default is 0.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "input_config",
+          "output_config"
         ]
       }
     }

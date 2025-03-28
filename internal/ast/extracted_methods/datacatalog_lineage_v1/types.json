@@ -1,5 +1,5 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-datacatalog-lineage\\google\\cloud\\datacatalog_lineage_v1\\types\\lineage.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-datacatalog-lineage/google/cloud/datacatalog_lineage_v1/types/lineage.py": [
     {
       "type": "function",
       "name": "ProcessOpenLineageRunEventRequest",
@@ -40,96 +40,68 @@
           },
           "process": {
             "description": "Required. The process to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The name of resource.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The create timestamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The update timestamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "analysis": {
-                "description": "Required. Reference to an existing Analysis resource.",
-                "type": "string"
-              },
-              "attribute_overrides": {
-                "description": "Optional. Attribute overrides of the Analyzers. Format for each single override item: \"{analyzer_name}:{attribute_key}={value}\".",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.datacatalog_lineage_v1.types.Process",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name of the lineage process. Format: ``projects/{project}/locations/{location}/processes/{process}``. Can be specified or auto-assigned. {process} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
                   "type": "string"
-                }
-              },
-              "run_status": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "AFFECTED": {
-                        "value": 1
-                      },
-                      "NOT_AFFECTED": {
-                        "value": 2
-                      },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
+                },
+                "display_name": {
+                  "description": "Optional. A human-readable name you can set to display in a user interface. Must be not longer than 200 characters and only contain UTF-8 letters or numbers, spaces or characters like ``_-:&.``",
+                  "type": "string"
+                },
+                "attributes": {
+                  "description": "Optional. The attributes of the process. Should only be used for the purpose of non-semantic management (classifying, describing or labeling the process).  Up to 100 attributes are allowed.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "reference": "google.protobuf.struct_pb2.Value",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "dropdown_value": {
+                          "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
+                          "type": "integer"
+                        },
+                        "string_value": {
+                          "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
+                          "type": "string"
+                        },
+                        "number_value": {
+                          "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                          "type": "number"
+                        },
+                        "toggle_value": {
+                          "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                          "type": "boolean"
+                        }
                       }
                     }
-                  },
-                  "reason": {
-                    "description": "The reason of becoming the state.",
-                    "type": "string"
+                  }
+                },
+                "origin": {
+                  "description": "Optional. The origin of this process and its runs and lineage events.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_lineage_v1.types.Origin",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "source_type": {
+                        "description": "Type of the source.  Use of a source_type other than ``CUSTOM`` for process creation or updating is highly discouraged, and may be restricted in the future without notice.",
+                        "type": "object",
+                        "reference": "google.cloud.datacatalog_lineage_v1.types.Origin.SourceType"
+                      },
+                      "name": {
+                        "description": "If the source_type isn't CUSTOM, the value of this field should be a GCP resource name of the system, which reports lineage. The project and location parts of the resource name must match the project and location of the lineage resource being created. Examples:  -  ``{source_type: COMPOSER, name: \"projects/foo/locations/us/environments/bar\"}`` -  ``{source_type: BIGQUERY, name: \"projects/foo/locations/eu\"}`` -  ``{source_type: CUSTOM, name: \"myCustomIntegration\"}``",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
-              },
-              "run_mode": {
-                "type": "enum",
-                "name": "RunMode",
-                "description": "RunMode represents the mode to launch the Process on.\n\nValues:\n    RUN_MODE_UNSPECIFIED (0):\n        Mode is unspecified.\n    LIVE (1):\n        Live mode. Meaning the Process is launched to\n        handle live video source, and possible packet\n        drops are expected.\n    SUBMISSION (2):\n        Submission mode. Meaning the Process is\n        launched to handle bounded video files, with no\n        packet drop. Completion status is tracked.",
-                "values": {
-                  "RUN_MODE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "LIVE": {
-                    "value": 1
-                  },
-                  "SUBMISSION": {
-                    "value": 2
-                  }
-                }
-              },
-              "event_id": {
-                "description": "Optional. Event ID of the input/output streams. This is useful when you have a StreamSource/StreamSink operator in the Analysis, and you want to manually specify the Event to read from/write to.",
-                "type": "string"
-              },
-              "batch_id": {
-                "description": "Optional. Optional: Batch ID of the Process.",
-                "type": "string"
-              },
-              "retry_count": {
-                "description": "Optional. Optional: The number of retries for a process in submission mode the system should try before declaring failure. By default, no retry will be performed.",
-                "type": "integer"
               }
-            },
-            "required": [
-              "analysis"
-            ]
+            }
           },
           "request_id": {
             "description": "A unique identifier for this request. Restricted to 36 ASCII characters. A random UUID is recommended. This request is idempotent only if a ``request_id`` is provided.",
@@ -151,96 +123,68 @@
         "properties": {
           "process": {
             "description": "Required. The lineage process to update.  The process's ``name`` field is used to identify the process to update.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The name of resource.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The create timestamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The update timestamp.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "analysis": {
-                "description": "Required. Reference to an existing Analysis resource.",
-                "type": "string"
-              },
-              "attribute_overrides": {
-                "description": "Optional. Attribute overrides of the Analyzers. Format for each single override item: \"{analyzer_name}:{attribute_key}={value}\".",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.datacatalog_lineage_v1.types.Process",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name of the lineage process. Format: ``projects/{project}/locations/{location}/processes/{process}``. Can be specified or auto-assigned. {process} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
                   "type": "string"
-                }
-              },
-              "run_status": {
-                "type": "object",
-                "properties": {
-                  "state": {
-                    "type": "enum",
-                    "name": "State",
-                    "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                    "values": {
-                      "STATE_UNSPECIFIED": {
-                        "value": 0
-                      },
-                      "AFFECTED": {
-                        "value": 1
-                      },
-                      "NOT_AFFECTED": {
-                        "value": 2
-                      },
-                      "FIXED": {
-                        "value": 3
-                      },
-                      "UNDER_INVESTIGATION": {
-                        "value": 4
+                },
+                "display_name": {
+                  "description": "Optional. A human-readable name you can set to display in a user interface. Must be not longer than 200 characters and only contain UTF-8 letters or numbers, spaces or characters like ``_-:&.``",
+                  "type": "string"
+                },
+                "attributes": {
+                  "description": "Optional. The attributes of the process. Should only be used for the purpose of non-semantic management (classifying, describing or labeling the process).  Up to 100 attributes are allowed.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "reference": "google.protobuf.struct_pb2.Value",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "dropdown_value": {
+                          "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
+                          "type": "integer"
+                        },
+                        "string_value": {
+                          "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
+                          "type": "string"
+                        },
+                        "number_value": {
+                          "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                          "type": "number"
+                        },
+                        "toggle_value": {
+                          "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                          "type": "boolean"
+                        }
                       }
                     }
-                  },
-                  "reason": {
-                    "description": "The reason of becoming the state.",
-                    "type": "string"
+                  }
+                },
+                "origin": {
+                  "description": "Optional. The origin of this process and its runs and lineage events.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_lineage_v1.types.Origin",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "source_type": {
+                        "description": "Type of the source.  Use of a source_type other than ``CUSTOM`` for process creation or updating is highly discouraged, and may be restricted in the future without notice.",
+                        "type": "object",
+                        "reference": "google.cloud.datacatalog_lineage_v1.types.Origin.SourceType"
+                      },
+                      "name": {
+                        "description": "If the source_type isn't CUSTOM, the value of this field should be a GCP resource name of the system, which reports lineage. The project and location parts of the resource name must match the project and location of the lineage resource being created. Examples:  -  ``{source_type: COMPOSER, name: \"projects/foo/locations/us/environments/bar\"}`` -  ``{source_type: BIGQUERY, name: \"projects/foo/locations/eu\"}`` -  ``{source_type: CUSTOM, name: \"myCustomIntegration\"}``",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
-              },
-              "run_mode": {
-                "type": "enum",
-                "name": "RunMode",
-                "description": "RunMode represents the mode to launch the Process on.\n\nValues:\n    RUN_MODE_UNSPECIFIED (0):\n        Mode is unspecified.\n    LIVE (1):\n        Live mode. Meaning the Process is launched to\n        handle live video source, and possible packet\n        drops are expected.\n    SUBMISSION (2):\n        Submission mode. Meaning the Process is\n        launched to handle bounded video files, with no\n        packet drop. Completion status is tracked.",
-                "values": {
-                  "RUN_MODE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "LIVE": {
-                    "value": 1
-                  },
-                  "SUBMISSION": {
-                    "value": 2
-                  }
-                }
-              },
-              "event_id": {
-                "description": "Optional. Event ID of the input/output streams. This is useful when you have a StreamSource/StreamSink operator in the Analysis, and you want to manually specify the Event to read from/write to.",
-                "type": "string"
-              },
-              "batch_id": {
-                "description": "Optional. Optional: Batch ID of the Process.",
-                "type": "string"
-              },
-              "retry_count": {
-                "description": "Optional. Optional: The number of retries for a process in submission mode the system should try before declaring failure. By default, no retry will be performed.",
-                "type": "integer"
               }
-            },
-            "required": [
-              "analysis"
-            ]
+            }
           },
           "update_mask": {
             "description": "The list of fields to update. Currently not used. The whole message is updated.",
@@ -333,91 +277,68 @@
           },
           "run": {
             "description": "Required. The run to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the run. Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}``. Can be specified or auto-assigned. {run} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "Optional. A human-readable name you can set to display in a user interface. Must be not longer than 1024 characters and only contain UTF-8 letters or numbers, spaces or characters like ``_-:&.``",
-                "type": "string"
-              },
-              "attributes": {
-                "description": "Optional. The attributes of the run. Should only be used for the purpose of non-semantic management (classifying, describing or labeling the run).  Up to 100 attributes are allowed.",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.datacatalog_lineage_v1.types.Run",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name of the run. Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}``. Can be specified or auto-assigned. {run} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Optional. A human-readable name you can set to display in a user interface. Must be not longer than 1024 characters and only contain UTF-8 letters or numbers, spaces or characters like ``_-:&.``",
+                  "type": "string"
+                },
+                "attributes": {
+                  "description": "Optional. The attributes of the run. Should only be used for the purpose of non-semantic management (classifying, describing or labeling the run).  Up to 100 attributes are allowed.",
                   "type": "object",
-                  "properties": {
-                    "no_shipping": {
-                      "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
-                      "type": "boolean"
-                    },
-                    "flat_rate": {
+                  "additionalProperties": {
+                    "type": "object",
+                    "reference": "google.protobuf.struct_pb2.Value",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "amount_micros": {
-                          "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                        "dropdown_value": {
+                          "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
                           "type": "integer"
                         },
-                        "currency_code": {
-                          "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                        "string_value": {
+                          "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
                           "type": "string"
+                        },
+                        "number_value": {
+                          "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                          "type": "number"
+                        },
+                        "toggle_value": {
+                          "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                          "type": "boolean"
                         }
                       }
-                    },
-                    "price_percentage": {
-                      "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
-                      "type": "string"
-                    },
-                    "carrier_rate": {
-                      "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
-                      "type": "string"
-                    },
-                    "subtable": {
-                      "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
-                      "type": "string"
                     }
                   }
+                },
+                "start_time": {
+                  "description": "Required. The timestamp of the start of the run.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "Optional. The timestamp of the end of the run.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "state": {
+                  "description": "Required. The state of the run.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_lineage_v1.types.Run.State"
                 }
               },
-              "start_time": {
-                "description": "Required. The timestamp of the start of the run.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "Optional. The timestamp of the end of the run.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
-                  }
-                }
-              }
-            },
-            "required": [
-              "start_time",
-              "state"
-            ]
+              "required": [
+                "start_time",
+                "state"
+              ]
+            }
           },
           "request_id": {
             "description": "A unique identifier for this request. Restricted to 36 ASCII characters. A random UUID is recommended. This request is idempotent only if a ``request_id`` is provided.",
@@ -439,91 +360,68 @@
         "properties": {
           "run": {
             "description": "Required. The lineage run to update.  The run's ``name`` field is used to identify the run to update.  Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}``.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the run. Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}``. Can be specified or auto-assigned. {run} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "Optional. A human-readable name you can set to display in a user interface. Must be not longer than 1024 characters and only contain UTF-8 letters or numbers, spaces or characters like ``_-:&.``",
-                "type": "string"
-              },
-              "attributes": {
-                "description": "Optional. The attributes of the run. Should only be used for the purpose of non-semantic management (classifying, describing or labeling the run).  Up to 100 attributes are allowed.",
-                "type": "object",
-                "additionalProperties": {
+            "reference": "google.cloud.datacatalog_lineage_v1.types.Run",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name of the run. Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}``. Can be specified or auto-assigned. {run} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Optional. A human-readable name you can set to display in a user interface. Must be not longer than 1024 characters and only contain UTF-8 letters or numbers, spaces or characters like ``_-:&.``",
+                  "type": "string"
+                },
+                "attributes": {
+                  "description": "Optional. The attributes of the run. Should only be used for the purpose of non-semantic management (classifying, describing or labeling the run).  Up to 100 attributes are allowed.",
                   "type": "object",
-                  "properties": {
-                    "no_shipping": {
-                      "description": "If true, then the product can't be shipped. Must be true when set, can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_no_shipping``.",
-                      "type": "boolean"
-                    },
-                    "flat_rate": {
+                  "additionalProperties": {
+                    "type": "object",
+                    "reference": "google.protobuf.struct_pb2.Value",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "amount_micros": {
-                          "description": "The price represented as a number in micros (1 million micros is an equivalent to one's currency standard unit, for example, 1 USD = 1000000 micros).  This field is a member of `oneof`_ ``_amount_micros``.",
+                        "dropdown_value": {
+                          "description": "The custom_field_option_id, if the CustomFieldDataType is DROPDOWN.  This field is a member of `oneof`_ ``value``.",
                           "type": "integer"
                         },
-                        "currency_code": {
-                          "description": "The currency of the price using three-letter acronyms according to `ISO 4217 <http://en.wikipedia.org/wiki/ISO_4217>`__.  This field is a member of `oneof`_ ``_currency_code``.",
+                        "string_value": {
+                          "description": "The value, if the CustomFieldDataType is STRING.  This field is a member of `oneof`_ ``value``.",
                           "type": "string"
+                        },
+                        "number_value": {
+                          "description": "The value, if the CustomFieldDataType is NUMBER.  This field is a member of `oneof`_ ``value``.",
+                          "type": "number"
+                        },
+                        "toggle_value": {
+                          "description": "The value, if the CustomFieldDataType is TOGGLE.  This field is a member of `oneof`_ ``value``.",
+                          "type": "boolean"
                         }
                       }
-                    },
-                    "price_percentage": {
-                      "description": "A percentage of the price represented as a number in decimal notation (For example, ``\"5.4\"``). Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_price_percentage``.",
-                      "type": "string"
-                    },
-                    "carrier_rate": {
-                      "description": "The name of a carrier rate referring to a carrier rate defined in the same rate group. Can only be set if all other fields are not set.  This field is a member of `oneof`_ ``_carrier_rate``.",
-                      "type": "string"
-                    },
-                    "subtable": {
-                      "description": "The name of a subtable. Can only be set in table cells (For example, not for single values), and only if all other fields are not set.  This field is a member of `oneof`_ ``_subtable``.",
-                      "type": "string"
                     }
                   }
+                },
+                "start_time": {
+                  "description": "Required. The timestamp of the start of the run.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "Optional. The timestamp of the end of the run.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "state": {
+                  "description": "Required. The state of the run.",
+                  "type": "object",
+                  "reference": "google.cloud.datacatalog_lineage_v1.types.Run.State"
                 }
               },
-              "start_time": {
-                "description": "Required. The timestamp of the start of the run.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "Optional. The timestamp of the end of the run.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
-                  }
-                }
-              }
-            },
-            "required": [
-              "start_time",
-              "state"
-            ]
+              "required": [
+                "start_time",
+                "state"
+              ]
+            }
           },
           "update_mask": {
             "description": "The list of fields to update. Currently not used. The whole message is updated.",
@@ -616,63 +514,80 @@
           },
           "lineage_event": {
             "description": "Required. The lineage event to create.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Immutable. The resource name of the lineage event. Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}/lineageEvents/{lineage_event}``. Can be specified or auto-assigned. {lineage_event} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
-                "type": "string"
-              },
-              "links": {
-                "description": "Optional. List of source-target pairs. Can't contain more than 100 tuples.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "source": {
+            "reference": "google.cloud.datacatalog_lineage_v1.types.LineageEvent",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name of the lineage event. Format: ``projects/{project}/locations/{location}/processes/{process}/runs/{run}/lineageEvents/{lineage_event}``. Can be specified or auto-assigned. {lineage_event} must be not longer than 200 characters and only contain characters in a set: ``a-zA-Z0-9_-:.``",
+                  "type": "string"
+                },
+                "links": {
+                  "description": "Optional. List of source-target pairs. Can't contain more than 100 tuples.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.datacatalog_lineage_v1.types.EventLink",
+                    "resolved_schema": {
                       "type": "object",
                       "properties": {
-                        "fully_qualified_name": {
-                          "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
-                          "type": "string"
+                        "source": {
+                          "description": "Required. Reference to the source entity",
+                          "type": "object",
+                          "reference": "google.cloud.datacatalog_lineage_v1.types.EntityReference",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "fully_qualified_name": {
+                                "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "fully_qualified_name"
+                            ]
+                          }
+                        },
+                        "target": {
+                          "description": "Required. Reference to the target entity",
+                          "type": "object",
+                          "reference": "google.cloud.datacatalog_lineage_v1.types.EntityReference",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "fully_qualified_name": {
+                                "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "fully_qualified_name"
+                            ]
+                          }
                         }
                       },
                       "required": [
-                        "fully_qualified_name"
-                      ]
-                    },
-                    "target": {
-                      "type": "object",
-                      "properties": {
-                        "fully_qualified_name": {
-                          "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "fully_qualified_name"
+                        "source",
+                        "target"
                       ]
                     }
-                  },
-                  "required": [
-                    "source",
-                    "target"
-                  ]
+                  }
+                },
+                "start_time": {
+                  "description": "Required. The beginning of the transformation which resulted in this lineage event. For streaming scenarios, it should be the beginning of the period from which the lineage is being reported.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "end_time": {
+                  "description": "Optional. The end of the transformation which resulted in this lineage event.  For streaming scenarios, it should be the end of the period from which the lineage is being reported.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
                 }
               },
-              "start_time": {
-                "description": "Required. The beginning of the transformation which resulted in this lineage event. For streaming scenarios, it should be the beginning of the period from which the lineage is being reported.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "end_time": {
-                "description": "Optional. The end of the transformation which resulted in this lineage event.  For streaming scenarios, it should be the end of the period from which the lineage is being reported.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              }
-            },
-            "required": [
-              "start_time"
-            ]
+              "required": [
+                "start_time"
+              ]
+            }
           },
           "request_id": {
             "description": "A unique identifier for this request. Restricted to 36 ASCII characters. A random UUID is recommended. This request is idempotent only if a ``request_id`` is provided.",
@@ -761,29 +676,35 @@
           },
           "source": {
             "description": "Optional. Send asset information in the **source** field to retrieve all links that lead from the specified asset to downstream assets.  This field is a member of `oneof`_ ``criteria``.",
-            "type": "object",
-            "properties": {
-              "fully_qualified_name": {
-                "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "fully_qualified_name"
-            ]
+            "reference": "google.cloud.datacatalog_lineage_v1.types.EntityReference",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "fully_qualified_name": {
+                  "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "fully_qualified_name"
+              ]
+            }
           },
           "target": {
             "description": "Optional. Send asset information in the **target** field to retrieve all links that lead from upstream assets to the specified asset.  This field is a member of `oneof`_ ``criteria``.",
-            "type": "object",
-            "properties": {
-              "fully_qualified_name": {
-                "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "fully_qualified_name"
-            ]
+            "reference": "google.cloud.datacatalog_lineage_v1.types.EntityReference",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "fully_qualified_name": {
+                  "description": "Required. `Fully Qualified Name (FQN) <https://cloud.google.com/data-catalog/docs/fully-qualified-names>`__ of the entity.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "fully_qualified_name"
+              ]
+            }
           },
           "page_size": {
             "description": "Optional. The maximum number of links to return in a single page of the response. A page may contain fewer links than this value. If unspecified, at most 10 links are returned.  Maximum value is 100; values greater than 100 are reduced to 100.",

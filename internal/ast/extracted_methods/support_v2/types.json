@@ -1,18 +1,18 @@
 {
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-support\\google\\cloud\\support_v2\\types\\attachment_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-support/google/cloud/support_v2/types/comment_service.py": [
     {
       "type": "function",
-      "name": "ListAttachmentsRequest",
-      "description": "The request message for the ListAttachments endpoint.\n\nAttributes:\n    parent (str):\n        Required. The resource name of Case object\n        for which attachments should be listed.\n    page_size (int):\n        The maximum number of attachments fetched\n        with each request. If not provided, the default\n        is 10. The maximum page size that will be\n        returned is 100.\n    page_token (str):\n        A token identifying the page of results to\n        return. If unspecified, the first page is\n        retrieved.",
+      "name": "ListCommentsRequest",
+      "description": "The request message for the ListComments endpoint.\n\nAttributes:\n    parent (str):\n        Required. The resource name of Case object\n        for which comments should be listed.\n    page_size (int):\n        The maximum number of comments fetched with\n        each request. Defaults to 10.\n    page_token (str):\n        A token identifying the page of results to\n        return. If unspecified, the first page is\n        retrieved.",
       "parameters": {
         "type": "object",
         "properties": {
           "parent": {
-            "description": "Required. The resource name of Case object for which attachments should be listed.",
+            "description": "Required. The resource name of Case object for which comments should be listed.",
             "type": "string"
           },
           "page_size": {
-            "description": "The maximum number of attachments fetched with each request. If not provided, the default is 10. The maximum page size that will be returned is 100.",
+            "description": "The maximum number of comments fetched with each request. Defaults to 10.",
             "type": "integer"
           },
           "page_token": {
@@ -24,9 +24,93 @@
           "parent"
         ]
       }
+    },
+    {
+      "type": "function",
+      "name": "CreateCommentRequest",
+      "description": "The request message for CreateComment endpoint.\n\nAttributes:\n    parent (str):\n        Required. The resource name of Case to which\n        this comment should be added.\n    comment (google.cloud.support_v2.types.Comment):\n        Required. The Comment object to be added to\n        this Case.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The resource name of Case to which this comment should be added.",
+            "type": "string"
+          },
+          "comment": {
+            "description": "Required. The Comment object to be added to this Case.",
+            "reference": "google.cloud.support_v2.types.Comment",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Identifier. Name of this comment. Format: ``projects/{project}/locations/{location}/orders/{order}/comments/{comment}``",
+                  "type": "string"
+                },
+                "create_time": {
+                  "description": "Output only. Time when this comment was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "labels": {
+                  "description": "Optional. Labels associated with this comment as key value pairs. For more information about labels, see `Create and manage labels <https://cloud.google.com/resource-manager/docs/creating-managing-labels>`__.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "author": {
+                  "description": "Output only. Username of the author of this comment. This is auto-populated from the credentials used during creation of the comment.",
+                  "type": "string"
+                },
+                "text": {
+                  "description": "Required. Text of this comment. The length of text must be <= 1000 characters.",
+                  "type": "string"
+                },
+                "customer_viewed_time": {
+                  "description": "Output only. Timestamp of the first time this comment was viewed by the customer. If the comment wasn't viewed then this timestamp will be unset.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "author_entity": {
+                  "description": "Output only. The entity the author belongs to.",
+                  "type": "object",
+                  "reference": "google.cloud.gdchardwaremanagement_v1alpha.types.Entity",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "description": "Required. The primary value associated with this entity entry. For example, if the entity type is *vegetable*, the value could be *scallions*.  For ``KIND_MAP`` entity types:  -  A reference value to be used in place of synonyms.  For ``KIND_LIST`` entity types:  -  A string that can contain references to other entity types (with or without aliases).",
+                        "type": "string"
+                      },
+                      "synonyms": {
+                        "description": "Required. A collection of value synonyms. For example, if the entity type is *vegetable*, and ``value`` is *scallions*, a synonym could be *green onions*.  For ``KIND_LIST`` entity types:  -  This collection must contain exactly one synonym equal to ``value``.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "synonyms"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        },
+        "required": [
+          "parent",
+          "comment"
+        ]
+      }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-support\\google\\cloud\\support_v2\\types\\case_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-support/google/cloud/support_v2/types/case_service.py": [
     {
       "type": "function",
       "name": "GetCaseRequest",
@@ -57,132 +141,108 @@
           },
           "case": {
             "description": "Required. The case to be created.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name for the case.",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "The short summary of the issue reported in this case.",
-                "type": "string"
-              },
-              "description": {
-                "description": "A broad description of the issue.",
-                "type": "string"
-              },
-              "classification": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "description": "The unique ID for a classification. Must be specified for case creation.  To retrieve valid classification IDs for case creation, use ``caseClassifications.search``.",
-                    "type": "string"
-                  },
-                  "display_name": {
-                    "description": "The display name of the classification.",
-                    "type": "string"
-                  }
-                }
-              },
-              "time_zone": {
-                "description": "The timezone of the user who created the support case. It should be in a format IANA recognizes: https://www.iana.org/time-zones. There is no additional validation done by the API.",
-                "type": "string"
-              },
-              "subscriber_email_addresses": {
-                "description": "The email addresses to receive updates on this case.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.support_v2.types.Case",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name for the case.",
                   "type": "string"
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
+                },
+                "display_name": {
+                  "description": "The short summary of the issue reported in this case.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "A broad description of the issue.",
+                  "type": "string"
+                },
+                "classification": {
+                  "description": "The issue classification applicable to this case.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.CaseClassification",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "The unique ID for a classification. Must be specified for case creation.  To retrieve valid classification IDs for case creation, use ``caseClassifications.search``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "The display name of the classification.",
+                        "type": "string"
+                      }
+                    }
                   }
-                }
-              },
-              "create_time": {
-                "description": "Output only. The time this case was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The time this case was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "creator": {
-                "type": "object",
-                "properties": {
-                  "display_name": {
-                    "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                },
+                "time_zone": {
+                  "description": "The timezone of the user who created the support case. It should be in a format IANA recognizes: https://www.iana.org/time-zones. There is no additional validation done by the API.",
+                  "type": "string"
+                },
+                "subscriber_email_addresses": {
+                  "description": "The email addresses to receive updates on this case.",
+                  "type": "array",
+                  "items": {
                     "type": "string"
-                  },
-                  "email": {
-                    "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
-                    "type": "string"
-                  },
-                  "google_support": {
-                    "description": "Output only. Whether the actor is a Google support actor.",
-                    "type": "boolean"
                   }
-                }
-              },
-              "contact_email": {
-                "description": "A user-supplied email address to send case update notifications for. This should only be used in BYOID flows, where we cannot infer the user's email address directly from their EUCs.",
-                "type": "string"
-              },
-              "escalated": {
-                "description": "Whether the case is currently escalated.",
-                "type": "boolean"
-              },
-              "test_case": {
-                "description": "Whether this case was created for internal API testing and should not be acted on by the support team.",
-                "type": "boolean"
-              },
-              "language_code": {
-                "description": "The language the user has requested to receive support in. This should be a BCP 47 language code (e.g., ``\"en\"``, ``\"zh-CN\"``, ``\"zh-TW\"``, ``\"ja\"``, ``\"ko\"``). If no language or an unsupported language is specified, this field defaults to English (en).  Language selection during case creation may affect your available support options. For a list of supported languages and their support working hours, see: https://cloud.google.com/support/docs/language-working-hours",
-                "type": "string"
-              },
-              "priority": {
-                "type": "enum",
-                "name": "Priority",
-                "description": "The case Priority. P0 is most urgent and P4 the least.\n\nValues:\n    PRIORITY_UNSPECIFIED (0):\n        Priority is undefined or has not been set\n        yet.\n    P0 (1):\n        Extreme impact on a production service.\n        Service is hard down.\n    P1 (2):\n        Critical impact on a production service.\n        Service is currently unusable.\n    P2 (3):\n        Severe impact on a production service.\n        Service is usable but greatly impaired.\n    P3 (4):\n        Medium impact on a production service.\n        Service is available, but moderately impaired.\n    P4 (5):\n        General questions or minor issues.\n        Production service is fully available.",
-                "values": {
-                  "PRIORITY_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "P0": {
-                    "value": 1
-                  },
-                  "P1": {
-                    "value": 2
-                  },
-                  "P2": {
-                    "value": 3
-                  },
-                  "P3": {
-                    "value": 4
-                  },
-                  "P4": {
-                    "value": 5
+                },
+                "state": {
+                  "description": "Output only. The current status of the support case.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Case.State"
+                },
+                "create_time": {
+                  "description": "Output only. The time this case was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. The time this case was last updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "creator": {
+                  "description": "The user who created the case.  Note: The name and email will be obfuscated if the case was created by Google Support.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Actor",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "display_name": {
+                        "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                        "type": "string"
+                      },
+                      "email": {
+                        "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                        "type": "string"
+                      },
+                      "google_support": {
+                        "description": "Output only. Whether the actor is a Google support actor.",
+                        "type": "boolean"
+                      }
+                    }
                   }
+                },
+                "contact_email": {
+                  "description": "A user-supplied email address to send case update notifications for. This should only be used in BYOID flows, where we cannot infer the user's email address directly from their EUCs.",
+                  "type": "string"
+                },
+                "escalated": {
+                  "description": "Whether the case is currently escalated.",
+                  "type": "boolean"
+                },
+                "test_case": {
+                  "description": "Whether this case was created for internal API testing and should not be acted on by the support team.",
+                  "type": "boolean"
+                },
+                "language_code": {
+                  "description": "The language the user has requested to receive support in. This should be a BCP 47 language code (e.g., ``\"en\"``, ``\"zh-CN\"``, ``\"zh-TW\"``, ``\"ja\"``, ``\"ko\"``). If no language or an unsupported language is specified, this field defaults to English (en).  Language selection during case creation may affect your available support options. For a list of supported languages and their support working hours, see: https://cloud.google.com/support/docs/language-working-hours",
+                  "type": "string"
+                },
+                "priority": {
+                  "description": "The priority of this case.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Case.Priority"
                 }
               }
             }
@@ -262,61 +322,43 @@
           },
           "escalation": {
             "description": "The escalation object to be sent with the escalation request.",
-            "type": "object",
-            "properties": {
-              "reason": {
-                "type": "object",
-                "properties": {
-                  "code": {
-                    "type": "enum",
-                    "name": "Code",
-                    "description": "Code identifying the reason type. The order here is\nmeaningless. In particular, it gives no indication of whether a\ngiven reason will appear before another in the solution, if both\napply.\n\nValues:\n    CODE_UNSPECIFIED (0):\n        This should never be used.\n    NO_VEHICLE (1):\n        There is no vehicle in the model making all\n        shipments infeasible.\n    DEMAND_EXCEEDS_VEHICLE_CAPACITY (2):\n        The demand of the shipment exceeds a vehicle's capacity for\n        some capacity types, one of which is\n        ``example_exceeded_capacity_type``.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT (3):\n        The minimum distance necessary to perform this shipment,\n        i.e. from the vehicle's ``start_location`` to the shipment's\n        pickup and/or delivery locations and to the vehicle's end\n        location exceeds the vehicle's ``route_distance_limit``.\n\n        Note that for this computation we use the geodesic\n        distances.\n    CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT (4):\n    ",
-                    "values": {
-                      "CODE_UNSPECIFIED": {
-                        "value": 0
+            "reference": "google.cloud.support_v2.types.Escalation",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "description": "Required. The reason why the Case is being escalated.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Escalation.Reason",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "description": "Refer to the comments of Code.",
+                        "type": "object",
+                        "reference": "google.cloud.optimization_v1.types.SkippedShipment.Reason.Code"
                       },
-                      "NO_VEHICLE": {
-                        "value": 1
+                      "example_vehicle_index": {
+                        "description": "If the reason is related to a shipment-vehicle incompatibility, this field provides the index of one relevant vehicle.  This field is a member of `oneof`_ ``_example_vehicle_index``.",
+                        "type": "integer"
                       },
-                      "DEMAND_EXCEEDS_VEHICLE_CAPACITY": {
-                        "value": 2
-                      },
-                      "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DISTANCE_LIMIT": {
-                        "value": 3
-                      },
-                      "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_DURATION_LIMIT": {
-                        "value": 4
-                      },
-                      "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TRAVEL_DURATION_LIMIT": {
-                        "value": 5
-                      },
-                      "CANNOT_BE_PERFORMED_WITHIN_VEHICLE_TIME_WINDOWS": {
-                        "value": 6
-                      },
-                      "VEHICLE_NOT_ALLOWED": {
-                        "value": 7
+                      "example_exceeded_capacity_type": {
+                        "description": "If the reason code is ``DEMAND_EXCEEDS_VEHICLE_CAPACITY``, documents one capacity type that is exceeded.",
+                        "type": "string"
                       }
                     }
-                  },
-                  "example_vehicle_index": {
-                    "description": "If the reason is related to a shipment-vehicle incompatibility, this field provides the index of one relevant vehicle.  This field is a member of `oneof`_ ``_example_vehicle_index``.",
-                    "type": "integer"
-                  },
-                  "example_exceeded_capacity_type": {
-                    "description": "If the reason code is ``DEMAND_EXCEEDS_VEHICLE_CAPACITY``, documents one capacity type that is exceeded.",
-                    "type": "string"
                   }
+                },
+                "justification": {
+                  "description": "Required. A free text description to accompany the ``reason`` field above. Provides additional context on why the case is being escalated.",
+                  "type": "string"
                 }
               },
-              "justification": {
-                "description": "Required. A free text description to accompany the ``reason`` field above. Provides additional context on why the case is being escalated.",
-                "type": "string"
-              }
-            },
-            "required": [
-              "reason",
-              "justification"
-            ]
+              "required": [
+                "reason",
+                "justification"
+              ]
+            }
           }
         },
         "required": [
@@ -333,132 +375,108 @@
         "properties": {
           "case": {
             "description": "Required. The case object to update.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "The resource name for the case.",
-                "type": "string"
-              },
-              "display_name": {
-                "description": "The short summary of the issue reported in this case.",
-                "type": "string"
-              },
-              "description": {
-                "description": "A broad description of the issue.",
-                "type": "string"
-              },
-              "classification": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "description": "The unique ID for a classification. Must be specified for case creation.  To retrieve valid classification IDs for case creation, use ``caseClassifications.search``.",
-                    "type": "string"
-                  },
-                  "display_name": {
-                    "description": "The display name of the classification.",
-                    "type": "string"
-                  }
-                }
-              },
-              "time_zone": {
-                "description": "The timezone of the user who created the support case. It should be in a format IANA recognizes: https://www.iana.org/time-zones. There is no additional validation done by the API.",
-                "type": "string"
-              },
-              "subscriber_email_addresses": {
-                "description": "The email addresses to receive updates on this case.",
-                "type": "array",
-                "items": {
+            "reference": "google.cloud.support_v2.types.Case",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The resource name for the case.",
                   "type": "string"
-                }
-              },
-              "state": {
-                "type": "enum",
-                "name": "State",
-                "description": "Provides the state of this Vulnerability assessment.\n\nValues:\n    STATE_UNSPECIFIED (0):\n        No state is specified.\n    AFFECTED (1):\n        This product is known to be affected by this\n        vulnerability.\n    NOT_AFFECTED (2):\n        This product is known to be not affected by\n        this vulnerability.\n    FIXED (3):\n        This product contains a fix for this\n        vulnerability.\n    UNDER_INVESTIGATION (4):\n        It is not known yet whether these versions\n        are or are not affected by the vulnerability.\n        However, it is still under investigation.",
-                "values": {
-                  "STATE_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "AFFECTED": {
-                    "value": 1
-                  },
-                  "NOT_AFFECTED": {
-                    "value": 2
-                  },
-                  "FIXED": {
-                    "value": 3
-                  },
-                  "UNDER_INVESTIGATION": {
-                    "value": 4
+                },
+                "display_name": {
+                  "description": "The short summary of the issue reported in this case.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "A broad description of the issue.",
+                  "type": "string"
+                },
+                "classification": {
+                  "description": "The issue classification applicable to this case.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.CaseClassification",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "The unique ID for a classification. Must be specified for case creation.  To retrieve valid classification IDs for case creation, use ``caseClassifications.search``.",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "The display name of the classification.",
+                        "type": "string"
+                      }
+                    }
                   }
-                }
-              },
-              "create_time": {
-                "description": "Output only. The time this case was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "update_time": {
-                "description": "Output only. The time this case was last updated.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "creator": {
-                "type": "object",
-                "properties": {
-                  "display_name": {
-                    "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                },
+                "time_zone": {
+                  "description": "The timezone of the user who created the support case. It should be in a format IANA recognizes: https://www.iana.org/time-zones. There is no additional validation done by the API.",
+                  "type": "string"
+                },
+                "subscriber_email_addresses": {
+                  "description": "The email addresses to receive updates on this case.",
+                  "type": "array",
+                  "items": {
                     "type": "string"
-                  },
-                  "email": {
-                    "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
-                    "type": "string"
-                  },
-                  "google_support": {
-                    "description": "Output only. Whether the actor is a Google support actor.",
-                    "type": "boolean"
                   }
-                }
-              },
-              "contact_email": {
-                "description": "A user-supplied email address to send case update notifications for. This should only be used in BYOID flows, where we cannot infer the user's email address directly from their EUCs.",
-                "type": "string"
-              },
-              "escalated": {
-                "description": "Whether the case is currently escalated.",
-                "type": "boolean"
-              },
-              "test_case": {
-                "description": "Whether this case was created for internal API testing and should not be acted on by the support team.",
-                "type": "boolean"
-              },
-              "language_code": {
-                "description": "The language the user has requested to receive support in. This should be a BCP 47 language code (e.g., ``\"en\"``, ``\"zh-CN\"``, ``\"zh-TW\"``, ``\"ja\"``, ``\"ko\"``). If no language or an unsupported language is specified, this field defaults to English (en).  Language selection during case creation may affect your available support options. For a list of supported languages and their support working hours, see: https://cloud.google.com/support/docs/language-working-hours",
-                "type": "string"
-              },
-              "priority": {
-                "type": "enum",
-                "name": "Priority",
-                "description": "The case Priority. P0 is most urgent and P4 the least.\n\nValues:\n    PRIORITY_UNSPECIFIED (0):\n        Priority is undefined or has not been set\n        yet.\n    P0 (1):\n        Extreme impact on a production service.\n        Service is hard down.\n    P1 (2):\n        Critical impact on a production service.\n        Service is currently unusable.\n    P2 (3):\n        Severe impact on a production service.\n        Service is usable but greatly impaired.\n    P3 (4):\n        Medium impact on a production service.\n        Service is available, but moderately impaired.\n    P4 (5):\n        General questions or minor issues.\n        Production service is fully available.",
-                "values": {
-                  "PRIORITY_UNSPECIFIED": {
-                    "value": 0
-                  },
-                  "P0": {
-                    "value": 1
-                  },
-                  "P1": {
-                    "value": 2
-                  },
-                  "P2": {
-                    "value": 3
-                  },
-                  "P3": {
-                    "value": 4
-                  },
-                  "P4": {
-                    "value": 5
+                },
+                "state": {
+                  "description": "Output only. The current status of the support case.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Case.State"
+                },
+                "create_time": {
+                  "description": "Output only. The time this case was created.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "update_time": {
+                  "description": "Output only. The time this case was last updated.",
+                  "type": "object",
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                },
+                "creator": {
+                  "description": "The user who created the case.  Note: The name and email will be obfuscated if the case was created by Google Support.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Actor",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "display_name": {
+                        "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                        "type": "string"
+                      },
+                      "email": {
+                        "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
+                        "type": "string"
+                      },
+                      "google_support": {
+                        "description": "Output only. Whether the actor is a Google support actor.",
+                        "type": "boolean"
+                      }
+                    }
                   }
+                },
+                "contact_email": {
+                  "description": "A user-supplied email address to send case update notifications for. This should only be used in BYOID flows, where we cannot infer the user's email address directly from their EUCs.",
+                  "type": "string"
+                },
+                "escalated": {
+                  "description": "Whether the case is currently escalated.",
+                  "type": "boolean"
+                },
+                "test_case": {
+                  "description": "Whether this case was created for internal API testing and should not be acted on by the support team.",
+                  "type": "boolean"
+                },
+                "language_code": {
+                  "description": "The language the user has requested to receive support in. This should be a BCP 47 language code (e.g., ``\"en\"``, ``\"zh-CN\"``, ``\"zh-TW\"``, ``\"ja\"``, ``\"ko\"``). If no language or an unsupported language is specified, this field defaults to English (en).  Language selection during case creation may affect your available support options. For a list of supported languages and their support working hours, see: https://cloud.google.com/support/docs/language-working-hours",
+                  "type": "string"
+                },
+                "priority": {
+                  "description": "The priority of this case.",
+                  "type": "object",
+                  "reference": "google.cloud.support_v2.types.Case.Priority"
                 }
               }
             }
@@ -514,20 +532,20 @@
       }
     }
   ],
-  "\\Users\\AMD\\vidhra\\internal\\ast\\google-cloud-python\\packages\\google-cloud-support\\google\\cloud\\support_v2\\types\\comment_service.py": [
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-support/google/cloud/support_v2/types/attachment_service.py": [
     {
       "type": "function",
-      "name": "ListCommentsRequest",
-      "description": "The request message for the ListComments endpoint.\n\nAttributes:\n    parent (str):\n        Required. The resource name of Case object\n        for which comments should be listed.\n    page_size (int):\n        The maximum number of comments fetched with\n        each request. Defaults to 10.\n    page_token (str):\n        A token identifying the page of results to\n        return. If unspecified, the first page is\n        retrieved.",
+      "name": "ListAttachmentsRequest",
+      "description": "The request message for the ListAttachments endpoint.\n\nAttributes:\n    parent (str):\n        Required. The resource name of Case object\n        for which attachments should be listed.\n    page_size (int):\n        The maximum number of attachments fetched\n        with each request. If not provided, the default\n        is 10. The maximum page size that will be\n        returned is 100.\n    page_token (str):\n        A token identifying the page of results to\n        return. If unspecified, the first page is\n        retrieved.",
       "parameters": {
         "type": "object",
         "properties": {
           "parent": {
-            "description": "Required. The resource name of Case object for which comments should be listed.",
+            "description": "Required. The resource name of Case object for which attachments should be listed.",
             "type": "string"
           },
           "page_size": {
-            "description": "The maximum number of comments fetched with each request. Defaults to 10.",
+            "description": "The maximum number of attachments fetched with each request. If not provided, the default is 10. The maximum page size that will be returned is 100.",
             "type": "integer"
           },
           "page_token": {
@@ -537,64 +555,6 @@
         },
         "required": [
           "parent"
-        ]
-      }
-    },
-    {
-      "type": "function",
-      "name": "CreateCommentRequest",
-      "description": "The request message for CreateComment endpoint.\n\nAttributes:\n    parent (str):\n        Required. The resource name of Case to which\n        this comment should be added.\n    comment (google.cloud.support_v2.types.Comment):\n        Required. The Comment object to be added to\n        this Case.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "parent": {
-            "description": "Required. The resource name of Case to which this comment should be added.",
-            "type": "string"
-          },
-          "comment": {
-            "description": "Required. The Comment object to be added to this Case.",
-            "type": "object",
-            "properties": {
-              "name": {
-                "description": "Output only. The resource name for the comment.",
-                "type": "string"
-              },
-              "create_time": {
-                "description": "Output only. The time when this comment was created.",
-                "type": "object",
-                "reference": "google.protobuf.timestamp_pb2.Timestamp"
-              },
-              "creator": {
-                "type": "object",
-                "properties": {
-                  "display_name": {
-                    "description": "The name to display for the actor. If not provided, it is inferred from credentials supplied during case creation. When an email is provided, a display name must also be provided. This will be obfuscated if the user is a Google Support agent.",
-                    "type": "string"
-                  },
-                  "email": {
-                    "description": "The email address of the actor. If not provided, it is inferred from credentials supplied during case creation. If the authenticated principal does not have an email address, one must be provided. When a name is provided, an email must also be provided. This will be obfuscated if the user is a Google Support agent.",
-                    "type": "string"
-                  },
-                  "google_support": {
-                    "description": "Output only. Whether the actor is a Google support actor.",
-                    "type": "boolean"
-                  }
-                }
-              },
-              "body": {
-                "description": "The full comment body. Maximum of 12800 characters. This can contain rich text syntax.",
-                "type": "string"
-              },
-              "plain_text_body": {
-                "description": "Output only. DEPRECATED. An automatically generated plain text version of body with all rich text syntax stripped.",
-                "type": "string"
-              }
-            }
-          }
-        },
-        "required": [
-          "parent",
-          "comment"
         ]
       }
     }

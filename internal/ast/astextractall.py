@@ -20,7 +20,6 @@ def extract_methods_from_file(file_path, class_name, target_methods):
           - description
           - parameters (as JSON schema)
           - request_types
-          - response_types
 
     Parameters are extracted from:
       1. The function signature (positional and keyword-only arguments).
@@ -70,16 +69,31 @@ def extract_methods_from_file(file_path, class_name, target_methods):
                         docstring = ast.get_docstring(item) or ""
                         stripped_docstring = docstring.strip()[:1024]
 
-                        # 3) Extract request types from the docstring (if any)
-                        request_types = re.findall(
-                            r"Request message for\s*``([^`]+)``", docstring
-                        )
+                        # 3) Extract the request type from the first parameter's annotation
                         updated_request_types = []
-                        for rt in request_types:
-                            if not rt.endswith("Request"):
-                                updated_request_types.append(rt + "Request")
-                            else:
-                                updated_request_types.append(rt)
+                        # Look for a parameter named "request"
+                        for arg in item.args.args:
+                            if arg.arg == "request" and arg.annotation is not None:
+                                # Use ast.unparse to get the string representation of the annotation.
+                                annotation_str = ast.unparse(arg.annotation)
+                                # Look for a type that ends with "Request". This handles annotations like:
+                                # Optional[Union[functions.ListFunctionsRequest, dict]]
+                                matches = re.findall(r"([a-zA-Z_][\w\.]*Request)", annotation_str)
+                                if matches:
+                                    updated_request_types.extend(matches)
+                                break  # We only check the first occurrence of "request"
+
+                        # Fallback: if no request type was found via the annotation,
+                        # try extracting from the docstring.
+                        if not updated_request_types:
+                            request_types = re.findall(
+                                r"Request(?: message)? for\s*``([^`]+)``", docstring
+                            )
+                            for rt in request_types:
+                                if not rt.endswith("Request"):
+                                    updated_request_types.append(rt + "Request")
+                                else:
+                                    updated_request_types.append(rt)
 
                         # 4) Parse docstring lines for parameter lines of the form:
                         #      name (:class:`str`):
@@ -126,24 +140,6 @@ def extract_methods_from_file(file_path, class_name, target_methods):
                             ).strip()
                             properties[param_name_in_progress] = existing
 
-                        # 5) Extract response types from the docstring (if any)
-                        response_types = re.findall(
-                            r"Response message for\s*``([^`]+)``", docstring
-                        )
-                        updated_response_types = []
-                        if response_types:
-                            for rt in response_types:
-                                if not rt.endswith("Response"):
-                                    updated_response_types.append(rt + "Response")
-                                else:
-                                    updated_response_types.append(rt)
-                        else:
-                            # Alternatively, try to extract from the Returns section.
-                            match = re.search(r"Returns:\s*\n\s*([\w\.\_]+):", docstring)
-                            if match:
-                                rt = match.group(1)
-                                updated_response_types.append(rt)
-
                         # Build final method information
                         method_info = {
                             "type": "function",
@@ -155,13 +151,13 @@ def extract_methods_from_file(file_path, class_name, target_methods):
                                     "properties": properties,
                                     "required": required
                                 },
-                                "request_types": updated_request_types,
-                                "response_types": updated_response_types
+                                "request_types": updated_request_types
                             }
                         }
                         extracted_methods.append(method_info)
             break  # Stop after processing the target class
     return extracted_methods
+
 
 def camel_to_snake(name):
     """Convert CamelCase to snake_case."""
@@ -223,9 +219,9 @@ def process_all_packages(base_directory):
                 package_results = process_package(metadata_path)
                 if package_results:
                     # Create an output folder within the package directory
-                    working_dir = r"\Users\AMD\vidhra\internal\ast"
+                    working_dir = r"/Users/prashanthvarma/Saturn/internal/ast"
                     output_dir = os.path.join(working_dir, "extracted_methods")
-                    tools_dir = os.path.join(output_dir, metadata_path.split("\\")[-2])
+                    tools_dir = os.path.join(output_dir, metadata_path.split("/")[-2])
                     os.makedirs(tools_dir, exist_ok=True)
                     output_file = os.path.join(tools_dir, "tools.json")
                     with open(output_file, "w", encoding="utf-8") as f:
@@ -234,7 +230,7 @@ def process_all_packages(base_directory):
 
 def main():
     # Set the base directory for the packages.
-    base_directory = r"\Users\AMD\vidhra\internal\ast\google-cloud-python\packages"
+    base_directory = r"/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages"
     
     # Process each package and save the results in its own folder.
     process_all_packages(base_directory)
