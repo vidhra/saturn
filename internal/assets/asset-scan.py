@@ -1,5 +1,105 @@
 import json
 from collections import defaultdict
+import duckdb
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+def setup_duckdb():
+    """
+    Sets up DuckDB with necessary tables.
+    """
+    # Connect to DuckDB
+    conn = duckdb.connect('assets.duckdb')
+    
+    # Create table for assets without vector storage
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS assets (
+            id VARCHAR,
+            asset_type VARCHAR,
+            name VARCHAR,
+            display_name VARCHAR,
+            location VARCHAR,
+            project VARCHAR,
+            state VARCHAR,
+            create_time VARCHAR,
+            metadata JSON,
+            search_text VARCHAR,  -- Combined text for searching
+            embedding FLOAT[384]
+        )
+    """)
+    
+    return conn
+
+def store_assets_in_duckdb(assets_by_type):
+    """
+    Stores assets in DuckDB with searchable text.
+    """
+    conn = setup_duckdb()
+    
+    # Clear existing data
+    
+    # Process and store each asset
+    for asset_type, assets in assets_by_type.items():
+        for asset in assets:
+            # Create search text from relevant fields
+            embedding = None
+            search_text = f"{asset['name']} {asset.get('displayName', '')} {asset_type} {asset.get('location', '')}"
+            embedding = model.encode("asset_name:"+asset['name']+" asset_type:"+
+                                         asset['assetType']+" location:"+asset['location'])
+            if 'additionalAttributes' in asset:
+                search_text += f" {str(asset['additionalAttributes'])}"
+
+            
+            # Prepare data for insertion
+            conn.execute("""
+                INSERT INTO assets (
+                    id, asset_type, name, display_name, location, project,
+                    state, create_time, metadata, search_text, embedding
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                asset['name'],  # Using name as ID
+                asset_type,
+                asset['name'],
+                asset.get('displayName', None),
+                asset.get('location', None),
+                asset.get('project', None),
+                asset.get('state', None),
+                asset.get('createTime', None),
+                json.dumps(asset),  # Store full metadata as JSON
+                search_text.lower(),  # Store lowercase for case-insensitive search
+                embedding
+            ))
+    
+    # Create index for text search
+    conn.execute("""
+        CREATE INDEX IF NOT EXISTS asset_search_idx 
+        ON assets(search_text);
+    """)
+    
+    conn.close()
+
+def search_similar_assets(query_text, top_k=5):
+    """
+    Search for similar assets using text matching.
+    """
+    conn = duckdb.connect('assets.duckdb')
+    
+    # Perform text-based search
+    query_embedding = model.encode(query_text).tolist()
+
+    # Retrieve documents ordered by similarity
+    results = conn.execute('''
+    SELECT name, asset_type, location, embedding, array_cosine_similarity(embedding::FLOAT[384], ?::FLOAT[384]) AS similarity
+    FROM assets
+    ORDER BY similarity DESC
+    LIMIT 10
+    ''', (query_embedding,)).fetchall()
+
+    for result in results:
+        print(f"Name: {result[0]}, Asset Type: {result[1]}, Location: {result[2]}, Similarity: {result[4]}")
+    
+    conn.close()
+    return results
 
 def read_asset_metadata(file_path: str = "asset_metadata.json"):
     """
@@ -83,16 +183,24 @@ def main():
     assets_by_type = read_asset_metadata()
     
     if assets_by_type:
-        # Print summary
+        # Store assets in DuckDB with searchable text
+        store_assets_in_duckdb(assets_by_type)
+        print("\nAssets have been stored in DuckDB with searchable text")
+        
+        # Example similarity search
+        print("\nExample similarity search for 'cloud run functions':")
+        similar_assets = search_similar_assets("billing accounts")
+        for asset in similar_assets:
+            print(f"Name: {asset[0]}")
+            print(f"Type: {asset[1]}")
+            print(f"Location: {asset[2]}")
+            print("-" * 40)
+        
+        # Continue with existing analysis
         print_asset_type_summary(assets_by_type)
-        
-        # Print detailed information
         print_detailed_assets(assets_by_type)
-        
-        # Print location analysis
         analyze_asset_locations(assets_by_type)
         
-        # Print total number of assets
         total_assets = sum(len(assets) for assets in assets_by_type.values())
         print(f"\nTotal number of assets: {total_assets}")
 
