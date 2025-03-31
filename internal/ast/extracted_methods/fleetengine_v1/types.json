@@ -85,7 +85,8 @@
               "properties": {
                 "name": {
                   "description": "Output only. In the format \"providers/{provider}/trips/{trip}\".",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "vehicle_id": {
                   "description": "ID of the vehicle making this trip.",
@@ -213,7 +214,8 @@
                 "pickup_time": {
                   "description": "Output only. Either the estimated future time when the rider(s) will be picked up, or the actual time when they were picked up.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "intermediate_destinations": {
                   "description": "Intermediate stops in order that the trip requests (in addition to pickup and dropoff). Initially this will not be supported for shared trips.",
@@ -426,7 +428,8 @@
                 "dropoff_time": {
                   "description": "Output only. Either the estimated future time when the rider(s) will be dropped off at the final destination, or the actual time when they were dropped off.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "remaining_waypoints": {
                   "description": "Output only. The full path from the current location to the dropoff point, inclusive. This path could include waypoints from other trips.",
@@ -581,7 +584,8 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "output_only": true
                 },
                 "vehicle_waypoints": {
                   "description": "This field supports manual ordering of the waypoints for the trip. It contains all of the remaining waypoints for the assigned vehicle, as well as the pickup and drop-off waypoints for this trip. If the trip hasn't been assigned to a vehicle, then Fleet Engine ignores this field. For privacy reasons, this field is only populated by the server on ``UpdateTrip`` and ``CreateTrip`` calls, NOT on ``GetTrip`` calls.",
@@ -736,7 +740,8 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "output_only": true
                 },
                 "route": {
                   "description": "Output only. Anticipated route for this trip to the first entry in remaining_waypoints. Note that the first waypoint may belong to a different trip.",
@@ -744,21 +749,25 @@
                   "items": {
                     "type": "object",
                     "reference": "google.type.latlng_pb2.LatLng"
-                  }
+                  },
+                  "output_only": true
                 },
                 "current_route_segment": {
                   "description": "Output only. An encoded path to the next waypoint. Note: This field is intended only for use by the Driver SDK and Consumer SDK. Decoding is not yet supported.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "current_route_segment_version": {
                   "description": "Output only. Indicates the last time the route was modified. Note: This field is intended only for use by the Driver SDK and Consumer SDK.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "current_route_segment_traffic": {
                   "description": "Output only. Indicates the traffic conditions along the ``current_route_segment`` when they're available.  Note: This field is intended only for use by the Driver SDK and Consumer SDK.",
                   "type": "object",
                   "reference": "google.maps.fleetengine_v1.types.ConsumableTrafficPolyline",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -798,12 +807,14 @@
                 "current_route_segment_traffic_version": {
                   "description": "Output only. Indicates the last time the ``current_route_segment_traffic`` was modified.  Note: This field is intended only for use by the Driver SDK and Consumer SDK.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "current_route_segment_end_point": {
                   "description": "Output only. The waypoint where ``current_route_segment`` ends.",
                   "type": "object",
                   "reference": "google.maps.fleetengine_v1.types.TripWaypoint",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -955,17 +966,20 @@
                 "remaining_distance_meters": {
                   "description": "Output only. The remaining driving distance in the ``current_route_segment`` field. The value is unspecified if the trip is not assigned to a vehicle, or the trip is completed or cancelled.",
                   "type": "object",
-                  "reference": "google.protobuf.wrappers_pb2.Int32Value"
+                  "reference": "google.protobuf.wrappers_pb2.Int32Value",
+                  "output_only": true
                 },
                 "eta_to_first_waypoint": {
                   "description": "Output only. The ETA to the next waypoint (the first entry in the ``remaining_waypoints`` field). The value is unspecified if the trip is not assigned to a vehicle, or the trip is inactive (completed or cancelled).",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "remaining_time_to_first_waypoint": {
                   "description": "Output only. The duration from when the Trip data is returned to the time in ``Trip.eta_to_first_waypoint``. The value is unspecified if the trip is not assigned to a vehicle, or the trip is inactive (completed or cancelled).",
                   "type": "object",
                   "reference": "google.protobuf.duration_pb2.Duration",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -983,12 +997,14 @@
                 "remaining_waypoints_version": {
                   "description": "Output only. Indicates the last time that ``remaining_waypoints`` was changed (a waypoint was added, removed, or changed).",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "remaining_waypoints_route_version": {
                   "description": "Output only. Indicates the last time the ``remaining_waypoints.path_to_waypoint`` and ``remaining_waypoints.traffic_to_waypoint`` were modified. Your client app should cache this value and pass it in ``GetTripRequest`` to ensure the paths and traffic for ``remaining_waypoints`` are only returned if updated.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "number_of_passengers": {
                   "description": "Immutable. Indicates the number of passengers on this trip and does not include the driver. A vehicle must have available capacity to be returned in a ``SearchVehicles`` response.",
@@ -998,6 +1014,7 @@
                   "description": "Output only. Indicates the last reported location of the vehicle along the route.",
                   "type": "object",
                   "reference": "google.maps.fleetengine_v1.types.VehicleLocation",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -1069,7 +1086,8 @@
                       "server_time": {
                         "description": "Output only. The time when the server received the location information.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "location_sensor": {
                         "description": "Provider of location data (for example, ``GPS``).",
@@ -1163,7 +1181,8 @@
                 },
                 "last_location_snappable": {
                   "description": "Output only. Indicates whether the vehicle's ``last_location`` can be snapped to the current_route_segment. False if ``last_location`` or ``current_route_segment`` doesn't exist. It is computed by Fleet Engine. Any update from clients will be ignored.",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "output_only": true
                 },
                 "view": {
                   "description": "The subset of Trip fields that are populated and how they should be interpreted.",
@@ -1410,7 +1429,8 @@
               "properties": {
                 "name": {
                   "description": "Output only. In the format \"providers/{provider}/trips/{trip}\".",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "vehicle_id": {
                   "description": "ID of the vehicle making this trip.",
@@ -1538,7 +1558,8 @@
                 "pickup_time": {
                   "description": "Output only. Either the estimated future time when the rider(s) will be picked up, or the actual time when they were picked up.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "intermediate_destinations": {
                   "description": "Intermediate stops in order that the trip requests (in addition to pickup and dropoff). Initially this will not be supported for shared trips.",
@@ -1751,7 +1772,8 @@
                 "dropoff_time": {
                   "description": "Output only. Either the estimated future time when the rider(s) will be dropped off at the final destination, or the actual time when they were dropped off.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "remaining_waypoints": {
                   "description": "Output only. The full path from the current location to the dropoff point, inclusive. This path could include waypoints from other trips.",
@@ -1906,7 +1928,8 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "output_only": true
                 },
                 "vehicle_waypoints": {
                   "description": "This field supports manual ordering of the waypoints for the trip. It contains all of the remaining waypoints for the assigned vehicle, as well as the pickup and drop-off waypoints for this trip. If the trip hasn't been assigned to a vehicle, then Fleet Engine ignores this field. For privacy reasons, this field is only populated by the server on ``UpdateTrip`` and ``CreateTrip`` calls, NOT on ``GetTrip`` calls.",
@@ -2061,7 +2084,8 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "output_only": true
                 },
                 "route": {
                   "description": "Output only. Anticipated route for this trip to the first entry in remaining_waypoints. Note that the first waypoint may belong to a different trip.",
@@ -2069,21 +2093,25 @@
                   "items": {
                     "type": "object",
                     "reference": "google.type.latlng_pb2.LatLng"
-                  }
+                  },
+                  "output_only": true
                 },
                 "current_route_segment": {
                   "description": "Output only. An encoded path to the next waypoint. Note: This field is intended only for use by the Driver SDK and Consumer SDK. Decoding is not yet supported.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "current_route_segment_version": {
                   "description": "Output only. Indicates the last time the route was modified. Note: This field is intended only for use by the Driver SDK and Consumer SDK.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "current_route_segment_traffic": {
                   "description": "Output only. Indicates the traffic conditions along the ``current_route_segment`` when they're available.  Note: This field is intended only for use by the Driver SDK and Consumer SDK.",
                   "type": "object",
                   "reference": "google.maps.fleetengine_v1.types.ConsumableTrafficPolyline",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -2123,12 +2151,14 @@
                 "current_route_segment_traffic_version": {
                   "description": "Output only. Indicates the last time the ``current_route_segment_traffic`` was modified.  Note: This field is intended only for use by the Driver SDK and Consumer SDK.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "current_route_segment_end_point": {
                   "description": "Output only. The waypoint where ``current_route_segment`` ends.",
                   "type": "object",
                   "reference": "google.maps.fleetengine_v1.types.TripWaypoint",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -2280,17 +2310,20 @@
                 "remaining_distance_meters": {
                   "description": "Output only. The remaining driving distance in the ``current_route_segment`` field. The value is unspecified if the trip is not assigned to a vehicle, or the trip is completed or cancelled.",
                   "type": "object",
-                  "reference": "google.protobuf.wrappers_pb2.Int32Value"
+                  "reference": "google.protobuf.wrappers_pb2.Int32Value",
+                  "output_only": true
                 },
                 "eta_to_first_waypoint": {
                   "description": "Output only. The ETA to the next waypoint (the first entry in the ``remaining_waypoints`` field). The value is unspecified if the trip is not assigned to a vehicle, or the trip is inactive (completed or cancelled).",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "remaining_time_to_first_waypoint": {
                   "description": "Output only. The duration from when the Trip data is returned to the time in ``Trip.eta_to_first_waypoint``. The value is unspecified if the trip is not assigned to a vehicle, or the trip is inactive (completed or cancelled).",
                   "type": "object",
                   "reference": "google.protobuf.duration_pb2.Duration",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -2308,12 +2341,14 @@
                 "remaining_waypoints_version": {
                   "description": "Output only. Indicates the last time that ``remaining_waypoints`` was changed (a waypoint was added, removed, or changed).",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "remaining_waypoints_route_version": {
                   "description": "Output only. Indicates the last time the ``remaining_waypoints.path_to_waypoint`` and ``remaining_waypoints.traffic_to_waypoint`` were modified. Your client app should cache this value and pass it in ``GetTripRequest`` to ensure the paths and traffic for ``remaining_waypoints`` are only returned if updated.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "number_of_passengers": {
                   "description": "Immutable. Indicates the number of passengers on this trip and does not include the driver. A vehicle must have available capacity to be returned in a ``SearchVehicles`` response.",
@@ -2323,6 +2358,7 @@
                   "description": "Output only. Indicates the last reported location of the vehicle along the route.",
                   "type": "object",
                   "reference": "google.maps.fleetengine_v1.types.VehicleLocation",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -2394,7 +2430,8 @@
                       "server_time": {
                         "description": "Output only. The time when the server received the location information.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "location_sensor": {
                         "description": "Provider of location data (for example, ``GPS``).",
@@ -2488,7 +2525,8 @@
                 },
                 "last_location_snappable": {
                   "description": "Output only. Indicates whether the vehicle's ``last_location`` can be snapped to the current_route_segment. False if ``last_location`` or ``current_route_segment`` doesn't exist. It is computed by Fleet Engine. Any update from clients will be ignored.",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "output_only": true
                 },
                 "view": {
                   "description": "The subset of Trip fields that are populated and how they should be interpreted.",

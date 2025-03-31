@@ -4,8 +4,11 @@ from openai import OpenAI
 import asyncio
 import importlib
 import os
-from google.cloud import functions_v1,vpcaccess_v1
+from google.cloud import functions_v2,functions_v2
 from google.protobuf import field_mask_pb2
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
 # Set your OpenAI API key
 api_key = "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"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "vidhra-eb3e8152e0a2.json"
@@ -27,7 +30,7 @@ Please don't forget the request type in the function call. The request type is m
 """.strip()
 
 # Define the user query
-query = " Can you create vpc access connectors in the project vidhra us-central1?"
+query = " Can you create a cloud run function in the project vidhra us-central1?"
 
 
 
@@ -36,6 +39,104 @@ client = OpenAI(
 )
 tools_data = {}
 types_data = {}
+
+# Initialize the embedding model once
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+def filter_optional_parameters(query, tools, similarity_threshold=0.6):
+    """
+    Filter optional parameters based on the similarity between the query and parameter descriptions.
+    
+    Args:
+        query (str): The user's query
+        tools (list): List of tool definitions with parameters
+        similarity_threshold (float): Minimum similarity score to keep a parameter (0-1)
+        
+    Returns:
+        list: Filtered list of tools with only relevant parameters
+    """
+    # Embed the query
+    query_embedding = embedding_model.encode(query)
+    
+    filtered_tools = []
+    
+    for tool in tools:
+        # Create a deep copy of the tool to avoid modifying the original
+        import copy
+        tool_copy = copy.deepcopy(tool)
+        
+        # Skip if no parameters
+        if 'parameters' not in tool_copy or 'properties' not in tool_copy['parameters']:
+            filtered_tools.append(tool_copy)
+            continue
+        
+        # Get required fields (if any)
+        required_fields = tool_copy['parameters'].get('required', [])
+        
+        # Filter parameters
+        filtered_properties = {}
+        for param_name, param_info in tool_copy['parameters']['properties'].items():
+            # Always keep required parameters
+            if param_name in required_fields:
+                filtered_properties[param_name] = param_info
+                continue
+                
+            # Skip parameters without descriptions
+            if 'description' not in param_info or not param_info['description']:
+                continue
+                
+            # Embed the parameter description
+            param_embedding = embedding_model.encode(param_info['description'])
+            
+            # Calculate cosine similarity
+            similarity = np.dot(query_embedding, param_embedding) / (
+                np.linalg.norm(query_embedding) * np.linalg.norm(param_embedding)
+            )
+            
+            # Keep parameter if similarity is above threshold
+            if similarity > similarity_threshold:
+                filtered_properties[param_name] = param_info
+        
+        # Update tool with filtered parameters
+        tool_copy['parameters']['properties'] = filtered_properties
+        filtered_tools.append(tool_copy)
+    
+    return filtered_tools
+
+def format_tools_for_openai(tools):
+    """
+    Format tools to ensure they are properly structured for OpenAI API with consistent indentation.
+    
+    Args:
+        tools (list): List of tool definitions
+        
+    Returns:
+        list: Properly formatted tools
+    """
+    tools_json = json.dumps(tools, indent=2) 
+    formatted_tools = json.loads(tools_json)
+    
+    return formatted_tools
+
+def filter_tools_for_query(query, tools_json_path, types_json_path):
+    """
+    Build OpenAI tools and filter optional parameters based on query relevance.
+    
+    Args:
+        query (str): The user's query
+        tools_json_path (str): Path to tools.json file
+        types_json_path (str): Path to types.json file
+        
+    Returns:
+        list: Filtered tools with only relevant parameters
+    """
+    # First build the regular tools
+    all_tools = build_openai_tools(tools_json_path, types_json_path)
+    
+    # Then filter optional parameters based on query relevance
+    filtered_tools = filter_optional_parameters(query, all_tools)
+    
+    return filtered_tools
 
 def build_openai_tools(tools_json_path, types_json_path):
     """
@@ -94,7 +195,7 @@ def build_openai_tools(tools_json_path, types_json_path):
             for key, val in resolved.items():
                 if key != "properties":
                     schema_fragment[key] = val
-        print(schema_fragment)
+
 
         # Convert enumerations
         if schema_fragment.get("type") == "enum" and "values" in schema_fragment:
@@ -151,8 +252,8 @@ def build_openai_tools(tools_json_path, types_json_path):
     return openai_tools
 
 # Use the function to build tools dynamically
-tools_json_path = "vpcaccess_v1/tools.json"
-types_json_path = "vpcaccess_v1/types.json"
+tools_json_path = "functions_v2/tools.json"
+types_json_path = "functions_v2/types.json"
 openai_format_tools = build_openai_tools(tools_json_path, types_json_path)
 
 def build_prompt_system(task_instruction: str, format_instruction: str):
@@ -160,12 +261,14 @@ def build_prompt_system(task_instruction: str, format_instruction: str):
     prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
     return prompt
 
-def build_prompt_user(tools: list, query: str):
-    prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
-    prompt += f"[BEGIN OF AVAILABLE TOOLS]\n{json.dumps(openai_format_tools)}\n[END OF AVAILABLE TOOLS]\n\n"
-    prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
-    prompt += f"[BEGIN OF QUERY]\n{query}\n[END OF QUERY]\n\n"
-    return prompt
+# def build_prompt_user(query, tools_json_path, types_json_path):
+#     filtered_tools = filter_tools_for_query(query, tools_json_path, types_json_path)
+#     print(filtered_tools)
+#     prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
+#     prompt += f"[BEGIN OF AVAILABLE TOOLS]\n{json.dumps(filtered_tools)}\n[END OF AVAILABLE TOOLS]\n\n"
+#     prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
+#     prompt += f"[BEGIN OF QUERY]\n{query}\n[END OF QUERY]\n\n"
+#     return prompt
 
 
 def convert_strings_to_json(data: dict) -> dict:
@@ -207,10 +310,10 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
       4. Invoking the async method.
     """
     try:
-        RequestClass = getattr(vpcaccess_v1, request_type)
-        # RequestClassFunctionAccount = getattr(vpcaccess_v1, "VpcAccess")
+        RequestClass = getattr(functions_v2, request_type)
+        # RequestClassFunctionAccount = getattr(functions_v2, "VpcAccess")
 
-        function_client = vpcaccess_v1.VpcAccessServiceAsyncClient()
+        function_client = functions_v2.FunctionServiceAsyncClient()
         method = getattr(function_client, method_name)
 
         # Remove "account" from the original args before conversion
@@ -246,8 +349,15 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
 
 
 content = build_prompt_system(task_instruction, format_instruction)
+filtered_tools = filter_tools_for_query(query, tools_json_path, types_json_path)
 
-#Helper function to build the prompt
+# Format the tools properly before sending to OpenAI
+formatted_tools = format_tools_for_openai(filtered_tools)
+
+print("Sending formatted tools to OpenAI:")
+print(json.dumps(formatted_tools, indent=2))
+
+# Helper function to build the prompt
 response = client.responses.create(
   model="gpt-4.5-preview",
   input=[
@@ -275,7 +385,7 @@ response = client.responses.create(
       "type": "text"
     }
   },
-  tools=openai_format_tools,
+  tools=formatted_tools,
 )
 
 def extract_args(arguments: dict,start_key='request',end_key='retry'):
@@ -326,7 +436,7 @@ def get_request_types_for_method(tools_json_path: str, method_name: str) -> list
 
 
 # Example usage:
-tools_json_path = "vpcaccess_v1/tools.json"
+tools_json_path = "functions_v2/tools.json"
 
 async def collect_pager_results(pager):
     results = []
@@ -357,4 +467,6 @@ for call in tools["tool_calls"]:
     ))
     print(output)
     results = asyncio.run(collect_pager_results(output))
+
+
 
