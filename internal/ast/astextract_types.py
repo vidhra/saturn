@@ -105,6 +105,7 @@ def extract_request_classes_from_file(file_path: str, type_registry=None, filter
       - Capture the class name.
       - Capture & truncate the docstring (to 1024 chars).
       - Extract attributes from any 'Attributes:' block in the docstring.
+      - Mark fields as output_only if their description indicates they're output-only.
     
     Returns a list of dictionaries formatted for LLM function calling,
     with nested types resolved using the provided type_registry.
@@ -117,6 +118,19 @@ def extract_request_classes_from_file(file_path: str, type_registry=None, filter
     
     # Regex to identify attribute lines.
     attr_pattern = re.compile(r"^\s*(\w+)\s*\(\s*([\w\[\], \.]+)\)\:\s*(.*)$")
+    
+    # Output-only indicators in field descriptions
+    output_only_patterns = [
+        r'output[ \-_]*only',
+        r'server[ \-_]*generated',
+        r'read[ \-_]*only',
+        r'returned by the server',
+        r'populated by the server',
+        r'output parameter',
+        r'response only',
+        r'returned but not accepted'
+    ]
+    output_only_regex = re.compile('|'.join(output_only_patterns), re.IGNORECASE)
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ClassDef):
@@ -190,12 +204,21 @@ def extract_request_classes_from_file(file_path: str, type_registry=None, filter
                     resolved_type = resolve_nested_references(converted_type, type_registry)
                 else:
                     resolved_type = converted_type
+                
+                # Check if the field description indicates it's output-only
+                is_output_only = output_only_regex.search(details["description"]) is not None
+                
                 if details["description"].lstrip().startswith("Required"):
                     required_fields.append(attr_name)
+                
                 schema_properties[attr_name] = {
                     "description": details["description"],
                     **resolved_type
                 }
+                
+                # Add output_only property if the field is determined to be output-only
+                if is_output_only:
+                    schema_properties[attr_name]["output_only"] = True
 
             parameters_schema = {
                 "type": "object",

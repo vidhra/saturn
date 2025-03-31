@@ -250,12 +250,14 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for the [KeyRing][google.cloud.kms.v1.KeyRing] in the format ``projects/*/locations/*/keyRings/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "create_time": {
                   "description": "Output only. The time at which this [KeyRing][google.cloud.kms.v1.KeyRing] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 }
               }
             }
@@ -291,18 +293,21 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for this [CryptoKey][google.cloud.kms.v1.CryptoKey] in the format ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "primary": {
                   "description": "Output only. A copy of the \"primary\" [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] that will be used by [Encrypt][google.cloud.kms.v1.KeyManagementService.Encrypt] when this [CryptoKey][google.cloud.kms.v1.CryptoKey] is given in [EncryptRequest.name][google.cloud.kms.v1.EncryptRequest.name].  The [CryptoKey][google.cloud.kms.v1.CryptoKey]'s primary version can be updated via [UpdateCryptoKeyPrimaryVersion][google.cloud.kms.v1.KeyManagementService.UpdateCryptoKeyPrimaryVersion].  Keys with [purpose][google.cloud.kms.v1.CryptoKey.purpose] [ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT] may have a primary. For other keys, this field will be omitted.",
                   "type": "object",
                   "reference": "google.cloud.kms_v1.types.CryptoKeyVersion",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
                       "name": {
                         "description": "Output only. The resource name for this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] in the format ``projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*``.",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "state": {
                         "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
@@ -312,34 +317,40 @@
                       "protection_level": {
                         "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                        "reference": "google.cloud.kms_v1.types.ProtectionLevel",
+                        "output_only": true
                       },
                       "algorithm": {
                         "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                        "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm",
+                        "output_only": true
                       },
                       "attestation": {
                         "description": "Output only. Statement that was generated and signed by the HSM at key creation time. Use this statement to verify attributes of the key as stored on the HSM, independently of Google. Only provided for key versions with [protection_level][google.cloud.kms.v1.CryptoKeyVersion.protection_level] [HSM][google.cloud.kms.v1.ProtectionLevel.HSM].",
                         "type": "object",
                         "reference": "google.cloud.kms_v1.types.KeyOperationAttestation",
+                        "output_only": true,
                         "resolved_schema": {
                           "type": "object",
                           "properties": {
                             "format": {
                               "description": "Output only. The format of the attestation data.",
                               "type": "object",
-                              "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                              "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat",
+                              "output_only": true
                             },
                             "content": {
                               "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
                               "type": "object",
-                              "reference": "bytes"
+                              "reference": "bytes",
+                              "output_only": true
                             },
                             "cert_chains": {
                               "description": "Output only. The certificate chains needed to validate the attestation",
                               "type": "object",
                               "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.CertificateChains",
+                              "output_only": true,
                               "resolved_schema": {
                                 "type": "object",
                                 "properties": {
@@ -373,43 +384,52 @@
                       "create_time": {
                         "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] was created.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "generate_time": {
                         "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was generated.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "destroy_time": {
                         "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material is scheduled for destruction. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROY_SCHEDULED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROY_SCHEDULED].",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "destroy_event_time": {
                         "description": "Output only. The time this CryptoKeyVersion's key material was destroyed. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROYED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROYED].",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "import_job": {
                         "description": "Output only. The name of the [ImportJob][google.cloud.kms.v1.ImportJob] used in the most recent import of this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]. Only present if the underlying key material was imported.",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "import_time": {
                         "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was most recently imported.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "import_failure_reason": {
                         "description": "Output only. The root cause of the most recent import failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [IMPORT_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.IMPORT_FAILED].",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "generation_failure_reason": {
                         "description": "Output only. The root cause of the most recent generation failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [GENERATION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.GENERATION_FAILED].",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "external_destruction_failure_reason": {
                         "description": "Output only. The root cause of the most recent external destruction failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [EXTERNAL_DESTRUCTION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.EXTERNAL_DESTRUCTION_FAILED].",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "external_protection_level_options": {
                         "description": "ExternalProtectionLevelOptions stores a group of additional fields for configuring a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] that are specific to the [EXTERNAL][google.cloud.kms.v1.ProtectionLevel.EXTERNAL] protection level and [EXTERNAL_VPC][google.cloud.kms.v1.ProtectionLevel.EXTERNAL_VPC] protection levels.",
@@ -431,7 +451,8 @@
                       },
                       "reimport_eligible": {
                         "description": "Output only. Whether or not this key version is eligible for reimport, by being specified as a target in [ImportCryptoKeyVersionRequest.crypto_key_version][google.cloud.kms.v1.ImportCryptoKeyVersionRequest.crypto_key_version].",
-                        "type": "boolean"
+                        "type": "boolean",
+                        "output_only": true
                       }
                     }
                   }
@@ -444,7 +465,8 @@
                 "create_time": {
                   "description": "Output only. The time at which this [CryptoKey][google.cloud.kms.v1.CryptoKey] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "next_rotation_time": {
                   "description": "At [next_rotation_time][google.cloud.kms.v1.CryptoKey.next_rotation_time], the Key Management Service will automatically:  1. Create a new version of this [CryptoKey][google.cloud.kms.v1.CryptoKey]. 2. Mark the new version as primary.  Key rotations performed manually via [CreateCryptoKeyVersion][google.cloud.kms.v1.KeyManagementService.CreateCryptoKeyVersion] and [UpdateCryptoKeyPrimaryVersion][google.cloud.kms.v1.KeyManagementService.UpdateCryptoKeyPrimaryVersion] do not affect [next_rotation_time][google.cloud.kms.v1.CryptoKey.next_rotation_time].  Keys with [purpose][google.cloud.kms.v1.CryptoKey.purpose] [ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT] support automatic rotation. For other keys, this field must be omitted.",
@@ -591,7 +613,8 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] in the format ``projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "state": {
                   "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
@@ -601,34 +624,40 @@
                 "protection_level": {
                   "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
                   "type": "object",
-                  "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                  "reference": "google.cloud.kms_v1.types.ProtectionLevel",
+                  "output_only": true
                 },
                 "algorithm": {
                   "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
                   "type": "object",
-                  "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                  "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm",
+                  "output_only": true
                 },
                 "attestation": {
                   "description": "Output only. Statement that was generated and signed by the HSM at key creation time. Use this statement to verify attributes of the key as stored on the HSM, independently of Google. Only provided for key versions with [protection_level][google.cloud.kms.v1.CryptoKeyVersion.protection_level] [HSM][google.cloud.kms.v1.ProtectionLevel.HSM].",
                   "type": "object",
                   "reference": "google.cloud.kms_v1.types.KeyOperationAttestation",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
                       "format": {
                         "description": "Output only. The format of the attestation data.",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat",
+                        "output_only": true
                       },
                       "content": {
                         "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
                         "type": "object",
-                        "reference": "bytes"
+                        "reference": "bytes",
+                        "output_only": true
                       },
                       "cert_chains": {
                         "description": "Output only. The certificate chains needed to validate the attestation",
                         "type": "object",
                         "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.CertificateChains",
+                        "output_only": true,
                         "resolved_schema": {
                           "type": "object",
                           "properties": {
@@ -662,43 +691,52 @@
                 "create_time": {
                   "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "generate_time": {
                   "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was generated.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "destroy_time": {
                   "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material is scheduled for destruction. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROY_SCHEDULED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROY_SCHEDULED].",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "destroy_event_time": {
                   "description": "Output only. The time this CryptoKeyVersion's key material was destroyed. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROYED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROYED].",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "import_job": {
                   "description": "Output only. The name of the [ImportJob][google.cloud.kms.v1.ImportJob] used in the most recent import of this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]. Only present if the underlying key material was imported.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "import_time": {
                   "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was most recently imported.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "import_failure_reason": {
                   "description": "Output only. The root cause of the most recent import failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [IMPORT_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.IMPORT_FAILED].",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "generation_failure_reason": {
                   "description": "Output only. The root cause of the most recent generation failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [GENERATION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.GENERATION_FAILED].",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "external_destruction_failure_reason": {
                   "description": "Output only. The root cause of the most recent external destruction failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [EXTERNAL_DESTRUCTION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.EXTERNAL_DESTRUCTION_FAILED].",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "external_protection_level_options": {
                   "description": "ExternalProtectionLevelOptions stores a group of additional fields for configuring a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] that are specific to the [EXTERNAL][google.cloud.kms.v1.ProtectionLevel.EXTERNAL] protection level and [EXTERNAL_VPC][google.cloud.kms.v1.ProtectionLevel.EXTERNAL_VPC] protection levels.",
@@ -720,7 +758,8 @@
                 },
                 "reimport_eligible": {
                   "description": "Output only. Whether or not this key version is eligible for reimport, by being specified as a target in [ImportCryptoKeyVersionRequest.crypto_key_version][google.cloud.kms.v1.ImportCryptoKeyVersionRequest.crypto_key_version].",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "output_only": true
                 }
               }
             }
@@ -797,7 +836,8 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for this [ImportJob][google.cloud.kms.v1.ImportJob] in the format ``projects/*/locations/*/keyRings/*/importJobs/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "import_method": {
                   "description": "Required. Immutable. The wrapping method to be used for incoming key material.",
@@ -812,32 +852,38 @@
                 "create_time": {
                   "description": "Output only. The time at which this [ImportJob][google.cloud.kms.v1.ImportJob] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "generate_time": {
                   "description": "Output only. The time this [ImportJob][google.cloud.kms.v1.ImportJob]'s key material was generated.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "expire_time": {
                   "description": "Output only. The time at which this [ImportJob][google.cloud.kms.v1.ImportJob] is scheduled for expiration and can no longer be used to import key material.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "expire_event_time": {
                   "description": "Output only. The time this [ImportJob][google.cloud.kms.v1.ImportJob] expired. Only present if [state][google.cloud.kms.v1.ImportJob.state] is [EXPIRED][google.cloud.kms.v1.ImportJob.ImportJobState.EXPIRED].",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "state": {
                   "description": "Output only. The current state of the [ImportJob][google.cloud.kms.v1.ImportJob], indicating if it can be used.",
                   "type": "object",
-                  "reference": "google.cloud.kms_v1.types.ImportJob.ImportJobState"
+                  "reference": "google.cloud.kms_v1.types.ImportJob.ImportJobState",
+                  "output_only": true
                 },
                 "public_key": {
                   "description": "Output only. The public key with which to wrap key material prior to import. Only returned if [state][google.cloud.kms.v1.ImportJob.state] is [ACTIVE][google.cloud.kms.v1.ImportJob.ImportJobState.ACTIVE].",
                   "type": "object",
                   "reference": "google.cloud.kms_v1.types.ImportJob.WrappingPublicKey",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
@@ -852,23 +898,27 @@
                   "description": "Output only. Statement that was generated and signed by the key creator (for example, an HSM) at key creation time. Use this statement to verify attributes of the key as stored on the HSM, independently of Google. Only present if the chosen [ImportMethod][google.cloud.kms.v1.ImportJob.ImportMethod] is one with a protection level of [HSM][google.cloud.kms.v1.ProtectionLevel.HSM].",
                   "type": "object",
                   "reference": "google.cloud.kms_v1.types.KeyOperationAttestation",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
                       "format": {
                         "description": "Output only. The format of the attestation data.",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat",
+                        "output_only": true
                       },
                       "content": {
                         "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
                         "type": "object",
-                        "reference": "bytes"
+                        "reference": "bytes",
+                        "output_only": true
                       },
                       "cert_chains": {
                         "description": "Output only. The certificate chains needed to validate the attestation",
                         "type": "object",
                         "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.CertificateChains",
+                        "output_only": true,
                         "resolved_schema": {
                           "type": "object",
                           "properties": {
@@ -929,18 +979,21 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for this [CryptoKey][google.cloud.kms.v1.CryptoKey] in the format ``projects/*/locations/*/keyRings/*/cryptoKeys/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "primary": {
                   "description": "Output only. A copy of the \"primary\" [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] that will be used by [Encrypt][google.cloud.kms.v1.KeyManagementService.Encrypt] when this [CryptoKey][google.cloud.kms.v1.CryptoKey] is given in [EncryptRequest.name][google.cloud.kms.v1.EncryptRequest.name].  The [CryptoKey][google.cloud.kms.v1.CryptoKey]'s primary version can be updated via [UpdateCryptoKeyPrimaryVersion][google.cloud.kms.v1.KeyManagementService.UpdateCryptoKeyPrimaryVersion].  Keys with [purpose][google.cloud.kms.v1.CryptoKey.purpose] [ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT] may have a primary. For other keys, this field will be omitted.",
                   "type": "object",
                   "reference": "google.cloud.kms_v1.types.CryptoKeyVersion",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
                       "name": {
                         "description": "Output only. The resource name for this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] in the format ``projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*``.",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "state": {
                         "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
@@ -950,34 +1003,40 @@
                       "protection_level": {
                         "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                        "reference": "google.cloud.kms_v1.types.ProtectionLevel",
+                        "output_only": true
                       },
                       "algorithm": {
                         "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                        "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm",
+                        "output_only": true
                       },
                       "attestation": {
                         "description": "Output only. Statement that was generated and signed by the HSM at key creation time. Use this statement to verify attributes of the key as stored on the HSM, independently of Google. Only provided for key versions with [protection_level][google.cloud.kms.v1.CryptoKeyVersion.protection_level] [HSM][google.cloud.kms.v1.ProtectionLevel.HSM].",
                         "type": "object",
                         "reference": "google.cloud.kms_v1.types.KeyOperationAttestation",
+                        "output_only": true,
                         "resolved_schema": {
                           "type": "object",
                           "properties": {
                             "format": {
                               "description": "Output only. The format of the attestation data.",
                               "type": "object",
-                              "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                              "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat",
+                              "output_only": true
                             },
                             "content": {
                               "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
                               "type": "object",
-                              "reference": "bytes"
+                              "reference": "bytes",
+                              "output_only": true
                             },
                             "cert_chains": {
                               "description": "Output only. The certificate chains needed to validate the attestation",
                               "type": "object",
                               "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.CertificateChains",
+                              "output_only": true,
                               "resolved_schema": {
                                 "type": "object",
                                 "properties": {
@@ -1011,43 +1070,52 @@
                       "create_time": {
                         "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] was created.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "generate_time": {
                         "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was generated.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "destroy_time": {
                         "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material is scheduled for destruction. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROY_SCHEDULED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROY_SCHEDULED].",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "destroy_event_time": {
                         "description": "Output only. The time this CryptoKeyVersion's key material was destroyed. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROYED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROYED].",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "import_job": {
                         "description": "Output only. The name of the [ImportJob][google.cloud.kms.v1.ImportJob] used in the most recent import of this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]. Only present if the underlying key material was imported.",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "import_time": {
                         "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was most recently imported.",
                         "type": "object",
-                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                        "output_only": true
                       },
                       "import_failure_reason": {
                         "description": "Output only. The root cause of the most recent import failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [IMPORT_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.IMPORT_FAILED].",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "generation_failure_reason": {
                         "description": "Output only. The root cause of the most recent generation failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [GENERATION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.GENERATION_FAILED].",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "external_destruction_failure_reason": {
                         "description": "Output only. The root cause of the most recent external destruction failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [EXTERNAL_DESTRUCTION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.EXTERNAL_DESTRUCTION_FAILED].",
-                        "type": "string"
+                        "type": "string",
+                        "output_only": true
                       },
                       "external_protection_level_options": {
                         "description": "ExternalProtectionLevelOptions stores a group of additional fields for configuring a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] that are specific to the [EXTERNAL][google.cloud.kms.v1.ProtectionLevel.EXTERNAL] protection level and [EXTERNAL_VPC][google.cloud.kms.v1.ProtectionLevel.EXTERNAL_VPC] protection levels.",
@@ -1069,7 +1137,8 @@
                       },
                       "reimport_eligible": {
                         "description": "Output only. Whether or not this key version is eligible for reimport, by being specified as a target in [ImportCryptoKeyVersionRequest.crypto_key_version][google.cloud.kms.v1.ImportCryptoKeyVersionRequest.crypto_key_version].",
-                        "type": "boolean"
+                        "type": "boolean",
+                        "output_only": true
                       }
                     }
                   }
@@ -1082,7 +1151,8 @@
                 "create_time": {
                   "description": "Output only. The time at which this [CryptoKey][google.cloud.kms.v1.CryptoKey] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "next_rotation_time": {
                   "description": "At [next_rotation_time][google.cloud.kms.v1.CryptoKey.next_rotation_time], the Key Management Service will automatically:  1. Create a new version of this [CryptoKey][google.cloud.kms.v1.CryptoKey]. 2. Mark the new version as primary.  Key rotations performed manually via [CreateCryptoKeyVersion][google.cloud.kms.v1.KeyManagementService.CreateCryptoKeyVersion] and [UpdateCryptoKeyPrimaryVersion][google.cloud.kms.v1.KeyManagementService.UpdateCryptoKeyPrimaryVersion] do not affect [next_rotation_time][google.cloud.kms.v1.CryptoKey.next_rotation_time].  Keys with [purpose][google.cloud.kms.v1.CryptoKey.purpose] [ENCRYPT_DECRYPT][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose.ENCRYPT_DECRYPT] support automatic rotation. For other keys, this field must be omitted.",
@@ -1225,7 +1295,8 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] in the format ``projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "state": {
                   "description": "The current state of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
@@ -1235,34 +1306,40 @@
                 "protection_level": {
                   "description": "Output only. The [ProtectionLevel][google.cloud.kms.v1.ProtectionLevel] describing how crypto operations are performed with this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion].",
                   "type": "object",
-                  "reference": "google.cloud.kms_v1.types.ProtectionLevel"
+                  "reference": "google.cloud.kms_v1.types.ProtectionLevel",
+                  "output_only": true
                 },
                 "algorithm": {
                   "description": "Output only. The [CryptoKeyVersionAlgorithm][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionAlgorithm] that this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] supports.",
                   "type": "object",
-                  "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm"
+                  "reference": "google.cloud.kms_v1.types.CryptoKeyVersion.CryptoKeyVersionAlgorithm",
+                  "output_only": true
                 },
                 "attestation": {
                   "description": "Output only. Statement that was generated and signed by the HSM at key creation time. Use this statement to verify attributes of the key as stored on the HSM, independently of Google. Only provided for key versions with [protection_level][google.cloud.kms.v1.CryptoKeyVersion.protection_level] [HSM][google.cloud.kms.v1.ProtectionLevel.HSM].",
                   "type": "object",
                   "reference": "google.cloud.kms_v1.types.KeyOperationAttestation",
+                  "output_only": true,
                   "resolved_schema": {
                     "type": "object",
                     "properties": {
                       "format": {
                         "description": "Output only. The format of the attestation data.",
                         "type": "object",
-                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat"
+                        "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.AttestationFormat",
+                        "output_only": true
                       },
                       "content": {
                         "description": "Output only. The attestation data provided by the HSM when the key operation was performed.",
                         "type": "object",
-                        "reference": "bytes"
+                        "reference": "bytes",
+                        "output_only": true
                       },
                       "cert_chains": {
                         "description": "Output only. The certificate chains needed to validate the attestation",
                         "type": "object",
                         "reference": "google.cloud.kms_v1.types.KeyOperationAttestation.CertificateChains",
+                        "output_only": true,
                         "resolved_schema": {
                           "type": "object",
                           "properties": {
@@ -1296,43 +1373,52 @@
                 "create_time": {
                   "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "generate_time": {
                   "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was generated.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "destroy_time": {
                   "description": "Output only. The time this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material is scheduled for destruction. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROY_SCHEDULED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROY_SCHEDULED].",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "destroy_event_time": {
                   "description": "Output only. The time this CryptoKeyVersion's key material was destroyed. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [DESTROYED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.DESTROYED].",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "import_job": {
                   "description": "Output only. The name of the [ImportJob][google.cloud.kms.v1.ImportJob] used in the most recent import of this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]. Only present if the underlying key material was imported.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "import_time": {
                   "description": "Output only. The time at which this [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]'s key material was most recently imported.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "import_failure_reason": {
                   "description": "Output only. The root cause of the most recent import failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [IMPORT_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.IMPORT_FAILED].",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "generation_failure_reason": {
                   "description": "Output only. The root cause of the most recent generation failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [GENERATION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.GENERATION_FAILED].",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "external_destruction_failure_reason": {
                   "description": "Output only. The root cause of the most recent external destruction failure. Only present if [state][google.cloud.kms.v1.CryptoKeyVersion.state] is [EXTERNAL_DESTRUCTION_FAILED][google.cloud.kms.v1.CryptoKeyVersion.CryptoKeyVersionState.EXTERNAL_DESTRUCTION_FAILED].",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "external_protection_level_options": {
                   "description": "ExternalProtectionLevelOptions stores a group of additional fields for configuring a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion] that are specific to the [EXTERNAL][google.cloud.kms.v1.ProtectionLevel.EXTERNAL] protection level and [EXTERNAL_VPC][google.cloud.kms.v1.ProtectionLevel.EXTERNAL_VPC] protection levels.",
@@ -1354,7 +1440,8 @@
                 },
                 "reimport_eligible": {
                   "description": "Output only. Whether or not this key version is eligible for reimport, by being specified as a target in [ImportCryptoKeyVersionRequest.crypto_key_version][google.cloud.kms.v1.ImportCryptoKeyVersionRequest.crypto_key_version].",
-                  "type": "boolean"
+                  "type": "boolean",
+                  "output_only": true
                 }
               }
             }
@@ -1801,7 +1888,8 @@
                 },
                 "kms_key": {
                   "description": "Output only. Name of a [CryptoKey][google.cloud.kms.v1.CryptoKey] that has been provisioned for Customer Managed Encryption Key (CMEK) use in the [KeyHandle][google.cloud.kms.v1.KeyHandle] project and location for the requested resource type. The [CryptoKey][google.cloud.kms.v1.CryptoKey] project will reflect the value configured in the [AutokeyConfig][google.cloud.kms.v1.AutokeyConfig] on the resource project's ancestor folder at the time of the [KeyHandle][google.cloud.kms.v1.KeyHandle] creation. If more than one ancestor folder has a configured [AutokeyConfig][google.cloud.kms.v1.AutokeyConfig], the nearest of these configurations is used.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "resource_type_selector": {
                   "description": "Required. Indicates the resource type that the resulting [CryptoKey][google.cloud.kms.v1.CryptoKey] is meant to protect, e.g. ``{SERVICE}.googleapis.com/{TYPE}``. See documentation for supported resource types.",
@@ -1892,7 +1980,8 @@
                 "state": {
                   "description": "Output only. The state for the AutokeyConfig.",
                   "type": "object",
-                  "reference": "google.cloud.kms_v1.types.AutokeyConfig.State"
+                  "reference": "google.cloud.kms_v1.types.AutokeyConfig.State",
+                  "output_only": true
                 }
               }
             }
@@ -2018,12 +2107,14 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for the [EkmConnection][google.cloud.kms.v1.EkmConnection] in the format ``projects/*/locations/*/ekmConnections/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "create_time": {
                   "description": "Output only. The time at which the [EkmConnection][google.cloud.kms.v1.EkmConnection] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "service_resolvers": {
                   "description": "Optional. A list of [ServiceResolvers][google.cloud.kms.v1.EkmConnection.ServiceResolver] where the EKM can be reached. There should be one ServiceResolver per EKM replica. Currently, only a single [ServiceResolver][google.cloud.kms.v1.EkmConnection.ServiceResolver] is supported.",
@@ -2062,40 +2153,48 @@
                                 },
                                 "parsed": {
                                   "description": "Output only. True if the certificate was parsed successfully.",
-                                  "type": "boolean"
+                                  "type": "boolean",
+                                  "output_only": true
                                 },
                                 "issuer": {
                                   "description": "Output only. The issuer distinguished name in RFC 2253 format. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 },
                                 "subject": {
                                   "description": "Output only. The subject distinguished name in RFC 2253 format. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 },
                                 "subject_alternative_dns_names": {
                                   "description": "Output only. The subject Alternative DNS names. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
                                   "type": "array",
                                   "items": {
                                     "type": "string"
-                                  }
+                                  },
+                                  "output_only": true
                                 },
                                 "not_before_time": {
                                   "description": "Output only. The certificate is not valid before this time. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
                                   "type": "object",
-                                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                                  "output_only": true
                                 },
                                 "not_after_time": {
                                   "description": "Output only. The certificate is not valid after this time. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
                                   "type": "object",
-                                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                                  "output_only": true
                                 },
                                 "serial_number": {
                                   "description": "Output only. The certificate serial number as a hex string. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 },
                                 "sha256_fingerprint": {
                                   "description": "Output only. The SHA-256 certificate fingerprint as a hex string. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 }
                               },
                               "required": [
@@ -2152,12 +2251,14 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for the [EkmConnection][google.cloud.kms.v1.EkmConnection] in the format ``projects/*/locations/*/ekmConnections/*``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "create_time": {
                   "description": "Output only. The time at which the [EkmConnection][google.cloud.kms.v1.EkmConnection] was created.",
                   "type": "object",
-                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                  "output_only": true
                 },
                 "service_resolvers": {
                   "description": "Optional. A list of [ServiceResolvers][google.cloud.kms.v1.EkmConnection.ServiceResolver] where the EKM can be reached. There should be one ServiceResolver per EKM replica. Currently, only a single [ServiceResolver][google.cloud.kms.v1.EkmConnection.ServiceResolver] is supported.",
@@ -2196,40 +2297,48 @@
                                 },
                                 "parsed": {
                                   "description": "Output only. True if the certificate was parsed successfully.",
-                                  "type": "boolean"
+                                  "type": "boolean",
+                                  "output_only": true
                                 },
                                 "issuer": {
                                   "description": "Output only. The issuer distinguished name in RFC 2253 format. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 },
                                 "subject": {
                                   "description": "Output only. The subject distinguished name in RFC 2253 format. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 },
                                 "subject_alternative_dns_names": {
                                   "description": "Output only. The subject Alternative DNS names. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
                                   "type": "array",
                                   "items": {
                                     "type": "string"
-                                  }
+                                  },
+                                  "output_only": true
                                 },
                                 "not_before_time": {
                                   "description": "Output only. The certificate is not valid before this time. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
                                   "type": "object",
-                                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                                  "output_only": true
                                 },
                                 "not_after_time": {
                                   "description": "Output only. The certificate is not valid after this time. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
                                   "type": "object",
-                                  "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                                  "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                                  "output_only": true
                                 },
                                 "serial_number": {
                                   "description": "Output only. The certificate serial number as a hex string. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 },
                                 "sha256_fingerprint": {
                                   "description": "Output only. The SHA-256 certificate fingerprint as a hex string. Only present if [parsed][google.cloud.kms.v1.Certificate.parsed] is true.",
-                                  "type": "string"
+                                  "type": "string",
+                                  "output_only": true
                                 }
                               },
                               "required": [
@@ -2307,7 +2416,8 @@
               "properties": {
                 "name": {
                   "description": "Output only. The resource name for the [EkmConfig][google.cloud.kms.v1.EkmConfig] in the format ``projects/*/locations/*/ekmConfig``.",
-                  "type": "string"
+                  "type": "string",
+                  "output_only": true
                 },
                 "default_ekm_connection": {
                   "description": "Optional. Resource name of the default [EkmConnection][google.cloud.kms.v1.EkmConnection]. Setting this field to the empty string removes the default.",
