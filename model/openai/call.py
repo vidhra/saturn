@@ -8,6 +8,7 @@ from google.cloud import functions_v2,functions_v2
 from google.protobuf import field_mask_pb2
 import numpy as np
 from sentence_transformers import SentenceTransformer
+import json_repair
 
 # Set your OpenAI API key
 api_key = "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"
@@ -30,7 +31,7 @@ Please don't forget the request type in the function call. The request type is m
 """.strip()
 
 # Define the user query
-query = " Can you create a cloud run function in the project vidhra us-central1?"
+query = " Can you create a cloud function in the project vidhra us-central1 with name 'test-function' and entry point 'main'?"
 
 
 
@@ -113,8 +114,17 @@ def format_tools_for_openai(tools):
     Returns:
         list: Properly formatted tools
     """
-    tools_json = json.dumps(tools, indent=2) 
-    formatted_tools = json.loads(tools_json)
+    # Remove any fields that might cause validation issues
+    formatted_tools = []
+    for tool in tools:
+        # Create a clean copy without potential problematic fields
+        cleaned_tool = {
+            "type": tool.get("type", "function"),
+            "name": tool.get("name", ""),
+            "description": tool.get("description", ""),
+            "parameters": tool.get("parameters", {})
+        }
+        formatted_tools.append(cleaned_tool)
     
     return formatted_tools
 
@@ -349,17 +359,20 @@ async def dynamic_executor(request_type: str, method_name: str, args: dict):
 
 
 content = build_prompt_system(task_instruction, format_instruction)
-filtered_tools = filter_tools_for_query(query, tools_json_path, types_json_path)
+# filtered_tools = filter_tools_for_query(query, tools_json_path, types_json_path)
 
 # Format the tools properly before sending to OpenAI
-formatted_tools = format_tools_for_openai(filtered_tools)
+formatted_tools = format_tools_for_openai(openai_format_tools)
+
+with open("formatted_tools.json", "w") as f:
+    json.dump(formatted_tools, f, indent=2)
 
 print("Sending formatted tools to OpenAI:")
 print(json.dumps(formatted_tools, indent=2))
 
 # Helper function to build the prompt
 response = client.responses.create(
-  model="gpt-4.5-preview",
+  model="gpt-4o",
   input=[
     {
       "role": "system",
