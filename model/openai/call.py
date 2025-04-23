@@ -4,11 +4,12 @@ from openai import OpenAI
 import asyncio
 import importlib
 import os
-from google.cloud import functions_v2,functions_v2
+from google.cloud import vpcaccess_v1,vpcaccess_v1
 from google.protobuf import field_mask_pb2
 import numpy as np
 from sentence_transformers import SentenceTransformer
-import json_repair
+import google.api_core.exceptions
+
 
 # Set your OpenAI API key
 api_key = "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"
@@ -26,14 +27,31 @@ If the given question lacks the parameters required by the function, also point 
 format_instruction = """
 The output MUST strictly adhere to the following JSON format if only the parameters are understandable, and NO other text MUST be included.
 The example format is as follows. Please make sure the parameter type is correct. If no function call is needed, please make tool_calls an empty list '[]'. 
+Always assume the minimum default values for the parameters that are required and not provided in user query.
 Please don't forget the request type in the function call. The request type is mentioned as the request_types in the function call.
 { "tool_calls": [ {"name": "func_name1", "arguments": {"argument1": "value1", "argument2": "value2"}}, ... (more tool calls as required) ] }
 """.strip()
 
-# Define the user query
-query = " Can you create a cloud function in the project vidhra us-central1 with name 'test-function' and entry point 'main'?"
-
-
+# Define the error handling instruction
+error_handling_instruction = """
+When an error occurs during function execution, you must:
+1. Analyze the error message carefully to understand the root cause
+2. Check if the error is due to:
+   - Missing required parameters
+   - Invalid parameter values or types
+   - Resource naming issues
+   - Permission or access issues
+   - Resource conflicts or existence
+3. Based on the error analysis:
+   - If parameters are missing, add them with appropriate values
+   - If values are invalid, correct them according to the API requirements
+   - If resource names are malformed, fix the naming format
+   - If there are permission issues, ensure proper authentication
+   - If resources exist/conflict, handle accordingly
+4. Modify the tool calls to address the specific error while maintaining the original intent
+5. Ensure all modified tool calls still adhere to the required JSON format
+6. If the error cannot be resolved, provide a clear explanation of why
+""".strip()
 
 client = OpenAI(
     api_key=api_key,  # This is the default and can be omitted
@@ -262,13 +280,14 @@ def build_openai_tools(tools_json_path, types_json_path):
     return openai_tools
 
 # Use the function to build tools dynamically
-tools_json_path = "functions_v2/tools.json"
-types_json_path = "functions_v2/types.json"
+tools_json_path = "vpcaccess_v1/tools.json"
+types_json_path = "vpcaccess_v1/types.json"
 openai_format_tools = build_openai_tools(tools_json_path, types_json_path)
 
 def build_prompt_system(task_instruction: str, format_instruction: str):
     prompt = f"[BEGIN OF TASK INSTRUCTION]\n{task_instruction}\n[END OF TASK INSTRUCTION]\n\n"
     prompt += f"[BEGIN OF FORMAT INSTRUCTION]\n{format_instruction}\n[END OF FORMAT INSTRUCTION]\n\n"
+    prompt += f"[BEGIN OF ERROR HANDLING INSTRUCTION]\n{error_handling_instruction}\n[END OF ERROR HANDLING INSTRUCTION]\n\n"
     return prompt
 
 # def build_prompt_user(query, tools_json_path, types_json_path):
@@ -312,46 +331,44 @@ def convert_strings_to_json(data: dict) -> dict:
 
 async def dynamic_executor(request_type: str, method_name: str, args: dict):
     """
-    Dynamically call a method from the CloudBillingAsyncClient by:
-      1. Retrieving the request class using 'class_name' from billing_v1
-      2. Retrieving the async method using 'method_name'
-      3. Instantiating 'RequestClass' with parameter values from 'args'
-         (Parsing JSON strings where appropriate)
-      4. Invoking the async method.
+    Dynamically call a method with comprehensive error handling.
+    Returns a tuple of (success, result/error_message)
     """
     try:
-        RequestClass = getattr(functions_v2, request_type)
-        # RequestClassFunctionAccount = getattr(functions_v2, "VpcAccess")
-
-        function_client = functions_v2.FunctionServiceAsyncClient()
+        RequestClass = getattr(vpcaccess_v1, request_type)
+        function_client = vpcaccess_v1.VpcAccessServiceAsyncClient()
         method = getattr(function_client, method_name)
 
-        # Remove "account" from the original args before conversion
+        # Remove "function" from the original args before conversion
         function_value = args.pop("function", None)
 
         # Convert any JSON strings into Python dictionaries (or lists)
         parsed_args = convert_strings_to_json(args)
 
-
-        request = None
-
-        # # Attach the "account" field to a BillingAccount object if present
-        # if function_value is not None:
-        #     parsed_args_function = convert_strings_to_json(function_value)
-        #     request = RequestClass(**parsed_args,function=RequestClassFunctionAccount(**parsed_args_function))
-        # else:
         request = RequestClass(**parsed_args)
-
-
-
-        billing_info = await method(request=request)
-        print(billing_info)
-        return billing_info
+        result = await method(request=request)
+        return True, result
 
     except AttributeError as e:
-        print(f"Failed to find attribute: {e}")
+        return False, f"Invalid request type or method: {str(e)}"
+    except TypeError as e:
+        return False, f"Invalid argument types: {str(e)}"
+    except ValueError as e:
+        return False, f"Invalid argument values: {str(e)}"
+    except google.api_core.exceptions.InvalidArgument as e:
+        return False, f"Invalid API arguments (400): {str(e)}"
+    except google.api_core.exceptions.PermissionDenied as e:
+        return False, f"Permission denied (403): {str(e)}"
+    except google.api_core.exceptions.NotFound as e:
+        return False, f"Resource not found (404): {str(e)}"
+    except google.api_core.exceptions.AlreadyExists as e:
+        return False, f"Resource already exists (409): {str(e)}"
+    except google.api_core.exceptions.FailedPrecondition as e:
+        return False, f"Failed precondition (412): {str(e)}"
+    except google.api_core.exceptions.ResourceExhausted as e:
+        return False, f"Resource exhausted (429): {str(e)}"
     except Exception as e:
-        print(f"Failed to execute request: {e}")
+        return False, f"Unexpected error: {str(e)}"
 
 # Example usage
 
@@ -371,35 +388,35 @@ print("Sending formatted tools to OpenAI:")
 print(json.dumps(formatted_tools, indent=2))
 
 # Helper function to build the prompt
-response = client.responses.create(
-  model="gpt-4o",
-  input=[
-    {
-      "role": "system",
-      "content": [
-        {
-          "type": "input_text",
-          "text": content
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "input_text",
-          "text": query
-        }
-      ]
-    },
-  ],
-  text={
-    "format": {
-      "type": "text"
-    }
-  },
-  tools=formatted_tools,
-)
+# response = client.responses.create(
+#   model="gpt-4o",
+#   input=[
+#     {
+#       "role": "system",
+#       "content": [
+#         {
+#           "type": "input_text",
+#           "text": content
+#         }
+#       ]
+#     },
+#     {
+#       "role": "user",
+#       "content": [
+#         {
+#           "type": "input_text",
+#           "text": query
+#         }
+#       ]
+#     },
+#   ],
+#   text={
+#     "format": {
+#       "type": "text"
+#     }
+#   },
+#   tools=formatted_tools,
+# )
 
 def extract_args(arguments: dict,start_key='request',end_key='retry'):
     keys = list(arguments.keys())
@@ -419,7 +436,7 @@ def extract_args(arguments: dict,start_key='request',end_key='retry'):
 #Call the API to get the response
 # tool_calls = response.choices[0].message.tool_calls
 # content = response.choices[0].message.content
-content = response
+# content = response
 
 
 
@@ -449,7 +466,7 @@ def get_request_types_for_method(tools_json_path: str, method_name: str) -> list
 
 
 # Example usage:
-tools_json_path = "functions_v2/tools.json"
+tools_json_path = "vpcaccess_v1/tools.json"
 
 async def collect_pager_results(pager):
     results = []
@@ -459,27 +476,141 @@ async def collect_pager_results(pager):
 
 
 # Then in your dynamic_executor or wherever you need it:
-print(content.output_text)
-tools = json.loads(content.output_text)
-for call in tools["tool_calls"]:
-    # Suppose the call includes "service_name" and "method_name"
-    if call["name"].startswith("functions."):
-        call["name"] = call["name"][len("functions.") :]
+# print(content.output_text)
+# tools = json.loads(content.output_text)
+# for call in tools["tool_calls"]:
+#     # Suppose the call includes "service_name" and "method_name"
+#     if call["name"].startswith("functions."):
+#         call["name"] = call["name"][len("functions.") :]
 
-    method_name = call["name"]
+#     method_name = call["name"]
 
-    # Find the corresponding request type
-    request_types = get_request_types_for_method(tools_json_path, method_name)  # e.g. "GetBillingAccountRequest"
+#     # Find the corresponding request type
+#     request_types = get_request_types_for_method(tools_json_path, method_name)  # e.g. "GetBillingAccountRequest"
 
-    print(f"Found request type for {method_name}: {request_types}")
-    print(request_types[0])
-    output = asyncio.run(dynamic_executor(
-        request_types[0],
-        method_name,
-        call["arguments"]
-    ))
-    print(output)
-    results = asyncio.run(collect_pager_results(output))
+#     print(f"Found request type for {method_name}: {request_types}")
+#     print(request_types[0])
+#     output = asyncio.run(dynamic_executor(
+#         request_types[0],
+#         method_name,
+#         call["arguments"]
+#     ))
+#     print(output)
+#     results = asyncio.run(collect_pager_results(output))
+
+async def tool_call_with_feedback_loop(query, max_attempts=6):
+    """
+    Execute tool calls with OpenAI feedback loop for error correction.
+    Sends errors back to OpenAI to get corrected tool calls until successful or max attempts reached.
+    """
+    attempt = 0
+    previous_errors = []
+    
+    while attempt < max_attempts:
+        try:
+            # Build the conversation with error context if any
+            messages = [
+                {
+                    "role": "system",
+                    "content": [{"type": "input_text", "text": content}]
+                },
+                {
+                    "role": "user",
+                    "content": [{"type": "input_text", "text": query}]
+                }
+            ]
+            
+            # Add error context from previous attempts
+            for previous_error in previous_errors:
+                error_context = (
+                    "[BEGIN OF ERROR CONTEXT INSTRUCTION]\n Previous attempt failed with these errors. Please correct the tool calls accordingly:\n"
+                    f"{json.dumps(previous_error, indent=2)}\n"
+                    "Ensure all resource names are properly formatted and required fields are provided.\n"
+                    "[END OF ERROR CONTEXT INSTRUCTION]\n"
+                )
+                print(error_context)
+                messages.append({
+                    "role": "user",
+                    "content": [{"type": "input_text", "text": error_context}]
+                })
+
+            print(messages)
+            # Get new tool calls from OpenAI
+            response = client.responses.create(
+                model="gpt-4o",
+                input=messages,
+                tools=formatted_tools,
+                temperature=0.0,
+                top_p=0.95,
+            )
+    
+
+            # Parse the tool calls
+            tools = json.loads(response.output_text)
+            current_errors = []
+
+            # Execute each tool call
+            for call in tools["tool_calls"]:
+                if call["name"].startswith("functions."):
+                    call["name"] = call["name"][len("functions."):]
+
+                method_name = call["name"]
+                request_types = get_request_types_for_method(tools_json_path, method_name)
+                if not request_types:
+                    current_errors.append({
+                        "method": method_name,
+                        "error": "No request type found for this method",
+                        "output": call,
+                    })
+                    continue
+
+                success, result = await dynamic_executor(
+                    request_types[0],
+                    method_name,
+                    call["arguments"]
+                )
+                print(success, result)
+
+                if not success:
+                    # Add the error to our list with full context
+                    current_errors.append({
+                        "method": method_name,
+                        "error": str(result),  # This now includes the HTTP status code if applicable
+                        "arguments": call["arguments"]
+                    })
+                else:
+                    print(f"Successfully executed {method_name}")
+                    if hasattr(result, "__aiter__"):
+                        results = await collect_pager_results(result)
+                        print("Results:", results)
+                    else:
+                        print("Result:", result)
+
+            # If no errors, we're done!
+            if not current_errors:
+                print("All operations completed successfully!")
+                return
+
+            # If we had errors, save them for the next iteration
+            previous_errors = current_errors
+            attempt += 1
+            print(f"\nAttempt {attempt} failed with errors:")
+            for error in current_errors:
+                print(f"Method: {error['method']}")
+                print(f"Error: {error['error']}")
+                print(f"Arguments used: {json.dumps(error['arguments'], indent=2)}\n")
+            print("Retrying with corrections...")
+
+        except Exception as e:
+            print(f"Unexpected error during attempt {attempt}: {e}")
+            attempt += 1
+
+    print(f"Failed after {max_attempts} attempts. Last errors:")
+    print(json.dumps(previous_errors, indent=2))
+
+# Usage
+query = "Can you create a serverless vpc access connector in the project vidhra us-central1 with name 'test-vpc-access-connector' and ip address '10.8.0.0/28' in default network?"
+asyncio.run(tool_call_with_feedback_loop(query))
 
 
 
