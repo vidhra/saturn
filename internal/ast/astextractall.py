@@ -219,9 +219,9 @@ def process_all_packages(base_directory):
                 package_results = process_package(metadata_path)
                 if package_results:
                     # Create an output folder within the package directory
-                    working_dir = r"/Users/prashanthvarma/Saturn/internal/ast"
+                    working_dir = r"C:\Users\AMD\vidhra\internal\ast"
                     output_dir = os.path.join(working_dir, "extracted_methods")
-                    tools_dir = os.path.join(output_dir, metadata_path.split("/")[-2])
+                    tools_dir = os.path.join(output_dir, metadata_path.split("\\")[-2])
                     os.makedirs(tools_dir, exist_ok=True)
                     output_file = os.path.join(tools_dir, "tools.json")
                     with open(output_file, "w", encoding="utf-8") as f:
@@ -230,7 +230,7 @@ def process_all_packages(base_directory):
 
 def main():
     # Set the base directory for the packages.
-    base_directory = r"/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages"
+    base_directory = r"C:\Users\AMD\vidhra\internal\ast\google-cloud-python\packages"
     
     # Process each package and save the results in its own folder.
     process_all_packages(base_directory)
