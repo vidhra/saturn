@@ -9,7 +9,20 @@ from google.protobuf import field_mask_pb2
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import google.api_core.exceptions
+from error_agent import create_error_handled_prompt
+from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Dict, Any, Optional
 
+class ToolCall(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
+    name: str = Field(..., description="The name of the function to call")
+    arguments: Dict[str, Any] = Field(..., description="The arguments to pass to the function")
+
+class ToolCalls(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
+    tool_calls: List[ToolCall] = Field(..., description="List of tool calls to make")
 
 # Set your OpenAI API key
 api_key = "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"
@@ -17,10 +30,21 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "vidhra-eb3e8152e0a2.json"
 
 # Define the task instruction
 task_instruction = """
-You are an expert in composing functions. You are given a question and a set of possible functions. 
-Based on the question, you will need to make one or more function/tool calls to achieve the purpose. 
-If none of the functions can be used, point it out and refuse to answer. 
-If the given question lacks the parameters required by the function, also point it out.
+You are an expert in composing functions and handling API errors. Your primary role is to:
+1. Analyze and understand the user's request
+2. Make appropriate function/tool calls to achieve the purpose
+3. When errors occur, carefully analyze the error messages and:
+   - Identify the root cause of the error
+   - Check for missing or invalid parameters
+   - Verify resource names and formats
+   - Ensure proper permissions and access
+   - Make necessary corrections to the function calls
+4. If none of the functions can be used, clearly explain why
+5. If the request lacks required parameters, specify which ones are missing
+6. Always maintain the original intent while fixing errors
+7. Learn from previous errors to prevent similar issues in subsequent attempts
+
+Remember: Your goal is to successfully complete the task while handling any errors that arise.
 """.strip()
 
 # Define the format instruction
@@ -29,9 +53,9 @@ The output MUST strictly adhere to the following JSON format if only the paramet
 The example format is as follows. Please make sure the parameter type is correct. If no function call is needed, please make tool_calls an empty list '[]'. 
 Always assume the minimum default values for the parameters that are required and not provided in user query.
 Please don't forget the request type in the function call. The request type is mentioned as the request_types in the function call.
-{ "tool_calls": [ {"name": "func_name1", "arguments": {"argument1": "value1", "argument2": "value2"}}, ... (more tool calls as required) ] }
-""".strip()
 
+""".strip()
+# { "tool_calls": [ {"name": "func_name1", "arguments": {"argument1": "value1", "argument2": "value2"}}, ... (more tool calls as required) ] }
 # Define the error handling instruction
 error_handling_instruction = """
 When an error occurs during function execution, you must:
@@ -520,37 +544,32 @@ async def tool_call_with_feedback_loop(query, max_attempts=6):
                 }
             ]
             
-            # Add error context from previous attempts
-            for previous_error in previous_errors:
-                error_context = (
-                    "[BEGIN OF ERROR CONTEXT INSTRUCTION]\n Previous attempt failed with these errors. Please correct the tool calls accordingly:\n"
-                    f"{json.dumps(previous_error, indent=2)}\n"
-                    "Ensure all resource names are properly formatted and required fields are provided.\n"
-                    "[END OF ERROR CONTEXT INSTRUCTION]\n"
-                )
-                print(error_context)
-                messages.append({
-                    "role": "user",
-                    "content": [{"type": "input_text", "text": error_context}]
-                })
+            # If we have previous errors, use the error handling agent to create a new prompt
+            if previous_errors:
+                new_prompt = create_error_handled_prompt(query, previous_errors)
+                messages = [
+                    {
+                        "role": "system",
+                        "content": [{"type": "input_text", "text": new_prompt}]
+                    }
+                ]
+                print(new_prompt)
 
-            print(messages)
+
             # Get new tool calls from OpenAI
-            response = client.responses.create(
+            response = client.responses.parse(
                 model="gpt-4o",
                 input=messages,
-                tools=formatted_tools,
-                temperature=0.0,
-                top_p=0.95,
+                tools=formatted_tools
             )
-    
-
+            print(response.output)
+            
             # Parse the tool calls
-            tools = json.loads(response.output_text)
+            tools = ToolCalls.model_validate_json(response.output_text)
             current_errors = []
 
             # Execute each tool call
-            for call in tools["tool_calls"]:
+            for call in tools.tool_calls:
                 if call["name"].startswith("functions."):
                     call["name"] = call["name"][len("functions."):]
 
