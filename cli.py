@@ -5,12 +5,12 @@ from typing import Optional, Dict, Any
 from rich.console import Console
 from rich.panel import Panel
 
-# Import actual components from the package
-from gcp_nl_cli.config import load_config
-# We need to import the actual classes now, not the stubs from openai_interface
-from gcp_nl_cli.openai_interface import run_query_with_feedback 
-from gcp_nl_cli.knowledge_base import KnowledgeBase 
-from gcp_nl_cli.gcp_executor import GcpExecutor 
+# Import actual components from the package (using the new name 'saturn')
+from saturn.config import load_config
+# Import the main feedback loop function from the new orchestrator module
+from saturn.orchestrator import run_query_with_feedback
+from saturn.knowledge_base import KnowledgeBase
+from saturn.gcp_executor import GcpExecutor
 
 # Remove Temporary stubs
 # async def run_query_with_feedback(...): ...
