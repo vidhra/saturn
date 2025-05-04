@@ -7,6 +7,9 @@ from typing import Dict, Any, Tuple, Optional, List
 import asyncio
 import traceback
 import re # Needed for robust key matching
+from google.api_core.operation import Operation # Import Operation for type checking
+from google.api_core.operation_async import AsyncOperation # Import AsyncOperation
+from google.protobuf.json_format import MessageToDict # For result conversion
 
 # Import necessary components from the package
 from .knowledge_base import KnowledgeBase
@@ -361,25 +364,52 @@ class GcpExecutor:
 
             print(f"Calling method: {method_name}")
             print(f"Request object: {request_obj}")
-            result = await method_to_call(request=request_obj)
-            print("GCP call successful.")
+            api_result = await method_to_call(request=request_obj)
+            print("Initial GCP API call successful.")
+
+            # --- Handle Result (Check for LRO, Pagers, etc.) --- 
+            final_result = api_result
             
-            # Handle potential pagers/async iterators
-            if hasattr(result, "__aiter__"):
-                print("Result is an async iterator, collecting items...")
+            # Check if the result is an AsyncOperation (LRO)
+            if isinstance(api_result, AsyncOperation):
+                print(f"Result is an AsyncOperation (LRO). Waiting for completion... (Operation ID: {api_result.operation.name})")
+                # Wait for the LRO to complete. Timeout can be added.
+                try:
+                    # The timeout here is for the wait itself, not the operation total time
+                    final_result = await asyncio.wait_for(api_result.result(), timeout=self.config.get('gcp_lro_wait_timeout', 300.0))
+                    print("LRO completed successfully.")
+                except asyncio.TimeoutError:
+                    print("Warning: Timed out waiting for LRO to complete.")
+                    return False, f"Timed out waiting for operation {api_result.operation.name} to complete."
+                except Exception as lro_err:
+                    print(f"Error occurred during LRO execution: {lro_err}")
+                    # Try to get metadata or error details from the operation if possible
+                    op_error = getattr(api_result.operation, 'error', None)
+                    return False, f"Operation {api_result.operation.name} failed: {lro_err} {op_error or ''}"
+
+            # Handle potential pagers/async iterators AFTER LRO check (LRO result might be iterable)
+            elif hasattr(final_result, "__aiter__"):
+                print("Result is an async iterator/pager. Collecting items...")
                 collected_results = []
-                async for item in result:
-                    # TODO: Convert proto messages to dicts for cleaner output/state?
-                    # from google.protobuf.json_format import MessageToDict
-                    # collected_results.append(MessageToDict(item))
-                    collected_results.append(item) 
+                async for item in final_result:
+                    # Convert proto messages to dicts
+                    try:
+                         collected_results.append(MessageToDict(item))
+                    except Exception as conversion_err:
+                         print(f"Warning: Failed to convert item to dict: {conversion_err}. Appending raw item.")
+                         collected_results.append(item)
                 print(f"Collected {len(collected_results)} items.")
                 return True, collected_results # Return list of results
-            else:
-                 # TODO: Convert single proto message result to dict?
-                # from google.protobuf.json_format import MessageToDict
-                # return True, MessageToDict(result)
-                 return True, result # Return single result
+            
+            # --- Convert single result to Dict --- 
+            try:
+                 # Attempt conversion even if not LRO/pager
+                 final_result_dict = MessageToDict(final_result)
+                 print("Converted final result to dictionary.")
+                 return True, final_result_dict
+            except Exception as conversion_err:
+                 print(f"Warning: Failed to convert final result to dict: {conversion_err}. Returning raw result.")
+                 return True, final_result # Return raw result if conversion fails
 
         # --- Error Handling (More specific) --- 
         except google.api_core.exceptions.InvalidArgument as e:
