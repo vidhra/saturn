@@ -1,37 +1,70 @@
-# Vidhra
-Better management, finOps, and usage of cloud
+# GCP Natural Language CLI
 
-### Overview
-Vidhra is a Cloud Optimization Tool, an open-source project designed to efficiently manage cloud resources, reduce cloud wastage, and optimize costs. It includes a **Karma Allocation** inspired by the paper [karma allocator](https://www.usenix.org/conference/osdi23/presentation/vuppalapati) module to allocate cloud resources based on usage efficiency and a **FinOps** module to provide optimization recommendations, generate reports, and manage cloud wastage alerts.
+This project aims to provide a command-line interface (CLI) for interacting with Google Cloud Platform (GCP) APIs using natural language queries. It leverages OpenAI's function calling capabilities to translate user requests into specific GCP API calls and includes an error-handling feedback loop to improve reliability.
 
-The project integrates with **AWS** and **GCP** billing APIs to track cloud costs, provide actionable optimization suggestions, and reward efficient teams with monetary credits. The Karma allocator encourages teams to be more resource-efficient, while the FinOps module helps organizations take control of their cloud spending.
+## Features (Planned)
 
-### Features
-- **Cloud Query**: Runs actions with a simple query prompt.
-- **FinOps Optimization**: Detects cloud wastage and provides optimization recommendations to reduce costs.
-- **Cloud Integration**: Integrates with AWS and GCP billing APIs for real-time cost monitoring.
-- **Cost Reporting**: Generates detailed reports on cloud costs, efficiency, and areas for potential savings.
-### Leveraging LLMs for Enhanced Functionality
+*   **Natural Language Input:** Control GCP resources using commands like "create a firewall rule", "list storage buckets", etc.
+*   **Multi-Service Support:** Designed to work with various GCP services (Compute Engine, VPC Access, Cloud Storage, etc.).
+*   **Error Correction:** Automatically attempts to correct failed API calls by analyzing errors and adjusting parameters.
+*   **Extensible Knowledge Base:** Uses API definitions (initially JSON files) to inform the LLM about available GCP functions.
+*   **(Future) State Management:** Track created resources.
+*   **(Future) DAG Planning:** Model dependencies between operations for complex workflows.
 
-**Vidhra** uses **Large Language Models (LLMs)** to make data processing, reporting, and decision-making more efficient. Here’s how LLMs are utilized to simplify and enhance various aspects of the project:
+## Setup
 
-1. **Data Fetching and Analysis**:
-   LLMs can be integrated to parse and analyze cloud usage data fetched from **AWS** and **GCP**. They provide natural language insights, identify underutilized resources, predict peak demands, and detect anomalies more effectively.
-   - Example Prompt: `"Analyze patterns and suggest areas where resources can be optimized."`
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd gcp-natural-language-cli
+    ```
 
-2. **Natural Language Reporting**:
-   - The **FinOps Reporting Module** leverages LLMs to generate easy-to-understand reports summarizing cost-saving opportunities, wastage trends, and recommendations for each team.
-   - These reports can be customized by querying the LLM in natural language, such as: `"Generate a report showing the top 5 optimization opportunities for the month."`
+2.  **Create a virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
-3. **Real-Time Recommendations**:
-   LLMs can provide real-time optimization suggestions by continuously analyzing cloud metrics and identifying potential issues. They detect scenarios such as overprovisioning or idle instances and generate suggestions to either scale down resources or move to a different instance type.
-   - Example: "Consider switching this instance to a spot instance to save 30% in costs."
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-4. **Automated Alert Messaging**:
-   - The **Alerts Module** is enhanced with LLMs to formulate alert messages in natural language, making it easier for DevOps teams to understand and act upon. Instead of raw metrics, alerts will include explanations like: "The resource utilization, for instance, XYZ, has dropped below 10% for the last 48 hours. Consider rightsizing or shutting it down."
+4.  **Configuration:**
+    *   **Environment Variables:** Set the following environment variables:
+        *   `OPENAI_API_KEY`: Your OpenAI API key.
+        *   `GCP_PROJECT_ID`: Your Google Cloud project ID.
+        *   `GOOGLE_APPLICATION_CREDENTIALS`: (Optional) Path to your GCP service account key file. If not set, the tool relies on Application Default Credentials (ADC).
+    *   **Alternatively, use `config.yaml`:** Create a `config.yaml` file in the root directory with the following structure:
+        ```yaml
+        openai_api_key: "sk-..."
+        gcp_project_id: "your-gcp-project-id"
+        gcp_credentials_path: "/path/to/your/keyfile.json" # Optional
+        ```
 
-5. **Interactive Querying**:
-   - LLMs enable users to query cloud cost data and optimization opportunities interactively. Users can ask questions like: "Which department has the highest cloud wastage?" and receive a detailed response, along with suggestions for improvement.
+5.  **API Definitions:** Place the `tools.json` and `types.json` files for each required GCP service into subdirectories within the `api_defs/` directory. The subdirectory name should correspond to the service name used in the code (e.g., `api_defs/vpcaccess_v1/`, `api_defs/compute_v1/`).
 
-6. **Simplified Integration**:
-   - By using LLMs, integration with **AWS** and **GCP** billing APIs becomes more intuitive. LLMs help generate API requests or Terraform configurations, allowing the tool to scale or provision cloud resources based on natural language instructions.
+## Usage
+
+```bash
+python cli.py "Your natural language query here" [OPTIONS]
+```
+
+**Example:**
+
+```bash
+python cli.py "Create a serverless VPC access connector named 'my-connector' in us-central1 with IP range 10.8.0.0/28 in the default network."
+```
+
+**Options:**
+
+*   `--config-file TEXT`: Path to configuration file (default: `config.yaml`).
+*   `--state-file TEXT`: Path to state file (default: `gcp_state.json`).
+*   `--api-defs-dir TEXT`: Directory containing GCP API definitions (default: `api_defs`).
+*   `--max-attempts INTEGER`: Maximum retry attempts for API calls (default: 5).
+*   `--verbose, -v`: Enable verbose output.
+*   `--help`: Show help message.
+
+## Development
+
+(Add notes on running tests, contributing, etc. later)
