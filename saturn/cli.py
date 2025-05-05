@@ -30,7 +30,8 @@ def run_command(
     project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--project-id", help="Google Cloud Project ID. Overrides config/env."),
     creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--creds-path", help="Path to GCP service account key file (uses ADC if not provided). Overrides config/env."),
     max_retries: Optional[int] = typer.Option(int(os.getenv("MAX_RETRIES") or APP_CONFIG.get('max_retries', 5)), "--max-retries", help="Max retry attempts for the orchestrator loop."),
-    kb_path: Optional[str] = typer.Option(os.getenv("KB_PATH") or APP_CONFIG.get('kb_path', "api_defs"), "--kb-path", help="Path to the knowledge base API definitions.")
+    kb_path: Optional[str] = typer.Option(os.getenv("KB_PATH") or APP_CONFIG.get('kb_path', "api_defs"), "--kb-path", help="Path to the knowledge base API definitions."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output, including full exception tracebacks.")
 ):
     """Runs the Saturn orchestrator with the specified query and configuration."""
     
@@ -77,7 +78,7 @@ def run_command(
         console.print("Components initialized.")
 
         console.print("--- Starting Orchestrator ---")
-        asyncio.run(run_query_with_feedback(query, config, kb, executor, config['max_retries']))
+        asyncio.run(run_query_with_feedback(query, config, kb, executor, config['max_retries'], verbose))
 
     except FileNotFoundError:
          console.print(f"[bold red]ERROR:[/] Knowledge Base directory '{kb_path}' not found.")
