@@ -87,18 +87,54 @@ class OpenAILLM(BaseLLMInterface):
                                 "arguments": args_dict
                             })
                         except json.JSONDecodeError as json_err:
-                            print(f"  [Error] Invalid JSON arguments from LLM: {json_err}")
-                            # How to handle this error? Return it? For now, maybe just skip the call.
-                            # Or potentially add it to a list of processing errors?
-                            # We might need a different return type to signal this kind of issue.
+                            print(f"  [Error] Invalid JSON arguments from LLM tool_call object: {json_err}")
                             pass # Skipping this invalid tool call for now
                     else:
                         print(f"  [Warning] Received non-function tool call type: {tool_call_obj.type}")
-            else:
-                print("OpenAI did not propose any tool calls.")
-                if message.content:
-                    print(f"OpenAI Response Content: {message.content}")
+            elif message.content:
+                print("OpenAI did not propose tool calls directly. Checking message content for JSON...")
+                try:
+                    # Attempt to parse the content as JSON
+                    potential_tool_calls = json.loads(message.content.strip())
+                    # Check if it looks like the expected structure (dict with 'tool_calls' list)
+                    if isinstance(potential_tool_calls, dict) and isinstance(potential_tool_calls.get('tool_calls'), list):
+                        print("Found 'tool_calls' structure in message content. Processing...")
+                        llm_text_response = None # Clear text response if we found structured calls
+                        calls_in_content = potential_tool_calls['tool_calls']
+                        print(f"Found {len(calls_in_content)} potential tool call(s) in content:")
+                        for call_data in calls_in_content:
+                            # Adapt structure based on observed text output ('parameters' key)
+                            if isinstance(call_data, dict) and 'name' in call_data and 'parameters' in call_data:
+                                func_name = call_data['name']
+                                args_dict = call_data['parameters'] # Assuming parameters is already a dict
+                                print(f"  - Name: {func_name}")
+                                print(f"    Arguments (from 'parameters'): {args_dict}")
+                                tool_calls_list.append({
+                                    "name": func_name,
+                                    "arguments": args_dict # Use the parameters dict as arguments
+                                })
+                            else:
+                                print(f"  [Warning] Skipping item in content's tool_calls list due to unexpected format: {call_data}")
+                    else:
+                        # JSON parsed, but not the expected tool call structure
+                        print("Message content is JSON, but not the expected tool_calls structure.")
+                        llm_text_response = message.content
+                except json.JSONDecodeError:
+                    # Content is not valid JSON, treat as plain text
+                    print("Message content is not valid JSON. Treating as text response.")
                     llm_text_response = message.content
+                except Exception as parse_err:
+                    # Catch other potential errors during parsing/processing
+                    print(f"[Error] Failed to process message content for tool calls: {parse_err}")
+                    llm_text_response = message.content # Fallback to text
+
+            if not tool_calls_list and message.content and not llm_text_response:
+                 # This case might occur if content existed but wasn't parsed into tool calls above.
+                 # Re-assign if it was cleared assuming content would yield tools.
+                 print("Assigning original message content as text response.")
+                 llm_text_response = message.content
+            elif not tool_calls_list and not message.content:
+                 print("OpenAI did not propose any tool calls and provided no text content.")
 
             # Return None for tool calls list if it's empty
             return tool_calls_list if tool_calls_list else None, llm_text_response
