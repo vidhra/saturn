@@ -90,7 +90,8 @@ async def run_query_with_feedback(
     config: Dict[str, Any],
     knowledge_base: KnowledgeBase, 
     gcp_executor: GcpExecutor,    
-    max_attempts: int = 5
+    max_attempts: int = 5,
+    verbose: bool = False
 ) -> None:
     """
     Main loop: Process query, call LLM, manage execution of planned tool calls 
@@ -168,8 +169,15 @@ async def run_query_with_feedback(
                             raw_calls = parsed['tool_calls']
                             console.print(f"[info]Successfully parsed {len(raw_calls)} potential calls from text.[/info]")
                             for item in parsed['tool_calls']:
-                                name = item.get('name') or item.get('function') or item.get('tool_name')
+                                # Handle variations in tool name key
+                                name = item.get('name') or item.get('function') or item.get('tool_name') or item.get('tool') or item.get('recipient_name')
+                                # Handle variations in arguments key
                                 args = item.get('arguments') or item.get('parameters')
+                                
+                                # Strip potential prefix like 'functions.' from recipient_name
+                                if name and name.startswith('functions.'):
+                                     name = name.split('.', 1)[1]
+                                
                                 if name and isinstance(args, dict):
                                     extracted_calls.append({'name': name, 'arguments': args})
                                 else: 
@@ -256,7 +264,7 @@ async def run_query_with_feedback(
                     tool_name = node_id.split('_', 2)[2] # Use correct split for unique ID
                     args = node_args[node_id]
                     console.print(f"  Queueing [cyan]{node_id}[/cyan] (Tool: {tool_name})")
-                    tasks.append(_execute_single_node(gcp_executor, knowledge_base, node_id, tool_name, args))
+                    tasks.append(_execute_single_node(gcp_executor, knowledge_base, node_id, tool_name, args, console))
                 
                 execution_results = await asyncio.gather(*tasks, return_exceptions=True)
                 
@@ -367,11 +375,18 @@ async def run_query_with_feedback(
     # ... (final failure logging) ...
 
 # Updated helper to use console.print (remains the same)
-async def _execute_single_node(gcp_executor, knowledge_base, node_id, tool_name, args):
+async def _execute_single_node(
+    gcp_executor: GcpExecutor,
+    knowledge_base: KnowledgeBase,
+    node_id: str,
+    tool_name: str,
+    args: Dict[str, Any],
+    console: Console
+) -> Tuple[str, bool, Any]:
     """Helper to execute one node and return structured result/error."""
     try:
         console.print(f"    Starting execution: [cyan]{node_id}[/cyan] ({tool_name})")
-        success, result = await gcp_executor.execute(tool_name, args, knowledge_base)
+        success, result = await gcp_executor.execute(tool_name, args, knowledge_base, console)
         console.print(f"    Finished execution: {node_id} (Success: {success})")
         return (node_id, success, result)
     except Exception as exec_err:
