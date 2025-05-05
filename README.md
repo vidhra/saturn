@@ -1,70 +1,111 @@
-# GCP Natural Language CLI
+# Saturn - Natural Language Interface for Google Cloud Platform
 
-This project aims to provide a command-line interface (CLI) for interacting with Google Cloud Platform (GCP) APIs using natural language queries. It leverages OpenAI's function calling capabilities to translate user requests into specific GCP API calls and includes an error-handling feedback loop to improve reliability.
+Saturn aims to provide a conversational interface for interacting with Google Cloud Platform (GCP) APIs. Instead of writing scripts or using the Cloud Console UI, users can state their goals in natural language, and Saturn will translate them into the appropriate GCP API calls.
 
-## Features (Planned)
+## Goals
 
-*   **Natural Language Input:** Control GCP resources using commands like "create a firewall rule", "list storage buckets", etc.
-*   **Multi-Service Support:** Designed to work with various GCP services (Compute Engine, VPC Access, Cloud Storage, etc.).
-*   **Error Correction:** Automatically attempts to correct failed API calls by analyzing errors and adjusting parameters.
-*   **Extensible Knowledge Base:** Uses API definitions (initially JSON files) to inform the LLM about available GCP functions.
-*   **(Future) State Management:** Track created resources.
-*   **(Future) DAG Planning:** Model dependencies between operations for complex workflows.
+*   **Natural Language Control:** Allow users to manage GCP resources using plain English commands.
+*   **LLM Agnostic:** Support multiple Large Language Models (LLMs) like OpenAI GPT, Google Gemini, Anthropic Claude, and Mistral models via configurable interfaces.
+*   **Extensible Knowledge Base:** Use API definitions (e.g., OpenAPI specs, potentially other formats) stored locally (`api_defs/`) to inform the LLM about available GCP tools (functions/API calls) and their parameters.
+*   **Robust Execution:** Reliably execute the API calls identified by the LLM.
+*   **Error Handling & Retries:** Automatically handle errors during API execution and provide feedback to the LLM for correction within a retry loop.
+*   **State Tracking (Optional):** Record the execution flow and outcomes for debugging and auditing (`saturn_run_state.json`).
+
+## Core Components
+
+1.  **CLI (`saturn/cli.py`):** The command-line interface (using Typer) that accepts user queries and configuration overrides. Defines the `saturn run` command.
+2.  **Configuration (`saturn/config.py`):** Loads configuration from `config.yaml` and environment variables (`.env`).
+3.  **LLM Interfaces (`model/llm/`):** Contains wrappers for different LLM providers (OpenAI, Gemini, etc.), handling API calls and function/tool calling logic specific to each provider.
+4.  **Knowledge Base (`saturn/knowledge_base.py`):** Loads API definitions from the `api_defs/` directory and provides the available tools list to the LLM.
+5.  **GCP Executor (`saturn/gcp_executor.py`):** Takes a tool name and arguments (as decided by the LLM) and executes the corresponding GCP API call using the appropriate Python client library. Handles authentication (primarily via Application Default Credentials).
+6.  **Orchestrator (`saturn/orchestrator.py`):** The main control loop (`run_query_with_feedback`) that:
+    *   Takes the user query.
+    *   Calls the selected LLM Interface to get a plan (list of tool calls), providing available tools and previous errors.
+    *   Manages the execution of the planned tool calls via the GCP Executor, potentially handling dependencies and concurrency (using node states).
+    *   Collects results and errors.
+    *   Retries the LLM call with error feedback if necessary.
+7.  **State Recorder (`internal/state_recorder.py`):** (Optional) Logs the detailed state transitions and outcomes of each node (tool call) during a run to a JSON file (`saturn_run_state.json`).
 
 ## Setup
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url>
-    cd gcp-natural-language-cli
+    git clone <your-repo-url>
+    cd saturn # Or your project directory name
     ```
-
-2.  **Create a virtual environment:**
+2.  **Create and activate a virtual environment (Recommended):**
     ```bash
+    # Using venv
     python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
+    source venv/bin/activate # Linux/macOS
+    # .\venv\Scripts\activate # Windows
 
-3.  **Install dependencies:**
+    # Or using conda
+    # conda create -n saturnenv python=3.10 # Adjust Python version if needed
+    # conda activate saturnenv
+    ```
+3.  **Install dependencies:** Install the package in editable mode along with its dependencies using the `pyproject.toml` file.
     ```bash
-    pip install -r requirements.txt
+    pip install -e .
     ```
 
-4.  **Configuration:**
-    *   **Environment Variables:** Set the following environment variables:
-        *   `OPENAI_API_KEY`: Your OpenAI API key.
-        *   `GCP_PROJECT_ID`: Your Google Cloud project ID.
-        *   `GOOGLE_APPLICATION_CREDENTIALS`: (Optional) Path to your GCP service account key file. If not set, the tool relies on Application Default Credentials (ADC).
-    *   **Alternatively, use `config.yaml`:** Create a `config.yaml` file in the root directory with the following structure:
-        ```yaml
-        openai_api_key: "sk-..."
-        gcp_project_id: "your-gcp-project-id"
-        gcp_credentials_path: "/path/to/your/keyfile.json" # Optional
-        ```
+## Configuration
 
-5.  **API Definitions:** Place the `tools.json` and `types.json` files for each required GCP service into subdirectories within the `api_defs/` directory. The subdirectory name should correspond to the service name used in the code (e.g., `api_defs/vpcaccess_v1/`, `api_defs/compute_v1/`).
+Configuration is handled via `config.yaml` and environment variables (loaded from a `.env` file if present).
+
+1.  **`config.yaml`:** Create this file in the project root. Add base configuration like default LLM provider, API keys (though environment variables are generally preferred for secrets), and GCP project ID.
+    ```yaml
+    # Example config.yaml
+    llm_provider: openai # 'gemini', 'claude', 'mistral'
+    # openai_api_key: 'sk-...' # Better to use env var
+    gcp_project_id: your-gcp-project-id # Replace with your default project
+    kb_path: api_defs
+    max_retries: 3
+    # openai_model: gpt-4o # Optional model specification
+    ```
+2.  **`.env` File:** Create this file in the project root for sensitive information like API keys. **Ensure this file is added to your `.gitignore`!**
+    ```dotenv
+    # Example .env
+    OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    GEMINI_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    # ANTHROPIC_API_KEY=...
+    # MISTRAL_API_KEY=...
+    GCP_PROJECT_ID=your-gcp-project-id # Can also be set here
+    # GCP_CREDENTIALS_PATH=/path/to/your/service-account-key.json # Optional
+    ```
+3.  **GCP Authentication:** Ensure your environment is authenticated to GCP. The easiest way for local development is Application Default Credentials (ADC):
+    ```bash
+    gcloud auth application-default login
+    ```
+    Alternatively, set the `GCP_CREDENTIALS_PATH` environment variable (or config value) to point to a service account key JSON file.
 
 ## Usage
 
+Run Saturn from your terminal using the installed command (defined via `pyproject.toml` pointing to `saturn.cli:app`):
+
 ```bash
-python cli.py "Your natural language query here" [OPTIONS]
+saturn run "<your natural language query>" [OPTIONS]
 ```
 
 **Example:**
 
 ```bash
-python cli.py "Create a serverless VPC access connector named 'my-connector' in us-central1 with IP range 10.8.0.0/28 in the default network."
+saturn run "Create a serverless VPC access connector named 'dev-connector' in us-central1 with IP range 10.9.0.0/28 in the default network." --project-id my-dev-project
 ```
 
-**Options:**
+**Common Options:**
 
-*   `--config-file TEXT`: Path to configuration file (default: `config.yaml`).
-*   `--state-file TEXT`: Path to state file (default: `gcp_state.json`).
-*   `--api-defs-dir TEXT`: Directory containing GCP API definitions (default: `api_defs`).
-*   `--max-attempts INTEGER`: Maximum retry attempts for API calls (default: 5).
-*   `--verbose, -v`: Enable verbose output.
-*   `--help`: Show help message.
+*   `--project-id TEXT`: Specify the target GCP project ID (overrides config/env).
+*   `--provider TEXT`: Specify the LLM provider (e.g., `openai`, `gemini`).
+*   `--model TEXT`: Specify a specific LLM model for the chosen provider.
+*   `--creds-path TEXT`: Path to a GCP service account key file.
+*   `--max-retries INTEGER`: Number of attempts for the orchestrator loop.
+*   `--kb-path TEXT`: Path to the API definitions directory.
 
-## Development
+Use `saturn run --help` to see all available options.
 
-(Add notes on running tests, contributing, etc. later)
+## State Recording
+
+The `RunStateLogger` is integrated into the orchestrator. After each run, it generates/updates `saturn_run_state.json` in the project root. This file contains:
+*   `run_info`: Details about the overall run (query, times, status, errors).
+*   `nodes`: Detailed state history for each tool call (node) attempted during the run, including arguments, status transitions (PENDING, READY, RUNNING, COMPLETED/FAILED), timestamps, and final output or error.
