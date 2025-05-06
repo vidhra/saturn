@@ -22,6 +22,7 @@ SERVICE_TO_LIBRARY_MAP = {
     "vpcaccess_v1": "google.cloud.vpcaccess_v1",
     "compute_v1": "google.cloud.compute_v1",
     "storage_v1": "google.cloud.storage_v1",
+    "run_v2": "google.cloud.run_v2",
     # Add more services as needed
 }
 
@@ -31,6 +32,7 @@ SERVICE_TO_CLIENT_CLASS_MAP = {
     "vpcaccess_v1": "VpcAccessServiceAsyncClient",
     "compute_v1": "InstancesAsyncClient", # Or other specific clients like NetworksAsyncClient etc.
     "storage_v1": "StorageAsyncClient",
+    "run_v2": "JobsAsyncClient",
     # Add more services as needed
 }
 
@@ -269,21 +271,25 @@ class GcpExecutor:
             async for item in final_result:
                 # Convert proto messages to dicts
                 try:
-                     collected_results.append(MessageToDict(item))
+                     # Ensure 'item' is a protobuf message; otherwise, this will fail.
+                     # It's generally good practice for GCP client libraries.
+                     collected_results.append(MessageToDict(item, preserving_proto_field_name=True, including_default_value_fields=True))
                 except Exception as conversion_err:
-                     console.print(f"Warning: Failed to convert item to dict: {conversion_err}. Appending raw item.")
-                     collected_results.append(item)
+                     # Log the actual item type if conversion fails for debugging
+                     console.print(f"Warning: Failed to convert item of type {type(item)} to dict: {conversion_err}. Appending raw item.")
+                     collected_results.append(item) # Keep raw item if conversion fails
             console.print(f"Collected {len(collected_results)} items.")
             return True, collected_results # Return list of results
         
         # --- Convert single result to Dict --- 
         try:
              # Attempt conversion even if not LRO/pager
-             final_result_dict = MessageToDict(final_result)
+             final_result_dict = MessageToDict(final_result, preserving_proto_field_name=True, including_default_value_fields=True)
              console.print("Converted final result to dictionary.")
              return True, final_result_dict
         except Exception as conversion_err:
-             console.print(f"Warning: Failed to convert final result to dict: {conversion_err}. Returning raw result.")
+             # Log the actual item type if conversion fails for debugging
+             console.print(f"Warning: Failed to convert final result of type {type(final_result)} to dict: {conversion_err}. Returning raw result.")
              return True, final_result # Return raw result if conversion fails
 
 # Helper (if needed, from call.py)

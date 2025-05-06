@@ -1,0 +1,2122 @@
+{
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-run/google/cloud/run_v2/types/build.py": [
+    {
+      "type": "function",
+      "name": "SubmitBuildRequest",
+      "description": "Request message for submitting a Build.\n\nThis message has `oneof`_ fields (mutually exclusive fields).\nFor each oneof, at most one member field can be set at the same time.\nSetting any member of the oneof automatically clears all other\nmembers.\n\n.. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields\n\nAttributes:\n    parent (str):\n        Required. The project and location to build in. Location\n        must be a region, e.g., 'us-central1' or 'global' if the\n        global builder is to be used. Format:\n        ``projects/{project}/locations/{location}``\n    storage_source (google.cloud.run_v2.types.StorageSource):\n        Required. Source for the build.\n\n        This field is a member of `oneof`_ ``source``.\n    image_uri (str):\n        Required. Artifact Registry URI to store the\n        built image.\n    buildpack_build (google.cloud.run_v2.types.SubmitBuildRequest.BuildpacksBuild):\n        Build the source using Buildpacks.\n\n        This field is a member ",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The project and location to build in. Location must be a region, e.g., 'us-central1' or 'global' if the global builder is to be used. Format: ``projects/{project}/locations/{location}``",
+            "type": "string"
+          },
+          "storage_source": {
+            "description": "Required. Source for the build.  This field is a member of `oneof`_ ``source``.",
+            "reference": "google.cloud.run_v2.types.StorageSource",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "bucket": {
+                  "description": "Google Cloud Storage bucket containing the source (see `Bucket Name Requirements <https://cloud.google.com/storage/docs/bucket-naming#requirements>`__).",
+                  "type": "string"
+                },
+                "object_": {
+                  "description": "Google Cloud Storage object containing the source.  This object must be a gzipped archive file (``.tar.gz``) containing source to build.",
+                  "type": "string"
+                },
+                "generation": {
+                  "description": "Google Cloud Storage generation for the object. If the generation is omitted, the latest generation will be used.",
+                  "type": "integer"
+                },
+                "source_upload_url": {
+                  "description": "When the specified storage bucket is a 1st gen function uploard url bucket, this field should be set as the generated upload url for 1st gen deployment.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "image_uri": {
+            "description": "Required. Artifact Registry URI to store the built image.",
+            "type": "string"
+          },
+          "buildpack_build": {
+            "description": "Build the source using Buildpacks.  This field is a member of `oneof`_ ``build_type``.",
+            "reference": "google.cloud.run_v2.types.SubmitBuildRequest.BuildpacksBuild",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "runtime": {
+                  "description": "The runtime name, e.g. 'go113'. Leave blank for generic builds.",
+                  "type": "string"
+                },
+                "function_target": {
+                  "description": "Optional. Name of the function target if the source is a function source. Required for function builds.",
+                  "type": "string"
+                },
+                "cache_image_uri": {
+                  "description": "Optional. cache_image_uri is the GCR/AR URL where the cache image will be stored. cache_image_uri is optional and omitting it will disable caching. This URL must be stable across builds. It is used to derive a build-specific temporary URL by substituting the tag with the build ID. The build will clean up the temporary image on a best-effort basis.",
+                  "type": "string"
+                },
+                "base_image": {
+                  "description": "Optional. The base image used to opt into automatic base image updates.",
+                  "type": "string"
+                },
+                "environment_variables": {
+                  "description": "Optional. User-provided build-time environment variables.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "enable_automatic_updates": {
+                  "description": "Optional. Whether or not the application container will be enrolled in automatic base image updates. When true, the application will be built on a scratch base image, so the base layers can be appended at run time.",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "docker_build": {
+            "description": "Build the source using Docker. This means the source has a Dockerfile.  This field is a member of `oneof`_ ``build_type``.",
+            "reference": "google.cloud.run_v2.types.SubmitBuildRequest.DockerBuild",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "service_account": {
+            "description": "Optional. The service account to use for the build. If not set, the default Cloud Build service account for the project will be used.",
+            "type": "string"
+          },
+          "worker_pool": {
+            "description": "Optional. Name of the Cloud Build Custom Worker Pool that should be used to build the function. The format of this field is ``projects/{project}/locations/{region}/workerPools/{workerPool}`` where ``{project}`` and ``{region}`` are the project id and region respectively where the worker pool is defined and ``{workerPool}`` is the short name of the worker pool.",
+            "type": "string"
+          },
+          "tags": {
+            "description": "Optional. Additional tags to annotate the build.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "parent",
+          "storage_source",
+          "image_uri"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-run/google/cloud/run_v2/types/service.py": [
+    {
+      "type": "function",
+      "name": "CreateServiceRequest",
+      "description": "Request message for creating a Service.\n\nAttributes:\n    parent (str):\n        Required. The location and project in which\n        this service should be created. Format:\n        projects/{project}/locations/{location}, where\n        {project} can be project id or number. Only\n        lowercase characters, digits, and hyphens.\n    service (google.cloud.run_v2.types.Service):\n        Required. The Service instance to create.\n    service_id (str):\n        Required. The unique identifier for the Service. It must\n        begin with letter, and cannot end with hyphen; must contain\n        fewer than 50 characters. The name of the service becomes\n        {parent}/services/{service_id}.\n    validate_only (bool):\n        Indicates that the request should be\n        validated and default values populated, without\n        persisting the request or creating any\n        resources.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The location and project in which this service should be created. Format: projects/{project}/locations/{location}, where {project} can be project id or number. Only lowercase characters, digits, and hyphens.",
+            "type": "string"
+          },
+          "service": {
+            "description": "Required. The Service instance to create.",
+            "reference": "google.cloud.run_v2.types.Service",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name for the service in the format ``projects/*/locations/*/namespaces/*/services/*``.",
+                  "type": "string"
+                },
+                "annotations": {
+                  "description": "Optional. Annotations for the service. This data can be consumed by service clients.  Restrictions:  -  The entire annotations dictionary may contain up to 2000 characters, spread accoss all key-value pairs. Annotations that go beyond this limit are rejected -  Valid annotation keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Annotations that fails to meet these requirements are rejected  Note: This field is equivalent to the ``metadata`` field in the v1beta1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "endpoints": {
+                  "description": "Output only. Endpoints associated with this service. Returned on [LookupService.ResolveService][google.cloud.servicedirectory.v1.LookupService.ResolveService]. Control plane clients should use [RegistrationService.ListEndpoints][google.cloud.servicedirectory.v1.RegistrationService.ListEndpoints].",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.servicedirectory_v1.types.Endpoint",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "ip_address": {
+                          "description": "The IP address of the endpoint, which can be an external or internal IP.",
+                          "type": "string"
+                        },
+                        "port": {
+                          "description": "The IP protocol port of the endpoint. Only applicable when protocol is TCP or UDP.",
+                          "type": "integer"
+                        },
+                        "instance": {
+                          "description": "A Compute Engine instance URI.",
+                          "type": "string"
+                        },
+                        "forwarding_rule": {
+                          "description": "A forwarding rule and its corresponding IP address represent the frontend configuration of a Google Cloud load balancer. Forwarding rules are also used for protocol forwarding, Private Service Connect and other network services to provide forwarding information in the control plane. Format:  projects/{project}/global/forwardingRules/{id} or projects/{project}/regions/{region}/forwardingRules/{id}",
+                          "type": "string"
+                        },
+                        "forwarding_rule_target": {
+                          "description": "Output only. Specifies the type of the target of the forwarding rule.  This field is a member of `oneof`_ ``_forwarding_rule_target``.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.ForwardingRuleTarget",
+                          "output_only": true
+                        },
+                        "load_balancer_id": {
+                          "description": "Output only. ID of the load balancer the forwarding rule points to. Empty for forwarding rules not related to load balancers.  This field is a member of `oneof`_ ``_load_balancer_id``.",
+                          "type": "string",
+                          "output_only": true
+                        },
+                        "load_balancer_type": {
+                          "description": "Output only. Type of the load balancer the forwarding rule points to.  This field is a member of `oneof`_ ``_load_balancer_type``.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.LoadBalancerType",
+                          "output_only": true
+                        },
+                        "gke_master_cluster": {
+                          "description": "A cluster URI for `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__.",
+                          "type": "string"
+                        },
+                        "fqdn": {
+                          "description": "DNS endpoint of `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__. Requires gke_master_cluster to be set, can't be used simultaneoulsly with ip_address or network. Applicable only to destination endpoint.",
+                          "type": "string"
+                        },
+                        "cloud_sql_instance": {
+                          "description": "A `Cloud SQL <https://cloud.google.com/sql>`__ instance URI.",
+                          "type": "string"
+                        },
+                        "redis_instance": {
+                          "description": "A `Redis Instance <https://cloud.google.com/memorystore/docs/redis>`__ URI.",
+                          "type": "string"
+                        },
+                        "redis_cluster": {
+                          "description": "A `Redis Cluster <https://cloud.google.com/memorystore/docs/cluster>`__ URI.",
+                          "type": "string"
+                        },
+                        "cloud_function": {
+                          "description": "A `Cloud Function <https://cloud.google.com/functions>`__.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.CloudFunctionEndpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "A `Cloud Function <https://cloud.google.com/functions>`__ name.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "app_engine_version": {
+                          "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.AppEngineVersionEndpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__ name.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "cloud_run_revision": {
+                          "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.CloudRunRevisionEndpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__ URI. The format is: projects/{project}/locations/{location}/revisions/{revision}",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "network": {
+                          "description": "A Compute Engine network URI.",
+                          "type": "string"
+                        },
+                        "network_type": {
+                          "description": "Type of the network where the endpoint is located. Applicable only to source endpoint, as destination network type can be inferred from the source.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.NetworkType"
+                        },
+                        "project_id": {
+                          "description": "Project ID where the endpoint is located. The Project ID can be derived from the URI if you provide a VM instance or network URI. The following are two cases where you must provide the project ID:  1. Only the IP address is specified, and the IP address is within a Google Cloud project. 2. When you are using Shared VPC and the IP address that you provide is from the service project. In this case, the network that the IP address resides in is defined in the host project.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "output_only": true
+                },
+                "uid": {
+                  "description": "Output only. The globally unique identifier of the service in the UUID4 format.",
+                  "type": "string",
+                  "output_only": true
+                }
+              }
+            }
+          },
+          "service_id": {
+            "description": "Required. The unique identifier for the Service. It must begin with letter, and cannot end with hyphen; must contain fewer than 50 characters. The name of the service becomes {parent}/services/{service_id}.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated and default values populated, without persisting the request or creating any resources.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent",
+          "service",
+          "service_id"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "UpdateServiceRequest",
+      "description": "Request message for updating a service.\n\nAttributes:\n    update_mask (google.protobuf.field_mask_pb2.FieldMask):\n        Optional. The list of fields to be updated.\n    service (google.cloud.run_v2.types.Service):\n        Required. The Service to be updated.\n    validate_only (bool):\n        Indicates that the request should be\n        validated and default values populated, without\n        persisting the request or updating any\n        resources.\n    allow_missing (bool):\n        Optional. If set to true, and if the Service\n        does not exist, it will create a new one. The\n        caller must have 'run.services.create'\n        permissions if this is set to true and the\n        Service does not exist.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "update_mask": {
+            "description": "Optional. The list of fields to be updated.",
+            "type": "object",
+            "reference": "google.protobuf.field_mask_pb2.FieldMask"
+          },
+          "service": {
+            "description": "Required. The Service to be updated.",
+            "reference": "google.cloud.run_v2.types.Service",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Immutable. The resource name for the service in the format ``projects/*/locations/*/namespaces/*/services/*``.",
+                  "type": "string"
+                },
+                "annotations": {
+                  "description": "Optional. Annotations for the service. This data can be consumed by service clients.  Restrictions:  -  The entire annotations dictionary may contain up to 2000 characters, spread accoss all key-value pairs. Annotations that go beyond this limit are rejected -  Valid annotation keys have two segments: an optional prefix and name, separated by a slash (/). The name segment is required and must be 63 characters or less, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (.), not longer than 253 characters in total, followed by a slash (/). Annotations that fails to meet these requirements are rejected  Note: This field is equivalent to the ``metadata`` field in the v1beta1 API. They have the same syntax and read/write to the same location in Service Directory.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "endpoints": {
+                  "description": "Output only. Endpoints associated with this service. Returned on [LookupService.ResolveService][google.cloud.servicedirectory.v1.LookupService.ResolveService]. Control plane clients should use [RegistrationService.ListEndpoints][google.cloud.servicedirectory.v1.RegistrationService.ListEndpoints].",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.servicedirectory_v1.types.Endpoint",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "ip_address": {
+                          "description": "The IP address of the endpoint, which can be an external or internal IP.",
+                          "type": "string"
+                        },
+                        "port": {
+                          "description": "The IP protocol port of the endpoint. Only applicable when protocol is TCP or UDP.",
+                          "type": "integer"
+                        },
+                        "instance": {
+                          "description": "A Compute Engine instance URI.",
+                          "type": "string"
+                        },
+                        "forwarding_rule": {
+                          "description": "A forwarding rule and its corresponding IP address represent the frontend configuration of a Google Cloud load balancer. Forwarding rules are also used for protocol forwarding, Private Service Connect and other network services to provide forwarding information in the control plane. Format:  projects/{project}/global/forwardingRules/{id} or projects/{project}/regions/{region}/forwardingRules/{id}",
+                          "type": "string"
+                        },
+                        "forwarding_rule_target": {
+                          "description": "Output only. Specifies the type of the target of the forwarding rule.  This field is a member of `oneof`_ ``_forwarding_rule_target``.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.ForwardingRuleTarget",
+                          "output_only": true
+                        },
+                        "load_balancer_id": {
+                          "description": "Output only. ID of the load balancer the forwarding rule points to. Empty for forwarding rules not related to load balancers.  This field is a member of `oneof`_ ``_load_balancer_id``.",
+                          "type": "string",
+                          "output_only": true
+                        },
+                        "load_balancer_type": {
+                          "description": "Output only. Type of the load balancer the forwarding rule points to.  This field is a member of `oneof`_ ``_load_balancer_type``.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.LoadBalancerType",
+                          "output_only": true
+                        },
+                        "gke_master_cluster": {
+                          "description": "A cluster URI for `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__.",
+                          "type": "string"
+                        },
+                        "fqdn": {
+                          "description": "DNS endpoint of `Google Kubernetes Engine cluster control plane <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture>`__. Requires gke_master_cluster to be set, can't be used simultaneoulsly with ip_address or network. Applicable only to destination endpoint.",
+                          "type": "string"
+                        },
+                        "cloud_sql_instance": {
+                          "description": "A `Cloud SQL <https://cloud.google.com/sql>`__ instance URI.",
+                          "type": "string"
+                        },
+                        "redis_instance": {
+                          "description": "A `Redis Instance <https://cloud.google.com/memorystore/docs/redis>`__ URI.",
+                          "type": "string"
+                        },
+                        "redis_cluster": {
+                          "description": "A `Redis Cluster <https://cloud.google.com/memorystore/docs/cluster>`__ URI.",
+                          "type": "string"
+                        },
+                        "cloud_function": {
+                          "description": "A `Cloud Function <https://cloud.google.com/functions>`__.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.CloudFunctionEndpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "A `Cloud Function <https://cloud.google.com/functions>`__ name.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "app_engine_version": {
+                          "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.AppEngineVersionEndpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "An `App Engine <https://cloud.google.com/appengine>`__ `service version <https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions>`__ name.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "cloud_run_revision": {
+                          "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.CloudRunRevisionEndpoint",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "description": "A `Cloud Run <https://cloud.google.com/run>`__ `revision <https://cloud.google.com/run/docs/reference/rest/v1/namespaces.revisions/get>`__ URI. The format is: projects/{project}/locations/{location}/revisions/{revision}",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "network": {
+                          "description": "A Compute Engine network URI.",
+                          "type": "string"
+                        },
+                        "network_type": {
+                          "description": "Type of the network where the endpoint is located. Applicable only to source endpoint, as destination network type can be inferred from the source.",
+                          "type": "object",
+                          "reference": "google.cloud.network_management_v1.types.Endpoint.NetworkType"
+                        },
+                        "project_id": {
+                          "description": "Project ID where the endpoint is located. The Project ID can be derived from the URI if you provide a VM instance or network URI. The following are two cases where you must provide the project ID:  1. Only the IP address is specified, and the IP address is within a Google Cloud project. 2. When you are using Shared VPC and the IP address that you provide is from the service project. In this case, the network that the IP address resides in is defined in the host project.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "output_only": true
+                },
+                "uid": {
+                  "description": "Output only. The globally unique identifier of the service in the UUID4 format.",
+                  "type": "string",
+                  "output_only": true
+                }
+              }
+            }
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated and default values populated, without persisting the request or updating any resources.",
+            "type": "boolean"
+          },
+          "allow_missing": {
+            "description": "Optional. If set to true, and if the Service does not exist, it will create a new one. The caller must have 'run.services.create' permissions if this is set to true and the Service does not exist.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "service"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListServicesRequest",
+      "description": "Request message for retrieving a list of Services.\n\nAttributes:\n    parent (str):\n        Required. The location and project to list\n        resources on. Location must be a valid Google\n        Cloud region, and cannot be the \"-\" wildcard.\n        Format: projects/{project}/locations/{location},\n        where {project} can be project id or number.\n    page_size (int):\n        Maximum number of Services to return in this\n        call.\n    page_token (str):\n        A page token received from a previous call to\n        ListServices. All other parameters must match.\n    show_deleted (bool):\n        If true, returns deleted (but unexpired)\n        resources along with active ones.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The location and project to list resources on. Location must be a valid Google Cloud region, and cannot be the \"-\" wildcard. Format: projects/{project}/locations/{location}, where {project} can be project id or number.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Maximum number of Services to return in this call.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token received from a previous call to ListServices. All other parameters must match.",
+            "type": "string"
+          },
+          "show_deleted": {
+            "description": "If true, returns deleted (but unexpired) resources along with active ones.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "GetServiceRequest",
+      "description": "Request message for obtaining a Service by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Service.\n        Format:\n        projects/{project}/locations/{location}/services/{service},\n        where {project} can be project id or number.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Service. Format: projects/{project}/locations/{location}/services/{service}, where {project} can be project id or number.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "DeleteServiceRequest",
+      "description": "Request message to delete a Service by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Service.\n        Format:\n        projects/{project}/locations/{location}/services/{service},\n        where {project} can be project id or number.\n    validate_only (bool):\n        Indicates that the request should be\n        validated without actually deleting any\n        resources.\n    etag (str):\n        A system-generated fingerprint for this\n        version of the resource. May be used to detect\n        modification conflict during updates.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Service. Format: projects/{project}/locations/{location}/services/{service}, where {project} can be project id or number.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated without actually deleting any resources.",
+            "type": "boolean"
+          },
+          "etag": {
+            "description": "A system-generated fingerprint for this version of the resource. May be used to detect modification conflict during updates.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-run/google/cloud/run_v2/types/task.py": [
+    {
+      "type": "function",
+      "name": "GetTaskRequest",
+      "description": "Request message for obtaining a Task by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Task.\n        Format:\n\n        projects/{project}/locations/{location}/jobs/{job}/executions/{execution}/tasks/{task}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Task. Format:  projects/{project}/locations/{location}/jobs/{job}/executions/{execution}/tasks/{task}",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListTasksRequest",
+      "description": "Request message for retrieving a list of Tasks.\n\nAttributes:\n    parent (str):\n        Required. The Execution from which the Tasks\n        should be listed. To list all Tasks across\n        Executions of a Job, use \"-\" instead of\n        Execution name. To list all Tasks across Jobs,\n        use \"-\" instead of Job name. Format:\n\n        projects/{project}/locations/{location}/jobs/{job}/executions/{execution}\n    page_size (int):\n        Maximum number of Tasks to return in this\n        call.\n    page_token (str):\n        A page token received from a previous call to\n        ListTasks. All other parameters must match.\n    show_deleted (bool):\n        If true, returns deleted (but unexpired)\n        resources along with active ones.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The Execution from which the Tasks should be listed. To list all Tasks across Executions of a Job, use \"-\" instead of Execution name. To list all Tasks across Jobs, use \"-\" instead of Job name. Format:  projects/{project}/locations/{location}/jobs/{job}/executions/{execution}",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Maximum number of Tasks to return in this call.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token received from a previous call to ListTasks. All other parameters must match.",
+            "type": "string"
+          },
+          "show_deleted": {
+            "description": "If true, returns deleted (but unexpired) resources along with active ones.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-run/google/cloud/run_v2/types/execution.py": [
+    {
+      "type": "function",
+      "name": "GetExecutionRequest",
+      "description": "Request message for obtaining a Execution by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Execution. Format:\n        ``projects/{project}/locations/{location}/jobs/{job}/executions/{execution}``,\n        where ``{project}`` can be project id or number.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Execution. Format: ``projects/{project}/locations/{location}/jobs/{job}/executions/{execution}``, where ``{project}`` can be project id or number.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListExecutionsRequest",
+      "description": "Request message for retrieving a list of Executions.\n\nAttributes:\n    parent (str):\n        Required. The Execution from which the Executions should be\n        listed. To list all Executions across Jobs, use \"-\" instead\n        of Job name. Format:\n        ``projects/{project}/locations/{location}/jobs/{job}``,\n        where ``{project}`` can be project id or number.\n    page_size (int):\n        Maximum number of Executions to return in\n        this call.\n    page_token (str):\n        A page token received from a previous call to\n        ListExecutions. All other parameters must match.\n    show_deleted (bool):\n        If true, returns deleted (but unexpired)\n        resources along with active ones.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The Execution from which the Executions should be listed. To list all Executions across Jobs, use \"-\" instead of Job name. Format: ``projects/{project}/locations/{location}/jobs/{job}``, where ``{project}`` can be project id or number.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Maximum number of Executions to return in this call.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token received from a previous call to ListExecutions. All other parameters must match.",
+            "type": "string"
+          },
+          "show_deleted": {
+            "description": "If true, returns deleted (but unexpired) resources along with active ones.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "DeleteExecutionRequest",
+      "description": "Request message for deleting an Execution.\n\nAttributes:\n    name (str):\n        Required. The name of the Execution to delete. Format:\n        ``projects/{project}/locations/{location}/jobs/{job}/executions/{execution}``,\n        where ``{project}`` can be project id or number.\n    validate_only (bool):\n        Indicates that the request should be\n        validated without actually deleting any\n        resources.\n    etag (str):\n        A system-generated fingerprint for this\n        version of the resource. This may be used to\n        detect modification conflict during updates.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Execution to delete. Format: ``projects/{project}/locations/{location}/jobs/{job}/executions/{execution}``, where ``{project}`` can be project id or number.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated without actually deleting any resources.",
+            "type": "boolean"
+          },
+          "etag": {
+            "description": "A system-generated fingerprint for this version of the resource. This may be used to detect modification conflict during updates.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "CancelExecutionRequest",
+      "description": "Request message for deleting an Execution.\n\nAttributes:\n    name (str):\n        Required. The name of the Execution to cancel. Format:\n        ``projects/{project}/locations/{location}/jobs/{job}/executions/{execution}``,\n        where ``{project}`` can be project id or number.\n    validate_only (bool):\n        Indicates that the request should be\n        validated without actually cancelling any\n        resources.\n    etag (str):\n        A system-generated fingerprint for this\n        version of the resource. This may be used to\n        detect modification conflict during updates.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Execution to cancel. Format: ``projects/{project}/locations/{location}/jobs/{job}/executions/{execution}``, where ``{project}`` can be project id or number.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated without actually cancelling any resources.",
+            "type": "boolean"
+          },
+          "etag": {
+            "description": "A system-generated fingerprint for this version of the resource. This may be used to detect modification conflict during updates.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-run/google/cloud/run_v2/types/job.py": [
+    {
+      "type": "function",
+      "name": "CreateJobRequest",
+      "description": "Request message for creating a Job.\n\nAttributes:\n    parent (str):\n        Required. The location and project in which\n        this Job should be created. Format:\n        projects/{project}/locations/{location}, where\n        {project} can be project id or number.\n    job (google.cloud.run_v2.types.Job):\n        Required. The Job instance to create.\n    job_id (str):\n        Required. The unique identifier for the Job. The name of the\n        job becomes {parent}/jobs/{job_id}.\n    validate_only (bool):\n        Indicates that the request should be\n        validated and default values populated, without\n        persisting the request or creating any\n        resources.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The location and project in which this Job should be created. Format: projects/{project}/locations/{location}, where {project} can be project id or number.",
+            "type": "string"
+          },
+          "job": {
+            "description": "Required. The Job instance to create.",
+            "reference": "google.cloud.run_v2.types.Job",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "job_name": {
+                  "description": "Job name.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobName",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "project_id": {
+                        "description": "The project ID.",
+                        "type": "string"
+                      },
+                      "job_id": {
+                        "description": "The job ID within the project.",
+                        "type": "string"
+                      },
+                      "location": {
+                        "description": "The job location.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "job_configuration": {
+                  "description": "Job configuration.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "query": {
+                        "description": "Query job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.Query",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "description": "The SQL query to run.",
+                              "type": "string"
+                            },
+                            "destination_table": {
+                              "description": "The table where results are written.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "create_disposition": {
+                              "description": "Describes when a job is allowed to create a table: ``CREATE_IF_NEEDED``, ``CREATE_NEVER``.",
+                              "type": "string"
+                            },
+                            "write_disposition": {
+                              "description": "Describes how writes affect existing tables: ``WRITE_TRUNCATE``, ``WRITE_APPEND``, ``WRITE_EMPTY``.",
+                              "type": "string"
+                            },
+                            "default_dataset": {
+                              "description": "If a table name is specified without a dataset in a query, this dataset will be added to table name.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.DatasetName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "table_definitions": {
+                              "description": "Describes data sources outside BigQuery, if needed.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.bigquery_logging_v1.types.TableDefinition",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "description": "Name of the table, used in queries.",
+                                      "type": "string"
+                                    },
+                                    "source_uris": {
+                                      "description": "Google Cloud Storage URIs for the data to be imported.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "query_priority": {
+                              "description": "Describes the priority given to the query: ``QUERY_INTERACTIVE`` or ``QUERY_BATCH``.",
+                              "type": "string"
+                            },
+                            "destination_table_encryption": {
+                              "description": "Result table encryption information. Set when non-default encryption is used.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.EncryptionInfo",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "kms_key_name": {
+                                    "description": "unique identifier for cloud kms key",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "statement_type": {
+                              "description": "Type of the statement (e.g. SELECT, INSERT, CREATE_TABLE, CREATE_MODEL..)",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "load": {
+                        "description": "Load job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.Load",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "source_uris": {
+                              "description": "URIs for the data to be imported. Only Google Cloud Storage URIs are supported.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "schema_json": {
+                              "description": "The table schema in JSON format representation of a TableSchema.",
+                              "type": "string"
+                            },
+                            "destination_table": {
+                              "description": "The table where the imported data is written.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "create_disposition": {
+                              "description": "Describes when a job is allowed to create a table: ``CREATE_IF_NEEDED``, ``CREATE_NEVER``.",
+                              "type": "string"
+                            },
+                            "write_disposition": {
+                              "description": "Describes how writes affect existing tables: ``WRITE_TRUNCATE``, ``WRITE_APPEND``, ``WRITE_EMPTY``.",
+                              "type": "string"
+                            },
+                            "destination_table_encryption": {
+                              "description": "Result table encryption information. Set when non-default encryption is used.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.EncryptionInfo",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "kms_key_name": {
+                                    "description": "unique identifier for cloud kms key",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "extract": {
+                        "description": "Extract job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.Extract",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "destination_uris": {
+                              "description": "Google Cloud Storage URIs where extracted data should be written.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "source_table": {
+                              "description": "The source table.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "table_copy": {
+                        "description": "TableCopy job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.TableCopy",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "source_tables": {
+                              "description": "Source tables.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "project_id": {
+                                      "description": "The project ID.",
+                                      "type": "string"
+                                    },
+                                    "dataset_id": {
+                                      "description": "The dataset ID within the project.",
+                                      "type": "string"
+                                    },
+                                    "table_id": {
+                                      "description": "The table ID of the table within the dataset.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "destination_table": {
+                              "description": "Destination table.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "create_disposition": {
+                              "description": "Describes when a job is allowed to create a table: ``CREATE_IF_NEEDED``, ``CREATE_NEVER``.",
+                              "type": "string"
+                            },
+                            "write_disposition": {
+                              "description": "Describes how writes affect existing tables: ``WRITE_TRUNCATE``, ``WRITE_APPEND``, ``WRITE_EMPTY``.",
+                              "type": "string"
+                            },
+                            "destination_table_encryption": {
+                              "description": "Result table encryption information. Set when non-default encryption is used.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.EncryptionInfo",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "kms_key_name": {
+                                    "description": "unique identifier for cloud kms key",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "dry_run": {
+                        "description": "If true, don't actually run the job. Just check that it would run.",
+                        "type": "boolean"
+                      },
+                      "labels": {
+                        "description": "Labels provided for the job.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "job_status": {
+                  "description": "Job status.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State of a job: ``PENDING``, ``RUNNING``, or ``DONE``.",
+                        "type": "string"
+                      },
+                      "error": {
+                        "description": "If the job did not complete successfully, this field describes why.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State",
+                              "output_only": true
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string",
+                              "output_only": true
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer",
+                              "output_only": true
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                              "output_only": true
+                            }
+                          }
+                        }
+                      },
+                      "additional_errors": {
+                        "description": "Errors encountered during the running of the job. Do not necessarily mean that the job has completed or was unsuccessful.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.rpc.status_pb2.Status",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "state": {
+                                "description": "Output only. State of the metadata job.",
+                                "type": "object",
+                                "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State",
+                                "output_only": true
+                              },
+                              "message": {
+                                "description": "Output only. Message relating to the progression of a metadata job.",
+                                "type": "string",
+                                "output_only": true
+                              },
+                              "completion_percent": {
+                                "description": "Output only. Progress tracking.",
+                                "type": "integer",
+                                "output_only": true
+                              },
+                              "update_time": {
+                                "description": "Output only. The time when the status was updated.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                                "output_only": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "job_statistics": {
+                  "description": "Job statistics.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobStatistics",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "create_time": {
+                        "description": "Time when the job was created.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "start_time": {
+                        "description": "Time when the job started.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "end_time": {
+                        "description": "Time when the job ended.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "total_processed_bytes": {
+                        "description": "Total bytes processed for a job.",
+                        "type": "integer"
+                      },
+                      "total_billed_bytes": {
+                        "description": "Processed bytes, adjusted by the job's CPU usage.",
+                        "type": "integer"
+                      },
+                      "billing_tier": {
+                        "description": "The tier assigned by CPU-based billing.",
+                        "type": "integer"
+                      },
+                      "total_slot_ms": {
+                        "description": "The total number of slot-ms consumed by the query job.",
+                        "type": "integer"
+                      },
+                      "reservation_usage": {
+                        "description": "Reservation usage. This field reported misleading information and will no longer be populated. Aggregate usage of all jobs submitted to a reservation should provide a more reliable indicator of reservation imbalance.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.JobStatistics.ReservationResourceUsage",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Reservation name or \"unreserved\" for on-demand resources usage.",
+                                "type": "string"
+                              },
+                              "slot_ms": {
+                                "description": "Total slot milliseconds used by the reservation for a particular job.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "reservation": {
+                        "description": "Reservation name or \"unreserved\" for on-demand resource usage.",
+                        "type": "string"
+                      },
+                      "referenced_tables": {
+                        "description": "The first N tables accessed by the query job. Older queries that reference a large number of tables may not have all of their tables in this list. You can use the total_tables_processed count to know how many total tables were read in the query. For new queries, there is currently no limit.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "project_id": {
+                                "description": "The project ID.",
+                                "type": "string"
+                              },
+                              "dataset_id": {
+                                "description": "The dataset ID within the project.",
+                                "type": "string"
+                              },
+                              "table_id": {
+                                "description": "The table ID of the table within the dataset.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total_tables_processed": {
+                        "description": "Total number of unique tables referenced in the query.",
+                        "type": "integer"
+                      },
+                      "referenced_views": {
+                        "description": "The first N views accessed by the query job. Older queries that reference a large number of views may not have all of their views in this list. You can use the total_tables_processed count to know how many total tables were read in the query. For new queries, there is currently no limit.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "project_id": {
+                                "description": "The project ID.",
+                                "type": "string"
+                              },
+                              "dataset_id": {
+                                "description": "The dataset ID within the project.",
+                                "type": "string"
+                              },
+                              "table_id": {
+                                "description": "The table ID of the table within the dataset.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total_views_processed": {
+                        "description": "Total number of unique views referenced in the query.",
+                        "type": "integer"
+                      },
+                      "query_output_row_count": {
+                        "description": "Number of output rows produced by the query job.",
+                        "type": "integer"
+                      },
+                      "total_load_output_bytes": {
+                        "description": "Total bytes loaded for an import job.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "job_id": {
+            "description": "Required. The unique identifier for the Job. The name of the job becomes {parent}/jobs/{job_id}.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated and default values populated, without persisting the request or creating any resources.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent",
+          "job",
+          "job_id"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "GetJobRequest",
+      "description": "Request message for obtaining a Job by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Job.\n        Format:\n        projects/{project}/locations/{location}/jobs/{job},\n        where {project} can be project id or number.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Job. Format: projects/{project}/locations/{location}/jobs/{job}, where {project} can be project id or number.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "UpdateJobRequest",
+      "description": "Request message for updating a Job.\n\nAttributes:\n    job (google.cloud.run_v2.types.Job):\n        Required. The Job to be updated.\n    validate_only (bool):\n        Indicates that the request should be\n        validated and default values populated, without\n        persisting the request or updating any\n        resources.\n    allow_missing (bool):\n        Optional. If set to true, and if the Job does\n        not exist, it will create a new one. Caller must\n        have both create and update permissions for this\n        call if this is set to true.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "description": "Required. The Job to be updated.",
+            "reference": "google.cloud.run_v2.types.Job",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "job_name": {
+                  "description": "Job name.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobName",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "project_id": {
+                        "description": "The project ID.",
+                        "type": "string"
+                      },
+                      "job_id": {
+                        "description": "The job ID within the project.",
+                        "type": "string"
+                      },
+                      "location": {
+                        "description": "The job location.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "job_configuration": {
+                  "description": "Job configuration.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "query": {
+                        "description": "Query job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.Query",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "description": "The SQL query to run.",
+                              "type": "string"
+                            },
+                            "destination_table": {
+                              "description": "The table where results are written.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "create_disposition": {
+                              "description": "Describes when a job is allowed to create a table: ``CREATE_IF_NEEDED``, ``CREATE_NEVER``.",
+                              "type": "string"
+                            },
+                            "write_disposition": {
+                              "description": "Describes how writes affect existing tables: ``WRITE_TRUNCATE``, ``WRITE_APPEND``, ``WRITE_EMPTY``.",
+                              "type": "string"
+                            },
+                            "default_dataset": {
+                              "description": "If a table name is specified without a dataset in a query, this dataset will be added to table name.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.DatasetName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "table_definitions": {
+                              "description": "Describes data sources outside BigQuery, if needed.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.bigquery_logging_v1.types.TableDefinition",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "description": "Name of the table, used in queries.",
+                                      "type": "string"
+                                    },
+                                    "source_uris": {
+                                      "description": "Google Cloud Storage URIs for the data to be imported.",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "query_priority": {
+                              "description": "Describes the priority given to the query: ``QUERY_INTERACTIVE`` or ``QUERY_BATCH``.",
+                              "type": "string"
+                            },
+                            "destination_table_encryption": {
+                              "description": "Result table encryption information. Set when non-default encryption is used.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.EncryptionInfo",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "kms_key_name": {
+                                    "description": "unique identifier for cloud kms key",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "statement_type": {
+                              "description": "Type of the statement (e.g. SELECT, INSERT, CREATE_TABLE, CREATE_MODEL..)",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "load": {
+                        "description": "Load job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.Load",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "source_uris": {
+                              "description": "URIs for the data to be imported. Only Google Cloud Storage URIs are supported.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "schema_json": {
+                              "description": "The table schema in JSON format representation of a TableSchema.",
+                              "type": "string"
+                            },
+                            "destination_table": {
+                              "description": "The table where the imported data is written.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "create_disposition": {
+                              "description": "Describes when a job is allowed to create a table: ``CREATE_IF_NEEDED``, ``CREATE_NEVER``.",
+                              "type": "string"
+                            },
+                            "write_disposition": {
+                              "description": "Describes how writes affect existing tables: ``WRITE_TRUNCATE``, ``WRITE_APPEND``, ``WRITE_EMPTY``.",
+                              "type": "string"
+                            },
+                            "destination_table_encryption": {
+                              "description": "Result table encryption information. Set when non-default encryption is used.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.EncryptionInfo",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "kms_key_name": {
+                                    "description": "unique identifier for cloud kms key",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "extract": {
+                        "description": "Extract job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.Extract",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "destination_uris": {
+                              "description": "Google Cloud Storage URIs where extracted data should be written.",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "source_table": {
+                              "description": "The source table.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "table_copy": {
+                        "description": "TableCopy job information.  This field is a member of `oneof`_ ``configuration``.",
+                        "type": "object",
+                        "reference": "google.cloud.bigquery_logging_v1.types.JobConfiguration.TableCopy",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "source_tables": {
+                              "description": "Source tables.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                                "resolved_schema": {
+                                  "type": "object",
+                                  "properties": {
+                                    "project_id": {
+                                      "description": "The project ID.",
+                                      "type": "string"
+                                    },
+                                    "dataset_id": {
+                                      "description": "The dataset ID within the project.",
+                                      "type": "string"
+                                    },
+                                    "table_id": {
+                                      "description": "The table ID of the table within the dataset.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "destination_table": {
+                              "description": "Destination table.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "project_id": {
+                                    "description": "The project ID.",
+                                    "type": "string"
+                                  },
+                                  "dataset_id": {
+                                    "description": "The dataset ID within the project.",
+                                    "type": "string"
+                                  },
+                                  "table_id": {
+                                    "description": "The table ID of the table within the dataset.",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "create_disposition": {
+                              "description": "Describes when a job is allowed to create a table: ``CREATE_IF_NEEDED``, ``CREATE_NEVER``.",
+                              "type": "string"
+                            },
+                            "write_disposition": {
+                              "description": "Describes how writes affect existing tables: ``WRITE_TRUNCATE``, ``WRITE_APPEND``, ``WRITE_EMPTY``.",
+                              "type": "string"
+                            },
+                            "destination_table_encryption": {
+                              "description": "Result table encryption information. Set when non-default encryption is used.",
+                              "type": "object",
+                              "reference": "google.cloud.bigquery_logging_v1.types.EncryptionInfo",
+                              "resolved_schema": {
+                                "type": "object",
+                                "properties": {
+                                  "kms_key_name": {
+                                    "description": "unique identifier for cloud kms key",
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "dry_run": {
+                        "description": "If true, don't actually run the job. Just check that it would run.",
+                        "type": "boolean"
+                      },
+                      "labels": {
+                        "description": "Labels provided for the job.",
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "job_status": {
+                  "description": "Job status.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobStatus",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "State of a job: ``PENDING``, ``RUNNING``, or ``DONE``.",
+                        "type": "string"
+                      },
+                      "error": {
+                        "description": "If the job did not complete successfully, this field describes why.",
+                        "type": "object",
+                        "reference": "google.rpc.status_pb2.Status",
+                        "resolved_schema": {
+                          "type": "object",
+                          "properties": {
+                            "state": {
+                              "description": "Output only. State of the metadata job.",
+                              "type": "object",
+                              "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State",
+                              "output_only": true
+                            },
+                            "message": {
+                              "description": "Output only. Message relating to the progression of a metadata job.",
+                              "type": "string",
+                              "output_only": true
+                            },
+                            "completion_percent": {
+                              "description": "Output only. Progress tracking.",
+                              "type": "integer",
+                              "output_only": true
+                            },
+                            "update_time": {
+                              "description": "Output only. The time when the status was updated.",
+                              "type": "object",
+                              "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                              "output_only": true
+                            }
+                          }
+                        }
+                      },
+                      "additional_errors": {
+                        "description": "Errors encountered during the running of the job. Do not necessarily mean that the job has completed or was unsuccessful.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.rpc.status_pb2.Status",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "state": {
+                                "description": "Output only. State of the metadata job.",
+                                "type": "object",
+                                "reference": "google.cloud.dataplex_v1.types.MetadataJob.Status.State",
+                                "output_only": true
+                              },
+                              "message": {
+                                "description": "Output only. Message relating to the progression of a metadata job.",
+                                "type": "string",
+                                "output_only": true
+                              },
+                              "completion_percent": {
+                                "description": "Output only. Progress tracking.",
+                                "type": "integer",
+                                "output_only": true
+                              },
+                              "update_time": {
+                                "description": "Output only. The time when the status was updated.",
+                                "type": "object",
+                                "reference": "google.protobuf.timestamp_pb2.Timestamp",
+                                "output_only": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "job_statistics": {
+                  "description": "Job statistics.",
+                  "type": "object",
+                  "reference": "google.cloud.bigquery_logging_v1.types.JobStatistics",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "create_time": {
+                        "description": "Time when the job was created.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "start_time": {
+                        "description": "Time when the job started.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "end_time": {
+                        "description": "Time when the job ended.",
+                        "type": "object",
+                        "reference": "google.protobuf.timestamp_pb2.Timestamp"
+                      },
+                      "total_processed_bytes": {
+                        "description": "Total bytes processed for a job.",
+                        "type": "integer"
+                      },
+                      "total_billed_bytes": {
+                        "description": "Processed bytes, adjusted by the job's CPU usage.",
+                        "type": "integer"
+                      },
+                      "billing_tier": {
+                        "description": "The tier assigned by CPU-based billing.",
+                        "type": "integer"
+                      },
+                      "total_slot_ms": {
+                        "description": "The total number of slot-ms consumed by the query job.",
+                        "type": "integer"
+                      },
+                      "reservation_usage": {
+                        "description": "Reservation usage. This field reported misleading information and will no longer be populated. Aggregate usage of all jobs submitted to a reservation should provide a more reliable indicator of reservation imbalance.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.JobStatistics.ReservationResourceUsage",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Reservation name or \"unreserved\" for on-demand resources usage.",
+                                "type": "string"
+                              },
+                              "slot_ms": {
+                                "description": "Total slot milliseconds used by the reservation for a particular job.",
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "reservation": {
+                        "description": "Reservation name or \"unreserved\" for on-demand resource usage.",
+                        "type": "string"
+                      },
+                      "referenced_tables": {
+                        "description": "The first N tables accessed by the query job. Older queries that reference a large number of tables may not have all of their tables in this list. You can use the total_tables_processed count to know how many total tables were read in the query. For new queries, there is currently no limit.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "project_id": {
+                                "description": "The project ID.",
+                                "type": "string"
+                              },
+                              "dataset_id": {
+                                "description": "The dataset ID within the project.",
+                                "type": "string"
+                              },
+                              "table_id": {
+                                "description": "The table ID of the table within the dataset.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total_tables_processed": {
+                        "description": "Total number of unique tables referenced in the query.",
+                        "type": "integer"
+                      },
+                      "referenced_views": {
+                        "description": "The first N views accessed by the query job. Older queries that reference a large number of views may not have all of their views in this list. You can use the total_tables_processed count to know how many total tables were read in the query. For new queries, there is currently no limit.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "reference": "google.cloud.bigquery_logging_v1.types.TableName",
+                          "resolved_schema": {
+                            "type": "object",
+                            "properties": {
+                              "project_id": {
+                                "description": "The project ID.",
+                                "type": "string"
+                              },
+                              "dataset_id": {
+                                "description": "The dataset ID within the project.",
+                                "type": "string"
+                              },
+                              "table_id": {
+                                "description": "The table ID of the table within the dataset.",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total_views_processed": {
+                        "description": "Total number of unique views referenced in the query.",
+                        "type": "integer"
+                      },
+                      "query_output_row_count": {
+                        "description": "Number of output rows produced by the query job.",
+                        "type": "integer"
+                      },
+                      "total_load_output_bytes": {
+                        "description": "Total bytes loaded for an import job.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated and default values populated, without persisting the request or updating any resources.",
+            "type": "boolean"
+          },
+          "allow_missing": {
+            "description": "Optional. If set to true, and if the Job does not exist, it will create a new one. Caller must have both create and update permissions for this call if this is set to true.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "job"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListJobsRequest",
+      "description": "Request message for retrieving a list of Jobs.\n\nAttributes:\n    parent (str):\n        Required. The location and project to list\n        resources on. Format:\n        projects/{project}/locations/{location}, where\n        {project} can be project id or number.\n    page_size (int):\n        Maximum number of Jobs to return in this\n        call.\n    page_token (str):\n        A page token received from a previous call to\n        ListJobs. All other parameters must match.\n    show_deleted (bool):\n        If true, returns deleted (but unexpired)\n        resources along with active ones.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The location and project to list resources on. Format: projects/{project}/locations/{location}, where {project} can be project id or number.",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Maximum number of Jobs to return in this call.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token received from a previous call to ListJobs. All other parameters must match.",
+            "type": "string"
+          },
+          "show_deleted": {
+            "description": "If true, returns deleted (but unexpired) resources along with active ones.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "DeleteJobRequest",
+      "description": "Request message to delete a Job by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Job.\n        Format:\n        projects/{project}/locations/{location}/jobs/{job},\n        where {project} can be project id or number.\n    validate_only (bool):\n        Indicates that the request should be\n        validated without actually deleting any\n        resources.\n    etag (str):\n        A system-generated fingerprint for this\n        version of the resource. May be used to detect\n        modification conflict during updates.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Job. Format: projects/{project}/locations/{location}/jobs/{job}, where {project} can be project id or number.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated without actually deleting any resources.",
+            "type": "boolean"
+          },
+          "etag": {
+            "description": "A system-generated fingerprint for this version of the resource. May be used to detect modification conflict during updates.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "RunJobRequest",
+      "description": "Request message to create a new Execution of a Job.\n\nAttributes:\n    name (str):\n        Required. The full name of the Job.\n        Format:\n        projects/{project}/locations/{location}/jobs/{job},\n        where {project} can be project id or number.\n    validate_only (bool):\n        Indicates that the request should be\n        validated without actually deleting any\n        resources.\n    etag (str):\n        A system-generated fingerprint for this\n        version of the resource. May be used to detect\n        modification conflict during updates.\n    overrides (google.cloud.run_v2.types.RunJobRequest.Overrides):\n        Overrides specification for a given execution\n        of a job. If provided, overrides will be applied\n        to update the execution or task spec.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Job. Format: projects/{project}/locations/{location}/jobs/{job}, where {project} can be project id or number.",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated without actually deleting any resources.",
+            "type": "boolean"
+          },
+          "etag": {
+            "description": "A system-generated fingerprint for this version of the resource. May be used to detect modification conflict during updates.",
+            "type": "string"
+          },
+          "overrides": {
+            "description": "Overrides specification for a given execution of a job. If provided, overrides will be applied to update the execution or task spec.",
+            "reference": "google.cloud.run_v2.types.RunJobRequest.Overrides",
+            "resolved_schema": {
+              "type": "object",
+              "properties": {
+                "container_overrides": {
+                  "description": "Per container override specification.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "reference": "google.cloud.run_v2.types.RunJobRequest.Overrides.ContainerOverride",
+                    "resolved_schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "The name of the container specified as a DNS_LABEL.",
+                          "type": "string"
+                        },
+                        "args": {
+                          "description": "Optional. Arguments to the entrypoint. Will replace existing args for override.",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "env": {
+                          "description": "List of environment variables to set in the container. Will be merged with existing env for override.",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "reference": "google.cloud.run_v2.types.EnvVar",
+                            "resolved_schema": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "description": "Required. Name of the environment variable. Must not exceed 32768 characters.",
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "description": "Literal value of the environment variable. Defaults to \"\", and the maximum length is 32768 bytes. Variable references are not supported in Cloud Run.  This field is a member of `oneof`_ ``values``.",
+                                  "type": "string"
+                                },
+                                "value_source": {
+                                  "description": "Source for the environment variable's value.  This field is a member of `oneof`_ ``values``.",
+                                  "type": "object",
+                                  "reference": "google.cloud.run_v2.types.EnvVarSource",
+                                  "resolved_schema": {
+                                    "type": "object",
+                                    "properties": {
+                                      "secret_key_ref": {
+                                        "description": "Selects a secret and a specific version from Cloud Secret Manager.",
+                                        "type": "object",
+                                        "reference": "google.cloud.run_v2.types.SecretKeySelector",
+                                        "resolved_schema": {
+                                          "type": "object",
+                                          "properties": {
+                                            "secret": {
+                                              "description": "Required. The name of the secret in Cloud Secret Manager. Format: {secret_name} if the secret is in the same project. projects/{project}/secrets/{secret_name} if the secret is in a different project.",
+                                              "type": "string"
+                                            },
+                                            "version": {
+                                              "description": "The Cloud Secret Manager secret version. Can be 'latest' for the latest version, an integer for a specific version, or a version alias.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "secret"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ]
+                            }
+                          }
+                        },
+                        "clear_args": {
+                          "description": "Optional. True if the intention is to clear out existing args list.",
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "task_count": {
+                  "description": "Optional. The desired number of tasks the execution should run. Will replace existing task_count value.",
+                  "type": "integer"
+                },
+                "timeout": {
+                  "description": "Duration in seconds the task may be active before the system will actively try to mark it failed and kill associated containers. Will replace existing timeout_seconds value.",
+                  "type": "object",
+                  "reference": "google.protobuf.duration_pb2.Duration",
+                  "resolved_schema": {
+                    "type": "object",
+                    "properties": {
+                      "nanos": {
+                        "description": "Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 ``seconds`` field and a positive ``nanos`` field. Must be from 0 to 999,999,999 inclusive.  This field is a member of `oneof`_ ``_nanos``.",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min \\* 60 min/hr \\* 24 hr/day \\* 365.25 days/year \\* 10000 years  This field is a member of `oneof`_ ``_seconds``.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    }
+  ],
+  "/Users/prashanthvarma/Saturn/internal/ast/google-cloud-python/packages/google-cloud-run/google/cloud/run_v2/types/revision.py": [
+    {
+      "type": "function",
+      "name": "GetRevisionRequest",
+      "description": "Request message for obtaining a Revision by its full name.\n\nAttributes:\n    name (str):\n        Required. The full name of the Revision.\n        Format:\n\n        projects/{project}/locations/{location}/services/{service}/revisions/{revision}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The full name of the Revision. Format:  projects/{project}/locations/{location}/services/{service}/revisions/{revision}",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "ListRevisionsRequest",
+      "description": "Request message for retrieving a list of Revisions.\n\nAttributes:\n    parent (str):\n        Required. The Service from which the\n        Revisions should be listed. To list all\n        Revisions across Services, use \"-\" instead of\n        Service name. Format:\n\n        projects/{project}/locations/{location}/services/{service}\n    page_size (int):\n        Maximum number of revisions to return in this\n        call.\n    page_token (str):\n        A page token received from a previous call to\n        ListRevisions. All other parameters must match.\n    show_deleted (bool):\n        If true, returns deleted (but unexpired)\n        resources along with active ones.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "description": "Required. The Service from which the Revisions should be listed. To list all Revisions across Services, use \"-\" instead of Service name. Format:  projects/{project}/locations/{location}/services/{service}",
+            "type": "string"
+          },
+          "page_size": {
+            "description": "Maximum number of revisions to return in this call.",
+            "type": "integer"
+          },
+          "page_token": {
+            "description": "A page token received from a previous call to ListRevisions. All other parameters must match.",
+            "type": "string"
+          },
+          "show_deleted": {
+            "description": "If true, returns deleted (but unexpired) resources along with active ones.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "parent"
+        ]
+      }
+    },
+    {
+      "type": "function",
+      "name": "DeleteRevisionRequest",
+      "description": "Request message for deleting a retired Revision.\nRevision lifecycle is usually managed by making changes to the\nparent Service. Only retired revisions can be deleted with this\nAPI.\n\nAttributes:\n    name (str):\n        Required. The name of the Revision to delete.\n        Format:\n\n        projects/{project}/locations/{location}/services/{service}/revisions/{revision}\n    validate_only (bool):\n        Indicates that the request should be\n        validated without actually deleting any\n        resources.\n    etag (str):\n        A system-generated fingerprint for this\n        version of the resource. This may be used to\n        detect modification conflict during updates.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required. The name of the Revision to delete. Format:  projects/{project}/locations/{location}/services/{service}/revisions/{revision}",
+            "type": "string"
+          },
+          "validate_only": {
+            "description": "Indicates that the request should be validated without actually deleting any resources.",
+            "type": "boolean"
+          },
+          "etag": {
+            "description": "A system-generated fingerprint for this version of the resource. This may be used to detect modification conflict during updates.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    }
+  ]
+}
