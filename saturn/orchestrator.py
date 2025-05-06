@@ -26,6 +26,10 @@ from model.llm.mistral_llm import MistralLLM
 # Import the state recorder
 from internal.state_recorder import RunStateLogger
 
+# Import for JSON Schema validation
+import jsonschema
+from jsonschema import ValidationError as JsonSchemaValidationError
+
 # Initialize Rich Console
 console = Console()
 
@@ -200,6 +204,30 @@ async def run_query_with_feedback(
                         current_attempt_errors.append({"method":"PLAN_VALIDATION", "error":"Tool missing name"})
                         break 
                     
+                    # --- BEGIN VALIDATION OF ARGUMENTS --- 
+                    param_schema = knowledge_base.get_tool_parameter_json_schema(tool_name)
+                    if param_schema:
+                        try:
+                            jsonschema.validate(instance=tool_args_dict, schema=param_schema)
+                            console.print(f"  [green]OK:[/] Arguments for '{tool_name}' passed JSON schema validation.")
+                        except JsonSchemaValidationError as e_schema:
+                            console.print(f"  [bold red]Validation Error:[/] Arguments for '{tool_name}' failed JSON schema validation.")
+                            # Simplify the error for the LLM. Providing the full e_schema might be too verbose.
+                            # We want to give enough info for the LLM to correct the args.
+                            validation_error_summary = f"Schema validation failed for {tool_name}: {e_schema.message}. Path: {list(e_schema.path)}. Validator: {e_schema.validator} = {e_schema.validator_value}."
+                            console.print(f"    Details: {validation_error_summary}")
+                            current_attempt_errors.append({
+                                "method": tool_name,
+                                "error_type": "SCHEMA_VALIDATION",
+                                "error": validation_error_summary,
+                                "arguments": tool_args_dict # Show LLM what it tried
+                            })
+                            # This error will cause the attempt to fail and retry with this feedback.
+                            continue # Skip adding this node to plan_nodes for execution
+                    else:
+                        console.print(f"  [bold yellow]Warning:[/] No parameter schema found in KnowledgeBase for tool '{tool_name}'. Skipping argument validation.")
+                    # --- END VALIDATION OF ARGUMENTS --- 
+
                     node_id = f"{attempt}_{i}_{tool_name}" # Keep ID unique across attempts
                     plan_nodes.append(node_id)
                     node_args[node_id] = tool_args_dict
@@ -261,10 +289,15 @@ async def run_query_with_feedback(
                     # --- Use Logger --- 
                     state_logger.record_node_status_change(node_id, NODE_RUNNING)
                     # --- End Use ---
-                    tool_name = node_id.split('_', 2)[2] # Use correct split for unique ID
-                    args = node_args[node_id]
-                    console.print(f"  Queueing [cyan]{node_id}[/cyan] (Tool: {tool_name})")
-                    tasks.append(_execute_single_node(gcp_executor, knowledge_base, node_id, tool_name, args, console))
+                    # Retrieve tool_name and args again, safely
+                    # The node_id format is attempt_index_toolName. We need to ensure this reconstruction is robust
+                    # or retrieve from a structure that stored it during node initialization.
+                    # For now, assume node_args[node_id] and splitting node_id is correct as per prior logic.
+                    current_tool_name = node_id.split('_', 2)[2] 
+                    current_args = node_args[node_id]
+                    
+                    console.print(f"  Queueing [cyan]{node_id}[/cyan] (Tool: {current_tool_name})")
+                    tasks.append(_execute_single_node(gcp_executor, knowledge_base, node_id, current_tool_name, current_args, console))
                 
                 execution_results = await asyncio.gather(*tasks, return_exceptions=True)
                 

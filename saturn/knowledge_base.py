@@ -99,102 +99,108 @@ class KnowledgeBase:
         request_types_map = {}
 
         # First pass: build the request types map from all loaded types.json
-        print("[KB Debug] --- Pass 1: Building request_types_map ---") # DEBUG
-        for service_name, service_types in self.types_data.items():
-            print(f"[KB Debug] Processing types for service: {service_name}") # DEBUG
-            if isinstance(service_types, dict):
-                # Original structure was { file: [types] }, handle potential variations
-                # Assuming the list of types is the primary value if dict
-                 type_list = next(iter(service_types.values()), [])
-                 print(f"[KB Debug]   Service types is dict, using first list of types (count: {len(type_list)})") # DEBUG
-            elif isinstance(service_types, list):
-                 type_list = service_types
-                 print(f"[KB Debug]   Service types is list (count: {len(type_list)})") # DEBUG
+        print("[KB Debug] --- Pass 1: Building request_types_map ---")
+        for service_name, service_types_content in self.types_data.items(): # Renamed for clarity
+            print(f"[KB Debug] Processing types for service: {service_name}")
+            
+            all_type_definitions_for_service = []
+            if isinstance(service_types_content, dict):
+                # This is the case for run_v2: {filepath: [type_defs], filepath2: [type_defs]}
+                print(f"[KB Debug]   Service types content is dict. Iterating through its values (lists of types).")
+                for file_path_key in service_types_content: # Iterate through file paths
+                    file_type_list = service_types_content[file_path_key]
+                    if isinstance(file_type_list, list):
+                        all_type_definitions_for_service.extend(file_type_list)
+                    else:
+                        print(f"[KB Debug]     Warning: Expected a list of types for file '{file_path_key}' in '{service_name}', got {type(file_type_list)}")
+            elif isinstance(service_types_content, list):
+                # This might be the case for simpler services where types.json is just a list
+                print(f"[KB Debug]   Service types content is list.")
+                all_type_definitions_for_service = service_types_content
             else:
-                 type_list = []
-                 print(f"Warning: Unexpected format for types_data[{service_name}]")
+                print(f"Warning: Unexpected format for types_data[{service_name}], type is {type(service_types_content)}. Skipping.")
+                continue # Skip this service if format is unknown
 
-            for type_info in type_list:
+            print(f"[KB Debug]   Total type definitions found for {service_name}: {len(all_type_definitions_for_service)}")
+            for type_info in all_type_definitions_for_service:
                 # print(f"[KB Debug]     Checking type_info: {type_info.get('name')}, type: {type_info.get('type')}") # DEBUG (Verbose)
-                if type_info.get("type") == "function": # Corrected: types.json uses "function" for these definitions
+                if type_info.get("type") == "function": # Assuming "function" is the indicator for request type schemas
                     type_name = type_info.get("name")
                     if type_name:
                          # Store with service prefix to avoid name collisions
-                        map_key = f"{service_name}.{type_name}" # DEBUG
+                        map_key = f"{service_name}.{type_name}" # e.g., run_v2.GetExecutionRequest
                         request_types_map[map_key] = type_info
-                        print(f"[KB Debug]     Added to request_types_map: Key='{map_key}'") # DEBUG
+                        print(f"[KB Debug]     Added to request_types_map: Key='{map_key}'")
 
-        print(f"[KB Debug] --- Pass 1 Complete: request_types_map has {len(request_types_map)} entries ---") # DEBUG
+        print(f"[KB Debug] --- Pass 1 Complete: request_types_map has {len(request_types_map)} entries ---")
 
         # Second pass: iterate through tools.json and build tool definitions
-        print("[KB Debug] --- Pass 2: Building tools from tools_data ---") # DEBUG
+        print("[KB Debug] --- Pass 2: Building tools from tools_data ---")
         for service_name, service_tools in self.tools_data.items():
-            print(f"[KB Debug] Processing tools for service: {service_name}") # DEBUG
-            # --- Added Debug: Check structure of service_tools ---
+            print(f"[KB Debug] Processing tools for service: {service_name}")
             if not isinstance(service_tools, dict):
                  print(f"[KB Debug]   WARNING: Expected service_tools for '{service_name}' to be a dict, got {type(service_tools)}. Skipping.")
                  continue
             
-            # --- Assuming tools.json has a top-level key like the service class name ---
-            # Let's iterate through potential top-level keys if structure is { ServiceClass: { methods: [...] }}
             for service_class_name, service_class_def in service_tools.items():
-                 print(f"[KB Debug]   Processing service class/key: {service_class_name}") # DEBUG
+                 print(f"[KB Debug]   Processing service class/key: {service_class_name}")
                  if not isinstance(service_class_def, dict) or "methods" not in service_class_def:
                       print(f"[KB Debug]     Skipping '{service_class_name}', not a dict or no 'methods' key.")
                       continue
 
                  for method in service_class_def.get("methods", []):
-                    # print(f"[KB Debug]       Processing method definition: {method.get('function', {}).get('name')}") # DEBUG (Verbose)
                     func_def = method.get("function", {})
                     method_name = func_def.get("name")
                     request_types = func_def.get("request_types", [])
 
                     if not method_name:
-                         print("[KB Debug]         Skipping method: No method name found.") # DEBUG
+                         print("[KB Debug]         Skipping method: No method name found.")
                          continue
                     if not request_types:
-                         print(f"[KB Debug]         Skipping method '{method_name}': No request_types defined.") # DEBUG
+                         print(f"[KB Debug]         Skipping method '{method_name}': No request_types defined.")
                          continue
 
-                    # Assume the first request type is the primary one
-                    # Add service prefix to look up in our combined map
-                    request_type_name = request_types[0] # DEBUG
-                    request_type_key = f"{service_name}.{request_type_name}"
-                    print(f"[KB Debug]       Method '{method_name}', Request Type '{request_type_name}', Generated Key: '{request_type_key}'") # DEBUG
+                    raw_request_type_name_from_tools = request_types[0]
+                    base_request_type_name = raw_request_type_name_from_tools.split('.')[-1]
+                    request_type_key = f"{service_name}.{base_request_type_name}"
+                    
+                    print(f"[KB Debug]       Method '{method_name}', Raw Request Type from tools.json: '{raw_request_type_name_from_tools}', Base Name: '{base_request_type_name}', Generated Lookup Key: '{request_type_key}'")
 
                     if request_type_key not in request_types_map:
-                        print(f"[KB Debug]         WARNING: Key '{request_type_key}' not found in request_types_map. Cannot build tool '{service_name}.{method_name}'.") # DEBUG
-                        # --- Add check for similar keys ---
-                        similar_keys = [k for k in request_types_map if request_type_name in k]
+                        print(f"[KB Debug]         WARNING: Key '{request_type_key}' not found in request_types_map. Cannot build tool '{service_name}_{method_name}'.")
+                        similar_keys = [k for k in request_types_map if base_request_type_name in k and service_name in k]
                         if similar_keys:
-                             print(f"[KB Debug]           Possible related keys found in map: {similar_keys}")
-                        # --- End Add ---
+                             print(f"[KB Debug]           Possible related keys found in map for {service_name}.{base_request_type_name}: {similar_keys}")
+                        else:
+                             print(f"[KB Debug]           No similar keys found in map for {service_name}.{base_request_type_name}.")
+                        # Check if map contains *any* keys for the service for broader debugging
+                        service_specific_keys_in_map = [k for k in request_types_map if k.startswith(f"{service_name}.")]
+                        if not service_specific_keys_in_map:
+                            print(f"[KB Debug]           No keys found for service '{service_name}' in request_types_map at all.")
+                        elif len(service_specific_keys_in_map) < 10: # Print a few if the list is small
+                            print(f"[KB Debug]           Some keys for service '{service_name}' in map: {service_specific_keys_in_map[:5]}")
+
+
                         continue
                     else:
-                        print(f"[KB Debug]         Key '{request_type_key}' FOUND in request_types_map.") # DEBUG
+                        print(f"[KB Debug]         Key '{request_type_key}' FOUND in request_types_map.")
 
                     import copy
                     type_info = request_types_map[request_type_key]
-                    # Deep copy parameters before transforming
                     parameters_copy = copy.deepcopy(type_info.get("parameters", {}))
-
-                    # Transform enums, etc.
                     parameters_transformed = self._transform_fields(parameters_copy)
+                    tool_name_for_openai = f"{service_name}_{method_name}"
 
-                    # Construct the tool name with service prefix
-                    tool_name = f"{service_name}_{method_name}" # Use underscore instead of dot for OpenAI compatibility
-
-                    # Build the final tool definition for OpenAI
                     openai_tool = {
                         "type": "function",
                         "function": {
-                            "name": tool_name,
-                            "description": type_info.get("description", f"Calls the {tool_name} method."),
+                            "name": tool_name_for_openai,
+                            "description": func_def.get("description", type_info.get("description", f"Calls the {tool_name_for_openai} method.")), # Prefer description from tools.json func_def
                             "parameters": parameters_transformed,
                         }
                     }
                     all_tools.append(openai_tool)
-                    print(f"[KB Debug]       Successfully built tool: {tool_name}") # DEBUG
+                    print(f"[KB Debug]       Successfully built tool: {tool_name_for_openai}")
 
 
         self.raw_tools = all_tools
@@ -298,17 +304,28 @@ class KnowledgeBase:
 
     def get_type_schema(self, full_type_name: str) -> Optional[Dict[str, Any]]:
         """
-        Retrieves the JSON schema definition for a given type name.
-        The type name should ideally be prefixed with the service name
-        (e.g., 'vpcaccess_v1.CreateConnectorRequest') or be a full reference.
+        Retrieves the full schema for a given type name (e.g., service.TypeName or google.cloud... reference).
         """
-        schema = self._type_schema_map.get(full_type_name)
-        if schema:
-            print(f"Found schema for type: {full_type_name}")
-            return schema
-        else:
-            # Attempt fallback/variations if needed? (e.g., search without service prefix)
-            print(f"Warning: Schema not found for type: {full_type_name}")
-            return None
+        return self._type_schema_map.get(full_type_name)
+
+    def get_tool_parameter_json_schema(self, tool_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieves the JSON schema for the parameters of a given tool name.
+        The tool_name is expected to be in the format 'service_method' (e.g., vpcaccess_v1_create_connector).
+        """
+        # self.raw_tools is a list of dicts, each like:
+        # {
+        #   "type": "function",
+        #   "function": {
+        #     "name": "service_method_name",
+        #     "description": "...",
+        #     "parameters": { /* JSON Schema for parameters */ }
+        #   }
+        # }
+        for tool_def in self.raw_tools:
+            if tool_def.get("function", {}).get("name") == tool_name:
+                return tool_def["function"].get("parameters")
+        print(f"[KB Debug] Tool name '{tool_name}' not found in raw_tools for schema retrieval.")
+        return None
 
 # Example Usage removed to prevent linting issues. 

@@ -34,7 +34,7 @@ class OpenAILLM(BaseLLMInterface):
         if not self.config.get('openai_api_key'):
             raise ValueError("OpenAI API key ('openai_api_key') missing in configuration.")
         self.api_key = self.config['openai_api_key']
-        self.model = self.config.get('openai_model', 'gpt-4o') # Default to gpt-4o
+        self.model = self.config.get('openai_model', 'gpt-4.1') # Default to gpt-4o
         print(f"OpenAI Interface configured for model: {self.model}")
         try:
             self.client = AsyncOpenAI(api_key=self.api_key)
