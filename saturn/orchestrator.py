@@ -196,6 +196,11 @@ async def run_query_with_feedback(
             # Initialize node states and record with logger
             if extracted_calls:
                 console.print(f"[info]Initializing {len(extracted_calls)} nodes from plan...[/info]")
+                
+                # Create DAG structure for logging
+                dag_nodes = {}
+                dag_edges = []
+                
                 for i, tool_call in enumerate(extracted_calls): 
                     tool_name = tool_call.get('name')
                     tool_args_dict = tool_call.get('arguments', {})
@@ -212,21 +217,15 @@ async def run_query_with_feedback(
                             console.print(f"  [green]OK:[/] Arguments for '{tool_name}' passed JSON schema validation.")
                         except JsonSchemaValidationError as e_schema:
                             console.print(f"  [bold red]Validation Error:[/] Arguments for '{tool_name}' failed JSON schema validation.")
-                            # Simplify the error for the LLM. Providing the full e_schema might be too verbose.
-                            # We want to give enough info for the LLM to correct the args.
                             validation_error_summary = f"Schema validation failed for {tool_name}: {e_schema.message}. Path: {list(e_schema.path)}. Validator: {e_schema.validator} = {e_schema.validator_value}."
                             console.print(f"    Details: {validation_error_summary}")
                             current_attempt_errors.append({
                                 "method": tool_name,
                                 "error_type": "SCHEMA_VALIDATION",
                                 "error": validation_error_summary,
-                                "arguments": tool_args_dict # Show LLM what it tried
+                                "arguments": tool_args_dict
                             })
-                            # This error will cause the attempt to fail and retry with this feedback.
-                            continue # Skip adding this node to plan_nodes for execution
-                    else:
-                        console.print(f"  [bold yellow]Warning:[/] No parameter schema found in KnowledgeBase for tool '{tool_name}'. Skipping argument validation.")
-                    # --- END VALIDATION OF ARGUMENTS --- 
+                            continue
 
                     node_id = f"{attempt}_{i}_{tool_name}" # Keep ID unique across attempts
                     plan_nodes.append(node_id)
@@ -234,6 +233,21 @@ async def run_query_with_feedback(
                     initial_state = NODE_READY if i == 0 else NODE_PENDING
                     node_states[node_id] = initial_state
                     node_outputs[node_id] = None
+                    
+                    # Add to DAG structure
+                    dag_nodes[node_id] = {
+                        "type": "tool_call",
+                        "tool": tool_name,
+                        "parameters": tool_args_dict,
+                        "description": f"Execute {tool_name}",
+                        "expected_output": f"Result of {tool_name} execution"
+                    }
+                    
+                    # Add edges for sequential execution
+                    if i > 0:
+                        prev_node = plan_nodes[i-1]
+                        dag_edges.append(f"{prev_node} -> {node_id}")
+                    
                     console.print(f"  Node '{node_id}' initialized as {initial_state}")
                     
                     # --- Use Logger --- 
@@ -246,6 +260,18 @@ async def run_query_with_feedback(
                     )
                     # --- End Use --- 
 
+                # Log DAG structure
+                console.print("\n[bold cyan]DAG Structure:[/bold cyan]")
+                for node_id, node_info in dag_nodes.items():
+                    console.print(f"\n[bold]{node_id}[/bold]")
+                    console.print(f"  Tool: [yellow]{node_info['tool']}[/yellow]")
+                    console.print(f"  Description: {node_info['description']}")
+                
+                console.print("\n[bold cyan]Execution Order:[/bold cyan]")
+                for i, node_id in enumerate(plan_nodes, 1):
+                    node_info = dag_nodes[node_id]
+                    console.print(f"{i}. [bold]{node_id}[/bold] - {node_info['tool']}")
+
                 if current_attempt_errors: 
                     raise Exception("Invalid plan received from LLM (missing tool names).")
             else:
@@ -254,13 +280,12 @@ async def run_query_with_feedback(
                     console.print("[bold green]LLM provided only text response. Assuming completion.[/bold green]")
                     console.print(Panel(llm_text_response, title="Final Text Response"))
                     final_status = "COMPLETED_TEXT_RESPONSE"
-                    state_logger.set_final_run_status(final_status) # Record status before exiting
+                    state_logger.set_final_run_status(final_status)
                     state_logger.save_state()
-                    return # Exit loop successfully
+                    return
                 else:
                     console.print("[bold yellow]Warning:[/] LLM provided no tool calls and no text response.")
                     current_attempt_errors.append({"method": "N/A", "error": "LLM returned empty response", "arguments": {}})
-                    # Go to end of try block to handle retry/failure
 
             # 4. Execute Nodes based on State (Inner Loop)
             active_nodes = True
@@ -274,25 +299,18 @@ async def run_query_with_feedback(
                     running_or_pending = any(s in [NODE_RUNNING, NODE_PENDING] for s in node_states.values())
                     if not running_or_pending:
                         console.print(f"[info]Execution Cycle {execution_cycle}: No more READY, RUNNING, or PENDING nodes.[/info]")
-                        active_nodes = False # All done or failed
-                        break # Exit inner execution loop
+                        active_nodes = False
+                        break
                     else:
-                        # Should not happen with asyncio.gather unless logic error
                         console.print(f"[bold yellow]Warning:[/] Cycle {execution_cycle}: No READY nodes, but RUNNING/PENDING exist. Waiting briefly...")
-                        await asyncio.sleep(0.1) # Avoid busy-waiting
+                        await asyncio.sleep(0.1)
                         continue
 
                 console.print(Panel(f"Execution Cycle {execution_cycle}: Running {len(ready_nodes)} READY Node(s)", style="blue"))
                 tasks = []
                 for node_id in ready_nodes:
                     node_states[node_id] = NODE_RUNNING
-                    # --- Use Logger --- 
                     state_logger.record_node_status_change(node_id, NODE_RUNNING)
-                    # --- End Use ---
-                    # Retrieve tool_name and args again, safely
-                    # The node_id format is attempt_index_toolName. We need to ensure this reconstruction is robust
-                    # or retrieve from a structure that stored it during node initialization.
-                    # For now, assume node_args[node_id] and splitting node_id is correct as per prior logic.
                     current_tool_name = node_id.split('_', 2)[2] 
                     current_args = node_args[node_id]
                     
@@ -301,25 +319,20 @@ async def run_query_with_feedback(
                 
                 execution_results = await asyncio.gather(*tasks, return_exceptions=True)
                 
-                # Process results and update states 
                 console.print(f"[info]Processing {len(execution_results)} results for cycle {execution_cycle}...[/info]")
                 failed_in_batch = False
                 for result_data in execution_results:
                     if isinstance(result_data, Exception):
                         console.print(f"  [bold bright_red]Fatal Error:[/] Gather returned exception: {result_data}")
-                        # How to record this error state? Add general error for now.
                         error_info = {"method":"NODE_EXECUTION_GATHER", "error":f"Unhandled task exception: {result_data}", "arguments":{}}
                         current_attempt_errors.append(error_info)
                         failed_in_batch = True
-                        continue # Don't try to process node result further
+                        continue
 
                     node_id, success, result_val = result_data
                     final_node_state = NODE_COMPLETED if success else NODE_FAILED
                     node_states[node_id] = final_node_state
-                    
-                    # --- Use Logger --- 
                     state_logger.record_node_result(node_id, success, result_val, final_node_state)
-                    # --- End Use --- 
                     
                     if success:
                          console.print(f"  [bold green]Success:[/] Node [cyan]{node_id}[/cyan] completed.")
@@ -329,7 +342,7 @@ async def run_query_with_feedback(
                         error_msg = str(result_val)
                         console.print(f"    Reason: {error_msg}")
                         current_attempt_errors.append({
-                            "method": node_id.split('_', 2)[2], # Use correct split 
+                            "method": node_id.split('_', 2)[2],
                             "error": error_msg,
                             "arguments": node_args[node_id]
                         })
@@ -337,66 +350,50 @@ async def run_query_with_feedback(
                     
                 if failed_in_batch:
                     console.print("[bold red]Error occurred during node execution. Stopping this attempt.[/bold red]")
-                    break # Exit the inner execution loop for this attempt
+                    break
 
-                # Update READY states for next iteration (simple sequential)
+                # Update READY states for next iteration
                 for i, node_id in enumerate(plan_nodes):
                     if node_states[node_id] == NODE_PENDING:
                         if i > 0 and node_states[plan_nodes[i-1]] == NODE_COMPLETED:
                             console.print(f"[info]Node [cyan]{node_id}[/cyan] is now READY.[/info]")
                             node_states[node_id] = NODE_READY
-                            # --- Use Logger --- 
                             state_logger.record_node_status_change(node_id, NODE_READY)
-                            # --- End Use ---
-            # --- End Inner Execution Loop --- 
 
             # 5. Check for Completion or Retry
             if not current_attempt_errors:
-                # Verify all nodes actually completed (handles cases with no plan initially)
                 all_completed = all(s == NODE_COMPLETED for s in node_states.values()) if node_states else True
                 if all_completed:
                     console.print("\n[bold green]All planned nodes completed successfully in this attempt![/bold green]")
                     if node_outputs:
                         console.print(Panel(node_outputs, title="Final Node Outputs"))
-                    final_status = "COMPLETED" # Mark overall run as completed
+                    final_status = "COMPLETED"
                     state_logger.set_final_run_status(final_status)
                     state_logger.save_state()
-                    return # SUCCESSFUL COMPLETION
+                    return
                 else:
-                    # Should not happen if loop exited correctly without errors
                     console.print(f"[bold yellow]Warning:[/] Attempt finished with no errors, but not all nodes COMPLETED. State:", {node_states})
-                    current_attempt_errors.append({"method":"POST_EXECUTION_CHECK", "error":"Inconsistent final state"}) # Add error
+                    current_attempt_errors.append({"method":"POST_EXECUTION_CHECK", "error":"Inconsistent final state"})
             
-            # If we reach here, errors occurred in this attempt
-            previous_run_errors = current_attempt_errors # Save errors for next attempt's feedback
-            # (Outer loop handles retry logic)
+            previous_run_errors = current_attempt_errors
 
         except Exception as e:
-            # Catch unexpected errors in the main attempt logic
             console.print(f"\n--- Unexpected Error during attempt {attempt + 1} --- ")
-            console.print_exception(show_locals=False) # Use Rich exception formatting
-            # Assign error to be passed to next attempt if retrying
+            console.print_exception(show_locals=False)
             previous_run_errors = current_attempt_errors + [{"method": "Orchestrator Loop", "error": str(e), "arguments": {}}]
-            # (Outer loop handles retry logic)
         
-        # --- Increment attempt and check retry limit --- 
         attempt += 1
-        if attempt < max_attempts and previous_run_errors: # Only print retry if errors occurred
+        if attempt < max_attempts and previous_run_errors:
             console.print(Panel(f"Attempt {attempt} Failed. Errors will be sent for correction.", style="yellow"))
             console.print("Errors for next attempt:")
             console.print(previous_run_errors)
             console.print("[info]Retrying...[/info]")
         elif attempt >= max_attempts:
             console.print(Panel("Maximum attempts reached. Orchestrator failed.", style="bold red"))
-            # Loop terminates
-        # else: loop terminates (no errors)
 
-    # End of while loop
-    final_errors = previous_run_errors # Errors from the last failed attempt
-    # --- Set final status and save state --- 
+    final_errors = previous_run_errors
     state_logger.set_final_run_status(final_status, final_errors)
     state_logger.save_state()
-    # --- End Save --- 
 
     console.print(Panel(f"Orchestrator finished after {attempt} attempts.", border_style="red"))
     if final_errors: 
@@ -404,8 +401,6 @@ async def run_query_with_feedback(
         console.print(final_errors)
     else:
         console.print("[info]Loop finished without recorded errors (check completion status).[/info]")
-
-    # ... (final failure logging) ...
 
 # Updated helper to use console.print (remains the same)
 async def _execute_single_node(
