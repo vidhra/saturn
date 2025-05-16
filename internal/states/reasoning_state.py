@@ -67,81 +67,147 @@ class ReasoningState(BaseState):
         self._parameter_cache = {}
         self._validation_errors = []
 
-    async def run(self, context: StateMachineContext) -> Tuple[Type[BaseState], StateMachineContext]:
+    async def run(self, context: StateMachineContext) -> StateMachineContext:
         """
         Process the user query and generate a DAG of tool-callable steps.
-        
-        Args:
-            context: The current state machine context
-            
-        Returns:
-            Tuple containing next state and updated context
+        Each step is executed as a separate LLM call.
         """
         try:
-            # Use the LLM interface to generate a step-by-step plan
-            reasoning_prompt = f"""
-            Given the user query: {context.original_query}
+            # Get the LLM's reasoning about how to solve the query
+            reasoning_response = await self._get_llm_reasoning(context)
             
-            Break down the task into individual steps that can be executed as tool calls.
-            For each step, specify:
-            1. The tool to call (e.g., codebase_search, read_file, edit_file, run_terminal_cmd)
-            2. Required parameters for the tool
-            3. Dependencies on previous steps (if any)
-            4. Expected output and how it will be used
+            # Parse the reasoning into a DAG structure
+            dag = self._parse_reasoning_to_dag(reasoning_response)
             
-            Format each step as a JSON object with:
-            {{
-                "step_id": "unique_id",
-                "tool": "tool_name",
-                "parameters": {{
-                    "param1": "value1",
-                    ...
-                }},
-                "dependencies": ["step_id1", "step_id2"],
-                "description": "What this step does",
-                "expected_output": "What we expect to get from this step"
-            }}
-            
-            Return a list of these steps in execution order.
-            """
-            
-            # Get reasoning from LLM with retry logic
-            reasoning_response = await self._get_llm_response_with_retry(context, reasoning_prompt)
-            context.llm_text_response = reasoning_response
-            
-            # Parse the reasoning into a DAG definition
-            dag_definition = await self._parse_reasoning_to_dag(reasoning_response)
-            context.dag_definition = dag_definition
-            
-            # Initialize node states
-            context.node_states = {
-                node_id: "PENDING" 
-                for node_id in dag_definition["nodes"]
+            # Log the DAG structure to state recorder
+            dag_definition = {
+                "nodes": {
+                    node_id: {
+                        "tool": node.tool,
+                        "description": node.description,
+                        "dependencies": node.dependencies
+                    }
+                    for node_id, node in dag.nodes.items()
+                },
+                "edges": [
+                    f"{source} -> {target}"
+                    for source, target in dag.edges
+                ],
+                "execution_order": dag.get_execution_order()
             }
-
-            # Log the DAG structure
-            self._log_dag_structure(dag_definition, context)
+            context.state_recorder.record_dag_structure(dag_definition)
             
-            # Move to planning state
-            return PlanningState, context
+            # Log the DAG structure to console
+            self._log_dag_structure(dag)
+            
+            # Initialize nodes in state recorder
+            for node_id, node in dag.nodes.items():
+                context.state_recorder.record_node_initialization(
+                    node_id=node_id,
+                    tool_name=node.tool,
+                    attempt=1,
+                    args=node.parameters,
+                    initial_status="PENDING"
+                )
+            
+            # Execute the DAG
+            execution_order = dag.get_execution_order()
+            step_results = {}  # Store results of each step
+            
+            for node_id in execution_order:
+                node = dag.nodes[node_id]
+                try:
+                    # Update node status to RUNNING
+                    context.state_recorder.record_node_status_change(node_id, "RUNNING")
+                    
+                    # Create a system prompt for this specific step
+                    step_prompt = f"""You are executing step {node_id} of a larger task.
+Description: {node.description}
+Expected Output Format: {node.expected_output}
+
+Previous step results:
+{self._format_previous_results(node.dependencies, step_results)}
+
+Please execute this step and provide the output in the expected format."""
+
+                    # Get the LLM's execution of this step
+                    tool_calls, _ = await context.llm_interface.get_tool_calls(
+                        query=context.user_query,
+                        system_prompt=step_prompt,
+                        tools=[node.tool] if node.tool else [],
+                        previous_errors=None
+                    )
+                    
+                    # Execute the tool if specified
+                    if node.tool and tool_calls:
+                        result = await self._execute_tool(node.tool, tool_calls[0]["arguments"], context)
+                    else:
+                        # If no tool was specified or no tool calls were made, use the LLM's response
+                        result = context.llm_interface.last_response
+                    
+                    # Store the result
+                    step_results[node_id] = result
+                    
+                    # Update node status to COMPLETED
+                    context.state_recorder.record_node_result(
+                        node_id=node_id,
+                        success=True,
+                        result_or_error=result,
+                        final_status="COMPLETED"
+                    )
+                    
+                except Exception as e:
+                    # Update node status to FAILED
+                    context.state_recorder.record_node_result(
+                        node_id=node_id,
+                        success=False,
+                        result_or_error=str(e),
+                        final_status="FAILED"
+                    )
+                    raise
+            
+            # Get DAG summary for final state
+            dag_summary = context.state_recorder.get_dag_summary()
+            console.print(f"\n[info]DAG Execution Summary:[/info]")
+            console.print(f"Total Nodes: {dag_summary['total_nodes']}")
+            console.print(f"Total Edges: {dag_summary['total_edges']}")
+            console.print(f"Execution Order: {' -> '.join(dag_summary['execution_order'])}")
+            console.print("\nNode States:")
+            for node_id, status in dag_summary['node_states'].items():
+                console.print(f"  {node_id}: {status}")
+            
+            # Store the final results in the context
+            context.step_results = step_results
+            
+            return context
             
         except Exception as e:
-            context.current_errors.append({
-                "state": "reasoning",
-                "error": str(e),
-                "details": "Failed to process query and generate DAG"
-            })
-            return ErrorHandlingState, context
+            console.print(f"[bold red]Error in reasoning state:[/bold red] {str(e)}")
+            raise
 
-    def _log_dag_structure(self, dag_definition: Dict[str, Any], context: StateMachineContext) -> None:
+    def _format_previous_results(self, dependencies: List[str], step_results: Dict[str, Any]) -> str:
+        """Format the results of previous steps for inclusion in a step's prompt."""
+        if not dependencies:
+            return "No previous steps."
+            
+        formatted = []
+        for dep in dependencies:
+            if dep in step_results:
+                formatted.append(f"Step {dep}:\n{step_results[dep]}")
+            else:
+                formatted.append(f"Step {dep}: Not executed yet")
+                
+        return "\n\n".join(formatted)
+
+    def _log_dag_structure(self, dag: AcyclicGraph) -> None:
         """Log the DAG structure in a tree-like format."""
         if not hasattr(context, 'console'):
             return
 
         console = context.console
-        nodes = dag_definition["nodes"]
-        edges = dag_definition["edges"]
-        execution_order = dag_definition["execution_order"]
+        nodes = dag.nodes
+        edges = dag.edges
+        execution_order = dag.get_execution_order()
 
         # Create a mapping of node to its children
         children_map = {}
@@ -167,8 +233,8 @@ class ReasoningState(BaseState):
             
             # Print node info
             console.print(f"{indent}{arrow}[bold]{node_id}[/bold]")
-            console.print(f"{indent}    Tool: [yellow]{node['tool']}[/yellow]")
-            console.print(f"{indent}    Description: {node['description']}")
+            console.print(f"{indent}    Tool: [yellow]{node.tool}[/yellow]")
+            console.print(f"{indent}    Description: {node.description}")
             
             # Print children
             for child in children_map.get(node_id, []):
@@ -182,35 +248,79 @@ class ReasoningState(BaseState):
         console.print("\n[bold cyan]Execution Order:[/bold cyan]")
         for i, node_id in enumerate(execution_order, 1):
             node = nodes[node_id]
-            console.print(f"{i}. [bold]{node_id}[/bold] - {node['tool']}")
+            console.print(f"{i}. [bold]{node_id}[/bold] - {node.tool}")
 
-    async def _get_llm_response_with_retry(self, context: StateMachineContext, prompt: str, max_retries: int = 3) -> str:
-        """Get LLM response with retry logic."""
-        for attempt in range(max_retries):
-            try:
-                response = await context.llm_interface.generate(prompt)
-                if self._validate_llm_response(response):
-                    return response
-            except Exception as e:
-                if attempt == max_retries - 1:
-                    raise
-                await asyncio.sleep(1 * (attempt + 1))  # Exponential backoff
-        raise Exception("Failed to get valid LLM response after retries")
+    async def _get_llm_reasoning(self, context: StateMachineContext) -> str:
+        """
+        Get LLM reasoning about how to solve the query.
+        
+        This method generates a high-level plan of steps that can be converted into
+        individual LLM prompts. Each step will be executed as a separate LLM call.
+        
+        Args:
+            context: The state machine context containing the user query and other state
+            
+        Returns:
+            A JSON string containing the plan of steps
+        """
+        # Get the user query from context
+        query = context.user_query
+        
+        # Create a system prompt that guides the LLM to generate a plan
+        system_prompt = """You are a planning assistant that breaks down complex tasks into a sequence of steps.
+Each step should be self-contained and executable by an LLM.
+For each step, provide:
+1. A unique step_id
+2. A clear description of what the step should do
+3. The expected output format
+4. Any dependencies on previous steps
+5. The tool to use (if applicable)
+6. Parameters for the tool (if applicable)
 
-    def _validate_llm_response(self, response: str) -> bool:
-        """Validate that the LLM response is properly formatted JSON."""
+The response should be a JSON array of step objects, where each step has:
+{
+    "step_id": "unique_id",
+    "description": "what this step should do",
+    "expected_output": "what format the output should be in",
+    "dependencies": ["list", "of", "step_ids", "this", "depends", "on"],
+    "tool": "tool_name",  // Optional, if a specific tool is needed
+    "parameters": {  // Optional, if a tool is specified
+        "param1": "value1",
+        "param2": "value2"
+    }
+}"""
+
+        # Get the LLM's plan
         try:
-            steps = json.loads(response)
-            if not isinstance(steps, list):
-                return False
-            for step in steps:
-                if not all(k in step for k in ["step_id", "tool", "parameters", "dependencies", "description", "expected_output"]):
-                    return False
-            return True
-        except json.JSONDecodeError:
-            return False
+            # Use the LLM interface to get the plan
+            tool_calls, _ = await context.llm_interface.get_tool_calls(
+                query=query,
+                system_prompt=system_prompt,
+                tools=[],  # No tools needed for planning
+                previous_errors=None
+            )
+            
+            if not tool_calls:
+                # If no tool calls were made, the LLM should have returned a plan directly
+                return context.llm_interface.last_response
+            else:
+                # If tool calls were made, use the first one as the plan
+                return tool_calls[0]["arguments"]
+                
+        except Exception as e:
+            # If there's an error, return a basic plan with error handling
+            return json.dumps([{
+                "step_id": "error_handling",
+                "description": f"Handle error: {str(e)}",
+                "expected_output": "Error message",
+                "dependencies": [],
+                "tool": "error_handling",
+                "parameters": {
+                    "error": str(e)
+                }
+            }])
 
-    async def _parse_reasoning_to_dag(self, reasoning_response: str) -> Dict[str, Any]:
+    async def _parse_reasoning_to_dag(self, reasoning_response: str) -> AcyclicGraph:
         """
         Parse the LLM's reasoning response into a DAG definition with tool-callable steps.
         
@@ -218,7 +328,7 @@ class ReasoningState(BaseState):
             reasoning_response: The LLM's response containing the reasoning
             
         Returns:
-            Dict containing the DAG definition
+            DAG definition
         """
         try:
             # Parse the JSON response from LLM
@@ -372,57 +482,6 @@ class ReasoningState(BaseState):
         self._parameter_cache[cache_key] = (is_valid, errors)
         
         return is_valid, errors
-
-    async def _execute_step(self, step: Dict[str, Any], context: StateMachineContext) -> Any:
-        """
-        Execute a single step with retry logic.
-        
-        Args:
-            step: Step definition
-            context: Current context
-            
-        Returns:
-            Step execution result
-        """
-        max_retries = 3
-        last_error = None
-        
-        # Log step execution start
-        if hasattr(context, 'console'):
-            context.console.print(f"\n[bold cyan]Executing Step: {step['step_id']}[/bold cyan]")
-            context.console.print(f"Tool: [yellow]{step['tool']}[/yellow]")
-            context.console.print(f"Description: {step['description']}")
-            context.console.print(f"Dependencies: {', '.join(step['dependencies']) if step['dependencies'] else 'None'}")
-        
-        for attempt in range(max_retries):
-            try:
-                # Execute step
-                result = await self._execute_tool(
-                    step["tool"],
-                    step["parameters"],
-                    context
-                )
-                
-                # Log successful execution
-                if hasattr(context, 'console'):
-                    context.console.print(f"[green]✓ Step {step['step_id']} completed successfully[/green]")
-                    if step.get('expected_output'):
-                        context.console.print(f"Expected output: {step['expected_output']}")
-                
-                return result
-                
-            except Exception as e:
-                last_error = e
-                if attempt < max_retries - 1:
-                    # Log retry attempt
-                    if hasattr(context, 'console'):
-                        context.console.print(f"[yellow]Retry {attempt + 1}/{max_retries} for {step['tool']} due to: {str(e)}[/yellow]")
-                    await asyncio.sleep(1 * (attempt + 1))  # Exponential backoff
-                else:
-                    # Log final failure
-                    if hasattr(context, 'console'):
-                        context.console.print(f"[red]Failed to execute {step['tool']} after {max_retries} attempts[/red]")
-                    raise Exception(f"Failed after {max_retries} attempts. Last error: {str(last_error)}")
 
     async def _execute_tool(self, tool: str, parameters: Dict[str, Any], context: StateMachineContext) -> Any:
         """Execute a tool with enhanced parameter validation."""

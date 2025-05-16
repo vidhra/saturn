@@ -44,6 +44,9 @@ class GcpExecutor:
         self.credentials_path = config.get('gcp_credentials_path')
         # Initialize clients dynamically as needed or maintain a cache
         self.clients = {}
+        # Add state tracking for steps
+        self.step_results = {}
+        self.current_step = None
         print(f"GCP Executor initialized for project: {self.gcp_project_id}")
 
     async def _get_client(self, service_name: str) -> Any:
@@ -291,6 +294,113 @@ class GcpExecutor:
              # Log the actual item type if conversion fails for debugging
              console.print(f"Warning: Failed to convert final result of type {type(final_result)} to dict: {conversion_err}. Returning raw result.")
              return True, final_result # Return raw result if conversion fails
+
+    async def execute_step(
+        self,
+        step_id: str,
+        service_method_name: str,
+        llm_args: Dict[str, Any],
+        knowledge_base: KnowledgeBase,
+        console: Console,
+        dependencies: List[str] = None
+    ) -> Tuple[bool, Any]:
+        """
+        Execute a single step in the DAG, handling dependencies and state tracking.
+        
+        Args:
+            step_id: Unique identifier for this step
+            service_method_name: The GCP service method to call
+            llm_args: Arguments for the method
+            knowledge_base: Knowledge base for API definitions
+            console: Console for logging
+            dependencies: List of step IDs this step depends on
+            
+        Returns:
+            Tuple of (success, result)
+        """
+        try:
+            # Store current step for context
+            self.current_step = step_id
+            
+            # Check dependencies
+            if dependencies:
+                for dep in dependencies:
+                    if dep not in self.step_results:
+                        return False, f"Dependency {dep} not executed yet"
+                    if not self.step_results[dep][0]:  # Check if dependency failed
+                        return False, f"Dependency {dep} failed: {self.step_results[dep][1]}"
+            
+            # Execute the actual GCP call
+            success, result = await self.execute(service_method_name, llm_args, knowledge_base, console)
+            
+            # Store result
+            self.step_results[step_id] = (success, result)
+            
+            return success, result
+            
+        except Exception as e:
+            error_msg = f"Error executing step {step_id}: {str(e)}"
+            console.print(f"[bold red]{error_msg}[/bold red]")
+            self.step_results[step_id] = (False, error_msg)
+            return False, error_msg
+
+    async def execute_dag(
+        self,
+        dag_definition: Dict[str, Any],
+        knowledge_base: KnowledgeBase,
+        console: Console
+    ) -> Dict[str, Tuple[bool, Any]]:
+        """
+        Execute a DAG of GCP operations.
+        
+        Args:
+            dag_definition: Dictionary containing nodes, edges, and execution order
+            knowledge_base: Knowledge base for API definitions
+            console: Console for logging
+            
+        Returns:
+            Dictionary mapping step IDs to their (success, result) tuples
+        """
+        try:
+            # Reset state
+            self.step_results = {}
+            
+            # Get execution order
+            execution_order = dag_definition.get("execution_order", [])
+            if not execution_order:
+                raise ValueError("No execution order defined in DAG")
+            
+            # Execute steps in order
+            for step_id in execution_order:
+                node = dag_definition["nodes"][step_id]
+                
+                console.print(f"\n[bold cyan]Executing step {step_id}[/bold cyan]")
+                console.print(f"Description: {node.get('description', 'No description')}")
+                
+                if node.get("dependencies"):
+                    console.print(f"Dependencies: {', '.join(node['dependencies'])}")
+                
+                success, result = await self.execute_step(
+                    step_id=step_id,
+                    service_method_name=node["tool"],
+                    llm_args=node["parameters"],
+                    knowledge_base=knowledge_base,
+                    console=console,
+                    dependencies=node.get("dependencies", [])
+                )
+                
+                if not success:
+                    console.print(f"[bold red]Step {step_id} failed:[/bold red] {result}")
+                    # Optionally break on first failure
+                    # break
+                else:
+                    console.print(f"[bold green]Step {step_id} completed successfully[/bold green]")
+            
+            return self.step_results
+            
+        except Exception as e:
+            console.print(f"[bold red]Error executing DAG:[/bold red] {str(e)}")
+            return self.step_results
 
 # Helper (if needed, from call.py)
 # def convert_strings_to_json(data: dict) -> dict:
