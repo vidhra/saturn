@@ -1,0 +1,190 @@
+# gcloud compute network-endpoint-groups create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create)*
+
+**NAME**
+
+: **gcloud compute network-endpoint-groups create - create a Compute Engine network endpoint group**
+
+**SYNOPSIS**
+
+: **`gcloud compute network-endpoint-groups create` `[NAME](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#NAME)` [`[--default-port](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--default-port)`=`DEFAULT_PORT`] [`[--network](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--network)`=`NETWORK`] [`[--network-endpoint-type](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--network-endpoint-type)`=`NETWORK_ENDPOINT_TYPE`; default="gce-vm-ip-port"] [`[--producer-port](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--producer-port)`=`PRODUCER_PORT`] [`[--psc-target-service](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--psc-target-service)`=`PSC_TARGET_SERVICE`] [`[--subnet](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--subnet)`=`SUBNET`] [`[--cloud-function-name](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--cloud-function-name)`=`CLOUD_FUNCTION_NAME` `[--cloud-function-url-mask](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--cloud-function-url-mask)`=`CLOUD_FUNCTION_URL_MASK`     | `[--cloud-run-service](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--cloud-run-service)`=`CLOUD_RUN_SERVICE` `[--cloud-run-tag](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--cloud-run-tag)`=`CLOUD_RUN_TAG` `[--cloud-run-url-mask](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--cloud-run-url-mask)`=`CLOUD_RUN_URL_MASK`     | `[--[no-]app-engine-app](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--[no-]app-engine-app)` `[--app-engine-service](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--app-engine-service)`=`APP_ENGINE_SERVICE` `[--app-engine-url-mask](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--app-engine-url-mask)`=`APP_ENGINE_URL_MASK` `[--app-engine-version](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--app-engine-version)`=`APP_ENGINE_VERSION`] [`[--global](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--global)`     | `[--region](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--region)`=`REGION`     | `[--zone](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#--zone)`=`ZONE`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/network-endpoint-groups/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: Create a Compute Engine network endpoint group.
+
+**EXAMPLES**
+
+: To create a network endpoint group:
+
+```
+gcloud compute network-endpoint-groups create my-neg --zone=us-central1-a --network=my-network --subnet=my-subnetwork
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`NAME`**:
+Name of the network endpoint group to operate on.
+
+**FLAGS**
+
+: **--default-port**:
+The default port to use if the port number is not specified in the network
+endpoint.
+If this flag isn't specified for a NEG with endpoint type
+`gce-vm-ip-port`, `gce-vm-ip-portmap` or
+`non-gcp-private-ip-port`, then every network endpoint in the network
+endpoint group must have a port specified. For a global NEG with endpoint type
+`internet-ip-port` and `internet-fqdn-port` if the default
+port is not specified, the well-known port for your backend protocol is used (80
+for HTTP, 443 for HTTPS).
+This flag is not supported for NEGs with endpoint type `serverless`.
+This flag is not supported for NEGs with endpoint type
+`private-service-connect`.
+
+**--network**:
+Name of the network in which the NEG is created. `default` project
+network is used if unspecified.
+This is only supported for NEGs with endpoint type `gce-vm-ip-port`,
+`non-gcp-private-ip-port`, `gce-vm-ip`,
+`private-service-connect`, `internet-ip-port`,
+`internet-fqdn-port`, or `gce-vm-ip-portmap`.
+For Private Service Connect NEGs, you can optionally specify --network and
+--subnet if --psc-target-service points to a published service. If
+--psc-target-service points to the regional service endpoint of a Google API, do
+not specify --network or --subnet.
+
+**--network-endpoint-type**:
+Determines the spec of endpoints attached to this group.
+
+**`gce-vm-ip-port`**:
+Endpoint IP address must belong to a VM in Compute Engine (either the primary IP
+or as part of an aliased IP range). The `--default-port` must be
+specified or every network endpoint in the network endpoint group must have a
+port specified.
+
+**`internet-ip-port`**:
+Endpoint IP address must be a publicly routable address. If specified, the
+default port is used. If unspecified, the well-known port for your backend
+protocol is used as the default port (80 for HTTP, 443 for HTTPS).
+
+**`internet-fqdn-port`**:
+Endpoint FQDN must be resolvable to a public IP address via public DNS. The
+default port is used, if specified. If the default port is not specified, the
+well-known port for your backend protocol is used as the default port (80 for
+HTTP, 443 for HTTPS).
+After creating a NEG of this type, you can use the `gcloud compute
+network-endpoint-groups update` command with the
+`--add-endpoint` flag. Example:
+`--add-endpoint="fqdn=backend.example.com,port=443"`
+
+**`non-gcp-private-ip-port`**:
+Endpoint IP address must belong to a VM not in Compute Engine and must be
+routable using a Cloud Router over VPN or an Interconnect connection. In this
+case, the NEG must be zonal. The `--default-port` must be specified
+or every network endpoint in the network endpoint group must have a port
+specified.
+
+**`serverless`**:
+The network endpoint is handled by specified serverless infrastructure, such as
+Cloud Run, App Engine, or Cloud Function. Default port, network, and subnet are
+not effective for serverless endpoints.
+
+**`private-service-connect`**:
+The network endpoint corresponds to a service outside the VPC, accessed via
+Private Service Connect.
+
+**`gce-vm-ip`**:
+Endpoint must be the IP address of a VM's network interface in Compute Engine.
+Instance reference is required. The IP address is optional. If unspecified, the
+primary NIC address is used. A port must not be specified.
+
+**`gce-vm-ip-portmap`**:
+Endpoint IP address must be a primary IP of a VM's network interface in Compute
+Engine. The `--default-port` must be specified or every network
+endpoint in the network endpoint group must have a port specified.
+`NETWORK_ENDPOINT_TYPE` must be one of:
+`gce-vm-ip-port`, `internet-ip-port`,
+`internet-fqdn-port`, `non-gcp-private-ip-port`,
+`serverless`, `gce-vm-ip`,
+`private-service-connect`, `gce-vm-ip-portmap`.
+
+**--producer-port**:
+The producer port to use when a consumer PSC NEG connects to a producer's
+internal network load balancer. If this flag isn't specified for a NEG with
+endpoint type `private-service-connect`, the PSC NEG will connect to
+port 443 or the first available port in the PSC producer port range, or to port
+1 if the PSC producer's forwarding rule ports flag is set to all-ports.
+This flag is not supported for NEGs with endpoint type other than
+`private-service-connect`.
+
+**--psc-target-service**:
+PSC target service name to add to the private service connect network endpoint
+groups (NEG).
+
+**--subnet**:
+Name of the subnet to which all network endpoints belong.
+If not specified, network endpoints may belong to any subnetwork in the region
+where the network endpoint group is created.
+This is only supported for NEGs with endpoint type `gce-vm-ip-port`,
+`gce-vm-ip`, `private-service-connect`, or
+`gce-vm-ip-portmap`. For Private Service Connect NEGs, you can
+optionally specify --network and --subnet if --psc-target-service points to a
+published service. If --psc-target-service points to the regional service
+endpoint of a Google API, do not specify --network or --subnet.
+
+**The serverless routing configurations are only valid when endpoint type of the
+network endpoint group is `serverless`.
+At most one of these can be specified:
+
+**--cloud-function-name**
+
+**--cloud-run-service**
+
+**Configuration for an App Engine network endpoint group. Both App Engine service
+and version are optional, and may be provided explicitly or in the URL mask. The
+`app-engine-app` flag is only used for default routing. The App
+Engine app must be in the same project as the Serverless network endpoint groups
+(NEG).
+
+**--[no-]app-engine-app**:
+If set, the default routing is used. Use `--app-engine-app` to enable
+and `--no-app-engine-app` to disable.
+
+**--app-engine-service**:
+Optional serving service to add to the Serverless NEG.
+
+**--app-engine-url-mask**:
+A template to parse service and version fields from a request URL. URL mask
+allows for routing to multiple App Engine services without having to create
+multiple network endpoint groups and backend services.
+
+**--app-engine-version**:
+Optional serving version to add to the Serverless NEG.****
+
+**--global**
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha compute network-endpoint-groups create
+```
+
+```
+gcloud beta compute network-endpoint-groups create
+```

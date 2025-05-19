@@ -1,0 +1,115 @@
+# gcloud alpha compute instances move  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move)*
+
+**NAME**
+
+: **gcloud alpha compute instances move - move an instance and its attached persistent disks between zones**
+
+**SYNOPSIS**
+
+: **`gcloud alpha compute instances move` `[INSTANCE_NAME](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move#INSTANCE_NAME)` `[--destination-zone](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move#--destination-zone)`=`DESTINATION_ZONE` [`[--async](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move#--async)`] [`[--zone](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move#--zone)`=`ZONE`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/move#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` `(DEPRECATED)` This command is deprecated.
+Please see [https://cloud.google.com/compute/docs/instances/moving-instance-across-zones](https://cloud.google.com/compute/docs/instances/moving-instance-across-zones)
+for an alternative method.
+`gcloud alpha compute instances move` moves a Compute Engine virtual
+machine from one zone to another. Moving a virtual machine might incur downtime
+if the guest OS must be shut down in order to quiesce disk volumes prior to
+snapshotting.
+For example, running the following command moves the instance called
+`example-instance-1` with its attached persistent disks, currently
+running in `us-central1-b`, to `us-central1-f`.
+
+```
+gcloud compute instances move example-instance-1 --zone=us-central1-b --destination-zone=us-central1-f
+```
+
+Note: Moving VMs or disks by using the `gcloud alpha compute instances
+move` command might cause unexpected behavior. For more information, see
+[https://cloud.google.com/compute/docs/troubleshooting/known-issues#moving_vms_or_disks_using_the_moveinstance_api_or_the_causes_unexpected_behavior](https://cloud.google.com/compute/docs/troubleshooting/known-issues#moving_vms_or_disks_using_the_moveinstance_api_or_the_causes_unexpected_behavior).
+Please note that gcloud compute instances move does not yet support instances
+which have regional persistent disks attached. Please see [https://cloud.google.com/compute/docs/disks/regional-persistent-disk](https://cloud.google.com/compute/docs/disks/regional-persistent-disk)
+for more details.
+
+**EXAMPLES**
+
+: To move `instance-1` from `us-central-a` to
+`europe-west1-d`, run:
+
+```
+gcloud alpha compute instances move instance-1 --zone=us-central1-a --destination-zone=europe-west1-d
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`INSTANCE_NAME`**:
+Name of the instance to operate on. For details on valid instance names, refer
+to the criteria documented under the field 'name' at: [https://cloud.google.com/compute/docs/reference/rest/v1/instances](https://cloud.google.com/compute/docs/reference/rest/v1/instances)
+
+**REQUIRED FLAGS**
+
+: **--destination-zone**:
+The zone to move the instance to.
+
+**OPTIONAL FLAGS**
+
+: **--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**--zone**:
+Zone of the instance to operate on. If not specified, you might be prompted to
+select a zone (interactive mode only). `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` attempts to identify the
+appropriate zone by searching for resources in your currently active project. If
+the zone cannot be determined, `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` prompts you for a selection with
+all available Google Cloud Platform zones.
+To avoid prompting when this flag is omitted, the user can set the
+``compute/zone`` property:
+
+```
+gcloud config set compute/zone ZONE
+```
+
+A list of zones can be fetched by running:
+
+```
+gcloud compute zones list
+```
+
+To unset the property, run:
+
+```
+gcloud config unset compute/zone
+```
+
+Alternatively, the zone can be stored in the environment variable
+``CLOUDSDK_COMPUTE_ZONE``.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist. These variants are also available:
+
+```
+gcloud compute instances move
+```
+
+```
+gcloud beta compute instances move
+```

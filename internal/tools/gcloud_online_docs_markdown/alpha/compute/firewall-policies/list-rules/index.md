@@ -1,0 +1,135 @@
+# gcloud alpha compute firewall-policies list-rules  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules)*
+
+**NAME**
+
+: **gcloud alpha compute firewall-policies list-rules - list the rules of a Compute Engine organization firewall policy**
+
+**SYNOPSIS**
+
+: **`gcloud alpha compute firewall-policies list-rules` `[FIREWALL_POLICY](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#FIREWALL_POLICY)` [`[NAME](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#NAME)` …] [`[--organization](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--organization)`=`ORGANIZATION`] [`[--regexp](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--regexp)`=`REGEXP`, `[-r](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#-r)` `[REGEXP](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#REGEXP)`] [`[--filter](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--filter)`=`EXPRESSION`] [`[--limit](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--limit)`=`LIMIT`] [`[--page-size](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--page-size)`=`PAGE_SIZE`] [`[--sort-by](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--sort-by)`=[`FIELD`,…]] [`[--uri](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#--uri)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/firewall-policies/list-rules#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` `gcloud alpha compute firewall-policies
+list-rules` is used to list the rules of an organization firewall policy.
+
+**EXAMPLES**
+
+: To list the rules of an organization firewall policy with ID ``123456789", run:
+
+```
+gcloud alpha compute firewall-policies list-rules 123456789
+```
+
+To list all the fields of the rules of an organization firewall policy with ID
+``123456789", run:
+
+```
+gcloud alpha compute firewall-policies list-rules 123456789 --format="table(
+  priority,
+  action,
+  direction,
+  match.srcIpRanges.list():label=SRC_RANGES,
+  match.destIpRanges.list():label=DEST_RANGES,
+  match.layer4Configs.map().org_firewall_rule().list():label=PORT_RANGES,
+  targetServiceAccounts.list():label=TARGET_SVC_ACCT,
+  targetResources:label=TARGET_RESOURCES,
+  ruleTupleCount,
+  enableLogging,
+  description)"
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`FIREWALL_POLICY`**:
+Short name or ID of the firewall policy to list rules for.
+
+**[`NAME` …]**:
+(DEPRECATED) If provided, show details for the specified names and/or URIs of
+resources.
+Argument `NAME` is deprecated. Use `--filter="name=( 'NAME'
+… )"` instead.
+
+**FLAGS**
+
+: **--organization**:
+Organization which the organization firewall policy belongs to. Must be set if
+FIREWALL_POLICY is short name.
+
+**--regexp**:
+(DEPRECATED) Regular expression to filter the names of the results on. Any names
+that do not match the entire regular expression will be filtered out.
+Flag `--regexp` is deprecated. Use
+`--filter="name~'REGEXP'"` instead.
+
+**LIST COMMAND FLAGS**
+
+: **--filter**:
+Apply a Boolean filter `EXPRESSION` to each resource item
+to be listed. If the expression evaluates `True`, then that item is
+listed. For more details and examples of filter expressions, run $ [gcloud topic filters](https://cloud.google.com/sdk/gcloud/reference/topic/filters). This flag
+interacts with other flags that are applied in this order:
+`--flatten`, `--sort-by`, `--filter`,
+`--limit`.
+
+**--limit**:
+Maximum number of resources to list. The default is `unlimited`. This
+flag interacts with other flags that are applied in this order:
+`--flatten`, `--sort-by`, `--filter`,
+`--limit`.
+
+**--page-size**:
+Some services group resource list output into pages. This flag specifies the
+maximum number of resources per page. The default is determined by the service
+if it supports paging, otherwise it is `unlimited` (no paging).
+Paging may be applied before or after `--filter` and
+`--limit` depending on the service.
+
+**--sort-by**:
+Comma-separated list of resource field key names to sort by. The default order
+is ascending. Prefix a field with ``~´´ for descending order on that
+field. This flag interacts with other flags that are applied in this order:
+`--flatten`, `--sort-by`, `--filter`,
+`--limit`.
+
+**--uri**:
+Print a list of resource URIs instead of the default output, and change the
+command output to a list of URIs. If this flag is used with
+`--format`, the formatting is applied on this URI list. To display
+URIs alongside other keys instead, use the `uri()` transform.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**IAM PERMISSIONS**
+
+: To list rules of a firewall policy, the user must have the following permission:
+``compute.firewallPolicies.get`.
+To find predefined roles that contain those permissions, see the [Compute Engine IAM
+roles](https://cloud.google.com/compute/docs/access/iam).`
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist. These variants are also available:
+
+```
+gcloud compute firewall-policies list-rules
+```
+
+```
+gcloud beta compute firewall-policies list-rules
+```

@@ -1,0 +1,78 @@
+# gcloud compute snapshots describe  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/snapshots/describe](https://cloud.google.com/sdk/gcloud/reference/compute/snapshots/describe)*
+
+**NAME**
+
+: **gcloud compute snapshots describe - describe a Compute Engine snapshot**
+
+**SYNOPSIS**
+
+: **`gcloud compute snapshots describe` `[SNAPSHOT_NAME](https://cloud.google.com/sdk/gcloud/reference/compute/snapshots/describe#SNAPSHOT_NAME)` [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/snapshots/describe#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `gcloud compute snapshots describe` displays all data associated with
+a Compute Engine snapshot in a project.
+Given an existing snapshot is queried, successful output of this command looks
+like the following:
+
+```
+creationTimestamp: '2018-05-07T10:45:46.988-07:00'
+diskSizeGb: '500'
+id: '1234567891234567890'
+kind: compute#snapshot
+labelFingerprint: 12345abcdWW=
+name: zs9utdhb8r1x
+selfLink: https://www.googleapis.com/compute/v1/projects/test-project-name/global/snapshots/snapshot-number
+sourceDisk: https://www.googleapis.com/compute/v1/projects/test-project-name/zones/us-central1-c/disks/test
+sourceDiskId: '1234567891234567890'
+status: READY
+storageBytes: '0'
+storageBytesStatus: UP_TO_DATE
+```
+
+**EXAMPLES**
+
+: To run `gcloud compute snapshots describe`, you'll need the name of a
+snapshot. To list existing snapshots by name, run:
+
+```
+gcloud compute snapshots list
+```
+
+To display specific details of an existing Compute Engine snapshot (like its
+creation time, status, and storage details), run:
+
+```
+gcloud compute snapshots describe SNAPSHOT_NAME --format="table(creationTimestamp, status, storageBytesStatus)"
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`SNAPSHOT_NAME`**:
+Name of the snapshot to describe.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha compute snapshots describe
+```
+
+```
+gcloud beta compute snapshots describe
+```

@@ -1,0 +1,164 @@
+# gcloud alpha artifacts repositories create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create)*
+
+**NAME**
+
+: **gcloud alpha artifacts repositories create - create an Artifact Registry repository**
+
+**SYNOPSIS**
+
+: **`gcloud alpha artifacts repositories create` (`[REPOSITORY](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#REPOSITORY)` : `[--location](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--location)`=`LOCATION`) `[--repository-format](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--repository-format)`=`REPOSITORY_FORMAT` [`[--allow-snapshot-overwrites](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--allow-snapshot-overwrites)`] [`[--async](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--async)`] [`[--description](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--description)`=`DESCRIPTION`] [`[--kms-key](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--kms-key)`=`KMS_KEY`] [`[--labels](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--labels)`=[`KEY`=`VALUE`,…]] [`[--version-policy](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#--version-policy)`=`VERSION_POLICY`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` Create a new Artifact Registry repository.
+This command can fail for the following reasons:
+
+- A repository with the same name already exists.
+- The active account does not have permission to create repositories.
+- A valid repository format was not provided.
+
+**EXAMPLES**
+
+: To create a repository with the name `my-repo` under the current
+project, run:
+
+```
+gcloud alpha artifacts repositories create my-repo
+```
+
+To create repository `my-repo` with a KMS key
+`projects/my-project/locations/us/keyRings/my-kr/cryptoKeys/my-key`,
+run:
+
+```
+gcloud alpha artifacts repositories create my-repo --kms-key=projects/my-project/locations/us/keyRings/my-kr/cryptoKeys/my-key
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **Repository resource - The Artifact Registry repository to create. The arguments
+in this group can be used to specify the attributes of this resource. (NOTE)
+Some attributes are not given arguments in this group but can be set in other
+ways.
+To set the `project` attribute:
+
+- provide the argument `repository` on the command line with a fully
+specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+This must be specified.
+
+**`REPOSITORY`**:
+ID of the repository or fully qualified identifier for the repository.
+To set the `repository` attribute:
+
+- provide the argument `repository` on the command line.
+
+This positional argument must be specified if any of the other arguments in this
+group are specified.
+
+**--location**:
+Location of the repository. Overrides the default artifacts/location property
+value for this command invocation. To configure the default location, use the
+command: gcloud config set artifacts/location.
+To set the `location` attribute:
+
+- provide the argument `repository` on the command line with a fully
+specified name;
+- provide the argument `--location` on the command line;
+- set the property `artifacts/location`.**
+
+**REQUIRED FLAGS**
+
+: **--repository-format**:
+Format of the repository. REPOSITORY_FORMAT must be one of:
+
+```
+apt
+   APT package format.
+docker
+   Docker image format.
+googet
+   GooGet package format.
+kfp
+   KFP package format.
+maven
+   Maven package format.
+npm
+   NPM package format.
+python
+   Python package format.
+yum
+   YUM package format.
+```
+
+**OPTIONAL FLAGS**
+
+: **--allow-snapshot-overwrites**:
+(Maven only) Allow repository users to publish a snapshot that overwrites the
+same snapshot version in the repository.
+
+**--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**--description**:
+Description for the repository.
+
+**--kms-key**:
+Name of the encryption key that's used for encrypting the contents of the
+repository.
+
+**--labels**:
+List of label KEY=VALUE pairs to add.
+Keys must start with a lowercase character and contain only hyphens
+(`-`), underscores (`_`), lowercase characters, and
+numbers. Values must contain only hyphens (`-`), underscores
+(`_`), lowercase characters, and numbers.
+
+**--version-policy**:
+(Maven only) The package versions that the repository will store.
+`VERSION_POLICY` must be one of:
+
+**`none`**:
+(Maven only) The repository doesn't validate the version type.
+
+**`release`**:
+(Maven only) The repository accepts release versions only.
+
+**`snapshot`**:
+(Maven only) The repository accepts snapshot versions only.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**API REFERENCE**
+
+: This command uses the `artifactregistry/v1beta2` API. The full
+documentation for this API can be found at: [https://cloud.google.com/artifacts/docs/](https://cloud.google.com/artifacts/docs/)
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist. These variants are also available:
+
+```
+gcloud artifacts repositories create
+```
+
+```
+gcloud beta artifacts repositories create
+```

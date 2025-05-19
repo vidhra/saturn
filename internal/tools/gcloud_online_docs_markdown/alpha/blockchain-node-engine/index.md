@@ -1,0 +1,44 @@
+# gcloud alpha blockchain-node-engine  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine](https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine)*
+
+**NAME**
+
+: **gcloud alpha blockchain-node-engine - create and manipulate Blockchain Node Engine resources**
+
+**SYNOPSIS**
+
+: **`gcloud alpha blockchain-node-engine` `[GROUP](https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine#GROUP)` [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` The gcloud blockchain-node-engine command group lets you
+create and manage Blockchain Node Engine nodes.
+Blockchain Node Engine is a fully-managed blockchain node service that makes it
+easy to set up and manage your blockchain nodes in the cloud.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**GROUPS**
+
+: ``GROUP`` is one of the following:
+
+**`[locations](https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine/locations)`**:
+`(ALPHA)` View Blockchain Node Engine locations available for a
+project.
+
+**`[nodes](https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine/nodes)`**:
+`(ALPHA)` Commands for viewing and manipulating blockchain nodes.
+
+**`[operations](https://cloud.google.com/sdk/gcloud/reference/alpha/blockchain-node-engine/operations)`**:
+`(ALPHA)` Manage Blockchain Node Engine operations.
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist.
