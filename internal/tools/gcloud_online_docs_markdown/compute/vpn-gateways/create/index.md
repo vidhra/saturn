@@ -1,0 +1,127 @@
+# gcloud compute vpn-gateways create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create)*
+
+**NAME**
+
+: **gcloud compute vpn-gateways create - create a new Compute Engine Highly Available VPN gateway**
+
+**SYNOPSIS**
+
+: **`gcloud compute vpn-gateways create` `[NAME](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#NAME)` `[--network](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#--network)`=`NETWORK` [`[--description](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#--description)`=`DESCRIPTION`] [`[--gateway-ip-version](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#--gateway-ip-version)`=`GATEWAY_IP_VERSION`] [`[--interconnect-attachments](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#--interconnect-attachments)`=[`INTERCONNECT_ATTACHMENTS`,…]] [`[--region](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#--region)`=`REGION`] [`[--stack-type](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#--stack-type)`=`STACK_TYPE`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/vpn-gateways/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `gcloud compute vpn-gateways create` creates a new Highly Available
+VPN gateway.
+Highly Available VPN Gateway provides a means to create a VPN solution with a
+higher availability SLA compared to Classic Target VPN Gateway. Highly Available
+VPN gateways are simply referred to as VPN gateways in the API documentation and
+gcloud commands. A VPN Gateway can reference one or more VPN tunnels that
+connect it to external VPN gateways or Cloud VPN Gateways.
+
+**EXAMPLES**
+
+: To create a VPN gateway, run:
+
+```
+gcloud compute vpn-gateways create my-vpn-gateway --region=us-central1 --network=default
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`NAME`**:
+Name of the VPN Gateway to create.
+
+**REQUIRED FLAGS**
+
+: **--network**:
+A reference to a network to which the VPN gateway is attached.
+
+**OPTIONAL FLAGS**
+
+: **--description**:
+An optional, textual description for the VPN gateway.
+
+**--gateway-ip-version**:
+IP version of the HA VPN gateway. You must specify either IPv4 or IPv6. If you
+do not specify this field, every HA VPN gateway interface will be configured
+with an IPv4 address. `GATEWAY_IP_VERSION` must be one of:
+
+**`IPV4`**:
+Every HA-VPN gateway interface is configured with an IPv4 address.
+
+**`IPV6`**:
+Every HA-VPN gateway interface is configured with an IPv6 address.
+
+**--interconnect-attachments**:
+Names of interconnect attachments (VLAN attachments) associated with the VPN
+gateway interfaces. You must specify this field when using a VPN gateway for HA
+VPN over Cloud Interconnect. Otherwise, this field is optional.
+For example, `--interconnect-attachments
+attachment-a-zone1,attachment-a-zone2` associates VPN gateway with
+attachment from zone1 on interface 0 and with attachment from zone2 on interface
+1.
+
+**--region**:
+Region of the VPN Gateway to create. If not specified, you might be prompted to
+select a region (interactive mode only).
+To avoid prompting when this flag is omitted, you can set the
+``compute/region`` property:
+
+```
+gcloud config set compute/region REGION
+```
+
+A list of regions can be fetched by running:
+
+```
+gcloud compute regions list
+```
+
+To unset the property, run:
+
+```
+gcloud config unset compute/region
+```
+
+Alternatively, the region can be stored in the environment variable
+``CLOUDSDK_COMPUTE_REGION``.
+
+**--stack-type**:
+The stack type of the protocol(s) enabled on this VPN gateway. If not provided,
+`IPV4_ONLY` will be used. `STACK_TYPE` must be
+one of:
+
+**`IPV4_IPV6`**:
+Both IPv4 and IPv6 protocols are enabled on this VPN gateway.
+
+**`IPV4_ONLY`**:
+Only IPv4 protocol is enabled on this VPN gateway.
+
+**`IPV6_ONLY`**:
+Only IPv6 protocol is enabled on this VPN gateway.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha compute vpn-gateways create
+```
+
+```
+gcloud beta compute vpn-gateways create
+```

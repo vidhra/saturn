@@ -1,0 +1,100 @@
+# gcloud compute target-pools set-backup  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup)*
+
+**NAME**
+
+: **gcloud compute target-pools set-backup - set a backup pool for a target pool**
+
+**SYNOPSIS**
+
+: **`gcloud compute target-pools set-backup` `[NAME](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup#NAME)` (`[--backup-pool](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup#--backup-pool)`=`BACKUP_POOL`     | `[--no-backup-pool](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup#--backup-pool)`) [`[--failover-ratio](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup#--failover-ratio)`=`FAILOVER_RATIO`] [`[--region](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup#--region)`=`REGION`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/target-pools/set-backup#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `gcloud compute target-pools set-backup` is used to set a backup
+target pool for a primary target pool, which defines the fallback behavior of
+the primary pool. If the ratio of the healthy instances in the primary pool is
+at or below the specified ``--failover-ratio
+value``, then traffic arriving at the load-balanced IP address
+will be directed to the backup pool.
+
+**EXAMPLES**
+
+: To cause `TARGET-POOL` (in region `us-central1`) to fail
+over to `BACKUP-POOL` when more than half of the
+`TARGET-POOL` instances are unhealthy, run:
+
+```
+gcloud compute target-pools set-backup TARGET-POOL --backup-pool=BACKUP-POOL --failover-ratio=0.5 --region=us-central1
+```
+
+To remove `BACKUP-POOL` as a backup to `TARGET-POOL`, run:
+
+```
+gcloud compute target-pools set-backup TARGET-POOL --backup-pool='' --region=us-central1
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`NAME`**:
+The name of the target pool for which to set the backup pool.
+
+**REQUIRED FLAGS**
+
+: **--backup-pool**
+
+**OPTIONAL FLAGS**
+
+: **--failover-ratio**:
+The new failover ratio value for the target pool. This must be a float in the
+range of [0, 1].
+
+**--region**:
+Region of the target pool to set a backup pool for. If not specified, you might
+be prompted to select a region (interactive mode only).
+To avoid prompting when this flag is omitted, you can set the
+``compute/region`` property:
+
+```
+gcloud config set compute/region REGION
+```
+
+A list of regions can be fetched by running:
+
+```
+gcloud compute regions list
+```
+
+To unset the property, run:
+
+```
+gcloud config unset compute/region
+```
+
+Alternatively, the region can be stored in the environment variable
+``CLOUDSDK_COMPUTE_REGION``.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha compute target-pools set-backup
+```
+
+```
+gcloud beta compute target-pools set-backup
+```

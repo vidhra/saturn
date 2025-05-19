@@ -1,0 +1,87 @@
+# gcloud compute url-maps  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/url-maps](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps)*
+
+**NAME**
+
+: **gcloud compute url-maps - list, create, and delete URL maps**
+
+**SYNOPSIS**
+
+: **`gcloud compute url-maps` `[COMMAND](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps#COMMAND)` [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: List, create, and delete URL maps for external Application Load Balancer,
+internal Application Load Balancer, and Traffic Director.
+For more information about URL maps, see the [URL maps
+documentation](https://cloud.google.com/load-balancing/docs/url-map-concepts).
+See also: [URL maps
+API](https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps) and [regional
+URL maps API](https://cloud.google.com/compute/docs/reference/rest/v1/regionUrlMaps).
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**COMMANDS**
+
+: ``COMMAND`` is one of the following:
+
+**`[add-host-rule](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/add-host-rule)`**:
+Add a rule to a URL map to map hosts to a path matcher.
+
+**`[add-path-matcher](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/add-path-matcher)`**:
+Add a path matcher to a URL map.
+
+**`[create](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/create)`**:
+Create a URL map.
+
+**`[delete](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/delete)`**:
+Delete URL maps.
+
+**`[describe](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/describe)`**:
+Describe a URL map.
+
+**`[edit](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/edit)`**:
+Modify URL maps.
+
+**`[export](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/export)`**:
+Export a URL map.
+
+**`[import](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/import)`**:
+Import a URL map.
+
+**`[invalidate-cdn-cache](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/invalidate-cdn-cache)`**:
+Invalidate specified objects for a URL map in Cloud CDN caches.
+
+**`[list](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/list)`**:
+List Google Compute Engine URL maps.
+
+**`[list-cdn-cache-invalidations](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/list-cdn-cache-invalidations)`**:
+List Cloud CDN cache invalidations for a URL map.
+
+**`[remove-host-rule](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/remove-host-rule)`**:
+Remove a host rule from a URL map.
+
+**`[remove-path-matcher](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/remove-path-matcher)`**:
+Remove a path matcher from a URL map.
+
+**`[set-default-service](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/set-default-service)`**:
+Change the default service or default bucket of a URL map.
+
+**`[validate](https://cloud.google.com/sdk/gcloud/reference/compute/url-maps/validate)`**:
+Validate a URL map.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha compute url-maps
+```
+
+```
+gcloud beta compute url-maps
+```

@@ -1,0 +1,121 @@
+# gcloud artifacts repositories  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories)*
+
+**NAME**
+
+: **gcloud artifacts repositories - manage Artifact Registry repositories**
+
+**SYNOPSIS**
+
+: **`gcloud artifacts repositories` `[COMMAND](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories#COMMAND)` [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories#GCLOUD-WIDE-FLAGS) …`]**
+
+**EXAMPLES**
+
+: To create a repository with the name `my-repo`, run:
+
+```
+gcloud artifacts repositories create my-repo
+```
+
+To delete a repository with the name `my-repo`, run:
+
+```
+gcloud artifacts repositories delete my-repo
+```
+
+To describe a repository with the name `my-repo`, run:
+
+```
+gcloud artifacts repositories describe my-repo
+```
+
+To list all Artifact Registry repositories, run:
+
+```
+gcloud artifacts repositories list
+```
+
+To set an IAM policy for repository `my-repo`, run:
+
+```
+gcloud artifacts repositories set-iam-policy my-repo policy.json
+```
+
+To get an IAM policy for repository `my-repo`, run:
+
+```
+gcloud artifacts repositories get-iam-policy my-repo
+```
+
+To add an IAM policy binding for the role of 'roles/editor' for the user
+'test-user@gmail.com' on repository `my-repo`, run:
+
+```
+gcloud artifacts repositories add-iam-policy-binding my-repo --member='user:test-user@gmail.com' --role='roles/editor'
+```
+
+To remove an IAM policy binding for the role of 'roles/editor' for the user
+'test-user@gmail.com' on repository `my-repo`, run:
+
+```
+gcloud artifacts repositories remove-iam-policy-binding my-repo --member='user:test-user@gmail.com' --role='roles/editor'
+```
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**COMMANDS**
+
+: ``COMMAND`` is one of the following:
+
+**`[add-iam-policy-binding](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/add-iam-policy-binding)`**:
+Add an IAM policy binding to the IAM policy of an Artifact Registry repository.
+
+**`[create](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/create)`**:
+Create an Artifact Registry repository.
+
+**`[delete](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/delete)`**:
+Delete an Artifact Registry repository.
+
+**`[delete-cleanup-policies](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/delete-cleanup-policies)`**:
+Delete cleanup policies from an Artifact Registry repository.
+
+**`[describe](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/describe)`**:
+Describe an Artifact Registry repository.
+
+**`[get-iam-policy](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/get-iam-policy)`**:
+Get IAM policy for an Artifact Registry repository.
+
+**`[list](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/list)`**:
+List repositories in the specified project.
+
+**`[list-cleanup-policies](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/list-cleanup-policies)`**:
+List cleanup policies of an Artifact Registry repository.
+
+**`[remove-iam-policy-binding](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/remove-iam-policy-binding)`**:
+Remove an IAM policy binding from the IAM policy of an Artifact Registry
+repository.
+
+**`[set-cleanup-policies](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/set-cleanup-policies)`**:
+Set or update cleanup policies for an Artifact Registry repository.
+
+**`[set-iam-policy](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/set-iam-policy)`**:
+Set the IAM policy for an Artifact Registry repository.
+
+**`[update](https://cloud.google.com/sdk/gcloud/reference/artifacts/repositories/update)`**:
+Update an Artifact Registry repository.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha artifacts repositories
+```
+
+```
+gcloud beta artifacts repositories
+```

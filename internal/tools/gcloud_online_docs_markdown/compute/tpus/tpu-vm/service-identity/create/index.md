@@ -1,0 +1,80 @@
+# gcloud compute tpus tpu-vm service-identity create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/tpus/tpu-vm/service-identity/create](https://cloud.google.com/sdk/gcloud/reference/compute/tpus/tpu-vm/service-identity/create)*
+
+**NAME**
+
+: **gcloud compute tpus tpu-vm service-identity create - create a Cloud TPU VM service identity for a project**
+
+**SYNOPSIS**
+
+: **`gcloud compute tpus tpu-vm service-identity create` [`[--zone](https://cloud.google.com/sdk/gcloud/reference/compute/tpus/tpu-vm/service-identity/create#--zone)`=`ZONE`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/tpus/tpu-vm/service-identity/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: Create a Cloud TPU VM service identity for a project.
+The Cloud TPU VM creates a service identity (Google-owned service account) for
+management of resources when the first Cloud TPU VM is created in a project
+after TPU service activation. However, there are cases where the service
+identity may need to be created beforehand to grant specific IAM permissions to
+it, like access to a Google Cloud Storage bucket. This method generates the
+service account without need to first create a Cloud TPU VM.
+This command generates a service identity valid for Cloud TPU VMs across all
+zones in a project. The zone is required (either set in the gcloud config
+defaults, as an environment variable, or `--zone` flag), but the
+service identity generated will work across all Cloud TPU VM zones.
+
+**EXAMPLES**
+
+: To generate a Cloud TPU VM service identity for a project (using zone
+`europe-west4-a`), run:
+
+```
+gcloud compute tpus tpu-vm service-identity create --zone=europe-west4-a
+```
+
+**FLAGS**
+
+: **Location resource - Zone to use for the request.
+If not specified, will use the value of the [compute/zone] property in the
+current gcloud configuration. This represents a Cloud resource. (NOTE) Some
+attributes are not given arguments in this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `--zone` on the command line with a fully
+specified name;
+- set the property `compute/zone` with a fully specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+**--zone**:
+ID of the location or fully qualified identifier for the location.
+To set the `zone` attribute:
+
+- provide the argument `--zone` on the command line;
+- set the property `compute/zone`.**
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**API REFERENCE**
+
+: This command uses the `tpu/v2` API. The full documentation for this
+API can be found at: [https://cloud.google.com/tpu/](https://cloud.google.com/tpu/)
+
+**NOTES**
+
+: This variant is also available:
+
+```
+gcloud alpha compute tpus tpu-vm service-identity create
+```

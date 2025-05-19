@@ -1,0 +1,83 @@
+# gcloud alpha app domain-mappings create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/app/domain-mappings/create](https://cloud.google.com/sdk/gcloud/reference/alpha/app/domain-mappings/create)*
+
+**NAME**
+
+: **gcloud alpha app domain-mappings create - creates a domain mapping**
+
+**SYNOPSIS**
+
+: **`gcloud alpha app domain-mappings create` `[DOMAIN](https://cloud.google.com/sdk/gcloud/reference/alpha/app/domain-mappings/create#DOMAIN)` [`[--certificate-id](https://cloud.google.com/sdk/gcloud/reference/alpha/app/domain-mappings/create#--certificate-id)`=`CERTIFICATE_ID`] [`[--certificate-management](https://cloud.google.com/sdk/gcloud/reference/alpha/app/domain-mappings/create#--certificate-management)`=`CERTIFICATE_MANAGEMENT`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/app/domain-mappings/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` Creates a domain mapping.
+
+**EXAMPLES**
+
+: To create a new App Engine domain mapping with an automatically managed
+certificate, run:
+
+```
+gcloud alpha app domain-mappings create 'example.com'
+```
+
+Note: managed certificates do not support wildcard domain mappings.
+To create a domain with a manual certificate, run:
+
+```
+gcloud alpha app domain-mappings create '*.example.com' --certificate-management=manual --certificate-id=1234
+```
+
+To create a domain with no associated certificate, run:
+
+```
+gcloud alpha app domain-mappings create '*.example.com' --certificate-management=manual
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`DOMAIN`**:
+A valid domain which may begin with a wildcard, such as:
+`example.com` or `*.example.com`
+
+**FLAGS**
+
+: **--certificate-id**:
+A certificate id to use for this domain. May not be used on a domain mapping
+with automatically managed certificates. Use the `[gcloud app
+ssl-certificates list](https://cloud.google.com/sdk/gcloud/reference/app/ssl-certificates/list)` to see available certificates for this app.
+
+**--certificate-management**:
+Type of certificate management. 'automatic' will provision an SSL certificate
+automatically while 'manual' requires the user to provide a certificate id to
+provision. `CERTIFICATE_MANAGEMENT` must be one of:
+`automatic`, `manual`.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist. These variants are also available:
+
+```
+gcloud app domain-mappings create
+```
+
+```
+gcloud beta app domain-mappings create
+```

@@ -1,0 +1,1531 @@
+# gcloud config set  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/config/set](https://cloud.google.com/sdk/gcloud/reference/config/set)*
+
+**NAME**
+
+: **gcloud config set - set a Google Cloud CLI property**
+
+**SYNOPSIS**
+
+: **`gcloud config set` `[SECTION](https://cloud.google.com/sdk/gcloud/reference/config/set#SECTION)`/`[PROPERTY](https://cloud.google.com/sdk/gcloud/reference/config/set#PROPERTY)` `[VALUE](https://cloud.google.com/sdk/gcloud/reference/config/set#VALUE)` [`[--installation](https://cloud.google.com/sdk/gcloud/reference/config/set#--installation)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/config/set#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: gcloud config set sets the specified property in your active configuration only.
+A property governs the behavior of a specific aspect of Google Cloud CLI such as
+the service account to use or the verbosity level of logs. To set the property
+across all configurations, use the `--installation` flag. For more
+information regarding creating and using configurations, see `[gcloud topic
+configurations](https://cloud.google.com/sdk/gcloud/reference/topic/configurations)`.
+To view a list of properties currently in use, run `[gcloud config list](https://cloud.google.com/sdk/gcloud/reference/config/list)`.
+To unset properties, use `[gcloud config unset](https://cloud.google.com/sdk/gcloud/reference/config/unset)`.
+Google Cloud CLI comes with a `default` configuration. To create
+multiple configurations, use `[gcloud config
+configurations create](https://cloud.google.com/sdk/gcloud/reference/config/configurations/create)`, and `[gcloud config
+configurations activate](https://cloud.google.com/sdk/gcloud/reference/config/configurations/activate)` to switch between them.
+Note: If you are using Cloud Shell, your gcloud command-line tool preferences
+are stored in a temporary `tmp` folder, set for your current tab
+only, and do not persist across sessions. For details on how to make these
+configurations persist, refer to the Cloud Shell guide on setting gcloud
+command-line tool preferences: [https://cloud.google.com/shell/docs/configuring-cloud-shell#gcloud_command-line_tool_preferences](https://cloud.google.com/shell/docs/configuring-cloud-shell#gcloud_command-line_tool_preferences).
+
+**EXAMPLES**
+
+: To set the `project` property in the core section, run:
+
+```
+gcloud config set project PROJECT_ID
+```
+
+To set the `zone` property in the `compute` section, run:
+
+```
+gcloud config set compute/zone ZONE_NAME
+```
+
+To disable prompting for scripting, run:
+
+```
+gcloud config set disable_prompts true
+```
+
+To set a proxy with the appropriate type, and specify the address and port on
+which to reach it, run:
+
+```
+gcloud config set proxy/type http
+gcloud config set proxy/address 1.234.56.78
+gcloud config set proxy/port 8080
+```
+
+For a full list of accepted values, see [https://cloud.google.com/sdk/gcloud/reference/topic/configurations#AVAILABLE-PROPERTIES](https://cloud.google.com/sdk/gcloud/reference/topic/configurations#AVAILABLE-PROPERTIES).
+
+**POSITIONAL ARGUMENTS**
+
+: **`SECTION`/`PROPERTY`**:
+Property to be set. Note that SECTION/ is optional while referring to properties
+in the core section, i.e., using either `core/project` or
+`project` is a valid way of setting a project. Using section names is
+required for setting other properties like `compute/region`. Consult
+the Available Properties section below for a comprehensive list of properties.
+
+**`VALUE`**:
+Value to be set.
+
+**FLAGS**
+
+: **--installation**:
+If set, the property is updated for the entire Google Cloud CLI installation.
+Otherwise, by default, the property is updated only in the currently active
+configuration.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**AVAILABLE PROPERTIES**
+
+: **`core`**:
+**`account`**:
+Account `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` should use for
+authentication. Run `[gcloud auth
+list](https://cloud.google.com/sdk/gcloud/reference/auth/list)` to see your currently available accounts.
+
+**`console_log_format`**:
+Control the format used to display log messages to the console.
+Valid values are:
+
+- `standard` - Simplified log messages are displayed on the console.
+- `detailed` - More detailed messages are displayed on the console.
+
+If unset, default is `standard`.
+
+**`custom_ca_certs_file`**:
+Absolute path to a custom CA cert file.
+
+**`default_format`**:
+Sets the default format for printing command resources.
+`core/default_format` overrides the default yaml format. If the
+command contains a command-specific output format, it takes precedence over the
+`core/default_format` value. Use `--verbosity=debug` flag
+to view the command-specific format. Both `core/format` and
+`--format` also take precedence over
+`core/default_format`. The supported formats are limited to:
+`config`, `default`, `disable`,
+`flattened`, `json`, `list`, `none`,
+`object`, `text`. For more details run $ [gcloud topic formats](https://cloud.google.com/sdk/gcloud/reference/topic/formats). Run `$
+[gcloud](https://cloud.google.com/sdk/gcloud/reference) config set --help` to see more
+information about `core/default_format`
+
+**`default_regional_backend_service`**:
+If True, backend services in `[gcloud compute
+backend-services](https://cloud.google.com/sdk/gcloud/reference/compute/backend-services)` will be regional by default. Setting the
+`--global` flag is required for global backend services.
+
+**`disable_color`**:
+If True, color will not be used when printing messages in the terminal.
+
+**`disable_file_logging`**:
+If True, `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` will not store
+logs to a file. This may be useful if disk space is limited.
+
+**`disable_prompts`**:
+If True, the default answer will be assumed for all user prompts. However, for
+any prompts that require user input, an error will be raised. This is equivalent
+to either using the global `--quiet` flag or setting the environment
+variable `CLOUDSDK_CORE_DISABLE_PROMPTS` to 1. Setting this property
+is useful when scripting with `[gcloud](https://cloud.google.com/sdk/gcloud/reference)`.
+
+**`disable_usage_reporting`**:
+If True, anonymous statistics on SDK usage will not be collected. This value is
+set by your choices during installation, but can be changed at any time. For
+more information, see [Usage
+statistics](https://cloud.google.com/sdk//reference/sdk/docs/usage-statistics).
+
+**`enable_feature_flags`**:
+If True, remote config-file driven feature flags will be enabled.
+
+**`format`**:
+Sets the format for printing all command resources. This overrides the default
+command-specific human-friendly output format. Use
+`--verbosity=debug` flag to view the command-specific format. If both
+`core/default_format` and `core/format` are specified,
+`core/format` takes precedence. If both `core/format` and
+`--format` are specified, `--format` takes precedence. The
+supported formats are limited to: `config`, `default`,
+`disable`, `flattened`, `json`,
+`list`, `none`, `object`, `text`.
+For more details run $ [gcloud
+topic formats](https://cloud.google.com/sdk/gcloud/reference/topic/formats). Run `$ [gcloud
+config](https://cloud.google.com/sdk/gcloud/reference/config) set --help` to see more information about
+`core/format`
+
+**`log_http`**:
+If True, log HTTP requests and responses to the logs. To see logs in the
+terminal, adjust `verbosity` settings. Otherwise, logs are available
+in their respective log files.
+
+**`max_log_days`**:
+Maximum number of days to retain log files before deleting. If set to 0, turns
+off log garbage collection and does not delete log files. If unset, the default
+is 30 days.
+
+**`parse_error_details`**:
+If True, `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` will attempt to
+parse and interpret error details in API originating errors. If False, `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` will write flush error details as
+is to stderr/log.
+
+**`pass_credentials_to_gsutil`**:
+If True, pass the configured Google Cloud CLI authentication to gsutil.
+
+**`project`**:
+Project ID of the Cloud Platform project to operate on by default. This can be
+overridden by using the global `--project` flag.
+
+**`show_structured_logs`**:
+Control when JSON-structured log messages for the current verbosity level (and
+above) will be written to standard error. If this property is disabled, logs are
+formatted as `text` by default.
+Valid values are:
+
+- `never` - Log messages as text
+- `always` - Always log messages as JSON
+- `log` - Only log messages as JSON if stderr is a file
+- `terminal` - Only log messages as JSON if stderr is a terminal
+
+If unset, default is `never`.
+
+**`trace_token`**:
+Token used to route traces of service requests for investigation of issues. This
+token will be provided by Google support.
+
+**`user_output_enabled`**:
+True, by default. If False, messages to the user and command output on both
+standard output and standard error will be suppressed.
+
+**`verbosity`**:
+Default logging verbosity for `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` commands. This is the equivalent
+of using the global `--verbosity` flag. Supported verbosity levels:
+`debug`, `info`, `warning`, `error`,
+`critical`, and `none`.
+
+**`accessibility`**:
+**`screen_reader`**:
+Make gcloud more screen reader friendly.
+
+**`ai`**:
+**`region`**:
+Default region to use when working with AI Platform resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`ai_platform`**:
+**`region`**:
+Default region to use when working with AI Platform Training and Prediction
+resources (currently for Prediction only). It is ignored for training resources
+for now. The value should be either `global` or one of the supported
+regions. When a `--region` flag is required but not provided, the
+command will fall back to this value, if set.
+
+**`api_endpoint_overrides`**:
+**`accessapproval`**:
+Overrides API endpoint for `[gcloud access-approval](https://cloud.google.com/sdk/gcloud/reference/access-approval)`
+command group. Defaults to `https://accessapproval.googleapis.com/`
+
+**`accesscontextmanager`**:
+Overrides API endpoint for `[gcloud
+access-context-manager](https://cloud.google.com/sdk/gcloud/reference/access-context-manager)` command group. Defaults to
+`https://accesscontextmanager.googleapis.com/`
+
+**`ai`**:
+Overrides API endpoint for `[gcloud
+ai](https://cloud.google.com/sdk/gcloud/reference/ai)` command group.
+
+**`aiplatform`**:
+Overrides API endpoint for `[gcloud ai-platform](https://cloud.google.com/sdk/gcloud/reference/ai-platform)` command
+group. Defaults to `https://aiplatform.googleapis.com/`
+
+**`anthosevents`**:
+Overrides API endpoint for `[gcloud
+anthos](https://cloud.google.com/sdk/gcloud/reference/anthos)` command group. Defaults to
+`https://anthosevents.googleapis.com/`
+
+**`anthospolicycontrollerstatus_pa`**:
+Overrides API endpoint for `[gcloud container
+fleet policycontroller](https://cloud.google.com/sdk/gcloud/reference/container/fleet/policycontroller)` command group. Defaults to
+`https://anthospolicycontrollerstatus-pa.googleapis.com/`
+
+**`apigateway`**:
+Overrides API endpoint for `[gcloud api-gateway](https://cloud.google.com/sdk/gcloud/reference/api-gateway)` command
+group. Defaults to `https://apigateway.googleapis.com/`
+
+**`apigee`**:
+Overrides API endpoint for `[gcloud
+apigee](https://cloud.google.com/sdk/gcloud/reference/apigee)` command group. Defaults to
+`https://apigee.googleapis.com/`
+
+**`appengine`**:
+Overrides API endpoint for `[gcloud
+app](https://cloud.google.com/sdk/gcloud/reference/app)` command group. Defaults to
+`https://appengine.googleapis.com/`
+
+**`apphub`**:
+Overrides API endpoint for `[gcloud
+apphub](https://cloud.google.com/sdk/gcloud/reference/apphub)` command group. Defaults to
+`https://apphub.googleapis.com/`
+
+**`artifactregistry`**:
+Overrides API endpoint for `[gcloud artifacts](https://cloud.google.com/sdk/gcloud/reference/artifacts)` command
+group. Defaults to `https://artifactregistry.googleapis.com/`
+
+**`assuredworkloads`**:
+Overrides API endpoint for `[gcloud
+assured](https://cloud.google.com/sdk/gcloud/reference/assured)` command group. Defaults to
+`https://assuredworkloads.googleapis.com/`
+
+**`auditmanager`**:
+Overrides API endpoint for `[gcloud audit-manager](https://cloud.google.com/sdk/gcloud/reference/audit-manager)`
+command group. Defaults to `https://auditmanager.googleapis.com/`
+
+**`baremetalsolution`**:
+Overrides API endpoint for `[gcloud
+bms](https://cloud.google.com/sdk/gcloud/reference/bms)` command group. Defaults to
+`https://baremetalsolution.googleapis.com/`
+
+**`bigtableadmin`**:
+Overrides API endpoint for `[gcloud
+bigtable](https://cloud.google.com/sdk/gcloud/reference/bigtable)` command group. Defaults to
+`https://bigtableadmin.googleapis.com/`
+
+**`certificatemanager`**:
+Overrides API endpoint for `[gcloud
+certificate-manager](https://cloud.google.com/sdk/gcloud/reference/certificate-manager)` command group. Defaults to
+`https://certificatemanager.googleapis.com/`
+
+**`cloudasset`**:
+Overrides API endpoint for `[gcloud
+asset](https://cloud.google.com/sdk/gcloud/reference/asset)` command group. Defaults to
+`https://cloudasset.googleapis.com/`
+
+**`cloudbilling`**:
+Overrides API endpoint for `[gcloud
+billing](https://cloud.google.com/sdk/gcloud/reference/billing)` command group. Defaults to
+`https://cloudbilling.googleapis.com/`
+
+**`cloudbuild`**:
+Overrides API endpoint for `[gcloud
+builds](https://cloud.google.com/sdk/gcloud/reference/builds)` command group. Defaults to
+`https://cloudbuild.googleapis.com/`
+
+**`cloudcommerceconsumerprocurement`**:
+Overrides API endpoint for `gcloud commerce-procurement` command
+group. Defaults to
+`https://cloudcommerceconsumerprocurement.googleapis.com/`
+
+**`clouddebugger`**:
+Overrides API endpoint for `gcloud debug` command group. Defaults to
+`https://clouddebugger.googleapis.com/`
+
+**`clouddeploy`**:
+Overrides API endpoint for `[gcloud
+deploy](https://cloud.google.com/sdk/gcloud/reference/deploy)` command group. Defaults to
+`https://clouddeploy.googleapis.com/`
+
+**`clouderrorreporting`**:
+Overrides API endpoint for `gcloud error-reporting` command group.
+Defaults to `https://clouderrorreporting.googleapis.com/`
+
+**`cloudfunctions`**:
+Overrides API endpoint for `[gcloud functions](https://cloud.google.com/sdk/gcloud/reference/functions)` command
+group. Defaults to `https://cloudfunctions.googleapis.com/`
+
+**`cloudidentity`**:
+Overrides API endpoint for `[gcloud
+identity](https://cloud.google.com/sdk/gcloud/reference/identity)` command group. Defaults to
+`https://cloudidentity.googleapis.com/`
+
+**`cloudkms`**:
+Overrides API endpoint for `[gcloud
+kms](https://cloud.google.com/sdk/gcloud/reference/kms)` command group. Defaults to
+`https://cloudkms.googleapis.com/`
+
+**`cloudlocationfinder`**:
+Overrides API endpoint for `gcloud cloudlocationfinder` command
+group. Defaults to `https://cloudlocationfinder.googleapis.com/`
+
+**`cloudresourcemanager`**:
+Overrides API endpoint for `[gcloud
+projects](https://cloud.google.com/sdk/gcloud/reference/projects)` command group. Defaults to
+`https://cloudresourcemanager.googleapis.com/`
+
+**`cloudscheduler`**:
+Overrides API endpoint for `[gcloud scheduler](https://cloud.google.com/sdk/gcloud/reference/scheduler)` command
+group. Defaults to `https://cloudscheduler.googleapis.com/`
+
+**`cloudtasks`**:
+Overrides API endpoint for `[gcloud
+tasks](https://cloud.google.com/sdk/gcloud/reference/tasks)` command group. Defaults to
+`https://cloudtasks.googleapis.com/`
+
+**`cloudtrace`**:
+Overrides API endpoint for `gcloud trace` command group. Defaults to
+`https://cloudtrace.googleapis.com/`
+
+**`composer`**:
+Overrides API endpoint for `[gcloud
+composer](https://cloud.google.com/sdk/gcloud/reference/composer)` command group. Defaults to
+`https://composer.googleapis.com/`
+
+**`compute`**:
+Overrides API endpoint for `[gcloud
+compute](https://cloud.google.com/sdk/gcloud/reference/compute)` command group. For Private Service Connect usage, see [https://cloud.google.com/vpc/docs/configure-private-service-connect-apis#using-endpoints](https://cloud.google.com/vpc/docs/configure-private-service-connect-apis#using-endpoints)
+
+**`config`**:
+Overrides API endpoint for `[gcloud infra-manager](https://cloud.google.com/sdk/gcloud/reference/infra-manager)`
+command group. Defaults to `https://config.googleapis.com/`
+
+**`container`**:
+Overrides API endpoint for `[gcloud container](https://cloud.google.com/sdk/gcloud/reference/container)` command
+group. Defaults to `https://container.googleapis.com/`
+
+**`datacatalog`**:
+Overrides API endpoint for `[gcloud data-catalog](https://cloud.google.com/sdk/gcloud/reference/data-catalog)` command
+group. Defaults to `https://datacatalog.googleapis.com/`
+
+**`dataflow`**:
+Overrides API endpoint for `[gcloud
+dataflow](https://cloud.google.com/sdk/gcloud/reference/dataflow)` command group. Defaults to
+`https://dataflow.googleapis.com/`
+
+**`datafusion`**:
+Overrides API endpoint for `gcloud data-fusion` command group.
+Defaults to `https://datafusion.googleapis.com/`
+
+**`datamigration`**:
+Overrides API endpoint for `[gcloud
+database-migration](https://cloud.google.com/sdk/gcloud/reference/database-migration)` command group. Defaults to
+`https://datamigration.googleapis.com/`
+
+**`datapipelines`**:
+Overrides API endpoint for `gcloud datapipelines` command group.
+Defaults to `https://datapipelines.googleapis.com/`
+
+**`dataplex`**:
+Overrides API endpoint for `[gcloud
+dataplex](https://cloud.google.com/sdk/gcloud/reference/dataplex)` command group. Defaults to
+`https://dataplex.googleapis.com/`
+
+**`dataproc`**:
+Overrides API endpoint for `[gcloud
+dataproc](https://cloud.google.com/sdk/gcloud/reference/dataproc)` command group. Defaults to
+`https://dataproc.googleapis.com/`
+
+**`datastore`**:
+Overrides API endpoint for `[gcloud datastore](https://cloud.google.com/sdk/gcloud/reference/datastore)` command
+group. Defaults to `https://datastore.googleapis.com/`
+
+**`datastream`**:
+Overrides API endpoint for `[gcloud datastream](https://cloud.google.com/sdk/gcloud/reference/datastream)` command
+group. Defaults to `https://datastream.googleapis.com/`
+
+**`deploymentmanager`**:
+Overrides API endpoint for `[gcloud
+deployment-manager](https://cloud.google.com/sdk/gcloud/reference/deployment-manager)` command group. Defaults to
+`https://deploymentmanager.googleapis.com/`
+
+**`developerconnect`**:
+Overrides API endpoint for `[gcloud
+developer-connect](https://cloud.google.com/sdk/gcloud/reference/developer-connect)` command group. Defaults to
+`https://developerconnect.googleapis.com/`
+
+**`dns`**:
+Overrides API endpoint for `[gcloud
+dns](https://cloud.google.com/sdk/gcloud/reference/dns)` command group. Defaults to
+`https://dns.googleapis.com/dns/v1/`
+
+**`domains`**:
+Overrides API endpoint for `[gcloud
+domains](https://cloud.google.com/sdk/gcloud/reference/domains)` command group. Defaults to
+`https://domains.googleapis.com/`
+
+**`edgecontainer`**:
+Overrides API endpoint for `gcloud edge-container` command group.
+Defaults to `https://edgecontainer.googleapis.com/`
+
+**`eventarc`**:
+Overrides API endpoint for `[gcloud
+eventarc](https://cloud.google.com/sdk/gcloud/reference/eventarc)` command group. Defaults to
+`https://eventarc.googleapis.com/`
+
+**`eventarcpublishing`**:
+Overrides API endpoint for `gcloud eventarc publish` command group.
+Defaults to `https://eventarcpublishing.googleapis.com/`
+
+**`faultinjectiontesting`**:
+Overrides API endpoint for `gcloud fault-injection` command group.
+Defaults to `https://faultinjectiontesting.googleapis.com/`
+
+**`file`**:
+Overrides API endpoint for `[gcloud filestore](https://cloud.google.com/sdk/gcloud/reference/filestore)` command
+group. Defaults to `https://file.googleapis.com/`
+
+**`firebasedataconnect`**:
+Overrides API endpoint for `gcloud firebase-data-connect` command
+group. Defaults to `https://firebasedataconnect.googleapis.com/`
+
+**`firestore`**:
+Overrides API endpoint for `[gcloud firestore](https://cloud.google.com/sdk/gcloud/reference/firestore)` command
+group. Defaults to `https://firestore.googleapis.com/`
+
+**`genomics`**:
+Overrides API endpoint for `gcloud genomics` command group. Defaults
+to `https://genomics.googleapis.com/`
+
+**`gkemulticloud`**:
+Overrides API endpoint for `[gcloud container aws](https://cloud.google.com/sdk/gcloud/reference/container/aws)`,
+`[gcloud container
+azure](https://cloud.google.com/sdk/gcloud/reference/container/azure)` and `[gcloud container
+attached](https://cloud.google.com/sdk/gcloud/reference/container/attached)` command groups.
+
+**`healthcare`**:
+Overrides API endpoint for `[gcloud healthcare](https://cloud.google.com/sdk/gcloud/reference/healthcare)` command
+group. Defaults to `https://healthcare.googleapis.com/`
+
+**`iam`**:
+Overrides API endpoint for `[gcloud
+iam](https://cloud.google.com/sdk/gcloud/reference/iam)` command group. Defaults to
+`https://iam.googleapis.com/`
+
+**`iamcredentials`**:
+Overrides API endpoint for `[gcloud
+iam](https://cloud.google.com/sdk/gcloud/reference/iam)` command group. Defaults to
+`https://iamcredentials.googleapis.com/`
+
+**`iap`**:
+Overrides API endpoint for `[gcloud
+iap](https://cloud.google.com/sdk/gcloud/reference/iap)` command group. Defaults to
+`https://iap.googleapis.com/`
+
+**`ids`**:
+Overrides API endpoint for `[gcloud
+ids](https://cloud.google.com/sdk/gcloud/reference/ids)` command group. Defaults to
+`https://ids.googleapis.com/`
+
+**`krmapihosting`**:
+Overrides API endpoint for `[gcloud anthos config
+controller](https://cloud.google.com/sdk/gcloud/reference/anthos/config/controller)` command group. Defaults to
+`https://krmapihosting.googleapis.com/`
+
+**`language`**:
+Overrides API endpoint for `[gcloud ml language](https://cloud.google.com/sdk/gcloud/reference/ml/language)` command
+group. Defaults to `https://language.googleapis.com/`
+
+**`lifesciences`**:
+Overrides API endpoint for `gcloud lifesciences` command group.
+Defaults to `https://lifesciences.googleapis.com/`
+
+**`logging`**:
+Overrides API endpoint for `[gcloud
+logging](https://cloud.google.com/sdk/gcloud/reference/logging)` command group. Defaults to
+`https://logging.googleapis.com/`
+
+**`looker`**:
+Overrides API endpoint for `[gcloud
+looker](https://cloud.google.com/sdk/gcloud/reference/looker)` command group. Defaults to
+`https://looker.googleapis.com/`
+
+**`managedidentities`**:
+Overrides API endpoint for `[gcloud active-directory](https://cloud.google.com/sdk/gcloud/reference/active-directory)`
+command group. Defaults to
+`https://managedidentities.googleapis.com/`
+
+**`marketplacesolutions`**:
+Overrides API endpoint for `gcloud mps` command group. Defaults to
+`https://marketplacesolutions.googleapis.com/`
+
+**`mediaasset`**:
+Overrides API endpoint for `gcloud media` command group. Defaults to
+`https://mediaasset.googleapis.com/`
+
+**`memcache`**:
+Overrides API endpoint for `[gcloud
+memcache](https://cloud.google.com/sdk/gcloud/reference/memcache)` command group. Defaults to
+`https://memcache.googleapis.com/`
+
+**`metastore`**:
+Overrides API endpoint for `[gcloud metastore](https://cloud.google.com/sdk/gcloud/reference/metastore)` command
+group. Defaults to `https://metastore.googleapis.com/`
+
+**`monitoring`**:
+Overrides API endpoint for `[gcloud monitoring](https://cloud.google.com/sdk/gcloud/reference/monitoring)` command
+group. Defaults to `https://monitoring.googleapis.com/`
+
+**`netapp`**:
+Overrides API endpoint for `[gcloud
+netapp](https://cloud.google.com/sdk/gcloud/reference/netapp)` command group. Defaults to
+`https://netapp.googleapis.com/`
+
+**`networkconnectivity`**:
+Overrides API endpoint for `[gcloud
+network-connectivity](https://cloud.google.com/sdk/gcloud/reference/network-connectivity)` command group. Defaults to
+`https://networkconnectivity.googleapis.com/`
+
+**`networkmanagement`**:
+Overrides API endpoint for `[gcloud
+network-management](https://cloud.google.com/sdk/gcloud/reference/network-management)` command group. Defaults to
+`https://networkmanagement.googleapis.com/`
+
+**`networksecurity`**:
+Overrides API endpoint for `[gcloud network-security](https://cloud.google.com/sdk/gcloud/reference/network-security)`
+command group. Defaults to `https://networksecurity.googleapis.com/`
+
+**`networkservices`**:
+Overrides API endpoint for `[gcloud network-services](https://cloud.google.com/sdk/gcloud/reference/network-services)`
+command group. Defaults to `https://networkservices.googleapis.com/`
+
+**`notebooks`**:
+Overrides API endpoint for `[gcloud notebooks](https://cloud.google.com/sdk/gcloud/reference/notebooks)` command
+group. Defaults to `https://notebooks.googleapis.com/`
+
+**`orgpolicy`**:
+Overrides API endpoint for `[gcloud org-policies](https://cloud.google.com/sdk/gcloud/reference/org-policies)` command
+group. Defaults to `https://orgpolicy.googleapis.com/`
+
+**`pam`**:
+Overrides API endpoint for `[gcloud
+pam](https://cloud.google.com/sdk/gcloud/reference/pam)` command group.
+
+**`policyanalyzer`**:
+Overrides API endpoint for `policy-intelligence` command group.
+Defaults to `https://policyanalyzer.googleapis.com/`
+
+**`privateca`**:
+Overrides API endpoint for `[gcloud privateca](https://cloud.google.com/sdk/gcloud/reference/privateca)` command
+group. Defaults to `https://privateca.googleapis.com/`
+
+**`publicca`**:
+Overrides API endpoint for `[gcloud
+publicca](https://cloud.google.com/sdk/gcloud/reference/publicca)` command group. Defaults to
+`https://publicca.googleapis.com/`
+
+**`pubsub`**:
+Overrides API endpoint for `[gcloud
+pubsub](https://cloud.google.com/sdk/gcloud/reference/pubsub)` command group. Defaults to
+`https://pubsub.googleapis.com/`
+
+**`recaptchaenterprise`**:
+Overrides API endpoint for `[gcloud recaptcha](https://cloud.google.com/sdk/gcloud/reference/recaptcha)` command
+group. Defaults to `https://recaptchaenterprise.googleapis.com/`
+
+**`recommender`**:
+Overrides API endpoint for `[gcloud recommender](https://cloud.google.com/sdk/gcloud/reference/recommender)` command
+group. Defaults to `https://recommender.googleapis.com/`
+
+**`redis`**:
+Overrides API endpoint for `[gcloud
+redis](https://cloud.google.com/sdk/gcloud/reference/redis)` command group. Defaults to
+`https://redis.googleapis.com/`
+
+**`run`**:
+Overrides API endpoint for `[gcloud
+run](https://cloud.google.com/sdk/gcloud/reference/run)` command group. Defaults to
+`https://run.googleapis.com/`
+
+**`runtimeconfig`**:
+Overrides API endpoint for `gcloud runtime-config` command group.
+Defaults to `https://runtimeconfig.googleapis.com/`
+
+**`sddc`**:
+Overrides API endpoint for `gcloud vmware sddc` command group.
+Defaults to `https://sddc.googleapis.com/`
+
+**`secretmanager`**:
+Overrides API endpoint for `[gcloud
+secrets](https://cloud.google.com/sdk/gcloud/reference/secrets)` command group. Defaults to
+`https://secretmanager.googleapis.com/`
+
+**`securitycenter`**:
+Overrides API endpoint for `[gcloud
+scc](https://cloud.google.com/sdk/gcloud/reference/scc)` command group. Defaults to
+`https://securitycenter.googleapis.com/`
+
+**`servicedirectory`**:
+Overrides API endpoint for `[gcloud
+service-directory](https://cloud.google.com/sdk/gcloud/reference/service-directory)` command group. Defaults to
+`https://servicedirectory.googleapis.com/`
+
+**`servicemanagement`**:
+Overrides API endpoint for `[gcloud endpoints](https://cloud.google.com/sdk/gcloud/reference/endpoints)` command
+group. Defaults to `https://servicemanagement.googleapis.com/`
+
+**`sourcerepo`**:
+Overrides API endpoint for `[gcloud
+source](https://cloud.google.com/sdk/gcloud/reference/source)` command group. Defaults to
+`https://sourcerepo.googleapis.com/`
+
+**`spanner`**:
+Overrides API endpoint for `[gcloud
+spanner](https://cloud.google.com/sdk/gcloud/reference/spanner)` command group. For spanner emulator usage, see [https://cloud.google.com/spanner/docs/emulator#using_the_gcloud_cli_with_the_emulator](https://cloud.google.com/spanner/docs/emulator#using_the_gcloud_cli_with_the_emulator)
+
+**`speech`**:
+Overrides API endpoint for `[gcloud ml speech](https://cloud.google.com/sdk/gcloud/reference/ml/speech)` command
+group. Defaults to `https://speech.googleapis.com/`
+
+**`sql`**:
+Overrides API endpoint for `[gcloud
+sql](https://cloud.google.com/sdk/gcloud/reference/sql)` command group.
+
+**`storage`**:
+Overrides API endpoint for `[gcloud
+storage](https://cloud.google.com/sdk/gcloud/reference/storage)` command group. Defaults to
+`https://storage.googleapis.com/storage/v1/`
+
+**`testing`**:
+Overrides API endpoint for `[gcloud firebase test](https://cloud.google.com/sdk/gcloud/reference/firebase/test)`
+command group. Defaults to `https://testing.googleapis.com/`
+
+**`transfer`**:
+Overrides API endpoint for `[gcloud
+transfer](https://cloud.google.com/sdk/gcloud/reference/transfer)` command group.
+
+**`transferappliance`**:
+Overrides API endpoint for `gcloud transfer appliances` command
+group. Defaults to `https://transferappliance.googleapis.com/`
+
+**`vision`**:
+Overrides API endpoint for `[gcloud ml vision](https://cloud.google.com/sdk/gcloud/reference/ml/vision)` command
+group. Defaults to `https://vision.googleapis.com/`
+
+**`vmmigration`**:
+Overrides API endpoint for `[gcloud migration vms](https://cloud.google.com/sdk/gcloud/reference/migration/vms)`
+command group. Defaults to `https://vmmigration.googleapis.com/`
+
+**`vmwareengine`**:
+Overrides API endpoint for `[gcloud
+vmware](https://cloud.google.com/sdk/gcloud/reference/vmware)` command group. Defaults to
+`https://vmwareengine.googleapis.com/`
+
+**`workflowexecutions`**:
+Overrides API endpoint for `[gcloud workflows
+executions](https://cloud.google.com/sdk/gcloud/reference/workflows/executions)` command group. Defaults to
+`https://workflowexecutions.googleapis.com/`
+
+**`workflows`**:
+Overrides API endpoint for `[gcloud workflows](https://cloud.google.com/sdk/gcloud/reference/workflows)` command
+group. Defaults to `https://workflows.googleapis.com/`
+
+**`workstations`**:
+Overrides API endpoint for `[gcloud workstations](https://cloud.google.com/sdk/gcloud/reference/workstations)` command
+group. Defaults to `https://workstations.googleapis.com/`
+
+**`app`**:
+**`cloud_build_timeout`**:
+Timeout, in seconds, to wait for Docker builds to complete during deployments.
+All Docker builds now use the Cloud Build API.
+
+**`promote_by_default`**:
+If True, when deploying a new version of a service, that version will be
+promoted to receive all traffic for the service. This property can be overridden
+with the `--promote-by-default` or
+`--no-promote-by-default` flags.
+
+**`stop_previous_version`**:
+If True, when deploying a new version of a service, the previously deployed
+version is stopped. If False, older versions must be stopped manually.
+
+**`use_runtime_builders`**:
+If set, opt in/out to a new code path for building applications using
+pre-fabricated runtimes that can be updated independently of client tooling. If
+not set, the default path for each runtime is used.
+
+**`artifacts`**:
+**`location`**:
+Default location to use when working with Artifact Registry resources. When a
+`location` value is required but not provided, the command will fall
+back to this value, if set. If this value is unset, the default location is
+`global` when `location` value is optional.
+
+**`repository`**:
+Default repository to use when working with Artifact Registry resources. When a
+`repository` value is required but not provided, the command will
+fall back to this value, if set.
+
+**`auth`**:
+**`access_token_file`**:
+A file path to read the access token. Use this property to authenticate gcloud
+with an access token. The credentials of the active account (if it exists) will
+be ignored. The file should contain an access token with no other information.
+
+**`disable_credentials`**:
+If True, `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` will not
+attempt to load any credentials or authenticate any requests. This is useful
+when behind a proxy that adds authentication to requests.
+
+**`impersonate_service_account`**:
+While set, all API requests will be made as the given service account or target
+service account in an impersonation delegation chain instead of the currently
+selected account. You can specify either a single service account as the
+impersonator, or a comma-separated list of service accounts to create an
+impersonation delegation chain. This is done without needing to create,
+download, or activate a key for the service account or accounts.
+In order to make API requests as a service account, your currently selected
+account must have an IAM role that includes the
+`iam.serviceAccounts.getAccessToken` permission for the service
+account or accounts.
+The `roles/iam.serviceAccountTokenCreator` role has the
+`iam.serviceAccounts.getAccessToken permission`. You can also create
+a custom role.
+You can specify a list of service accounts, separated with commas. This creates
+an impersonation delegation chain in which each service account delegates its
+permissions to the next service account in the chain. Each service account in
+the list must have the `roles/iam.serviceAccountTokenCreator` role on
+the next service account in the list. For example, when the property is set
+through `gcloud config set auth/impersonate_service_account=`
+``SERVICE_ACCOUNT_1``,``SERVICE_ACCOUNT_2``,
+the active account must have the
+`roles/iam.serviceAccountTokenCreator` role on
+``SERVICE_ACCOUNT_1``, which must have the
+`roles/iam.serviceAccountTokenCreator` role on
+``SERVICE_ACCOUNT_2``.
+``SERVICE_ACCOUNT_1`` is the impersonated
+service account and ``SERVICE_ACCOUNT_2`` is
+the delegate.
+
+**`login_config_file`**:
+Sets the created login configuration file in auth/login_config_file. Calling
+`[gcloud auth login](https://cloud.google.com/sdk/gcloud/reference/auth/login)`
+will automatically use this login configuration unless it is explicitly unset.
+
+**`service_account_disable_id_token_refresh`**:
+If True, disable ID token refresh for service account.
+
+**`service_account_use_self_signed_jwt`**:
+If True, use self signed jwt flow to get service account credentials access
+token. This only applies to service account json file and not to the legacy .p12
+file.
+
+**`token_host`**:
+Overrides the token endpoint to provision access tokens. It can be used with
+Private Service Connect.
+
+**`batch`**:
+**`location`**:
+Default location to use when working with Batch resources. When a
+`location` value is required but not provided, the command will fall
+back to this value, if set.
+
+**`billing`**:
+**`quota_project`**:
+The Google Cloud project that is billed and charged quota for operations
+performed in `[gcloud](https://cloud.google.com/sdk/gcloud/reference)`. When
+unset, the default is [CURRENT_PROJECT]. This default bills and charges quota
+against the current project. If you need to operate on one project, but need to
+bill your usage against or use quota from a different project, you can use this
+flag to specify the billing project. If both `billing/quota_project`
+and `--billing-project` are specified, `--billing-project`
+takes precedence.
+
+**`builds`**:
+**`kaniko_cache_ttl`**:
+TTL, in hours, of cached layers when using Kaniko. If zero, layer caching is
+disabled.
+
+**`region`**:
+Default region to use when working with Cloud Build resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`timeout`**:
+Timeout, in seconds, to wait for builds to complete. If unset, defaults to 10
+minutes.
+
+**`use_kaniko`**:
+If True, kaniko will be used to build images described by a Dockerfile, instead
+of `docker build`.
+
+**`colab`**:
+**`region`**:
+Default region to use when working with Colab Enterprise resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set. Please see [https://cloud.google.com/colab/docs/locations](https://cloud.google.com/colab/docs/locations)
+for a list of supported regions.
+
+**`component_manager`**:
+**`additional_repositories`**:
+Comma separated list of additional repositories to check for components. This
+property is automatically managed by the `[gcloud components
+repositories](https://cloud.google.com/sdk/gcloud/reference/components/repositories)` commands.
+
+**`disable_update_check`**:
+If True, Google Cloud CLI will not automatically check for updates.
+
+**`composer`**:
+**`location`**:
+Composer location to use. Each Composer location constitutes an independent
+resource namespace constrained to deploying environments into Compute Engine
+regions inside this location. This parameter corresponds to the
+/locations/<location> segment of the Composer resource URIs being
+referenced.
+
+**`compute`**:
+**`image_family_scope`**:
+Sets how images are selected with image families for disk and instance creation.
+By default, zonal image resources are used when using an image family in a
+public image project, and global image resources are used for all other
+projects. To override the default behavior, set this property to
+`zonal` or `global`.
+
+**`region`**:
+Default region to use when working with regional Compute Engine resources. When
+a `--region` flag is required but not provided, the command will fall
+back to this value, if set. To see valid choices, run `[gcloud compute regions
+list](https://cloud.google.com/sdk/gcloud/reference/compute/regions/list)`.
+
+**`use_new_list_usable_subnets_api`**:
+If True, use the new API for listing usable subnets which only returns subnets
+in the current project.
+
+**`zone`**:
+Default zone to use when working with zonal Compute Engine resources. When a
+`--zone` flag is required but not provided, the command will fall
+back to this value, if set. To see valid choices, run `[gcloud compute zones
+list](https://cloud.google.com/sdk/gcloud/reference/compute/zones/list)`.
+
+**`container`**:
+**`build_timeout`**:
+Timeout, in seconds, to wait for container builds to complete.
+
+**`cluster`**:
+Name of the cluster to use by default when working with Kubernetes Engine.
+
+**`use_application_default_credentials`**:
+If True, use application default credentials to authenticate to the cluster API
+server.
+
+**`use_client_certificate`**:
+If True, use the cluster's client certificate to authenticate to the cluster API
+server.
+
+**`container_attached`**:
+**`location`**:
+Default Google Cloud location to use for Attached clusters.
+
+**`container_aws`**:
+**`location`**:
+Default Google Cloud location to use for Anthos clusters on AWS.
+
+**`container_azure`**:
+**`location`**:
+Default Google Cloud location to use for Anthos clusters on Azure.
+
+**`container_bare_metal`**:
+**`location`**:
+Default Google Cloud location to use for Anthos clusters on Bare Metal.
+
+**`container_vmware`**:
+**`location`**:
+Default Google Cloud location to use for Anthos clusters on VMware.
+
+**`context_aware`**:
+**`use_client_certificate`**:
+If True, use client certificate to authorize user device using Context-aware
+access. This includes user login as well. Some services may not support client
+certificate authorization. If a command sends requests to such services, the
+client certificate will not be validated. Run `[gcloud topic
+client-certificate](https://cloud.google.com/sdk/gcloud/reference/topic/client-certificate)` for list of services supporting this feature.
+
+**`dataflow`**:
+**`disable_public_ips`**:
+Specifies that Cloud Dataflow workers must not use public IP addresses.
+
+**`enable_streaming_engine`**:
+Set this to true to enable Streaming Engine for the job.
+
+**`print_only`**:
+Prints the container spec to stdout. Does not save in Google Cloud Storage.
+
+**`datafusion`**:
+**`location`**:
+Datafusion location to use. Each Datafusion location constitutes an independent
+resource namespace constrained to deploying environments into Compute Engine
+regions inside this location. This parameter corresponds to the
+/locations/<location> segment of the Datafusion resource URIs being
+referenced.
+
+**`datapipelines`**:
+**`disable_public_ips`**:
+Specifies that Cloud Dataflow workers must not use public IP addresses.
+
+**`enable_streaming_engine`**:
+Set this to true to enable Streaming Engine for the job.
+
+**`dataplex`**:
+**`asset`**:
+Dataplex asset to use. When an `asset` is required but not provided
+by a flag, the command will fall back to this value, if set.
+
+**`lake`**:
+Dataplex lake to use. When a `lake` is required but not provided by a
+flag, the command will fall back to this value, if set.
+
+**`location`**:
+Dataplex location to use. When a `location` is required but not
+provided by a flag, the command will fall back to this value, if set.
+
+**`zone`**:
+Dataplex zone to use. When a `zone` is required but not provided by a
+flag, the command will fall back to this value, if set.
+
+**`dataproc`**:
+**`location`**:
+Dataproc location to use. Each Dataproc location constitutes an independent
+resource namespace constrained to deploying instances into Compute Engine zones
+inside the location.
+
+**`region`**:
+Dataproc region to use. Each Dataproc region constitutes an independent resource
+namespace constrained to deploying instances into Compute Engine zones inside
+the region.
+
+**`deploy`**:
+**`delivery_pipeline`**:
+Delivery Pipeline being managed by Cloud Deploy.
+
+**`region`**:
+Cloud Deploy region to use. Each Cloud Deploy region constitutes an independent
+resource namespace constrained to deploying instances into Compute Engine zones
+inside the region.
+
+**`deployment_manager`**:
+**`glob_imports`**:
+Enable import path globbing. Uses glob patterns to match multiple imports in a
+config file.
+
+**`eventarc`**:
+**`location`**:
+The default location to use when working with Eventarc resources. This should be
+either ``global`` or one of the supported
+regions. When a `--location` flag is required but not provided, the
+command will fall back to this value, if set.
+
+**`filestore`**:
+**`location`**:
+Please use the `--location` flag or set the filestore/zone or
+filestore/region property.
+
+**`region`**:
+Default region to use when working with Cloud Filestore regions. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`zone`**:
+Default zone to use when working with Cloud Filestore zones. When a
+`--zone` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`functions`**:
+**`gen2`**:
+Default environment to use when working with Cloud Functions resources. When
+neither `--gen2` nor `--no-gen2` is provided, the decision
+of whether to use Generation 2 falls back to this value if set.
+
+**`region`**:
+Default region to use when working with Cloud Functions resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set. To see valid choices, run `[gcloud beta functions
+regions list](https://cloud.google.com/sdk/gcloud/reference/beta/functions/regions/list)`.
+
+**`gcloudignore`**:
+**`enabled`**:
+If True, do not upload `.gcloudignore` files (see `$ [gcloud topic
+gcloudignore](https://cloud.google.com/sdk/gcloud/reference/topic/gcloudignore)`). If False, turn off the gcloudignore mechanism entirely
+and upload all files.
+
+**`gkebackup`**:
+**`backup`**:
+Default backup ID to use when working with Backup for GKE Services resources.
+When a `--backup` flag is required but not provided, the command will
+fall back to this value.
+
+**`backup_plan`**:
+Default backup plan ID to use when working with Backup for GKE Services
+resources. When a `--backup-plan` flag is required but not provided,
+the command will fall back to this value.
+
+**`location`**:
+Default location to use when working with Backup for GKE Services resources.
+When a `--location` flag is required but not provided, the command
+will fall back to this value.
+
+**`restore`**:
+Default restore ID to use when working with Backup for GKE Services resources.
+When a `--restore` flag is required but not provided, the command
+will fall back to this value.
+
+**`restore_plan`**:
+Default restore plan ID to use when working with Backup for GKE Services
+resources. When a `--restore-plan` flag is required but not provided,
+the command will fall back to this value.
+
+**`healthcare`**:
+**`dataset`**:
+Default dataset to use when working with Cloud Healthcare resources. When a
+`--dataset` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`location`**:
+Default location to use when working with Cloud Healthcare resources. When a
+`--location` flag is required but not provided, the command will fall
+back to this value.
+
+**`interactive`**:
+**`bottom_bindings_line`**:
+If True, display the bottom key bindings line.
+
+**`bottom_status_line`**:
+If True, display the bottom status line.
+
+**`completion_menu_lines`**:
+Number of lines in the completion menu.
+
+**`context`**:
+Command context string.
+
+**`fixed_prompt_position`**:
+If True, display the prompt at the same position.
+
+**`help_lines`**:
+Maximum number of help snippet lines.
+
+**`hidden`**:
+If True, expose hidden commands/flags.
+
+**`justify_bottom_lines`**:
+If True, left- and right-justify bottom toolbar lines.
+
+**`manpage_generator`**:
+If True, use the manpage CLI tree generator for unsupported commands.
+
+**`multi_column_completion_menu`**:
+If True, display the completions as a multi-column menu.
+
+**`prompt`**:
+Command prompt string.
+
+**`show_help`**:
+If True, show help as command args are being entered.
+
+**`suggest`**:
+If True, add command line suggestions based on history.
+
+**`lifesciences`**:
+**`location`**:
+Default location to use when working with Cloud Life Sciences resources. When a
+`--location` flag is required but not provided, the command will fall
+back to this value.
+
+**`looker`**:
+**`region`**:
+Default region to use when working with Cloud Looker resources. When a
+`region` is required but not provided by a flag, the command will
+fall back to this value, if set.
+
+**`lustre`**:
+**`location`**:
+Default location to use when working with Cloud Lustre resources. When a
+`location` value is required but not provided, the command will fall
+back to this value, if set.
+
+**`media_asset`**:
+**`location`**:
+Default location to use when working with Cloud Media Asset resources. When a
+`--location` flag is required but not provided, the command will fall
+back to this value.
+
+**`memcache`**:
+**`region`**:
+Default region to use when working with Cloud Memorystore for Memcached
+resources. When a `region` is required but not provided by a flag,
+the command will fall back to this value, if set.
+
+**`metastore`**:
+**`location`**:
+Default location to use when working with Dataproc Metastore. When a
+`location` is required but not provided by a flag, the command will
+fall back to this value, if set.
+
+**`tier`**:
+Default tier to use when creating Dataproc Metastore services. When a
+`tier` is required but not provided by a flag, the command will fall
+back to this value, if set.
+Valid values are:
+
+- `developer` - The developer tier provides limited scalability and no
+fault tolerance. Good for low-cost proof-of-concept.
+- `enterprise` - The enterprise tier provides multi-zone high
+availability, and sufficient scalability for enterprise-level Dataproc Metastore
+workloads.
+
+**`ml_engine`**:
+**`local_python`**:
+Full path to the Python interpreter to use for Cloud ML Engine local
+predict/train jobs. If not specified, the default path is the one to the Python
+interpreter found on system `PATH`.
+
+**`polling_interval`**:
+Interval (in seconds) at which to poll logs from your Cloud ML Engine jobs. Note
+that making it much faster than the default (60) will quickly use all of your
+quota.
+
+**`mps`**:
+**`product`**:
+Id for Marketplace Solutions Product.
+
+**`netapp`**:
+**`location`**:
+Default location to use when working with Cloud NetApp Files resources. When a
+`location` value is required but not provided, the command will fall
+back to this value, if set.
+
+**`notebooks`**:
+**`location`**:
+Default location to use when working with Notebook resources. When a
+`location` value is required but not provided, the command will fall
+back to this value, if set.
+
+**`privateca`**:
+**`location`**:
+Default location to use when working with Private CA resources. When a
+`--location` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`proxy`**:
+**`address`**:
+Hostname or IP address of proxy server.
+
+**`password`**:
+Password to use when connecting, if the proxy requires authentication.
+
+**`port`**:
+Port to use when connected to the proxy server.
+
+**`rdns`**:
+If True, DNS queries will not be performed locally, and instead, handed to the
+proxy to resolve. This is default behavior.
+
+**`type`**:
+Type of proxy being used. Supported proxy types are: [http, http_no_tunnel,
+socks4, socks5].
+
+**`username`**:
+Username to use when connecting, if the proxy requires authentication.
+
+**`redis`**:
+**`region`**:
+Default region to use when working with Cloud Memorystore for Redis resources.
+When a `region` is required but not provided by a flag, the command
+will fall back to this value, if set.
+
+**`run`**:
+**`cluster`**:
+ID of the cluster or fully qualified identifier for the cluster
+
+**`cluster_location`**:
+Zone or region in which the cluster is located.
+
+**`platform`**:
+Target platform for running commands.
+
+**`region`**:
+Default region to use when working with Cloud Run resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`runapps`**:
+**`deployment_service_account`**:
+Service account to use when deploying integrations.
+
+**`scc`**:
+**`organization`**:
+Default organization `[gcloud](https://cloud.google.com/sdk/gcloud/reference)`
+should use for scc surface.
+
+**`parent`**:
+Default parent `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` should
+use for scc surface.
+
+**`secrets`**:
+**`locations`**:
+A comma separated list of the locations to replicate secrets to. Only applies to
+secrets with a user-managed policy.
+
+**`replication-policy`**:
+The type of replication policy to apply to secrets. Allowed values are
+"automatic" and "user-managed". If user-managed then locations must also be
+provided.
+
+**`spanner`**:
+**`instance`**:
+Default instance to use when working with Cloud Spanner resources. When an
+instance is required but not provided by a flag, the command will fall back to
+this value, if set.
+
+**`ssh`**:
+**`putty_force_connect`**:
+Whether or not `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` should
+automatically accept new or changed host keys when executing plink/pscp commands
+on Windows. Defaults to True, but can be set to False to present these
+interactive prompts to the user for host key checking.
+
+**`verify_internal_ip`**:
+Whether or not `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` should
+perform an initial SSH connection to verify an instance ID is correct when
+connecting via its internal IP. Without this check, `[gcloud](https://cloud.google.com/sdk/gcloud/reference)` will simply connect to the
+internal IP of the desired instance, which may be wrong if the desired instance
+is in a different subnet but happens to share the same internal IP as an
+instance in the current subnet. Defaults to True.
+
+**`storage`**:
+**`additional_headers`**:
+Includes arbitrary headers in storage API calls. Accepts a comma separated list
+of key=value pairs, e.g. `header1=value1,header2=value2`.
+
+**`base_retry_delay`**:
+Second delay between retrying operations. May be multiplied by
+exponential_sleep_multiplier.
+
+**`check_hashes`**:
+'check_hashes' specifies how strictly to require integrity checking for
+downloaded data. Legal values are:
+
+- 'if_fast_else_fail' - (default) Only integrity check if the digest will run
+efficiently (using compiled code), else fail the download.
+
+- 'if_fast_else_skip' - Only integrity check if the server supplies a hash and the
+local digest computation will run quickly, else skip the check.
+
+- 'always' - Always check download integrity regardless of possible performance
+costs.
+
+- 'never' - Don't perform download integrity checks. This setting is not
+recommended except for special cases such as measuring download performance
+excluding time for integrity checking.
+
+This option exists to assist users who wish to download a composite object and
+are unable to install crcmod with the C-extension. CRC32c is the only available
+integrity check for composite objects, and without the C-extension, download
+performance can be significantly degraded by the digest computation. This option
+is ignored for daisy-chain copies, which don't compute hashes but instead
+(inexpensively) compare the cloud source and destination hashes.
+
+**`check_mv_early_deletion_fee`**:
+Block mv commands that may incur an early deletion fee (the source object in a
+mv is deleted).
+
+**`convert_incompatible_windows_path_characters`**:
+Allows automatic conversion of invalid path characters on Windows. If not
+enabled, Windows will raise an OSError if an invalid character is encountered.
+
+**`copy_chunk_size`**:
+Chunk size used for copying to in clouds or on disk.
+
+**`download_chunk_size`**:
+Chunk size used for downloadinging to clouds.
+
+**`exponential_sleep_multiplier`**:
+Used in exponential backoff for retrying operations.
+
+**`key_store_path`**:
+Path to a yaml file containing an encryption key, and multiple decryption keys
+for use in storage commands. The file must be formatted as follows:
+
+```
+encryption_key: {A customer-supplied or customer-managed key.}
+decryption_keys:
+- {A customer-supplied key}
+…
+```
+
+Customer-supplied encryption keys must be RFC 4648 section 4 base64-encoded
+AES256 strings. Customer-managed encryption keys must be of the form
+`projects/{project}/locations/{location}/keyRings/{key-ring}/cryptoKeys/{crypto-key}`.
+
+**`max_retries`**:
+Max number of retries for operations like copy.
+
+**`max_retry_delay`**:
+Max second delay between retriable operations.
+
+**`multipart_chunksize`**:
+Specifies partition size in bytes of each part of a multipart upload made by the
+Boto3 client. To calculate the maximum size of a Boto3 client multipart upload,
+multiply the multipart_chunk value by the maximum number of parts the API
+allows. For AWS S3 this limit is 10000. Values can be provided either in bytes
+or as human-readable values (e.g., "150M" to represent 150 mebibytes).
+
+**`multipart_threshold`**:
+Files larger than this threshold will be partitioned into parts, uploaded
+separately by the Boto3 client, and then combined into a single object.
+Otherwise, files smaller than this threshold will be uploaded by the Boto3
+client in a single stream.
+
+**`parallel_composite_upload_compatibility_check`**:
+Determines if the GET bucket call should be performed to check if the default
+storage class and retention period for the destination bucket meet the criteria
+for parallel composite upload.
+
+**`parallel_composite_upload_component_prefix`**:
+The prefix used when naming temporary components created by composite uploads.
+If the prefix begins with a `/`, the temporary components are
+uploaded relative to the bucket name. If the prefix does not begin with a
+`/`, the temporary components are uploaded relative to the prefix
+portion of the destination object name. For example, consider an upload that
+will create a final object named `gs://bucket/dir1/dir2/object`.
+Using a prefix of `/prefix` means temporary components use names like
+`gs://bucket/prefix/COMPONENT_NAME`. Using a prefix of
+`prefix` means temporary components use names like
+`gs://bucket/dir1/dir2/prefix/COMPONENT_NAME`. Note that this can
+complicate cleaning up temporary components, as they will not all share a common
+prefix. If this property is not specified, gcloud storage uses the prefix
+`/gcloud/tmp/parallel_composite_uploads/see_gcloud_storage_cp_help_for_details/`.
+If a chosen prefix results in temporary component names longer than the maximum
+length Cloud Storage allows, gcloud storage performs a non-composite upload.
+
+**`parallel_composite_upload_component_size`**:
+Specifies the ideal size of a component in bytes, which will act as an upper
+bound to the size of the components if ceil(file_size /
+parallel_composite_upload_component_size) is less than the maximum number of
+objects the API allows composing at once. Values can be provided either in bytes
+or as human-readable values (e.g., "150M" to represent 150 mebibytes).
+
+**`parallel_composite_upload_enabled`**:
+Determines whether parallel composite upload should be used. Default value is
+None which will use parallel composite upload and log an appropriate warning for
+the user explaining that parallel composite upload is being used by default.
+
+**`parallel_composite_upload_threshold`**:
+Specifies the maximum size of a file to upload in a single stream. Files larger
+than this threshold will be partitioned into component parts, uploaded in
+parallel, then composed into a single object. The number of components will be
+the smaller of ceil(file_size / parallel_composite_upload_component_size) and
+the maximum number of objects the API allows composing at once. For Cloud
+Storage this limit is 32. This property has no effect if
+parallel_composite_upload_enabled is set to False.
+
+**`process_count`**:
+The maximum number of processes parallel execution should use. When
+process_count and thread_count are both 1, commands use sequential execution.
+
+**`resumable_threshold`**:
+File operations above this size in bytes will use resumable instead of one-shot
+strategies. For example, a resumable download.
+
+**`rsync_files_directory`**:
+Directory path to intermediary files created by rsync.
+
+**`rsync_list_chunk_size`**:
+Number of files processed at a time by the rsync command when it builds and
+compares the list of files at the source and destination.
+
+**`s3_endpoint_url`**:
+If set, boto3 client will connect to this endpoint. Otherwise, boto3 selects a
+default endpoint based on the AWS service used.
+
+**`sliced_object_download_component_size`**:
+Target size and upper bound for files to be sliced into. Analogous to
+parallel_composite_upload_component_size.
+
+**`sliced_object_download_max_components`**:
+Specifies the maximum number of slices to be used when performing a sliced
+object download. Set None for automatic optimization based on system resources.
+
+**`sliced_object_download_threshold`**:
+Slice files larger than this value. Zero will block sliced downloads. Analogous
+to parallel_composite_upload_threshold.
+
+**`suggest_transfer`**:
+If True, logs messages about when Storage Transfer Service might be a better
+tool than gcloud storage.
+
+**`thread_count`**:
+The number of threads parallel execution should use per process. When
+process_count and thread_count are both 1, commands use sequential execution.
+
+**`tracker_files_directory`**:
+Directory path to tracker files for resumable operations.
+
+**`upload_chunk_size`**:
+Chunk size used for uploading to clouds.
+
+**`use_gcloud_crc32c`**:
+If True, data integrity checks use a binary subprocess to calculate CRC32C
+hashes with the included gcloud-crc32c tool rather than the google-crc32c Python
+library. This behavior is also triggered when the google-crc32c Python library
+is unavailable even if this property is False.
+
+**`use_gsutil`**:
+If True, use the deprecated upload implementation which uses gsutil.
+
+**`use_magicfile`**:
+If True, uses the `file --mime <filename>` command to guess
+content types instead of the default filename extension-based mechanism.
+Available on UNIX and macOS (and possibly on Windows, if you're running Cygwin
+or some other package that provides implementations of UNIX-like commands). When
+available and enabled use_magicfile should be more robust because it analyzes
+file contents in addition to extensions.
+
+**`use_threading_local`**:
+If True, reuses some resource if they are already declared on a thread. If
+False, creates duplicates of resources like API clients on the same thread.
+Turning off can help with some bugs but will hurt performance.
+
+**`survey`**:
+**`disable_prompts`**:
+If True, gcloud will not prompt you to take periodic usage experience surveys.
+
+**`vmware`**:
+**`region`**:
+Default region to use when working with VMware Engine resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`workstations`**:
+**`cluster`**:
+Default cluster to use when working with Workstations resources. When a
+`--cluster` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`config`**:
+Default configuration to use when working with Workstations resources. When a
+`--config` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**`region`**:
+Default region to use when working with Workstations resources. When a
+`--region` flag is required but not provided, the command will fall
+back to this value, if set.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha config set
+```
+
+```
+gcloud beta config set
+```
+
+```
+gcloud preview config set
+```

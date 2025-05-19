@@ -1,0 +1,200 @@
+# gcloud alpha bigtable tables create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create)*
+
+**NAME**
+
+: **gcloud alpha bigtable tables create - create a new Cloud Bigtable table**
+
+**SYNOPSIS**
+
+: **`gcloud alpha bigtable tables create` (`[TABLE](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#TABLE)` : `[--instance](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--instance)`=`INSTANCE`) `[--column-families](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--column-families)`=[`COLUMN_FAMILIES`,…] [`[--change-stream-retention-period](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--change-stream-retention-period)`=`CHANGE_STREAM_RETENTION_PERIOD`] [`[--deletion-protection](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--deletion-protection)`] [`[--row-key-schema-definition-file](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--row-key-schema-definition-file)`=`ROW_KEY_SCHEMA_DEFINITION_FILE`] [`[--row-key-schema-pre-encoded-bytes](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--row-key-schema-pre-encoded-bytes)`] [`[--splits](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--splits)`=[`SPLITS`,…]] [`[--tiered-storage-infrequent-access-older-than](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--tiered-storage-infrequent-access-older-than)`=`TIERED_STORAGE_INFREQUENT_ACCESS_OLDER_THAN`] [`[--automated-backup-retention-period](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--automated-backup-retention-period)`=`AUTOMATED_BACKUP_RETENTION_PERIOD`     | `[--enable-automated-backup](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#--enable-automated-backup)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/bigtable/tables/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` Create a new Cloud Bigtable table.
+
+**EXAMPLES**
+
+: To create a table `my-table` in instance `my-instance`
+with a column family `my-family`, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family"
+```
+
+To create a table that has a column family named `my-instance`, a
+garbage collection policy that lets data expire after 864,000 seconds, and
+initial table splits on row keys `car` and `key`, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family:maxage=864000s" --splits=car,key
+```
+
+To create a table `my-table` in instance `my-instance`
+that lets data in column family `my-family1` expire after 10 days and
+keeps a maximum of 5 cells per column in column family `my-family-2`
+if the data is less than 5 days old, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family-1:maxage=10d,my-family-2:maxversions=5||maxage=5d"
+```
+
+To create a table `my-table` that has one column family
+`my-family` that lets data expire after 10 days, and to enable a
+change stream for the table to be kept for 7 days, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family:maxage=10d" --change-stream-retention-period=7d
+```
+
+To create a deletion-protected table `my-table` in instance
+`my-instance` with a column family `my-family`, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family" --deletion-protection
+```
+
+To create a table `my-table` without deletion protection in instance
+`my-instance` with a column family `my-family`, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family" --no-deletion-protection
+```
+
+To create a table `my-table` with the default automated backup policy
+(retention_period=7d, frequency=1d) enabled in instance `my-instance`
+with a column family `my-family`, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family" --enable-automated-backup
+```
+
+To create a table `my-table` with a custom automated backup policy
+configured to retain backups for 30 days in instance `my-instance`
+with a column family `my-family`, run:
+
+```
+gcloud alpha bigtable tables create my-table --instance=my-instance --column-families="my-family" --automated-backup-retention_period=30d
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **Table resource - Cloud Bigtable table to create. The arguments in this group can
+be used to specify the attributes of this resource. (NOTE) Some attributes are
+not given arguments in this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `table` on the command line with a fully
+specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+This must be specified.
+
+**`TABLE`**:
+ID of the table or fully qualified identifier for the table.
+To set the `table` attribute:
+
+- provide the argument `table` on the command line.
+
+This positional argument must be specified if any of the other arguments in this
+group are specified.
+
+**--instance**:
+Name of the Cloud Bigtable instance.
+To set the `instance` attribute:
+
+- provide the argument `table` on the command line with a fully
+specified name;
+- provide the argument `--instance` on the command line.**
+
+**REQUIRED FLAGS**
+
+: **--column-families**:
+A double-quote (`"`) wrapped list of family name and corresponding
+garbage collection rules concatenated by `:`, where the rules are
+optional. For example: \
+`"family_1,family_2:maxage=5d&&maxversions=2,family_3:maxage=10d||maxversions=5"`
+
+**OPTIONAL FLAGS**
+
+: **--change-stream-retention-period**:
+The length of time to retain change stream data for the table, in the range of
+[1 day, 7 days]. Acceptable units are days (d), hours (h), minutes (m), and
+seconds (s). Passing in a value for this option enables a change stream for the
+table. Examples: `5d` or `48h`.
+
+**--deletion-protection**:
+Once specified, the table is deletion protected.
+
+**--row-key-schema-definition-file**:
+The row key schema for the table. The schema is defined in a YAML or JSON file,
+equivalent to the StructType protobuf message.
+Example YAML:
+
+```
+encoding:
+  delimitedBytes:
+    delimiter: '#'
+fields:
+- fieldName: field1
+  type:
+    bytesType:
+      encoding:
+        raw: {}
+- fieldName: field2
+  type:
+    bytesType:
+      encoding:
+        raw: {}
+```
+
+**--row-key-schema-pre-encoded-bytes**:
+By default, Base64 encoding is applied to all binary fields in the YAML/JSON
+file (for example, `encoding.delimitedBytes.delimiter`).
+Use this to indicate that all binary fields are already encoded in the YAML/JSON
+file and should not be encoded again.
+
+**--splits**:
+Row keys where the table should initially be split. For example:
+`car,key`
+
+**--tiered-storage-infrequent-access-older-than**:
+The age at which data should be moved to infrequent access storage.
+See `$ [gcloud topic
+datetimes](https://cloud.google.com/sdk/gcloud/reference/topic/datetimes)` for information on absolute duration formats.
+
+**--automated-backup-retention-period**
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**API REFERENCE**
+
+: This command uses the `bigtableadmin/v2` API. The full documentation
+for this API can be found at: [https://cloud.google.com/bigtable/](https://cloud.google.com/bigtable/)
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist. These variants are also available:
+
+```
+gcloud bigtable tables create
+```
+
+```
+gcloud beta bigtable tables create
+```

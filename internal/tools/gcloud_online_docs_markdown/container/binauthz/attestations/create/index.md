@@ -1,0 +1,145 @@
+# gcloud container binauthz attestations create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create)*
+
+**NAME**
+
+: **gcloud container binauthz attestations create - create a Binary Authorization attestation**
+
+**SYNOPSIS**
+
+: **`gcloud container binauthz attestations create` `[--artifact-url](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--artifact-url)`=`ARTIFACT_URL` `[--public-key-id](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--public-key-id)`=`PUBLIC_KEY_ID` `[--signature-file](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--signature-file)`=`SIGNATURE_FILE` [`[--payload-file](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--payload-file)`=`PAYLOAD_FILE`] [[`[--note](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--note)`=`NOTE` : `[--note-project](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--note-project)`=`NOTE_PROJECT`]     | `[--validate](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--validate)` [`[--attestor](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--attestor)`=`ATTESTOR` : `[--attestor-project](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#--attestor-project)`=`ATTESTOR_PROJECT`]] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/container/binauthz/attestations/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: This command creates a Binary Authorization attestation for your project. The
+attestation is created for the specified artifact (e.g. a gcr.io container URL),
+associate with the specified attestor, and stored under the specified project.
+
+**EXAMPLES**
+
+: To create an attestation in the project "my_proj" as the attestor with resource
+path "projects/foo/attestors/bar", run:
+
+```
+gcloud container binauthz attestations create --project=my_proj --artifact-url='gcr.io/example-project/example-image@sha256:abcd' --attestor=projects/foo/attestors/bar --signature-file=signed_artifact_attestation.pgp.sig --public-key-id=AAAA0000000000000000FFFFFFFFFFFFFFFFFFFF
+```
+
+To create an attestation in the project "my_proj" in note
+"projects/foo/notes/bar", run:
+
+```
+gcloud container binauthz attestations create --project=my_proj --artifact-url='gcr.io/example-project/example-image@sha256:abcd' --note=projects/foo/notes/bar --signature-file=signed_artifact_attestation.pgp.sig --public-key-id=AAAA0000000000000000FFFFFFFFFFFFFFFFFFFF
+```
+
+**REQUIRED FLAGS**
+
+: **--artifact-url**:
+Container URL. May be in the `gcr.io/repository/image` format, or may
+optionally contain the `http` or `https` scheme
+
+**--public-key-id**:
+The ID of the public key that will be used to verify the signature of the
+created Attestation. This ID must match the one found on the Attestor
+resource(s) which will verify this Attestation.
+For PGP keys, this must be the version 4, full 160-bit fingerprint, expressed as
+a 40 character hexadecimal string. See [https://tools.ietf.org/html/rfc4880#section-12.2](https://tools.ietf.org/html/rfc4880#section-12.2)
+for details.
+
+**--signature-file**:
+Path to file containing the signature to store, or `-` to read
+signature from stdin.
+
+**OPTIONAL FLAGS**
+
+: **--payload-file**:
+Path to file containing the payload over which the signature was calculated.
+This defaults to the output of the standard payload command:
+
+```
+gcloud container binauthz create-signature-payload
+```
+
+NOTE: If you sign a payload with e.g. different whitespace or formatting, you
+must explicitly provide the payload content via this flag.
+
+**At most one of these can be specified:
+
+**Note resource - The Container Analysis Note which will be used to host the
+created attestation. In order to successfully attach the attestation, the active
+gcloud account (core/account) must have the
+`containeranalysis.notes.attachOccurrence` permission for the Note
+(usually via the `containeranalysis.notes.attacher` role). The
+arguments in this group can be used to specify the attributes of this resource.
+
+**--note**:
+ID of the note or fully qualified identifier for the note.
+To set the `note` attribute:
+
+- provide the argument `--note` on the command line.
+
+This flag argument must be specified if any of the other arguments in this group
+are specified.
+
+**--note-project**:
+The Container Analysis project for the note.
+To set the `project` attribute:
+
+- provide the argument `--note` on the command line with a fully
+specified name;
+- provide the argument `--note-project` on the command line.**
+
+**--validate**:
+Whether to validate that the Attestation can be verified by the provided
+Attestor.
+
+**Attestor resource - The Attestor whose Container Analysis Note will be used to
+host the created attestation. In order to successfully attach the attestation,
+the active gcloud account (core/account) must be able to read this attestor and
+must have the `containeranalysis.notes.attachOccurrence` permission
+for the Attestor's underlying Note resource (usually via the
+`containeranalysis.notes.attacher` role). The arguments in this group
+can be used to specify the attributes of this resource.
+
+**--attestor**:
+ID of the attestor or fully qualified identifier for the attestor.
+To set the `name` attribute:
+
+- provide the argument `--attestor` on the command line.
+
+This flag argument must be specified if any of the other arguments in this group
+are specified.
+
+**--attestor-project**:
+Project ID of the Google Cloud project for the attestor.
+To set the `project` attribute:
+
+- provide the argument `--attestor` on the command line with a fully
+specified name;
+- provide the argument `--attestor-project` on the command line;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.****
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha container binauthz attestations create
+```
+
+```
+gcloud beta container binauthz attestations create
+```

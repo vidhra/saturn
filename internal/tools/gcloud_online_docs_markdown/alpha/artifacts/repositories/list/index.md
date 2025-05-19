@@ -1,0 +1,169 @@
+# gcloud alpha artifacts repositories list  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list)*
+
+**NAME**
+
+: **gcloud alpha artifacts repositories list - list repositories in the specified project**
+
+**SYNOPSIS**
+
+: **`gcloud alpha artifacts repositories list` [`[--location](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list#--location)`=`LOCATION`] [`[--filter](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list#--filter)`=`EXPRESSION`] [`[--limit](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list#--limit)`=`LIMIT`] [`[--page-size](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list#--page-size)`=`PAGE_SIZE`] [`[--sort-by](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list#--sort-by)`=[`FIELD`,…]] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/alpha/artifacts/repositories/list#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(ALPHA)` List all Artifact Registry repositories in the specified
+project.
+To specify the maximum number of repositories to list, use the --limit flag.
+
+**EXAMPLES**
+
+: The following command lists a maximum of five repositories:
+
+```
+gcloud alpha artifacts repositories list --limit=5
+```
+
+To list repositories with name as `my_repo`:
+
+```
+gcloud alpha artifacts repositories list --filter='name="projects/my-project/locations/us/repositories/my_repo"'
+```
+
+To list repositories with a given partial name, use `*` to match any
+character in name:
+
+```
+gcloud alpha artifacts repositories list --filter='name="projects/my-project/locations/us/repositories/*repo"'
+```
+
+```
+gcloud alpha artifacts repositories list --filter='name="projects/my-project/locations/us/repositories/my_*"'
+```
+
+To list files that have annotations:
+
+```
+gcloud alpha artifacts repositories list --filter=annotations:*
+```
+
+To list repositories with annotations pair as [annotation_key: annotation_value]
+
+```
+gcloud alpha artifacts repositories list --filter='annotations.annotation_key:annotation_value'
+```
+
+To list repositories with annotations containing key as `my_key`:
+
+```
+gcloud alpha artifacts repositories list --filter='annotations.my_key'
+```
+
+If the key or value contains special characters, such as `my.key` or
+`my.value`, backtick("`") is required:
+
+```
+gcloud alpha artifacts repositories list --filter='annotations.`my.key`'
+```
+
+```
+gcloud alpha artifacts repositories list --filter='annotations.`my.key`:`my.value`'
+```
+
+To list repositories with given partial annotation key or value, use`*`to match any character:
+
+```
+gcloud alpha artifacts repositories list --filter='annotations.*key:`*.value`'
+```
+
+To list repositories ordered by create_time:
+
+```
+gcloud alpha artifacts repositories list --sort-by=create_time
+```
+
+To list repositories ordered by update_time reversely:
+
+```
+gcloud alpha artifacts repositories list--sort-by=~update_time
+````
+
+**FLAGS**
+
+: **Location resource - The Artifact Registry repository location. You can also set
+--location=all to list repositories across all locations. If you omit this flag,
+the default location is used if you set the artifacts/location property.
+Otherwise, omitting this flag lists repositories across all locations. This
+represents a Cloud resource. (NOTE) Some attributes are not given arguments in
+this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `--location` on the command line with a fully
+specified name;
+- set the property `artifacts/location` with a fully specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+**--location**:
+ID of the location or fully qualified identifier for the location.
+To set the `location` attribute:
+
+- provide the argument `--location` on the command line;
+- set the property `artifacts/location`.**
+
+**LIST COMMAND FLAGS**
+
+: **--filter**:
+Apply a Boolean filter `EXPRESSION` to each resource item
+to be listed. If the expression evaluates `True`, then that item is
+listed. For more details and examples of filter expressions, run $ [gcloud topic filters](https://cloud.google.com/sdk/gcloud/reference/topic/filters). This flag
+interacts with other flags that are applied in this order:
+`--flatten`, `--sort-by`, `--filter`,
+`--limit`.
+
+**--limit**:
+Maximum number of resources to list. The default is `unlimited`. This
+flag interacts with other flags that are applied in this order:
+`--flatten`, `--sort-by`, `--filter`,
+`--limit`.
+
+**--page-size**:
+Some services group resource list output into pages. This flag specifies the
+maximum number of resources per page. The default is determined by the service
+if it supports paging, otherwise it is `unlimited` (no paging).
+Paging may be applied before or after `--filter` and
+`--limit` depending on the service.
+
+**--sort-by**:
+Comma-separated list of resource field key names to sort by. The default order
+is ascending. Prefix a field with ``~´´ for descending order on that
+field. This flag interacts with other flags that are applied in this order:
+`--flatten`, `--sort-by`, `--filter`,
+`--limit`.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: This command is currently in alpha and might change without notice. If this
+command fails with API permission errors despite specifying the correct project,
+you might be trying to access an API with an invitation-only early access
+allowlist. These variants are also available:
+
+```
+gcloud artifacts repositories list
+```
+
+```
+gcloud beta artifacts repositories list
+```

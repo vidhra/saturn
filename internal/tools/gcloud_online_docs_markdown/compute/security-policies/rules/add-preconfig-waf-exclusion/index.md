@@ -1,0 +1,147 @@
+# gcloud compute security-policies rules add-preconfig-waf-exclusion  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion)*
+
+**NAME**
+
+: **gcloud compute security-policies rules add-preconfig-waf-exclusion - add an exclusion configuration for preconfigured WAF evaluation into a security policy rule**
+
+**SYNOPSIS**
+
+: **`gcloud compute security-policies rules add-preconfig-waf-exclusion` `[PRIORITY](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#PRIORITY)` `[--target-rule-set](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--target-rule-set)`=`TARGET_RULE_SET` [`[--region](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--region)`=`REGION`] [`[--request-cookie-to-exclude](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--request-cookie-to-exclude)`=[`op`=`OP`],[`val`=`VAL`]] [`[--request-header-to-exclude](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--request-header-to-exclude)`=[`op`=`OP`],[`val`=`VAL`]] [`[--request-query-param-to-exclude](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--request-query-param-to-exclude)`=[`op`=`OP`],[`val`=`VAL`]] [`[--request-uri-to-exclude](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--request-uri-to-exclude)`=[`op`=`OP`],[`val`=`VAL`]] [`[--security-policy](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--security-policy)`=`SECURITY_POLICY`] [`[--target-rule-ids](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#--target-rule-ids)`=[`RULE_ID`,…]] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/compute/security-policies/rules/add-preconfig-waf-exclusion#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `gcloud compute security-policies rules add-preconfig-waf-exclusion`
+is used to add an exclusion configuration for preconfigured WAF evaluation into
+a security policy rule.
+Note that request field exclusions are associated with a target, which can be a
+single rule set, or a rule set plus a list of rule IDs under the rule set.
+
+**EXAMPLES**
+
+: To add specific request field exclusions that are associated with the target of
+'sqli-stable': ['owasp-crs-v030001-id942110-sqli',
+'owasp-crs-v030001-id942120-sqli'], run:
+
+```
+gcloud compute security-policies rules add-preconfig-waf-exclusion 1000 --security-policy=my-policy --target-rule-set=sqli-stable --target-rule-ids=owasp-crs-v030001-id942110-sqli,owasp-crs-v030001-id942120-sqli --request-header-to-exclude=op=EQUALS,val=abc --request-header-to-exclude=op=STARTS_WITH,val=xyz --request-uri-to-exclude=op=EQUALS_ANY
+```
+
+To add specific request field exclusions that are associated with the target of
+'sqli-stable': [], run:
+
+```
+gcloud compute security-policies rules add-preconfig-waf-exclusion 1000 --security-policy=my-policy --target-rule-set=sqli-stable --request-cookie-to-exclude=op=EQUALS_ANY
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`PRIORITY`**:
+The priority of the rule to add the exclusion configuration for preconfigured
+WAF evaluation. Rules are evaluated in order from highest priority to lowest
+priority where 0 is the highest priority and 2147483647 is the lowest priority.
+
+**REQUIRED FLAGS**
+
+: **--target-rule-set**:
+Target WAF rule set where the request field exclusions being added would apply.
+This, together with the target rule IDs (if given), determines the target for
+associating request field exclusions. See `--target-rule-ids`.
+
+**OPTIONAL FLAGS**
+
+: **--region**:
+Region of the security policy to add the exclusion configuration for
+preconfigured WAF evaluation. If not specified, you might be prompted to select
+a region (interactive mode only).
+A list of regions can be fetched by running:
+
+```
+gcloud compute regions list
+```
+
+Overrides the default `compute/region` property value for this
+command invocation.
+
+**--request-cookie-to-exclude**:
+Adds a request cookie to the request field exclusions associated with the rule
+set and rule IDs (if given). This specifies a request cookie whose value will be
+excluded from inspection during preconfigured WAF evaluation.
+You can specify an exact match or a partial match by using a field operator and
+a field value. Available field operators are:
+
+- ``EQUALS``: the operator matches if the field
+value equals the specified value.
+- ``STARTS_WITH``: the operator matches if the
+field value starts with the specified value.
+- ``ENDS_WITH``: the operator matches if the
+field value ends with the specified value.
+- ``CONTAINS``: the operator matches if the field
+value contains the specified value.
+- ``EQUALS_ANY``: the operator matches if the
+field value is any value.
+
+A field value must be given if the field operator is not
+``EQUALS_ANY``, and cannot be given if the
+field operator is ``EQUALS_ANY``. For example,
+`--request-header-to-exclude op=EQUALS,val=abc` or
+`--request-header-to-exclude op=EQUALS_ANY`.
+This flag can be repeated to specify multiple request headers to exclude. For
+example, `--request-header-to-exclude op=EQUALS,val=abc
+--request-header-to-exclude op=STARTS_WITH,val=xyz`.
+
+**--request-header-to-exclude**:
+Adds a request header to the request field exclusions associated with the rule
+set and rule IDs (if given). This specifies a request header whose value will be
+excluded from inspection during preconfigured WAF evaluation.
+Refer to the syntax under `--request-cookie-to-exclude`.
+This flag can be repeated to specify multiple request headers.
+
+**--request-query-param-to-exclude**:
+Adds a request query parameter to the request field exclusions associated with
+the rule set and rule IDs (if given). This specifies a request query parameter
+in the query string or in the POST body whose value will be excluded from
+inspection during preconfigured WAF evaluation.
+Refer to the syntax under `--request-cookie-to-exclude`.
+This flag can be repeated to specify multiple request query parameters.
+
+**--request-uri-to-exclude**:
+Adds a request URI to the request field exclusions associated with the rule set
+and rule IDs (if given). This specifies a request URI from the request line to
+be excluded from inspection during preconfigured WAF evaluation.
+Refer to the syntax under `--request-cookie-to-exclude`.
+This flag can be repeated to specify multiple request URIs.
+
+**--security-policy**:
+The security policy that this rule belongs to.
+
+**--target-rule-ids**:
+A comma-separated list of target rule IDs under the WAF rule set where the
+request field exclusions being added would apply. If omitted, the added request
+field exclusions will be associated with the rule set only, which would apply to
+all the rule IDs under the rule set.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha compute security-policies rules add-preconfig-waf-exclusion
+```
+
+```
+gcloud beta compute security-policies rules add-preconfig-waf-exclusion
+```

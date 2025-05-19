@@ -1,0 +1,168 @@
+# gcloud app deploy  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/app/deploy](https://cloud.google.com/sdk/gcloud/reference/app/deploy)*
+
+**NAME**
+
+: **gcloud app deploy - deploy the local code and/or configuration of your app to App Engine**
+
+**SYNOPSIS**
+
+: **`gcloud app deploy` [`[DEPLOYABLES](https://cloud.google.com/sdk/gcloud/reference/app/deploy#DEPLOYABLES)` …] [`[--appyaml](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--appyaml)`=`APPYAML`] [`[--bucket](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--bucket)`=`BUCKET`] [`[--no-cache](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--cache)`] [`[--ignore-file](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--ignore-file)`=`IGNORE_FILE`] [`[--image-url](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--image-url)`=`IMAGE_URL`] [`[--no-promote](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--promote)`] [`[--service-account](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--service-account)`=`SERVICE_ACCOUNT`] [`[--no-stop-previous-version](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--stop-previous-version)`] [`[--version](https://cloud.google.com/sdk/gcloud/reference/app/deploy#--version)`=`VERSION`, `[-v](https://cloud.google.com/sdk/gcloud/reference/app/deploy#-v)` `[VERSION](https://cloud.google.com/sdk/gcloud/reference/app/deploy#VERSION)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/app/deploy#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: This command is used to deploy both code and configuration to the App Engine
+server. As an input it takes one or more DEPLOYABLES that should be uploaded. A
+DEPLOYABLE can be a service's .yaml file or a configuration's .yaml file (for
+more information about configuration files specific to your App Engine
+environment, refer to [https://cloud.google.com/appengine/docs/standard/configuration-files](https://cloud.google.com/appengine/docs/standard/configuration-files)
+or https://cloud.google.com/appengine/docs/flexible/configuration-files). Note,
+for Java 8 Standard apps or Java 11/17/21 Standard apps using bundled services,
+you must add the path to the appengine-web.xml file inside the WEB-INF
+directory. gcloud app deploy skips files specified in the .gcloudignore file
+(see gcloud topic gcloudignore for more information). For Java 11 Standard, you
+can either use the yaml file, a Maven pom.xml, or a Gradle build.gradle.
+Alternatively, if the application is a single self-contained jar, you can give
+the path to the jar and a simple service configuration will be generated. You
+can deploy Java 11 Maven source projects by specifying the location of your
+project's pom.xml file, and it will be built and deployed using App Engine
+Buildpacks.
+
+**EXAMPLES**
+
+: To deploy a single service, run:
+
+```
+gcloud app deploy ~/my_app/app.yaml
+```
+
+To deploy an App Engine Standard Java8 service or a Java11 service using bundled
+services, run:
+
+```
+gcloud app deploy ~/my_app/WEB-INF/appengine-web.xml
+```
+
+To deploy an App Engine Standard Java11 single jar, run:
+
+```
+gcloud app deploy ~/my_app/my_jar.jar
+```
+
+To deploy an App Engine Standard Java11 Maven source project, run:
+
+```
+gcloud app deploy ~/my_app/pom.xml
+```
+
+To deploy an App Engine Standard Java11 Gradle source project, run:
+
+```
+gcloud app deploy ~/my_app/build.gradle
+```
+
+By default, the service is deployed to the current project configured via:
+
+```
+gcloud config set core/project PROJECT
+```
+
+To override this value for a single deployment, use the
+``--project`` flag:
+
+```
+gcloud app deploy ~/my_app/app.yaml --project=PROJECT
+```
+
+To deploy multiple services, run:
+
+```
+gcloud app deploy ~/my_app/app.yaml ~/my_app/another_service.yaml
+```
+
+To change the default --promote behavior for your current environment, run:
+
+```
+gcloud config set app/promote_by_default false
+```
+
+To deploy a service that will run as a service account, run:
+
+```
+gcloud app deploy ~/my_app/app.yaml --service-account=SERVICE_ACCOUNT
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **[`DEPLOYABLES` …]**:
+The yaml files for the services or configurations you want to deploy. If not
+given, defaults to `app.yaml` in the current directory. If that is
+not found, attempts to automatically generate necessary configuration files
+(such as app.yaml) in the current directory.
+
+**FLAGS**
+
+: **--appyaml**:
+Deploy with a specific app.yaml that will replace the one defined in the
+DEPLOYABLE.
+
+**--bucket**:
+The Google Cloud Storage bucket used to stage files associated with the
+deployment. If this argument is not specified, the application's default code
+bucket is used.
+
+**--cache**:
+Enable caching mechanisms involved in the deployment process, particularly in
+the build step. Enabled by default, use `--no-cache` to disable.
+
+**--ignore-file**:
+Override the .gcloudignore file and use the specified file instead.
+
+**--image-url**:
+(App Engine flexible environment only.) Deploy with a specific Docker image.
+Docker url must be from one of the valid Artifact Registry hostnames.
+
+**--promote**:
+Promote the deployed version to receive all traffic. Overrides the default
+`app/promote_by_default` property value for this command invocation.
+Use `--no-promote` to disable.
+
+**--service-account**:
+The service account that this deployed version will run as. If this argument is
+not specified, the App Engine default service account will be used for your
+current deployed version.
+
+**--stop-previous-version**:
+Stop the previously running version when deploying a new version that receives
+all traffic.
+Note that if the version is running on an instance of an auto-scaled service in
+the App Engine Standard environment, using `--stop-previous-version`
+will not work and the previous version will continue to run because auto-scaled
+service instances are always running.
+Overrides the default `app/stop_previous_version` property value for
+this command invocation. Use `--no-stop-previous-version` to disable.
+
+**--version**:
+The version of the app that will be created or replaced by this deployment. If
+you do not specify a version, one will be generated for you.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: This variant is also available:
+
+```
+gcloud beta app deploy
+```

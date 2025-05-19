@@ -1,0 +1,82 @@
+# gcloud beta active-directory domains migration disable  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/beta/active-directory/domains/migration/disable](https://cloud.google.com/sdk/gcloud/reference/beta/active-directory/domains/migration/disable)*
+
+**NAME**
+
+: **gcloud beta active-directory domains migration disable - disable domain migration permissions on a Managed Microsoft AD domain**
+
+**SYNOPSIS**
+
+: **`gcloud beta active-directory domains migration disable` `[DOMAIN](https://cloud.google.com/sdk/gcloud/reference/beta/active-directory/domains/migration/disable#DOMAIN)` [`[--async](https://cloud.google.com/sdk/gcloud/reference/beta/active-directory/domains/migration/disable#--async)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/beta/active-directory/domains/migration/disable#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: `(BETA)` Disable domain migration permissions on a Managed Microsoft
+AD domain.
+This command can fail for the following reasons:
+
+- The specified domain doesn't exist.
+- The specified domain is either being created or updated.
+- The active account doesn't have permission to disable migration permissions on
+the specified domain.
+
+**EXAMPLES**
+
+: The following command disables migration permissions on the domain
+`my-domain.com` in project `my-project`.
+
+```
+gcloud beta active-directory domains migration disable my-domain.com --project=my-project --async
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **Domain resource - Name of the Managed Microsoft AD domain on which you want to
+disable migration permissions. This represents a Cloud resource. (NOTE) Some
+attributes are not given arguments in this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `domain` on the command line with a fully
+specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+This must be specified.
+
+**`DOMAIN`**:
+ID of the domain or fully qualified identifier for the domain.
+To set the `domain` attribute:
+
+- provide the argument `domain` on the command line.**
+
+**FLAGS**
+
+: **--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**API REFERENCE**
+
+: This command uses the `managedidentities/v1beta1` API. The full
+documentation for this API can be found at: [https://cloud.google.com/managed-microsoft-ad/](https://cloud.google.com/managed-microsoft-ad/)
+
+**NOTES**
+
+: This command is currently in beta and might change without notice. This variant
+is also available:
+
+```
+gcloud alpha active-directory domains migration disable
+```
