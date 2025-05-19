@@ -41,6 +41,26 @@ class OpenAILLM(BaseLLMInterface):
         except Exception as e:
             raise RuntimeError(f"Error initializing AsyncOpenAI client: {e}")
 
+    async def agenerate(self, messages: List[Dict[str, str]]) -> Any:
+        """
+        Generate a response from the LLM using the provided messages.
+        
+        Args:
+            messages: List of message dictionaries with 'role' and 'content' keys
+            
+        Returns:
+            The raw response from the LLM
+        """
+        try:
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=messages
+            )
+            return response
+        except Exception as e:
+            print(f"Error during OpenAI API call: {e}")
+            raise
+
     async def get_tool_calls(
         self,
         query: str,

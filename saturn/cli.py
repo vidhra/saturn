@@ -10,7 +10,7 @@ from rich.panel import Panel
 from .config import load_config
 from .orchestrator import run_query_with_feedback # Use the loop version
 from .knowledge_base import KnowledgeBase
-from .gcp_executor import GcpExecutor
+from .gcp_executor import GcloudExecutor
 
 # Load environment variables from .env file if present
 load_dotenv()
@@ -71,18 +71,20 @@ def run_command(
 
     # --- Initialize Components & Run --- 
     try:
-        console.print(f"Loading API definitions from: {kb_path}")
-        kb = KnowledgeBase(kb_path)
-        # Removed kb.build_definitions() - assuming handled in __init__
-        executor = GcpExecutor(config)
+        # Initialize components (KnowledgeBase, GcloudExecutor, LLMInterface)
+        console.print("Initializing components...")
+        kb_path = config.get('knowledge_base_path', 'api_defs')
+        kb = KnowledgeBase(kb_path) # KB is still initialized for other potential uses or if re-added
+        executor = GcloudExecutor(config)
+        # LLM Interface is now initialized directly within run_query_with_feedback
         console.print("Components initialized.")
 
         console.print("--- Starting Orchestrator ---")
-        asyncio.run(run_query_with_feedback(query, config, kb, executor, config['max_retries'], verbose))
+        asyncio.run(run_query_with_feedback(query, config, executor, config.get('max_retries', 5), verbose))
 
     except FileNotFoundError:
-         console.print(f"[bold red]ERROR:[/] Knowledge Base directory '{kb_path}' not found.")
-         raise typer.Exit(code=1)
+        console.print(f"[bold red]ERROR:[/] Knowledge Base directory '{kb_path}' not found.")
+        raise typer.Exit(code=1)
     except Exception as e:
         console.print(f"[bold red]\n--- An unexpected error occurred --- [/bold red]")
         console.print_exception(show_locals=False)
