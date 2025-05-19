@@ -16,6 +16,19 @@ class BaseLLMInterface(abc.ABC):
         pass
 
     @abc.abstractmethod
+    async def agenerate(self, messages: List[Dict[str, str]]) -> Any:
+        """
+        Generate a response from the LLM using the provided messages.
+        
+        Args:
+            messages: List of message dictionaries with 'role' and 'content' keys
+            
+        Returns:
+            The raw response from the LLM
+        """
+        pass
+
+    @abc.abstractmethod
     async def get_tool_calls(
         self,
         query: str,
