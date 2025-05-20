@@ -2,19 +2,21 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Any, List, Optional
+import uuid # For generating unique IDs
 
 # Use rich console for logging within the recorder itself
 from rich.console import Console
 
 console = Console()
 
-STATE_FILE_PATH = "saturn_run_state.json"
+# STATE_FILE_PATH = "saturn_run_state.json" # No longer a fixed path
 
 class RunStateLogger:
     """Handles recording and saving the state of an orchestrator run."""
 
     def __init__(self, query: str):
         self.run_start_time = datetime.now().isoformat()
+        self.query = query # Store query for filename generation
         self.run_state_data = {
             "run_info": {
                 "query": query,
@@ -58,7 +60,7 @@ class RunStateLogger:
                 "current_status": initial_status,
                 "output": None,
                 "error": None,
-                "dependencies": self.run_state_data["dag"]["nodes"].get(node_id, {}).get("dependencies", [])
+                "dependencies": self.run_state_data["dag"].get("nodes", {}).get(node_id, {}).get("dependencies", [])
             }
             console.print(f"[grey50][StateLogger] Node '{node_id}' initialized as {initial_status}.[/grey50]")
 
@@ -81,7 +83,7 @@ class RunStateLogger:
                 self.run_state_data["nodes"][node_id]["error"] = None
             else:
                 self.run_state_data["nodes"][node_id]["output"] = None
-                self.run_state_data["nodes"][node_id]["error"] = str(result_or_error)
+                self.run_state_data["nodes"][node_id]["error"] = str(result_or_error) # Ensure error is stringified
             console.print(f"[grey50][StateLogger] Node '{node_id}' result recorded (Success: {success}).[/grey50]")
         else:
             console.print(f"[bold yellow][StateLogger] Warning:[/] Tried to record result for unknown node_id: {node_id}")
@@ -89,9 +91,9 @@ class RunStateLogger:
     def get_dag_summary(self) -> Dict[str, Any]:
         """Returns a summary of the DAG structure and execution state."""
         return {
-            "total_nodes": len(self.run_state_data["dag"]["nodes"]),
-            "total_edges": len(self.run_state_data["dag"]["edges"]),
-            "execution_order": self.run_state_data["dag"]["execution_order"],
+            "total_nodes": len(self.run_state_data["dag"].get("nodes", {})),
+            "total_edges": len(self.run_state_data["dag"].get("edges", [])),
+            "execution_order": self.run_state_data["dag"].get("execution_order", []),
             "node_states": {
                 node_id: node_data["current_status"]
                 for node_id, node_data in self.run_state_data["nodes"].items()
@@ -103,14 +105,32 @@ class RunStateLogger:
         self.run_state_data["run_info"]["final_status"] = status
         if errors:
             self.run_state_data["run_info"]["final_errors"] = errors
+        else: # Ensure it's explicitly null if no errors
+            self.run_state_data["run_info"]["final_errors"] = None
 
     def save_state(self):
-        """Writes the accumulated run state to the JSON file."""
+        """Writes the accumulated run state to a uniquely named JSON file in a 'logs' directory."""
         self.run_state_data["run_info"]["end_time"] = datetime.now().isoformat()
+        
+        log_dir = "logs"
+        os.makedirs(log_dir, exist_ok=True)
+        
+        # Sanitize query for filename or use a UUID for simplicity if query is too complex/long
+        # Using a simple alphanumeric sanitize for now
+        safe_query_part = "".join(c if c.isalnum() else "_" for c in self.query)[:50] 
+        if not safe_query_part: # handle empty or fully non-alphanumeric query
+            safe_query_part = "run"
+            
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        unique_id = uuid.uuid4().hex[:8] # Add a short unique ID to prevent collisions on same second
+        
+        filename = f"saturn_run_{safe_query_part}_{timestamp}_{unique_id}.json"
+        filepath = os.path.join(log_dir, filename)
+        
         try:
-            console.print(f"[info]Writing final run state to [cyan]{STATE_FILE_PATH}[/cyan]...[/info]")
-            with open(STATE_FILE_PATH, 'w') as f:
+            console.print(f"[info]Writing final run state to [cyan]{filepath}[/cyan]...[/info]")
+            with open(filepath, 'w') as f:
                 json.dump(self.run_state_data, f, indent=2)
-            console.print("[info]State file written successfully.[/info]")
+            console.print(f"[info]State file [cyan]{filename}[/cyan] written successfully to [magenta]{log_dir}/[/magenta].[/info]")
         except Exception as e:
-            console.print(f"[bold red]Error:[/] Failed to write state file {STATE_FILE_PATH}: {e}") 
+            console.print(f"[bold red]Error:[/] Failed to write state file {filepath}: {e}") 

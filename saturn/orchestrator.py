@@ -4,12 +4,14 @@ import asyncio
 import traceback
 import json_repair
 import re # Import re for parsing
+import shlex # Import shlex for robust command splitting
 from pydantic import BaseModel, Field, ConfigDict # Keep Pydantic for potential future use, but ToolCall/ToolCalls are removed
 from typing import List, Dict, Any, Optional, Tuple
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.syntax import Syntax
+from rich.table import Table # Import Table for better display
 
 from .gcp_executor import GcloudExecutor
 from model.llm.base_interface import BaseLLMInterface
@@ -58,88 +60,76 @@ def load_gcloud_docs():
         console.print(f"[yellow]Warning: Could not read gcloud documentation: {e}[/yellow]")
         GCLOUD_DOCS_CONTENT = "Error loading gcloud documentation."
 
-# --- Helper function to parse gcloud commands ---
-# def _parse_gcloud_command(command_string: str) -> Dict[str, Any]:
-#     """Parses a gcloud command string into a structured dictionary."""
-#     parsed_command: Dict[str, Any] = {
-#         "full_command": command_string,
-#         "base_command": "",
-#         "subcommands": [],
-#         "flags": {},
-#         "positional_args": [],
-#         "parsing_error": None # Initialize parsing_error
-#     }
-# 
-#     try:
-#         # Regex to split by space while respecting quotes.
-#         # Handles simple cases. For '[^']*', we use string concatenation for clarity.
-#         tokens = re.findall(r'"[^"]*"|' + "'[^']*'" + r'|\S+', command_string)
-#         
-#         if not tokens:
-#             return parsed_command 
-# 
-#         parsed_command["base_command"] = tokens.pop(0)
-#         if parsed_command["base_command"] != "gcloud":
-#             parsed_command["parsing_error"] = "Command does not start with gcloud"
-#             return parsed_command
-# 
-#         idx = 0
-#         temp_subcommands_and_positional = [] # Temporary list to hold non-flag tokens
-# 
-#         while idx < len(tokens):
-#             token = tokens[idx]
-#             if token.startswith("--"):
-#                 flag_name = token
-#                 if "=" in flag_name:
-#                     parts = flag_name.split("=", 1)
-#                     parsed_command["flags"][parts[0]] = parts[1].strip('\"'')
-#                     idx += 1
-#                 elif idx + 1 < len(tokens) and not tokens[idx+1].startswith("--") and not tokens[idx+1].startswith("-") :
-#                     parsed_command["flags"][flag_name] = tokens[idx+1].strip('\"'')
-#                     idx += 2
-#                 else:
-#                     parsed_command["flags"][flag_name] = True
-#                     idx += 1
-#             elif token.startswith("-") and not token.startswith("--"): # Basic short flags
-#                 if len(token) > 1 and token[1] == '=': # -f=value
-#                     parts = token.split("=", 1)
-#                     parsed_command["flags"][parts[0]] = parts[1].strip('\"'')
-#                     idx +=1
-#                 elif idx + 1 < len(tokens) and not tokens[idx+1].startswith("--") and not tokens[idx+1].startswith("-") and len(token) == 2: # -f value 
-#                     parsed_command["flags"][token] = tokens[idx+1].strip('\"'')
-#                     idx += 2
-#                 else: # boolean short flags like -v or grouped like -abc (not splitting grouped for now)
-#                     parsed_command["flags"][token] = True
-#                     idx += 1
-#             else:
-#                 temp_subcommands_and_positional.append(token.strip('\"''))
-#                 idx += 1
-#         
-#         # Refine subcommands and positional arguments from temp_subcommands_and_positional
-#         consuming_subcommands = True
-#         for t_token in temp_subcommands_and_positional:
-#             if consuming_subcommands and t_token.isalpha() and not any(char.isdigit() or char in '.=/' for char in t_token):
-#                 is_likely_subcommand = True
-#                 try:
-#                     if re.match(r'^[a-zA-Z0-9][a-zA-Z0-9._/-]*$', t_token) and ('.' in t_token or '/' in t_token or any(c.isdigit() for c in t_token)):
-#                          if len(parsed_command["subcommands"]) > 0: 
-#                             is_likely_subcommand = False
-#                 except re.error: 
-#                     pass 
-#                 
-#                 if is_likely_subcommand:
-#                     parsed_command["subcommands"].append(t_token)
-#                 else:
-#                     consuming_subcommands = False
-#                     parsed_command["positional_args"].append(t_token)
-#             else:
-#                 consuming_subcommands = False
-#                 parsed_command["positional_args"].append(t_token)
-# 
-#     except Exception as e:
-#         parsed_command["parsing_error"] = f"Error during command parsing: {str(e)}"
-#     
-#     return parsed_command
+# --- Helper function to parse gcloud commands (Simplified Version using shlex) ---
+def _parse_gcloud_command(command_string: str) -> Dict[str, Any]:
+    """Parses a gcloud command string into a structured dictionary using shlex."""
+    parsed_command: Dict[str, Any] = {
+        "original_command": command_string,
+        "base_command": "",
+        "subcommands": [],
+        "flags": {},
+        "positional_args": [],
+        "parsing_error": None
+    }
+    
+    try:
+        tokens = shlex.split(command_string)
+        
+        if not tokens:
+            parsed_command["parsing_error"] = "Empty command string"
+            return parsed_command
+
+        if tokens[0] != "gcloud":
+            parsed_command["parsing_error"] = "Command does not start with gcloud"
+            # Fallback: treat the whole thing as command_parts if not starting with gcloud
+            parsed_command["base_command"] = tokens[0] if tokens else ""
+            parsed_command["subcommands"] = tokens[1:] if len(tokens) > 1 else []
+            return parsed_command
+        
+        parsed_command["base_command"] = tokens.pop(0)
+        
+        idx = 0
+        while idx < len(tokens):
+            token = tokens[idx]
+            if token.startswith("--"):
+                flag_name = token
+                if "=" in flag_name:
+                    name, value = flag_name.split("=", 1)
+                    parsed_command["flags"][name] = value
+                    idx += 1
+                elif idx + 1 < len(tokens) and not tokens[idx+1].startswith("-"):
+                    parsed_command["flags"][flag_name] = tokens[idx+1]
+                    idx += 2
+                else:
+                    parsed_command["flags"][flag_name] = True # Boolean flag
+                    idx += 1
+            elif token.startswith("-") and not token.startswith("--"): # Short flags
+                if "=" in token: # e.g. -f=value
+                    name, value = token.split("=",1)
+                    parsed_command["flags"][name] = value
+                    idx += 1
+                elif len(token) == 2 and idx + 1 < len(tokens) and not tokens[idx+1].startswith("-"): # e.g. -f value
+                    parsed_command["flags"][token] = tokens[idx+1]
+                    idx += 2
+                else: # Boolean or grouped e.g. -v or -abc
+                    parsed_command["flags"][token] = True 
+                    idx += 1
+            else:
+                # Consider as subcommand if no flags have been encountered yet, else positional
+                # This is a heuristic and might not be perfect for all gcloud commands
+                if not parsed_command["flags"]:
+                    parsed_command["subcommands"].append(token)
+                else:
+                    parsed_command["positional_args"].append(token)
+                idx += 1
+                
+    except Exception as e:
+        parsed_command["parsing_error"] = f"Error during command parsing: {str(e)}"
+        # If parsing fails, ensure original command is still primary
+        if not parsed_command.get("command_parts") and not parsed_command.get("subcommands"):
+             parsed_command["subcommands"] = [command_string] # Put full string as a part if total failure
+
+    return parsed_command
 
 # --- LLM Interface Loader (remains the same) ---
 def get_llm_interface(config: Dict[str, Any]) -> BaseLLMInterface:
@@ -177,7 +167,7 @@ async def _generate_plan_dag(
             {"role": "user", "content": planning_prompt}
         ])
         raw_plan_str = response.choices[0].message.content.strip()
-        console.print(f"Raw plan from LLM:\\n{raw_plan_str}")
+        # console.print(f"Raw plan from LLM:\n{raw_plan_str}") # Old raw JSON print
 
         try:
             plan_steps = json.loads(raw_plan_str)
@@ -196,6 +186,27 @@ async def _generate_plan_dag(
             console.print(f"[bold red]Error:[/] {error_msg}")
             # state_logger.record_event("plan_generation_failed", {"error": error_msg, "parsed_plan": plan_steps})
             return None, None
+
+        # Display the plan in a more readable format
+        plan_display_table = Table(title="LLM Generated Plan", show_header=True, header_style="bold blue")
+        plan_display_table.add_column("Step ID", style="cyan", no_wrap=True)
+        plan_display_table.add_column("Description", style="white")
+        plan_display_table.add_column("Dependencies", style="yellow")
+        plan_display_table.add_column("Pass Output", style="magenta")
+
+        if not plan_steps: # Handle empty plan from LLM
+            console.print("[yellow]LLM returned an empty plan.[/yellow]")
+        else:
+            for i, step_data in enumerate(plan_steps):
+                if isinstance(step_data, dict):
+                    step_id_disp = step_data.get("id", f"Step {i+1} (ID missing)")
+                    description_disp = step_data.get("description", "N/A")
+                    dependencies_disp = ", ".join(step_data.get("dependencies", [])) or "-"
+                    pass_output_disp = str(step_data.get("pass_output_to_next", "True")) # Default to True for display
+                    plan_display_table.add_row(step_id_disp, description_disp, dependencies_disp, pass_output_disp)
+                else:
+                    plan_display_table.add_row(f"Step {i+1}", "Invalid step data format", "-", "-")
+            console.print(plan_display_table)
 
         dag = AcyclicGraph()
         step_details_map = {}
@@ -299,18 +310,26 @@ async def _execute_dag_step(
     # state_logger.record_event("step_execution_start", {"step_id": step_id, "description": step_details.get('description')})
     state_logger.record_node_status_change(step_id, "RUNNING")
 
-    context_str = "Context from previous steps (if any):\\n"
+    context_str = "Context from previous steps (if any):\n"
     if previous_step_outputs:
-        for prev_step_id, output in previous_step_outputs.items():
-            context_str += f"- Output of step '{prev_step_id}': {json.dumps(output, indent=2)}\\n"
+        for prev_step_id, output_info in previous_step_outputs.items(): # output_info is now a dict
+             if isinstance(output_info, dict):
+                status = output_info.get("status", "UNKNOWN")
+                actual_output = output_info.get("output", "No output available")
+                context_str += f"- Output of step '{prev_step_id}' (Status: {status}): {json.dumps(actual_output, indent=2)}\n"
+             else: # Fallback for older format or direct string output
+                context_str += f"- Output of step '{prev_step_id}': {json.dumps(output_info, indent=2)}\n"
+
     else:
-        context_str += "No outputs from previous steps available.\\n"
+        context_str += "No outputs from previous steps available.\n"
     
     current_step_description = step_details.get('description', 'No description provided for this step.')
     
     attempt = 0
     last_error = ""
     command_to_execute = ""
+    parsed_command_for_log: Dict[str, Any] = {}
+
 
     while attempt < max_attempts:
         attempt += 1
@@ -332,7 +351,7 @@ async def _execute_dag_step(
                 user_content = prompt_template.format(
                     step_id=step_id,
                     step_description=current_step_description,
-                    previous_command=command_to_execute,
+                    previous_command=command_to_execute, # Log the string command
                     error_message=last_error,
                     context_from_previous_steps=context_str,
                     gcloud_docs=GCLOUD_DOCS_CONTENT
@@ -344,20 +363,45 @@ async def _execute_dag_step(
             ])
             command_to_execute = response.choices[0].message.content.strip()
             
-            command_to_execute = command_to_execute.replace('`', '').replace('\\n', ' ').strip()
+            command_to_execute = command_to_execute.replace('`', '').replace('\n', ' ').strip()
             
             if not command_to_execute:
                 console.print("[yellow]Warning: LLM generated an empty command. Skipping execution for this attempt.[/yellow]")
                 last_error = "LLM generated an empty command."
                 # state_logger.record_event("step_attempt_failed_empty_command", {"step_id": step_id, "attempt": attempt})
                 if attempt >= max_attempts: 
-                     state_logger.record_node_result(step_id, False, {"error": last_error}, "FAILED_EMPTY_COMMAND")
+                     parsed_command_for_log = _parse_gcloud_command(command_to_execute) if command_to_execute else {"original_command": "EMPTY"}
+                     state_logger.record_node_result(step_id, False, {"error": last_error, "parsed_command": parsed_command_for_log }, "FAILED_EMPTY_COMMAND")
                      return False, {"error": last_error, "step_id": step_id}
                 continue
 
-            console.print(f"Generated gcloud command for step {step_id} (Attempt {attempt}):\\n[bold magenta]{command_to_execute}[/bold magenta]")
-            # state_logger.record_event("step_command_generated", {"step_id": step_id, "attempt": attempt, "command": command_to_execute})
-            # We can store the command in the node's state if RunStateLogger is augmented or via a generic field
+            # Parse and display the command before execution
+            parsed_command_for_log = _parse_gcloud_command(command_to_execute)
+            
+            display_table = Table(title=f"Command for Step: {step_id} (Attempt {attempt})", show_header=True, header_style="bold magenta")
+            display_table.add_column("Component", style="dim")
+            display_table.add_column("Details")
+            
+            # display_table.add_row("Full Command", Syntax(parsed_command_for_log.get("original_command", command_to_execute), "bash", theme="monokai", line_numbers=False)) # Removed Full Command row
+            if parsed_command_for_log.get("base_command"):
+                 display_table.add_row("Base", parsed_command_for_log["base_command"])
+            # if parsed_command_for_log.get("subcommands"):
+            #      display_table.add_row("Subcommands", ", ".join(parsed_command_for_log["subcommands"])) # Removed Subcommands row
+            if parsed_command_for_log.get("flags"):
+                flags_display_list = []
+                for k,v in parsed_command_for_log["flags"].items():
+                    # Remove leading hyphens for display
+                    display_key = k.lstrip('-')
+                    flags_display_list.append(f"{display_key}: {v}")
+                flags_str = "\n".join(flags_display_list)
+                display_table.add_row("Flags", flags_str)
+            if parsed_command_for_log.get("positional_args"):
+                display_table.add_row("Positional Args", ", ".join(parsed_command_for_log["positional_args"]))
+            if parsed_command_for_log.get("parsing_error"):
+                display_table.add_row("Parsing Error", parsed_command_for_log["parsing_error"], style="red")
+            
+            console.print(display_table)
+
 
             success, result_or_error = await gcp_executor.execute(command_to_execute, console)
 
@@ -380,16 +424,16 @@ async def _execute_dag_step(
         except Exception as e:
             last_error = f"Exception during step {step_id} attempt {attempt}: {str(e)}"
             if verbose:
-                console.print(f"[bold red]{last_error}[/bold red]\\n{traceback.format_exc()}")
+                console.print(f"[bold red]{last_error}[/bold red]\n{traceback.format_exc()}")
             else:
                 console.print(f"[bold red]{last_error}[/bold red]")
             # state_logger.record_event("step_execution_exception_attempt", {"step_id": step_id, "attempt": attempt, "error": last_error, "traceback": traceback.format_exc()})
             if command_to_execute: 
-                last_error += f"\\nFailing command was: `{command_to_execute}`"
+                last_error += f"\nFailing command was: `{command_to_execute}`"
 
     console.print(f"[bold red]Step {step_id} failed after {max_attempts} attempts.[/bold red]")
     # parsed_cmd_dict_on_fail = _parse_gcloud_command(command_to_execute) # Temporarily disabled parser
-    state_logger.record_node_result(step_id, False, {"error": last_error, "final_attempt_command_str": command_to_execute}, "FAILED_MAX_ATTEMPTS") # Removed parsed_command field
+    state_logger.record_node_result(step_id, False, {"error": last_error, "final_attempt_command_str": command_to_execute, "parsed_command": parsed_command_for_log}, "FAILED_MAX_ATTEMPTS") # Removed parsed_command field
     return False, {"error": last_error, "step_id": step_id}
 
 

@@ -48,44 +48,47 @@ class GcloudExecutor:
     async def execute(
         self,
         command: str,
-        console: Console
+        console: Console # Rich console instance passed for status updates
     ) -> Tuple[bool, Any]:
         """
         Executes a gcloud CLI command and returns the result.
         
         Args:
             command: The gcloud CLI command to execute
-            console: Console for logging
+            console: Console for logging and status updates
             
         Returns:
             Tuple of (success, result)
         """
-        console.print(f"  Executing command: [bold cyan]{command}[/bold cyan]")
+        # console.print(f"  Executing command: [bold cyan]{command}[/bold cyan]") # Old print, replaced by status
         
         try:
-            # Run the command and capture output
-            process = await asyncio.create_subprocess_shell(
-                command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
-            )
-            
-            stdout, stderr = await process.communicate()
-            
-            if process.returncode == 0:
-                # Command succeeded
-                result = stdout.decode().strip()
-                console.print("[green]Command executed successfully[/green]")
-                return True, result
-            else:
-                # Command failed
-                error = stderr.decode().strip()
-                console.print(f"[red]Command failed: {error}[/red]")
-                return False, error
+            # Use rich.status for a loading indicator
+            with console.status(f"[bold yellow]Executing: [cyan]{command}[/cyan]...[/bold yellow]", spinner="dots") as status:
+                process = await asyncio.create_subprocess_shell(
+                    command,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE
+                )
                 
+                stdout, stderr = await process.communicate()
+                
+                if process.returncode == 0:
+                    # Command succeeded
+                    result = stdout.decode().strip()
+                    # status.stop() # No need to manually stop, context manager handles it
+                    console.print(f"[green]  Command executed successfully: [bold cyan]{command}[/bold cyan][/green]")
+                    return True, result
+                else:
+                    # Command failed
+                    error = stderr.decode().strip()
+                    # status.stop()
+                    console.print(f"[red]  Command failed: [bold cyan]{command}[/bold cyan][/red]\n  Error: {error}")
+                    return False, error
+                    
         except Exception as e:
-            error_msg = f"Error executing command: {str(e)}"
-            console.print(f"[bold red]{error_msg}[/bold red]")
+            error_msg = f"Exception during command execution: {str(e)}"
+            console.print(f"[bold red]  {error_msg}[/bold red]")
             return False, error_msg
 
     async def execute_dag(
