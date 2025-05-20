@@ -42,10 +42,13 @@ def load_gcloud_docs():
         # Using a common example doc, replace with a more general or dynamic loading if possible
         doc_path = 'internal/tools/gcloud_online_docs_markdown/compute/instances/create/index.md'
         doc_path2 = 'internal/tools/gcloud_online_docs_markdown/compute/machine-types/list/index.md'
+        doc_path3 = 'internal/tools/gcloud_online_docs_markdown/compute/addresses/create/index.md'
         if os.path.exists(doc_path):
             with open(doc_path, 'r', encoding='utf-8') as f:
                 GCLOUD_DOCS_CONTENT = f.read()
             with open(doc_path2, 'r', encoding='utf-8') as f:
+                GCLOUD_DOCS_CONTENT += f.read()
+            with open(doc_path3, 'r', encoding='utf-8') as f:
                 GCLOUD_DOCS_CONTENT += f.read()
             console.print(f"[info]Successfully loaded gcloud docs from {doc_path}[/info]")
         else:
