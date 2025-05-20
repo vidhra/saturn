@@ -407,7 +407,12 @@ async def _execute_dag_step(
 
             if success:
                 console.print(f"[bold green]Step {step_id} executed successfully![/bold green]")
-                # parsed_cmd_dict = _parse_gcloud_command(command_to_execute) # Temporarily disabled parser
+                # Display the result in the console
+                if isinstance(result_or_error, str) and result_or_error.strip(): # Check if it's a non-empty string
+                    console.print(Panel(result_or_error, title=f"Result for Step: {step_id}", title_align="left", border_style="green"))
+                elif result_or_error: # For other types of results (e.g. dicts, lists if parser produced them)
+                    console.print(Panel(str(result_or_error), title=f"Result for Step: {step_id}", title_align="left", border_style="green"))
+                
                 success_payload = {
                     "result": result_or_error,
                     "executed_command_str": command_to_execute, 

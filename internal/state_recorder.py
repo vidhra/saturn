@@ -124,7 +124,7 @@ class RunStateLogger:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         unique_id = uuid.uuid4().hex[:8] # Add a short unique ID to prevent collisions on same second
         
-        filename = f"saturn_run_{safe_query_part}_{timestamp}_{unique_id}.json"
+        filename = f"{timestamp}_{unique_id}.json"
         filepath = os.path.join(log_dir, filename)
         
         try:
