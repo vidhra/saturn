@@ -434,11 +434,10 @@ If the `load-balancing-scheme` is `INTERNAL` (Internal
 passthrough Network Load Balancer), the protocol must be one of: TCP, UDP,
 UNSPECIFIED.
 If the `load-balancing-scheme` is `INTERNAL_SELF_MANAGED`
-(Traffic Director), the protocol must be one of: HTTP, HTTPS, HTTP2, GRPC, H2C
-(beta only).
+(Traffic Director), the protocol must be one of: HTTP, HTTPS, HTTP2, GRPC, H2C.
 If the `load-balancing-scheme` is `INTERNAL_MANAGED`
 (Internal Application Load Balancer), the protocol must be one of: HTTP, HTTPS,
-HTTP2, H2C (beta only).
+HTTP2, H2C.
 If the `load-balancing-scheme` is `INTERNAL_MANAGED`
 (Internal proxy Network Load Balancer), the protocol must be only TCP.
 If the `load-balancing-scheme` is `EXTERNAL` and
@@ -450,8 +449,7 @@ If the `load-balancing-scheme` is `EXTERNAL` and
 protocol must be one of: TCP, UDP, UNSPECIFIED.
 If the `load-balancing-scheme` is `EXTERNAL_MANAGED`
 (Global external Application Load Balancer and regional external Application
-Load Balancer), the protocol must be one of: HTTP, HTTPS, HTTP2, H2C (beta
-only).
+Load Balancer), the protocol must be one of: HTTP, HTTPS, HTTP2, H2C.
 If the `load-balancing-scheme` is `EXTERNAL_MANAGED`
 (Global external proxy Network Load Balancer), the protocol must be one of: TCP,
 SSL.

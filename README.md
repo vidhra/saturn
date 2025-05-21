@@ -1,30 +1,6 @@
-# Saturn - Natural Language Interface for Google Cloud Platform
+# Saturn - Agents for cloud
 
-Saturn aims to provide a conversational interface for interacting with Google Cloud Platform (GCP) APIs. Instead of writing scripts or using the Cloud Console UI, users can state their goals in natural language, and Saturn will translate them into the appropriate GCP API calls.
-
-## Goals
-
-*   **Natural Language Control:** Allow users to manage GCP resources using plain English commands.
-*   **LLM Agnostic:** Support multiple Large Language Models (LLMs) like OpenAI GPT, Google Gemini, Anthropic Claude, and Mistral models via configurable interfaces.
-*   **Extensible Knowledge Base:** Use API definitions (e.g., OpenAPI specs, potentially other formats) stored locally (`api_defs/`) to inform the LLM about available GCP tools (functions/API calls) and their parameters.
-*   **Robust Execution:** Reliably execute the API calls identified by the LLM.
-*   **Error Handling & Retries:** Automatically handle errors during API execution and provide feedback to the LLM for correction within a retry loop.
-*   **State Tracking (Optional):** Record the execution flow and outcomes for debugging and auditing (`saturn_run_state.json`).
-
-## Core Components
-
-1.  **CLI (`saturn/cli.py`):** The command-line interface (using Typer) that accepts user queries and configuration overrides. Defines the `saturn run` command.
-2.  **Configuration (`saturn/config.py`):** Loads configuration from `config.yaml` and environment variables (`.env`).
-3.  **LLM Interfaces (`model/llm/`):** Contains wrappers for different LLM providers (OpenAI, Gemini, etc.), handling API calls and function/tool calling logic specific to each provider.
-4.  **Knowledge Base (`saturn/knowledge_base.py`):** Loads API definitions from the `api_defs/` directory and provides the available tools list to the LLM.
-5.  **GCP Executor (`saturn/gcp_executor.py`):** Takes a tool name and arguments (as decided by the LLM) and executes the corresponding GCP API call using the appropriate Python client library. Handles authentication (primarily via Application Default Credentials).
-6.  **Orchestrator (`saturn/orchestrator.py`):** The main control loop (`run_query_with_feedback`) that:
-    *   Takes the user query.
-    *   Calls the selected LLM Interface to get a plan (list of tool calls), providing available tools and previous errors.
-    *   Manages the execution of the planned tool calls via the GCP Executor, potentially handling dependencies and concurrency (using node states).
-    *   Collects results and errors.
-    *   Retries the LLM call with error feedback if necessary.
-7.  **State Recorder (`internal/state_recorder.py`):** (Optional) Logs the detailed state transitions and outcomes of each node (tool call) during a run to a JSON file (`saturn_run_state.json`).
+Saturn aims to provide a conversational interface for interacting with Cloud APIs. Instead of writing scripts or using the Cloud Console UI, users can state their goals in natural language, and Saturn will translate them into the appropriate API calls.
 
 ## Setup
 
@@ -109,3 +85,116 @@ Use `saturn run --help` to see all available options.
 The `RunStateLogger` is integrated into the orchestrator. After each run, it generates/updates `saturn_run_state.json` in the project root. This file contains:
 *   `run_info`: Details about the overall run (query, times, status, errors).
 *   `nodes`: Detailed state history for each tool call (node) attempted during the run, including arguments, status transitions (PENDING, READY, RUNNING, COMPLETED/FAILED), timestamps, and final output or error.
+
+## RAG Engine Setup and Usage
+
+The RAG (Retrieval Augmented Generation) engine uses LlamaIndex to provide relevant documentation snippets to the LLM when generating `gcloud` commands. This improves the accuracy and relevance of the generated commands.
+
+### 1. Prerequisites
+
+*   Ensure Python and `pip` are installed.
+*   Your Saturn project should be cloned, and you should be in the project root directory.
+*   Activate your virtual environment.
+
+### 2. Install RAG Dependencies
+
+First, ensure the base Saturn dependencies are installed:
+```bash
+pip install -e .
+```
+Then, install the LlamaIndex packages required for RAG functionality:
+
+*   **Core LlamaIndex & Local Embeddings (Recommended Default):**
+    ```bash
+    pip install llama-index>=0.10.0 llama-index-embeddings-huggingface>=0.1.0 sentence-transformers>=2.2.0
+    ```
+*   **For ChromaDB Vector Store:**
+    ```bash
+    pip install llama-index-vector-stores-chroma>=0.1.0 chromadb>=0.4.0
+    ```
+*   **For DuckDB Vector Store:**
+    ```bash
+    pip install llama-index-vector-stores-duckdb>=0.1.0 duckdb>=0.9.0
+    ```
+    You can install all of them if you plan to switch between vector stores.
+
+### 3. Prepare Documentation
+
+*   The RAG engine expects Markdown files (`.md`) as its knowledge source.
+*   Place your scraped GCP documentation (or any relevant Markdown files) in a directory. The default path configured in `saturn/cli.py` and `saturn/orchestrator.py` (example block) is `internal/tools/gcloud_online_docs_markdown`.
+*   You can change this path using the `--docs-path` option in the `ingest-docs` command or by setting the `GCLOUD_DOCS_PATH` environment variable.
+
+### 4. Ingest Documents into a Vector Store
+
+Use the `ingest-docs` command to process your Markdown files and store their embeddings in your chosen vector store. This step needs to be done once initially, and then whenever your documentation changes.
+
+**Command Structure:**
+```bash
+saturn ingest-docs --vector-store chroma --rag-embed-model "text-embedding-004" --force-rebuild
+```
+
+**Key Options:**
+*   `--vector-store TEXT`: Choose the vector store: `default` (in-memory, not persistent for ingest), `chroma`, or `duckdb`. (Required, though defaults to 'chroma' if `VECTOR_STORE` env var not set).
+*   `--docs-path TEXT`: Path to your Markdown documents. Defaults to `internal/tools/gcloud_online_docs_markdown` or `GCLOUD_DOCS_PATH` env var.
+*   `--rag-embed-model TEXT`: Specify the embedding model. Defaults to `local:BAAI/bge-small-en-v1.5` or `RAG_EMBED_MODEL` env var.
+*   `--force-rebuild`: If set, attempts to delete existing data in the persistent store (ChromaDB collection or DuckDB table) before ingesting.
+
+**Database Path and Name/Collection Configuration:**
+For persistent stores (`chroma`, `duckdb`), Saturn now uses predefined default paths and names for the databases/collections. These are defined in `saturn/rag_engine.py` and are typically within a `db/` subdirectory in your project root (e.g., `./db/chroma_db` for ChromaDB data, `./db/duckdb_store/vector_store.duckdb` for DuckDB file). You can see these defaults printed in the console when you run the `ingest-docs` command.
+
+**Examples:**
+
+*   **Ingest into ChromaDB (using default paths/names):**
+    ```bash
+    saturn ingest-docs --docs-path ./internal/tools/gcloud_online_docs_markdown --vector-store chroma
+    ```
+    To force a rebuild:
+    ```bash
+    saturn ingest-docs --vector-store chroma --force-rebuild
+    ```
+
+*   **Ingest into DuckDB (using default paths/names):**
+    ```bash
+    saturn ingest-docs --docs-path ./internal/tools/gcloud_online_docs_markdown --vector-store duckdb
+    ```
+
+*   **Ingest into In-Memory Store (not persistent, for quick tests):**
+    ```bash
+    saturn ingest-docs --docs-path ./internal/tools/gcloud_online_docs_markdown --vector-store default
+    ```
+    Note: For the `default` (in-memory) store, ingestion via `ingest-docs` is primarily for testing the ingestion pipeline itself. The `saturn run` command will build its own in-memory index if `default` is chosen and `rag_docs_path` is valid.
+
+### 5. Running Queries with the RAG Engine
+
+Once your documents are ingested into a persistent vector store (ChromaDB or DuckDB using the default paths/names), the `saturn run` command will attempt to use it if configured correctly. The RAGEngine will try to load the existing index from the default persistent storage locations for the chosen vector store.
+
+**Configuration for `saturn run` to use a specific RAG store (defaults will be used if not specified):**
+
+*   **Environment Variables (recommended for persistent settings):**
+    ```bash
+    export VECTOR_STORE="chroma"                # or "duckdb", or "default"
+    export RAG_EMBED_MODEL="local:BAAI/bge-small-en-v1.5" # Or your preferred model
+    # No need to set CHROMA_DB_PATH, DUCKDB_PATH etc. if using defaults for `run` command,
+    # as the RAGEngine will use its internal defaults when db_config is not explicitly passed by `run`.
+    # The `run` command's CLI options for DB paths can still override these if needed for advanced cases.
+
+    saturn run "your query"
+    ```
+*   **CLI Options (overrides environment variables and `config.yaml`):**
+The `saturn run` command still retains options like `--db-path` and `--db-collection-table` if you need to point it to a *non-default* persistent store location for a specific run. However, for simplicity, if you've ingested to the default locations, you often only need:
+    ```bash
+    # Using ChromaDB (assuming ingested to default Chroma path/collection)
+    saturn run "your query" --vector-store chroma
+
+    # Using DuckDB (assuming ingested to default DuckDB path/file/table)
+    saturn run "your query" --vector-store duckdb
+    ```
+
+If `VECTOR_STORE` is set to `default` (or if the chosen persistent store cannot be loaded and `rag_docs_path` is available), `saturn run` will build an in-memory RAG index from the `--rag-docs-path` for that session.
+
+## State Recording
+
+After each run, the orchestrator saves a detailed log to a uniquely named JSON file in the `logs/` directory (e.g., `logs/saturn_run_your_query_timestamp_uuid.json`). This file contains:
+*   `run_info`: Details about the overall run (query, times, status, errors).
+*   `dag`: The planned DAG structure (nodes, descriptions, dependencies, execution order).
+*   `nodes`: Detailed state history for each step (node) attempted during the run, including arguments, status transitions, timestamps, and final output (including executed command) or error.

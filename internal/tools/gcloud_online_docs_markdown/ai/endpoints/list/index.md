@@ -8,7 +8,7 @@
 
 **SYNOPSIS**
 
-: **`gcloud ai endpoints list` [`[--region](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--region)`=`REGION`] [`[--filter](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--filter)`=`EXPRESSION`] [`[--limit](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--limit)`=`LIMIT`] [`[--page-size](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--page-size)`=`PAGE_SIZE`] [`[--sort-by](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--sort-by)`=[`FIELD`,…]] [`[--uri](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--uri)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#GCLOUD-WIDE-FLAGS) …`]**
+: **`gcloud ai endpoints list` [`[--list-model-garden-endpoints-only](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--list-model-garden-endpoints-only)`] [`[--region](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--region)`=`REGION`] [`[--filter](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--filter)`=`EXPRESSION`] [`[--limit](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--limit)`=`LIMIT`] [`[--page-size](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--page-size)`=`PAGE_SIZE`] [`[--sort-by](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--sort-by)`=[`FIELD`,…]] [`[--uri](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#--uri)`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/ai/endpoints/list#GCLOUD-WIDE-FLAGS) …`]**
 
 **EXAMPLES**
 
@@ -19,9 +19,20 @@ in region ``us-central1``, run:
 gcloud ai endpoints list --project=example --region=us-central1
 ```
 
+To list the endpoints under project ``example``
+in region ``us-central1`` that are created from
+Model Garden, run:
+
+```
+gcloud ai endpoints list --project=example --region=us-central1 --list-model-garden-endpoints-only
+```
+
 **FLAGS**
 
-: **Region resource - Cloud region to list endpoints. This represents a Cloud
+: **--list-model-garden-endpoints-only**:
+Whether to only list endpoints related to Model Garden.
+
+**Region resource - Cloud region to list endpoints. This represents a Cloud
 resource. (NOTE) Some attributes are not given arguments in this group but can
 be set in other ways.
 To set the `project` attribute:
