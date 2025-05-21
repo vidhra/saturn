@@ -7,7 +7,7 @@ name = "saturn"
 version = "0.1.0"
 description = "A natural language interface for Google Cloud Platform APIs."
 authors = [
-    { name = "prashanth varma", email = "your.email@example.com" },
+    { name = "Your Name", email = "your.email@example.com" },
 ]
 readme = "README.md" # Optional
 requires-python = ">=3.9"
@@ -18,23 +18,34 @@ classifiers = [
 ]
 dependencies = [
     "openai>=1.3.0",
-    "google-cloud-aiplatform>=1.38.0", # For Gemini
-    "anthropic>=0.15.0", # For Claude
-    "mistralai>=0.1.0", # For Mistral
+    "google-cloud-aiplatform>=1.38.0", 
+    "anthropic>=0.15.0", 
+    "mistralai>=0.1.0", 
     "google-auth>=2.0.0",
-    "google-api-python-client>=2.0.0", # May be needed by executor
-    # Add specific GCP client libraries as needed by your KB, e.g.:
+    "google-api-python-client>=2.0.0", 
     "google-cloud>=0.31.0",
-    # ---
     "pydantic>=2.0.0",
     "PyYAML>=6.0",
     "python-dotenv>=1.0.0",
     "typer[all]>=0.9.0",
     "json-repair>=0.19.0",
-    "rich>=13.0.0"
+    "rich>=13.0.0",
+    # --- For RAG Engine ---
+    "llama-index>=0.11.00",  
+    "llama-index-core>=0.11.00", 
+    "llama-index-embeddings-huggingface>=0.2.0", 
+    "llama-index-embeddings-google-genai>=0.1.0", # Pinned to specific version 0.3.1
+    "google-generativeai>=0.5.0", 
+    "sentence-transformers>=2.2.0",
+    # --- For ChromaDB Vector Store ---
+    "llama-index-vector-stores-chroma>=0.1.7",   
+    "chromadb>=0.4.22", 
+    # --- For DuckDB Vector Store ---
+    "llama-index-vector-stores-duckdb>=0.1.5",   
+    "duckdb>=0.10.1" 
 ]
 
-[project.urls] # Optional
+[project.urls] 
 "Homepage" = "https://github.com/vidhra/Saturn"
 "Bug Tracker" = "https://github.com/vidhar/Saturn/issues"
 
@@ -45,5 +56,6 @@ saturn = "saturn.cli:app"
 
 # --- Explicitly define packages to include --- 
 [tool.setuptools.packages.find]
-include = ["saturn*", "model", "internal"] # Made model and internal more specific
-exclude = ["tests*", "venv*", "embeddings_env*"] # Exclude tests, venv, etc.
+where = ["."]  
+include = ["saturn*", "model", "internal"] 
+exclude = ["tests*", "venv*", "embeddings_env*"] 

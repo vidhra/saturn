@@ -38,6 +38,9 @@ Manage Vertex AI index endpoints.
 **`[indexes](https://cloud.google.com/sdk/gcloud/reference/ai/indexes)`**:
 Manage Vertex AI indexes.
 
+**`[model-garden](https://cloud.google.com/sdk/gcloud/reference/ai/model-garden)`**:
+Interact with and manage resources in Vertex Model Garden.
+
 **`[model-monitoring-jobs](https://cloud.google.com/sdk/gcloud/reference/ai/model-monitoring-jobs)`**:
 Manage Vertex AI model monitoring jobs.
 

@@ -95,8 +95,9 @@ is for memory-optimized VMs. `TYPE` must be one of:
 `general-purpose-n4`, `general-purpose-t2d`,
 `graphics-optimized`, `memory-optimized`,
 `memory-optimized-m3`, `memory-optimized-m4`,
-`memory-optimized-x4-16tb`, `memory-optimized-x4-24tb`,
-`memory-optimized-x4-32tb`, `storage-optimized-z3`.
+`memory-optimized-m4-6tb`, `memory-optimized-x4-16tb`,
+`memory-optimized-x4-24tb`, `memory-optimized-x4-32tb`,
+`storage-optimized-z3`.
 
 **--existing-reservation**
 
