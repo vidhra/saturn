@@ -138,7 +138,7 @@ def run_command(
             console.print(f"[bold yellow]Warning:[/] RAG query engine for '{config['vector_store_choice']}' not ready. Index may need to be ingested first using 'saturn ingest-docs'.")
 
         console.print("--- Starting Orchestrator ---")
-        asyncio.run(run_query_with_feedback(query, config, executor, rag_engine_instance, config['max_retries'], verbose))
+        asyncio.run(run_query_with_feedback(query, config, rag_engine_instance, verbose=verbose))
 
     except Exception as e:
         console.print(f"[bold red]\n--- An unexpected error occurred in 'run' command --- [/bold red]")

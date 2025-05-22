@@ -27,8 +27,8 @@ DEFAULT_DUCKDB_TABLE_NAME = "gclouddocs_embeddings"
 
 # Default LlamaIndex settings to be applied early
 DEFAULT_CONTEXT_WINDOW = 65536 # Increased default
-DEFAULT_CHUNK_SIZE = 512     # Reduced chunk size for potentially better granularity
-DEFAULT_CHUNK_OVERLAP_RATIO = 0.1 # 10% overlap
+DEFAULT_CHUNK_SIZE = 2048     # Reduced chunk size for potentially better granularity
+DEFAULT_CHUNK_OVERLAP_RATIO = 0.25 # 10% overlap
 
 class RAGEngine:
     """Handles loading documentation, building/loading an index, and querying it using LlamaIndex."""
@@ -82,8 +82,8 @@ class RAGEngine:
             # Set context window and chunk size globally for LlamaIndex
             # These are applied before embedding model, as some tokenizers might be influenced
             Settings.context_window = DEFAULT_CONTEXT_WINDOW
-            Settings.chunk_size = DEFAULT_CHUNK_SIZE
-            Settings.chunk_overlap = int(DEFAULT_CHUNK_SIZE * DEFAULT_CHUNK_OVERLAP_RATIO)
+            Settings.chunk_size = 2048
+            Settings.chunk_overlap = 204  # 10% of 2048
             console.print(f"[RAG Engine] Set LlamaIndex Settings: context_window={Settings.context_window}, chunk_size={Settings.chunk_size}, chunk_overlap={Settings.chunk_overlap}")
 
             # 1. Configure Embeddings - CRUCIAL for RAG
@@ -111,15 +111,15 @@ class RAGEngine:
             # Standardize model name format for Google models
             final_google_model_name = embed_model_name
             
-            if "gemini" in embed_model_name.lower() or "embedding-" in embed_model_name.lower() or embed_model_name.startswith("models/") or embed_model_name.startswith("gemini-"):
+            if "gemini" in embed_model_name.lower() or "embedding-" in embed_model_name.lower() or embed_model_name.startswith("models/") or embed_model_name.startswith("text-"):
                 if not (embed_model_name.startswith("models/") or embed_model_name.startswith("tunedModels/")):
                     if "embedding-001" in embed_model_name or \
-                       "text-embedding-004" in embed_model_name or \
+                       "text-embedding-" in embed_model_name or \
                        "gemini-embedding-exp-03-07" in embed_model_name: 
                         final_google_model_name = f"models/{embed_model_name}" 
                         console.print(f"[RAG Engine] [yellow]Info:[/] Auto-prefixed Google model name to: {final_google_model_name}")
             print(f"embed_model_name: {embed_model_name}")
-            is_google_model_candidate =  embed_model_name.startswith("text-") or embed_model_name.startswith("gemini-")
+            is_google_model_candidate =  final_google_model_name.startswith("models/")
             print(f"is_google_model_candidate: {is_google_model_candidate}")
             print(f"final_google_model_name: {final_google_model_name}")
             print(f"starts with local:: {final_google_model_name.startswith('local:')}")
@@ -134,15 +134,16 @@ class RAGEngine:
                 try:
                     from llama_index.embeddings.google_genai import GoogleGenAIEmbedding 
                     print(f"[RAG Engine Debug] Creating GoogleGenAIEmbedding with:")
-                    print(f"  - model_name: {embed_model_name.lower()}")
+                    print(f"  - model_name: {final_google_model_name}")
                     print(f"  - api_key: {effective_google_api_key[:5]}...{effective_google_api_key[-4:]}")
-                    print(f"  - embed_batch_size: 32")
+                    print(f"  - embed_batch_size: 4")
+
                     Settings.embed_model = GoogleGenAIEmbedding(
-                        model_name=embed_model_name.lower(), 
+                        model_name=final_google_model_name,
                         api_key=effective_google_api_key,
-                        embed_batch_size=32 # Explicitly set a smaller batch size
+                        embed_batch_size=64  # Try 4, or 1 if needed
                     )
-                    console.print(f"[RAG Engine] Configured GoogleGenAIEmbedding model: {final_google_model_name} with batch size 32")
+                    console.print(f"[RAG Engine] Configured GoogleGenAIEmbedding model: {final_google_model_name} with batch size 4")
                     embedding_model_configured = True
                 except ImportError:
                     console.print("[RAG Engine] [bold red]Error:[/] `llama-index-embeddings-google-genai` or its dependencies not installed. Please install it.")
@@ -344,7 +345,7 @@ class RAGEngine:
             console.print_exception(show_locals=False)
             return False
 
-    def query_docs(self, query_text: str, min_similarity_score: float = 0.6) -> str:
+    def query_docs(self, query_text: str, min_similarity_score: float = 0.55) -> str:
         """
         Queries the indexed documents and returns a concatenated string of relevant text chunks.
         Filters results by a minimum similarity score if the retriever supports it.
