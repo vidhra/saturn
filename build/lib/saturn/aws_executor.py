@@ -17,7 +17,8 @@ class AWSExecutor:
     async def execute(
         self,
         command: str,
-        console: Console
+        console: Console,
+        step_id: str
     ) -> Tuple[bool, Any]:
         """
         Executes an AWS CLI command and returns the result.
@@ -51,7 +52,7 @@ class AWSExecutor:
             env_vars["AWS_DEFAULT_REGION"] = self.aws_region
 
         try:
-            with console.status(f"[bold yellow]Executing: [cyan]{command}[/cyan]...[/bold yellow]", spinner="dots") as status:
+            with console.status(f"[bold yellow]Executing: [cyan]{step_id}[/cyan]...[/bold yellow]", spinner="dots") as status:
                 process = await asyncio.create_subprocess_shell(
                     command,
                     stdout=asyncio.subprocess.PIPE,

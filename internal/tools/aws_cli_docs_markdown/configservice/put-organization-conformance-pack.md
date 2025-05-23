@@ -1,0 +1,237 @@
+# put-organization-conformance-packÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/configservice/put-organization-conformance-pack.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/configservice/put-organization-conformance-pack.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [configservice](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/configservice/index.html#cli-aws-configservice) ]
+
+# put-organization-conformance-pack
+
+## Description
+
+Deploys conformance packs across member accounts in an Amazon Web Services Organization. For information on how many organization conformance packs and how many Config rules you can have per account, see ` **Service Limits** [https://docs.aws.amazon.com/config/latest/developerguide/configlimits](https://docs.aws.amazon.com/config/latest/developerguide/configlimits).html`__ in the *Config Developer Guide* .
+
+Only a management account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure Organizations `ListDelegatedAdministrator` permissions are added. An organization can have up to 3 delegated administrators.
+
+This API enables organization service access for `config-multiaccountsetup.amazonaws.com` through the `EnableAWSServiceAccess` action and creates a service-linked role `AWSServiceRoleForConfigMultiAccountSetup` in the management or delegated administrator account of your organization. The service-linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling Amazon Web Services Organization `register-delegate-admin` for `config-multiaccountsetup.amazonaws.com` .
+
+### Note
+
+Prerequisite: Ensure you call `EnableAllFeatures` API to enable all features in an organization.
+
+You must specify either the `TemplateS3Uri` or the `TemplateBody` parameter, but not both. If you provide both Config uses the `TemplateS3Uri` parameter and ignores the `TemplateBody` parameter.
+
+Config sets the state of a conformance pack to CREATE_IN_PROGRESS and UPDATE_IN_PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutOrganizationConformancePack)
+
+## Synopsis
+
+```
+put-organization-conformance-pack
+--organization-conformance-pack-name <value>
+[--template-s3-uri <value>]
+[--template-body <value>]
+[--delivery-s3-bucket <value>]
+[--delivery-s3-key-prefix <value>]
+[--conformance-pack-input-parameters <value>]
+[--excluded-accounts <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--organization-conformance-pack-name` (string)
+
+Name of the organization conformance pack you want to create.
+
+`--template-s3-uri` (string)
+
+Location of file containing the template body. The uri must point to the conformance pack template (max size: 300 KB).
+
+### Note
+
+You must have access to read Amazon S3 bucket. In addition, in order to ensure a successful deployment, the template object must not be in an [archived storage class](https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html) if this parameter is passed.
+
+`--template-body` (string)
+
+A string containing full conformance pack template body. Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes.
+
+`--delivery-s3-bucket` (string)
+
+The name of the Amazon S3 bucket where Config stores conformance pack templates.
+
+### Note
+
+This field is optional. If used, it must be prefixed with `awsconfigconforms` .
+
+`--delivery-s3-key-prefix` (string)
+
+The prefix for the Amazon S3 bucket.
+
+### Note
+
+This field is optional.
+
+`--conformance-pack-input-parameters` (list)
+
+A list of `ConformancePackInputParameter` objects.
+
+(structure)
+
+Input parameters in the form of key-value pairs for the conformance pack, both of which you define. Keys can have a maximum character length of 255 characters, and values can have a maximum length of 4096 characters.
+
+ParameterName -> (string)
+
+One part of a key-value pair.
+
+ParameterValue -> (string)
+
+Another part of the key-value pair.
+
+Shorthand Syntax:
+
+```
+ParameterName=string,ParameterValue=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "ParameterName": "string",
+    "ParameterValue": "string"
+  }
+  ...
+]
+```
+
+`--excluded-accounts` (list)
+
+A list of Amazon Web Services accounts to be excluded from an organization conformance pack while deploying a conformance pack.
+
+(string)
+
+Syntax:
+
+```
+"string" "string" ...
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+OrganizationConformancePackArn -> (string)
+
+ARN of the organization conformance pack.

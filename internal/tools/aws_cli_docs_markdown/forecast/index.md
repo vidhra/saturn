@@ -1,0 +1,77 @@
+# forecastÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/index.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/index.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) ]
+
+# forecast
+
+## Description
+
+Provides APIs for creating and managing Amazon Forecast resources.
+
+## Available Commands
+
+- [create-auto-predictor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-auto-predictor.html)
+- [create-dataset](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-dataset.html)
+- [create-dataset-group](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-dataset-group.html)
+- [create-dataset-import-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-dataset-import-job.html)
+- [create-explainability](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-explainability.html)
+- [create-explainability-export](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-explainability-export.html)
+- [create-forecast](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-forecast.html)
+- [create-forecast-export-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-forecast-export-job.html)
+- [create-monitor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-monitor.html)
+- [create-predictor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-predictor.html)
+- [create-predictor-backtest-export-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-predictor-backtest-export-job.html)
+- [create-what-if-analysis](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-what-if-analysis.html)
+- [create-what-if-forecast](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-what-if-forecast.html)
+- [create-what-if-forecast-export](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/create-what-if-forecast-export.html)
+- [delete-dataset](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-dataset.html)
+- [delete-dataset-group](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-dataset-group.html)
+- [delete-dataset-import-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-dataset-import-job.html)
+- [delete-explainability](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-explainability.html)
+- [delete-explainability-export](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-explainability-export.html)
+- [delete-forecast](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-forecast.html)
+- [delete-forecast-export-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-forecast-export-job.html)
+- [delete-monitor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-monitor.html)
+- [delete-predictor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-predictor.html)
+- [delete-predictor-backtest-export-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-predictor-backtest-export-job.html)
+- [delete-resource-tree](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-resource-tree.html)
+- [delete-what-if-analysis](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-what-if-analysis.html)
+- [delete-what-if-forecast](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-what-if-forecast.html)
+- [delete-what-if-forecast-export](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/delete-what-if-forecast-export.html)
+- [describe-auto-predictor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-auto-predictor.html)
+- [describe-dataset](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-dataset.html)
+- [describe-dataset-group](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-dataset-group.html)
+- [describe-dataset-import-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-dataset-import-job.html)
+- [describe-explainability](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-explainability.html)
+- [describe-explainability-export](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-explainability-export.html)
+- [describe-forecast](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-forecast.html)
+- [describe-forecast-export-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-forecast-export-job.html)
+- [describe-monitor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-monitor.html)
+- [describe-predictor](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-predictor.html)
+- [describe-predictor-backtest-export-job](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-predictor-backtest-export-job.html)
+- [describe-what-if-analysis](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-what-if-analysis.html)
+- [describe-what-if-forecast](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-what-if-forecast.html)
+- [describe-what-if-forecast-export](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/describe-what-if-forecast-export.html)
+- [get-accuracy-metrics](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/get-accuracy-metrics.html)
+- [list-dataset-groups](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-dataset-groups.html)
+- [list-dataset-import-jobs](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-dataset-import-jobs.html)
+- [list-datasets](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-datasets.html)
+- [list-explainabilities](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-explainabilities.html)
+- [list-explainability-exports](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-explainability-exports.html)
+- [list-forecast-export-jobs](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-forecast-export-jobs.html)
+- [list-forecasts](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-forecasts.html)
+- [list-monitor-evaluations](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-monitor-evaluations.html)
+- [list-monitors](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-monitors.html)
+- [list-predictor-backtest-export-jobs](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-predictor-backtest-export-jobs.html)
+- [list-predictors](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-predictors.html)
+- [list-tags-for-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-tags-for-resource.html)
+- [list-what-if-analyses](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-what-if-analyses.html)
+- [list-what-if-forecast-exports](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-what-if-forecast-exports.html)
+- [list-what-if-forecasts](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/list-what-if-forecasts.html)
+- [resume-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/resume-resource.html)
+- [stop-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/stop-resource.html)
+- [tag-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/tag-resource.html)
+- [untag-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/untag-resource.html)
+- [update-dataset-group](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/forecast/update-dataset-group.html)

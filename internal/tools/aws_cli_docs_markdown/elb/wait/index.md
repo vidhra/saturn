@@ -1,0 +1,17 @@
+# waitÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elb/wait/index.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elb/wait/index.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [elb](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elb/index.html#cli-aws-elb) ]
+
+# wait
+
+## Description
+
+Wait until a particular condition is satisfied. Each subcommand polls an API until the listed requirement is met.
+
+## Available Commands
+
+- [any-instance-in-service](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elb/wait/any-instance-in-service.html)
+- [instance-deregistered](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elb/wait/instance-deregistered.html)
+- [instance-in-service](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elb/wait/instance-in-service.html)

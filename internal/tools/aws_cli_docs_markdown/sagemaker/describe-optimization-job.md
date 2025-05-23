@@ -1,0 +1,346 @@
+# describe-optimization-jobÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sagemaker/describe-optimization-job.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sagemaker/describe-optimization-job.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [sagemaker](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sagemaker/index.html#cli-aws-sagemaker) ]
+
+# describe-optimization-job
+
+## Description
+
+Provides the properties of the specified optimization job.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/sagemaker-2017-07-24/DescribeOptimizationJob)
+
+## Synopsis
+
+```
+describe-optimization-job
+--optimization-job-name <value>
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--optimization-job-name` (string)
+
+The name that you assigned to the optimization job.
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+OptimizationJobArn -> (string)
+
+The Amazon Resource Name (ARN) of the optimization job.
+
+OptimizationJobStatus -> (string)
+
+The current status of the optimization job.
+
+OptimizationStartTime -> (timestamp)
+
+The time when the optimization job started.
+
+OptimizationEndTime -> (timestamp)
+
+The time when the optimization job finished processing.
+
+CreationTime -> (timestamp)
+
+The time when you created the optimization job.
+
+LastModifiedTime -> (timestamp)
+
+The time when the optimization job was last updated.
+
+FailureReason -> (string)
+
+If the optimization job status is `FAILED` , the reason for the failure.
+
+OptimizationJobName -> (string)
+
+The name that you assigned to the optimization job.
+
+ModelSource -> (structure)
+
+The location of the source model to optimize with an optimization job.
+
+S3 -> (structure)
+
+The Amazon S3 location of a source model to optimize with an optimization job.
+
+S3Uri -> (string)
+
+An Amazon S3 URI that locates a source model to optimize with an optimization job.
+
+ModelAccessConfig -> (structure)
+
+The access configuration settings for the source ML model for an optimization job, where you can accept the model end-user license agreement (EULA).
+
+AcceptEula -> (boolean)
+
+Specifies agreement to the model end-user license agreement (EULA). The `AcceptEula` value must be explicitly defined as `True` in order to accept the EULA that this model requires. You are responsible for reviewing and complying with any applicable license terms and making sure they are acceptable for your use case before downloading or using a model.
+
+OptimizationEnvironment -> (map)
+
+The environment variables to set in the model container.
+
+key -> (string)
+
+value -> (string)
+
+DeploymentInstanceType -> (string)
+
+The type of instance that hosts the optimized model that you create with the optimization job.
+
+OptimizationConfigs -> (list)
+
+Settings for each of the optimization techniques that the job applies.
+
+(tagged union structure)
+
+Settings for an optimization technique that you apply with a model optimization job.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `ModelQuantizationConfig`, `ModelCompilationConfig`, `ModelShardingConfig`.
+
+ModelQuantizationConfig -> (structure)
+
+Settings for the model quantization technique thatâs applied by a model optimization job.
+
+Image -> (string)
+
+The URI of an LMI DLC in Amazon ECR. SageMaker uses this image to run the optimization.
+
+OverrideEnvironment -> (map)
+
+Environment variables that override the default ones in the model container.
+
+key -> (string)
+
+value -> (string)
+
+ModelCompilationConfig -> (structure)
+
+Settings for the model compilation technique thatâs applied by a model optimization job.
+
+Image -> (string)
+
+The URI of an LMI DLC in Amazon ECR. SageMaker uses this image to run the optimization.
+
+OverrideEnvironment -> (map)
+
+Environment variables that override the default ones in the model container.
+
+key -> (string)
+
+value -> (string)
+
+ModelShardingConfig -> (structure)
+
+Settings for the model sharding technique thatâs applied by a model optimization job.
+
+Image -> (string)
+
+The URI of an LMI DLC in Amazon ECR. SageMaker uses this image to run the optimization.
+
+OverrideEnvironment -> (map)
+
+Environment variables that override the default ones in the model container.
+
+key -> (string)
+
+value -> (string)
+
+OutputConfig -> (structure)
+
+Details for where to store the optimized model that you create with the optimization job.
+
+KmsKeyId -> (string)
+
+The Amazon Resource Name (ARN) of a key in Amazon Web Services KMS. SageMaker uses they key to encrypt the artifacts of the optimized model when SageMaker uploads the model to Amazon S3.
+
+S3OutputLocation -> (string)
+
+The Amazon S3 URI for where to store the optimized model that you create with an optimization job.
+
+OptimizationOutput -> (structure)
+
+Output values produced by an optimization job.
+
+RecommendedInferenceImage -> (string)
+
+The image that SageMaker recommends that you use to host the optimized model that you created with an optimization job.
+
+RoleArn -> (string)
+
+The ARN of the IAM role that you assigned to the optimization job.
+
+StoppingCondition -> (structure)
+
+Specifies a limit to how long a job can run. When the job reaches the time limit, SageMaker ends the job. Use this API to cap costs.
+
+To stop a training job, SageMaker sends the algorithm the `SIGTERM` signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts, so the results of training are not lost.
+
+The training algorithms provided by SageMaker automatically save the intermediate results of a model training job when possible. This attempt to save artifacts is only a best effort case as model might not be in a state from which it can be saved. For example, if training has just started, the model might not be ready to save. When saved, this intermediate data is a valid model artifact. You can use it to create a model with `CreateModel` .
+
+### Note
+
+The Neural Topic Model (NTM) currently does not support saving intermediate model artifacts. When training NTMs, make sure that the maximum runtime is sufficient for the training job to complete.
+
+MaxRuntimeInSeconds -> (integer)
+
+The maximum length of time, in seconds, that a training or compilation job can run before it is stopped.
+
+For compilation jobs, if the job does not complete during this time, a `TimeOut` error is generated. We recommend starting with 900 seconds and increasing as necessary based on your model.
+
+For all other jobs, if the job does not complete during this time, SageMaker ends the job. When `RetryStrategy` is specified in the job request, `MaxRuntimeInSeconds` specifies the maximum time for all of the attempts in total, not each individual attempt. The default value is 1 day. The maximum value is 28 days.
+
+The maximum time that a `TrainingJob` can run in total, including any time spent publishing metrics or archiving and uploading models after it has been stopped, is 30 days.
+
+MaxWaitTimeInSeconds -> (integer)
+
+The maximum length of time, in seconds, that a managed Spot training job has to complete. It is the amount of time spent waiting for Spot capacity plus the amount of time the job can run. It must be equal to or greater than `MaxRuntimeInSeconds` . If the job does not complete during this time, SageMaker ends the job.
+
+When `RetryStrategy` is specified in the job request, `MaxWaitTimeInSeconds` specifies the maximum time for all of the attempts in total, not each individual attempt.
+
+MaxPendingTimeInSeconds -> (integer)
+
+The maximum length of time, in seconds, that a training or compilation job can be pending before it is stopped.
+
+### Note
+
+When working with training jobs that use capacity from [training plans](https://docs.aws.amazon.com/sagemaker/latest/dg/reserve-capacity-with-training-plans.html) , not all `Pending` job states count against the `MaxPendingTimeInSeconds` limit. The following scenarios do not increment the `MaxPendingTimeInSeconds` counter:
+
+- The plan is in a `Scheduled` state: Jobs queued (in `Pending` status) before a planâs start date (waiting for scheduled start time)
+- Between capacity reservations: Jobs temporarily back to `Pending` status between two capacity reservation periods
+
+`MaxPendingTimeInSeconds` only increments when jobs are actively waiting for capacity in an `Active` plan.
+
+VpcConfig -> (structure)
+
+A VPC in Amazon VPC that your optimized model has access to.
+
+SecurityGroupIds -> (list)
+
+The VPC security group IDs, in the form `sg-xxxxxxxx` . Specify the security groups for the VPC that is specified in the `Subnets` field.
+
+(string)
+
+Subnets -> (list)
+
+The ID of the subnets in the VPC to which you want to connect your optimized model.
+
+(string)

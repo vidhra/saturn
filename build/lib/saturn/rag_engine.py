@@ -194,7 +194,7 @@ class RAGEngine:
                     chroma_collection = db.get_or_create_collection(collection_name)
                     self.vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
                     self.storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
-                    console.print(f"[RAG Engine] ChromaDB client setup. Collection '{collection_name}' ready.")
+                    
                     # Try to load existing index metadata from this store
                     if chroma_collection.count() > 0 and not build_index_on_init:
                         console.print(f"[RAG Engine] Attempting to load index from existing Chroma collection.")
@@ -371,7 +371,7 @@ class RAGEngine:
                 file_name = metadata.get('file_name', 'N/A')
                 
                 display_score = f"{score:.2f}" if score is not None else "N/A"
-                console.print(f"  [RAG Engine] Node {i+1}: Score={display_score}, File='{file_name}'")
+                
                 
                 if score is None or score >= min_similarity_score:
                     relevant_docs_parts.append(f"---\nSource Document: {file_name} (Score: {display_score})\n---\n{text_content}\n\n")

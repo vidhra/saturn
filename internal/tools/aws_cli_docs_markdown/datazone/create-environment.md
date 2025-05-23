@@ -1,0 +1,454 @@
+# create-environmentÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/datazone/create-environment.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/datazone/create-environment.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [datazone](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/datazone/index.html#cli-aws-datazone) ]
+
+# create-environment
+
+## Description
+
+Create an Amazon DataZone environment.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/datazone-2018-05-10/CreateEnvironment)
+
+## Synopsis
+
+```
+create-environment
+[--deployment-order <value>]
+[--description <value>]
+--domain-identifier <value>
+[--environment-account-identifier <value>]
+[--environment-account-region <value>]
+[--environment-blueprint-identifier <value>]
+[--environment-configuration-id <value>]
+--environment-profile-identifier <value>
+[--glossary-terms <value>]
+--name <value>
+--project-identifier <value>
+[--user-parameters <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--deployment-order` (integer)
+
+The deployment order of the environment.
+
+`--description` (string)
+
+The description of the Amazon DataZone environment.
+
+`--domain-identifier` (string)
+
+The identifier of the Amazon DataZone domain in which the environment is created.
+
+`--environment-account-identifier` (string)
+
+The ID of the account in which the environment is being created.
+
+`--environment-account-region` (string)
+
+The region of the account in which the environment is being created.
+
+`--environment-blueprint-identifier` (string)
+
+The ID of the blueprint with which the environment is being created.
+
+`--environment-configuration-id` (string)
+
+The configuration ID of the environment.
+
+`--environment-profile-identifier` (string)
+
+The identifier of the environment profile that is used to create this Amazon DataZone environment.
+
+`--glossary-terms` (list)
+
+The glossary terms that can be used in this Amazon DataZone environment.
+
+(string)
+
+Syntax:
+
+```
+"string" "string" ...
+```
+
+`--name` (string)
+
+The name of the Amazon DataZone environment.
+
+`--project-identifier` (string)
+
+The identifier of the Amazon DataZone project in which this environment is created.
+
+`--user-parameters` (list)
+
+The user parameters of this Amazon DataZone environment.
+
+(structure)
+
+The parameter details of an evironment profile.
+
+name -> (string)
+
+The name of an environment profile parameter.
+
+value -> (string)
+
+The value of an environment profile parameter.
+
+Shorthand Syntax:
+
+```
+name=string,value=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "name": "string",
+    "value": "string"
+  }
+  ...
+]
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+awsAccountId -> (string)
+
+The Amazon Web Services account in which the Amazon DataZone environment is created.
+
+awsAccountRegion -> (string)
+
+The Amazon Web Services region in which the Amazon DataZone environment is created.
+
+createdAt -> (timestamp)
+
+The timestamp of when the environment was created.
+
+createdBy -> (string)
+
+The Amazon DataZone user who created this environment.
+
+deploymentProperties -> (structure)
+
+The deployment properties of this Amazon DataZone environment.
+
+endTimeoutMinutes -> (integer)
+
+The end timeout of the environment blueprint deployment.
+
+startTimeoutMinutes -> (integer)
+
+The start timeout of the environment blueprint deployment.
+
+description -> (string)
+
+The description of this Amazon DataZone environment.
+
+domainId -> (string)
+
+The identifier of the Amazon DataZone domain in which the environment is created.
+
+environmentActions -> (list)
+
+The configurable actions of this Amazon DataZone environment.
+
+(structure)
+
+The configurable action of a Amazon DataZone environment.
+
+auth -> (string)
+
+The authentication type of a configurable action of a Amazon DataZone environment.
+
+parameters -> (list)
+
+The parameters of a configurable action in a Amazon DataZone environment.
+
+(structure)
+
+The details of the parameters for the configurable environment action.
+
+key -> (string)
+
+The key of the configurable action parameter.
+
+value -> (string)
+
+The value of the configurable action parameter.
+
+type -> (string)
+
+The type of a configurable action in a Amazon DataZone environment.
+
+environmentBlueprintId -> (string)
+
+The ID of the blueprint with which this Amazon DataZone environment was created.
+
+environmentConfigurationId -> (string)
+
+The configuration ID of the environment.
+
+environmentProfileId -> (string)
+
+The ID of the environment profile with which this Amazon DataZone environment was created.
+
+glossaryTerms -> (list)
+
+The glossary terms that can be used in this Amazon DataZone environment.
+
+(string)
+
+id -> (string)
+
+The ID of this Amazon DataZone environment.
+
+lastDeployment -> (structure)
+
+The details of the last deployment of this Amazon DataZone environment.
+
+deploymentId -> (string)
+
+The identifier of the last deployment of the environment.
+
+deploymentStatus -> (string)
+
+The status of the last deployment of the environment.
+
+deploymentType -> (string)
+
+The type of the last deployment of the environment.
+
+failureReason -> (structure)
+
+The failure reason of the last deployment of the environment.
+
+code -> (string)
+
+The error code for the failure reason for the environment deployment.
+
+message -> (string)
+
+The error message for the failure reason for the environment deployment.
+
+isDeploymentComplete -> (boolean)
+
+Specifies whether the last deployment of the environment is complete.
+
+messages -> (list)
+
+The messages of the last deployment of the environment.
+
+(string)
+
+name -> (string)
+
+The name of this environment.
+
+projectId -> (string)
+
+The ID of the Amazon DataZone project in which this environment is created.
+
+provider -> (string)
+
+The provider of this Amazon DataZone environment.
+
+provisionedResources -> (list)
+
+The provisioned resources of this Amazon DataZone environment.
+
+(structure)
+
+The details of a provisioned resource of this Amazon DataZone environment.
+
+name -> (string)
+
+The name of a provisioned resource of this Amazon DataZone environment.
+
+provider -> (string)
+
+The provider of a provisioned resource of this Amazon DataZone environment.
+
+type -> (string)
+
+The type of a provisioned resource of this Amazon DataZone environment.
+
+value -> (string)
+
+The value of a provisioned resource of this Amazon DataZone environment.
+
+provisioningProperties -> (tagged union structure)
+
+The provisioning properties of this Amazon DataZone environment.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `cloudFormation`.
+
+cloudFormation -> (structure)
+
+The cloud formation properties included as part of the provisioning properties of an environment blueprint.
+
+templateUrl -> (string)
+
+The template URL of the cloud formation provisioning properties of the environment blueprint.
+
+status -> (string)
+
+The status of this Amazon DataZone environment.
+
+updatedAt -> (timestamp)
+
+The timestamp of when this environment was updated.
+
+userParameters -> (list)
+
+The user parameters of this Amazon DataZone environment.
+
+(structure)
+
+The details of user parameters of an environment blueprint.
+
+defaultValue -> (string)
+
+The default value of the parameter.
+
+description -> (string)
+
+The description of the parameter.
+
+fieldType -> (string)
+
+The filed type of the parameter.
+
+isEditable -> (boolean)
+
+Specifies whether the parameter is editable.
+
+isOptional -> (boolean)
+
+Specifies whether the custom parameter is optional.
+
+keyName -> (string)
+
+The key name of the parameter.

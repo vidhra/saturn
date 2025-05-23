@@ -115,7 +115,7 @@ def run_command(
     if config.get(f'{provider}_model'):
         console.print(f"Using Model: {config.get(f'{provider}_model')}")
     console.print(f"Target GCP Project: {config['gcp_project_id']}")
-    console.print(f"RAG Docs Path for Init/Ingest: {config['rag_docs_path_for_init']}")
+    
     console.print(f"RAG Vector Store: {config['vector_store_choice']}")
     if config['db_config']:
         console.print(f"RAG DB Config: {config['db_config']}")
@@ -147,13 +147,18 @@ def run_command(
 
 @app.command("ingest-docs")
 def ingest_docs_command(
-    docs_path: str = typer.Option(
-        os.getenv("GCLOUD_DOCS_PATH") or APP_CONFIG.get('rag_docs_path', os.path.join(os.path.dirname(__file__), '..' , 'internal', 'tools', 'gcloud_online_docs_markdown')),
+    provider: str = typer.Option(
+        "gcp",
+        "--provider",
+        help="Cloud provider: gcp or aws"
+    ),
+    docs_path: Optional[str] = typer.Option(
+        None,
         "--docs-path", 
-        help="Path to Markdown documents to ingest."
+        help="Path to Markdown documents to ingest. If not specified, uses provider-specific default path."
     ),
     vector_store: str = typer.Option(
-        os.getenv("VECTOR_STORE", "chroma"), 
+        os.getenv("VECTOR_STORE") or APP_CONFIG.get('vector_store', "chroma"), 
         "--vector-store", 
         help="Vector store type: default (in-memory, not persistent for ingest), chroma, duckdb."
     ),
@@ -168,24 +173,37 @@ def ingest_docs_command(
     google_api_key_cli: Optional[str] = typer.Option(None, "--google-api-key", help="Google API Key for Gemini Embeddings. Overrides GOOGLE_API_KEY env var."),
     force_rebuild: bool = typer.Option(False, "--force-rebuild", help="Force rebuild of the index, deleting existing data in persistent stores.")
 ):
-    """Ingests documents into the specified vector store using predefined paths/names.""" # Updated docstring
-    console.print(Panel(f"Starting Document Ingestion for Vector Store: [bold cyan]{vector_store}[/bold cyan]", title="Saturn Ingestion"))
+    """Ingests documents into the specified vector store with provider-specific configurations."""
+    
+    # Import provider-specific functions from rag_engine
+    from .rag_engine import get_provider_docs_path, build_provider_db_config
+    
+    provider = provider.lower()
+    if provider not in ["gcp", "aws"]:
+        console.print(f"[bold red]Error:[/] Unsupported provider '{provider}'. Use 'gcp' or 'aws'.")
+        raise typer.Exit(code=1)
+    
+    # Use provider-specific docs path if not explicitly provided
+    if not docs_path:
+        docs_path = get_provider_docs_path(APP_CONFIG, provider)
+    
+    console.print(Panel(f"Starting {provider.upper()} Document Ingestion for Vector Store: [bold cyan]{vector_store}[/bold cyan]", title="Saturn Ingestion"))
+    console.print(f"Provider: [bold]{provider.upper()}[/bold]")
     console.print(f"Documents path: {docs_path}")
 
     vs_choice = vector_store.lower()
     if vs_choice == "default":
         console.print("[bold yellow]Warning:[/] 'default' (in-memory) vector store selected. Ingestion will not be persistent. Use 'chroma' or 'duckdb' for persistence.")
 
-    db_configuration = {}
+    # Use provider-specific database configuration
+    db_configuration = build_provider_db_config(APP_CONFIG, provider, vs_choice)
+    
     if vs_choice == "chroma":
-        db_configuration["chroma_path"] = DEFAULT_CHROMA_PATH # Use default constant
-        db_configuration["chroma_collection_name"] = DEFAULT_CHROMA_COLLECTION # Use default constant
-        console.print(f"[Info] Using ChromaDB with default path: '{DEFAULT_CHROMA_PATH}' and collection: '{DEFAULT_CHROMA_COLLECTION}'")
+        console.print(f"[Info] Using ChromaDB with path: '{db_configuration['chroma_path']}' and collection: '{db_configuration['chroma_collection_name']}'")
     elif vs_choice == "duckdb":
-        db_configuration["duckdb_path"] = DEFAULT_DUCKDB_PATH # Use default constant
-        db_configuration["duckdb_file_name"] = DEFAULT_DUCKDB_DB_FILE_NAME # Use default constant
-        db_configuration["duckdb_table_name"] = DEFAULT_DUCKDB_TABLE_NAME # Use default constant
-        console.print(f"[Info] Using DuckDB with default path: '{DEFAULT_DUCKDB_PATH}/{DEFAULT_DUCKDB_DB_FILE_NAME}' and table: '{DEFAULT_DUCKDB_TABLE_NAME}'")
+        console.print(f"[Info] Using DuckDB with path: '{db_configuration['duckdb_path']}/{db_configuration['duckdb_file_name']}' and table: '{db_configuration['duckdb_table_name']}'")
+    
+    console.print(f"Database configuration: {db_configuration}")
     
     effective_google_api_key = google_api_key_cli or os.getenv("GOOGLE_API_KEY") or APP_CONFIG.get('google_api_key')
 

@@ -1,0 +1,291 @@
+# batch-get-repositoriesÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/codecommit/batch-get-repositories.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/codecommit/batch-get-repositories.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [codecommit](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/codecommit/index.html#cli-aws-codecommit) ]
+
+# batch-get-repositories
+
+## Description
+
+Returns information about one or more repositories.
+
+### Note
+
+The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/codecommit-2015-04-13/BatchGetRepositories)
+
+## Synopsis
+
+```
+batch-get-repositories
+--repository-names <value>
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--repository-names` (list)
+
+The names of the repositories to get information about.
+
+### Note
+
+The length constraint limit is for each string in the array. The array itself can be empty.
+
+(string)
+
+Syntax:
+
+```
+"string" "string" ...
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Examples
+
+### Note
+
+To use the following examples, you must have the AWS CLI installed and configured. See the [Getting started guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) in the *AWS CLI User Guide* for more information.
+
+Unless otherwise stated, all examples have unix-like quotation rules. These examples will need to be adapted to your terminalâs quoting rules. See [Using quotation marks with strings](https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-quoting-strings.html) in the *AWS CLI User Guide* .
+
+**To view details about multiple repositories**
+
+This example shows details about multiple AWS CodeCommit repositories.
+
+```
+aws codecommit batch-get-repositories \
+    --repository-names MyDemoRepo MyOtherDemoRepo
+```
+
+Output:
+
+```
+{
+    "repositoriesNotFound": [],
+    "repositories": [
+         {
+            "creationDate": 1429203623.625,
+            "defaultBranch": "main",
+            "repositoryName": "MyDemoRepo",
+            "cloneUrlSsh": "ssh://git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo",
+            "lastModifiedDate": 1430783812.0869999,
+            "repositoryDescription": "My demonstration repository",
+            "cloneUrlHttp": "https://codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo",
+            "repositoryId": "f7579e13-b83e-4027-aaef-650c0EXAMPLE",
+            "Arn": "arn:aws:codecommit:us-east-2:111111111111:MyDemoRepo"
+            "accountId": "111111111111"
+        },
+        {
+            "creationDate": 1429203623.627,
+            "defaultBranch": "main",
+            "repositoryName": "MyOtherDemoRepo",
+            "cloneUrlSsh": "ssh://git-codecommit.us-east-2.amazonaws.com/v1/repos/MyOtherDemoRepo",
+            "lastModifiedDate": 1430783812.0889999,
+            "repositoryDescription": "My other demonstration repository",
+            "cloneUrlHttp": "https://codecommit.us-east-2.amazonaws.com/v1/repos/MyOtherDemoRepo",
+            "repositoryId": "cfc29ac4-b0cb-44dc-9990-f6f51EXAMPLE",
+            "Arn": "arn:aws:codecommit:us-east-2:111111111111:MyOtherDemoRepo"
+            "accountId": "111111111111"
+        }
+    ],
+    "repositoriesNotFound": []
+}
+```
+
+## Output
+
+repositories -> (list)
+
+A list of repositories returned by the batch get repositories operation.
+
+(structure)
+
+Information about a repository.
+
+accountId -> (string)
+
+The ID of the Amazon Web Services account associated with the repository.
+
+repositoryId -> (string)
+
+The ID of the repository.
+
+repositoryName -> (string)
+
+The repositoryâs name.
+
+repositoryDescription -> (string)
+
+A comment or description about the repository.
+
+defaultBranch -> (string)
+
+The repositoryâs default branch name.
+
+lastModifiedDate -> (timestamp)
+
+The date and time the repository was last modified, in timestamp format.
+
+creationDate -> (timestamp)
+
+The date and time the repository was created, in timestamp format.
+
+cloneUrlHttp -> (string)
+
+The URL to use for cloning the repository over HTTPS.
+
+cloneUrlSsh -> (string)
+
+The URL to use for cloning the repository over SSH.
+
+Arn -> (string)
+
+The Amazon Resource Name (ARN) of the repository.
+
+kmsKeyId -> (string)
+
+The ID of the Key Management Service encryption key used to encrypt and decrypt the repository.
+
+repositoriesNotFound -> (list)
+
+Returns a list of repository names for which information could not be found.
+
+(string)
+
+errors -> (list)
+
+Returns information about any errors returned when attempting to retrieve information about the repositories.
+
+(structure)
+
+Returns information about errors in a BatchGetRepositories operation.
+
+repositoryId -> (string)
+
+The ID of a repository that either could not be found or was not in a valid state.
+
+repositoryName -> (string)
+
+The name of a repository that either could not be found or was not in a valid state.
+
+errorCode -> (string)
+
+An error code that specifies the type of failure.
+
+errorMessage -> (string)
+
+An error message that provides detail about why the repository either was not found or was not in a valid state.

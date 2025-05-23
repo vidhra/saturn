@@ -115,7 +115,7 @@ def run_command(
     if config.get(f'{provider}_model'):
         console.print(f"Using Model: {config.get(f'{provider}_model')}")
     console.print(f"Target GCP Project: {config['gcp_project_id']}")
-    console.print(f"RAG Docs Path for Init/Ingest: {config['rag_docs_path_for_init']}")
+    
     console.print(f"RAG Vector Store: {config['vector_store_choice']}")
     if config['db_config']:
         console.print(f"RAG DB Config: {config['db_config']}")
@@ -217,4 +217,5 @@ def ingest_docs_command(
         raise typer.Exit(code=1)
 
 if __name__ == "__main__":
+    print("test")
     app() 

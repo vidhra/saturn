@@ -1,0 +1,261 @@
+# update-inputÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/iotevents/update-input.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/iotevents/update-input.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [iotevents](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/iotevents/index.html#cli-aws-iotevents) ]
+
+# update-input
+
+## Description
+
+Updates an input.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/iotevents-2018-07-27/UpdateInput)
+
+## Synopsis
+
+```
+update-input
+--input-name <value>
+[--input-description <value>]
+--input-definition <value>
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--input-name` (string)
+
+The name of the input you want to update.
+
+`--input-description` (string)
+
+A brief description of the input.
+
+`--input-definition` (structure)
+
+The definition of the input.
+
+attributes -> (list)
+
+The attributes from the JSON payload that are made available by the input. Inputs are derived from messages sent to the AWS IoT Events system using `BatchPutMessage` . Each such message contains a JSON payload, and those attributes (and their paired values) specified here are available for use in the `condition` expressions used by detectors that monitor this input.
+
+(structure)
+
+The attributes from the JSON payload that are made available by the input. Inputs are derived from messages sent to the AWS IoT Events system using `BatchPutMessage` . Each such message contains a JSON payload. Those attributes (and their paired values) specified here are available for use in the `condition` expressions used by detectors.
+
+jsonPath -> (string)
+
+An expression that specifies an attribute-value pair in a JSON structure. Use this to specify an attribute from the JSON payload that is made available by the input. Inputs are derived from messages sent to AWS IoT Events (`BatchPutMessage` ). Each such message contains a JSON payload. The attribute (and its paired value) specified here are available for use in the `condition` expressions used by detectors.
+
+Syntax: `<field-name>.<field-name>...`
+
+Shorthand Syntax:
+
+```
+attributes=[{jsonPath=string},{jsonPath=string}]
+```
+
+JSON Syntax:
+
+```
+{
+  "attributes": [
+    {
+      "jsonPath": "string"
+    }
+    ...
+  ]
+}
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Examples
+
+### Note
+
+To use the following examples, you must have the AWS CLI installed and configured. See the [Getting started guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) in the *AWS CLI User Guide* for more information.
+
+Unless otherwise stated, all examples have unix-like quotation rules. These examples will need to be adapted to your terminalâs quoting rules. See [Using quotation marks with strings](https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-quoting-strings.html) in the *AWS CLI User Guide* .
+
+**To update an input**
+
+The following `update-input` example updates the specified input with a new description and definition.
+
+```
+aws iotevents update-input \
+    --cli-input-json file://pressureInput.json
+```
+
+Contents of `pressureInput.json`:
+
+```
+{
+    "inputName": "PressureInput",
+    "inputDescription": "Pressure readings from a motor",
+    "inputDefinition": {
+        "attributes": [
+            { "jsonPath": "sensorData.pressure" },
+            { "jsonPath": "motorid" }
+        ]
+    }
+}
+```
+
+Output:
+
+```
+{
+    "inputConfiguration": {
+        "status": "ACTIVE",
+        "inputArn": "arn:aws:iotevents:us-west-2:123456789012:input/PressureInput",
+        "lastUpdateTime": 1560795976.458,
+        "creationTime": 1560795312.542,
+        "inputName": "PressureInput",
+        "inputDescription": "Pressure readings from a motor"
+    }
+}
+```
+
+For more information, see [UpdateInput](https://docs.aws.amazon.com/iotevents/latest/apireference/API_UpdateInput) in the *AWS IoT Events API Reference*.
+
+## Output
+
+inputConfiguration -> (structure)
+
+Information about the configuration of the input.
+
+inputName -> (string)
+
+The name of the input.
+
+inputDescription -> (string)
+
+A brief description of the input.
+
+inputArn -> (string)
+
+The ARN of the input.
+
+creationTime -> (timestamp)
+
+The time the input was created.
+
+lastUpdateTime -> (timestamp)
+
+The last time the input was updated.
+
+status -> (string)
+
+The status of the input.

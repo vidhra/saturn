@@ -1,0 +1,361 @@
+# batch-get-findingsÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/codeguru-security/batch-get-findings.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/codeguru-security/batch-get-findings.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [codeguru-security](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/codeguru-security/index.html#cli-aws-codeguru-security) ]
+
+# batch-get-findings
+
+## Description
+
+Returns a list of requested findings from standard scans.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/codeguru-security-2018-05-10/BatchGetFindings)
+
+## Synopsis
+
+```
+batch-get-findings
+--finding-identifiers <value>
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--finding-identifiers` (list)
+
+A list of finding identifiers. Each identifier consists of a `scanName` and a `findingId` . You retrieve the `findingId` when you call `GetFindings` .
+
+(structure)
+
+An object that contains information about a finding and the scan that generated it.
+
+findingId -> (string)
+
+The identifier for a finding.
+
+scanName -> (string)
+
+The name of the scan that generated the finding.
+
+Shorthand Syntax:
+
+```
+findingId=string,scanName=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "findingId": "string",
+    "scanName": "string"
+  }
+  ...
+]
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+failedFindings -> (list)
+
+A list of errors for individual findings which were not fetched. Each BatchGetFindingsError contains the `scanName` , `findingId` , `errorCode` and error `message` .
+
+(structure)
+
+Contains information about the error that caused a finding to fail to be retrieved.
+
+errorCode -> (string)
+
+A code associated with the type of error.
+
+findingId -> (string)
+
+The finding ID of the finding that was not fetched.
+
+message -> (string)
+
+Describes the error.
+
+scanName -> (string)
+
+The name of the scan that generated the finding.
+
+findings -> (list)
+
+A list of all findings which were successfully fetched.
+
+(structure)
+
+Information about a finding that was detected in your code.
+
+createdAt -> (timestamp)
+
+The time when the finding was created.
+
+description -> (string)
+
+A description of the finding.
+
+detectorId -> (string)
+
+The identifier for the detector that detected the finding in your code. A detector is a defined rule based on industry standards and AWS best practices.
+
+detectorName -> (string)
+
+The name of the detector that identified the security vulnerability in your code.
+
+detectorTags -> (list)
+
+One or more tags or categorizations that are associated with a detector. These tags are defined by type, programming language, or other classification such as maintainability or consistency.
+
+(string)
+
+generatorId -> (string)
+
+The identifier for the component that generated a finding such as AmazonCodeGuruSecurity.
+
+id -> (string)
+
+The identifier for a finding.
+
+remediation -> (structure)
+
+An object that contains the details about how to remediate a finding.
+
+recommendation -> (structure)
+
+An object that contains information about the recommended course of action to remediate a finding.
+
+text -> (string)
+
+The recommended course of action to remediate the finding.
+
+url -> (string)
+
+The URL address to the recommendation for remediating the finding.
+
+suggestedFixes -> (list)
+
+A list of `SuggestedFix` objects. Each object contains information about a suggested code fix to remediate the finding.
+
+(structure)
+
+Information about the suggested code fix to remediate a finding.
+
+code -> (string)
+
+The suggested code fix. If applicable, includes code patch to replace your source code.
+
+description -> (string)
+
+A description of the suggested code fix and why it is being suggested.
+
+resource -> (structure)
+
+The resource where Amazon CodeGuru Security detected a finding.
+
+id -> (string)
+
+The `scanName` of the scan that was run on the resource.
+
+subResourceId -> (string)
+
+The identifier for a section of the resource.
+
+ruleId -> (string)
+
+The identifier for the rule that generated the finding.
+
+severity -> (string)
+
+The severity of the finding. Severity can be critical, high, medium, low, or informational. For information on severity levels, see [Finding severity](https://docs.aws.amazon.com/codeguru/latest/security-ug/findings-overview.html#severity-distribution) in the *Amazon CodeGuru Security User Guide* .
+
+status -> (string)
+
+The status of the finding. A finding status can be open or closed.
+
+title -> (string)
+
+The title of the finding.
+
+type -> (string)
+
+The type of finding.
+
+updatedAt -> (timestamp)
+
+The time when the finding was last updated. Findings are updated when you remediate them or when the finding code location changes.
+
+vulnerability -> (structure)
+
+An object that describes the detected security vulnerability.
+
+filePath -> (structure)
+
+An object that describes the location of the detected security vulnerability in your code.
+
+codeSnippet -> (list)
+
+A list of `CodeLine` objects that describe where the security vulnerability appears in your code.
+
+(structure)
+
+The line of code where a finding was detected.
+
+content -> (string)
+
+The code that contains a vulnerability.
+
+number -> (integer)
+
+The code line number.
+
+endLine -> (integer)
+
+The last line number of the code snippet where the security vulnerability appears in your code.
+
+name -> (string)
+
+The name of the file.
+
+path -> (string)
+
+The path to the resource with the security vulnerability.
+
+startLine -> (integer)
+
+The first line number of the code snippet where the security vulnerability appears in your code.
+
+id -> (string)
+
+The identifier for the vulnerability.
+
+itemCount -> (integer)
+
+The number of times the vulnerability appears in your code.
+
+referenceUrls -> (list)
+
+One or more URL addresses that contain details about a vulnerability.
+
+(string)
+
+relatedVulnerabilities -> (list)
+
+One or more vulnerabilities that are related to the vulnerability being described.
+
+(string)

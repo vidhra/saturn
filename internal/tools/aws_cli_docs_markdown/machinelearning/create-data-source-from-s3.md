@@ -1,0 +1,235 @@
+# create-data-source-from-s3Â¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/create-data-source-from-s3.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/create-data-source-from-s3.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [machinelearning](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/index.html#cli-aws-machinelearning) ]
+
+# create-data-source-from-s3
+
+## Description
+
+Creates a `DataSource` object. A `DataSource` references data that can be used to perform `CreateMLModel` , `CreateEvaluation` , or `CreateBatchPrediction` operations.
+
+`CreateDataSourceFromS3` is an asynchronous operation. In response to `CreateDataSourceFromS3` , Amazon Machine Learning (Amazon ML) immediately returns and sets the `DataSource` status to `PENDING` . After the `DataSource` has been created and is ready for use, Amazon ML sets the `Status` parameter to `COMPLETED` . `DataSource` in the `COMPLETED` or `PENDING` state can be used to perform only `CreateMLModel` , `CreateEvaluation` or `CreateBatchPrediction` operations.
+
+If Amazon ML canât accept the input source, it sets the `Status` parameter to `FAILED` and includes an error message in the `Message` attribute of the `GetDataSource` operation response.
+
+The observation data used in a `DataSource` should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the `DataSource` .
+
+After the `DataSource` has been created, itâs ready to use in evaluations and batch predictions. If you plan to use the `DataSource` to train an `MLModel` , the `DataSource` also needs a recipe. A recipe describes how each input variable will be used in training an `MLModel` . Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/machinelearning-2014-12-12/CreateDataSourceFromS3)
+
+## Synopsis
+
+```
+create-data-source-from-s3
+--data-source-id <value>
+[--data-source-name <value>]
+--data-spec <value>
+[--compute-statistics | --no-compute-statistics]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--data-source-id` (string)
+
+A user-supplied identifier that uniquely identifies the `DataSource` .
+
+`--data-source-name` (string)
+
+A user-supplied name or description of the `DataSource` .
+
+`--data-spec` (structure)
+
+The data specification of a `DataSource` :
+
+- DataLocationS3 - The Amazon S3 location of the observation data.
+- DataSchemaLocationS3 - The Amazon S3 location of the `DataSchema` .
+- DataSchema - A JSON string representing the schema. This is not required if `DataSchemaUri` is specified.
+- DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the `Datasource` .  Sample - `"{\"splitting\":{\"percentBegin\":10,\"percentEnd\":60}}"`
+
+DataLocationS3 -> (string)
+
+The location of the data file(s) used by a `DataSource` . The URI specifies a data file or an Amazon Simple Storage Service (Amazon S3) directory or bucket containing data files.
+
+DataRearrangement -> (string)
+
+A JSON string that represents the splitting and rearrangement processing to be applied to a `DataSource` . If the `DataRearrangement` parameter is not provided, all of the input data is used to create the `Datasource` .
+
+There are multiple parameters that control what data is used to create a datasource:
+
+- [**](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/create-data-source-from-s3.html#id1)`percentBegin` **   Use `percentBegin` to indicate the beginning of the range of the data used to create the Datasource. If you do not include `percentBegin` and `percentEnd` , Amazon ML includes all of the data when creating the datasource.
+- [**](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/create-data-source-from-s3.html#id3)`percentEnd` **   Use `percentEnd` to indicate the end of the range of the data used to create the Datasource. If you do not include `percentBegin` and `percentEnd` , Amazon ML includes all of the data when creating the datasource.
+- [**](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/create-data-source-from-s3.html#id5)`complement` **   The `complement` parameter instructs Amazon ML to use the data that is not included in the range of `percentBegin` to `percentEnd` to create a datasource. The `complement` parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for `percentBegin` and `percentEnd` , along with the `complement` parameter. For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data. Datasource for evaluation: `{"splitting":{"percentBegin":0, "percentEnd":25}}`   Datasource for training: `{"splitting":{"percentBegin":0, "percentEnd":25, "complement":"true"}}`
+- [**](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/machinelearning/create-data-source-from-s3.html#id7)`strategy` **   To change how Amazon ML splits the data for a datasource, use the `strategy` parameter. The default value for the `strategy` parameter is `sequential` , meaning that Amazon ML takes all of the data records between the `percentBegin` and `percentEnd` parameters for the datasource, in the order that the records appear in the input data. The following two `DataRearrangement` lines are examples of sequentially ordered training and evaluation datasources: Datasource for evaluation: `{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential"}}`   Datasource for training: `{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential", "complement":"true"}}`   To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the `strategy` parameter to `random` and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between `percentBegin` and `percentEnd` . Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records. The following two `DataRearrangement` lines are examples of non-sequentially ordered training and evaluation datasources: Datasource for evaluation: `{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv"}}`   Datasource for training: `{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv", "complement":"true"}}`
+
+DataSchema -> (string)
+
+A JSON string that represents the schema for an Amazon S3 `DataSource` . The `DataSchema` defines the structure of the observation data in the data file(s) referenced in the `DataSource` .
+
+You must provide either the `DataSchema` or the `DataSchemaLocationS3` .
+
+Define your `DataSchema` as a series of key-value pairs. `attributes` and `excludedVariableNames` have an array of key-value pairs for their value. Use the following format to define your `DataSchema` .
+
+{ âversionâ: â1.0â,
+
+ârecordAnnotationFieldNameâ: âF1â,
+
+ârecordWeightFieldNameâ: âF2â,
+
+âtargetFieldNameâ: âF3â,
+
+âdataFormatâ: âCSVâ,
+
+âdataFileContainsHeaderâ: true,
+
+âattributesâ: [
+
+{ âfieldNameâ: âF1â, âfieldTypeâ: âTEXTâ }, { âfieldNameâ: âF2â, âfieldTypeâ: âNUMERICâ }, { âfieldNameâ: âF3â, âfieldTypeâ: âCATEGORICALâ }, { âfieldNameâ: âF4â, âfieldTypeâ: âNUMERICâ }, { âfieldNameâ: âF5â, âfieldTypeâ: âCATEGORICALâ }, { âfieldNameâ: âF6â, âfieldTypeâ: âTEXTâ }, { âfieldNameâ: âF7â, âfieldTypeâ: âWEIGHTED_INT_SEQUENCEâ }, { âfieldNameâ: âF8â, âfieldTypeâ: âWEIGHTED_STRING_SEQUENCEâ } ],
+
+âexcludedVariableNamesâ: [ âF6â ] }
+
+DataSchemaLocationS3 -> (string)
+
+Describes the schema location in Amazon S3. You must provide either the `DataSchema` or the `DataSchemaLocationS3` .
+
+Shorthand Syntax:
+
+```
+DataLocationS3=string,DataRearrangement=string,DataSchema=string,DataSchemaLocationS3=string
+```
+
+JSON Syntax:
+
+```
+{
+  "DataLocationS3": "string",
+  "DataRearrangement": "string",
+  "DataSchema": "string",
+  "DataSchemaLocationS3": "string"
+}
+```
+
+`--compute-statistics` | `--no-compute-statistics` (boolean)
+
+The compute statistics for a `DataSource` . The statistics are generated from the observation data referenced by a `DataSource` . Amazon ML uses the statistics internally during `MLModel` training. This parameter must be set to `true` if the DataSourceneeds to be used for `MLModel` training.
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+DataSourceId -> (string)
+
+A user-supplied ID that uniquely identifies the `DataSource` . This value should be identical to the value of the `DataSourceID` in the request.

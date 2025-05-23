@@ -442,9 +442,9 @@ async def _execute_dag_step(
 
 
             if cloud_provider == "gcp":
-                success, result_or_error = await gcp_executor.execute(command_to_execute, console)
+                success, result_or_error = await gcp_executor.execute(command_to_execute, console, step_id)
             elif cloud_provider == "aws":
-                success, result_or_error = await aws_executor.execute(command_to_execute, console)
+                success, result_or_error = await aws_executor.execute(command_to_execute, console, step_id)
             # else case already handled by checks at the start of the function
 
             if success:

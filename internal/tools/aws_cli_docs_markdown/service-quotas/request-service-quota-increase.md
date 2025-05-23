@@ -1,0 +1,291 @@
+# request-service-quota-increaseÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/service-quotas/request-service-quota-increase.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/service-quotas/request-service-quota-increase.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [service-quotas](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/service-quotas/index.html#cli-aws-service-quotas) ]
+
+# request-service-quota-increase
+
+## Description
+
+Submits a quota increase request for the specified quota at the account or resource level.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/service-quotas-2019-06-24/RequestServiceQuotaIncrease)
+
+## Synopsis
+
+```
+request-service-quota-increase
+--service-code <value>
+--quota-code <value>
+--desired-value <value>
+[--context-id <value>]
+[--support-case-allowed | --no-support-case-allowed]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--service-code` (string)
+
+Specifies the service identifier. To find the service code value for an Amazon Web Services service, use the  ListServices operation.
+
+`--quota-code` (string)
+
+Specifies the quota identifier. To find the quota code for a specific quota, use the  ListServiceQuotas operation, and look for the `QuotaCode` response in the output for the quota you want.
+
+`--desired-value` (double)
+
+Specifies the new, increased value for the quota.
+
+`--context-id` (string)
+
+Specifies the resource with an Amazon Resource Name (ARN).
+
+`--support-case-allowed` | `--no-support-case-allowed` (boolean)
+
+Specifies if an Amazon Web Services Support case can be opened for the quota increase request. This parameter is optional.
+
+By default, this flag is set to `True` and Amazon Web Services may create a support case for some quota increase requests. You can set this flag to `False` if you do not want a support case created when you request a quota increase. If you set the flag to `False` , Amazon Web Services does not open a support case and updates the request status to `Not approved` .
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Examples
+
+### Note
+
+To use the following examples, you must have the AWS CLI installed and configured. See the [Getting started guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) in the *AWS CLI User Guide* for more information.
+
+Unless otherwise stated, all examples have unix-like quotation rules. These examples will need to be adapted to your terminalâs quoting rules. See [Using quotation marks with strings](https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-quoting-strings.html) in the *AWS CLI User Guide* .
+
+**To request a service quota increase**
+
+The following `request-service-quota-increase` example requests an increase in the specified service quota.
+
+```
+aws service-quotas request-service-quota-increase \
+    --service-code ec2 \
+    --quota-code L-20F13EBD \
+    --desired-value 2
+```
+
+Output:
+
+```
+{
+    "RequestedQuota": {
+        "Id": "d187537d15254312a9609aa51bbf7624u7W49tPO",
+        "ServiceCode": "ec2",
+        "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+        "QuotaCode": "L-20F13EBD",
+        "QuotaName": "Running Dedicated c5n Hosts",
+        "DesiredValue": 2.0,
+        "Status": "PENDING",
+        "Created": 1580446904.067,
+        "Requester": "{\"accountId\":\"123456789012\",\"callerArn\":\"arn:aws:iam::123456789012:root\"}",
+        "QuotaArn": "arn:aws:servicequotas:us-east-2:123456789012:ec2/L-20F13EBD",
+        "GlobalQuota": false,
+        "Unit": "None"
+    }
+}
+```
+
+## Output
+
+RequestedQuota -> (structure)
+
+Information about the quota increase request.
+
+Id -> (string)
+
+The unique identifier.
+
+CaseId -> (string)
+
+The case ID.
+
+ServiceCode -> (string)
+
+Specifies the service identifier. To find the service code value for an Amazon Web Services service, use the  ListServices operation.
+
+ServiceName -> (string)
+
+Specifies the service name.
+
+QuotaCode -> (string)
+
+Specifies the quota identifier. To find the quota code for a specific quota, use the  ListServiceQuotas operation, and look for the `QuotaCode` response in the output for the quota you want.
+
+QuotaName -> (string)
+
+Specifies the quota name.
+
+DesiredValue -> (double)
+
+The new, increased value for the quota.
+
+Status -> (string)
+
+The state of the quota increase request.
+
+- `PENDING` : The quota increase request is under review by Amazon Web Services.
+- `CASE_OPENED` : Service Quotas opened a support case to process the quota increase request. Follow-up on the support case for more information.
+- `APPROVED` : The quota increase request is approved.
+- `DENIED` : The quota increase request canât be approved by Service Quotas. Contact Amazon Web Services Support for more details.
+- `NOT APPROVED` : The quota increase request canât be approved by Service Quotas. Contact Amazon Web Services Support for more details.
+- `CASE_CLOSED` : The support case associated with this quota increase request was closed. Check the support case correspondence for the outcome of your quota request.
+- `INVALID_REQUEST` : Service Quotas couldnât process your resource-level quota increase request because the Amazon Resource Name (ARN) specified as part of the `ContextId` is invalid.
+
+Created -> (timestamp)
+
+The date and time when the quota increase request was received and the case ID was created.
+
+LastUpdated -> (timestamp)
+
+The date and time of the most recent change.
+
+Requester -> (string)
+
+The IAM identity of the requester.
+
+QuotaArn -> (string)
+
+The Amazon Resource Name (ARN) of the quota.
+
+GlobalQuota -> (boolean)
+
+Indicates whether the quota is global.
+
+Unit -> (string)
+
+The unit of measurement.
+
+QuotaRequestedAtLevel -> (string)
+
+Filters the response to return quota requests for the `ACCOUNT` , `RESOURCE` , or `ALL` levels. `ACCOUNT` is the default.
+
+QuotaContext -> (structure)
+
+The context for this service quota.
+
+ContextScope -> (string)
+
+Specifies the scope to which the quota value is applied. If the scope is `RESOURCE` , the quota value is applied to each resource in the Amazon Web Services account. If the scope is `ACCOUNT` , the quota value is applied to the Amazon Web Services account.
+
+ContextScopeType -> (string)
+
+Specifies the resource type to which the quota can be applied.
+
+ContextId -> (string)
+
+Specifies the resource, or resources, to which the quota applies. The value for this field is either an Amazon Resource Name (ARN) or [*](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/service-quotas/request-service-quota-increase.html#id1). If the value is an ARN, the quota value applies to that resource. If the value is [*](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/service-quotas/request-service-quota-increase.html#id3), then the quota value applies to all resources listed in the `ContextScopeType` field. The quota value applies to all resources for which you havenât previously applied a quota value, and any new resources you create in your Amazon Web Services account.

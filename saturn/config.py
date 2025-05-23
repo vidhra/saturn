@@ -18,13 +18,28 @@ ENV_VAR_MAP = {
     "aws_region": "AWS_REGION",
     "aws_profile": "AWS_PROFILE",
     "vector_store": "VECTOR_STORE",
-    "rag_docs_path": "GCLOUD_DOCS_PATH", # Consider renaming to RAG_DOCS_PATH for clarity
+    # RAG Documentation paths - separate for each provider
+    "gcp_rag_docs_path": "GCP_RAG_DOCS_PATH",
+    "aws_rag_docs_path": "AWS_RAG_DOCS_PATH",
+    "rag_docs_path": "GCLOUD_DOCS_PATH", # Keep for backward compatibility, maps to GCP
     "rag_embedding_model": "RAG_EMBED_MODEL",
+    # RAG Context-Aware Parsing Configuration
+    "use_context_aware_parsing": "USE_CONTEXT_AWARE_PARSING",
+    "max_chunk_size": "MAX_CHUNK_SIZE",
+    "chunk_overlap": "CHUNK_OVERLAP", 
+    "preserve_code_blocks": "PRESERVE_CODE_BLOCKS",
+    "preserve_command_context": "PRESERVE_COMMAND_CONTEXT",
+    # ChromaDB configurations - can share same DB path but use different collections
     "chroma_db_path": "CHROMA_DB_PATH",
-    "chroma_collection_name": "CHROMA_COLLECTION",
+    "gcp_chroma_collection_name": "GCP_CHROMA_COLLECTION",
+    "aws_chroma_collection_name": "AWS_CHROMA_COLLECTION", 
+    "chroma_collection_name": "CHROMA_COLLECTION", # Keep for backward compatibility, maps to GCP
+    # DuckDB configurations - can share same DB path but use different tables
     "duckdb_path": "DUCKDB_PATH",
     "duckdb_file_name": "DUCKDB_FILE_NAME",
-    "duckdb_table_name": "DUCKDB_TABLE_NAME",
+    "gcp_duckdb_table_name": "GCP_DUCKDB_TABLE_NAME",
+    "aws_duckdb_table_name": "AWS_DUCKDB_TABLE_NAME",
+    "duckdb_table_name": "DUCKDB_TABLE_NAME", # Keep for backward compatibility, maps to GCP
 }
 
 def load_config(config_path_override: Optional[str] = None) -> Dict[str, Any]:

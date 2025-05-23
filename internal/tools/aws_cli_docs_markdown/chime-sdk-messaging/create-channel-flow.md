@@ -1,0 +1,262 @@
+# create-channel-flowÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/chime-sdk-messaging/create-channel-flow.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/chime-sdk-messaging/create-channel-flow.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [chime-sdk-messaging](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/chime-sdk-messaging/index.html#cli-aws-chime-sdk-messaging) ]
+
+# create-channel-flow
+
+## Description
+
+Creates a channel flow, a container for processors. Processors are AWS Lambda functions that perform actions on chat messages, such as stripping out profanity. You can associate channel flows with channels, and the processors in the channel flow then take action on all messages sent to that channel. This is a developer API.
+
+Channel flows process the following items:
+
+- New and updated messages
+- Persistent and non-persistent messages
+- The Standard message type
+
+### Note
+
+Channel flows donât process Control or System messages. For more information about the message types provided by Chime SDK messaging, refer to [Message types](https://docs.aws.amazon.com/chime/latest/dg/using-the-messaging-sdk.html#msg-types) in the *Amazon Chime developer guide* .
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/CreateChannelFlow)
+
+## Synopsis
+
+```
+create-channel-flow
+--app-instance-arn <value>
+--processors <value>
+--name <value>
+[--tags <value>]
+[--client-request-token <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--app-instance-arn` (string)
+
+The ARN of the channel flow request.
+
+`--processors` (list)
+
+Information about the processor Lambda functions.
+
+(structure)
+
+The information about a processor in a channel flow.
+
+Name -> (string)
+
+The name of the channel flow.
+
+Configuration -> (structure)
+
+The information about the type of processor and its identifier.
+
+Lambda -> (structure)
+
+Indicates that the processor is of type Lambda.
+
+ResourceArn -> (string)
+
+The ARN of the Lambda message processing function.
+
+InvocationType -> (string)
+
+Controls how the Lambda function is invoked.
+
+ExecutionOrder -> (integer)
+
+The sequence in which processors run. If you have multiple processors in a channel flow, message processing goes through each processor in the sequence. The value determines the sequence. At this point, we support only 1 processor within a flow.
+
+FallbackAction -> (string)
+
+Determines whether to continue with message processing or stop it in cases where communication with a processor fails. If a processor has a fallback action of `ABORT` and communication with it fails, the processor sets the message status to `FAILED` and does not send the message to any recipients. Note that if the last processor in the channel flow sequence has a fallback action of `CONTINUE` and communication with the processor fails, then the message is considered processed and sent to recipients of the channel.
+
+Shorthand Syntax:
+
+```
+Name=string,Configuration={Lambda={ResourceArn=string,InvocationType=string}},ExecutionOrder=integer,FallbackAction=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "Name": "string",
+    "Configuration": {
+      "Lambda": {
+        "ResourceArn": "string",
+        "InvocationType": "ASYNC"
+      }
+    },
+    "ExecutionOrder": integer,
+    "FallbackAction": "CONTINUE"|"ABORT"
+  }
+  ...
+]
+```
+
+`--name` (string)
+
+The name of the channel flow.
+
+`--tags` (list)
+
+The tags for the creation request.
+
+(structure)
+
+A tag object containing a key-value pair.
+
+Key -> (string)
+
+The key in a tag.
+
+Value -> (string)
+
+The value in a tag.
+
+Shorthand Syntax:
+
+```
+Key=string,Value=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "Key": "string",
+    "Value": "string"
+  }
+  ...
+]
+```
+
+`--client-request-token` (string)
+
+The client token for the request. An Idempotency token.
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+ChannelFlowArn -> (string)
+
+The ARN of the channel flow.
