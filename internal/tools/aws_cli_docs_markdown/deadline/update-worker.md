@@ -1,0 +1,317 @@
+# update-workerÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/deadline/update-worker.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/deadline/update-worker.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [deadline](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/deadline/index.html#cli-aws-deadline) ]
+
+# update-worker
+
+## Description
+
+Updates a worker.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/deadline-2023-10-12/UpdateWorker)
+
+## Synopsis
+
+```
+update-worker
+--farm-id <value>
+--fleet-id <value>
+--worker-id <value>
+[--status <value>]
+[--capabilities <value>]
+[--host-properties <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--farm-id` (string)
+
+The farm ID to update.
+
+`--fleet-id` (string)
+
+The fleet ID to update.
+
+`--worker-id` (string)
+
+The worker ID to update.
+
+`--status` (string)
+
+The worker status to update.
+
+Possible values:
+
+- `STARTED`
+- `STOPPING`
+- `STOPPED`
+
+`--capabilities` (structure)
+
+The worker capabilities to update.
+
+amounts -> (list)
+
+The worker capabilities amounts on a list of worker capabilities.
+
+(structure)
+
+The details of the worker amount capability.
+
+name -> (string)
+
+The name of the worker amount capability.
+
+value -> (float)
+
+The value of the worker amount capability.
+
+attributes -> (list)
+
+The worker attribute capabilities in the list of attribute capabilities.
+
+(structure)
+
+The details of the worker attribute capability.
+
+name -> (string)
+
+The name of the worker attribute capability.
+
+values -> (list)
+
+The values of the worker amount capability.
+
+(string)
+
+JSON Syntax:
+
+```
+{
+  "amounts": [
+    {
+      "name": "string",
+      "value": float
+    }
+    ...
+  ],
+  "attributes": [
+    {
+      "name": "string",
+      "values": ["string", ...]
+    }
+    ...
+  ]
+}
+```
+
+`--host-properties` (structure)
+
+The host properties to update.
+
+ipAddresses -> (structure)
+
+The IP address of the host.
+
+ipV4Addresses -> (list)
+
+The IpV4 address of the network.
+
+(string)
+
+ipV6Addresses -> (list)
+
+The IpV6 address for the network and node component.
+
+(string)
+
+hostName -> (string)
+
+The host name.
+
+Shorthand Syntax:
+
+```
+ipAddresses={ipV4Addresses=[string,string],ipV6Addresses=[string,string]},hostName=string
+```
+
+JSON Syntax:
+
+```
+{
+  "ipAddresses": {
+    "ipV4Addresses": ["string", ...],
+    "ipV6Addresses": ["string", ...]
+  },
+  "hostName": "string"
+}
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+log -> (structure)
+
+The worker log to update.
+
+logDriver -> (string)
+
+The log drivers for worker related logs.
+
+options -> (map)
+
+The options for a log driver.
+
+key -> (string)
+
+value -> (string)
+
+parameters -> (map)
+
+The parameters for the log configuration.
+
+key -> (string)
+
+value -> (string)
+
+error -> (string)
+
+The log configuration error details.
+
+hostConfiguration -> (structure)
+
+The script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.
+
+scriptBody -> (string)
+
+The text of the script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet. The script runs after a worker enters the `STARTING` state and before the worker processes tasks.
+
+For more information about using the script, see [Run scripts as an administrator to configure workers](https://docs.aws.amazon.com/deadline-cloud/latest/developerguide/smf-admin.html) in the *Deadline Cloud Developer Guide* .
+
+### Warning
+
+The script runs as an administrative user (`sudo root` on Linux, as an Administrator on Windows).
+
+scriptTimeoutSeconds -> (integer)
+
+The maximum time that the host configuration can run. If the timeout expires, the worker enters the `NOT RESPONDING` state and shuts down. You are charged for the time that the worker is running the host configuration script.
+
+### Note
+
+You should configure your fleet for a maximum of one worker while testing your host configuration script to avoid starting additional workers.
+
+The default is 300 seconds (5 minutes).

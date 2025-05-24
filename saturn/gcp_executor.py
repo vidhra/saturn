@@ -27,7 +27,8 @@ class GcloudExecutor:
     async def execute(
         self,
         command: str,
-        console: Console # Rich console instance passed for status updates
+        console: Console,
+        step_id: str
     ) -> Tuple[bool, Any]:
         """
         Executes a gcloud CLI command and returns the result.
@@ -43,7 +44,7 @@ class GcloudExecutor:
         
         try:
             # Use rich.status for a loading indicator
-            with console.status(f"[bold yellow]Executing: [cyan]{command}[/cyan]...[/bold yellow]", spinner="dots") as status:
+            with console.status(f"[bold yellow]Executing: [cyan]{step_id}[/cyan]...[/bold yellow]", spinner="dots") as status:
                 process = await asyncio.create_subprocess_shell(
                     command,
                     stdout=asyncio.subprocess.PIPE,
@@ -104,7 +105,7 @@ class GcloudExecutor:
                     console.print(f"Dependencies: {', '.join(node['dependencies'])}")
                 
                 # Execute the command
-                success, result = await self.execute(node["command"], console)
+                success, result = await self.execute(node["command"], console, step_id)
                 results[step_id] = (success, result)
                 
                 if not success:

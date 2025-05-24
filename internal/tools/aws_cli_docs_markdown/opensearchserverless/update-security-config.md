@@ -1,0 +1,307 @@
+# update-security-configÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearchserverless/update-security-config.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearchserverless/update-security-config.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [opensearchserverless](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearchserverless/index.html#cli-aws-opensearchserverless) ]
+
+# update-security-config
+
+## Description
+
+Updates a security configuration for OpenSearch Serverless. For more information, see [SAML authentication for Amazon OpenSearch Serverless](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-saml.html) .
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateSecurityConfig)
+
+## Synopsis
+
+```
+update-security-config
+--id <value>
+--config-version <value>
+[--description <value>]
+[--saml-options <value>]
+[--iam-identity-center-options-updates <value>]
+[--client-token <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--id` (string)
+
+The security configuration identifier. For SAML the ID will be `saml/<accountId>/<idpProviderName>` . For example, `saml/123456789123/OKTADev` .
+
+`--config-version` (string)
+
+The version of the security configuration to be updated. You can find the most recent version of a security configuration using the `GetSecurityPolicy` command.
+
+`--description` (string)
+
+A description of the security configuration.
+
+`--saml-options` (structure)
+
+SAML options in in the form of a key-value map.
+
+metadata -> (string)
+
+The XML IdP metadata file generated from your identity provider.
+
+userAttribute -> (string)
+
+A user attribute for this SAML integration.
+
+groupAttribute -> (string)
+
+The group attribute for this SAML integration.
+
+openSearchServerlessEntityId -> (string)
+
+Custom entity id attribute to override default entity id for this saml integration.
+
+sessionTimeout -> (integer)
+
+The session timeout, in minutes. Default is 60 minutes (12 hours).
+
+Shorthand Syntax:
+
+```
+metadata=string,userAttribute=string,groupAttribute=string,openSearchServerlessEntityId=string,sessionTimeout=integer
+```
+
+JSON Syntax:
+
+```
+{
+  "metadata": "string",
+  "userAttribute": "string",
+  "groupAttribute": "string",
+  "openSearchServerlessEntityId": "string",
+  "sessionTimeout": integer
+}
+```
+
+`--iam-identity-center-options-updates` (structure)
+
+Describes IAM Identity Center options in the form of a key-value map.
+
+userAttribute -> (string)
+
+The user attribute for this IAM Identity Center integration. Defaults to `UserId` .
+
+groupAttribute -> (string)
+
+The group attribute for this IAM Identity Center integration. Defaults to `GroupId` .
+
+Shorthand Syntax:
+
+```
+userAttribute=string,groupAttribute=string
+```
+
+JSON Syntax:
+
+```
+{
+  "userAttribute": "UserId"|"UserName"|"Email",
+  "groupAttribute": "GroupId"|"GroupName"
+}
+```
+
+`--client-token` (string)
+
+Unique, case-sensitive identifier to ensure idempotency of the request.
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+securityConfigDetail -> (structure)
+
+Details about the updated security configuration.
+
+id -> (string)
+
+The unique identifier of the security configuration.
+
+type -> (string)
+
+The type of security configuration.
+
+configVersion -> (string)
+
+The version of the security configuration.
+
+description -> (string)
+
+The description of the security configuration.
+
+samlOptions -> (structure)
+
+SAML options for the security configuration in the form of a key-value map.
+
+metadata -> (string)
+
+The XML IdP metadata file generated from your identity provider.
+
+userAttribute -> (string)
+
+A user attribute for this SAML integration.
+
+groupAttribute -> (string)
+
+The group attribute for this SAML integration.
+
+openSearchServerlessEntityId -> (string)
+
+Custom entity id attribute to override default entity id for this saml integration.
+
+sessionTimeout -> (integer)
+
+The session timeout, in minutes. Default is 60 minutes (12 hours).
+
+iamIdentityCenterOptions -> (structure)
+
+Describes IAM Identity Center options in the form of a key-value map.
+
+instanceArn -> (string)
+
+The ARN of the IAM Identity Center instance used to integrate with OpenSearch Serverless.
+
+applicationArn -> (string)
+
+The ARN of the IAM Identity Center application used to integrate with OpenSearch Serverless.
+
+applicationName -> (string)
+
+The name of the IAM Identity Center application used to integrate with OpenSearch Serverless.
+
+applicationDescription -> (string)
+
+The description of the IAM Identity Center application used to integrate with OpenSearch Serverless.
+
+userAttribute -> (string)
+
+The user attribute for this IAM Identity Center integration. Defaults to `UserId`
+
+groupAttribute -> (string)
+
+The group attribute for this IAM Identity Center integration. Defaults to `GroupId` .
+
+createdDate -> (long)
+
+The date the configuration was created.
+
+lastModifiedDate -> (long)
+
+The timestamp of when the configuration was last modified.

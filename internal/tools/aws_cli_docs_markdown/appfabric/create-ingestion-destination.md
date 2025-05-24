@@ -1,0 +1,382 @@
+# create-ingestion-destinationÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/appfabric/create-ingestion-destination.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/appfabric/create-ingestion-destination.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [appfabric](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/appfabric/index.html#cli-aws-appfabric) ]
+
+# create-ingestion-destination
+
+## Description
+
+Creates an ingestion destination, which specifies how an applicationâs ingested data is processed by Amazon Web Services AppFabric and where itâs delivered.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/appfabric-2023-05-19/CreateIngestionDestination)
+
+## Synopsis
+
+```
+create-ingestion-destination
+--app-bundle-identifier <value>
+--ingestion-identifier <value>
+--processing-configuration <value>
+--destination-configuration <value>
+[--client-token <value>]
+[--tags <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--app-bundle-identifier` (string)
+
+The Amazon Resource Name (ARN) or Universal Unique Identifier (UUID) of the app bundle to use for the request.
+
+`--ingestion-identifier` (string)
+
+The Amazon Resource Name (ARN) or Universal Unique Identifier (UUID) of the ingestion to use for the request.
+
+`--processing-configuration` (tagged union structure)
+
+Contains information about how ingested data is processed.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `auditLog`.
+
+auditLog -> (structure)
+
+Contains information about an audit log processing configuration.
+
+schema -> (string)
+
+The event schema in which the audit logs need to be formatted.
+
+format -> (string)
+
+The format in which the audit logs need to be formatted.
+
+Shorthand Syntax:
+
+```
+auditLog={schema=string,format=string}
+```
+
+JSON Syntax:
+
+```
+{
+  "auditLog": {
+    "schema": "ocsf"|"raw",
+    "format": "json"|"parquet"
+  }
+}
+```
+
+`--destination-configuration` (tagged union structure)
+
+Contains information about the destination of ingested data.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `auditLog`.
+
+auditLog -> (structure)
+
+Contains information about an audit log destination configuration.
+
+destination -> (tagged union structure)
+
+Contains information about an audit log destination.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `s3Bucket`, `firehoseStream`.
+
+s3Bucket -> (structure)
+
+Contains information about an Amazon S3 bucket.
+
+bucketName -> (string)
+
+The name of the Amazon S3 bucket.
+
+prefix -> (string)
+
+The object key to use.
+
+firehoseStream -> (structure)
+
+Contains information about an Amazon Kinesis Data Firehose delivery stream.
+
+streamName -> (string)
+
+The name of the Amazon Kinesis Data Firehose delivery stream.
+
+JSON Syntax:
+
+```
+{
+  "auditLog": {
+    "destination": {
+      "s3Bucket": {
+        "bucketName": "string",
+        "prefix": "string"
+      },
+      "firehoseStream": {
+        "streamName": "string"
+      }
+    }
+  }
+}
+```
+
+`--client-token` (string)
+
+Specifies a unique, case-sensitive identifier that you provide to ensure the idempotency of the request. This lets you safely retry the request without accidentally performing the same operation a second time. Passing the same value to a later call to an operation requires that you also pass the same value for all other parameters. We recommend that you use a [UUID type of value](https://wikipedia.org/wiki/Universally_unique_identifier) .
+
+If you donât provide this value, then Amazon Web Services generates a random one for you.
+
+If you retry the operation with the same `ClientToken` , but with different parameters, the retry fails with an `IdempotentParameterMismatch` error.
+
+`--tags` (list)
+
+A map of the key-value pairs of the tag or tags to assign to the resource.
+
+(structure)
+
+The key or keys of the key-value pairs for the tag or tags assigned to a resource.
+
+key -> (string)
+
+Tag key.
+
+value -> (string)
+
+Tag value.
+
+Shorthand Syntax:
+
+```
+key=string,value=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "key": "string",
+    "value": "string"
+  }
+  ...
+]
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+ingestionDestination -> (structure)
+
+Contains information about an ingestion destination.
+
+arn -> (string)
+
+The Amazon Resource Name (ARN) of the ingestion destination.
+
+ingestionArn -> (string)
+
+The Amazon Resource Name (ARN) of the ingestion.
+
+processingConfiguration -> (tagged union structure)
+
+Contains information about how ingested data is processed.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `auditLog`.
+
+auditLog -> (structure)
+
+Contains information about an audit log processing configuration.
+
+schema -> (string)
+
+The event schema in which the audit logs need to be formatted.
+
+format -> (string)
+
+The format in which the audit logs need to be formatted.
+
+destinationConfiguration -> (tagged union structure)
+
+Contains information about the destination of ingested data.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `auditLog`.
+
+auditLog -> (structure)
+
+Contains information about an audit log destination configuration.
+
+destination -> (tagged union structure)
+
+Contains information about an audit log destination.
+
+### Note
+
+This is a Tagged Union structure. Only one of the following top level keys can be set: `s3Bucket`, `firehoseStream`.
+
+s3Bucket -> (structure)
+
+Contains information about an Amazon S3 bucket.
+
+bucketName -> (string)
+
+The name of the Amazon S3 bucket.
+
+prefix -> (string)
+
+The object key to use.
+
+firehoseStream -> (structure)
+
+Contains information about an Amazon Kinesis Data Firehose delivery stream.
+
+streamName -> (string)
+
+The name of the Amazon Kinesis Data Firehose delivery stream.
+
+status -> (string)
+
+The state of the ingestion destination.
+
+The following states are possible:
+
+- `Active` : The ingestion destination is active and is ready to be used.
+- `Failed` : The ingestion destination has failed. If the ingestion destination is in this state, you should verify the ingestion destination configuration and try again.
+
+statusReason -> (string)
+
+The reason for the current status of the ingestion destination.
+
+Only present when the `status` of ingestion destination is `Failed` .
+
+createdAt -> (timestamp)
+
+The timestamp of when the ingestion destination was created.
+
+updatedAt -> (timestamp)
+
+The timestamp of when the ingestion destination was last updated.

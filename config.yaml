@@ -2,16 +2,30 @@ openai_api_key: "sk-proj-VFQ7mStuyZBdaZZgw63GU9TMJUVUMw4a3upNIhRIu0O0z_oPD-pAeIl
 gcp_project_id: "vidhra"
 google_api_key: "AIzaSyCLA8hwNOpQeE5V0mKTs2LPidXp5Vo8AMs"
 
-rag_docs_path: "./internal/tools/gcloud_online_docs_markdown" # Or your actual path
+# RAG Documentation paths - separate for each cloud provider
+gcp_rag_docs_path: "./internal/tools/gcloud_online_docs_markdown"
+aws_rag_docs_path: "./internal/tools/aws_cli_docs_markdown"
+rag_docs_path: "./internal/tools/gcloud_online_docs_markdown" # Backward compatibility (maps to GCP)
+
 rag_embedding_model: "text-embedding-004"
 vector_store: "chroma"  # Or "duckdb"
 
-# Optional: Define default persistent store paths if not using RAGEngine internal defaults
-# These can be overridden by environment variables or CLI args.
-# If these are commented out or missing, RAGEngine will use its own internal defaults 
-# (e.g., ./db/chroma_db for chroma_path).
+# RAG Context-Aware Parsing Configuration
+use_context_aware_parsing: true  # Enable CLI-specific intelligent text splitting
+max_chunk_size: 2048            # Maximum size for text chunks
+chunk_overlap: 200              # Overlap between chunks for context preservation  
+preserve_code_blocks: true      # Keep code blocks and examples intact
+preserve_command_context: true  # Preserve command-related context and structure
+
+# ChromaDB configurations - shared DB path, separate collections per provider
 chroma_db_path: "./db/chroma_db"
-chroma_collection_name: "gclouddocs_main"
-duckdb_path: "./db/my_saturn_duckdb_store" # Directory for the .duckdb file
+gcp_chroma_collection_name: "gcp_cli_docs"
+aws_chroma_collection_name: "aws_cli_docs" 
+chroma_collection_name: "gclouddocs_main" # Backward compatibility (maps to GCP)
+
+# DuckDB configurations - shared DB, separate tables per provider  
+duckdb_path: "./db/my_saturn_duckdb_store"
 duckdb_file_name: "saturn_vectors.duckdb"
-duckdb_table_name: "saturn_embeddings"
+gcp_duckdb_table_name: "gcp_cli_embeddings"
+aws_duckdb_table_name: "aws_cli_embeddings"
+duckdb_table_name: "saturn_embeddings" # Backward compatibility (maps to GCP)

@@ -115,7 +115,7 @@ def run_command(
     if config.get(f'{provider}_model'):
         console.print(f"Using Model: {config.get(f'{provider}_model')}")
     console.print(f"Target GCP Project: {config['gcp_project_id']}")
-    console.print(f"RAG Docs Path for Init/Ingest: {config['rag_docs_path_for_init']}")
+    
     console.print(f"RAG Vector Store: {config['vector_store_choice']}")
     if config['db_config']:
         console.print(f"RAG DB Config: {config['db_config']}")
@@ -138,7 +138,7 @@ def run_command(
             console.print(f"[bold yellow]Warning:[/] RAG query engine for '{config['vector_store_choice']}' not ready. Index may need to be ingested first using 'saturn ingest-docs'.")
 
         console.print("--- Starting Orchestrator ---")
-        asyncio.run(run_query_with_feedback(query, config, executor, rag_engine_instance, config['max_retries'], verbose))
+        asyncio.run(run_query_with_feedback(query, config, rag_engine_instance, verbose=verbose))
 
     except Exception as e:
         console.print(f"[bold red]\n--- An unexpected error occurred in 'run' command --- [/bold red]")
@@ -147,13 +147,18 @@ def run_command(
 
 @app.command("ingest-docs")
 def ingest_docs_command(
-    docs_path: str = typer.Option(
-        os.getenv("GCLOUD_DOCS_PATH") or APP_CONFIG.get('rag_docs_path', os.path.join(os.path.dirname(__file__), '..' , 'internal', 'tools', 'gcloud_online_docs_markdown')),
+    provider: str = typer.Option(
+        "gcp",
+        "--provider",
+        help="Cloud provider: gcp or aws"
+    ),
+    docs_path: Optional[str] = typer.Option(
+        None,
         "--docs-path", 
-        help="Path to Markdown documents to ingest."
+        help="Path to Markdown documents to ingest. If not specified, uses provider-specific default path."
     ),
     vector_store: str = typer.Option(
-        os.getenv("VECTOR_STORE", "chroma"), 
+        os.getenv("VECTOR_STORE") or APP_CONFIG.get('vector_store', "chroma"), 
         "--vector-store", 
         help="Vector store type: default (in-memory, not persistent for ingest), chroma, duckdb."
     ),
@@ -168,24 +173,37 @@ def ingest_docs_command(
     google_api_key_cli: Optional[str] = typer.Option(None, "--google-api-key", help="Google API Key for Gemini Embeddings. Overrides GOOGLE_API_KEY env var."),
     force_rebuild: bool = typer.Option(False, "--force-rebuild", help="Force rebuild of the index, deleting existing data in persistent stores.")
 ):
-    """Ingests documents into the specified vector store using predefined paths/names.""" # Updated docstring
-    console.print(Panel(f"Starting Document Ingestion for Vector Store: [bold cyan]{vector_store}[/bold cyan]", title="Saturn Ingestion"))
+    """Ingests documents into the specified vector store with provider-specific configurations."""
+    
+    # Import provider-specific functions from rag_engine
+    from .rag_engine import get_provider_docs_path, build_provider_db_config
+    
+    provider = provider.lower()
+    if provider not in ["gcp", "aws"]:
+        console.print(f"[bold red]Error:[/] Unsupported provider '{provider}'. Use 'gcp' or 'aws'.")
+        raise typer.Exit(code=1)
+    
+    # Use provider-specific docs path if not explicitly provided
+    if not docs_path:
+        docs_path = get_provider_docs_path(APP_CONFIG, provider)
+    
+    console.print(Panel(f"Starting {provider.upper()} Document Ingestion for Vector Store: [bold cyan]{vector_store}[/bold cyan]", title="Saturn Ingestion"))
+    console.print(f"Provider: [bold]{provider.upper()}[/bold]")
     console.print(f"Documents path: {docs_path}")
 
     vs_choice = vector_store.lower()
     if vs_choice == "default":
         console.print("[bold yellow]Warning:[/] 'default' (in-memory) vector store selected. Ingestion will not be persistent. Use 'chroma' or 'duckdb' for persistence.")
 
-    db_configuration = {}
+    # Use provider-specific database configuration
+    db_configuration = build_provider_db_config(APP_CONFIG, provider, vs_choice)
+    
     if vs_choice == "chroma":
-        db_configuration["chroma_path"] = DEFAULT_CHROMA_PATH # Use default constant
-        db_configuration["chroma_collection_name"] = DEFAULT_CHROMA_COLLECTION # Use default constant
-        console.print(f"[Info] Using ChromaDB with default path: '{DEFAULT_CHROMA_PATH}' and collection: '{DEFAULT_CHROMA_COLLECTION}'")
+        console.print(f"[Info] Using ChromaDB with path: '{db_configuration['chroma_path']}' and collection: '{db_configuration['chroma_collection_name']}'")
     elif vs_choice == "duckdb":
-        db_configuration["duckdb_path"] = DEFAULT_DUCKDB_PATH # Use default constant
-        db_configuration["duckdb_file_name"] = DEFAULT_DUCKDB_DB_FILE_NAME # Use default constant
-        db_configuration["duckdb_table_name"] = DEFAULT_DUCKDB_TABLE_NAME # Use default constant
-        console.print(f"[Info] Using DuckDB with default path: '{DEFAULT_DUCKDB_PATH}/{DEFAULT_DUCKDB_DB_FILE_NAME}' and table: '{DEFAULT_DUCKDB_TABLE_NAME}'")
+        console.print(f"[Info] Using DuckDB with path: '{db_configuration['duckdb_path']}/{db_configuration['duckdb_file_name']}' and table: '{db_configuration['duckdb_table_name']}'")
+    
+    console.print(f"Database configuration: {db_configuration}")
     
     effective_google_api_key = google_api_key_cli or os.getenv("GOOGLE_API_KEY") or APP_CONFIG.get('google_api_key')
 
@@ -216,5 +234,221 @@ def ingest_docs_command(
         console.print_exception(show_locals=False)
         raise typer.Exit(code=1)
 
+@app.command("terraform-run")
+def terraform_run_command(
+    query: str = typer.Argument(..., help="The natural language query for the Terraform agent."),
+    provider: Optional[str] = typer.Option(os.getenv("LLM_PROVIDER") or APP_CONFIG.get('llm_provider', "openai"), help="LLM provider (e.g., openai, gemini, claude, mistral"),
+    model: Optional[str] = typer.Option(None, help="Specific LLM model name (e.g., gpt-4o). Overrides config."),
+    cloud_provider: Optional[str] = typer.Option("gcp", "--cloud-provider", help="Cloud provider: gcp, aws, or multi (for multi-cloud)."),
+    # GCP options
+    gcp_project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--gcp-project-id", help="Google Cloud Project ID. Overrides config/env."),
+    gcp_creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--gcp-creds-path", help="Path to GCP service account key file. Overrides config/env."),
+    gcp_region: Optional[str] = typer.Option("us-central1", "--gcp-region", help="GCP default region."),
+    # AWS options
+    aws_region: Optional[str] = typer.Option(os.getenv("AWS_DEFAULT_REGION") or "us-west-2", "--aws-region", help="AWS default region."),
+    aws_profile: Optional[str] = typer.Option(os.getenv("AWS_PROFILE"), "--aws-profile", help="AWS profile to use."),
+    aws_access_key: Optional[str] = typer.Option(os.getenv("AWS_ACCESS_KEY_ID"), "--aws-access-key", help="AWS access key ID."),
+    aws_secret_key: Optional[str] = typer.Option(os.getenv("AWS_SECRET_ACCESS_KEY"), "--aws-secret-key", help="AWS secret access key."),
+    # Terraform options
+    terraform_working_dir: Optional[str] = typer.Option("terraform_workspace", "--terraform-dir", help="Terraform working directory."),
+    terraform_dry_run: bool = typer.Option(False, "--dry-run", help="Plan only, don't apply Terraform changes."),
+    terraform_keep_files: bool = typer.Option(False, "--keep-files", help="Keep Terraform files after execution."),
+    terraform_state_backend: Optional[str] = typer.Option("local", "--state-backend", help="Terraform state backend (local, gcs, s3, etc.)."),
+    rag_docs_path: Optional[str] = typer.Option(os.getenv("GCLOUD_DOCS_PATH") or APP_CONFIG.get('rag_docs_path', os.path.join(os.path.dirname(__file__), '..' , 'internal', 'tools', 'gcloud_online_docs_markdown')), "--rag-docs-path", help="Path to Markdown documents for RAG."),
+    vector_store_cli: Optional[str] = typer.Option(None, "--vector-store", help="Vector store type: default (in-memory), chroma, duckdb. Overrides env and config.yaml."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output, including full exception tracebacks.")
+):
+    """Runs the Saturn orchestrator using Terraform for multi-cloud infrastructure provisioning."""
+    
+    console.print(Panel(f"Processing query with multi-cloud Terraform: '[bold cyan]{query}[/bold cyan]'\nTarget providers: [yellow]{cloud_provider}[/yellow]", title="Saturn Multi-Cloud Terraform"))
+
+    config = APP_CONFIG.copy()
+    config['llm_provider'] = provider
+    if model: config[f'{provider}_model'] = model
+    
+    # Multi-cloud provider configuration
+    config['cloud_provider'] = cloud_provider
+    
+    # GCP configuration
+    if gcp_project_id: config['gcp_project_id'] = gcp_project_id
+    if gcp_creds_path: config['gcp_credentials_path'] = gcp_creds_path
+    config['gcp_default_region'] = gcp_region
+    
+    # AWS configuration
+    config['aws_default_region'] = aws_region
+    if aws_profile: config['aws_profile'] = aws_profile
+    if aws_access_key: config['aws_access_key_id'] = aws_access_key
+    if aws_secret_key: config['aws_secret_access_key'] = aws_secret_key
+    
+    # Terraform-specific configuration
+    config['terraform_working_dir'] = terraform_working_dir
+    config['terraform_dry_run'] = terraform_dry_run
+    config['terraform_keep_files'] = terraform_keep_files
+    config['terraform_state_backend'] = terraform_state_backend
+    config['default_executor'] = 'terraform'
+
+    # RAG configuration (reuse from existing command)
+    config['rag_docs_path_for_init'] = rag_docs_path
+    config['vector_store_choice'] = (vector_store_cli or os.getenv("VECTOR_STORE") or APP_CONFIG.get('vector_store', 'default')).lower()
+    
+    # Validate that at least one cloud provider is configured
+    gcp_configured = bool(config.get('gcp_project_id'))
+    aws_configured = bool(config.get('aws_default_region'))
+    
+    if cloud_provider == "gcp" and not gcp_configured:
+        console.print("[bold red]Error:[/] GCP Project ID required for GCP operations.")
+        raise typer.Exit(code=1)
+    elif cloud_provider == "aws" and not aws_configured:
+        console.print("[bold red]Error:[/] AWS region required for AWS operations.")
+        raise typer.Exit(code=1)
+    elif cloud_provider == "multi" and not (gcp_configured or aws_configured):
+        console.print("[bold red]Error:[/] At least one cloud provider (GCP or AWS) must be configured for multi-cloud operations.")
+        raise typer.Exit(code=1)
+
+    try:
+        from .terraform_executor import TerraformExecutor
+        from .hybrid_orchestrator import run_query_hybrid
+        from .rag_engine import RAGEngine
+
+        # Initialize RAG engine
+        rag_engine_instance = RAGEngine(
+            vector_store_choice=config['vector_store_choice'],
+            db_config=None,  # Use defaults for simplicity
+            embed_model_name=config.get('rag_embedding_model', 'sentence-transformers/all-MiniLM-L6-v2'),
+            google_api_key=config.get('google_api_key'),
+            documents_path_for_init=config['rag_docs_path_for_init'] if config['vector_store_choice'] == 'default' else None,
+            build_index_on_init=config['vector_store_choice'] == 'default'
+        )
+
+        console.print("--- Starting Terraform Orchestrator ---")
+        asyncio.run(run_query_hybrid(query, config, rag_engine_instance, execution_mode="terraform", verbose=verbose))
+
+    except Exception as e:
+        console.print(f"[bold red]\n--- An unexpected error occurred in 'terraform-run' command --- [/bold red]")
+        console.print_exception(show_locals=verbose)
+        raise typer.Exit(code=1)
+
+@app.command("hybrid-run")
+def hybrid_run_command(
+    query: str = typer.Argument(..., help="The natural language query for the hybrid agent."),
+    execution_mode: str = typer.Option("auto", "--mode", help="Execution mode: auto, terraform, gcloud, or dual"),
+    provider: Optional[str] = typer.Option(os.getenv("LLM_PROVIDER") or APP_CONFIG.get('llm_provider', "openai"), help="LLM provider (e.g., openai, gemini, claude, mistral"),
+    model: Optional[str] = typer.Option(None, help="Specific LLM model name (e.g., gpt-4o). Overrides config."),
+    project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--project-id", help="Google Cloud Project ID. Overrides config/env."),
+    creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--creds-path", help="Path to GCP service account key file (uses ADC if not provided). Overrides config/env."),
+    default_executor: Optional[str] = typer.Option("gcloud", "--default-executor", help="Default executor when mode is auto: gcloud or terraform"),
+    terraform_dry_run: bool = typer.Option(False, "--dry-run", help="Plan only, don't apply Terraform changes."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output, including full exception tracebacks.")
+):
+    """Runs the Saturn orchestrator with hybrid Terraform/gcloud execution."""
+    
+    if execution_mode not in ["auto", "terraform", "gcloud", "dual"]:
+        console.print(f"[bold red]Error:[/] Invalid execution mode '{execution_mode}'. Use: auto, terraform, gcloud, or dual")
+        raise typer.Exit(code=1)
+    
+    console.print(Panel(
+        f"Processing query with hybrid orchestrator\n"
+        f"Query: '[bold cyan]{query}[/bold cyan]'\n"
+        f"Mode: [yellow]{execution_mode}[/yellow]",
+        title="Saturn Hybrid Command"
+    ))
+
+    config = APP_CONFIG.copy()
+    config['llm_provider'] = provider
+    if model: config[f'{provider}_model'] = model
+    if project_id: config['gcp_project_id'] = project_id
+    if creds_path: config['gcp_credentials_path'] = creds_path
+    config['default_executor'] = default_executor
+    config['terraform_dry_run'] = terraform_dry_run
+
+    if not config.get('gcp_project_id'):
+        console.print("[bold red]Error:[/] GCP Project ID not found.")
+        raise typer.Exit(code=1)
+
+    try:
+        from .hybrid_orchestrator import run_query_hybrid
+        from .rag_engine import RAGEngine
+
+        # Initialize RAG engine with simple defaults
+        rag_engine_instance = RAGEngine(
+            vector_store_choice='default',
+            embed_model_name='sentence-transformers/all-MiniLM-L6-v2',
+            documents_path_for_init=config.get('rag_docs_path_for_init', 'internal/tools/gcloud_online_docs_markdown'),
+            build_index_on_init=True
+        )
+
+        console.print("--- Starting Hybrid Orchestrator ---")
+        asyncio.run(run_query_hybrid(query, config, rag_engine_instance, execution_mode=execution_mode, verbose=verbose))
+
+    except Exception as e:
+        console.print(f"[bold red]\n--- An unexpected error occurred in 'hybrid-run' command --- [/bold red]")
+        console.print_exception(show_locals=verbose)
+        raise typer.Exit(code=1)
+
+@app.command("convert-history")
+def convert_history_command(
+    log_file: str = typer.Argument(..., help="Path to Saturn execution log file (JSON format)."),
+    output_file: Optional[str] = typer.Option("converted_terraform.tf", "--output", "-o", help="Output Terraform file path."),
+    project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--project-id", help="Google Cloud Project ID."),
+    creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--creds-path", help="Path to GCP service account key file."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output.")
+):
+    """Convert gcloud command history from Saturn logs to Terraform configuration."""
+    
+    if not os.path.exists(log_file):
+        console.print(f"[bold red]Error:[/] Log file not found: {log_file}")
+        raise typer.Exit(code=1)
+    
+    console.print(Panel(f"Converting Saturn history to Terraform\nInput: [cyan]{log_file}[/cyan]\nOutput: [green]{output_file}[/green]", title="History Conversion"))
+
+    config = APP_CONFIG.copy()
+    if project_id: config['gcp_project_id'] = project_id
+    if creds_path: config['gcp_credentials_path'] = creds_path
+
+    try:
+        from .hybrid_orchestrator import HybridOrchestrator
+        from .rag_engine import RAGEngine
+
+        # Initialize a minimal RAG engine
+        rag_engine_instance = RAGEngine(
+            vector_store_choice='default',
+            build_index_on_init=False  # Don't need RAG for conversion
+        )
+
+        # Initialize hybrid orchestrator
+        orchestrator = HybridOrchestrator(config, rag_engine_instance)
+        
+        # Convert the history
+        result = asyncio.run(orchestrator.generate_terraform_from_gcloud_history(log_file))
+        
+        if result["status"] == "success":
+            # Move the generated file to the desired output location
+            if output_file != result["combined_file"]:
+                import shutil
+                shutil.move(result["combined_file"], output_file)
+            
+            console.print(f"[bold green]✓ Successfully converted history to Terraform![/bold green]")
+            console.print(f"Output file: {output_file}")
+            console.print(f"Converted {len(result['configs'])} commands")
+            
+            if verbose:
+                console.print("\n[bold]Generated Terraform Configuration:[/bold]")
+                console.print(result["combined_config"])
+                
+        elif result["status"] == "no_conversions":
+            console.print(f"[yellow]⚠ {result['message']}[/yellow]")
+        else:
+            console.print(f"[bold red]✗ Conversion failed: {result.get('error', 'Unknown error')}[/bold red]")
+            raise typer.Exit(code=1)
+
+    except Exception as e:
+        console.print(f"[bold red]\n--- An unexpected error occurred in 'convert-history' command --- [/bold red]")
+        if verbose:
+            console.print_exception(show_locals=True)
+        else:
+            console.print(f"Error: {e}")
+        raise typer.Exit(code=1)
+
 if __name__ == "__main__":
+    print("test")
     app() 

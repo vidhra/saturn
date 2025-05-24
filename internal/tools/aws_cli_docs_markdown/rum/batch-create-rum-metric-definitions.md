@@ -1,0 +1,451 @@
+# batch-create-rum-metric-definitionsÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/rum/batch-create-rum-metric-definitions.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/rum/batch-create-rum-metric-definitions.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [rum](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/rum/index.html#cli-aws-rum) ]
+
+# batch-create-rum-metric-definitions
+
+## Description
+
+Specifies the extended metrics and custom metrics that you want a CloudWatch RUM app monitor to send to a destination. Valid destinations include CloudWatch and Evidently.
+
+By default, RUM app monitors send some metrics to CloudWatch. These default metrics are listed in [CloudWatch metrics that you can collect with CloudWatch RUM](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-metrics.html) .
+
+In addition to these default metrics, you can choose to send extended metrics, custom metrics, or both.
+
+- Extended metrics let you send metrics with additional dimensions that arenât included in the default metrics. You can also send extended metrics to both Evidently and CloudWatch. The valid dimension names for the additional dimensions for extended metrics are `BrowserName` , `CountryCode` , `DeviceType` , `FileType` , `OSName` , and `PageId` . For more information, see [Extended metrics that you can send to CloudWatch and CloudWatch Evidently](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-vended-metrics.html) .
+- Custom metrics are metrics that you define. You can send custom metrics to CloudWatch. CloudWatch Evidently, or both. With custom metrics, you can use any metric name and namespace. To derive the metrics, you can use any custom events, built-in events, custom attributes, or default attributes.  You canât send custom metrics to the `AWS/RUM` namespace. You must send custom metrics to a custom namespace that you define. The namespace that you use canât start with `AWS/` . CloudWatch RUM prepends `RUM/CustomMetrics/` to the custom namespace that you define, so the final namespace for your metrics in CloudWatch is [``](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/rum/batch-create-rum-metric-definitions.html#id1)RUM/CustomMetrics/*your-custom-namespace* `` .
+
+The maximum number of metric definitions that you can specify in one `BatchCreateRumMetricDefinitions` operation is 200.
+
+The maximum number of metric definitions that one destination can contain is 2000.
+
+Extended metrics sent to CloudWatch and RUM custom metrics are charged as CloudWatch custom metrics. Each combination of additional dimension name and dimension value counts as a custom metric. For more information, see [Amazon CloudWatch Pricing](https://aws.amazon.com/cloudwatch/pricing/) .
+
+You must have already created a destination for the metrics before you send them. For more information, see [PutRumMetricsDestination](https://docs.aws.amazon.com/cloudwatchrum/latest/APIReference/API_PutRumMetricsDestination.html) .
+
+If some metric definitions specified in a `BatchCreateRumMetricDefinitions` operations are not valid, those metric definitions fail and return errors, but all valid metric definitions in the same operation still succeed.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchCreateRumMetricDefinitions)
+
+## Synopsis
+
+```
+batch-create-rum-metric-definitions
+--app-monitor-name <value>
+--destination <value>
+[--destination-arn <value>]
+--metric-definitions <value>
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--app-monitor-name` (string)
+
+The name of the CloudWatch RUM app monitor that is to send the metrics.
+
+`--destination` (string)
+
+The destination to send the metrics to. Valid values are `CloudWatch` and `Evidently` . If you specify `Evidently` , you must also specify the Amazon Resource Name (ARN) of the CloudWatchEvidently experiment that will receive the metrics and an IAM role that has permission to write to the experiment.
+
+Possible values:
+
+- `CloudWatch`
+- `Evidently`
+
+`--destination-arn` (string)
+
+This parameter is required if `Destination` is `Evidently` . If `Destination` is `CloudWatch` , do not use this parameter.
+
+This parameter specifies the ARN of the Evidently experiment that is to receive the metrics. You must have already defined this experiment as a valid destination. For more information, see [PutRumMetricsDestination](https://docs.aws.amazon.com/cloudwatchrum/latest/APIReference/API_PutRumMetricsDestination.html) .
+
+`--metric-definitions` (list)
+
+An array of structures which define the metrics that you want to send.
+
+(structure)
+
+Use this structure to define one extended metric or custom metric that RUM will send to CloudWatch or CloudWatch Evidently. For more information, see [Custom metrics and extended metrics that you can send to CloudWatch and CloudWatch Evidently](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-custom-and-extended-metrics.html) .
+
+This structure is validated differently for extended metrics and custom metrics. For extended metrics that are sent to the `AWS/RUM` namespace, the following validations apply:
+
+- The `Namespace` parameter must be omitted or set to `AWS/RUM` .
+- Only certain combinations of values for `Name` , `ValueKey` , and `EventPattern` are valid. In addition to what is displayed in the following list, the `EventPattern` can also include information used by the `DimensionKeys` field.
+- If `Name` is `PerformanceNavigationDuration` , then `ValueKey` must be `event_details.duration` and the `EventPattern` must include `{"event_type":["com.amazon.rum.performance_navigation_event"]}`
+- If `Name` is `PerformanceResourceDuration` , then `ValueKey` must be `event_details.duration` and the `EventPattern` must include `{"event_type":["com.amazon.rum.performance_resource_event"]}`
+- If `Name` is `NavigationSatisfiedTransaction` , then `ValueKey` must be null and the `EventPattern` must include `{ "event_type": ["com.amazon.rum.performance_navigation_event"], "event_details": { "duration": [{ "numeric": [">",2000] }] } }`
+- If `Name` is `NavigationToleratedTransaction` , then `ValueKey` must be null and the `EventPattern` must include `{ "event_type": ["com.amazon.rum.performance_navigation_event"], "event_details": { "duration": [{ "numeric": [">=",2000,"<"8000] }] } }`
+- If `Name` is `NavigationFrustratedTransaction` , then `ValueKey` must be null and the `EventPattern` must include `{ "event_type": ["com.amazon.rum.performance_navigation_event"], "event_details": { "duration": [{ "numeric": [">=",8000] }] } }`
+- If `Name` is `WebVitalsCumulativeLayoutShift` , then `ValueKey` must be `event_details.value` and the `EventPattern` must include `{"event_type":["com.amazon.rum.cumulative_layout_shift_event"]}`
+- If `Name` is `WebVitalsFirstInputDelay` , then `ValueKey` must be `event_details.value` and the `EventPattern` must include `{"event_type":["com.amazon.rum.first_input_delay_event"]}`
+- If `Name` is `WebVitalsLargestContentfulPaint` , then `ValueKey` must be `event_details.value` and the `EventPattern` must include `{"event_type":["com.amazon.rum.largest_contentful_paint_event"]}`
+- If `Name` is `JsErrorCount` , then `ValueKey` must be null and the `EventPattern` must include `{"event_type":["com.amazon.rum.js_error_event"]}`
+- If `Name` is `HttpErrorCount` , then `ValueKey` must be null and the `EventPattern` must include `{"event_type":["com.amazon.rum.http_event"]}`
+- If `Name` is `SessionCount` , then `ValueKey` must be null and the `EventPattern` must include `{"event_type":["com.amazon.rum.session_start_event"]}`
+- If `Name` is `PageViewCount` , then `ValueKey` must be null and the `EventPattern` must include `{"event_type":["com.amazon.rum.page_view_event"]}`
+- If `Name` is `Http4xxCount` , then `ValueKey` must be null and the `EventPattern` must include `{"event_type": ["com.amazon.rum.http_event"],"event_details":{"response":{"status":[{"numeric":[">=",400,"<",500]}]}}} }`
+- If `Name` is `Http5xxCount` , then `ValueKey` must be null and the `EventPattern` must include `{"event_type": ["com.amazon.rum.http_event"],"event_details":{"response":{"status":[{"numeric":[">=",500,"<=",599]}]}}} }`
+
+For custom metrics, the following validation rules apply:
+
+- The namespace canât be omitted and canât be `AWS/RUM` . You can use the `AWS/RUM` namespace only for extended metrics.
+- All dimensions listed in the `DimensionKeys` field must be present in the value of `EventPattern` .
+- The values that you specify for `ValueKey` , `EventPattern` , and `DimensionKeys` must be fields in RUM events, so all first-level keys in these fields must be one of the keys in the list later in this section.
+- If you set a value for `EventPattern` , it must be a JSON object.
+- For every non-empty `event_details` , there must be a non-empty `event_type` .
+- If `EventPattern` contains an `event_details` field, it must also contain an `event_type` . For every built-in `event_type` that you use, you must use a value for `event_details` that corresponds to that `event_type` . For information about event details that correspond to event types, see [RUM event details](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-datacollected.html#CloudWatch-RUM-datacollected-eventDetails) .
+- In `EventPattern` , any JSON array must contain only one value.
+
+Valid key values for first-level keys in the `ValueKey` , `EventPattern` , and `DimensionKeys` fields:
+
+- `account_id`
+- `application_Id`
+- `application_version`
+- `application_name`
+- `batch_id`
+- `event_details`
+- `event_id`
+- `event_interaction`
+- `event_timestamp`
+- `event_type`
+- `event_version`
+- `log_stream`
+- `metadata`
+- `sessionId`
+- `user_details`
+- `userId`
+
+DimensionKeys -> (map)
+
+Use this field only if you are sending the metric to CloudWatch.
+
+This field is a map of field paths to dimension names. It defines the dimensions to associate with this metric in CloudWatch. For extended metrics, valid values for the entries in this field are the following:
+
+- `"metadata.pageId": "PageId"`
+- `"metadata.browserName": "BrowserName"`
+- `"metadata.deviceType": "DeviceType"`
+- `"metadata.osName": "OSName"`
+- `"metadata.countryCode": "CountryCode"`
+- `"event_details.fileType": "FileType"`
+
+For both extended metrics and custom metrics, all dimensions listed in this field must also be included in `EventPattern` .
+
+key -> (string)
+
+value -> (string)
+
+EventPattern -> (string)
+
+The pattern that defines the metric, specified as a JSON object. RUM checks events that happen in a userâs session against the pattern, and events that match the pattern are sent to the metric destination.
+
+When you define extended metrics, the metric definition is not valid if `EventPattern` is omitted.
+
+Example event patterns:
+
+- `'{ "event_type": ["com.amazon.rum.js_error_event"], "metadata": { "browserName": [ "Chrome", "Safari" ], } }'`
+- `'{ "event_type": ["com.amazon.rum.performance_navigation_event"], "metadata": { "browserName": [ "Chrome", "Firefox" ] }, "event_details": { "duration": [{ "numeric": [ "<", 2000 ] }] } }'`
+- `'{ "event_type": ["com.amazon.rum.performance_navigation_event"], "metadata": { "browserName": [ "Chrome", "Safari" ], "countryCode": [ "US" ] }, "event_details": { "duration": [{ "numeric": [ ">=", 2000, "<", 8000 ] }] } }'`
+
+If the metrics destination is `CloudWatch` and the event also matches a value in `DimensionKeys` , then the metric is published with the specified dimensions.
+
+Name -> (string)
+
+The name for the metric that is defined in this structure. For custom metrics, you can specify any name that you like. For extended metrics, valid values are the following:
+
+- `PerformanceNavigationDuration`
+- `PerformanceResourceDuration`
+- `NavigationSatisfiedTransaction`
+- `NavigationToleratedTransaction`
+- `NavigationFrustratedTransaction`
+- `WebVitalsCumulativeLayoutShift`
+- `WebVitalsFirstInputDelay`
+- `WebVitalsLargestContentfulPaint`
+- `JsErrorCount`
+- `HttpErrorCount`
+- `SessionCount`
+
+Namespace -> (string)
+
+If this structure is for a custom metric instead of an extended metrics, use this parameter to define the metric namespace for that custom metric. Do not specify this parameter if this structure is for an extended metric.
+
+You cannot use any string that starts with `AWS/` for your namespace.
+
+UnitLabel -> (string)
+
+The CloudWatch metric unit to use for this metric. If you omit this field, the metric is recorded with no unit.
+
+ValueKey -> (string)
+
+The field within the event object that the metric value is sourced from.
+
+If you omit this field, a hardcoded value of 1 is pushed as the metric value. This is useful if you want to count the number of events that the filter catches.
+
+If this metric is sent to CloudWatch Evidently, this field will be passed to Evidently raw. Evidently will handle data extraction from the event.
+
+Shorthand Syntax:
+
+```
+DimensionKeys={KeyName1=string,KeyName2=string},EventPattern=string,Name=string,Namespace=string,UnitLabel=string,ValueKey=string ...
+```
+
+JSON Syntax:
+
+```
+[
+  {
+    "DimensionKeys": {"string": "string"
+      ...},
+    "EventPattern": "string",
+    "Name": "string",
+    "Namespace": "string",
+    "UnitLabel": "string",
+    "ValueKey": "string"
+  }
+  ...
+]
+```
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+Errors -> (list)
+
+An array of error objects, if the operation caused any errors.
+
+(structure)
+
+A structure that defines one error caused by a [BatchCreateRumMetricsDefinitions](https://docs.aws.amazon.com/cloudwatchrum/latest/APIReference/API_BatchCreateRumMetricsDefinitions.html) operation.
+
+ErrorCode -> (string)
+
+The error code.
+
+ErrorMessage -> (string)
+
+The error message for this metric definition.
+
+MetricDefinition -> (structure)
+
+The metric definition that caused this error.
+
+DimensionKeys -> (map)
+
+Use this field only if you are sending the metric to CloudWatch.
+
+This field is a map of field paths to dimension names. It defines the dimensions to associate with this metric in CloudWatch. For extended metrics, valid values for the entries in this field are the following:
+
+- `"metadata.pageId": "PageId"`
+- `"metadata.browserName": "BrowserName"`
+- `"metadata.deviceType": "DeviceType"`
+- `"metadata.osName": "OSName"`
+- `"metadata.countryCode": "CountryCode"`
+- `"event_details.fileType": "FileType"`
+
+For both extended metrics and custom metrics, all dimensions listed in this field must also be included in `EventPattern` .
+
+key -> (string)
+
+value -> (string)
+
+EventPattern -> (string)
+
+The pattern that defines the metric, specified as a JSON object. RUM checks events that happen in a userâs session against the pattern, and events that match the pattern are sent to the metric destination.
+
+When you define extended metrics, the metric definition is not valid if `EventPattern` is omitted.
+
+Example event patterns:
+
+- `'{ "event_type": ["com.amazon.rum.js_error_event"], "metadata": { "browserName": [ "Chrome", "Safari" ], } }'`
+- `'{ "event_type": ["com.amazon.rum.performance_navigation_event"], "metadata": { "browserName": [ "Chrome", "Firefox" ] }, "event_details": { "duration": [{ "numeric": [ "<", 2000 ] }] } }'`
+- `'{ "event_type": ["com.amazon.rum.performance_navigation_event"], "metadata": { "browserName": [ "Chrome", "Safari" ], "countryCode": [ "US" ] }, "event_details": { "duration": [{ "numeric": [ ">=", 2000, "<", 8000 ] }] } }'`
+
+If the metrics destination is `CloudWatch` and the event also matches a value in `DimensionKeys` , then the metric is published with the specified dimensions.
+
+Name -> (string)
+
+The name for the metric that is defined in this structure. For custom metrics, you can specify any name that you like. For extended metrics, valid values are the following:
+
+- `PerformanceNavigationDuration`
+- `PerformanceResourceDuration`
+- `NavigationSatisfiedTransaction`
+- `NavigationToleratedTransaction`
+- `NavigationFrustratedTransaction`
+- `WebVitalsCumulativeLayoutShift`
+- `WebVitalsFirstInputDelay`
+- `WebVitalsLargestContentfulPaint`
+- `JsErrorCount`
+- `HttpErrorCount`
+- `SessionCount`
+
+Namespace -> (string)
+
+If this structure is for a custom metric instead of an extended metrics, use this parameter to define the metric namespace for that custom metric. Do not specify this parameter if this structure is for an extended metric.
+
+You cannot use any string that starts with `AWS/` for your namespace.
+
+UnitLabel -> (string)
+
+The CloudWatch metric unit to use for this metric. If you omit this field, the metric is recorded with no unit.
+
+ValueKey -> (string)
+
+The field within the event object that the metric value is sourced from.
+
+If you omit this field, a hardcoded value of 1 is pushed as the metric value. This is useful if you want to count the number of events that the filter catches.
+
+If this metric is sent to CloudWatch Evidently, this field will be passed to Evidently raw. Evidently will handle data extraction from the event.
+
+MetricDefinitions -> (list)
+
+An array of structures that define the extended metrics.
+
+(structure)
+
+A structure that displays the definition of one extended metric that RUM sends to CloudWatch or CloudWatch Evidently. For more information, see [Additional metrics that you can send to CloudWatch and CloudWatch Evidently](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-vended-metrics.html) .
+
+DimensionKeys -> (map)
+
+This field is a map of field paths to dimension names. It defines the dimensions to associate with this metric in CloudWatch The value of this field is used only if the metric destination is `CloudWatch` . If the metric destination is `Evidently` , the value of `DimensionKeys` is ignored.
+
+key -> (string)
+
+value -> (string)
+
+EventPattern -> (string)
+
+The pattern that defines the metric. RUM checks events that happen in a userâs session against the pattern, and events that match the pattern are sent to the metric destination.
+
+If the metrics destination is `CloudWatch` and the event also matches a value in `DimensionKeys` , then the metric is published with the specified dimensions.
+
+MetricDefinitionId -> (string)
+
+The ID of this metric definition.
+
+Name -> (string)
+
+The name of the metric that is defined in this structure.
+
+Namespace -> (string)
+
+If this metric definition is for a custom metric instead of an extended metric, this field displays the metric namespace that the custom metric is published to.
+
+UnitLabel -> (string)
+
+Use this field only if you are sending this metric to CloudWatch. It defines the CloudWatch metric unit that this metric is measured in.
+
+ValueKey -> (string)
+
+The field within the event object that the metric value is sourced from.

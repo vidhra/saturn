@@ -14,6 +14,7 @@ from rich.syntax import Syntax
 from rich.table import Table # Import Table for better display
 
 from .gcp_executor import GcloudExecutor
+from .aws_executor import AWSExecutor # Added AWSExecutor
 from model.llm.base_interface import BaseLLMInterface
 from model.llm.openai_llm import OpenAILLM
 from model.llm.gemini_llm import GeminiLLM
@@ -27,8 +28,10 @@ from internal.dag.dag import AcyclicGraph, Edge, ORDER_DOWN, ORDER_UP # Added OR
 # Import prompt templates
 from .prompts import (
     PLANNING_SYSTEM_PROMPT_TEMPLATE,
-    GCLOUD_STEP_SYSTEM_PROMPT_TEMPLATE,
-    GCLOUD_STEP_ERROR_HANDLING_PROMPT_TEMPLATE
+    GCLOUD_STEP_SYSTEM_PROMPT_TEMPLATE, # Reverted to GCLOUD specific
+    GCLOUD_STEP_ERROR_HANDLING_PROMPT_TEMPLATE, # Reverted to GCLOUD specific
+    AWS_STEP_SYSTEM_PROMPT_TEMPLATE,    # Added AWS specific
+    AWS_STEP_ERROR_HANDLING_PROMPT_TEMPLATE # Added AWS specific
 )
 from .rag_engine import RAGEngine, DEFAULT_EMBED_MODEL_NAME # Import new default
 
@@ -39,6 +42,8 @@ console = Console()
 # --- Helper function to parse gcloud commands (Simplified Version using shlex) ---
 def _parse_gcloud_command(command_string: str) -> Dict[str, Any]:
     """Parses a gcloud command string into a structured dictionary using shlex."""
+    # This function is gcloud specific. If aws parsing is needed, a more generic one or aws specific one would be required.
+    # For now, it's kept as is, as the primary command parsing is for logging/display and not critical for execution logic if command is opaque.
     parsed_command: Dict[str, Any] = {
         "original_command": command_string,
         "base_command": "",
@@ -55,9 +60,9 @@ def _parse_gcloud_command(command_string: str) -> Dict[str, Any]:
             parsed_command["parsing_error"] = "Empty command string"
             return parsed_command
 
-        if tokens[0] != "gcloud":
-            parsed_command["parsing_error"] = "Command does not start with gcloud"
-            # Fallback: treat the whole thing as command_parts if not starting with gcloud
+        # Make it slightly more generic: check if first token is gcloud or aws
+        if tokens[0] not in ["gcloud", "aws"]:
+            parsed_command["parsing_error"] = f"Command does not start with gcloud or aws: {tokens[0]}"
             parsed_command["base_command"] = tokens[0] if tokens else ""
             parsed_command["subcommands"] = tokens[1:] if len(tokens) > 1 else []
             return parsed_command
@@ -79,20 +84,18 @@ def _parse_gcloud_command(command_string: str) -> Dict[str, Any]:
                 else:
                     parsed_command["flags"][flag_name] = True # Boolean flag
                     idx += 1
-            elif token.startswith("-") and not token.startswith("--"): # Short flags
-                if "=" in token: # e.g. -f=value
+            elif token.startswith("-") and not token.startswith("--"):
+                if "=" in token:
                     name, value = token.split("=",1)
                     parsed_command["flags"][name] = value
                     idx += 1
-                elif len(token) == 2 and idx + 1 < len(tokens) and not tokens[idx+1].startswith("-"): # e.g. -f value
+                elif len(token) == 2 and idx + 1 < len(tokens) and not tokens[idx+1].startswith("-"):
                     parsed_command["flags"][token] = tokens[idx+1]
                     idx += 2
-                else: # Boolean or grouped e.g. -v or -abc
+                else: 
                     parsed_command["flags"][token] = True 
                     idx += 1
             else:
-                # Consider as subcommand if no flags have been encountered yet, else positional
-                # This is a heuristic and might not be perfect for all gcloud commands
                 if not parsed_command["flags"]:
                     parsed_command["subcommands"].append(token)
                 else:
@@ -101,10 +104,8 @@ def _parse_gcloud_command(command_string: str) -> Dict[str, Any]:
                 
     except Exception as e:
         parsed_command["parsing_error"] = f"Error during command parsing: {str(e)}"
-        # If parsing fails, ensure original command is still primary
-        if not parsed_command.get("command_parts") and not parsed_command.get("subcommands"):
-             parsed_command["subcommands"] = [command_string] # Put full string as a part if total failure
-
+        if not parsed_command.get("subcommands"):
+             parsed_command["subcommands"] = [command_string]
     return parsed_command
 
 # --- LLM Interface Loader (remains the same) ---
@@ -166,6 +167,7 @@ async def _generate_plan_dag(
         # Display the plan in a more readable format
         plan_display_table = Table(title="LLM Generated Plan", show_header=True, header_style="bold blue")
         plan_display_table.add_column("Step ID", style="cyan", no_wrap=True)
+        plan_display_table.add_column("Provider", style="green") # Added Provider column
         plan_display_table.add_column("Description", style="white")
         plan_display_table.add_column("Dependencies", style="yellow")
         plan_display_table.add_column("Pass Output", style="magenta")
@@ -176,12 +178,13 @@ async def _generate_plan_dag(
             for i, step_data in enumerate(plan_steps):
                 if isinstance(step_data, dict):
                     step_id_disp = step_data.get("id", f"Step {i+1} (ID missing)")
+                    provider_disp = step_data.get("cloud_provider", "N/A").upper()
                     description_disp = step_data.get("description", "N/A")
                     dependencies_disp = ", ".join(step_data.get("dependencies", [])) or "-"
                     pass_output_disp = str(step_data.get("pass_output_to_next", "True")) # Default to True for display
-                    plan_display_table.add_row(step_id_disp, description_disp, dependencies_disp, pass_output_disp)
+                    plan_display_table.add_row(step_id_disp, provider_disp, description_disp, dependencies_disp, pass_output_disp)
                 else:
-                    plan_display_table.add_row(f"Step {i+1}", "Invalid step data format", "-", "-")
+                    plan_display_table.add_row(f"Step {i+1}", "N/A", "Invalid step data format", "-", "-")
             console.print(plan_display_table)
 
         dag = AcyclicGraph()
@@ -189,8 +192,15 @@ async def _generate_plan_dag(
         step_ids = set()
 
         for step in plan_steps:
-            if not isinstance(step, dict) or not all(k in step for k in ["id", "description", "dependencies"]):
-                error_msg = f"Invalid step structure in plan (missing id, description, or dependencies): {step}"
+            # Added validation for cloud_provider
+            if not isinstance(step, dict) or not all(k in step for k in ["id", "description", "dependencies", "cloud_provider"]):
+                error_msg = f"Invalid step structure (missing id, description, dependencies, or cloud_provider): {step}"
+                console.print(f"[bold red]Error:[/] {error_msg}")
+                # state_logger.record_event("plan_generation_failed", {"error": error_msg, "plan_steps": plan_steps})
+                return None, None
+            
+            if step["cloud_provider"] not in ["gcp", "aws"]:
+                error_msg = f"Invalid cloud_provider '{step['cloud_provider']}' in step {step['id']}. Must be 'gcp' or 'aws'."
                 console.print(f"[bold red]Error:[/] {error_msg}")
                 # state_logger.record_event("plan_generation_failed", {"error": error_msg, "plan_steps": plan_steps})
                 return None, None
@@ -207,8 +217,9 @@ async def _generate_plan_dag(
             step_details_map[step_id] = {
                 "id": step_id,
                 "description": step.get("description", ""),
+                "cloud_provider": step["cloud_provider"], # Store cloud_provider
                 "dependencies": step.get("dependencies", []),
-                "tool_to_use": step.get("tool_to_use", "gcloud_command_generation"),
+                "tool_to_use": step.get("tool_to_use", "cli_command_generation"),
                 "pass_output_to_next": step.get("pass_output_to_next", True)
             }
 
@@ -230,6 +241,7 @@ async def _generate_plan_dag(
             for sid, s_details in step_details_map.items():
                 dag_nodes_for_log[sid] = {
                     "description": s_details.get("description"),
+                    "cloud_provider": s_details.get("cloud_provider"),
                     "dependencies": s_details.get("dependencies", []),
                     "tool_to_use": s_details.get("tool_to_use"),
                     "pass_output_to_next": s_details.get("pass_output_to_next")
@@ -244,9 +256,9 @@ async def _generate_plan_dag(
             for step_id_to_init, details_to_init in step_details_map.items():
                  state_logger.record_node_initialization(
                      node_id=step_id_to_init,
-                     tool_name=details_to_init.get("tool_to_use", "gcloud_command_generation"), 
+                     tool_name=details_to_init.get("tool_to_use", "cli_command_generation"), 
                      attempt=0, # Will be incremented per execution attempt
-                     args={}, # Args for gcloud are generated dynamically per step
+                     args={ "cloud_provider": details_to_init.get("cloud_provider") }, # Log provider here
                      initial_status="PLANNED" # New status to indicate it's from the plan
                  )
 
@@ -272,9 +284,10 @@ async def _execute_dag_step(
     step_id: str,
     step_details: Dict[str, Any],
     llm_interface: BaseLLMInterface,
-    gcp_executor: GcloudExecutor,
+    gcp_executor: Optional[GcloudExecutor], # Now optional
+    aws_executor: Optional[AWSExecutor],   # Added AWSExecutor, optional
     state_logger: RunStateLogger,
-    rag_engine: RAGEngine, # Updated type hint
+    rag_engine: RAGEngine,
     previous_step_outputs: Dict[str, Any],
     max_attempts: int = 3, 
     verbose: bool = False
@@ -286,6 +299,43 @@ async def _execute_dag_step(
     console.print(Panel(f"Executing Step: [cyan]{step_id}[/cyan] - {step_details.get('description', 'N/A')}", title="[bold blue]Step Execution[/bold blue]"))
     # state_logger.record_event("step_execution_start", {"step_id": step_id, "description": step_details.get('description')})
     state_logger.record_node_status_change(step_id, "RUNNING")
+
+    cloud_provider = step_details.get("cloud_provider")
+    
+    # Determine CLI name, prompt templates, and doc context key based on provider
+    cli_name = ""
+    system_prompt_template = ""
+    error_prompt_template = ""
+    doc_context_key = ""
+    provider_full_name = ""
+
+    if cloud_provider == "gcp":
+        cli_name = "gcloud"
+        system_prompt_template = GCLOUD_STEP_SYSTEM_PROMPT_TEMPLATE
+        error_prompt_template = GCLOUD_STEP_ERROR_HANDLING_PROMPT_TEMPLATE
+        doc_context_key = "gcloud_docs"
+        provider_full_name = "Google Cloud Platform (GCP)"
+        if not gcp_executor:
+            error_msg = f"GCP Executor not available for GCP step: {step_id}"
+            console.print(f"[bold red]Error:[/] {error_msg}")
+            state_logger.record_node_result(step_id, False, {"error": error_msg}, "FAILED_EXECUTOR_MISSING")
+            return False, {"error": error_msg, "step_id": step_id}
+    elif cloud_provider == "aws":
+        cli_name = "aws"
+        system_prompt_template = AWS_STEP_SYSTEM_PROMPT_TEMPLATE
+        error_prompt_template = AWS_STEP_ERROR_HANDLING_PROMPT_TEMPLATE
+        doc_context_key = "aws_docs"
+        provider_full_name = "Amazon Web Services (AWS)"
+        if not aws_executor:
+            error_msg = f"AWS Executor not available for AWS step: {step_id}"
+            console.print(f"[bold red]Error:[/] {error_msg}")
+            state_logger.record_node_result(step_id, False, {"error": error_msg}, "FAILED_EXECUTOR_MISSING")
+            return False, {"error": error_msg, "step_id": step_id}
+    else:
+        error_msg = f"Unknown cloud provider '{cloud_provider}' for step {step_id}."
+        console.print(f"[bold red]Error:[/] {error_msg}")
+        state_logger.record_node_result(step_id, False, {"error": error_msg}, "FAILED_UNKNOWN_PROVIDER")
+        return False, {"error": error_msg, "step_id": step_id}
 
     context_str = "Context from previous steps (if any):\n"
     if previous_step_outputs:
@@ -303,12 +353,13 @@ async def _execute_dag_step(
     current_step_description = step_details.get('description', 'No description provided for this step.')
     
     # Fetch RAG context for the current step description
-    rag_docs_context = "No specific documentation found by RAG."
+    rag_query_for_docs = f"{provider_full_name} {cli_name} {current_step_description}"
+    cli_docs_context = "No specific documentation found by RAG."
     if rag_engine and rag_engine.query_engine:
-        console.print(f"[RAG] Fetching docs for: '{current_step_description[:100]}...'")
-        rag_docs_context = rag_engine.query_docs(current_step_description)
+        console.print(f"[RAG] Fetching docs for: '{rag_query_for_docs[:100]}...'")
+        cli_docs_context = rag_engine.query_docs(rag_query_for_docs)
         if verbose:
-            console.print(Panel(rag_docs_context, title=f"RAG Context for {step_id}", border_style="dim yellow"))
+            console.print(Panel(cli_docs_context, title=f"RAG Context for {step_id} ({cloud_provider.upper()})", border_style="dim yellow"))
     elif not rag_engine:
         console.print("[yellow]Warning: RAG engine instance not provided to _execute_dag_step.[/yellow]")
     else: # rag_engine exists but query_engine is None
@@ -322,32 +373,30 @@ async def _execute_dag_step(
 
     while attempt < max_attempts:
         attempt += 1
-        console.print(f"Attempt {attempt}/{max_attempts} for step [cyan]{step_id}[/cyan]")
+        console.print(f"Attempt {attempt}/{max_attempts} for step [cyan]{step_id}[/cyan] ({cloud_provider.upper()})")
         # state_logger.record_event("step_attempt", {"step_id": step_id, "attempt_number": attempt})
         # Potentially log attempt start with state_logger.record_node_status_change if more granular status is needed
 
         try:
+            prompt_args = {
+                "step_id": step_id,
+                "step_description": current_step_description,
+                "context_from_previous_steps": context_str,
+                doc_context_key: cli_docs_context # e.g., gcloud_docs or aws_docs
+            }
+            current_prompt_template_to_use = ""
+
             if attempt == 1: 
-                prompt_template = GCLOUD_STEP_SYSTEM_PROMPT_TEMPLATE
-                user_content = prompt_template.format(
-                    step_id=step_id,
-                    step_description=current_step_description,
-                    context_from_previous_steps=context_str,
-                    gcloud_docs=rag_docs_context # Use RAG context
-                )
+                current_prompt_template_to_use = system_prompt_template
             else: 
-                prompt_template = GCLOUD_STEP_ERROR_HANDLING_PROMPT_TEMPLATE
-                user_content = prompt_template.format(
-                    step_id=step_id,
-                    step_description=current_step_description,
-                    previous_command=command_to_execute, # Log the string command
-                    error_message=last_error,
-                    context_from_previous_steps=context_str,
-                    gcloud_docs=rag_docs_context # Use RAG context
-                )
+                current_prompt_template_to_use = error_prompt_template
+                prompt_args["previous_command"] = command_to_execute
+                prompt_args["error_message"] = last_error
+            
+            user_content = current_prompt_template_to_use.format(**prompt_args)
 
             response = await llm_interface.agenerate([
-                {"role": "system", "content": "You are a gcloud CLI expert."},
+                {"role": "system", "content": f"You are a {cli_name} CLI expert for {provider_full_name}."},
                 {"role": "user", "content": user_content}
             ])
             command_to_execute = response.choices[0].message.content.strip()
@@ -367,7 +416,7 @@ async def _execute_dag_step(
             # Parse and display the command before execution
             parsed_command_for_log = _parse_gcloud_command(command_to_execute)
             
-            display_table = Table(title=f"Command for Step: {step_id} (Attempt {attempt})", show_header=True, header_style="bold magenta")
+            display_table = Table(title=f"Command for Step: {step_id} ({cloud_provider.upper()}) (Attempt {attempt})", show_header=True, header_style="bold magenta")
             display_table.add_column("Component", style="dim")
             display_table.add_column("Details")
             
@@ -392,10 +441,14 @@ async def _execute_dag_step(
             console.print(display_table)
 
 
-            success, result_or_error = await gcp_executor.execute(command_to_execute, console)
+            if cloud_provider == "gcp":
+                success, result_or_error = await gcp_executor.execute(command_to_execute, console, step_id)
+            elif cloud_provider == "aws":
+                success, result_or_error = await aws_executor.execute(command_to_execute, console, step_id)
+            # else case already handled by checks at the start of the function
 
             if success:
-                console.print(f"[bold green]Step {step_id} executed successfully![/bold green]")
+                console.print(f"[bold green]Step {step_id} ({cloud_provider.upper()}) executed successfully![/bold green]")
                 # Display the result in the console
                 if isinstance(result_or_error, str) and result_or_error.strip(): # Check if it's a non-empty string
                     console.print(Panel(result_or_error, title=f"Result for Step: {step_id}", title_align="left", border_style="green"))
@@ -411,7 +464,7 @@ async def _execute_dag_step(
                 return True, result_or_error # Return original result_or_error for internal orchestrator flow
             else:
                 last_error = str(result_or_error)
-                console.print(f"[bold red]Command for step {step_id} failed (Attempt {attempt}):[/bold red] {last_error}")
+                console.print(f"[bold red]Command for step {step_id} ({cloud_provider.upper()}) failed (Attempt {attempt}):[/bold red] {last_error}")
 
         except Exception as e:
             last_error = f"Exception during step {step_id} attempt {attempt}: {str(e)}"
@@ -423,7 +476,7 @@ async def _execute_dag_step(
             if command_to_execute: 
                 last_error += f"\nFailing command was: `{command_to_execute}`"
 
-    console.print(f"[bold red]Step {step_id} failed after {max_attempts} attempts.[/bold red]")
+    console.print(f"[bold red]Step {step_id} ({cloud_provider.upper()}) failed after {max_attempts} attempts.[/bold red]")
     # parsed_cmd_dict_on_fail = _parse_gcloud_command(command_to_execute) # Temporarily disabled parser
     state_logger.record_node_result(step_id, False, {"error": last_error, "final_attempt_command_str": command_to_execute, "parsed_command": parsed_command_for_log}, "FAILED_MAX_ATTEMPTS") # Removed parsed_command field
     return False, {"error": last_error, "step_id": step_id}
@@ -432,8 +485,8 @@ async def _execute_dag_step(
 async def run_query_with_feedback(
     query: str,
     config: Dict[str, Any],
-    gcp_executor: GcloudExecutor,
-    rag_engine: RAGEngine, # Updated type hint
+    # Removed gcp_executor, will be instantiated based on plan
+    rag_engine: RAGEngine, 
     max_total_attempts: int = 5, 
     verbose: bool = False
 ) -> None:
@@ -445,6 +498,26 @@ async def run_query_with_feedback(
     final_status = "FAILED"
     accumulated_errors = [] 
     
+    gcp_executor_instance: Optional[GcloudExecutor] = None
+    aws_executor_instance: Optional[AWSExecutor] = None
+
+    # Initialize executors based on whether they will be needed (deferred to after plan)
+    # For now, initialize both if their respective configs are present, or only GCP by default.
+    # A more optimized approach would be to initialize them only if the plan contains steps for them.
+    if config.get('gcp_project_id'): # Assuming gcp_project_id implies GCP usage
+        gcp_executor_instance = GcloudExecutor(config)
+        console.print("GCP Executor initialized.")
+    
+    if config.get('aws_region') or config.get('aws_profile'): # Assuming these imply AWS usage
+        aws_executor_instance = AWSExecutor(config)
+        console.print("AWS Executor initialized.")
+
+    if not gcp_executor_instance and not aws_executor_instance:
+        console.print("[bold red]Error:[/] No cloud executor could be initialized. Check GCP/AWS configurations.")
+        state_logger.set_final_run_status("EXECUTOR_INIT_FAILED", [{"error": "No executor initialized"}])
+        state_logger.save_state()
+        return
+
     try:
         llm_interface = get_llm_interface(config)
         console.print("LLM interface initialized.")
@@ -497,14 +570,15 @@ async def run_query_with_feedback(
                         contextual_outputs[dep_id] = {"status": "FAILED", "output": dep_error_info}
                     else:
                         contextual_outputs[dep_id] = {"status": "SUCCESS", "output": step_outputs[dep_id]}
-            else:
-                    console.print(f"[info]Output of dependency '{dep_id}' for step '{step_id}' was not passed as per 'pass_output_to_next' flag.[/info]")
+            elif dep_id in step_details_map and not step_details_map[dep_id].get("pass_output_to_next", True):
+                 console.print(f"[info]Output of dependency '{dep_id}' for step '{step_id}' was not passed as per 'pass_output_to_next' flag.[/info]")
 
         step_success, step_result_or_error = await _execute_dag_step(
             step_id,
             current_step_details,
             llm_interface,
-            gcp_executor,
+            gcp_executor_instance, # Pass the potentially None GCP executor
+            aws_executor_instance, # Pass the potentially None AWS executor
             state_logger,
             rag_engine, # Pass the RAG engine instance
             contextual_outputs, 
@@ -584,6 +658,8 @@ if __name__ == '__main__':
         'gemini_api_key': os.getenv('GEMINI_API_KEY'), 
         'google_api_key': os.getenv('GOOGLE_API_KEY'), # For Gemini Embeddings / Google AI Studio
         'gcp_project_id': os.getenv('GCP_PROJECT_ID'),
+        'aws_region': os.getenv('AWS_REGION', 'us-east-1'), # Added AWS region to config
+        'aws_profile': os.getenv('AWS_PROFILE'),           # Added AWS profile to config
         'max_step_retries': 2,
         'rag_docs_path_for_init': docs_path_for_rag_init, # Path for RAGEngine, primarily for in-memory or if build_on_init is true
         'rag_embedding_model': os.getenv("RAG_EMBED_MODEL", DEFAULT_EMBED_MODEL_NAME), # Use new default
@@ -597,12 +673,14 @@ if __name__ == '__main__':
     if not config_example.get(api_key_name) and current_llm_provider != "mock": 
         console.print(f"[bold red]Error:[/] API key for {current_llm_provider} ({api_key_name}) not found in environment variables.")
         exit(1)
-    if not config_example.get('gcp_project_id'):
-        console.print("[bold red]Error:[/] GCP_PROJECT_ID not found in environment variables.")
+    if not config_example.get('gcp_project_id') and not (config_example.get('aws_region') or config_example.get('aws_profile')):
+        console.print("[bold red]Error:[/] Neither GCP_PROJECT_ID nor AWS configuration (AWS_REGION/AWS_PROFILE) found. At least one cloud provider must be configured.")
         exit(1)
     
     console.print(f"Using LLM Provider: {current_llm_provider}")
-    console.print(f"Using GCP Project ID: {config_example['gcp_project_id']}")
+    console.print(f"GCP Project ID (if configured): {config_example.get('gcp_project_id')}")
+    console.print(f"AWS Region (if configured): {config_example.get('aws_region')}")
+    console.print(f"AWS Profile (if configured): {config_example.get('aws_profile')}")
     console.print(f"RAG Docs Path for Init: {config_example['rag_docs_path_for_init']}")
     console.print(f"RAG Embedding Model: {config_example['rag_embedding_model']}")
     console.print(f"RAG Vector Store: {config_example['vector_store_choice']}")
@@ -613,6 +691,7 @@ if __name__ == '__main__':
 
     try:
         gcp_executor_instance = GcloudExecutor(config_example)
+        aws_executor_instance = AWSExecutor(config_example)
         rag_engine_instance = RAGEngine(
             vector_store_choice=config_example['vector_store_choice'],
             db_config=config_example['db_config'],
@@ -623,7 +702,7 @@ if __name__ == '__main__':
             llm_for_settings=None 
         )
         
-        test_query = "can you create an 2gb ram instance with a static ip?"
+        test_query = "Create a GCP VPC network named my-vpc-`date +%s` and an AWS S3 bucket named my-saturn-test-bucket-`date +%s`."
 
         if not rag_engine_instance.query_engine:
             console.print("[bold yellow]Warning:[/] RAG query engine not initialized after RAGEngine setup.")
@@ -634,7 +713,6 @@ if __name__ == '__main__':
         asyncio.run(run_query_with_feedback(
             test_query, 
             config_example,
-            gcp_executor_instance,
             rag_engine_instance, 
             verbose=True 
         ))

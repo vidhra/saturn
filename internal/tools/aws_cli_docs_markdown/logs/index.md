@@ -1,0 +1,108 @@
+# logsÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/index.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/index.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) ]
+
+# logs
+
+## Description
+
+You can use Amazon CloudWatch Logs to monitor, store, and access your log files from EC2 instances, CloudTrail, and other sources. You can then retrieve the associated log data from CloudWatch Logs using the CloudWatch console. Alternatively, you can use CloudWatch Logs commands in the Amazon Web Services CLI, CloudWatch Logs API, or CloudWatch Logs SDK.
+
+You can use CloudWatch Logs to:
+
+- **Monitor logs from EC2 instances in real time** : You can use CloudWatch Logs to monitor applications and systems using log data. For example, CloudWatch Logs can track the number of errors that occur in your application logs. Then, it can send you a notification whenever the rate of errors exceeds a threshold that you specify. CloudWatch Logs uses your log data for monitoring so no code changes are required. For example, you can monitor application logs for specific literal terms (such as âNullReferenceExceptionâ). You can also count the number of occurrences of a literal term at a particular position in log data (such as â404â status codes in an Apache access log). When the term you are searching for is found, CloudWatch Logs reports the data to a CloudWatch metric that you specify.
+- **Monitor CloudTrail logged events** : You can create alarms in CloudWatch and receive notifications of particular API activity as captured by CloudTrail. You can use the notification to perform troubleshooting.
+- **Archive log data** : You can use CloudWatch Logs to store your log data in highly durable storage. You can change the log retention setting so that any log events earlier than this setting are automatically deleted. The CloudWatch Logs agent helps to quickly send both rotated and non-rotated log data off of a host and into the log service. You can then access the raw log data when you need it.
+
+## Available Commands
+
+- [associate-kms-key](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/associate-kms-key.html)
+- [cancel-export-task](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/cancel-export-task.html)
+- [create-delivery](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/create-delivery.html)
+- [create-export-task](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/create-export-task.html)
+- [create-log-anomaly-detector](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/create-log-anomaly-detector.html)
+- [create-log-group](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/create-log-group.html)
+- [create-log-stream](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/create-log-stream.html)
+- [delete-account-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-account-policy.html)
+- [delete-data-protection-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-data-protection-policy.html)
+- [delete-delivery](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-delivery.html)
+- [delete-delivery-destination](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-delivery-destination.html)
+- [delete-delivery-destination-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-delivery-destination-policy.html)
+- [delete-delivery-source](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-delivery-source.html)
+- [delete-destination](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-destination.html)
+- [delete-index-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-index-policy.html)
+- [delete-integration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-integration.html)
+- [delete-log-anomaly-detector](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-log-anomaly-detector.html)
+- [delete-log-group](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-log-group.html)
+- [delete-log-stream](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-log-stream.html)
+- [delete-metric-filter](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-metric-filter.html)
+- [delete-query-definition](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-query-definition.html)
+- [delete-resource-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-resource-policy.html)
+- [delete-retention-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-retention-policy.html)
+- [delete-subscription-filter](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-subscription-filter.html)
+- [delete-transformer](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/delete-transformer.html)
+- [describe-account-policies](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-account-policies.html)
+- [describe-configuration-templates](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-configuration-templates.html)
+- [describe-deliveries](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-deliveries.html)
+- [describe-delivery-destinations](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-delivery-destinations.html)
+- [describe-delivery-sources](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-delivery-sources.html)
+- [describe-destinations](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-destinations.html)
+- [describe-export-tasks](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-export-tasks.html)
+- [describe-field-indexes](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-field-indexes.html)
+- [describe-index-policies](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-index-policies.html)
+- [describe-log-groups](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-log-groups.html)
+- [describe-log-streams](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-log-streams.html)
+- [describe-metric-filters](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-metric-filters.html)
+- [describe-queries](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-queries.html)
+- [describe-query-definitions](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-query-definitions.html)
+- [describe-resource-policies](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-resource-policies.html)
+- [describe-subscription-filters](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/describe-subscription-filters.html)
+- [disassociate-kms-key](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/disassociate-kms-key.html)
+- [filter-log-events](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/filter-log-events.html)
+- [get-data-protection-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-data-protection-policy.html)
+- [get-delivery](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-delivery.html)
+- [get-delivery-destination](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-delivery-destination.html)
+- [get-delivery-destination-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-delivery-destination-policy.html)
+- [get-delivery-source](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-delivery-source.html)
+- [get-integration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-integration.html)
+- [get-log-anomaly-detector](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-log-anomaly-detector.html)
+- [get-log-events](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-log-events.html)
+- [get-log-group-fields](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-log-group-fields.html)
+- [get-log-record](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-log-record.html)
+- [get-query-results](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-query-results.html)
+- [get-transformer](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/get-transformer.html)
+- [list-anomalies](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/list-anomalies.html)
+- [list-integrations](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/list-integrations.html)
+- [list-log-anomaly-detectors](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/list-log-anomaly-detectors.html)
+- [list-log-groups](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/list-log-groups.html)
+- [list-log-groups-for-query](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/list-log-groups-for-query.html)
+- [list-tags-for-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/list-tags-for-resource.html)
+- [put-account-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-account-policy.html)
+- [put-data-protection-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-data-protection-policy.html)
+- [put-delivery-destination](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-delivery-destination.html)
+- [put-delivery-destination-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-delivery-destination-policy.html)
+- [put-delivery-source](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-delivery-source.html)
+- [put-destination](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-destination.html)
+- [put-destination-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-destination-policy.html)
+- [put-index-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-index-policy.html)
+- [put-integration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-integration.html)
+- [put-log-events](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-log-events.html)
+- [put-metric-filter](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-metric-filter.html)
+- [put-query-definition](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-query-definition.html)
+- [put-resource-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-resource-policy.html)
+- [put-retention-policy](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-retention-policy.html)
+- [put-subscription-filter](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-subscription-filter.html)
+- [put-transformer](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/put-transformer.html)
+- [start-live-tail](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/start-live-tail.html)
+- [start-query](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/start-query.html)
+- [stop-query](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/stop-query.html)
+- [tag-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/tag-resource.html)
+- [tail](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/tail.html)
+- [test-metric-filter](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/test-metric-filter.html)
+- [test-transformer](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/test-transformer.html)
+- [untag-resource](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/untag-resource.html)
+- [update-anomaly](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/update-anomaly.html)
+- [update-delivery-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/update-delivery-configuration.html)
+- [update-log-anomaly-detector](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/update-log-anomaly-detector.html)

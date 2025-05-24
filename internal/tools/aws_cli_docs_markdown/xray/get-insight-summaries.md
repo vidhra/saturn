@@ -1,0 +1,297 @@
+# get-insight-summariesÂ¶
+
+*Source: [https://awscli.amazonaws.com/v2/documentation/api/latest/reference/xray/get-insight-summaries.html](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/xray/get-insight-summaries.html)*
+
+[ [aws](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#cli-aws) . [xray](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/xray/index.html#cli-aws-xray) ]
+
+# get-insight-summaries
+
+## Description
+
+Retrieves the summaries of all insights in the specified group matching the provided filter values.
+
+See also: [AWS API Documentation](https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetInsightSummaries)
+
+## Synopsis
+
+```
+get-insight-summaries
+[--states <value>]
+[--group-arn <value>]
+[--group-name <value>]
+--start-time <value>
+--end-time <value>
+[--max-results <value>]
+[--next-token <value>]
+[--cli-input-json | --cli-input-yaml]
+[--generate-cli-skeleton <value>]
+[--debug]
+[--endpoint-url <value>]
+[--no-verify-ssl]
+[--no-paginate]
+[--output <value>]
+[--query <value>]
+[--profile <value>]
+[--region <value>]
+[--version <value>]
+[--color <value>]
+[--no-sign-request]
+[--ca-bundle <value>]
+[--cli-read-timeout <value>]
+[--cli-connect-timeout <value>]
+[--cli-binary-format <value>]
+[--no-cli-pager]
+[--cli-auto-prompt]
+[--no-cli-auto-prompt]
+```
+
+## Options
+
+`--states` (list)
+
+The list of insight states.
+
+(string)
+
+Syntax:
+
+```
+"string" "string" ...
+
+Where valid values are:
+  ACTIVE
+  CLOSED
+```
+
+`--group-arn` (string)
+
+The Amazon Resource Name (ARN) of the group. Required if the GroupName isnât provided.
+
+`--group-name` (string)
+
+The name of the group. Required if the GroupARN isnât provided.
+
+`--start-time` (timestamp)
+
+The beginning of the time frame in which the insights started. The start time canât be more than 30 days old.
+
+`--end-time` (timestamp)
+
+The end of the time frame in which the insights ended. The end time canât be more than 30 days old.
+
+`--max-results` (integer)
+
+The maximum number of results to display.
+
+`--next-token` (string)
+
+Pagination token.
+
+`--cli-input-json` | `--cli-input-yaml` (string)
+Reads arguments from the JSON string provided. The JSON string follows the format provided by `--generate-cli-skeleton`. If other arguments are provided on the command line, those values will override the JSON-provided values. It is not possible to pass arbitrary binary values using a JSON-provided value as the string will be taken literally. This may not be specified along with `--cli-input-yaml`.
+
+`--generate-cli-skeleton` (string)
+Prints a JSON skeleton to standard output without sending an API request. If provided with no value or the value `input`, prints a sample input JSON that can be used as an argument for `--cli-input-json`. Similarly, if provided `yaml-input` it will print a sample input YAML that can be used with `--cli-input-yaml`. If provided with the value `output`, it validates the command inputs and returns a sample output JSON for that command. The generated JSON skeleton is not stable between versions of the AWS CLI and there are no backwards compatibility guarantees in the JSON skeleton generated.
+
+## Global Options
+
+`--debug` (boolean)
+
+Turn on debug logging.
+
+`--endpoint-url` (string)
+
+Override commandâs default URL with the given URL.
+
+`--no-verify-ssl` (boolean)
+
+By default, the AWS CLI uses SSL when communicating with AWS services. For each SSL connection, the AWS CLI will verify SSL certificates. This option overrides the default behavior of verifying SSL certificates.
+
+`--no-paginate` (boolean)
+
+Disable automatic pagination. If automatic pagination is disabled, the AWS CLI will only make one call, for the first page of results.
+
+`--output` (string)
+
+The formatting style for command output.
+
+- json
+- text
+- table
+- yaml
+- yaml-stream
+
+`--query` (string)
+
+A JMESPath query to use in filtering the response data.
+
+`--profile` (string)
+
+Use a specific profile from your credential file.
+
+`--region` (string)
+
+The region to use. Overrides config/env settings.
+
+`--version` (string)
+
+Display the version of this tool.
+
+`--color` (string)
+
+Turn on/off color output.
+
+- on
+- off
+- auto
+
+`--no-sign-request` (boolean)
+
+Do not sign requests. Credentials will not be loaded if this argument is provided.
+
+`--ca-bundle` (string)
+
+The CA certificate bundle to use when verifying SSL certificates. Overrides config/env settings.
+
+`--cli-read-timeout` (int)
+
+The maximum socket read time in seconds. If the value is set to 0, the socket read will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-connect-timeout` (int)
+
+The maximum socket connect time in seconds. If the value is set to 0, the socket connect will be blocking and not timeout. The default value is 60 seconds.
+
+`--cli-binary-format` (string)
+
+The formatting style to be used for binary blobs. The default format is base64. The base64 format expects binary blobs to be provided as a base64 encoded string. The raw-in-base64-out format preserves compatibility with AWS CLI V1 behavior and binary values must be passed literally. When providing contents from a file that map to a binary blob `fileb://` will always be treated as binary and use the file contents directly regardless of the `cli-binary-format` setting. When using `file://` the file contents will need to properly formatted for the configured `cli-binary-format`.
+
+- base64
+- raw-in-base64-out
+
+`--no-cli-pager` (boolean)
+
+Disable cli pager for output.
+
+`--cli-auto-prompt` (boolean)
+
+Automatically prompt for CLI input parameters.
+
+`--no-cli-auto-prompt` (boolean)
+
+Disable automatically prompt for CLI input parameters.
+
+## Output
+
+InsightSummaries -> (list)
+
+The summary of each insight within the group matching the provided filters. The summary contains the InsightID, start and end time, the root cause service, the root cause and client impact statistics, the top anomalous services, and the status of the insight.
+
+(structure)
+
+Information that describes an insight.
+
+InsightId -> (string)
+
+The insights unique identifier.
+
+GroupARN -> (string)
+
+The Amazon Resource Name (ARN) of the group that the insight belongs to.
+
+GroupName -> (string)
+
+The name of the group that the insight belongs to.
+
+RootCauseServiceId -> (structure)
+
+Name -> (string)
+
+Names -> (list)
+
+(string)
+
+AccountId -> (string)
+
+Type -> (string)
+
+Categories -> (list)
+
+Categories The categories that label and describe the type of insight.
+
+(string)
+
+State -> (string)
+
+The current state of the insight.
+
+StartTime -> (timestamp)
+
+The time, in Unix seconds, at which the insight began.
+
+EndTime -> (timestamp)
+
+The time, in Unix seconds, at which the insight ended.
+
+Summary -> (string)
+
+A brief description of the insight.
+
+ClientRequestImpactStatistics -> (structure)
+
+The impact statistics of the client side service. This includes the number of requests to the client service and whether the requests were faults or okay.
+
+FaultCount -> (long)
+
+The number of requests that have resulted in a fault,
+
+OkCount -> (long)
+
+The number of successful requests.
+
+TotalCount -> (long)
+
+The total number of requests to the service.
+
+RootCauseServiceRequestImpactStatistics -> (structure)
+
+The impact statistics of the root cause service. This includes the number of requests to the client service and whether the requests were faults or okay.
+
+FaultCount -> (long)
+
+The number of requests that have resulted in a fault,
+
+OkCount -> (long)
+
+The number of successful requests.
+
+TotalCount -> (long)
+
+The total number of requests to the service.
+
+TopAnomalousServices -> (list)
+
+The service within the insight that is most impacted by the incident.
+
+(structure)
+
+The service within the service graph that has anomalously high fault rates.
+
+ServiceId -> (structure)
+
+Name -> (string)
+
+Names -> (list)
+
+(string)
+
+AccountId -> (string)
+
+Type -> (string)
+
+LastUpdateTime -> (timestamp)
+
+The time, in Unix seconds, that the insight was last updated.
+
+NextToken -> (string)
+
+Pagination token.
