@@ -4,20 +4,18 @@ import os
 import glob
 from typing import List, Dict, Any, Optional
 
-# May need embedding model for filtering later
-# from sentence_transformers import SentenceTransformer
-# import numpy as np
 
 class KnowledgeBase:
-    def __init__(self, api_defs_dir: str):
-        """Initializes the Knowledge Base by loading API definitions."""
+    def __init__(self, api_defs_dir: str, external_tools: Optional[List[Dict[str, Any]]] = None):
+        """Initializes the Knowledge Base by loading API definitions and merging external tools if provided."""
         self.api_defs_dir = api_defs_dir
         self.tools_data: Dict[str, Any] = {}
         self.types_data: Dict[str, Any] = {}
-        self.raw_tools: List[Dict[str, Any]] = [] # Store initially parsed tools
-        # self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2') # Load if filtering needed
+        self.raw_tools: List[Dict[str, Any]] = [] 
         self._load_definitions()
         self._build_raw_tools()
+        if external_tools:
+            self.merge_external_tools(external_tools)
         # --- Debug --- 
         print(f"[KB Debug] KnowledgeBase initialized. {len(self.raw_tools)} raw tools built.")
         if not self.raw_tools:
@@ -63,20 +61,18 @@ class KnowledgeBase:
         """
         if not isinstance(schema_fragment, dict):
             return schema_fragment
-
-        # Convert enumerations (similar to call.py)
+       
         if schema_fragment.get("type") == "enum" and "values" in schema_fragment:
             enum_vals = list(schema_fragment.pop("values").keys())
             schema_fragment["type"] = "string"
             schema_fragment["enum"] = enum_vals
-            # OpenAI often expects a description for enums
+            
             if "description" not in schema_fragment:
                  schema_fragment["description"] = f"Must be one of: {', '.join(enum_vals)}"
             else:
                  schema_fragment["description"] += f" Must be one of: {', '.join(enum_vals)}"
 
 
-        # Recurse into properties, items, etc.
         if "properties" in schema_fragment and isinstance(schema_fragment["properties"], dict):
             schema_fragment["properties"] = {
                 k: self._transform_fields(v) for k, v in schema_fragment["properties"].items()
@@ -85,7 +81,7 @@ class KnowledgeBase:
              schema_fragment["items"] = self._transform_fields(schema_fragment["items"])
         if "additionalProperties" in schema_fragment:
              schema_fragment["additionalProperties"] = self._transform_fields(schema_fragment["additionalProperties"])
-        # Add recursion for other potential nested schema locations if needed (e.g., allOf, anyOf)
+    
 
         return schema_fragment
 
@@ -98,28 +94,26 @@ class KnowledgeBase:
         all_tools = []
         request_types_map = {}
 
-        # First pass: build the request types map from all loaded types.json
         print("[KB Debug] --- Pass 1: Building request_types_map ---")
-        for service_name, service_types_content in self.types_data.items(): # Renamed for clarity
+        for service_name, service_types_content in self.types_data.items(): 
             print(f"[KB Debug] Processing types for service: {service_name}")
             
             all_type_definitions_for_service = []
             if isinstance(service_types_content, dict):
-                # This is the case for run_v2: {filepath: [type_defs], filepath2: [type_defs]}
+                
                 print(f"[KB Debug]   Service types content is dict. Iterating through its values (lists of types).")
-                for file_path_key in service_types_content: # Iterate through file paths
+                for file_path_key in service_types_content: 
                     file_type_list = service_types_content[file_path_key]
                     if isinstance(file_type_list, list):
                         all_type_definitions_for_service.extend(file_type_list)
                     else:
                         print(f"[KB Debug]     Warning: Expected a list of types for file '{file_path_key}' in '{service_name}', got {type(file_type_list)}")
             elif isinstance(service_types_content, list):
-                # This might be the case for simpler services where types.json is just a list
                 print(f"[KB Debug]   Service types content is list.")
                 all_type_definitions_for_service = service_types_content
             else:
                 print(f"Warning: Unexpected format for types_data[{service_name}], type is {type(service_types_content)}. Skipping.")
-                continue # Skip this service if format is unknown
+                continue
 
             print(f"[KB Debug]   Total type definitions found for {service_name}: {len(all_type_definitions_for_service)}")
             for type_info in all_type_definitions_for_service:
@@ -327,5 +321,17 @@ class KnowledgeBase:
                 return tool_def["function"].get("parameters")
         print(f"[KB Debug] Tool name '{tool_name}' not found in raw_tools for schema retrieval.")
         return None
+
+    def merge_external_tools(self, external_tools: List[Dict[str, Any]]):
+        """
+        Merge a list of OpenAI-compatible tool schemas (e.g., from file_build_tools) into the KnowledgeBase.
+        This allows file tools to be available for planning and execution.
+        """
+        if not isinstance(external_tools, list):
+            print("[KB Debug] merge_external_tools: Provided external_tools is not a list.")
+            return
+        initial_count = len(self.raw_tools)
+        self.raw_tools.extend(external_tools)
+        print(f"[KB Debug] Merged {len(external_tools)} external tools. Total tools now: {len(self.raw_tools)} (was {initial_count})")
 
 # Example Usage removed to prevent linting issues. 

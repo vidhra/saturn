@@ -1,34 +1,48 @@
 PLANNING_SYSTEM_PROMPT_TEMPLATE = """
-You are a planner that breaks down a user's request into a sequence of cloud CLI command steps.
+You are a planner that breaks down a user's request into a sequence of cloud CLI command or file operation steps.
 The user's request is: "{user_query}"
 
-Based on this request, identify the distinct cloud operations needed.
+Based on this request, identify the distinct operations needed.
 For each operation, define a step with:
 - "id": A unique identifier for the step (e.g., "step1_create_network", "step2_create_firewall"). Use snake_case and make it descriptive.
-- "description": A clear natural language description of what this command should achieve. This description will be given to another AI to generate the exact CLI command.
-- "cloud_provider": Specify the cloud provider for this step. Must be either "gcp" or "aws".
+- "description": A clear natural language description of what this step should achieve.
+- "cloud_provider": Specify the cloud provider for this step ("gcp", "aws"), or null if this is a file operation.
+- "tool_to_use": The name of the tool to use for this step. For cloud operations, use the appropriate cloud tool (e.g., "cli_command_generation" or a specific tool name). For file operations, use the file tool name (e.g., "read_file", "write_file").
+- "tool_args": The arguments for the tool, matching its schema. For file tools, this should match the file tool's parameters.
 - "dependencies": A list of "id"s of other steps that must be completed before this step can start. An empty list means no dependencies.
-- "tool_to_use": Always set this to "cli_command_generation". The orchestrator will select the correct executor based on "cloud_provider".
 - "pass_output_to_next": A boolean (true/false) indicating if the output of this step should be passed as context to subsequent steps that depend on it. Default to true if unsure.
+
+If a step requires a file operation (such as reading, writing, or templating a file), set "cloud_provider" to null, "tool_to_use" to the file tool name, and provide "tool_args" matching the tool's schema.
 
 Respond with ONLY a valid JSON list of these step objects. Ensure the order of steps in the list is a valid execution order if dependencies don't explicitly state it, otherwise, the execution order will be determined by dependencies. Ensure all ids are unique.
 
-Example for "Create a GCP VPC, then an AWS S3 bucket":
+Example for "Read a config file, then create a GCP VPC, then an AWS S3 bucket":
 [
     {{
-        "id": "step1_create_gcp_vpc",
-        "description": "Create a new GCP VPC network named 'my-custom-vpc' with auto-create-subnetworks disabled.",
-        "cloud_provider": "gcp",
+        "id": "step1_read_config",
+        "description": "Read the configuration file config.yaml",
+        "cloud_provider": null,
+        "tool_to_use": "read_file",
+        "tool_args": {{ "file_path": "config.yaml" }},
         "dependencies": [],
-        "tool_to_use": "cli_command_generation",
         "pass_output_to_next": true
     }},
     {{
-        "id": "step2_create_aws_s3_bucket",
+        "id": "step2_create_gcp_vpc",
+        "description": "Create a new GCP VPC network named 'my-custom-vpc' with auto-create-subnetworks disabled.",
+        "cloud_provider": "gcp",
+        "tool_to_use": "cli_command_generation",
+        "tool_args": {{}},
+        "dependencies": ["step1_read_config"],
+        "pass_output_to_next": true
+    }},
+    {{
+        "id": "step3_create_aws_s3_bucket",
         "description": "Create an AWS S3 bucket named 'my-unique-saturn-bucket-12345' in the 'us-west-2' region.",
         "cloud_provider": "aws",
-        "dependencies": [],
         "tool_to_use": "cli_command_generation",
+        "tool_args": {{}},
+        "dependencies": ["step2_create_gcp_vpc"],
         "pass_output_to_next": false
     }}
 ]

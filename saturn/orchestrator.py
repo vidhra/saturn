@@ -34,6 +34,7 @@ from .prompts import (
     AWS_STEP_ERROR_HANDLING_PROMPT_TEMPLATE # Added AWS specific
 )
 from .rag_engine import RAGEngine, DEFAULT_EMBED_MODEL_NAME # Import new default
+from .file_build_tools import FileBuildToolCaller
 
 console = Console()
 
@@ -485,7 +486,6 @@ async def _execute_dag_step(
 async def run_query_with_feedback(
     query: str,
     config: Dict[str, Any],
-    # Removed gcp_executor, will be instantiated based on plan
     rag_engine: RAGEngine, 
     max_total_attempts: int = 5, 
     verbose: bool = False
@@ -493,31 +493,33 @@ async def run_query_with_feedback(
     console.print(Panel(f"Processing Query: [cyan]{query}[/cyan]", title="[bold blue]Saturn Orchestrator[/bold blue]", border_style="blue"))
     
     state_logger = RunStateLogger(query)
-    # load_gcloud_docs() # Removed, RAG will provide docs
-    
     final_status = "FAILED"
     accumulated_errors = [] 
     
     gcp_executor_instance: Optional[GcloudExecutor] = None
     aws_executor_instance: Optional[AWSExecutor] = None
-
-    # Initialize executors based on whether they will be needed (deferred to after plan)
-    # For now, initialize both if their respective configs are present, or only GCP by default.
-    # A more optimized approach would be to initialize them only if the plan contains steps for them.
-    if config.get('gcp_project_id'): # Assuming gcp_project_id implies GCP usage
+    
+    # --- File tool integration ---
+    file_tool_caller = FileBuildToolCaller(working_directory=config.get('working_directory', '.'))
+    file_tool_schemas = file_tool_caller.get_tools_schema()
+    file_tool_names = set([tool['function']['name'] for tool in file_tool_schemas])
+    
+    # If you use KnowledgeBase elsewhere, merge file tools into it here (example):
+    # from .knowledge_base import KnowledgeBase
+    # kb = KnowledgeBase(api_defs_dir, external_tools=file_tool_schemas)
+    
+    # --- Cloud executors as before ---
+    if config.get('gcp_project_id'):
         gcp_executor_instance = GcloudExecutor(config)
         console.print("GCP Executor initialized.")
-    
-    if config.get('aws_region') or config.get('aws_profile'): # Assuming these imply AWS usage
+    if config.get('aws_region') or config.get('aws_profile'):
         aws_executor_instance = AWSExecutor(config)
         console.print("AWS Executor initialized.")
-
     if not gcp_executor_instance and not aws_executor_instance:
         console.print("[bold red]Error:[/] No cloud executor could be initialized. Check GCP/AWS configurations.")
         state_logger.set_final_run_status("EXECUTOR_INIT_FAILED", [{"error": "No executor initialized"}])
         state_logger.save_state()
         return
-
     try:
         llm_interface = get_llm_interface(config)
         console.print("LLM interface initialized.")
@@ -526,15 +528,12 @@ async def run_query_with_feedback(
         state_logger.set_final_run_status("LLM_INIT_FAILED", [{"error": f"LLM Init Failed: {str(e)}"}])
         state_logger.save_state()
         return
-
     dag, step_details_map = await _generate_plan_dag(query, llm_interface, state_logger)
-
     if not dag or not step_details_map:
         console.print("[bold red]Failed to generate a valid execution plan. Orchestrator cannot proceed.[/bold red]")
         state_logger.set_final_run_status("PLAN_GENERATION_FAILED", [{"error": "Failed to generate DAG plan"}])
         state_logger.save_state()
         return
-
     try:
         execution_order = dag.topo_order(ORDER_UP)
         console.print(f"DAG Execution Order: {' -> '.join(execution_order)}")
@@ -544,21 +543,16 @@ async def run_query_with_feedback(
         state_logger.set_final_run_status("DAG_EXECUTION_ORDER_FAILED", [{"error": error_msg}])
         state_logger.save_state()
         return
-
     step_outputs: Dict[str, Any] = {}
     all_steps_succeeded = True
-
     for step_id in execution_order:
         if step_id not in step_details_map:
             console.print(f"[bold red]Error: Step ID '{step_id}' from execution order not found in step details. Skipping.[/bold red]")
             accumulated_errors.append({"step_id": step_id, "error": "Step details not found"})
             all_steps_succeeded = False
             break 
-        
         current_step_details = step_details_map[step_id]
-        
         step_dependencies = [edge.source for edge in dag.edges if edge.target == step_id]
-        
         contextual_outputs = {}
         for dep_id in step_dependencies:
             if dep_id in step_outputs:
@@ -572,7 +566,30 @@ async def run_query_with_feedback(
                         contextual_outputs[dep_id] = {"status": "SUCCESS", "output": step_outputs[dep_id]}
             elif dep_id in step_details_map and not step_details_map[dep_id].get("pass_output_to_next", True):
                  console.print(f"[info]Output of dependency '{dep_id}' for step '{step_id}' was not passed as per 'pass_output_to_next' flag.[/info]")
-
+        # --- File tool step execution ---
+        tool_to_use = current_step_details.get("tool_to_use")
+        cloud_provider = current_step_details.get("cloud_provider")
+        if tool_to_use in file_tool_names or (cloud_provider is None or str(cloud_provider).lower() == "none"):
+            tool_args = current_step_details.get("tool_args", {})
+            console.print(Panel(f"[File Tool] Executing file tool: [cyan]{tool_to_use}[/cyan] with args: {tool_args}", title=f"Step: {step_id}", border_style="blue"))
+            try:
+                result = await file_tool_caller.call_tool(tool_to_use, tool_args)
+                step_outputs[step_id] = result
+                state_logger.record_node_result(step_id, result.get("success", False), result, "COMPLETED_FILE_TOOL" if result.get("success", False) else "FAILED_FILE_TOOL")
+                if not result.get("success", False):
+                    console.print(f"[bold red]File tool step {step_id} failed: {result.get('error', 'Unknown error')}[/bold red]")
+                    accumulated_errors.append({"step_id": step_id, "error": result.get("error", "Unknown error")})
+                    all_steps_succeeded = False
+                    break
+                else:
+                    console.print(f"[green]File tool step {step_id} completed successfully.[/green]")
+                    continue  # Skip cloud executor logic for this step
+            except Exception as file_exc:
+                console.print(f"[bold red]Exception during file tool step {step_id}: {file_exc}[/bold red]")
+                accumulated_errors.append({"step_id": step_id, "error": str(file_exc)})
+                all_steps_succeeded = False
+                break
+        # --- End file tool step execution ---
         step_success, step_result_or_error = await _execute_dag_step(
             step_id,
             current_step_details,
@@ -585,9 +602,7 @@ async def run_query_with_feedback(
             max_attempts=config.get('max_step_retries', 3), 
             verbose=verbose
         )
-        
         step_outputs[step_id] = step_result_or_error 
-
         if not step_success:
             console.print(f"[bold red]Step {step_id} ultimately failed. Halting further execution.[/bold red]")
             all_steps_succeeded = False
@@ -596,7 +611,6 @@ async def run_query_with_feedback(
             else:
                  accumulated_errors.append({"step_id": step_id, "error": str(step_result_or_error)})
             break 
-
     if all_steps_succeeded and not accumulated_errors: 
         final_status = "COMPLETED_SUCCESSFULLY"
         console.print(Panel("[bold green]All steps completed successfully![/bold green]", border_style="green"))
@@ -606,11 +620,8 @@ async def run_query_with_feedback(
     else:
         final_status = "FAILED_AT_STEP"
         console.print(Panel(f"[bold red]Orchestration failed. See errors above or in logs.[/bold red]", border_style="red"))
-
     state_logger.set_final_run_status(final_status, accumulated_errors) 
-    # state_logger.add_event_to_log("run_step_outputs", {"outputs": step_outputs}) # Output per node is now in node state
     state_logger.save_state()
-
     console.print(f"Orchestrator finished with status: {final_status}")
     if accumulated_errors:
         console.print("[bold red]Final accumulated errors for the run:[/bold red]")
