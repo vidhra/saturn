@@ -1,5 +1,5 @@
-import unittest  
-from dag import AcyclicGraph, BasicEdge, Counter, MODE_DEPTH_FIRST, ORDER_DOWN, ORDER_UP
+import unittest
+from internal.dag.dag import AcyclicGraph, BasicEdge, Counter, MODE_DEPTH_FIRST, ORDER_DOWN, ORDER_UP
 
 class TestAcyclicGraph(unittest.TestCase):
 
@@ -314,4 +314,4 @@ class TestAcyclicGraph(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main() 
