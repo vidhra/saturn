@@ -10,10 +10,12 @@ import shutil
 from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
+import pytest
 
 # Import our new file build executor
 from saturn.file_build_executor import FileBuildExecutor
 
+@pytest.mark.asyncio
 async def test_basic_file_operations():
     """Test basic file operations without external dependencies."""
     
@@ -240,6 +242,7 @@ async def test_basic_file_operations():
     
     return success_count == total_tests
 
+@pytest.mark.asyncio
 async def test_supported_operations():
     """Test that all operations are properly registered."""
     

@@ -10,7 +10,9 @@ from saturn.file_build_tools import (
     create_file_build_tools_for_llm
 )
 from rich.console import Console
+import pytest
 
+@pytest.mark.asyncio
 async def test_file_build_tools():
     """Comprehensive test of file build tools for LLM integration."""
     
