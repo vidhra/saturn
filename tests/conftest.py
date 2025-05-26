@@ -8,7 +8,7 @@ from internal.states.base_state import StateMachineContext
 
 
 @pytest.fixture
-def mock_llm_interface():
+async def mock_llm_interface():
     """Mock LLM interface for testing."""
     mock = AsyncMock()
     mock.get_tool_calls.return_value = ([], "Mock response")
@@ -16,7 +16,7 @@ def mock_llm_interface():
 
 
 @pytest.fixture
-def mock_gcp_executor():
+async def mock_gcp_executor():
     """Mock GCP executor for testing."""
     mock = AsyncMock()
     mock.execute_tools.return_value = []
@@ -24,7 +24,7 @@ def mock_gcp_executor():
 
 
 @pytest.fixture
-def mock_knowledge_base():
+async def mock_knowledge_base():
     """Mock knowledge base for testing."""
     mock = Mock()
     mock.get_formatted_tools.return_value = [
