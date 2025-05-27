@@ -1,577 +1,277 @@
-# Saturn File Build Tools - LLM Integration Guide
+# LLM Integration Guide
 
-This guide explains how to integrate Saturn's file operations and build tools with Large Language Models (LLMs) for automated development workflows.
+This guide explains how to use different LLM providers with Saturn orchestrator. Saturn now supports OpenAI, Claude (Anthropic), Google Gemini, and Mistral AI.
 
 ## Overview
 
-The Saturn File Build Tools provide a comprehensive set of capabilities that can be exposed as tools for LLMs to use:
+Saturn uses a unified interface for all LLM providers, allowing you to switch between them easily by changing configuration. All providers support:
 
-- **File Operations**: Read, write, list, copy files in multiple formats
-- **Build Tools**: Auto-detect and build projects (Python, Node.js, Rust, Go, Java, etc.)
-- **Docker Integration**: Generate Dockerfiles, build images, run containers
-- **Template Processing**: Variable substitution in configuration files
+- **Text Generation** (`agenerate` method): Basic chat completion
+- **Tool Calls** (`get_tool_calls` method): Function calling for orchestration
 
-## Available Tools
+## Supported Providers
 
-### File Operations
+### 1. OpenAI (GPT-4, GPT-3.5, etc.)
 
-#### `read_file`
-Read content from any supported file format.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "read_file",
-    "arguments": {
-      "file_path": "config.json"
-    }
-  }
+**Setup:**
+```bash
+pip install openai>=1.3.0
+export OPENAI_API_KEY="your-openai-api-key"
+```
+
+**Configuration:**
+```python
+config = {
+    'llm_provider': 'openai',
+    'openai_api_key': 'your-openai-api-key',
+    'openai_model': 'gpt-4o'  # Optional, defaults to 'gpt-4.1'
 }
 ```
 
-#### `write_file`
-Write content to files with automatic format detection.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "write_file",
-    "arguments": {
-      "file_path": "config.yaml",
-      "content": {"database": {"host": "localhost", "port": 5432}},
-      "format": ".yaml"
-    }
-  }
+**Features:**
+- Full tool calling support
+- JSON mode support
+- Function calling with proper error handling
+
+### 2. Claude (Anthropic)
+
+**Setup:**
+```bash
+pip install anthropic>=0.50.0
+export ANTHROPIC_API_KEY="your-anthropic-api-key"
+```
+
+**Configuration:**
+```python
+config = {
+    'llm_provider': 'claude',
+    'anthropic_api_key': 'your-anthropic-api-key',
+    'claude_model': 'claude-3-5-sonnet-20241022'  # Optional, defaults to latest sonnet
 }
 ```
 
-#### `list_files`
-List files with pattern matching and recursive options.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "list_files",
-    "arguments": {
-      "pattern": "*.py",
-      "recursive": true
-    }
-  }
+**Features:**
+- Full tool calling support
+- Excellent reasoning capabilities
+- System prompt handling
+
+### 3. Google Gemini
+
+**Setup:**
+```bash
+pip install google-generativeai>=0.8.0
+export GEMINI_API_KEY="your-gemini-api-key"
+```
+
+**Configuration:**
+```python
+config = {
+    'llm_provider': 'gemini',
+    'gemini_api_key': 'your-gemini-api-key',
+    'gemini_model': 'gemini-1.5-pro-latest',  # Optional
+    'gemini_system_prompt': 'Custom system prompt'  # Optional
 }
 ```
 
-#### `copy_file`
-Copy files from source to destination.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "copy_file",
-    "arguments": {
-      "source": "config.template.json",
-      "destination": "config.json"
-    }
-  }
+**Features:**
+- Tool calling support with function declarations
+- Large context window
+- Multi-modal capabilities (future)
+
+### 4. Mistral AI
+
+**Setup:**
+```bash
+pip install mistralai>=1.7.0
+export MISTRAL_API_KEY="your-mistral-api-key"
+```
+
+**Configuration:**
+```python
+config = {
+    'llm_provider': 'mistral',
+    'mistral_api_key': 'your-mistral-api-key',
+    'mistral_model': 'mistral-large-latest'  # Optional
 }
 ```
 
-#### `template_file`
-Process template files with variable substitution.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "template_file",
-    "arguments": {
-      "template_path": "app.template.py",
-      "output_path": "app.py",
-      "variables": {
-        "app_name": "MyApp",
-        "version": "1.0.0"
-      }
-    }
-  }
-}
-```
+**Features:**
+- Tool calling support
+- High performance
+- Cost effective
 
-### Project Detection and Building
+## Usage Examples
 
-#### `detect_project_type`
-Auto-detect project type based on indicator files.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "detect_project_type",
-    "arguments": {}
-  }
-}
-```
-
-#### `build_project`
-Build project using appropriate build tool.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "build_project",
-    "arguments": {
-      "project_type": "auto"
-    }
-  }
-}
-```
-
-#### `test_project`
-Run tests using appropriate test runner.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "test_project",
-    "arguments": {
-      "project_type": "python"
-    }
-  }
-}
-```
-
-#### `lint_project`
-Run linting/code quality checks.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "lint_project",
-    "arguments": {
-      "project_type": "auto"
-    }
-  }
-}
-```
-
-### Docker Operations
-
-#### `generate_dockerfile`
-Generate Dockerfile based on project structure.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "generate_dockerfile",
-    "arguments": {
-      "base_image": "python:3.11-slim",
-      "dependencies_file": "requirements.txt",
-      "start_command": "[\"uvicorn\", \"app:app\", \"--host\", \"0.0.0.0\"]"
-    }
-  }
-}
-```
-
-#### `build_docker_image`
-Build Docker image from Dockerfile.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "build_docker_image",
-    "arguments": {
-      "image_name": "my-app:latest",
-      "build_context": "."
-    }
-  }
-}
-```
-
-#### `run_docker_container`
-Run Docker container with specified configuration.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "run_docker_container",
-    "arguments": {
-      "image_name": "my-app:latest",
-      "ports": {"8000": "8000"},
-      "environment": {"ENV": "production"}
-    }
-  }
-}
-```
-
-#### `docker_compose_up`
-Run docker-compose for multi-container applications.
-```json
-{
-  "type": "function",
-  "function": {
-    "name": "docker_compose_up",
-    "arguments": {
-      "compose_file": "docker-compose.yml",
-      "build": true
-    }
-  }
-}
-```
-
-## Integration Examples
-
-### OpenAI GPT Integration
+### Basic Text Generation
 
 ```python
-import openai
-from saturn.file_build_tools import create_file_build_tools_for_llm
+from model.llm.openai_llm import OpenAILLM
 
-# Initialize tools
-tools_interface = create_file_build_tools_for_llm("/path/to/project")
-tools_schema = tools_interface["tools_schema"]
-handler = tools_interface["handler"]
+# Initialize LLM
+config = {'openai_api_key': 'your-key'}
+llm = OpenAILLM(config)
 
-# Create OpenAI client
-client = openai.OpenAI(api_key="your-api-key")
-
-# Chat completion with tools
-response = client.chat.completions.create(
-    model="gpt-4",
-    messages=[
-        {"role": "user", "content": "Build and containerize this Python project"}
-    ],
-    tools=tools_schema,
-    tool_choice="auto"
-)
-
-# Process tool calls
-if response.choices[0].message.tool_calls:
-    for tool_call in response.choices[0].message.tool_calls:
-        result = await handler.handle_tool_call({
-            "type": "function",
-            "function": {
-                "name": tool_call.function.name,
-                "arguments": tool_call.function.arguments
-            }
-        })
-        print(f"Tool {tool_call.function.name}: {result}")
-```
-
-### Anthropic Claude Integration
-
-```python
-import anthropic
-from saturn.file_build_tools import create_file_build_tools_for_llm
-
-# Initialize tools
-tools_interface = create_file_build_tools_for_llm("/path/to/project")
-tools_schema = tools_interface["tools_schema"]
-handler = tools_interface["handler"]
-
-# Convert to Anthropic format
-anthropic_tools = []
-for tool in tools_schema:
-    anthropic_tools.append({
-        "name": tool["function"]["name"],
-        "description": tool["function"]["description"],
-        "input_schema": tool["function"]["parameters"]
-    })
-
-# Create Anthropic client
-client = anthropic.Anthropic(api_key="your-api-key")
-
-# Chat completion with tools
-response = client.messages.create(
-    model="claude-3-sonnet-20240229",
-    max_tokens=1000,
-    tools=anthropic_tools,
-    messages=[
-        {"role": "user", "content": "Analyze and build this project"}
-    ]
-)
-
-# Process tool use
-for content in response.content:
-    if content.type == "tool_use":
-        result = await handler.handle_tool_call({
-            "type": "function",
-            "function": {
-                "name": content.name,
-                "arguments": content.input
-            }
-        })
-        print(f"Tool {content.name}: {result}")
-```
-
-## Common Workflows
-
-### 1. Project Analysis and Setup
-
-```python
-workflow_steps = [
-    # Analyze existing project
-    {"name": "list_files", "args": {"recursive": True}},
-    {"name": "detect_project_type", "args": {}},
-    
-    # Setup configuration
-    {"name": "write_file", "args": {
-        "file_path": ".env",
-        "content": "DEBUG=true\nPORT=8000"
-    }},
-    
-    # Generate Docker setup
-    {"name": "generate_dockerfile", "args": {
-        "dependencies_file": "requirements.txt"
-    }}
+# Generate text
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Explain cloud computing in one sentence."}
 ]
+
+response = await llm.agenerate(messages)
+print(response.choices[0].message.content)
 ```
 
-### 2. Build and Test Pipeline
+### Tool Calling
 
 ```python
-pipeline_steps = [
-    # Build project
-    {"name": "build_project", "args": {"project_type": "auto"}},
-    
-    # Run tests
-    {"name": "test_project", "args": {}},
-    
-    # Check code quality
-    {"name": "lint_project", "args": {}},
-    
-    # Build Docker image
-    {"name": "build_docker_image", "args": {
-        "image_name": "my-app:latest"
-    }}
-]
-```
-
-### 3. Configuration Management
-
-```python
-config_steps = [
-    # Read existing config
-    {"name": "read_file", "args": {"file_path": "config.template.yaml"}},
-    
-    # Process template with environment-specific values
-    {"name": "template_file", "args": {
-        "template_path": "config.template.yaml",
-        "output_path": "config.yaml",
-        "variables": {
-            "environment": "production",
-            "database_url": "postgresql://prod-db:5432/app"
+# Define tools
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "create_vm",
+            "description": "Create a virtual machine",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "zone": {"type": "string"}
+                },
+                "required": ["name", "zone"]
+            }
         }
-    }},
-    
-    # Copy to deployment directory
-    {"name": "copy_file", "args": {
-        "source": "config.yaml",
-        "destination": "deploy/config.yaml"
-    }}
+    }
 ]
+
+# Get tool calls
+tool_calls, text_response = await llm.get_tool_calls(
+    query="Create a VM named 'test-vm' in zone 'us-central1-a'",
+    system_prompt="You are a cloud automation assistant.",
+    tools=tools
+)
+
+if tool_calls:
+    for call in tool_calls:
+        print(f"Tool: {call['name']}, Args: {call['arguments']}")
 ```
 
-## Error Handling
-
-All tools return a consistent response format:
+### Using with Saturn Orchestrator
 
 ```python
-{
-    "success": bool,          # Whether operation succeeded
-    "result": any,           # Operation result (if successful)
-    "error": str,            # Error message (if failed)
-    "tool": str              # Tool name that was called
+from saturn.orchestrator import run_query_with_feedback
+
+config = {
+    'llm_provider': 'claude',  # or 'openai', 'gemini', 'mistral'
+    'anthropic_api_key': 'your-claude-key',
+    'gcp_project_id': 'your-project',
+    # ... other config
 }
+
+await run_query_with_feedback(
+    query="Create a VPC network and a compute instance",
+    config=config,
+    rag_engine=rag_engine,
+    verbose=True
+)
 ```
 
-### Handling Tool Failures
+## Environment Variables
 
-```python
-async def handle_tool_with_retry(handler, tool_call, max_retries=3):
-    """Handle tool call with retry logic."""
-    
-    for attempt in range(max_retries):
-        result = await handler.handle_tool_call(tool_call)
-        
-        if result["success"]:
-            return result
-        
-        print(f"Attempt {attempt + 1} failed: {result['error']}")
-        
-        if attempt < max_retries - 1:
-            # Modify tool call based on error if needed
-            await asyncio.sleep(1)  # Brief delay before retry
-    
-    return result  # Return final failed result
+Set these environment variables based on which providers you want to use:
+
+```bash
+# OpenAI
+export OPENAI_API_KEY="sk-..."
+
+# Claude (Anthropic)
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# Gemini (Google AI)
+export GEMINI_API_KEY="AI..."
+
+# Mistral
+export MISTRAL_API_KEY="..."
+
+# For Saturn orchestrator
+export LLM_PROVIDER="openai"  # or claude, gemini, mistral
 ```
 
-## Performance Considerations
+## Testing Your Setup
 
-### Async Operations
-All file and build operations are asynchronous for better performance:
+Use the provided test script to verify all integrations:
 
-```python
-# Sequential execution
-results = []
-for tool_call in tool_calls:
-    result = await handler.handle_tool_call(tool_call)
-    results.append(result)
-
-# Parallel execution (where appropriate)
-import asyncio
-tasks = [handler.handle_tool_call(call) for call in independent_calls]
-results = await asyncio.gather(*tasks)
+```bash
+python test_llm_integrations.py
 ```
 
-### File Size Limits
-- Text files: No specific limit, but consider memory usage
-- Binary files: Consider streaming for large files
-- Build artifacts: Clean up temporary files after operations
+This will test:
+- ✅ Initialization of each provider
+- ✅ Basic text generation (`agenerate`)
+- ✅ Tool calling functionality (`get_tool_calls`)
 
-### Caching
-Consider implementing caching for:
-- Project type detection results
-- Build dependencies
-- Docker image layers
+## Provider Comparison
 
-## Security Considerations
-
-### File Access
-- Tools operate within specified working directory
-- Path traversal attacks are prevented by Path validation
-- Consider implementing file access allowlists for production
-
-### Command Execution
-- Build commands are predefined and validated
-- Custom commands should be sanitized
-- Consider running in containerized environments
-
-### Docker Operations
-- Docker commands require appropriate permissions
-- Consider using Docker rootless mode
-- Validate image names and tags
-
-## Best Practices
-
-### Tool Selection
-```python
-# Let LLM choose appropriate tools
-user_message = "Build and deploy this Python application"
-
-# Provide context about available tools
-system_message = """
-You have access to file operations, build tools, and Docker capabilities.
-Always start by detecting project type and listing files to understand the codebase.
-"""
-```
-
-### Error Recovery
-```python
-# Implement graceful degradation
-if build_result["success"]:
-    # Proceed with Docker build
-    docker_result = await build_docker_image(...)
-else:
-    # Try alternative build method or provide manual instructions
-    print(f"Build failed: {build_result['error']}")
-    print("Manual build steps: ...")
-```
-
-### Progress Tracking
-```python
-# Use rich console for progress feedback
-from rich.progress import Progress
-
-async def execute_workflow_with_progress(steps):
-    with Progress() as progress:
-        task = progress.add_task("Executing workflow...", total=len(steps))
-        
-        for step in steps:
-            result = await handler.handle_tool_call(step)
-            progress.advance(task)
-            
-            if not result["success"]:
-                progress.stop()
-                break
-```
+| Feature | OpenAI | Claude | Gemini | Mistral |
+|---------|--------|--------|--------|---------|
+| Tool Calling | ✅ Excellent | ✅ Excellent | ✅ Good | ✅ Good |
+| Reasoning | ✅ Very Good | ✅ Excellent | ✅ Good | ✅ Good |
+| Speed | ✅ Fast | ⚡ Fast | ⚡ Very Fast | ⚡ Very Fast |
+| Cost | 💰 Medium | 💰 Medium | 💰 Low | 💰 Low |
+| Context Window | 📄 128k | 📄 200k | 📄 2M | 📄 128k |
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Tool Not Found**
-   - Verify tool name spelling
-   - Check available tools with `get_available_tools()`
+1. **Import Errors**
+   ```bash
+   # Install missing dependencies
+   pip install -r requirements.txt
+   ```
 
-2. **Permission Errors**
-   - Check file/directory permissions
-   - Ensure Docker daemon is accessible
+2. **API Key Issues**
+   ```bash
+   # Verify your API key is set
+   echo $OPENAI_API_KEY
+   ```
 
-3. **Build Failures**
-   - Verify dependencies are installed
-   - Check project structure and configuration files
+3. **Tool Calling Not Working**
+   - Verify the tool schema format
+   - Check system prompts are clear
+   - Ensure the LLM supports function calling
 
-4. **Docker Issues**
-   - Ensure Docker is running
-   - Check image names and tags
-   - Verify network connectivity for image pulls
+4. **Async Issues**
+   ```python
+   # All methods are async, use await
+   response = await llm.agenerate(messages)
+   ```
 
-### Debug Mode
+### Provider-Specific Notes
 
-```python
-# Enable detailed logging
-import logging
-logging.basicConfig(level=logging.DEBUG)
+- **OpenAI**: Most stable, best documentation
+- **Claude**: Excellent for complex reasoning, handles errors well
+- **Gemini**: Very large context window, good for document processing
+- **Mistral**: Cost-effective, good performance
 
-# Test individual tools
-tools_interface = create_file_build_tools_for_llm(".", debug=True)
-```
+## API Rate Limits
 
-## Extensions
+Be aware of rate limits:
+- **OpenAI**: Varies by tier (10-100 requests/minute)
+- **Claude**: 50 requests/minute (free), higher for paid
+- **Gemini**: 60 requests/minute (free)
+- **Mistral**: Varies by subscription
 
-### Adding Custom Tools
+## Best Practices
 
-```python
-class CustomFileBuildToolCaller(FileBuildToolCaller):
-    def _register_tools(self):
-        tools = super()._register_tools()
-        
-        # Add custom tool
-        tools["custom_deploy"] = {
-            "function": self.custom_deploy,
-            "description": "Deploy application to custom platform",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "platform": {"type": "string"},
-                    "config": {"type": "object"}
-                },
-                "required": ["platform"]
-            }
-        }
-        
-        return tools
-    
-    async def custom_deploy(self, platform: str, config: dict = None):
-        # Implementation here
-        pass
-```
+1. **Error Handling**: Always wrap LLM calls in try-catch blocks
+2. **Rate Limiting**: Implement backoff for production use
+3. **Cost Management**: Monitor usage and set limits
+4. **Model Selection**: Choose appropriate models for your use case
+5. **Tool Design**: Keep tool schemas simple and clear
 
-### Integration with CI/CD
+## Getting Help
 
-```python
-# GitHub Actions integration
-def create_github_workflow():
-    return {
-        "name": "Saturn Build",
-        "on": ["push"],
-        "jobs": {
-            "build": {
-                "runs-on": "ubuntu-latest",
-                "steps": [
-                    {"uses": "actions/checkout@v2"},
-                    {"name": "Setup Saturn", "run": "pip install saturn-tools"},
-                    {"name": "Build with Saturn", "run": "python -m saturn.build"}
-                ]
-            }
-        }
-    }
-```
-
-This guide provides comprehensive information for integrating Saturn's file build tools with LLMs, enabling powerful automated development workflows. 
+- Check the test script output for specific errors
+- Review provider documentation for API specifics
+- Ensure all dependencies are installed correctly
+- Verify API keys have the correct permissions 

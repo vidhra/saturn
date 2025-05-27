@@ -56,8 +56,26 @@ class MistralLLM(BaseLLMInterface):
              raise RuntimeError("mistralai library not installed. Please install it: pip install mistralai")
         except Exception as e:
             raise RuntimeError(f"Error initializing Mistral client: {e}")
-        # print("TODO: Implement Mistral client initialization")
-        # self.client = None # Placeholder
+
+    async def agenerate(self, messages: List[Dict[str, str]]) -> Any:
+        """
+        Generate a response from Mistral using the provided messages.
+        
+        Args:
+            messages: List of message dictionaries with 'role' and 'content' keys
+            
+        Returns:
+            The raw response from Mistral
+        """
+        try:
+            response = await self.client.chat(
+                model=self.model_name,
+                messages=messages
+            )
+            return response
+        except Exception as e:
+            print(f"Error during Mistral API call: {e}")
+            raise
 
     async def get_tool_calls(
         self,
