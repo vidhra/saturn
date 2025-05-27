@@ -80,13 +80,75 @@ class GeminiLLM(BaseLLMInterface):
              raise RuntimeError("google.generativeai library not installed. Please install it: pip install google-generativeai")
         except Exception as e:
             raise RuntimeError(f"Error initializing Gemini client: {e}")
-        # print("TODO: Implement Gemini client initialization")
-        # self.model = None # Placeholder
+
+    async def agenerate(self, messages: List[Dict[str, str]]) -> Any:
+        """
+        Generate a response from Gemini using the provided messages.
+        
+        Args:
+            messages: List of message dictionaries with 'role' and 'content' keys
+            
+        Returns:
+            The raw response from Gemini
+        """
+        try:
+            # Convert messages to Gemini format
+            gemini_history = []
+            system_instruction = None
+            
+            for msg in messages:
+                if msg["role"] == "system":
+                    system_instruction = msg["content"]
+                elif msg["role"] == "user":
+                    gemini_history.append({'role': 'user', 'parts': [msg["content"]]})
+                elif msg["role"] == "assistant":
+                    gemini_history.append({'role': 'model', 'parts': [msg["content"]]})
+            
+            # Create a new model instance with system instruction if provided
+            model_to_use = self.model
+            if system_instruction:
+                model_to_use = genai.GenerativeModel(
+                    self.model_name,
+                    system_instruction=system_instruction
+                )
+            
+            # Use asyncio.to_thread for synchronous Gemini API
+            response = await asyncio.to_thread(
+                model_to_use.generate_content,
+                gemini_history
+            )
+            
+            # Convert Gemini response to OpenAI-like format for compatibility
+            class GeminiResponse:
+                def __init__(self, gemini_resp):
+                    self.choices = [GeminiChoice(gemini_resp)]
+            
+            class GeminiChoice:
+                def __init__(self, gemini_resp):
+                    self.message = GeminiMessage(gemini_resp)
+            
+            class GeminiMessage:
+                def __init__(self, gemini_resp):
+                    if gemini_resp.candidates and gemini_resp.candidates[0].content.parts:
+                        # Get text from the first part
+                        first_part = gemini_resp.candidates[0].content.parts[0]
+                        if hasattr(first_part, 'text'):
+                            self.content = first_part.text
+                        else:
+                            self.content = str(first_part)
+                    else:
+                        self.content = ""
+            
+            return GeminiResponse(response)
+            
+        except Exception as e:
+            print(f"Error during Gemini API call: {e}")
+            raise
 
     async def get_tool_calls(
         self,
         query: str,
-        system_prompt: str, # Passed during init for Gemini
+        system_prompt: str,
         tools: List[Dict[str, Any]],
         previous_errors: Optional[List[Dict[str, Any]]] = None
     ) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
@@ -97,16 +159,19 @@ class GeminiLLM(BaseLLMInterface):
         print(f"Calling Gemini API (Model: {self.model_name})...")
         
         try:
-            # Use asyncio.to_thread if generate_content is blocking
-            # response = await asyncio.to_thread(
-            #     self.model.generate_content,
-            #     history,
-            #     tools=gemini_tools
-            # )
-            # Assuming generate_content might be awaitable directly in future or via wrapper
-            response = await self.model.generate_content_async(
-                 history,
-                 tools=gemini_tools
+            # Create model with system instruction if available
+            model_to_use = self.model
+            if system_prompt:
+                model_to_use = genai.GenerativeModel(
+                    self.model_name,
+                    system_instruction=system_prompt
+                )
+            
+            # Use asyncio.to_thread since Gemini API is synchronous
+            response = await asyncio.to_thread(
+                model_to_use.generate_content,
+                history,
+                tools=gemini_tools
             )
 
             print("Received response from Gemini.")
@@ -116,7 +181,7 @@ class GeminiLLM(BaseLLMInterface):
             llm_text_response = None
             if response.candidates and response.candidates[0].content.parts:
                  for part in response.candidates[0].content.parts:
-                    if part.function_call:
+                    if hasattr(part, 'function_call') and part.function_call:
                         fc = part.function_call
                         print(f"  Gemini proposed call: {fc.name}")
                         # Args are already dicts in Gemini response
@@ -133,9 +198,11 @@ class GeminiLLM(BaseLLMInterface):
             if not tool_calls_list and not llm_text_response:
                  print("Warning: Gemini response did not contain tool calls or text.")
                  # Consider checking response.prompt_feedback for blocking reasons
-                 if response.prompt_feedback:
+                 if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
                       print(f"Prompt Feedback: {response.prompt_feedback}")
                       llm_text_response = f"Request blocked or failed. Feedback: {response.prompt_feedback}"
+                 else:
+                      llm_text_response = "No response content from Gemini."
                       
             return tool_calls_list if tool_calls_list else None, llm_text_response
         

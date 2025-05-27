@@ -1,9 +1,6 @@
 from typing import Tuple, Type
 from .base_state import BaseState, StateMachineContext
 
-# Import other state classes for transitions
-from .planning_state import PlanningState
-
 class StartState(BaseState):
     """Initial state of the machine."""
 
@@ -15,5 +12,6 @@ class StartState(BaseState):
         context.node_outputs = {}
         context.current_errors = []
         print("Transitioning to PLANNING")
+        from .planning_state import PlanningState  # moved import here
         # Always transition to Planning state first
         return PlanningState, context 

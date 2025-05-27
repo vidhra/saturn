@@ -2,17 +2,17 @@ import traceback
 from typing import Tuple, Type, List, Dict, Any
 from .base_state import BaseState, StateMachineContext
 
-# Import other state classes for transitions
-from .tool_selection_state import ToolSelectionState
-from .failed_state import FailedState
-from .completed_state import CompletedState
-
 class PlanningState(BaseState):
     """State responsible for interacting with the LLM to get tool calls."""
 
     async def run(self, context: StateMachineContext) -> Tuple[Type[BaseState], StateMachineContext]:
         print(f"--- State: PLANNING (Attempt {context.current_attempt + 1}/{context.max_retries}) ---")
         context.increment_attempt()
+
+        # Move imports here to avoid circular import
+        from .tool_selection_state import ToolSelectionState
+        from .failed_state import FailedState
+        from .completed_state import CompletedState
 
         if context.current_attempt > context.max_retries:
             print("Max attempts reached. Transitioning to FAILED.")
@@ -66,18 +66,6 @@ class PlanningState(BaseState):
                 print("LLM provided text, transitioning to TOOL_SELECTION to check for embedded JSON.")
                 context.current_errors = [] # Clear previous errors before potentially selecting/executing
                 return ToolSelectionState, context
-                # --- Old logic below (now potentially handled in ToolSelection or ProcessingResults) ---
-                # if context.current_errors: # Check if we were expecting corrections
-                #      print("LLM provided text instead of correcting errors. Transitioning to FAILED.")
-                #      context.current_errors.append({
-                #          "method": "N/A",
-                #          "error": "LLM failed to provide tool calls after errors, gave text instead.",
-                #          "arguments": {}
-                #      })
-                #      return FailedState, context
-                # else:
-                #      print("LLM provided text and no tools were expected/needed. Transitioning to COMPLETED.")
-                #      return CompletedState, context
             else:
                 # LLM call failed or returned nothing
                 print("LLM call failed or returned no usable response. Adding error.")

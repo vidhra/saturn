@@ -668,6 +668,8 @@ if __name__ == '__main__':
         'openai_api_key': os.getenv('OPENAI_API_KEY'),
         'gemini_api_key': os.getenv('GEMINI_API_KEY'), 
         'google_api_key': os.getenv('GOOGLE_API_KEY'), # For Gemini Embeddings / Google AI Studio
+        'anthropic_api_key': os.getenv('ANTHROPIC_API_KEY'), # For Claude
+        'mistral_api_key': os.getenv('MISTRAL_API_KEY'), # For Mistral
         'gcp_project_id': os.getenv('GCP_PROJECT_ID'),
         'aws_region': os.getenv('AWS_REGION', 'us-east-1'), # Added AWS region to config
         'aws_profile': os.getenv('AWS_PROFILE'),           # Added AWS profile to config

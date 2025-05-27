@@ -7,6 +7,37 @@ Run this script to test OpenAI, Claude, Gemini, and Mistral integrations.
 import os
 import asyncio
 from typing import Dict, Any
+from pathlib import Path
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    
+    # Look for .env file in current directory and parent directories
+    env_file_paths = [
+        Path(".env"),
+        Path("../.env"),
+        Path("../../.env"),
+        Path.cwd() / ".env",
+        Path.cwd().parent / ".env",
+        Path.cwd().parent.parent / ".env"
+    ]
+    
+    env_loaded = False
+    for env_path in env_file_paths:
+        if env_path.exists():
+            load_dotenv(env_path)
+            print(f"📄 Loaded environment variables from: {env_path.absolute()}")
+            env_loaded = True
+            break
+    
+    if not env_loaded:
+        print("⚠️  No .env file found. Using system environment variables only.")
+        print("   Looked in:", ", ".join(str(p) for p in env_file_paths[:3]))
+        
+except ImportError:
+    print("⚠️  python-dotenv not installed. Using system environment variables only.")
+    print("   Install with: pip install python-dotenv")
 
 from model.llm.openai_llm import OpenAILLM
 from model.llm.claude_llm import ClaudeLLM
@@ -124,10 +155,36 @@ async def test_provider(provider_config: Dict[str, Any], provider_name: str, llm
     return results
 
 
+def print_env_status():
+    """Print the status of environment variables."""
+    print("\n🔧 Environment Variable Status:")
+    print("-" * 40)
+    
+    env_vars = {
+        "OPENAI_API_KEY": "OpenAI",
+        "ANTHROPIC_API_KEY": "Claude", 
+        "GEMINI_API_KEY": "Gemini",
+        "MISTRAL_API_KEY": "Mistral"
+    }
+    
+    for env_var, provider in env_vars.items():
+        value = os.getenv(env_var)
+        if value:
+            # Show first 8 and last 4 characters for security
+            masked_value = f"{value[:8]}...{value[-4:]}" if len(value) > 12 else f"{value[:4]}..."
+            print(f"✅ {provider:8} ({env_var}): {masked_value}")
+        else:
+            print(f"❌ {provider:8} ({env_var}): Not set")
+    print("-" * 40)
+
+
 async def main():
     """Main test function."""
     print("🧪 LLM Integration Test Suite")
     print("=" * 60)
+    
+    # Show environment variable status
+    print_env_status()
     
     # Test configurations
     test_configs = {
@@ -185,11 +242,11 @@ async def main():
     
     print(f"\n{'='*60}")
     print("💡 Tips:")
-    print("- Set environment variables for API keys to test all providers")
-    print("- OPENAI_API_KEY for OpenAI")
-    print("- ANTHROPIC_API_KEY for Claude")
-    print("- GEMINI_API_KEY for Gemini")
-    print("- MISTRAL_API_KEY for Mistral")
+    print("- Create a .env file with your API keys")
+    print("- OPENAI_API_KEY=your_openai_key")
+    print("- ANTHROPIC_API_KEY=your_claude_key")
+    print("- GEMINI_API_KEY=your_gemini_key")
+    print("- MISTRAL_API_KEY=your_mistral_key")
     print(f"{'='*60}")
 
 

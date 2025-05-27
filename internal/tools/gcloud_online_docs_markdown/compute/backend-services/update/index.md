@@ -483,240 +483,50 @@ tracking mode for external passthrough Network Load Balancers](https://cloud.goo
 
 **--clear-custom-metrics**
 
-**At most one of these can be specified:
+**--clear-external-managed-migration-state**
 
-**--clear-external-managed-migration-state**:
-Clears current state of external managed migration.
+**--client-ttl**
 
-**--external-managed-migration-state**:
-Specifies the migration state. Possible values are PREPARE, TEST_BY_PERCENTAGE,
-and TEST_ALL_TRAFFIC.
-To begin the migration from EXTERNAL to EXTERNAL_MANAGED, the state must be
-changed to PREPARE. The state must be changed to TEST_ALL_TRAFFIC before the
-loadBalancingScheme can be changed to EXTERNAL_MANAGED. Optionally, the
-TEST_BY_PERCENTAGE state can be used to migrate traffic by percentage using the
---external-managed-migration-testing-percentage flag.
-`EXTERNAL_MANAGED_MIGRATION_STATE` must be one of:
-`PREPARE`, `TEST_BY_PERCENTAGE`,
-`TEST_ALL_TRAFFIC`.**
+**--custom-request-header**
 
-**At most one of these can be specified:
+**--custom-response-header**
 
-**--client-ttl**:
-Specifies a separate client (for example, browser client) TTL, separate from the
-TTL for Cloud CDN's edge caches.
-This allows you to set a shorter TTL for browsers/clients, and to have those
-clients revalidate content against Cloud CDN on a more regular basis, without
-requiring revalidation at the origin.
-The value of clientTtl cannot be set to a value greater than that of maxTtl, but
-can be equal.
-Any cacheable response has its max-age/s-maxage directives adjusted down to the
-client TTL value if necessary; an Expires header will be replaced with a
-suitable max-age directive.
-The maximum allowed value is 31,622,400s (1 year).
-When creating a new backend with CACHE_ALL_STATIC and the field is unset, or
-when switching to that mode and the field is unset, a default value of 3600 is
-used.
-When the cache mode is set to "USE_ORIGIN_HEADERS", you must omit this field.
+**--default-ttl**
 
-**--no-client-ttl**:
-(DEPRECATED) Clears client TTL value.
-The --no-client-ttl option is deprecated and will be removed in an upcoming
-release. If you're currently using this argument, you should remove it from your
-workflows.**
+**--global**
 
-**At most one of these can be specified:
+**--global-health-checks**
 
-**--custom-request-header**:
-Specifies a HTTP Header to be added by your load balancer. This flag can be
-repeated to specify multiple headers. For example:
+**--max-ttl**
+
+**--[no-]negative-caching**
+
+**--serve-while-stale**
+
+**--service-bindings**
+
+**--service-lb-policy**
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
 
 ```
-gcloud compute backend-services update NAME             --custom-request-header "header-name: value"             --custom-request-header "another-header:"
+gcloud alpha compute backend-services update
 ```
 
-**`--no-custom-request-headers`**
-
-: Remove all custom request headers for the backend service.**
-
-**At most one of these can be specified:
-
-**--custom-response-header**:
-Custom headers that the external Application Load Balancer adds to proxied
-responses. For the list of headers, see [Creating
-custom headers](https://cloud.google.com/load-balancing/docs/custom-headers).
-Variables are not case-sensitive.
-
-**--no-custom-response-headers**:
-Remove all custom response headers for the backend service.**
-
-**At most one of these can be specified:
-
-**--default-ttl**:
-Specifies the default TTL for cached content served by this origin for responses
-that do not have an existing valid TTL (max-age or s-maxage).
-The default value is 3600s for cache modes that allow a default TTL to be
-defined.
-The value of defaultTtl cannot be set to a value greater than that of maxTtl,
-but can be equal.
-When the cacheMode is set to FORCE_CACHE_ALL, the defaultTtl overwrites the TTL
-set in all responses.
-A TTL of "0" means Always revalidate.
-The maximum allowed value is 31,622,400s (1 year). Infrequently accessed objects
-may be evicted from the cache before the defined TTL.
-When creating a new backend with CACHE_ALL_STATIC or FORCE_CACHE_ALL and the
-field is unset, or when updating an existing backend to use these modes and the
-field is unset, a default value of 3600 is used. When the cache mode is set to
-"USE_ORIGIN_HEADERS", you must omit this field.
-
-**--no-default-ttl**:
-Clears default TTL value.**
-
-**At most one of these can be specified:
-
-**--global**:
-If set, the backend service is global.
-
-**--region**:
-Region of the backend service to update. Overrides the default
-`compute/region` property value for this command invocation.**
-
-**At most one of these can be specified:
-
-**--global-health-checks**:
-If set, the health checks are global.
-
-**--health-checks-region**:
-Region of the health checks to operate on. If not specified, you might be
-prompted to select a region (interactive mode only).
-To avoid prompting when this flag is omitted, you can set the
-``compute/region`` property:
-
 ```
-gcloud config set compute/region REGION
+gcloud beta compute backend-services update
 ```
-
-A list of regions can be fetched by running:
-
-```
-gcloud compute regions list
-```
-
-To unset the property, run:
-
-```
-gcloud config unset compute/region
-```
-
-Alternatively, the region can be stored in the environment variable
-``CLOUDSDK_COMPUTE_REGION``.**
-
-**At most one of these can be specified:
-
-**--max-ttl**:
-Specifies the maximum allowed TTL for cached content served by this origin.
-The default value is 86400 for cache modes that support a max TTL.
-Cache directives that attempt to set a max-age or s-maxage higher than this, or
-an Expires header more than maxTtl seconds in the future, are capped at the
-value of maxTtl, as if it were the value of an s-maxage Cache-Control directive.
-A TTL of "0" means Always revalidate.
-The maximum allowed value is 31,622,400s (1 year). Infrequently accessed objects
-may be evicted from the cache before the defined TTL.
-When creating a new backend with CACHE_ALL_STATIC and the field is unset, or
-when updating an existing backend to use these modes and the field is unset, a
-default value of 86400 is used. When the cache mode is set to
-"USE_ORIGIN_HEADERS" or "FORCE_CACHE_ALL", you must omit this field.
-
-**--no-max-ttl**:
-(DEPRECATED) Clears max TTL value.
-The --no-max-ttl option is deprecated and will be removed in an upcoming
-release. If you're currently using this argument, you should remove it from your
-workflows.**
-
-**At most one of these can be specified:
-
-**--[no-]negative-caching**:
-Negative caching allows per-status code cache TTLs to be set, in order to apply
-fine-grained caching for common errors or redirects. This can reduce the load on
-your origin and improve the end-user experience by reducing response latency.
-Negative caching applies to a set of 3xx, 4xx, and 5xx status codes that are
-typically useful to cache.
-Status codes not listed here cannot have their TTL explicitly set and aren't
-cached, in order to avoid cache poisoning attacks.
-HTTP success codes (HTTP 2xx) are handled by the values of defaultTtl and
-maxTtl.
-When the cache mode is set to CACHE_ALL_STATIC or USE_ORIGIN_HEADERS, these
-values apply to responses with the specified response code that lack any
-`cache-control` or `expires` headers.
-When the cache mode is set to FORCE_CACHE_ALL, these values apply to all
-responses with the specified response code, and override any caching headers.
-Cloud CDN applies the following default TTLs to these status codes:
-
-- HTTP 300 (Multiple Choice), 301, 308 (Permanent Redirects): 10m
-- HTTP 404 (Not Found), 410 (Gone), 451 (Unavailable For Legal Reasons): 120s
-- HTTP 405 (Method Not Found), 421 (Misdirected Request), 501 (Not Implemented):
-60s
-
-These defaults can be overridden in cdnPolicy.negativeCachingPolicy.
-Use `--negative-caching` to enable and
-`--no-negative-caching` to disable.
-
-**--no-negative-caching-policies**:
-Remove all negative caching policies for the backend service.
-
-**--negative-caching-policy**:
-Sets a cache TTL for the specified HTTP status code.
-NegativeCaching must be enabled to config the negativeCachingPolicy.
-If you omit the policy and leave negativeCaching enabled, Cloud CDN's default
-cache TTLs are used.
-Note that when specifying an explicit negative caching policy, make sure that
-you specify a cache TTL for all response codes that you want to cache. Cloud CDN
-doesn't apply any default negative caching when a policy exists.
-`CODE` is the HTTP status code to define a TTL against. Only HTTP
-status codes 300, 301, 308, 404, 405, 410, 421, 451, and 501 can be specified as
-values, and you cannot specify a status code more than once.
-TTL is the time to live (in seconds) for which to cache responses for the
-specified `CODE`. The maximum allowed value is 1800s (30 minutes),
-noting that infrequently accessed objects may be evicted from the cache before
-the defined TTL.**
-
-**At most one of these can be specified:
-
-**--serve-while-stale**:
-Serve existing content from the cache (if available) when revalidating content
-with the origin; this allows content to be served more quickly, and also allows
-content to continue to be served if the backend is down or reporting errors.
-This setting defines the default serve-stale duration for any cached responses
-that do not specify a stale-while-revalidate directive. Stale responses that
-exceed the TTL configured here will not be served without first being
-revalidated with the origin. The default limit is 86400s (1 day), which will
-allow stale content to be served up to this limit beyond the max-age (or
-s-max-age) of a cached response.
-The maximum allowed value is 604800 (1 week).
-Set this to zero (0) to disable serve-while-stale.
-
-**--no-serve-while-stale**:
-(DEPRECATED) Clears serve while stale value.
-The --no-serve-while-stale option is deprecated and will be removed in an
-upcoming release. If you're currently using this argument, you should remove it
-from your workflows.**
-
-**At most one of these can be specified:
-
-**--service-bindings**:
-List of service bindings to be attached to this backend service. Can only be set
-if load balancing scheme is INTERNAL_SELF_MANAGED. If set, lists of backends and
-health checks must be both empty.
-
-**--no-service-bindings**:
-No service bindings should be attached to the backend service.**
-
-**At most one of these can be specified:
-
-**--service-lb-policy**:
-Service load balancing policy to be applied to this backend service. Can only be
-set if load balancing scheme is EXTERNAL_MANAGED, INTERNAL_MANAGED, or
-INTERNAL_SELF_MANAGED. Only available for global backend services.
-
-**--no-service-lb-policy**:
-No service load balancing policies should be attached to the backend service.**
