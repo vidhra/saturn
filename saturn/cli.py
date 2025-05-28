@@ -2,7 +2,38 @@ import typer
 import os
 import asyncio
 from typing import Optional, List
-from dotenv import load_dotenv
+from pathlib import Path
+
+# Enhanced .env loading functionality (similar to test script)
+try:
+    from dotenv import load_dotenv
+    
+    # Look for .env file in current directory and parent directories
+    env_file_paths = [
+        Path(".env"),
+        Path("../.env"),
+        Path("../../.env"),
+        Path.cwd() / ".env",
+        Path.cwd().parent / ".env",
+        Path.cwd().parent.parent / ".env"
+    ]
+    
+    env_loaded = False
+    for env_path in env_file_paths:
+        if env_path.exists():
+            load_dotenv(env_path)
+            print(f"📄 [CLI] Loaded environment variables from: {env_path.absolute()}")
+            env_loaded = True
+            break
+    
+    if not env_loaded:
+        print("⚠️  [CLI] No .env file found. Using system environment variables only.")
+        print(f"   [CLI] Looked in: {', '.join(str(p) for p in env_file_paths[:3])}")
+        
+except ImportError:
+    print("⚠️  [CLI] python-dotenv not installed. Using system environment variables only.")
+    print("   [CLI] Install with: pip install python-dotenv")
+
 from rich.console import Console
 from rich.panel import Panel
 
@@ -21,15 +52,43 @@ from .rag_engine import (
     DEFAULT_DUCKDB_TABLE_NAME
 )
 
-# Load environment variables from .env file if present
-load_dotenv()
-
-# Load base configuration once
+# Load base configuration once (this will also check for additional env vars from YAML)
 APP_CONFIG = load_config()
 
 # Create Typer app
 app = typer.Typer()
 console = Console()
+
+
+def print_env_status_cli():
+    """Print the status of key environment variables for CLI debugging."""
+    console.print("\n🔧 [CLI] Environment Variable Status:")
+    console.print("-" * 50)
+    
+    env_vars = {
+        "OPENAI_API_KEY": "OpenAI",
+        "ANTHROPIC_API_KEY": "Claude", 
+        "GEMINI_API_KEY": "Gemini",
+        "MISTRAL_API_KEY": "Mistral",
+        "GOOGLE_API_KEY": "Google (Embeddings)",
+        "GCP_PROJECT_ID": "GCP Project",
+        "AWS_REGION": "AWS Region",
+        "VECTOR_STORE": "Vector Store"
+    }
+    
+    for env_var, description in env_vars.items():
+        value = os.getenv(env_var)
+        if value:
+            # Show first 8 and last 4 characters for API keys, full value for others
+            if "key" in env_var.lower() or "api" in env_var.lower():
+                masked_value = f"{value[:8]}...{value[-4:]}" if len(value) > 12 else f"{value[:4]}..."
+            else:
+                masked_value = value
+            console.print(f"✅ {description:15} ({env_var}): {masked_value}")
+        else:
+            console.print(f"❌ {description:15} ({env_var}): Not set")
+    console.print("-" * 50)
+
 
 @app.command("run")
 def run_command(
@@ -53,9 +112,13 @@ def run_command(
         help="RAG embedding model name."
     ),
     google_api_key_cli: Optional[str] = typer.Option(None, "--google-api-key", help="Google API Key for Gemini Embeddings. Overrides GOOGLE_API_KEY env var."),
+    show_env: bool = typer.Option(False, "--show-env", help="Show environment variable status for debugging."),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output, including full exception tracebacks.")
 ):
     """Runs the Saturn orchestrator with the specified query and configuration."""
+    
+    if show_env:
+        print_env_status_cli()
     
     console.print(Panel(f"Processing query: '[bold cyan]{query}[/bold cyan]'", title="Saturn Command"))
 
@@ -171,9 +234,13 @@ def ingest_docs_command(
         help="RAG embedding model name."
     ),
     google_api_key_cli: Optional[str] = typer.Option(None, "--google-api-key", help="Google API Key for Gemini Embeddings. Overrides GOOGLE_API_KEY env var."),
+    show_env: bool = typer.Option(False, "--show-env", help="Show environment variable status for debugging."),
     force_rebuild: bool = typer.Option(False, "--force-rebuild", help="Force rebuild of the index, deleting existing data in persistent stores.")
 ):
     """Ingests documents into the specified vector store with provider-specific configurations."""
+    
+    if show_env:
+        print_env_status_cli()
     
     # Import provider-specific functions from rag_engine
     from .rag_engine import get_provider_docs_path, build_provider_db_config
@@ -210,6 +277,8 @@ def ingest_docs_command(
     console.print(f"Using Embedding Model: {rag_embed_model}")
     if effective_google_api_key and "gemini" in rag_embed_model.lower():
         console.print("[Config] GOOGLE_API_KEY will be used for Gemini embeddings.")
+    elif not effective_google_api_key and "gemini" in rag_embed_model.lower():
+        console.print("[bold yellow]Warning:[/] GOOGLE_API_KEY not found but Gemini embedding model specified. This may cause issues.")
     
     try:
         rag_engine_instance = RAGEngine(
