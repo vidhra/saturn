@@ -1,37 +1,26 @@
 import os
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core.llms import LLM # For type hinting, can also be used to set Settings.llm = None
-from llama_index.core.embeddings import BaseEmbedding # For type hinting and explicit None
-from llama_index.core.schema import Document, TextNode # Add TextNode for custom splitting
-from llama_index.core.node_parser.interface import NodeParser # Add for custom parser
-# For local embeddings, if you don't want to rely on OpenAI for embeddings:
-# from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-# For local LLM for LlamaIndex synthesis (optional, if not just using it for retrieval)
-# from llama_index.llms.ollama import Ollama 
-
-# Using rich console for logging within the RAG engine itself
+from llama_index.core.llms import LLM 
+from llama_index.core.embeddings import BaseEmbedding 
+from llama_index.core.schema import Document, TextNode 
+from llama_index.core.node_parser.interface import NodeParser 
 from rich.console import Console
-from rich.panel import Panel # For example usage
+from rich.panel import Panel 
 from typing import Dict, Any, Optional, List
 import re
 
 console = Console()
 
-# Updated default embedding model name to a standard, correctly formatted Gemini model
 DEFAULT_EMBED_MODEL_NAME = "models/text-embedding-004" 
-
-# Chroma Defaults
 DEFAULT_CHROMA_PATH = "./db/chroma_db"
 DEFAULT_CHROMA_COLLECTION = "gclouddocs"
-# DuckDB Defaults
 DEFAULT_DUCKDB_PATH = "./db/duckdb_store"
-DEFAULT_DUCKDB_DB_FILE_NAME = "vector_store.duckdb" # DuckDB file name
+DEFAULT_DUCKDB_DB_FILE_NAME = "vector_store.duckdb"
 DEFAULT_DUCKDB_TABLE_NAME = "gclouddocs_embeddings"
+DEFAULT_CONTEXT_WINDOW = 65536 
+DEFAULT_CHUNK_SIZE = 2048     
 
-# Default LlamaIndex settings to be applied early
-DEFAULT_CONTEXT_WINDOW = 65536 # Increased default
-DEFAULT_CHUNK_SIZE = 2048     # Reduced chunk size for potentially better granularity
 DEFAULT_CHUNK_OVERLAP_RATIO = 0.25 # 10% overlap
 
 # Helper function to build provider-specific database config
@@ -50,7 +39,7 @@ def build_provider_db_config(config: Dict[str, Any], provider: str = "gcp", vect
     db_config = {}
     
     if vector_store_choice == "chroma":
-        # Use shared chroma_db_path but provider-specific collection
+        
         db_config["chroma_path"] = config.get("chroma_db_path", DEFAULT_CHROMA_PATH)
         
         if provider == "gcp":
@@ -62,7 +51,6 @@ def build_provider_db_config(config: Dict[str, Any], provider: str = "gcp", vect
             db_config["chroma_collection_name"] = config.get("chroma_collection_name", DEFAULT_CHROMA_COLLECTION)
             
     elif vector_store_choice == "duckdb":
-        # Use shared duckdb path and file but provider-specific table
         db_config["duckdb_path"] = config.get("duckdb_path", DEFAULT_DUCKDB_PATH) 
         db_config["duckdb_file_name"] = config.get("duckdb_file_name", DEFAULT_DUCKDB_DB_FILE_NAME)
         
@@ -112,10 +100,9 @@ class CLIContextAwareParser(NodeParser):
         preserve_code_blocks: bool = True,
         preserve_command_context: bool = True
     ):
-        # Initialize with required model config
+        
         super().__init__()
         
-        # Store configuration as private attributes
         self._max_chunk_size = max_chunk_size
         self._chunk_overlap = chunk_overlap
         self._preserve_code_blocks = preserve_code_blocks
@@ -168,22 +155,19 @@ class CLIContextAwareParser(NodeParser):
         """Extract metadata from CLI documentation text."""
         metadata = {"file_path": file_path}
         
-        # Extract command name from first header or file path
+
         command_match = self.command_patterns['command_header'].search(text)
         if command_match:
             header_text = command_match.group().strip()
-            # Extract command from header like "# aws s3 cp" or "## gcloud compute instances create"
             command_parts = re.findall(r'\b(?:aws|gcloud)\s+[\w-]+(?:\s+[\w-]+)*', header_text, re.IGNORECASE)
             if command_parts:
                 metadata["command"] = command_parts[0].strip()
         
-        # Extract cloud provider
         if "aws" in text.lower() or "aws" in file_path.lower():
             metadata["provider"] = "aws"
         elif "gcloud" in text.lower() or "gcp" in file_path.lower():
             metadata["provider"] = "gcp"
         
-        # Identify content type based on headers
         content_types = []
         if self.command_patterns['synopsis_header'].search(text):
             content_types.append("synopsis")
@@ -203,12 +187,10 @@ class CLIContextAwareParser(NodeParser):
         """Split text by CLI documentation sections."""
         sections = []
         
-        # Split by markdown headers
         header_pattern = re.compile(r'^(#{1,6})\s+(.+)$', re.MULTILINE)
         matches = list(header_pattern.finditer(text))
         
         if not matches:
-            # No headers found, treat entire text as one section
             return [{"content": text.strip(), "header_level": 0, "title": "Content"}]
         
         # Process sections between headers
@@ -226,7 +208,6 @@ class CLIContextAwareParser(NodeParser):
                 "title": title
             })
         
-        # Handle any content before the first header
         if matches[0].start() > 0:
             pre_content = text[:matches[0].start()].strip()
             if pre_content:
@@ -243,22 +224,19 @@ class CLIContextAwareParser(NodeParser):
         title = section["title"].lower()
         content = section["content"]
         
-        # Convert max_chunk_size to int if it's a string
         max_size = int(self.max_chunk_size) if isinstance(self.max_chunk_size, str) else self.max_chunk_size
         
-        # Preserve code blocks
+        
         if self.preserve_code_blocks and self.command_patterns['code_block'].search(content):
             return True
         
-        # Preserve command examples with their descriptions
         if "example" in title and len(content) < max_size:
             return True
         
-        # Preserve synopsis/usage sections
+        
         if any(keyword in title for keyword in ["synopsis", "usage", "syntax"]) and len(content) < max_size:
             return True
         
-        # Preserve short option lists
         if "option" in title and len(content) < max_size * 0.8:
             return True
         
@@ -377,13 +355,10 @@ class RAGEngine:
                  vector_store_choice: str = "default", 
                  db_config: Optional[Dict[str, Any]] = None,
                  embed_model_name: str = DEFAULT_EMBED_MODEL_NAME,
-                 google_api_key: Optional[str] = None, # Added for Gemini API key
-                 documents_path_for_init: Optional[str] = None, # If in-memory, docs are needed at init
-                 build_index_on_init: bool = False, # Controls if index is built from docs_path_for_init
-                 # Pass llm=None from LlamaIndex if you want to avoid OpenAI default
-                 # Or pass your app's LLM instance if RAG needs to synthesize
+                 google_api_key: Optional[str] = None, 
+                 documents_path_for_init: Optional[str] = None, 
+                 build_index_on_init: bool = False,
                  llm_for_settings: Optional[LLM] = None,
-                 # Context-aware parsing options
                  use_context_aware_parsing: bool = True,
                  max_chunk_size: int = 2048,
                  chunk_overlap: int = 200,
@@ -413,10 +388,8 @@ class RAGEngine:
         self.db_config = db_config if db_config else {}
         self.vector_store_choice = vector_store_choice.lower()
         self.storage_context: Optional[StorageContext] = None
-        self.vector_store: Optional[Any] = None # Will hold ChromaVectorStore or DuckDBVectorStore instance
-        self._is_initialized_properly = False # Flag to check successful init
-        
-        # Store parsing configuration
+        self.vector_store: Optional[Any] = None 
+        self._is_initialized_properly = False 
         self.use_context_aware_parsing = use_context_aware_parsing
         self.max_chunk_size = max_chunk_size
         self.chunk_overlap = chunk_overlap
@@ -429,21 +402,17 @@ class RAGEngine:
         console.print(f"[RAG Engine] Context-aware parsing: {'enabled' if use_context_aware_parsing else 'disabled'}")
 
         try:
-            # 0. Configure LlamaIndex Global Settings
+            
             if llm_for_settings is None:
-                # console.print("[RAG Engine] Setting LlamaIndex Settings.llm to None. Observability may be affected.")
-                Settings.llm = None # Primary way to avoid default OpenAI LLM for synthesis
-                # Settings.global_handler = None # This line caused "Eval mode None not supported"
+               
+                Settings.llm = None
+               
             elif llm_for_settings: 
                 Settings.llm = llm_for_settings
                 console.print(f"[RAG Engine] LlamaIndex Settings.llm configured with provided LLM: {type(llm_for_settings).__name__}")
-
-            # Set context window and configure node parser
             Settings.context_window = DEFAULT_CONTEXT_WINDOW
             
-            # Configure text splitting/parsing based on settings
             if self.use_context_aware_parsing:
-                # Use custom CLI-aware parser
                 Settings.node_parser = CLIContextAwareParser(
                     max_chunk_size=self.max_chunk_size,
                     chunk_overlap=self.chunk_overlap,
@@ -452,42 +421,33 @@ class RAGEngine:
                 )
                 console.print(f"[RAG Engine] Configured CLI context-aware parser (max_chunk_size={self.max_chunk_size})")
             else:
-                # Use default sentence splitter
+                
                 Settings.node_parser = SentenceSplitter(
                     chunk_size=self.max_chunk_size,
                     chunk_overlap=self.chunk_overlap
                 )
                 console.print(f"[RAG Engine] Configured standard sentence splitter (chunk_size={self.max_chunk_size})")
             
-            # Set chunk settings for compatibility (only if using standard sentence splitter)
             if not self.use_context_aware_parsing:
                 Settings.chunk_size = self.max_chunk_size
                 Settings.chunk_overlap = self.chunk_overlap
             console.print(f"[RAG Engine] Set LlamaIndex Settings: context_window={Settings.context_window}, chunk_size={Settings.chunk_size}, chunk_overlap={Settings.chunk_overlap}")
 
-            # 1. Configure Embeddings - CRUCIAL for RAG
             embedding_model_configured = False
             effective_google_api_key = google_api_key or os.getenv("GOOGLE_API_KEY")
             
-            # Debug printing with safe handling of None values
-            print(f"\n[RAG Engine Debug] API Key Sources:")
-            if google_api_key:
-                print(f"  - Direct google_api_key param: {google_api_key[:5]}...{google_api_key[-4:]}")
-            else:
-                print("  - Direct google_api_key param: None")
                 
             env_key = os.getenv("GOOGLE_API_KEY")
             if env_key:
-                print(f"  - From os.environ: {env_key[:5]}...{env_key[-4:]}")
+                print(f"  - From os.environ: {env_key[:2]}...{env_key[-2:]}")
             else:
                 print("  - From os.environ: None")
                 
             if effective_google_api_key:
-                print(f"  - Effective key chosen: {effective_google_api_key[:5]}...{effective_google_api_key[-4:]}")
+                print(f"  - Effective key chosen: {effective_google_api_key[:2]}...{effective_google_api_key[-2:]}")
             else:
                 print("  - Effective key chosen: None")
 
-            # Standardize model name format for Google models
             final_google_model_name = embed_model_name
             
             if "gemini" in embed_model_name.lower() or "embedding-" in embed_model_name.lower() or embed_model_name.startswith("models/") or embed_model_name.startswith("text-"):
@@ -556,9 +516,8 @@ class RAGEngine:
 
             if not embedding_model_configured:
                 console.print("[RAG Engine] [bold red]CRITICAL:[/] Embedding model could not be configured. RAG engine will not be functional.")
-                return # Stop initialization if no embedding model is set up
+                return 
 
-            # 2. Setup Vector Store Client/Connection
             if self.vector_store_choice == "chroma":
                 console.print("[RAG Engine] Setting up ChromaDB vector store client...")
                 try:
@@ -574,7 +533,6 @@ class RAGEngine:
                     self.vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
                     self.storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
                     
-                    # Try to load existing index metadata from this store
                     if chroma_collection.count() > 0 and not build_index_on_init:
                         console.print(f"[RAG Engine] Attempting to load index from existing Chroma collection.")
                         self.index = VectorStoreIndex.from_vector_store(self.vector_store, storage_context=self.storage_context)
@@ -601,8 +559,6 @@ class RAGEngine:
                     self.vector_store = DuckDBVectorStore(database_path=full_duckdb_path, table_name=table_name)
                     self.storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
                     console.print(f"[RAG Engine] DuckDB client setup. Table '{table_name}' will be used/created.")
-                    # Try to load existing index metadata from this store
-                    # DuckDBVectorStore handles table creation; from_vector_store checks if it can load.
                     if not build_index_on_init:
                         try:
                             console.print(f"[RAG Engine] Attempting to load index from existing DuckDB table.")
@@ -617,17 +573,15 @@ class RAGEngine:
                     console.print(f"[RAG Engine] [bold red]Error setting up DuckDB:[/] {e_duck}. Fallback to default.")
                     self.vector_store_choice = "default"
 
-            # If build_index_on_init is True, or if it's an in-memory store (which always needs docs at init)
             if build_index_on_init and documents_path_for_init:
-                self.ingest_and_build_index(documents_path_for_init, force_rebuild=False) # Pass force_rebuild=False here
+                self.ingest_and_build_index(documents_path_for_init, force_rebuild=False) 
             elif self.vector_store_choice == "default" and documents_path_for_init:
                  console.print("[RAG Engine] Building in-memory index from provided documents_path_for_init.")
-                 self.ingest_and_build_index(documents_path_for_init, force_rebuild=False) # In-memory always rebuilds
+                 self.ingest_and_build_index(documents_path_for_init, force_rebuild=False) 
             
             if self.index:
-                # Pass llm=None explicitly to as_query_engine if Settings.llm is None
                 current_llm_setting = Settings.llm
-                self.query_engine = self.index.as_query_engine(similarity_top_k=6, llm=current_llm_setting)
+                self.query_engine = self.index.as_query_engine(similarity_top_k=5, llm=current_llm_setting)
                 console.print(f"[RAG Engine] Query engine initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'}).")
                 self._is_initialized_properly = True
             else:
@@ -668,15 +622,15 @@ class RAGEngine:
                     console.print(f"[RAG Engine] ChromaDB force_rebuild: Deleting collection '{collection_name}'...")
                     try:
                         self.vector_store.client.delete_collection(name=collection_name)
-                        db = self.vector_store.client # Assuming PersistentClient
+                        db = self.vector_store.client 
                         chroma_collection = db.get_or_create_collection(collection_name)
-                        self.vector_store = type(self.vector_store)(chroma_collection=chroma_collection) # Re-init VectorStore adapter
+                        self.vector_store = type(self.vector_store)(chroma_collection=chroma_collection)
                         self.storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
                         console.print(f"[RAG Engine] ChromaDB collection '{collection_name}' re-created.")
-                        self.index = None # Ensure index is rebuilt
+                        self.index = None 
                     except Exception as e_delete_chroma:
                         console.print(f"[RAG Engine] [bold red]Error deleting/re-creating Chroma collection '{collection_name}':[/] {e_delete_chroma}")
-                        # Proceeding might lead to duplicate data if not handled carefully
+                        
             elif self.vector_store_choice == "duckdb" and force_rebuild:
                 if self.vector_store and hasattr(self.vector_store, '_conn'):
                     table_name = self.db_config.get("duckdb_table_name", DEFAULT_DUCKDB_TABLE_NAME)
@@ -684,24 +638,16 @@ class RAGEngine:
                     try:
                         self.vector_store._conn.execute(f"DROP TABLE IF EXISTS \"{table_name}\"")
                         console.print(f"[RAG Engine] DuckDB table '{table_name}' dropped.")
-                        self.index = None # Ensure index is rebuilt
-                         # Re-initialize vector_store for a fresh start if needed, though from_documents should handle table creation
-                        # full_duckdb_path = os.path.join(self.db_config.get("duckdb_path", DEFAULT_DUCKDB_PATH), self.db_config.get("duckdb_file_name", DEFAULT_DUCKDB_DB_FILE_NAME))
-                        # self.vector_store = type(self.vector_store)(database_path=full_duckdb_path, table_name=table_name)
-                        # self.storage_context = StorageContext.from_defaults(vector_store=self.vector_store)
+                        self.index = None 
                     except Exception as e_drop_duckdb:
                         console.print(f"[RAG Engine] [bold red]Error dropping DuckDB table '{table_name}':[/] {e_drop_duckdb}")
-            
-            # For in-memory ("default"), it always rebuilds from documents implicitly.
-            # For persistent stores, if not force_rebuild, from_documents should add new/changed docs.
-            
+             
             console.print(f"[RAG Engine] Building/updating index with {len(documents)} documents for '{self.vector_store_choice}' store...")
             if self.vector_store_choice == "default" or not self.storage_context:
-                # In-memory or if storage_context wasn't set up (e.g. error in persistent store setup)
                 self.index = VectorStoreIndex.from_documents(documents, show_progress=True)
                 console.print("[RAG Engine] Built new in-memory index.")
             else:
-                # Persistent store (Chroma or DuckDB with existing storage_context)
+                
                 self.index = VectorStoreIndex.from_documents(
                     documents, 
                     storage_context=self.storage_context, 
@@ -710,7 +656,7 @@ class RAGEngine:
                 console.print(f"[RAG Engine] Index built/updated for {self.vector_store_choice}.")
 
             if self.index:
-                # Pass llm=None explicitly to as_query_engine if Settings.llm is None
+                
                 current_llm_setting = Settings.llm
                 self.query_engine = self.index.as_query_engine(similarity_top_k=6, llm=current_llm_setting)
                 console.print(f"[RAG Engine] Query engine (re)initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'}).")
@@ -745,7 +691,6 @@ class RAGEngine:
         if hasattr(response, 'source_nodes') and response.source_nodes:
             console.print(f"[RAG Engine] Retrieved {len(response.source_nodes)} source nodes.")
             
-            # Group nodes by command/provider for better organization
             nodes_by_command = {}
             
             for i, source_node in enumerate(response.source_nodes):
@@ -753,7 +698,6 @@ class RAGEngine:
                 text_content = source_node.get_text()
                 metadata = source_node.node.metadata or {}
                 
-                # Extract enhanced metadata from context-aware parsing
                 file_name = metadata.get('file_name', 'N/A')
                 command = metadata.get('command', 'Unknown')
                 provider = metadata.get('provider', 'Unknown')
@@ -762,12 +706,10 @@ class RAGEngine:
                 
                 display_score = f"{score:.2f}" if score is not None else "N/A"
                 
-                # Skip if score is too low
                 if score is not None and score < min_similarity_score:
                     console.print(f"  [RAG Engine] Node {i+1} from '{file_name}' (command: {command}, section: {section_title}) skipped due to low score ({display_score} < {min_similarity_score}).")
                     continue
                 
-                # Group by command for better organization
                 command_key = f"{provider}:{command}" if command != 'Unknown' else f"{provider}:{file_name}"
                 if command_key not in nodes_by_command:
                     nodes_by_command[command_key] = []
@@ -780,12 +722,10 @@ class RAGEngine:
                     'content_types': content_types
                 })
             
-            # Format results by command/provider
             if nodes_by_command:
                 for command_key, nodes in nodes_by_command.items():
                     provider, command_or_file = command_key.split(':', 1)
                     
-                    # Add command header
                     relevant_docs_parts.append(f"## {provider.upper()}: {command_or_file}\n")
                     
                     for node_info in nodes:
@@ -806,7 +746,6 @@ class RAGEngine:
                         relevant_docs_parts.append(f"### {header}\n\n{text_content}\n\n---\n")
             else:
                 console.print("[RAG Engine] No documents met the minimum similarity score.")
-                # Fallback to the most relevant node if available
                 if response.source_nodes:
                     top_node = response.source_nodes[0]
                     top_node_text = top_node.get_text()
@@ -826,9 +765,7 @@ class RAGEngine:
 
         return "".join(relevant_docs_parts)
 
-# Example Usage (for testing this module directly):
 if __name__ == '__main__':
-    # Load configuration (in a real app, this would come from config.py)
     example_config = {
         "gcp_rag_docs_path": os.path.join(os.path.dirname(__file__), '..', 'internal', 'tools', 'gcloud_online_docs_markdown'),
         "aws_rag_docs_path": os.path.join(os.path.dirname(__file__), '..', 'internal', 'tools', 'aws_cli_docs_markdown'),
@@ -842,7 +779,7 @@ if __name__ == '__main__':
     
     docs_dir_gcp = get_provider_docs_path(example_config, "gcp")
     docs_dir_aws = get_provider_docs_path(example_config, "aws")
-    gemini_key_for_test = os.getenv("GOOGLE_API_KEY") # For Gemini embedding test
+    gemini_key_for_test = os.getenv("GOOGLE_API_KEY")
 
     console.print(f"[Example Usage] RAG Engine Test Script with Provider-Specific Configurations")
 
@@ -851,8 +788,6 @@ if __name__ == '__main__':
     if not os.path.isdir(docs_dir_aws):
         console.print(f"[bold yellow]Warning for AWS example usage:[/] AWS documentation directory not found at: {docs_dir_aws}")
         
-
-    # --- Test In-Memory with default local HuggingFace embedding (using GCP docs for this example) ---
     if os.path.isdir(docs_dir_gcp):
         console.print("\n[bold]--- Testing In-Memory (HuggingFace Embeddings - GCP Docs) ---[/bold]")
         rag_memory_hf = RAGEngine(
@@ -870,7 +805,6 @@ if __name__ == '__main__':
     else:
         console.print("\n[bold yellow]Skipping In-Memory HuggingFace (GCP Docs) test as docs_dir_gcp not found.[/bold]")
 
-    # --- Test In-Memory with Gemini Embedding (using GCP docs for this example, if API key is available) ---
     if os.path.isdir(docs_dir_gcp):
         console.print("\n[bold]--- Testing In-Memory (Gemini Embeddings - GCP Docs) ---[/bold]")
         if gemini_key_for_test:
@@ -892,8 +826,7 @@ if __name__ == '__main__':
     else:
         console.print("\n[bold yellow]Skipping In-Memory Gemini (GCP Docs) test as docs_dir_gcp not found.[/bold]")
 
-
-    # --- Test ChromaDB (GCP Docs - using provider-specific config) --- 
+ 
     if os.path.isdir(docs_dir_gcp):
         console.print("\n[bold]--- Testing ChromaDB Vector Store (GCP Docs - Provider-Specific Config) ---[/bold]")
         chroma_gcp_config = build_provider_db_config(example_config, provider="gcp", vector_store_choice="chroma")
@@ -914,8 +847,7 @@ if __name__ == '__main__':
         else: console.print("[ChromaDB GCP] Failed to initialize or ingest.")
     else:
         console.print("\n[bold yellow]Skipping ChromaDB (GCP Docs) test as docs_dir_gcp not found.[/bold]")
-
-    # --- Test ChromaDB (AWS Docs - using provider-specific config) --- 
+ 
     if os.path.isdir(docs_dir_aws):
         console.print("\n[bold]--- Testing ChromaDB Vector Store (AWS Docs - Provider-Specific Config) ---[/bold]")
         chroma_aws_config = build_provider_db_config(example_config, provider="aws", vector_store_choice="chroma")
@@ -938,7 +870,6 @@ if __name__ == '__main__':
         console.print("\n[bold yellow]Skipping ChromaDB (AWS Docs) test as docs_dir_aws not found.[/bold]")
 
 
-    # --- Test DuckDB (GCP Docs - using provider-specific config) --- 
     if os.path.isdir(docs_dir_gcp):
         console.print("\n[bold]--- Testing DuckDB Vector Store (GCP Docs - Provider-Specific Config) ---[/bold]")
         duckdb_gcp_config = build_provider_db_config(example_config, provider="gcp", vector_store_choice="duckdb")
@@ -960,7 +891,6 @@ if __name__ == '__main__':
     else:
         console.print("\n[bold yellow]Skipping DuckDB (GCP Docs) test as docs_dir_gcp not found.[/bold]")
         
-    # --- Test DuckDB (AWS Docs - using provider-specific config) --- 
     if os.path.isdir(docs_dir_aws):
         console.print("\n[bold]--- Testing DuckDB Vector Store (AWS Docs - Provider-Specific Config) ---[/bold]")
         duckdb_aws_config = build_provider_db_config(example_config, provider="aws", vector_store_choice="duckdb")

@@ -13,7 +13,6 @@ from pathlib import Path
 from rich.console import Console
 from abc import ABC, abstractmethod
 
-# Import HCL libraries for proper Terraform configuration handling
 try:
     import hcl2
     HCL2_AVAILABLE = True
@@ -43,45 +42,36 @@ class HCLConverter:
             return HCLConverter._fallback_json_to_hcl(config)
         
         try:
-            # Create a string buffer to build HCL content
             hcl_parts = []
             
-            # Handle terraform block
             if "terraform" in config:
                 hcl_parts.append(HCLConverter._format_terraform_block(config["terraform"]))
             
-            # Handle provider blocks
             if "provider" in config:
                 for provider_name, provider_config in config["provider"].items():
                     hcl_parts.append(HCLConverter._format_provider_block(provider_name, provider_config))
             
-            # Handle variable blocks
             if "variable" in config:
                 for var_name, var_config in config["variable"].items():
                     hcl_parts.append(HCLConverter._format_variable_block(var_name, var_config))
             
-            # Handle locals block
             if "locals" in config:
                 hcl_parts.append(HCLConverter._format_locals_block(config["locals"]))
             
-            # Handle data blocks
             if "data" in config:
                 for data_type, data_sources in config["data"].items():
                     for data_name, data_config in data_sources.items():
                         hcl_parts.append(HCLConverter._format_data_block(data_type, data_name, data_config))
             
-            # Handle resource blocks
             if "resource" in config:
                 for resource_type, resources in config["resource"].items():
                     for resource_name, resource_config in resources.items():
                         hcl_parts.append(HCLConverter._format_resource_block(resource_type, resource_name, resource_config))
             
-            # Handle output blocks
             if "output" in config:
                 for output_name, output_config in config["output"].items():
                     hcl_parts.append(HCLConverter._format_output_block(output_name, output_config))
             
-            # Handle module blocks
             if "module" in config:
                 for module_name, module_config in config["module"].items():
                     hcl_parts.append(HCLConverter._format_module_block(module_name, module_config))
@@ -101,7 +91,6 @@ class HCLConverter:
             return {}
         
         try:
-            # Parse HCL content to JSON
             return hcl2.loads(hcl_content)
         except Exception as e:
             print(f"HCL parsing error: {e}")
@@ -119,7 +108,6 @@ class HCLConverter:
         if not tf_dir.exists():
             return {"error": f"Terraform directory {terraform_dir} does not exist"}
         
-        # Find all .tf and .tf.json files
         tf_files = list(tf_dir.glob("*.tf")) + list(tf_dir.glob("*.tf.json"))
         
         if not tf_files:
@@ -134,16 +122,13 @@ class HCLConverter:
         for tf_file in tf_files:
             try:
                 if tf_file.suffix == '.json':
-                    # JSON Terraform file
                     with open(tf_file, 'r') as f:
                         config = json.load(f)
                 else:
-                    # HCL Terraform file
                     with open(tf_file, 'r') as f:
                         hcl_content = f.read()
                         config = HCLConverter.hcl_to_json(hcl_content)
                 
-                # Extract components
                 if "resource" in config:
                     all_resources.update(config["resource"])
                 if "provider" in config:
@@ -157,13 +142,11 @@ class HCLConverter:
                 print(f"Error parsing {tf_file}: {e}")
                 continue
         
-        # Convert to Saturn log format
         saturn_log = HCLConverter._create_saturn_log_from_terraform(
             all_resources, all_providers, all_variables, all_outputs, 
             original_query, step_prefix
         )
         
-        # Check for terraform.tfstate
         tfstate_file = tf_dir / "terraform.tfstate"
         if tfstate_file.exists():
             saturn_log["tfstate_info"] = HCLConverter._parse_tfstate(tfstate_file)
@@ -183,7 +166,6 @@ class HCLConverter:
         
         current_time = datetime.now().isoformat()
         
-        # Create nodes and execution order from resources
         nodes = {}
         execution_order = []
         
@@ -192,14 +174,11 @@ class HCLConverter:
             for resource_name, resource_config in resource_instances.items():
                 step_id = f"{step_prefix}_{step_counter}_{resource_type}_{resource_name}"
                 
-                # Determine cloud provider from resource type
                 if resource_type.startswith('google_'):
                     cloud_provider = "gcp"
-                    # Try to reverse-engineer the gcloud command
                     command = HCLConverter._terraform_to_gcloud_command(resource_type, resource_name, resource_config)
                 elif resource_type.startswith('aws_'):
                     cloud_provider = "aws"
-                    # Try to reverse-engineer the AWS CLI command
                     command = HCLConverter._terraform_to_aws_command(resource_type, resource_name, resource_config)
                 else:
                     cloud_provider = "unknown"
@@ -216,7 +195,6 @@ class HCLConverter:
                 execution_order.append(step_id)
                 step_counter += 1
         
-        # Create the Saturn log structure
         saturn_log = {
             "run_info": {
                 "query": original_query,
@@ -235,13 +213,11 @@ class HCLConverter:
             "nodes": {}
         }
         
-        # Add detailed node information
         step_counter = 1
         for resource_type, resource_instances in resources.items():
             for resource_name, resource_config in resource_instances.items():
                 step_id = f"{step_prefix}_{step_counter}_{resource_type}_{resource_name}"
                 
-                # Determine cloud provider and command
                 if resource_type.startswith('google_'):
                     cloud_provider = "gcp"
                     command = HCLConverter._terraform_to_gcloud_command(resource_type, resource_name, resource_config)
@@ -281,14 +257,12 @@ class HCLConverter:
     def _terraform_to_gcloud_command(resource_type: str, resource_name: str, config: Dict[str, Any]) -> str:
         """Dynamically reverse-engineer gcloud command from Terraform resource using provider schema."""
         
-        # Use dynamic approach instead of hardcoded mappings
         return HCLConverter._reverse_engineer_gcloud_command(resource_type, resource_name, config)
     
     @staticmethod
     def _terraform_to_aws_command(resource_type: str, resource_name: str, config: Dict[str, Any]) -> str:
         """Dynamically reverse-engineer AWS CLI command from Terraform resource using provider schema."""
         
-        # Use dynamic approach instead of hardcoded mappings
         return HCLConverter._reverse_engineer_aws_command(resource_type, resource_name, config)
     
     @staticmethod
@@ -382,14 +356,12 @@ class HCLConverter:
             return "\n".join(lines)
             
         elif isinstance(value, str):
-            # Handle Terraform expressions and functions
             if (value.startswith("${") and value.endswith("}")) or \
                (value.startswith("var.") or value.startswith("data.") or 
                 value.startswith("resource.") or value.startswith("local.") or
                 value.startswith("module.")):
-                return value  # Don't quote Terraform expressions
+                return value  
             else:
-                # Escape quotes in strings
                 escaped_value = value.replace('"', '\\"')
                 return f'"{escaped_value}"'
                 
@@ -418,16 +390,14 @@ class HCLConverter:
         """
         
         try:
-            # Use terraform provider schema to get real resource information
+        
             provider_schema = HCLConverter._get_provider_schema('google', resource_type)
             if provider_schema:
                 return HCLConverter._construct_gcloud_from_schema(resource_type, resource_name, config, provider_schema)
             
-            # Fallback: Use pattern analysis to reverse-engineer
             return HCLConverter._reverse_engineer_gcloud_from_pattern(resource_type, resource_name, config)
             
         except Exception as e:
-            # Ultimate fallback: Return a descriptive comment
             return f"# Could not reverse-engineer gcloud command for {resource_type}.{resource_name}: {str(e)}"
     
     @staticmethod
@@ -438,16 +408,13 @@ class HCLConverter:
         """
         
         try:
-            # Use terraform provider schema to get real resource information
+            
             provider_schema = HCLConverter._get_provider_schema('aws', resource_type)
             if provider_schema:
                 return HCLConverter._construct_aws_from_schema(resource_type, resource_name, config, provider_schema)
-            
-            # Fallback: Use pattern analysis to reverse-engineer
             return HCLConverter._reverse_engineer_aws_from_pattern(resource_type, resource_name, config)
             
         except Exception as e:
-            # Ultimate fallback: Return a descriptive comment
             return f"# Could not reverse-engineer AWS CLI command for {resource_type}.{resource_name}: {str(e)}"
     
     @staticmethod
@@ -458,12 +425,11 @@ class HCLConverter:
         """
         
         try:
-            # Try to get real provider schema using terraform CLI
+            
             import tempfile
             import subprocess
             
             with tempfile.TemporaryDirectory() as temp_dir:
-                # Create a minimal terraform configuration to initialize providers
                 tf_config = {
                     "terraform": {
                         "required_providers": {
@@ -479,7 +445,7 @@ class HCLConverter:
                 with open(config_file, 'w') as f:
                     json.dump(tf_config, f)
                 
-                # Try to run terraform init and get schema
+
                 init_result = subprocess.run(
                     ['terraform', 'init'],
                     cwd=temp_dir,
@@ -511,23 +477,17 @@ class HCLConverter:
             return None
             
         except Exception:
-            # Fall back to pattern-based approach
             return None
     
     @staticmethod
     def _construct_gcloud_from_schema(resource_type: str, resource_name: str, config: Dict[str, Any], schema: Dict[str, Any]) -> str:
         """Construct gcloud command using real provider schema."""
-        
-        # This would use the actual schema to construct the proper command
-        # For now, fall back to pattern-based approach
         return HCLConverter._reverse_engineer_gcloud_from_pattern(resource_type, resource_name, config)
     
     @staticmethod
     def _construct_aws_from_schema(resource_type: str, resource_name: str, config: Dict[str, Any], schema: Dict[str, Any]) -> str:
         """Construct AWS CLI command using real provider schema."""
-        
-        # This would use the actual schema to construct the proper command
-        # For now, fall back to pattern-based approach
+
         return HCLConverter._reverse_engineer_aws_from_pattern(resource_type, resource_name, config)
     
     @staticmethod
@@ -537,54 +497,43 @@ class HCLConverter:
         This reverses our dynamic parsing logic.
         """
         
-        # Extract service and resource type from Terraform resource type
-        # google_compute_instance -> service=compute, resource=instance
         if not resource_type.startswith('google_'):
             return f"# Unknown Google resource type: {resource_type}"
         
-        parts = resource_type[7:].split('_')  # Remove 'google_' prefix
+        parts = resource_type[7:].split('_')  
         if len(parts) < 2:
             return f"# Cannot parse resource type: {resource_type}"
         
         service = parts[0]
         resource_subtype = '_'.join(parts[1:])
         
-        # Convert resource subtype to gcloud format
-        # instance_template -> instance-templates
-        # compute_instance -> instances
         resource_plural = HCLConverter._pluralize_resource_type(resource_subtype)
-        
-        # Determine the action (usually 'create')
+
         action = 'create'
         if 'google_storage_bucket' in resource_type:
-            action = 'create'  # gcloud storage buckets create
+            action = 'create'  
         elif 'google_compute_address' in resource_type:
-            action = 'reserve'  # gcloud compute addresses reserve
+            action = 'reserve' 
         elif 'google_cloudfunctions_function' in resource_type:
-            action = 'deploy'  # gcloud functions deploy
+            action = 'deploy'  
             service = 'functions'
             resource_plural = ''
         
-        # Construct base command
         if resource_plural:
             base_cmd = f"gcloud {service} {resource_plural} {action}"
         else:
             base_cmd = f"gcloud {service} {action}"
         
-        # Add resource name
         name = config.get('name', resource_name)
         if isinstance(name, str) and name.startswith('${'):
-            # It's a Terraform expression, use the resource_name instead
             name = resource_name
         
         command = f"{base_cmd} {name}"
         
-        # Add dynamic flags based on configuration
         for tf_attr, value in config.items():
-            if tf_attr in ['name', 'project']:  # Skip these
+            if tf_attr in ['name', 'project']: 
                 continue
                 
-            # Convert Terraform attribute to gcloud flag
             gcloud_flag = HCLConverter._terraform_attr_to_gcloud_flag(tf_attr, value)
             if gcloud_flag:
                 command += f" {gcloud_flag}"
@@ -598,37 +547,28 @@ class HCLConverter:
         This reverses our dynamic parsing logic.
         """
         
-        # Extract service and resource type from Terraform resource type
-        # aws_ec2_instance -> service=ec2, action=run-instances
         if not resource_type.startswith('aws_'):
             return f"# Unknown AWS resource type: {resource_type}"
         
-        parts = resource_type[4:].split('_')  # Remove 'aws_' prefix
+        parts = resource_type[4:].split('_')
         if len(parts) < 1:
             return f"# Cannot parse resource type: {resource_type}"
         
-        # Determine service and action
         service = parts[0]
         resource_subtype = '_'.join(parts[1:]) if len(parts) > 1 else ''
         
-        # Map to AWS CLI patterns
         action = HCLConverter._get_aws_action(service, resource_subtype)
         
-        # Special cases for AWS CLI structure
         if resource_type == 'aws_s3_bucket':
             bucket_name = config.get('bucket', resource_name)
             return f"aws s3 mb s3://{bucket_name}"
         
-        # Construct base command
         base_cmd = f"aws {service} {action}"
-        
-        # Add dynamic parameters based on configuration
         params = []
         for tf_attr, value in config.items():
-            if tf_attr == 'tags':  # Skip complex attributes for now
+            if tf_attr == 'tags': 
                 continue
                 
-            # Convert Terraform attribute to AWS CLI parameter
             aws_param = HCLConverter._terraform_attr_to_aws_param(tf_attr, value, resource_type)
             if aws_param:
                 params.append(aws_param)
@@ -644,7 +584,6 @@ class HCLConverter:
     def _pluralize_resource_type(resource_type: str) -> str:
         """Convert singular resource type to plural gcloud format."""
         
-        # Handle special cases
         if resource_type == 'instance_template':
             return 'instance-templates'
         elif resource_type == 'firewall':
@@ -660,10 +599,10 @@ class HCLConverter:
     def _terraform_attr_to_gcloud_flag(attr: str, value: Any) -> Optional[str]:
         """Convert Terraform attribute to gcloud flag."""
         
-        # Convert attribute name from snake_case to kebab-case
+
         flag_name = attr.replace('_', '-')
         
-        # Handle different value types
+
         if isinstance(value, bool):
             if value:
                 return f"--{flag_name}"
@@ -679,14 +618,14 @@ class HCLConverter:
         elif isinstance(value, (int, float)):
             return f"--{flag_name}={value}"
         else:
-            # Skip Terraform expressions and complex objects
+
             return None
     
     @staticmethod
     def _get_aws_action(service: str, resource_type: str) -> str:
         """Determine AWS CLI action from service and resource type."""
         
-        # Map common patterns
+
         if service == 'ec2':
             if resource_type == 'instance':
                 return 'run-instances'
@@ -703,7 +642,7 @@ class HCLConverter:
         elif service == 'rds':
             return f"create-{resource_type.replace('_', '-')}"
         elif service == 's3':
-            return 'mb'  # make bucket
+            return 'mb' 
         else:
             return f"create-{resource_type.replace('_', '-')}"
     
@@ -711,7 +650,7 @@ class HCLConverter:
     def _terraform_attr_to_aws_param(attr: str, value: Any, resource_type: str) -> Optional[str]:
         """Convert Terraform attribute to AWS CLI parameter."""
         
-        # Handle special mappings
+
         if attr == 'ami':
             return f"--image-id {value}"
         elif attr == 'instance_type':

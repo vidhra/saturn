@@ -1,0 +1,151 @@
+export const metadata = {
+  title: 'Saturn CLI Reference',
+  description: 'Detailed command-line interface reference for the Saturn tool.',
+}
+
+# Saturn CLI Reference
+
+This page provides a detailed reference for the Saturn Command Line Interface (CLI). The Saturn CLI allows you to interact with the Saturn tool for various operations, including running natural language commands against your cloud infrastructure and managing the RAG engine.
+
+## General Usage
+
+The basic syntax for using the Saturn CLI is:
+
+```bash
+saturn [OPTIONS] COMMAND [ARGS]...
+```
+
+Below you will find details for each command.
+
+## Commands
+
+### `run`
+
+Runs the Saturn orchestrator with the specified query and configuration to execute actions, primarily against Google Cloud Platform.
+
+**Usage:**
+
+```bash
+saturn run "Your natural language query about cloud infrastructure"
+```
+
+**Arguments:**
+
+- `QUERY`: (Required) The natural language query for the agent.
+
+**Options:**
+
+- `--provider TEXT`: LLM provider (e.g., `openai`, `gemini`, `claude`, `mistral`). Defaults to value from `LLM_PROVIDER` env var or `config.yaml` (default: `openai`).
+- `--model TEXT`: Specific LLM model name (e.g., `gpt-4o`). Overrides model specified in `config.yaml` for the chosen provider.
+- `--project-id TEXT`: Google Cloud Project ID. Overrides `GCP_PROJECT_ID` env var or `config.yaml`.
+- `--creds-path FILE`: Path to GCP service account key file. Uses Application Default Credentials (ADC) if not provided. Overrides `GCP_CREDENTIALS_PATH` env var or `config.yaml`.
+- `--max-retries INTEGER`: Maximum retry attempts for the orchestrator loop. Defaults to value from `MAX_RETRIES` env var or `config.yaml` (default: `5`).
+- `--rag-docs-path DIRECTORY`: Path to Markdown documents for RAG. Defaults to value from `GCLOUD_DOCS_PATH` env var or `config.yaml` (default: `internal/tools/gcloud_online_docs_markdown` relative to Saturn project).
+- `--vector-store TEXT`: Vector store type: `default` (in-memory), `chroma`, `duckdb`. Overrides `VECTOR_STORE` env var or `config.yaml`.
+- `--db-path FILE_OR_DIRECTORY`: Path for persistent DB. 
+    - For Chroma: e.g., `./db/chroma_store` (directory).
+    - For DuckDB: e.g., `./db/duckdb_store/vector_store.duckdb` (file).
+- `--db-collection-table TEXT`: Collection name (for ChromaDB) or Table name (for DuckDB).
+    - Chroma default: `gcp_rag_collection` (derived from `DEFAULT_CHROMA_COLLECTION`).
+    - DuckDB default: `gcp_rag_table` (derived from `DEFAULT_DUCKDB_TABLE_NAME`).
+- `--rag-embed-model TEXT`: RAG embedding model name. Defaults to value from `RAG_EMBED_MODEL` env var or `config.yaml` (default: `BAAI/bge-small-en-v1.5`).
+- `--google-api-key TEXT`: Google API Key for Gemini Embeddings. Overrides `GOOGLE_API_KEY` env var or `config.yaml`.
+- `--verbose, -v`: Enable verbose output, including full exception tracebacks.
+
+### `ingest-docs`
+
+Ingests documents into the specified vector store to build or update the RAG knowledge base.
+
+**Usage:**
+
+```bash
+saturn ingest-docs --provider gcp --vector-store chroma
+```
+
+**Options:**
+
+- `--provider TEXT`: Cloud provider for which to ingest docs: `gcp` or `aws`. Default: `gcp`.
+- `--docs-path DIRECTORY`: Path to Markdown documents to ingest. If not specified, uses a provider-specific default path (e.g., from `config.yaml` or a path relative to the Saturn project like `internal/tools/gcloud_online_docs_markdown` for GCP).
+- `--vector-store TEXT`: Vector store type: `default` (in-memory, not persistent for ingest), `chroma`, `duckdb`. Defaults to `VECTOR_STORE` env var or `config.yaml` (default: `chroma`).
+- `--rag-embed-model TEXT`: RAG embedding model name. Defaults to `RAG_EMBED_MODEL` env var or `config.yaml` (default: `BAAI/bge-small-en-v1.5`).
+- `--google-api-key TEXT`: Google API Key for Gemini Embeddings. Overrides `GOOGLE_API_KEY` env var or `config.yaml`.
+- `--force-rebuild`: Force rebuild of the index, deleting existing data in persistent stores (Chroma, DuckDB).
+
+### `terraform-run`
+
+Runs the Saturn orchestrator to translate a natural language query into Terraform code and optionally plans/applies it.
+
+**Usage:**
+
+```bash
+saturn terraform-run "Create a secure VPC network in GCP"
+```
+
+**Arguments:**
+
+- `QUERY`: (Required) The natural language query for the Terraform agent.
+
+**Options:**
+
+- `--provider TEXT`: LLM provider (e.g., `openai`, `gemini`). Default: `openai` (from config).
+- `--model TEXT`: Specific LLM model name.
+- `--cloud-provider TEXT`: Cloud provider: `gcp`, `aws`, or `multi`. Default: `gcp`.
+- `--gcp-project-id TEXT`: GCP Project ID.
+- `--gcp-creds-path FILE`: Path to GCP service account key file.
+- `--gcp-region TEXT`: GCP default region. Default: `us-central1`.
+- `--aws-region TEXT`: AWS default region. Default: `us-west-2` (from env or hardcoded).
+- `--aws-profile TEXT`: AWS profile to use.
+- `--aws-access-key TEXT`: AWS access key ID (from env).
+- `--terraform-dir DIRECTORY`: Terraform working directory. Default: `terraform_workspace`.
+- `--dry-run`: Plan only, don't apply Terraform changes. Default: `False`.
+- `--keep-files`: Keep Terraform files after execution. Default: `False`.
+- `--state-backend TEXT`: Terraform state backend (e.g., `local`, `gcs`, `s3`). Default: `local`.
+- `--rag-docs-path DIRECTORY`: Path to Markdown documents for RAG.
+- `--vector-store TEXT`: Vector store type for RAG: `default`, `chroma`, `duckdb`.
+- `--verbose, -v`: Enable verbose output.
+
+### `hybrid-run`
+
+Runs a natural language query using a hybrid approach, potentially deciding between direct cloud execution (e.g., gcloud) and Terraform, or running both.
+
+**Usage:**
+
+```bash
+saturn hybrid-run "Setup a GKE cluster with monitoring"
+```
+
+**Arguments:**
+
+- `QUERY`: (Required) The natural language query.
+
+**Options:**
+
+- `--mode TEXT`: Execution mode: `auto`, `terraform`, `gcloud`, or `dual`. Default: `auto`.
+- `--provider TEXT`: LLM provider.
+- `--model TEXT`: Specific LLM model.
+- `--project-id TEXT`: GCP Project ID.
+- `--creds-path FILE`: Path to GCP service account key file.
+- `--default-executor TEXT`: Default executor when mode is `auto`: `gcloud` or `terraform`. Default: `gcloud`.
+- `--terraform-dry-run`: Plan only if Terraform is chosen. Default: `False`.
+- `--verbose, -v`: Enable verbose output.
+
+### `convert-history`
+
+Converts a Saturn execution log file (JSON format) into a Terraform configuration file.
+
+**Usage:**
+
+```bash
+saturn convert-history logs/saturn_run_some_query.json -o output.tf
+```
+
+**Arguments:**
+
+- `LOG_FILE`: (Required) Path to Saturn execution log file (JSON format).
+
+**Options:**
+
+- `--output, -o FILE`: Output Terraform file path. Default: `converted_terraform.tf`.
+- `--project-id TEXT`: GCP Project ID.
+- `--creds-path FILE`: Path to GCP service account key file.
+- `--verbose, -v`: Enable verbose output. 

@@ -1,0 +1,171 @@
+export const metadata = {
+  title: 'Saturn Configuration Guide',
+  description: 'Understanding and customizing Saturn\'s configuration using config.yaml and environment variables.',
+}
+
+# Saturn Configuration Guide
+
+Saturn uses a flexible configuration system that combines a `config.yaml` file with environment variables, allowing for easy customization of its behavior, including LLM providers, cloud connections, RAG engine settings, and more.
+
+This guide explains the available configuration parameters and how they are prioritized.
+
+## Configuration Loading
+
+Saturn attempts to load `config.yaml` from the following locations in order:
+
+1.  A specific path provided directly to the configuration loader.
+2.  `./config.yaml` (in the current working directory where Saturn is executed).
+3.  `~/.config/saturn/config.yaml` (user-specific global Saturn configuration).
+
+The first valid `config.yaml` found is loaded. Values from this file can set corresponding environment variables if those environment variables are not already set.
+
+**Priority for final configuration values:**
+
+1.  **Direct Environment Variables:** Highest priority. If an environment variable is set, it overrides any value from `config.yaml`.
+2.  **`config.yaml` Values:** Used if the corresponding environment variable is not already set.
+3.  **Default values in code:** Lowest priority, used if no setting is found in environment variables or `config.yaml`.
+
+## Configuration Parameters
+
+Below are the parameters you can configure, typically by setting the corresponding environment variable or by defining the key (left-hand side of `ENV_VAR = YAML_KEY`) in your `config.yaml`.
+
+### LLM Providers
+
+- **`llm_provider`** (No direct ENV_VAR in map, but used by CLI & Orchestrator)
+    - *Description*: Specifies the default LLM provider (e.g., `openai`, `gemini`, `claude`, `mistral`).
+    - *`config.yaml` key*: `llm_provider`
+    - *Note*: Often overridden by CLI options.
+
+- **`OPENAI_API_KEY`**
+    - *Description*: Your API key for OpenAI.
+    - *`config.yaml` key*: `openai_api_key`
+
+- **`GOOGLE_API_KEY`** or **`GEMINI_API_KEY`**
+    - *Description*: Your API key for Google Gemini (used for LLM and potentially embeddings).
+    - *`config.yaml` key*: `google_api_key` or `gemini_api_key`
+
+- **`ANTHROPIC_API_KEY`**
+    - *Description*: Your API key for Anthropic Claude.
+    - *`config.yaml` key*: `anthropic_api_key`
+
+- **`MISTRAL_API_KEY`**
+    - *Description*: Your API key for Mistral.
+    - *`config.yaml` key*: `mistral_api_key`
+
+### Google Cloud Platform (GCP)
+
+- **`GCP_PROJECT_ID`**
+    - *Description*: Your Google Cloud Project ID.
+    - *`config.yaml` key*: `gcp_project_id`
+
+- **`GOOGLE_APPLICATION_CREDENTIALS`**
+    - *Description*: Path to your GCP service account key JSON file. If not set, Application Default Credentials (ADC) are used.
+    - *`config.yaml` key*: `gcp_credentials_path`
+
+### Amazon Web Services (AWS)
+
+- **`AWS_REGION`**
+    - *Description*: The default AWS region to use.
+    - *`config.yaml` key*: `aws_region`
+
+- **`AWS_PROFILE`**
+    - *Description*: The AWS CLI profile to use.
+    - *`config.yaml` key*: `aws_profile`
+
+### RAG Engine & Vector Store
+
+- **`VECTOR_STORE`**
+    - *Description*: Specifies the type of vector store to use for RAG (e.g., `default` (in-memory), `chroma`, `duckdb`).
+    - *`config.yaml` key*: `vector_store`
+
+- **`RAG_EMBED_MODEL`**
+    - *Description*: The name of the embedding model to use for RAG.
+    - *`config.yaml` key*: `rag_embedding_model` (Default in code: `BAAI/bge-small-en-v1.5`)
+
+- **`GCP_RAG_DOCS_PATH`**
+    - *Description*: Path to the directory containing Markdown documentation files for GCP to be ingested by RAG.
+    - *`config.yaml` key*: `gcp_rag_docs_path`
+
+- **`AWS_RAG_DOCS_PATH`**
+    - *Description*: Path to the directory containing Markdown documentation files for AWS to be ingested by RAG.
+    - *`config.yaml` key*: `aws_rag_docs_path`
+
+- **`GCLOUD_DOCS_PATH`** (Legacy/Backward Compatibility)
+    - *Description*: Alternative way to specify RAG documentation path, primarily for GCP.
+    - *`config.yaml` key*: `rag_docs_path`
+
+#### RAG Context-Aware Parsing
+
+- **`USE_CONTEXT_AWARE_PARSING`**
+    - *Description*: Boolean (e.g., `true`/`false`) to enable/disable context-aware parsing for RAG.
+    - *`config.yaml` key*: `use_context_aware_parsing`
+
+- **`MAX_CHUNK_SIZE`**
+    - *Description*: Maximum size of text chunks for RAG processing.
+    - *`config.yaml` key*: `max_chunk_size`
+
+- **`CHUNK_OVERLAP`**
+    - *Description*: Number of characters to overlap between text chunks for RAG.
+    - *`config.yaml` key*: `chunk_overlap`
+
+- **`PRESERVE_CODE_BLOCKS`**
+    - *Description*: Boolean to indicate if code blocks should be preserved during RAG text processing.
+    - *`config.yaml` key*: `preserve_code_blocks`
+
+- **`PRESERVE_COMMAND_CONTEXT`**
+    - *Description*: Boolean to indicate if command context should be preserved during RAG text processing.
+    - *`config.yaml` key*: `preserve_command_context`
+
+#### ChromaDB Specific (for RAG)
+
+- **`CHROMA_DB_PATH`**
+    - *Description*: Filesystem path to store ChromaDB data.
+    - *`config.yaml` key*: `chroma_db_path` (Default in code, e.g., `./db/chroma_store/gcp_rag_store` or similar)
+
+- **`GCP_CHROMA_COLLECTION`**
+    - *Description*: Name of the ChromaDB collection for GCP documents.
+    - *`config.yaml` key*: `gcp_chroma_collection_name` (Default in code, e.g., `gcp_rag_collection`)
+
+- **`AWS_CHROMA_COLLECTION`**
+    - *Description*: Name of the ChromaDB collection for AWS documents.
+    - *`config.yaml` key*: `aws_chroma_collection_name` (Default in code, e.g., `aws_rag_collection`)
+
+- **`CHROMA_COLLECTION`** (Legacy/Backward Compatibility)
+    - *Description*: Alternative way to specify ChromaDB collection name, primarily for GCP.
+    - *`config.yaml` key*: `chroma_collection_name`
+
+#### DuckDB Specific (for RAG)
+
+- **`DUCKDB_PATH`**
+    - *Description*: Directory path where the DuckDB database file will be stored.
+    - *`config.yaml` key*: `duckdb_path` (Default in code, e.g., `./db/duckdb_store`)
+
+- **`DUCKDB_FILE_NAME`**
+    - *Description*: Name of the DuckDB database file (e.g., `vector_store.duckdb`).
+    - *`config.yaml` key*: `duckdb_file_name` (Default in code, e.g., `gcp_vector_store.duckdb`)
+
+- **`GCP_DUCKDB_TABLE_NAME`**
+    - *Description*: Name of the table within DuckDB for GCP documents.
+    - *`config.yaml` key*: `gcp_duckdb_table_name` (Default in code, e.g., `gcp_rag_table`)
+
+- **`AWS_DUCKDB_TABLE_NAME`**
+    - *Description*: Name of the table within DuckDB for AWS documents.
+    - *`config.yaml` key*: `aws_duckdb_table_name` (Default in code, e.g., `aws_rag_table`)
+
+- **`DUCKDB_TABLE_NAME`** (Legacy/Backward Compatibility)
+    - *Description*: Alternative way to specify DuckDB table name, primarily for GCP.
+    - *`config.yaml` key*: `duckdb_table_name`
+
+This list covers the main configurable aspects identified from `config.py`. Refer to the specific commands (e.g., `saturn run`, `saturn ingest-docs`) for how these configurations are utilized and if any command-line options can further override them.
+
+## Environment Variables
+
+Many configuration settings can also be (or exclusively be) set using environment variables. Environment variables typically override values set in `config.yaml`.
+
+Common environment variables include:
+
+{/* Details of environment variables will be populated here */}
+
+## Configuration Loading Logic
+
+{/* Explanation of how config.py loads and prioritizes settings */} 
