@@ -96,14 +96,12 @@ class Graph:
             self.up_edges[v].discard(vertex)
 
     def __str__(self):
-        # Produce a deterministic string: sort vertices (using their string value) and list each vertex's down edges.
         names = sorted([str(v) for v in self.vertices])
         mapping = {str(v): v for v in self.vertices}
         lines = []
         for name in names:
             v = mapping[name]
             lines.append(name)
-            # DON'T INDENT DEPENDENCIES - test expects a flat format
             deps = sorted([str(d) for d in self.down_edges.get(v, set())])
             for d in deps:
                 lines.append(d)

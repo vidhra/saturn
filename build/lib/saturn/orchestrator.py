@@ -122,7 +122,8 @@ def get_llm_interface(config: Dict[str, Any]) -> BaseLLMInterface:
 async def _generate_plan_dag(
     user_query: str,
     llm_interface: BaseLLMInterface,
-    state_logger: RunStateLogger
+    state_logger: RunStateLogger,
+    file_tool_names: set
 ) -> Tuple[Optional[AcyclicGraph], Optional[Dict[str, Any]]]:
     """
     Calls the LLM to generate a multi-step plan and constructs a DAG.
@@ -138,7 +139,27 @@ async def _generate_plan_dag(
             {"role": "system", "content": "You are a planning assistant."},
             {"role": "user", "content": planning_prompt}
         ])
-        raw_plan_str = response.choices[0].message.content.strip()
+        try:
+            choice = response.choices[0]
+            message = getattr(choice, "message", None)
+            if message is None:
+                raise ValueError("No 'message' attribute in response. Full response: {}".format(response))
+            content = getattr(message, "content", None)
+            if not isinstance(content, str):
+                raise ValueError(f"Expected string content, got {type(content)}. Content: {content}")
+            raw_plan_str = content.strip()
+            console.print(f"Raw plan: {raw_plan_str}")
+        except Exception as e:
+            console.print(f"[bold red]Error extracting plan from LLM response:[/bold red] {e}")
+            console.print(f"[dim]Full response object: {response}[/dim]")
+            raw_plan_str = None
+        
+        if raw_plan_str is None:
+            error_msg = "LLM returned an empty plan."
+            console.print(f"[bold red]Error:[/] {error_msg}")
+            state_logger.record_event("plan_generation_failed", {"error": error_msg, "raw_response": raw_plan_str})
+            return None, None
+
         try:
             plan_steps = json.loads(raw_plan_str)
         except json.JSONDecodeError:
@@ -170,7 +191,15 @@ async def _generate_plan_dag(
             for i, step_data in enumerate(plan_steps):
                 if isinstance(step_data, dict):
                     step_id_disp = step_data.get("id", f"Step {i+1} (ID missing)")
-                    provider_disp = step_data.get("cloud_provider", "N/A").upper()
+                    tool_to_use = step_data.get("tool_to_use", "")
+                    cloud_provider_val = step_data.get("cloud_provider")
+                    if not cloud_provider_val and tool_to_use in file_tool_names:
+                        provider_disp = "FILE"
+                    elif isinstance(cloud_provider_val, str) and cloud_provider_val:
+                        provider_disp = cloud_provider_val.upper()
+                    else:
+                        provider_disp = "N/A"
+                        console.print(f"[yellow]Warning: Step {step_id_disp} is missing a valid cloud_provider and is not a file/build step. Step: {step_data}[/yellow]")
                     description_disp = step_data.get("description", "N/A")
                     dependencies_disp = ", ".join(step_data.get("dependencies", [])) or "-"
                     pass_output_disp = str(step_data.get("pass_output_to_next", "True")) 
@@ -184,34 +213,36 @@ async def _generate_plan_dag(
         step_ids = set()
 
         for step in plan_steps:
-
-            if not isinstance(step, dict) or not all(k in step for k in ["id", "description", "dependencies", "cloud_provider"]):
-                error_msg = f"Invalid step structure (missing id, description, dependencies, or cloud_provider): {step}"
+            tool_to_use = step.get("tool_to_use", "")
+            cloud_provider = step.get("cloud_provider")
+            if not cloud_provider and tool_to_use in file_tool_names:
+                # File/build step, allow
+                pass
+            elif not isinstance(cloud_provider, str) or not cloud_provider:
+                error_msg = f"Step {step.get('id')} is missing a valid cloud_provider and is not a file/build step."
                 console.print(f"[bold red]Error:[/] {error_msg}")
                 state_logger.record_event("plan_generation_failed", {"error": error_msg, "plan_steps": plan_steps})
                 return None, None
-            
-            if step["cloud_provider"] not in ["gcp", "aws"]:
+            if step.get("cloud_provider") and step["cloud_provider"] not in ["gcp", "aws"]:
                 error_msg = f"Invalid cloud_provider '{step['cloud_provider']}' in step {step['id']}. Must be 'gcp' or 'aws'."
                 console.print(f"[bold red]Error:[/] {error_msg}")
                 state_logger.record_event("plan_generation_failed", {"error": error_msg, "plan_steps": plan_steps})
                 return None, None
-            
             step_id = step["id"]
             if step_id in step_ids:
                 error_msg = f"Duplicate step ID found in plan: {step_id}"
                 console.print(f"[bold red]Error:[/] {error_msg}")
                 state_logger.record_event("plan_generation_failed", {"error": error_msg, "plan_steps": plan_steps})
                 return None, None
-            
             step_ids.add(step_id)
             dag.add(step_id) 
             step_details_map[step_id] = {
                 "id": step_id,
                 "description": step.get("description", ""),
-                "cloud_provider": step["cloud_provider"], 
+                "cloud_provider": step.get("cloud_provider"), 
                 "dependencies": step.get("dependencies", []),
                 "tool_to_use": step.get("tool_to_use", "cli_command_generation"),
+                "tool_args": step.get("tool_args", {}),
                 "pass_output_to_next": step.get("pass_output_to_next", True)
             }
 
@@ -511,7 +542,7 @@ async def run_query_with_feedback(
         state_logger.set_final_run_status("LLM_INIT_FAILED", [{"error": f"LLM Init Failed: {str(e)}"}])
         state_logger.save_state()
         return
-    dag, step_details_map = await _generate_plan_dag(query, llm_interface, state_logger)
+    dag, step_details_map = await _generate_plan_dag(query, llm_interface, state_logger, file_tool_names)
     if not dag or not step_details_map:
         console.print("[bold red]Failed to generate a valid execution plan. Orchestrator cannot proceed.[/bold red]")
         state_logger.set_final_run_status("PLAN_GENERATION_FAILED", [{"error": "Failed to generate DAG plan"}])

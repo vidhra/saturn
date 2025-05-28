@@ -1413,8 +1413,8 @@ class TerraformExecutor:
         self.terraform_state_backend = config.get('terraform_state_backend', 'local')
         self.dry_run = config.get('terraform_dry_run', False)
         self.keep_files = config.get('terraform_keep_files', False)
+        self.execution_mode = config.get('execution_mode', 'auto')
         
-        # Initialize dynamic cloud provider converters
         self.converters = {
             'gcp': GCPConverter(),
             'aws': AWSConverter()
@@ -1422,10 +1422,8 @@ class TerraformExecutor:
         
         self.hcl_converter = HCLConverter()
         
-        # Ensure working directory exists
         Path(self.terraform_working_dir).mkdir(exist_ok=True)
         
-        # Determine available providers
         available_providers = []
         if config.get('gcp_project_id'):
             available_providers.append('gcp')
@@ -1433,6 +1431,7 @@ class TerraformExecutor:
             available_providers.append('aws')
         
         print(f"Dynamic Multi-cloud Terraform Executor initialized")
+        print(f"Execution mode: {self.execution_mode}")
         print(f"HCL Libraries: python-hcl2={'✓' if HCL2_AVAILABLE else '✗'}, pyhcl={'✓' if HCL_AVAILABLE else '✗'}")
         print(f"Supports: ANY gcloud command, ANY AWS CLI command")
         print(f"Available providers: {', '.join(available_providers) if available_providers else 'None configured'}")
@@ -1445,9 +1444,22 @@ class TerraformExecutor:
         step_id: str,
         execution_mode: str = "terraform"
     ) -> Tuple[bool, Any]:
-        """Execute ANY cloud CLI command using dynamic Terraform conversion."""
-        
         try:
+            if self.execution_mode == 'manual':
+                if self._is_destructive_terraform_operation(command, execution_mode):
+                    console.print(f"\n[bold yellow]Step {step_id}:[/bold yellow]")
+                    console.print(f"[cyan]Command to execute:[/cyan] {command}")
+                    
+                    from rich.prompt import Confirm
+                    if not Confirm.ask("Execute this command?", default=True):
+                        console.print("[yellow]Command execution skipped by user[/yellow]")
+                        return False, "Execution skipped by user"
+                else:
+                    console.print(f"[dim][READ-ONLY][/dim] Auto-executing: [cyan]{command}[/cyan]")
+            
+            elif self.execution_mode == 'yolo':
+                console.print(f"[bold green][YOLO MODE][/bold green] Auto-executing: [cyan]{command}[/cyan]")
+            
             if execution_mode == "convert":
                 return await self._execute_cloud_to_terraform(command, console, step_id)
             else:
@@ -1457,6 +1469,63 @@ class TerraformExecutor:
             error_msg = f"Exception during Terraform execution: {str(e)}"
             console.print(f"[bold red]  {error_msg}[/bold red]")
             return False, error_msg
+
+    def _is_destructive_terraform_operation(self, command: str, execution_mode: str) -> bool:
+        """Check if a Terraform operation is destructive and requires confirmation."""
+        command_lower = command.lower()
+        
+        if execution_mode == "convert":
+            return self._is_destructive_cloud_command(command)
+        
+        read_only_terraform_keywords = [
+            'plan', 'validate', 'show', 'version', 'fmt', 'providers', 'state show',
+            'state list', 'output', 'workspace show', 'workspace list', 'get'
+        ]
+        
+        for read_keyword in read_only_terraform_keywords:
+            if read_keyword in command_lower:
+                return False
+        
+        destructive_terraform_keywords = [
+            'apply', 'destroy', 'import', 'state rm', 'state mv', 'workspace new',
+            'workspace delete', 'init', 'refresh', 'taint', 'untaint'
+        ]
+        
+        for destructive_keyword in destructive_terraform_keywords:
+            if destructive_keyword in command_lower:
+                return True
+        
+        return True
+    
+    def _is_destructive_cloud_command(self, command: str) -> bool:
+        """Check if a cloud command (being converted to Terraform) is destructive."""
+        command_lower = command.lower()
+        
+        destructive_keywords = [
+            'create', 'delete', 'remove', 'destroy', 'terminate', 'stop', 'start', 'restart',
+            'update', 'modify', 'set', 'add', 'attach', 'detach', 'enable', 'disable',
+            'deploy', 'apply', 'import', 'export', 'copy', 'move', 'resize', 'reset',
+            'restore', 'backup', 'migrate', 'promote', 'demote', 'patch', 'replace',
+            'run-instances', 'allocate', 'associate', 'authorize', 'deauthorize',
+            'register', 'deregister', 'launch', 'reboot', 'release', 'revoke', 'cancel', 'invoke'
+        ]
+        
+        read_only_keywords = [
+            'describe', 'list', 'get', 'show', 'print', 'cat', 'tail', 'head',
+            'search', 'find', 'check', 'test', 'validate', 'verify', 'status',
+            'info', 'help', 'version', 'config list', 'auth list', 'configure list',
+            'sts get-caller-identity', 'wait', 'monitor'
+        ]
+        
+        for read_keyword in read_only_keywords:
+            if read_keyword in command_lower:
+                return False
+        
+        for destructive_keyword in destructive_keywords:
+            if destructive_keyword in command_lower:
+                return True
+        
+        return False
 
     async def _execute_cloud_to_terraform(
         self,

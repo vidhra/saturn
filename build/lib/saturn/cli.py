@@ -12,10 +12,6 @@ try:
     env_file_paths = [
         Path(".env"),
         Path("../.env"),
-        Path("../../.env"),
-        Path.cwd() / ".env",
-        Path.cwd().parent / ".env",
-        Path.cwd().parent.parent / ".env"
     ]
     
     env_loaded = False
@@ -98,11 +94,10 @@ def run_command(
     project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--project-id", help="Google Cloud Project ID. Overrides config/env."),
     creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--creds-path", help="Path to GCP service account key file (uses ADC if not provided). Overrides config/env."),
     max_retries: Optional[int] = typer.Option(int(os.getenv("MAX_RETRIES") or APP_CONFIG.get('max_retries', 5)), "--max-retries", help="Max retry attempts for the orchestrator loop."),
-    # kb_path is for the old KnowledgeBase, RAG uses rag_docs_path
-    # kb_path: Optional[str] = typer.Option(os.getenv("KB_PATH") or APP_CONFIG.get('kb_path', "api_defs"), "--kb-path", help="Path to the knowledge base API definitions."),
+    execution_mode: Optional[str] = typer.Option("auto", "--execution-mode", help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)"),
     rag_docs_path: Optional[str] = typer.Option(os.getenv("GCLOUD_DOCS_PATH") or APP_CONFIG.get('rag_docs_path', os.path.join(os.path.dirname(__file__), '..' , 'internal', 'tools', 'gcloud_online_docs_markdown')), "--rag-docs-path", help="Path to Markdown documents for RAG."),
     
-    vector_store_cli: Optional[str] = typer.Option(None, "--vector-store", help="Vector store type: default (in-memory), chroma, duckdb. Overrides env and config.yaml."), # Changed name to avoid conflict
+    vector_store_cli: Optional[str] = typer.Option(None, "--vector-store", help="Vector store type: default (in-memory), chroma, duckdb. Overrides env and config.yaml."),
     
     db_path: Optional[str] = typer.Option(None, "--db-path", help="Path for persistent DB (e.g., ./db/chroma_store or ./db/duckdb_store/vector_store.duckdb)."),
     db_collection_or_table: Optional[str] = typer.Option(None, "--db-collection-table", help="Collection name (Chroma) or Table name (DuckDB)."),
@@ -120,6 +115,10 @@ def run_command(
     if show_env:
         print_env_status_cli()
     
+    if execution_mode not in ['auto', 'yolo', 'manual']:
+        console.print(f"[bold red]Error:[/] Invalid execution mode '{execution_mode}'. Use: auto, yolo, or manual")
+        raise typer.Exit(code=1)
+    
     console.print(Panel(f"Processing query: '[bold cyan]{query}[/bold cyan]'", title="Saturn Command"))
 
     config = APP_CONFIG.copy()
@@ -128,6 +127,7 @@ def run_command(
     if project_id: config['gcp_project_id'] = project_id
     if creds_path: config['gcp_credentials_path'] = creds_path
     config['max_retries'] = max_retries 
+    config['execution_mode'] = execution_mode
     config['rag_docs_path_for_init'] = rag_docs_path 
     config['rag_embedding_model'] = rag_embed_model
     config['google_api_key'] = google_api_key_cli or os.getenv("GOOGLE_API_KEY") or config.get('google_api_key')
@@ -178,7 +178,15 @@ def run_command(
     if config.get(f'{provider}_model'):
         console.print(f"Using Model: {config.get(f'{provider}_model')}")
     console.print(f"Target GCP Project: {config['gcp_project_id']}")
+    console.print(f"Execution Mode: {execution_mode}")
     
+    if execution_mode == 'yolo':
+        console.print("[bold green]🚀 YOLO MODE: Commands will auto-execute without confirmation[/bold green]")
+    elif execution_mode == 'manual':
+        console.print("[bold yellow]✋ MANUAL MODE: You will be asked to confirm each command[/bold yellow]")
+    else:
+        console.print("[blue]🔄 AUTO MODE: Standard execution with progress display[/blue]")
+
     console.print(f"RAG Vector Store: {config['vector_store_choice']}")
     if config['db_config']:
         console.print(f"RAG DB Config: {config['db_config']}")
@@ -309,16 +317,14 @@ def terraform_run_command(
     provider: Optional[str] = typer.Option(os.getenv("LLM_PROVIDER") or APP_CONFIG.get('llm_provider', "openai"), help="LLM provider (e.g., openai, gemini, claude, mistral"),
     model: Optional[str] = typer.Option(None, help="Specific LLM model name (e.g., gpt-4o). Overrides config."),
     cloud_provider: Optional[str] = typer.Option("gcp", "--cloud-provider", help="Cloud provider: gcp, aws, or multi (for multi-cloud)."),
-    # GCP options
+    execution_mode: Optional[str] = typer.Option("auto", "--execution-mode", help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)"),
     gcp_project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--gcp-project-id", help="Google Cloud Project ID. Overrides config/env."),
     gcp_creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--gcp-creds-path", help="Path to GCP service account key file. Overrides config/env."),
     gcp_region: Optional[str] = typer.Option("us-central1", "--gcp-region", help="GCP default region."),
-    # AWS options
     aws_region: Optional[str] = typer.Option(os.getenv("AWS_DEFAULT_REGION") or "us-west-2", "--aws-region", help="AWS default region."),
     aws_profile: Optional[str] = typer.Option(os.getenv("AWS_PROFILE"), "--aws-profile", help="AWS profile to use."),
     aws_access_key: Optional[str] = typer.Option(os.getenv("AWS_ACCESS_KEY_ID"), "--aws-access-key", help="AWS access key ID."),
     aws_secret_key: Optional[str] = typer.Option(os.getenv("AWS_SECRET_ACCESS_KEY"), "--aws-secret-key", help="AWS secret access key."),
-    # Terraform options
     terraform_working_dir: Optional[str] = typer.Option("terraform_workspace", "--terraform-dir", help="Terraform working directory."),
     terraform_dry_run: bool = typer.Option(False, "--dry-run", help="Plan only, don't apply Terraform changes."),
     terraform_keep_files: bool = typer.Option(False, "--keep-files", help="Keep Terraform files after execution."),
@@ -331,12 +337,16 @@ def terraform_run_command(
     
     console.print(Panel(f"Processing query with multi-cloud Terraform: '[bold cyan]{query}[/bold cyan]'\nTarget providers: [yellow]{cloud_provider}[/yellow]", title="Saturn Multi-Cloud Terraform"))
 
+    if execution_mode not in ['auto', 'yolo', 'manual']:
+        console.print(f"[bold red]Error:[/] Invalid execution mode '{execution_mode}'. Use: auto, yolo, or manual")
+        raise typer.Exit(code=1)
+
     config = APP_CONFIG.copy()
     config['llm_provider'] = provider
     if model: config[f'{provider}_model'] = model
     
-    # Multi-cloud provider configuration
     config['cloud_provider'] = cloud_provider
+    config['execution_mode'] = execution_mode
     
     # GCP configuration
     if gcp_project_id: config['gcp_project_id'] = gcp_project_id
@@ -390,6 +400,15 @@ def terraform_run_command(
         )
 
         console.print("--- Starting Terraform Orchestrator ---")
+        console.print(f"Execution Mode: {execution_mode}")
+        
+        if execution_mode == 'yolo':
+            console.print("[bold green]🚀 YOLO MODE: Commands will auto-execute without confirmation[/bold green]")
+        elif execution_mode == 'manual':
+            console.print("[bold yellow]✋ MANUAL MODE: You will be asked to confirm each command[/bold yellow]")
+        else:
+            console.print("[blue]🔄 AUTO MODE: Standard execution with progress display[/blue]")
+        
         asyncio.run(run_query_hybrid(query, config, rag_engine_instance, execution_mode="terraform", verbose=verbose))
 
     except Exception as e:
@@ -400,7 +419,8 @@ def terraform_run_command(
 @app.command("hybrid-run")
 def hybrid_run_command(
     query: str = typer.Argument(..., help="The natural language query for the hybrid agent."),
-    execution_mode: str = typer.Option("auto", "--mode", help="Execution mode: auto, terraform, gcloud, or dual"),
+    execution_mode_hybrid: str = typer.Option("auto", "--mode", help="Execution mode: auto, terraform, gcloud, or dual"),
+    execution_mode: Optional[str] = typer.Option("auto", "--execution-mode", help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)"),
     provider: Optional[str] = typer.Option(os.getenv("LLM_PROVIDER") or APP_CONFIG.get('llm_provider', "openai"), help="LLM provider (e.g., openai, gemini, claude, mistral"),
     model: Optional[str] = typer.Option(None, help="Specific LLM model name (e.g., gpt-4o). Overrides config."),
     project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--project-id", help="Google Cloud Project ID. Overrides config/env."),
@@ -411,14 +431,18 @@ def hybrid_run_command(
 ):
     """Runs the Saturn orchestrator with hybrid Terraform/gcloud execution."""
     
-    if execution_mode not in ["auto", "terraform", "gcloud", "dual"]:
-        console.print(f"[bold red]Error:[/] Invalid execution mode '{execution_mode}'. Use: auto, terraform, gcloud, or dual")
+    if execution_mode_hybrid not in ["auto", "terraform", "gcloud", "dual"]:
+        console.print(f"[bold red]Error:[/] Invalid execution mode '{execution_mode_hybrid}'. Use: auto, terraform, gcloud, or dual")
+        raise typer.Exit(code=1)
+    
+    if execution_mode not in ['auto', 'yolo', 'manual']:
+        console.print(f"[bold red]Error:[/] Invalid execution mode '{execution_mode}'. Use: auto, yolo, or manual")
         raise typer.Exit(code=1)
     
     console.print(Panel(
         f"Processing query with hybrid orchestrator\n"
         f"Query: '[bold cyan]{query}[/bold cyan]'\n"
-        f"Mode: [yellow]{execution_mode}[/yellow]",
+        f"Mode: [yellow]{execution_mode_hybrid}[/yellow]",
         title="Saturn Hybrid Command"
     ))
 
@@ -429,6 +453,7 @@ def hybrid_run_command(
     if creds_path: config['gcp_credentials_path'] = creds_path
     config['default_executor'] = default_executor
     config['terraform_dry_run'] = terraform_dry_run
+    config['execution_mode'] = execution_mode
 
     if not config.get('gcp_project_id'):
         console.print("[bold red]Error:[/] GCP Project ID not found.")
@@ -447,7 +472,16 @@ def hybrid_run_command(
         )
 
         console.print("--- Starting Hybrid Orchestrator ---")
-        asyncio.run(run_query_hybrid(query, config, rag_engine_instance, execution_mode=execution_mode, verbose=verbose))
+        console.print(f"Execution Mode: {execution_mode}")
+        
+        if execution_mode == 'yolo':
+            console.print("[bold green]🚀 YOLO MODE: Commands will auto-execute without confirmation[/bold green]")
+        elif execution_mode == 'manual':
+            console.print("[bold yellow]✋ MANUAL MODE: You will be asked to confirm each command[/bold yellow]")
+        else:
+            console.print("[blue]🔄 AUTO MODE: Standard execution with progress display[/blue]")
+        
+        asyncio.run(run_query_hybrid(query, config, rag_engine_instance, execution_mode=execution_mode_hybrid, verbose=verbose))
 
     except Exception as e:
         console.print(f"[bold red]\n--- An unexpected error occurred in 'hybrid-run' command --- [/bold red]")

@@ -31,7 +31,8 @@ class RunStateLogger:
                 "edges": [],  # List of "source -> target" strings
                 "execution_order": []  # List of node_ids in execution order
             },
-            "nodes": {}  # Format: {node_id: node_state_dict}
+            "nodes": {},  # Format: {node_id: node_state_dict}
+            "events": []
         }
         console.print(f"[grey50][StateLogger] Initialized for query.[/grey50]")
 
@@ -133,4 +134,13 @@ class RunStateLogger:
                 json.dump(self.run_state_data, f, indent=2)
             console.print(f"[info]State file [cyan]{filename}[/cyan] written successfully to [magenta]{log_dir}/[/magenta].[/info]")
         except Exception as e:
-            console.print(f"[bold red]Error:[/] Failed to write state file {filepath}: {e}") 
+            console.print(f"[bold red]Error:[/] Failed to write state file {filepath}: {e}")
+
+    def record_event(self, event_type: str, event_data: Dict[str, Any]):
+        event = {
+            "timestamp": datetime.now().isoformat(),
+            "event_type": event_type,
+            "data": event_data
+        }
+        self.run_state_data["events"].append(event)
+        console.print(f"[grey50][StateLogger] Recorded event: {event_type}[/grey50]") 

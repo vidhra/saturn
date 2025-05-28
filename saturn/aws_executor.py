@@ -1,17 +1,20 @@
+import os
 import asyncio
 import json
 from typing import Dict, Any, Tuple
 
 from rich.console import Console
+from rich.prompt import Confirm
 
 class AWSExecutor:
     def __init__(self, config: Dict[str, Any]):
         """Initializes the AWS Executor."""
         self.config = config
-        self.aws_region = config.get('aws_region', 'us-east-1')
+        self.aws_region = config.get('aws_region', config.get('aws_default_region', 'us-west-2'))
         self.aws_profile = config.get('aws_profile')
-        print(f"AWS Executor initialized for region: {self.aws_region}" + 
-              (f" using profile: {self.aws_profile}" if self.aws_profile else ""))
+        self.execution_mode = config.get('execution_mode', 'auto')
+        print(f"AWS Executor initialized for region: {self.aws_region}")
+        print(f"Execution mode: {self.execution_mode}")
 
     async def execute(
         self,
@@ -35,12 +38,31 @@ class AWSExecutor:
             return False, error_msg
         
         env_vars = os.environ.copy()
+        if self.aws_region:
+            env_vars['AWS_DEFAULT_REGION'] = self.aws_region
         if self.aws_profile:
-            env_vars["AWS_PROFILE"] = self.aws_profile
-        if self.aws_region and not any(flag in command for flag in ["--region", "AWS_REGION"]):
-            env_vars["AWS_DEFAULT_REGION"] = self.aws_region
+            env_vars['AWS_PROFILE'] = self.aws_profile
+        
+        for aws_env_var in ['aws_access_key_id', 'aws_secret_access_key', 'aws_session_token']:
+            config_value = self.config.get(aws_env_var)
+            if config_value:
+                env_vars[aws_env_var.upper()] = config_value
 
         try:
+            if self.execution_mode == 'manual':
+                if self._is_destructive_operation(command):
+                    console.print(f"\n[bold yellow]Step {step_id}:[/bold yellow]")
+                    console.print(f"[cyan]Command to execute:[/cyan] {command}")
+                    
+                    if not Confirm.ask("Execute this command?", default=True):
+                        console.print("[yellow]Command execution skipped by user[/yellow]")
+                        return False, "Execution skipped by user"
+                else:
+                    console.print(f"[dim][READ-ONLY][/dim] Auto-executing: [cyan]{command}[/cyan]")
+            
+            elif self.execution_mode == 'yolo':
+                console.print(f"[bold green][YOLO MODE][/bold green] Auto-executing: [cyan]{command}[/cyan]")
+
             with console.status(f"[bold yellow]Executing: [cyan]{step_id}[/cyan]...[/bold yellow]", spinner="dots") as status:
                 process = await asyncio.create_subprocess_shell(
                     command,
@@ -68,6 +90,36 @@ class AWSExecutor:
             error_msg = f"Exception during AWS command execution: {str(e)}"
             console.print(f"[bold red]  {error_msg}[/bold red]")
             return False, error_msg
+
+    def _is_destructive_operation(self, command: str) -> bool:
+        """Check if an AWS CLI command is a destructive operation that requires confirmation."""
+        command_lower = command.lower()
+        
+        destructive_keywords = [
+            'create', 'delete', 'remove', 'destroy', 'terminate', 'stop', 'start', 'restart',
+            'update', 'modify', 'put', 'post', 'patch', 'add', 'attach', 'detach', 'enable', 'disable',
+            'deploy', 'apply', 'import', 'export', 'copy', 'move', 'resize', 'reset',
+            'restore', 'backup', 'migrate', 'promote', 'demote', 'replace', 'run-instances',
+            'allocate', 'associate', 'authorize', 'deauthorize', 'register', 'deregister',
+            'launch', 'reboot', 'release', 'revoke', 'cancel', 'invoke'
+        ]
+        
+        read_only_keywords = [
+            'describe', 'list', 'get', 'show', 'print', 'cat', 'tail', 'head',
+            'search', 'find', 'check', 'test', 'validate', 'verify', 'status',
+            'info', 'help', 'version', 'configure list', 'sts get-caller-identity',
+            'wait', 'monitor'
+        ]
+        
+        for read_keyword in read_only_keywords:
+            if read_keyword in command_lower:
+                return False
+        
+        for destructive_keyword in destructive_keywords:
+            if destructive_keyword in command_lower:
+                return True
+        
+        return False
 
     async def execute_dag(
         self,
@@ -105,7 +157,7 @@ class AWSExecutor:
                 if node.get("dependencies"):
                     console.print(f"Dependencies: {', '.join(node['dependencies'])}")
                 
-                success, result = await self.execute(node["command"], console)
+                success, result = await self.execute(node["command"], console, step_id)
                 results[step_id] = (success, result)
                 
                 if not success:
@@ -154,6 +206,4 @@ async def main_example():
     console_instance.print("\nAWS DAG Execution Results:", dag_results)
 
 if __name__ == '__main__':
-
-    import os 
     asyncio.run(main_example()) 
