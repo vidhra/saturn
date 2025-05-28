@@ -158,21 +158,19 @@ class KnowledgeBase:
         self.raw_tools = all_tools
         print(f"Finished building {len(self.raw_tools)} raw tools.")
 
-        # Build a quick lookup map for type schemas by full name (service.TypeName)
         self._type_schema_map = {}
         for service_name, service_types_file_content in self.types_data.items():
-             # Assuming structure { "/path/to/file.py": [ {type_info}, ... ] }
              if isinstance(service_types_file_content, dict):
                  for file_path, type_list in service_types_file_content.items():
                      if isinstance(type_list, list):
                          for type_info in type_list:
                              type_name = type_info.get("name")
                              if type_name:
-                                 # Use service_name as part of the key for uniqueness
+
                                  full_type_name = f"{service_name}.{type_name}"
                                  self._type_schema_map[full_type_name] = type_info
-                                 # Also store potential references like google.cloud... if available
-                                 reference = type_info.get("reference") # Check if types.json includes this
+                                
+                                 reference = type_info.get("reference")
                                  if reference:
                                       self._type_schema_map[reference] = type_info
              else:
@@ -190,7 +188,7 @@ class KnowledgeBase:
         if query:
             print(f"Query-based filtering not yet implemented. Returning all tools.")
 
-        return all_tools # Return the built list
+        return all_tools
 
     def get_file_build_tools(self) -> List[Dict[str, Any]]:
         return self.file_build_tools
@@ -219,12 +217,9 @@ class KnowledgeBase:
         found_service_key = None
         method_name = None
         for key in self.tools_data.keys():
-             # Check if the tool name starts with the key followed by an underscore
             if service_method_name.startswith(f"{key}_"):
-                # Choose the longest matching key (e.g., prefer 'vpcaccess_v1' over 'vpcaccess')
                 if found_service_key is None or len(key) > len(found_service_key):
                      found_service_key = key
-                     # Extract method name after the prefix and underscore
                      method_name = service_method_name[len(key) + 1:] 
 
         if not found_service_key or not method_name:
@@ -232,20 +227,18 @@ class KnowledgeBase:
             print(f"  Known service keys: {list(self.tools_data.keys())}")
             return []
         
-        service_name = found_service_key # Use the actual key found
+        service_name = found_service_key 
 
-        # Iterate through the top-level keys (service class names) in the loaded JSON
         service_class_definitions = self.tools_data[service_name]
         if not isinstance(service_class_definitions, dict):
              print(f"Warning: Expected dict for tools_data[{service_name}], got {type(service_class_definitions)}. Cannot find methods.")
              return []
         
         for service_class_name, service_class_def in service_class_definitions.items():
-            # Now access the 'methods' list within the service class definition
             methods_list = service_class_def.get("methods", [])
             if not isinstance(methods_list, list):
                 print(f"Warning: Expected list for methods in {service_class_name}, got {type(methods_list)}.")
-                continue # Skip if structure is unexpected
+                continue 
 
             for method_def in methods_list:
                 fn_info = method_def.get("function", {})
@@ -253,12 +246,11 @@ class KnowledgeBase:
                     request_types = fn_info.get("request_types", [])
                     if request_types:
                         print(f"Found request types {request_types} for {service_method_name}")
-                        return request_types # Return the list found
+                        return request_types 
                     else:
                         print(f"Warning: Method {service_method_name} found but has no request_types defined.")
-                        return [] # Found method but no types defined
+                        return []
 
-        # Method not found in any service class within the file
         print(f"Method '{method_name}' not found under any service class in {service_name}/tools.json (derived from tool name '{service_method_name}')")
         return []
 
@@ -303,5 +295,3 @@ class KnowledgeBase:
         initial_count = len(self.raw_tools)
         self.raw_tools.extend(external_tools)
         print(f"Merged {len(external_tools)} external tools. Total tools now: {len(self.raw_tools)} (was {initial_count})")
-
-# Example Usage removed to prevent linting issues. 

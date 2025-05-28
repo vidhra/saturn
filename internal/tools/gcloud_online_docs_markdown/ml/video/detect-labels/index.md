@@ -1,0 +1,108 @@
+# gcloud ml video detect-labels  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels)*
+
+**NAME**
+
+: **gcloud ml video detect-labels - detect general labels for videos**
+
+**SYNOPSIS**
+
+: **`gcloud ml video detect-labels` `[INPUT_PATH](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#INPUT_PATH)` [`[--async](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#--async)`] [`[--detection-mode](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#--detection-mode)`=`DETECTION_MODE`; default="shot"] [`[--output-uri](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#--output-uri)`=`OUTPUT_URI`] [`[--region](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#--region)`=`REGION`] [`[--segments](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#--segments)`=[`SEGMENTS`,…]] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/ml/video/detect-labels#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: Detect general categories in videos, such as modes of transportation or animals.
+Use the --detection-mode flag to control whether labels are detected for shots,
+frames, or both.
+
+**EXAMPLES**
+
+: To detect labels in video file 'gs://my_bucket/input_file.mp4':
+
+```
+gcloud ml video detect-labels gs://my_bucket/input_file.mp4
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **`INPUT_PATH`**:
+Path to the video to be analyzed. Must be a local path or a Google Cloud Storage
+URI.
+
+**FLAGS**
+
+: **--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**--detection-mode**:
+The mode of label detection requested. `DETECTION_MODE`
+must be one of:
+
+**`frame`**:
+Detect labels at the per-frame level.
+
+**`shot`**:
+Detect labels at the per-shot level.
+
+**`shot-and-frame`**:
+Detect labels at both the per-shot and per-frame level.
+
+**--output-uri**:
+Location to which the results should be written. Must be a Google Cloud Storage
+URI.
+
+**--region**:
+Optional Cloud region where annotation should take place. If no region is
+specified, a region will be determined based on video file location.
+`REGION` must be one of: `asia-east1`,
+`europe-west1`, `us-east1`, `us-west1`.
+
+**--segments**:
+Segments from the video which you want to analyze (by default, the entire video
+will be treated as one segment). Must be in the format
+START1:END1[,START2:END2,…] (inclusive). START and END of segments must
+be a properly formatted duration string of the form `HhMmSs` where:
+
+```
+*  H is the number of hours from beginning of video
+*  M is the number of minutes from the beginning of video
+*  S is the number of seconds from the beginning of the video
+```
+
+H, M and S can be specified as ints or floats for fractional units (to
+microsecond resolution). Unit chars (e.g. `h`, `m` or
+`s`) are required. Microseconds can be specified using fractional
+seconds e.g. 0.000569s == 569 microseconds.
+Examples:
+0s:23.554048s,24s:29.528064s
+0:1m40s,3m50s:5m10.232265s
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**API REFERENCE**
+
+: This command uses the `videointelligence/v1` API. The full
+documentation for this API can be found at: [https://cloud.google.com/video-intelligence/docs/](https://cloud.google.com/video-intelligence/docs/)
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha ml video detect-labels
+```
+
+```
+gcloud beta ml video detect-labels
+```

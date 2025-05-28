@@ -21,7 +21,7 @@ DEFAULT_DUCKDB_TABLE_NAME = "gclouddocs_embeddings"
 DEFAULT_CONTEXT_WINDOW = 65536 
 DEFAULT_CHUNK_SIZE = 2048     
 
-DEFAULT_CHUNK_OVERLAP_RATIO = 0.25 # 10% overlap
+DEFAULT_CHUNK_OVERLAP_RATIO = 0.25 
 
 # Helper function to build provider-specific database config
 def build_provider_db_config(config: Dict[str, Any], provider: str = "gcp", vector_store_choice: str = "chroma") -> Dict[str, Any]:

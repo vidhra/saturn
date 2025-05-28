@@ -6,10 +6,10 @@ import google.oauth2.service_account
 from typing import Dict, Any, Tuple, Optional, List
 import asyncio
 import traceback
-from google.api_core.operation import Operation # Import Operation for type checking
-from google.api_core.operation_async import AsyncOperation # Import AsyncOperation
-from google.protobuf.json_format import MessageToDict # For result conversion
-from rich.console import Console # Added console for rich printing
+from google.api_core.operation import Operation 
+from google.api_core.operation_async import AsyncOperation
+from google.protobuf.json_format import MessageToDict 
+from rich.console import Console 
 import subprocess
 
 from .knowledge_base import KnowledgeBase
@@ -85,12 +85,10 @@ class GcloudExecutor:
         results = {}
         
         try:
-            # Get execution order
             execution_order = dag_definition.get("execution_order", [])
             if not execution_order:
                 raise ValueError("No execution order defined in DAG")
             
-            # Execute steps in order
             for step_id in execution_order:
                 node = dag_definition["nodes"][step_id]
                 
@@ -100,7 +98,6 @@ class GcloudExecutor:
                 if node.get("dependencies"):
                     console.print(f"Dependencies: {', '.join(node['dependencies'])}")
                 
-                # Execute the command
                 success, result = await self.execute(node["command"], console, step_id)
                 results[step_id] = (success, result)
                 
@@ -114,8 +111,3 @@ class GcloudExecutor:
         except Exception as e:
             console.print(f"[bold red]Error executing DAG:[/bold red] {str(e)}")
             return results
-
-# Helper (if needed, from call.py)
-# def convert_strings_to_json(data: dict) -> dict:
-#     """Recursively attempt to parse any string fields as JSON objects."""
-#     # ... implementation ... 

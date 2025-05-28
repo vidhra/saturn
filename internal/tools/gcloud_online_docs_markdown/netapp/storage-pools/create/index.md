@@ -1,0 +1,213 @@
+# gcloud netapp storage-pools create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create)*
+
+**NAME**
+
+: **gcloud netapp storage-pools create - create a Cloud NetApp Storage Pool**
+
+**SYNOPSIS**
+
+: **`gcloud netapp storage-pools create` (`[STORAGE_POOL](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#STORAGE_POOL)` : `[--location](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--location)`=`LOCATION`) `[--capacity](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--capacity)`=`CAPACITY` `[--network](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--network)`=[`name`=`NAME`],[`psa-range`=`PSA-RANGE`] `[--service-level](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--service-level)`=`SERVICE_LEVEL` [`[--active-directory](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--active-directory)`=`ACTIVE_DIRECTORY`] [`[--allow-auto-tiering](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--allow-auto-tiering)`=`ALLOW_AUTO_TIERING`] [`[--async](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--async)`] [`[--custom-performance-enabled](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--custom-performance-enabled)`=`CUSTOM_PERFORMANCE_ENABLED`] [`[--description](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--description)`=`DESCRIPTION`] [`[--enable-ldap](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--enable-ldap)`=`ENABLE_LDAP`] [`[--kms-config](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--kms-config)`=`KMS_CONFIG`] [`[--labels](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--labels)`=[`KEY`=`VALUE`,…]] [`[--replica-zone](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--replica-zone)`=`REPLICA_ZONE`] [`[--total-iops](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--total-iops)`=`TOTAL_IOPS`] [`[--total-throughput](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--total-throughput)`=`TOTAL_THROUGHPUT`] [`[--zone](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#--zone)`=`ZONE`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/netapp/storage-pools/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: Creates a Storage Pool to contain Volumes with a specified Service Level and
+capacity.
+
+**EXAMPLES**
+
+: The following command creates a Storage Pool named NAME using all possible
+arguments with a VPC network in the same project
+
+```
+gcloud netapp storage-pools create NAME --location=us-central1 --service-level=standard --capacity=2048 --network=name=default --active-directory=ad1 --kms-config=kms-config1 --enable-ldap=true --description="example description"
+```
+
+The following command creates a Storage pool named NAME using all possible
+arguments with a shared VPC network in a separate project called VPC_PROJECT
+
+```
+gcloud netapp storage-pools create NAME --location=us-central1 --service-level=standard --capacity=2048 --network=name=projects/VPC_PROJECT/locations/us-central1/networks/default --active-directory=ad1 --kms-config=kms-config1 --enable-ldap=true --description="example description"
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **Storage pool resource - The Storage Pool to create. The arguments in this group
+can be used to specify the attributes of this resource. (NOTE) Some attributes
+are not given arguments in this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `storage_pool` on the command line with a fully
+specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+This must be specified.
+
+**`STORAGE_POOL`**:
+ID of the storage_pool or fully qualified identifier for the storage_pool.
+To set the `storage_pool` attribute:
+
+- provide the argument `storage_pool` on the command line.
+
+This positional argument must be specified if any of the other arguments in this
+group are specified.
+
+**--location**:
+The location of the storage_pool.
+To set the `location` attribute:
+
+- provide the argument `storage_pool` on the command line with a fully
+specified name;
+- provide the argument `--location` on the command line;
+- set the property `netapp/location`.**
+
+**REQUIRED FLAGS**
+
+: **--capacity**:
+The desired capacity of the Storage Pool in GiB or TiB units.If no capacity unit
+is specified, GiB is assumed.
+
+**--network**:
+Network configuration for a Cloud NetApp Files Storage Pool. Specifying
+`psa-range` is optional.
+
+**`name`**:
+The name of the Google Compute Engine [VPC network](https://cloud.google.com/compute/docs/networks-and-firewalls#networks) to which
+the volume is connected. Short-form (VPC network ID) or long-form (full VPC
+network name: projects/PROJECT/locations/LOCATION/networks/NETWORK) are both
+accepted, but please use the long-form when attempting to create a Storage Pool
+using a shared VPC.
+
+**`psa-range`**:
+This field is not implemented. The values provided in this field are ignored.
+
+**--service-level**:
+The service level for the Cloud NetApp Storage Pool. For more details, see: [https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/overview#service_levels](https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/overview#service_levels)
+`SERVICE_LEVEL` must be one of:
+
+**`extreme`**:
+Extreme Service Level for Cloud NetApp Storage Pool. The Extreme Service Level
+has a throughput per GiB of allocated volume size of 128 KiB/s.
+
+**`flex`**:
+Flex Service Level for Cloud NetApp Storage Pool. The Flex Service Level has a
+throughput per GiB of allocated volume size of 16 KiB/s.
+
+**`premium`**:
+Premium Service Level for Cloud NetApp Storage Pool. The Premium Service Level
+has a throughput per GiB of allocated volume size of 64 KiB/s.
+
+**`standard`**:
+Standard Service Level for Cloud NetApp Storage Pool. The Standard Service Level
+has a throughput per GiB of allocated volume size of 16 KiB/s.
+
+**OPTIONAL FLAGS**
+
+: **Active directory resource - The Active Directory to attach to the Storage Pool.
+This represents a Cloud resource. (NOTE) Some attributes are not given arguments
+in this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `--active-directory` on the command line with a
+fully specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+To set the `location` attribute:
+
+- provide the argument `--active-directory` on the command line with a
+fully specified name;
+- provide the argument `--location` on the command line;
+- set the property `netapp/location`.
+
+**--active-directory**:
+ID of the active_directory or fully qualified identifier for the
+active_directory.
+To set the `active_directory` attribute:
+
+- provide the argument `--active-directory` on the command line.**
+
+**--allow-auto-tiering**:
+Boolean flag indicating whether Storage Pool is allowed to use auto-tiering
+
+**--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**--custom-performance-enabled**:
+Boolean flag indicating whether Storage Pool is a custom performance Storage
+Pool or not
+
+**--description**:
+A description of the Cloud NetApp Storage Pool
+
+**--enable-ldap**:
+Boolean flag indicating whether Storage Pool is a NFS LDAP Storage Pool or not
+
+**Kms config resource - The KMS config to attach to the Storage Pool. This
+represents a Cloud resource. (NOTE) Some attributes are not given arguments in
+this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `--kms-config` on the command line with a fully
+specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+To set the `location` attribute:
+
+- provide the argument `--kms-config` on the command line with a fully
+specified name;
+- provide the argument `--location` on the command line;
+- set the property `netapp/location`.
+
+**--kms-config**:
+ID of the kms_config or fully qualified identifier for the kms_config.
+To set the `kms_config` attribute:
+
+- provide the argument `--kms-config` on the command line.**
+
+**--labels**:
+List of label KEY=VALUE pairs to add.
+Keys must start with a lowercase character and contain only hyphens
+(`-`), underscores (`_`), lowercase characters, and
+numbers. Values must contain only hyphens (`-`), underscores
+(`_`), lowercase characters, and numbers.
+
+**--replica-zone**:
+String indicating replica zone for the Storage Pool
+
+**--total-iops**:
+Integer indicating total IOPS of the Storage Pool
+
+**--total-throughput**:
+The total throughput of the Storage Pool in MiB/s or GiB/s units. If no
+throughput unit is specified, MiB/s is assumed.
+
+**--zone**:
+String indicating active zone of the Storage Pool
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha netapp storage-pools create
+```
+
+```
+gcloud beta netapp storage-pools create
+```

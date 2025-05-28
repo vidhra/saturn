@@ -1,0 +1,136 @@
+# gcloud firestore databases create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create)*
+
+**NAME**
+
+: **gcloud firestore databases create - create a Google Cloud Firestore database via Firestore API**
+
+**SYNOPSIS**
+
+: **`gcloud firestore databases create` `[--location](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--location)`=`LOCATION` [`[--database](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--database)`=`DATABASE`; default="(default)"] [`[--delete-protection](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--delete-protection)`] [`[--edition](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--edition)`=`EDITION`; default="standard"] [`[--enable-pitr](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--enable-pitr)`] [`[--kms-key-name](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--kms-key-name)`=`KMS_KEY_NAME`] [`[--type](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#--type)`=`TYPE`; default="firestore-native"] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/firestore/databases/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**EXAMPLES**
+
+: To create a Firestore Enterprise database named `foo` in
+`nam5` for use with Ignite APIs.
+
+```
+gcloud firestore databases create --database=foo --edition=enterprise --location=nam5
+```
+
+To create a Firestore Native database in `nam5`.
+
+```
+gcloud firestore databases create --location=nam5
+```
+
+To create a Datastore Mode database in `us-east1`.
+
+```
+gcloud firestore databases create --location=us-east1 --type=datastore-mode
+```
+
+To create a Datastore Mode database in `us-east1` with a databaseId
+`foo`.
+
+```
+gcloud firestore databases create --database=foo --location=us-east1 --type=datastore-mode
+```
+
+To create a Firestore Native database in `nam5` with delete
+protection enabled.
+
+```
+gcloud firestore databases create --location=nam5 --delete-protection
+```
+
+To create a Firestore Native database in `nam5` with Point In Time
+Recovery (PITR) enabled.
+
+```
+gcloud firestore databases create --location=nam5 --enable-pitr
+```
+
+To create a Firestore Native database in `nam5` encrypted by a
+Customer-managed encryption key (CMEK).
+
+```
+gcloud firestore databases create --location=nam5 --kms-key-name=projects/PROJECT_ID/locations/us/keyRings/KEY_RING_ID/cryptoKeys/CRYPTO_KEY_ID
+```
+
+**REQUIRED FLAGS**
+
+: **--location**:
+The location to operate on. Available locations are listed at [https://cloud.google.com/firestore/docs/locations](https://cloud.google.com/firestore/docs/locations).
+For example, to operate on location `us-east1`:
+
+```
+gcloud firestore databases create --location='us-east1'
+```
+
+**OPTIONAL FLAGS**
+
+: **--database**:
+The ID to use for the database, which will become the final component of the
+database's resource name. If database ID is not provided, (default) will be used
+as database ID.
+This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with
+first character a letter and the last a letter or a number. Must not be
+UUID-like /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
+Using "(default)" database ID is also allowed.
+
+**--delete-protection**:
+Whether to enable delete protection on the created database.
+If set to true, delete protection of the new database will be enabled and delete
+operations will fail unless delete protection is disabled.
+Default to false.
+
+**--edition**:
+The edition of the database. `EDITION` must be one of:
+`standard`, `enterprise`.
+
+**--enable-pitr**:
+Whether to enable Point In Time Recovery (PITR) on the created database.
+If set to true, PITR on the new database will be enabled. By default, this
+feature is not enabled.
+
+**--kms-key-name**:
+The resource ID of a Cloud KMS key. If set, the database created will be a
+Customer-Managed Encryption Key (CMEK) database encrypted with this key. This
+feature is allowlist only in initial launch.
+Only a key in the same location as this database is allowed to be used for
+encryption. For Firestore's nam5 multi-region, this corresponds to Cloud KMS
+location us. For Firestore's eur3 multi-region, this corresponds to Cloud KMS
+location europe. See [https://cloud.google.com/kms/docs/locations](https://cloud.google.com/kms/docs/locations).
+This value should be the KMS key resource ID in the format of
+`projects/{project_id}/locations/{kms_location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
+How to retrieve this resource ID is listed at [https://cloud.google.com/kms/docs/getting-resource-ids#getting_the_id_for_a_key_and_version](https://cloud.google.com/kms/docs/getting-resource-ids#getting_the_id_for_a_key_and_version).
+
+**--type**:
+The type of the database. `TYPE` must be one of:
+`firestore-native`, `datastore-mode`.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**NOTES**
+
+: These variants are also available:
+
+```
+gcloud alpha firestore databases create
+```
+
+```
+gcloud beta firestore databases create
+```

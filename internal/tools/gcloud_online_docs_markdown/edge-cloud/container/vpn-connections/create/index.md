@@ -1,0 +1,147 @@
+# gcloud edge-cloud container vpn-connections create  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create)*
+
+**NAME**
+
+: **gcloud edge-cloud container vpn-connections create - create a VPN connection between an Edge Container cluster and a VPC network**
+
+**SYNOPSIS**
+
+: **`gcloud edge-cloud container vpn-connections create` `[VPN_CONNECTION](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#VPN_CONNECTION)` `[--cluster](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--cluster)`=`CLUSTER` `[--vpc-network](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--vpc-network)`=`VPC_NETWORK` [`[--async](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--async)`] [`[--high-availability](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--high-availability)`] [`[--labels](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--labels)`=[`KEY`=`VALUE`,…]] [`[--location](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--location)`=`LOCATION`] [`[--nat-gateway-ip](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--nat-gateway-ip)`=`NAT_GATEWAY_IP`] [`[--router](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--router)`=`ROUTER`] [`[--vpc-project](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#--vpc-project)`=`VPC_PROJECT`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/edge-cloud/container/vpn-connections/create#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: Creates a new VPN connection.
+
+**EXAMPLES**
+
+: To create a connection called 'my-vpn-connection' between the VPC network
+'my-vpc' and the Edge Container cluster 'my-cluster' which is at region
+us-central1, run:
+
+```
+gcloud edge-cloud container vpn-connections create my-vpn-connection --location=us-central1 --vpc-network='my-vpc' --cluster='my-cluster'
+```
+
+Here VPC network and cluster should be under the same project.
+
+**POSITIONAL ARGUMENTS**
+
+: **Vpn connection resource - VPN connection to create. This represents a Cloud
+resource. (NOTE) Some attributes are not given arguments in this group but can
+be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `vpn_connection` on the command line with a
+fully specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+To set the `location` attribute:
+
+- provide the argument `vpn_connection` on the command line with a
+fully specified name;
+- provide the argument `--location` on the command line;
+- set the property `edge_container/location`.
+
+This must be specified.
+
+**`VPN_CONNECTION`**:
+ID of the vpn connection or fully qualified identifier for the vpn connection.
+To set the `vpn_connection` attribute:
+
+- provide the argument `vpn_connection` on the command line.**
+
+**REQUIRED FLAGS**
+
+: **Cluster resource - The name of the cluster to be connected under current
+project. This represents a Cloud resource. (NOTE) Some attributes are not given
+arguments in this group but can be set in other ways.
+To set the `project` attribute:
+
+- provide the argument `--cluster` on the command line with a fully
+specified name;
+- provide the argument `--project` on the command line;
+- set the property `core/project`.
+
+To set the `location` attribute:
+
+- provide the argument `--cluster` on the command line with a fully
+specified name;
+- provide the argument `--location` on the command line;
+- set the property `edge_container/location`.
+
+This must be specified.
+
+**--cluster**:
+ID of the cluster or fully qualified identifier for the cluster.
+To set the `cluster` attribute:
+
+- provide the argument `--cluster` on the command line.**
+
+**--vpc-network**:
+The name of the VPC network to be connected. By default it is assumed to be
+under the same project as cluster. If this VPC network is under a different
+project, `vpc-project` is required.
+
+**OPTIONAL FLAGS**
+
+: **--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**--high-availability**:
+Enables high availability on cluster side. This creates an additional VPN
+endpoint in cluster. Multiple Nodes/NodePools are required to enable this
+feature.
+
+**--labels**:
+List of label KEY=VALUE pairs to add.
+Keys must start with a lowercase character and contain only hyphens
+(`-`), underscores (`_`), lowercase characters, and
+numbers. Values must contain only hyphens (`-`), underscores
+(`_`), lowercase characters, and numbers.
+
+**--location**:
+For resources [vpn connection, cluster], provides fallback value for resource
+location attribute. When the resource's full URI path is not provided, location
+will fallback to this flag value.
+
+**--nat-gateway-ip**:
+The NAT gateway IP for the gateway floating IPs. Required if cluster sits behind
+NAT.
+
+**--router**:
+Name of the Cloud Router to use when creating the VPN connection. This Cloud
+Router must be in the same region as the cluster and connected to the provided
+VPC network. If not provided, a service-managed Cloud Router will either be
+created or reused to create the VPN connection.
+
+**--vpc-project**:
+The project of the VPC network. Required if the project of VPC network differs
+from the project of the cluster.
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: `[--access-token-file](https://cloud.google.com/sdk/gcloud/reference#--access-token-file)`,
+`[--account](https://cloud.google.com/sdk/gcloud/reference#--account)`, `[--billing-project](https://cloud.google.com/sdk/gcloud/reference#--billing-project)`,
+`[--configuration](https://cloud.google.com/sdk/gcloud/reference#--configuration)`,
+`[--flags-file](https://cloud.google.com/sdk/gcloud/reference#--flags-file)`,
+`[--flatten](https://cloud.google.com/sdk/gcloud/reference#--flatten)`, `[--format](https://cloud.google.com/sdk/gcloud/reference#--format)`, `[--help](https://cloud.google.com/sdk/gcloud/reference#--help)`, `[--impersonate-service-account](https://cloud.google.com/sdk/gcloud/reference#--impersonate-service-account)`,
+`[--log-http](https://cloud.google.com/sdk/gcloud/reference#--log-http)`,
+`[--project](https://cloud.google.com/sdk/gcloud/reference#--project)`, `[--quiet](https://cloud.google.com/sdk/gcloud/reference#--quiet)`, `[--trace-token](https://cloud.google.com/sdk/gcloud/reference#--trace-token)`, `[--user-output-enabled](https://cloud.google.com/sdk/gcloud/reference#--user-output-enabled)`,
+`[--verbosity](https://cloud.google.com/sdk/gcloud/reference#--verbosity)`.
+Run `$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)` for details.
+
+**API REFERENCE**
+
+: This command uses the `edgecontainer/v1` API. The full documentation
+for this API can be found at: [https://cloud.google.com/edge-cloud](https://cloud.google.com/edge-cloud)
+
+**NOTES**
+
+: This variant is also available:
+
+```
+gcloud alpha edge-cloud container vpn-connections create
+```

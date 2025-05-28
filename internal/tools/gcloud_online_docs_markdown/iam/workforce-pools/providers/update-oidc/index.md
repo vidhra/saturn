@@ -1,0 +1,278 @@
+# gcloud iam workforce-pools providers update-oidc  |  Google Cloud CLI Documentation
+
+*Source: [https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc)*
+
+**NAME**
+
+: **gcloud iam workforce-pools providers update-oidc - update an OIDC workforce pool provider**
+
+**SYNOPSIS**
+
+: **`gcloud iam workforce-pools providers update-oidc` (`[PROVIDER](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#PROVIDER)` : `[--location](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--location)`=`LOCATION` `[--workforce-pool](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--workforce-pool)`=`WORKFORCE_POOL`) [`[--async](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--async)`] [`[--attribute-condition](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--attribute-condition)`=`ATTRIBUTE_CONDITION`] [`[--attribute-mapping](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--attribute-mapping)`=[`KEY`=`VALUE`,…]] [`[--client-id](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--client-id)`=`CLIENT_ID`] [`[--description](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--description)`=`DESCRIPTION`] [`[--disabled](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--disabled)`] [`[--display-name](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--display-name)`=`DISPLAY_NAME`] [`[--issuer-uri](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--issuer-uri)`=`ISSUER_URI`] [`[--jwk-json-path](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--jwk-json-path)`=`PATH_TO_FILE`] [`[--web-sso-additional-scopes](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--web-sso-additional-scopes)`=[`WEB_SSO_ADDITIONAL_SCOPES`,…]] [`[--web-sso-assertion-claims-behavior](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--web-sso-assertion-claims-behavior)`=`WEB_SSO_ASSERTION_CLAIMS_BEHAVIOR`] [`[--web-sso-response-type](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--web-sso-response-type)`=`WEB_SSO_RESPONSE_TYPE`] [`[--clear-client-secret](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--clear-client-secret)`     | `[--client-secret-value](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--client-secret-value)`=`CLIENT_SECRET_VALUE`] [`[--clear-extra-attributes-config](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--clear-extra-attributes-config)`     | `[--extra-attributes-client-id](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--extra-attributes-client-id)`=`EXTRA_ATTRIBUTES_CLIENT_ID` `[--extra-attributes-client-secret-value](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--extra-attributes-client-secret-value)`=`EXTRA_ATTRIBUTES_CLIENT_SECRET_VALUE` `[--extra-attributes-filter](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--extra-attributes-filter)`=`EXTRA_ATTRIBUTES_FILTER` `[--extra-attributes-issuer-uri](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--extra-attributes-issuer-uri)`=`EXTRA_ATTRIBUTES_ISSUER_URI` `[--extra-attributes-type](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#--extra-attributes-type)`=`EXTRA_ATTRIBUTES_TYPE`] [`[GCLOUD_WIDE_FLAG](https://cloud.google.com/sdk/gcloud/reference/iam/workforce-pools/providers/update-oidc#GCLOUD-WIDE-FLAGS) …`]**
+
+**DESCRIPTION**
+
+: Update an OIDC workforce pool provider.
+
+**EXAMPLES**
+
+: The following command updates the OIDC workforce pool provider with the ID
+`my-workforce-pool-provider` in the workforce pool
+`my-workforce-pool`. Explicit values for all required and optional
+parameters are provided:
+
+```
+gcloud iam workforce-pools providers update-oidc my-workforce-pool-provider --workforce-pool="my-workforce-pool" --location="global" --display-name="My Workforce Pool Provider" --description="My workforce pool provider description." --disabled --detailed_audit_logging --attribute-mapping="google.subject=assertion.sub" --attribute-condition="true" --client-id="client-id" --client-secret-value="client-secret" --issuer-uri="https://test-idp.com" --web-sso-response-type="code" --web-sso-assertion-claims-behavior="merge-user-info-over-id-token-claims" --web-sso-additional-scopes="groups,photos" --jwk-json-path="path/to/jwk.json"
+```
+
+**POSITIONAL ARGUMENTS**
+
+: **Workforce pool provider resource - The workforce pool provider to update. The
+arguments in this group can be used to specify the attributes of this resource.
+This must be specified.
+
+**`PROVIDER`**:
+ID of the workforce pool provider or fully qualified identifier for the
+workforce pool provider.
+To set the `provider` attribute:
+
+- provide the argument `provider` on the command line.
+
+This positional argument must be specified if any of the other arguments in this
+group are specified.
+
+**--location**:
+The location for the workforce pool.
+To set the `location` attribute:
+
+- provide the argument `provider` on the command line with a fully
+specified name;
+- provide the argument `--location` on the command line.
+
+**--workforce-pool**:
+The ID to use for the workforce pool, which becomes the final component of the
+resource name. This value must be a globally unique string of 6 to 63 lowercase
+letters, digits, or hyphens. It must start with a letter, and cannot have a
+trailing hyphen. The prefix `gcp-` is reserved for use by Google, and
+may not be specified.
+To set the `workforce-pool` attribute:
+
+- provide the argument `provider` on the command line with a fully
+specified name;
+- provide the argument `--workforce-pool` on the command line.**
+
+**FLAGS**
+
+: **--async**:
+Return immediately, without waiting for the operation in progress to complete.
+
+**--attribute-condition**:
+A [Common Expression
+Language](https://opensource.google/projects/cel) expression, in plain text, to restrict which otherwise valid
+authentication credentials issued by the provider should be accepted.
+The expression must output a boolean representing whether to allow the
+federation.
+The following keywords may be referenced in the expressions:
+
+- `assertion`: JSON representing the authentication credential issued
+by the Provider.
+- `google`: The Google attributes mapped from the assertion in the
+`attribute_mappings`. `google.profile_photo` and
+`google.display_name` are not supported.
+- `attribute`: The custom attributes mapped from the assertion in the
+`attribute_mappings`.
+
+The maximum length of the attribute condition expression is 4096 characters. If
+unspecified, all valid authentication credential will be accepted.
+Example: Only allow credentials with a mapped `google.groups` value
+of `admins`.
+
+```
+"'admins' in google.groups"
+```
+
+**--attribute-mapping**:
+Maps claims from the authentication credentials issued by the Identity Provider
+into Google Cloud IAM attributes, e.g. subject, segment.
+Each key must be a string specifying the Google Cloud IAM attribute to be
+produced.
+The following predefined keys are currently supported:
+
+- `google.subject`: required field that indicates the principal that is
+being authenticated to IAM, and will be logged in all API accesses for which
+Cloud Audit Logging is configured.
+
+- `google.groups`: optional field that indicates asserted groups that
+the user should be considered to belong to. You can create IAM bindings using
+the groups attribute and access to a resource will be granted if any of the
+groups asserted here match a group in the respective binding.
+
+- `google.display_name`: optional field that overrides the name of the
+user. If not set, `google.subject` will be displayed instead. This
+attribute cannot be used in IAM policies. The maximum length of this field is
+100 characters.
+
+- `google.profile_photo`: optional fields that may be set to a valid
+URL specifying the user's thumbnail photo. When set, the image will be visible
+as the user's profile picture. If not set, a generic user icon will be displayed
+instead. This attribute cannot be used in IAM policies.
+
+Custom attributes can also be mapped by specifying
+`attribute.{custom_attribute}`, replacing
+`{custom_attribute}` with the name of the custom attribute to be
+mapped. A maximum of 50 custom attribute mappings can be defined. The maximum
+length of a mapped attribute key is 2048 characters and may only contain the
+characters [a-z0-9`].
+These attributes can then be referenced in IAM policies to define fine-grained
+access for the workforce pool to Google Cloud resources by specifying:
+
+- `google.subject`:
+`principal://iam.googleapis.com/locations/global/workforcePools/{pool}/subject/{value}`
+
+- `google.groups`:
+`principalSet://iam.googleapis.com/locations/global/workforcePools/{pool}/group/{value}`
+
+- `attribute.{custom_attribute}`:
+`principalSet://iam.googleapis.com/locations/global/workforcePools/{pool}/attribute.{custom_attribute}/{value}`
+
+Each value must be a [Common
+Expression Language](https://opensource.google/projects/cel) function that maps an Identity Provider credential to
+the normalized attribute specified by the corresponding map key.
+The following keywords may be referenced in the expressions:
+
+- `assertion`: JSON representing the authentication credential issued
+by the Identity Provider.
+
+The maximum length of an attribute mapping expression is 2048 characters. When
+evaluated, the total size of all mapped attributes must not exceed 8KB.
+Example: Map the `sub` claim of the incoming credential to the
+`subject` Google Cloud IAM attribute.
+
+```
+{"google.subject": "assertion.sub"}
+````
+
+**--client-id**:
+The OIDC client ID. This must match the audience claim of the JWT issued by the
+identity provider.
+
+**--description**:
+A description for the workforce pool provider. Cannot exceed 256 characters in
+length.
+
+**--disabled**:
+Disables the workforce pool provider. You cannot use a disabled provider to
+perform new token exchanges or sign-ins. However, existing tokens still grant
+access. Specify `--no-disabled` to enable a disabled pool.
+
+**--display-name**:
+A display name for the workforce pool provider. Cannot exceed 32 characters in
+length.
+
+**--issuer-uri**:
+The OIDC issuer URI. Must be a valid URI using the 'https' scheme.
+
+**--jwk-json-path**:
+Optional file containing JSON Web Key (JWK) public keys. The file format must
+follow [JWK
+specifications](https://www.rfc-editor.org/rfc/rfc7517#section-4). Example file format:
+```
+{
+  "keys": [
+     {
+          "kty": "RSA/EC",
+          "alg": "<algorithm>",
+          "use": "sig",
+          "kid": "<key-id>",
+          "n": "",
+          "e": "",
+          "x": "",
+          "y": "",
+          "crv": ""
+     }
+  ]
+}
+```. Use a full or relative path to a local file containing the value of jwk_json_path.
+
+*--web-sso-additional-scopes*=[_WEB_SSO_ADDITIONAL_SCOPES_,…]::
+
+Additional scopes to request for the OIDC authentication on
+top of scopes requested by default. By default, the `openid`, `profile`
+and `email` scopes that are supported by the identity provider are
+requested.
+
+Each additional scope may be at most 256
+characters. A maximum of 10 additional scopes may be configured.
+
+*--web-sso-assertion-claims-behavior*=_WEB_SSO_ASSERTION_CLAIMS_BEHAVIOR_::
+
+The behavior for how OIDC Claims are included in the `assertion` object used for attribute mapping and attribute condition.
+Use `merge-user-info-over-id-token-claims` to merge the UserInfo Endpoint Claims with ID Token
+Claims, preferring UserInfo Claim Values for the same Claim Name. Currently this option is only
+available for Authorization Code flow.
+Use `only-id-token-claims` to include only ID token claims. _WEB_SSO_ASSERTION_CLAIMS_BEHAVIOR_ must be one of: *assertion-claims-behavior-unspecified*, *merge-user-info-over-id-token-claims*, *only-id-token-claims*.
+
+*--web-sso-response-type*=_WEB_SSO_RESPONSE_TYPE_::
+
+Response Type to request for in the OIDC Authorization Request for web sign-in.
+Use `code` to select the authorization code flow
+Use `id-token` to select the implicit flow. _WEB_SSO_RESPONSE_TYPE_ must be one of: *code*, *id-token*, *response-type-unspecified*.
+
+:: At most one of these can be specified:
+
+*--clear-client-secret*:::
+
+Clear the OIDC client secret.
+
+*--client-secret-value*=_CLIENT_SECRET_VALUE_:::
+
+The OIDC client secret. Required to enable Authorization Code flow for web sign-in.
+
+:: At most one of these can be specified:
+
+*--clear-extra-attributes-config*:::
+
+Clear the extra attributes configuration.
+
+*--extra-attributes-client-id*=_EXTRA_ATTRIBUTES_CLIENT_ID_:::
+
+The OAuth 2.0 client ID for retrieving extra attributes from the identity provider. Required to get the access token using client credentials grant flow.
+
+*--extra-attributes-client-secret-value*=_EXTRA_ATTRIBUTES_CLIENT_SECRET_VALUE_:::
+
+The OAuth 2.0 client secret for retrieving extra attributes from the identity provider. Required to get the access token using client credentials grant flow.
+
+*--extra-attributes-filter*=_EXTRA_ATTRIBUTES_FILTER_:::
+
+The filter used to request specific records from the IdP. By default, all of the groups that are associated with a user are fetched. For Microsoft Entra ID, you can add `$search` query parameters using [Keyword Query Language] (https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference). To learn more about `$search` querying in Microsoft Entra ID, see [Use the `$search` query parameter] (https://learn.microsoft.com/en-us/graph/search-query-parameter).
+
+Additionally, Workforce Identity Federation automatically adds the following [`$filter` query parameters] (https://learn.microsoft.com/en-us/graph/filter-query-parameter), based on the value of `attributes_type`. Values passed to `filter` are converted to `$search` query parameters. Additional `$filter` query parameters cannot be added using this field.
+
+* `AZURE_AD_GROUPS_MAIL`: `mailEnabled` and `securityEnabled` filters are applied.
+* `AZURE_AD_GROUPS_ID`: `securityEnabled` filter is applied.
+
+*--extra-attributes-issuer-uri*=_EXTRA_ATTRIBUTES_ISSUER_URI_:::
+
+OIDC identity provider's issuer URI. Must be a valid URI using the `https` scheme. Required to get the OIDC discovery document.
+
+*--extra-attributes-type*=_EXTRA_ATTRIBUTES_TYPE_:::
+
+Represents the identity provider and type of claims that should be fetched. _EXTRA_ATTRIBUTES_TYPE_ must be one of: *azure-ad-groups-mail*, *azure-ad-groups-id*.
+```
+
+**GCLOUD WIDE FLAGS**
+
+: These flags are available to all commands: --access-token-file, --account, --billing-project, --configuration, --flags-file, --flatten, --format, --help, --impersonate-service-account, --log-http, --project, --quiet, --trace-token, --user-output-enabled, --verbosity.
+
+Run *$ [gcloud help](https://cloud.google.com/sdk/gcloud/reference)* for details.
+
+**API REFERENCE**
+
+: This command uses the *iam/v1* API. The full documentation for this API can be found at: [https://cloud.google.com/iam/](https://cloud.google.com/iam/)
+
+**NOTES**
+
+: These variants are also available:
+
+`[gcloud alpha iam workforce-pools providers update-oidc](https://cloud.google.com/sdk/gcloud/reference/alpha/iam/workforce-pools/providers/update-oidc)`
+`[gcloud beta iam workforce-pools providers update-oidc](https://cloud.google.com/sdk/gcloud/reference/beta/iam/workforce-pools/providers/update-oidc)`

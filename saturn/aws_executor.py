@@ -8,9 +8,8 @@ class AWSExecutor:
     def __init__(self, config: Dict[str, Any]):
         """Initializes the AWS Executor."""
         self.config = config
-        self.aws_region = config.get('aws_region', 'us-east-1') # Default region
-        self.aws_profile = config.get('aws_profile') # Optional AWS CLI profile
-        # Add other AWS specific configurations if needed, e.g., credentials path
+        self.aws_region = config.get('aws_region', 'us-east-1')
+        self.aws_profile = config.get('aws_profile')
         print(f"AWS Executor initialized for region: {self.aws_region}" + 
               (f" using profile: {self.aws_profile}" if self.aws_profile else ""))
 
@@ -34,21 +33,11 @@ class AWSExecutor:
             error_msg = "Command does not start with 'aws'. AWS Executor can only run AWS CLI commands."
             console.print(f"[bold red]  {error_msg}[/bold red]")
             return False, error_msg
-
-        # If an AWS profile is specified, prepend it to the command
-        # This assumes the AWS CLI is configured to use this profile
-        # e.g., aws --profile <profile_name> <service> <operation> ...
-        # However, it might be better to set AWS_PROFILE environment variable for the subprocess
-        # For simplicity, this example does not modify the command string for profile yet,
-        # assuming the environment is pre-configured or the command includes --profile.
-        # A more robust way is to set environment variables for the subprocess.
         
         env_vars = os.environ.copy()
         if self.aws_profile:
             env_vars["AWS_PROFILE"] = self.aws_profile
         if self.aws_region and not any(flag in command for flag in ["--region", "AWS_REGION"]):
-            # Only set AWS_DEFAULT_REGION if --region is not in command and AWS_REGION not in env
-            # to avoid overriding more specific settings.
             env_vars["AWS_DEFAULT_REGION"] = self.aws_region
 
         try:
@@ -57,7 +46,7 @@ class AWSExecutor:
                     command,
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
-                    env=env_vars # Pass modified environment variables
+                    env=env_vars 
                 )
                 
                 stdout, stderr = await process.communicate()
@@ -65,7 +54,6 @@ class AWSExecutor:
                 if process.returncode == 0:
                     result_str = stdout.decode().strip()
                     console.print(f"[green]  Command executed successfully: [bold cyan]{command}[/bold cyan][/green]")
-                    # Try to parse JSON, otherwise return raw string
                     try:
                         result_json = json.loads(result_str)
                         return True, result_json
@@ -133,23 +121,20 @@ class AWSExecutor:
             results["dag_execution_error"] = (False, str(e))
             return results
 
-# Example of how it might be used (for testing, not part of the class itself)
 async def main_example():
     console_instance = Console()
     aws_config = {
-        'aws_region': 'us-west-2', # Example region
-        'aws_profile': 'my-dev-profile' # Example profile, ensure it's configured in ~/.aws/credentials or config
+        'aws_region': 'us-west-2', 
+        'aws_profile': 'my-dev-profile'
     }
     executor = AWSExecutor(aws_config)
-    
-    # Example 1: Simple command
+
     success, result = await executor.execute("aws s3 ls", console_instance)
     if success:
         console_instance.print("S3 LS Result:", result)
     else:
         console_instance.print("S3 LS Error:", result)
 
-    # Example 2: DAG execution
     dag_example = {
         "nodes": {
             "step1_list_buckets": {
@@ -169,8 +154,6 @@ async def main_example():
     console_instance.print("\nAWS DAG Execution Results:", dag_results)
 
 if __name__ == '__main__':
-    # Add os import for environment variable setting in the executor
+
     import os 
-    # This example main will only run if you execute this file directly.
-    # Ensure your AWS CLI is configured and the profile (if used) exists.
     asyncio.run(main_example()) 

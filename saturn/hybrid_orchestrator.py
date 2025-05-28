@@ -83,15 +83,12 @@ class HybridOrchestrator:
                 console.print("[red]Failed to generate execution plan[/red]")
                 return {"status": "failed", "error": "Plan generation failed"}
             
-            # Analyze plan and determine optimal execution strategy
             execution_strategy = self._determine_execution_strategy(
                 step_details_map, execution_mode
             )
             
-            # Display execution strategy
             self._display_execution_strategy(execution_strategy)
             
-            # Execute based on strategy
             if execution_mode == "dual":
                 return await self._execute_dual_mode(dag, step_details_map, state_logger, verbose)
             else:
@@ -127,9 +124,8 @@ class HybridOrchestrator:
             elif execution_mode == "gcloud":
                 strategy[step_id] = "gcloud"
             elif execution_mode == "auto":
-                # Auto-determine based on resource type and preferences
                 strategy[step_id] = self._auto_select_executor(step_details)
-            else:  # dual mode handled separately
+            else: 
                 strategy[step_id] = self.default_executor
                 
         return strategy
@@ -146,22 +142,18 @@ class HybridOrchestrator:
         """
         description = step_details.get('description', '').lower()
         
-        # Check if this is a resource type that benefits from Terraform
         for tf_resource in self.terraform_preferred_resources:
             if tf_resource.replace('_', ' ') in description or tf_resource.replace('_', '-') in description:
                 return "terraform"
         
-        # Check for infrastructure-as-code keywords
         iac_keywords = ['template', 'infrastructure', 'deployment', 'stack', 'provisioning']
         if any(keyword in description for keyword in iac_keywords):
             return "terraform"
         
-        # Check for one-off or imperative operations
         imperative_keywords = ['list', 'describe', 'get', 'delete', 'stop', 'start']
         if any(keyword in description for keyword in imperative_keywords):
             return "gcloud"
         
-        # Default to configured preference
         return self.default_executor
 
     def _display_execution_strategy(self, strategy: Dict[str, str]) -> None:
@@ -251,12 +243,9 @@ class HybridOrchestrator:
             
             console.print(f"\n[bold]Step {step_id}[/bold] (dual execution)")
             console.print(f"Description: {step_details.get('description', 'No description')}")
-            
-            # Execute with both executors
             terraform_result = await self._execute_terraform_step(step_id, step_details, verbose)
             gcloud_result = await self._execute_gcloud_step(step_id, step_details, verbose)
-            
-            # Compare results
+
             comparison = self._compare_execution_results(terraform_result, gcloud_result)
             
             results[step_id] = {
@@ -271,7 +260,6 @@ class HybridOrchestrator:
                 "comparison": comparison
             }
             
-            # Display comparison
             self._display_dual_execution_result(step_id, results[step_id])
         
         return {
@@ -288,13 +276,11 @@ class HybridOrchestrator:
     ) -> Tuple[bool, Any]:
         """Execute a step using Terraform."""
         
-        # Extract command from step details
         command = step_details.get('command', '')
         if not command:
             return False, "No command found in step details"
         
         try:
-            # Determine execution mode based on command type
             execution_mode = "convert" if command.startswith('gcloud') else "terraform"
             
             return await self.terraform_executor.execute(
@@ -310,8 +296,7 @@ class HybridOrchestrator:
         verbose: bool
     ) -> Tuple[bool, Any]:
         """Execute a step using gcloud."""
-        
-        # Extract command from step details
+
         command = step_details.get('command', '')
         if not command:
             return False, "No command found in step details"
@@ -380,19 +365,16 @@ class HybridOrchestrator:
         ))
         
         try:
-            # Read the log file (assuming it's the JSON format like the attached file)
             with open(log_file_path, 'r') as f:
                 log_data = json.load(f)
             
             terraform_configs = {}
             
-            # Extract commands from the log
             if 'nodes' in log_data:
                 for node_id, node_data in log_data['nodes'].items():
                     if 'output' in node_data and 'executed_command_str' in node_data['output']:
                         command = node_data['output']['executed_command_str']
                         
-                        # Convert to Terraform
                         tf_config = self.terraform_executor._convert_gcloud_to_terraform(command)
                         
                         if tf_config and tf_config.get('type') != 'unsupported_conversion':
@@ -401,7 +383,6 @@ class HybridOrchestrator:
                         else:
                             console.print(f"[yellow]⚠ Could not convert {node_id}: {command}[/yellow]")
             
-            # Generate combined Terraform file
             if terraform_configs:
                 combined_config = self._combine_terraform_configs(terraform_configs)
                 
@@ -448,8 +429,7 @@ class HybridOrchestrator:
             },
             "resource": {}
         }
-        
-        # Merge all resources
+
         for config_name, config in configs.items():
             if config.get('type') == 'terraform_config' and 'config' in config:
                 tf_config = config['config']
@@ -461,7 +441,6 @@ class HybridOrchestrator:
         
         return self.terraform_executor._json_to_hcl(combined)
 
-# Convenience function for hybrid execution
 async def run_query_hybrid(
     query: str,
     config: Dict[str, Any],
