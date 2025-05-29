@@ -62,6 +62,7 @@ Saturn provides a comprehensive toolkit for cloud operations:
    python -m venv venv
    source venv/bin/activate  # On Windows: .\venv\Scripts\activate
    pip install -e .
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 # for gpu support
    ```
 
 2. **Configure your environment:**

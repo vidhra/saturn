@@ -87,7 +87,7 @@ class GcloudExecutor:
             'create', 'delete', 'remove', 'destroy', 'terminate', 'stop', 'start', 'restart',
             'update', 'modify', 'set', 'add', 'attach', 'detach', 'enable', 'disable',
             'deploy', 'apply', 'import', 'export', 'copy', 'move', 'resize', 'reset',
-            'restore', 'backup', 'migrate', 'promote', 'demote', 'patch', 'replace'
+            'restore', 'backup', 'migrate', 'promote', 'demote', 'patch', 'replace', 'submit', 'run'
         ]
         
         read_only_keywords = [

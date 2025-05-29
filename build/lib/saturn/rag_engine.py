@@ -10,6 +10,11 @@ from rich.panel import Panel
 from typing import Dict, Any, Optional, List
 import re
 
+try:
+    import torch
+except ImportError:
+    torch = None
+
 console = Console()
 
 DEFAULT_EMBED_MODEL_NAME = "models/text-embedding-004" 
@@ -291,8 +296,6 @@ class CLIContextAwareParser(NodeParser):
         nodes = []
         
         for doc in documents:
-            if show_progress:
-                console.print(f"[cyan]Processing document:[/cyan] {doc.metadata.get('file_name', 'Unknown')}")
             
             text = doc.text
             file_path = doc.metadata.get('file_path', doc.metadata.get('file_name', ''))
@@ -363,7 +366,14 @@ class RAGEngine:
                  max_chunk_size: int = 2048,
                  chunk_overlap: int = 200,
                  preserve_code_blocks: bool = True,
-                 preserve_command_context: bool = True
+                 preserve_command_context: bool = True,
+                 # GPU and parallel processing parameters
+                 device: Optional[str] = None,
+                 parallel_process: bool = False,
+                 target_devices: Optional[List[str]] = None,
+                 embed_batch_size: int = 64,
+                 show_progress_bar: bool = False,
+                 torch_dtype: Optional[str] = None
                  ):
         """
         Initializes the RAGEngine, sets up embedding model and vector store client.
@@ -382,6 +392,12 @@ class RAGEngine:
             chunk_overlap (int): Overlap between chunks for context preservation.
             preserve_code_blocks (bool): Whether to keep code blocks intact.
             preserve_command_context (bool): Whether to preserve command-related context.
+            device (Optional[str]): Device to run embeddings on ("cuda", "cuda:0", "cpu", "mps", "auto"). If None, auto-detects GPU.
+            parallel_process (bool): Enable multi-process parallel embedding processing. Great for large datasets.
+            target_devices (Optional[List[str]]): List of specific devices for parallel processing, e.g. ["cuda:0", "cuda:1"].
+            embed_batch_size (int): Batch size for embedding processing. Larger values can be faster on GPU.
+            show_progress_bar (bool): Show progress bar during embedding operations.
+            torch_dtype (Optional[str]): PyTorch dtype for model weights ("float16", "bfloat16", "float32"). float16 recommended for GPU.
         """
         self.index: Optional[VectorStoreIndex] = None
         self.query_engine = None
@@ -395,11 +411,22 @@ class RAGEngine:
         self.chunk_overlap = chunk_overlap
         self.preserve_code_blocks = preserve_code_blocks
         self.preserve_command_context = preserve_command_context
+        
+        # GPU and performance parameters
+        self.device = device
+        self.parallel_process = parallel_process
+        self.target_devices = target_devices
+        self.embed_batch_size = embed_batch_size
+        self.show_progress_bar = show_progress_bar
+        self.torch_dtype = torch_dtype
 
         console.print(f"[RAG Engine] Initializing RAGEngine.")
         console.print(f"[RAG Engine] Vector store choice: {self.vector_store_choice}")
         console.print(f"[RAG Engine] Attempting to use embedding model identifier: {embed_model_name}")
         console.print(f"[RAG Engine] Context-aware parsing: {'enabled' if use_context_aware_parsing else 'disabled'}")
+        console.print(f"[RAG Engine] Device: {device if device else 'auto-detect'}")
+        console.print(f"[RAG Engine] Parallel processing: {'enabled' if parallel_process else 'disabled'}")
+        console.print(f"[RAG Engine] Batch size: {embed_batch_size}")
 
         try:
             
@@ -475,14 +502,14 @@ class RAGEngine:
                     print(f"[RAG Engine Debug] Creating GoogleGenAIEmbedding with:")
                     print(f"  - model_name: {final_google_model_name}")
                     print(f"  - api_key: {effective_google_api_key[:5]}...{effective_google_api_key[-4:]}")
-                    print(f"  - embed_batch_size: 4")
+                    print(f"  - embed_batch_size: {self.embed_batch_size}")
 
                     Settings.embed_model = GoogleGenAIEmbedding(
                         model_name=final_google_model_name,
                         api_key=effective_google_api_key,
-                        embed_batch_size=64  # Try 4, or 1 if needed
+                        embed_batch_size=self.embed_batch_size
                     )
-                    console.print(f"[RAG Engine] Configured GoogleGenAIEmbedding model: {final_google_model_name} with batch size 4")
+                    console.print(f"[RAG Engine] Configured GoogleGenAIEmbedding model: {final_google_model_name} with batch size {self.embed_batch_size}")
                     embedding_model_configured = True
                 except ImportError:
                     console.print("[RAG Engine] [bold red]Error:[/] `llama-index-embeddings-google-genai` or its dependencies not installed. Please install it.")
@@ -494,8 +521,65 @@ class RAGEngine:
             elif embed_model_name.startswith("local:"):
                 hf_model_name = embed_model_name.split("local:", 1)[1]
                 try:
-                    from llama_index.embeddings.huggingface import HuggingFaceEmbedding 
-                    Settings.embed_model = HuggingFaceEmbedding(model_name=hf_model_name)
+                    from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+                    
+                    hf_kwargs = {
+                        "model_name": hf_model_name,
+                        "embed_batch_size": self.embed_batch_size,
+                        "show_progress_bar": self.show_progress_bar
+                    }
+                    
+                    if self.device == "auto" or self.device is None:
+                        try:
+                            if torch and torch.cuda.is_available():
+                                hf_kwargs["device"] = "cuda"
+                                console.print(f"[RAG Engine] Auto-detected CUDA device for embeddings")
+                            elif torch and hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+                                hf_kwargs["device"] = "mps"
+                                console.print(f"[RAG Engine] Auto-detected MPS device for embeddings")
+                            else:
+                                hf_kwargs["device"] = "cpu"
+                                console.print(f"[RAG Engine] Auto-detected CPU device for embeddings")
+                        except Exception as e:
+                            hf_kwargs["device"] = "cpu"
+                            console.print(f"[RAG Engine] Exception during device detection: {e}, using CPU for embeddings")
+                    else:
+                        hf_kwargs["device"] = self.device
+                        console.print(f"[RAG Engine] Using specified device: {self.device}")
+
+                    if self.parallel_process:
+                        hf_kwargs["parallel_process"] = True
+                        if self.target_devices:
+                            hf_kwargs["target_devices"] = self.target_devices
+                            console.print(f"[RAG Engine] Enabled parallel processing on devices: {self.target_devices}")
+                        else:
+                            console.print(f"[RAG Engine] Enabled parallel processing with auto device selection")
+
+                    if self.torch_dtype:
+                        model_kwargs = {}
+                        if self.torch_dtype == "float16":
+                            model_kwargs["torch_dtype"] = "float16"
+                        elif self.torch_dtype == "bfloat16":
+                            model_kwargs["torch_dtype"] = "bfloat16"
+                        elif self.torch_dtype == "float32":
+                            model_kwargs["torch_dtype"] = "float32"
+                        
+                        if model_kwargs:
+                            hf_kwargs["model_kwargs"] = model_kwargs
+                            console.print(f"[RAG Engine] Using torch dtype: {self.torch_dtype}")
+                    
+                    Settings.embed_model = HuggingFaceEmbedding(**hf_kwargs)
+
+                    if hf_kwargs.get("device", "").startswith("cuda"):
+                        try:
+                            if torch and torch.cuda.is_available():
+                                device_id = 0 if hf_kwargs["device"] == "cuda" else int(hf_kwargs["device"].split(":")[1])
+                                memory_allocated = torch.cuda.memory_allocated(device_id) / 1024**3
+                                memory_reserved = torch.cuda.memory_reserved(device_id) / 1024**3
+                                console.print(f"[RAG Engine] GPU Memory - Allocated: {memory_allocated:.2f}GB, Reserved: {memory_reserved:.2f}GB")
+                        except Exception as e_mem:
+                            console.print(f"[RAG Engine] Could not check GPU memory: {e_mem}")
+                    
                     console.print(f"[RAG Engine] Configured local HuggingFace embedding model: {hf_model_name}")
                     embedding_model_configured = True
                 except ImportError:
@@ -516,7 +600,7 @@ class RAGEngine:
 
             if not embedding_model_configured:
                 console.print("[RAG Engine] [bold red]CRITICAL:[/] Embedding model could not be configured. RAG engine will not be functional.")
-                return 
+                return
 
             if self.vector_store_choice == "chroma":
                 console.print("[RAG Engine] Setting up ChromaDB vector store client...")
@@ -763,151 +847,4 @@ class RAGEngine:
                 return response.response
             return "No relevant documents found by RAG engine."
 
-        return "".join(relevant_docs_parts)
-
-if __name__ == '__main__':
-    example_config = {
-        "gcp_rag_docs_path": os.path.join(os.path.dirname(__file__), '..', 'internal', 'tools', 'gcloud_online_docs_markdown'),
-        "aws_rag_docs_path": os.path.join(os.path.dirname(__file__), '..', 'internal', 'tools', 'aws_cli_docs_markdown'),
-        "vector_store": "chroma",
-        "chroma_db_path": "./db/chroma_db",
-        "gcp_chroma_collection_name": "gcp_cli_docs_test",
-        "aws_chroma_collection_name": "aws_cli_docs_test",
-        "gcp_duckdb_table_name": "gcp_cli_embeddings_test",
-        "aws_duckdb_table_name": "aws_cli_embeddings_test"
-    }
-    
-    docs_dir_gcp = get_provider_docs_path(example_config, "gcp")
-    docs_dir_aws = get_provider_docs_path(example_config, "aws")
-    gemini_key_for_test = os.getenv("GOOGLE_API_KEY")
-
-    console.print(f"[Example Usage] RAG Engine Test Script with Provider-Specific Configurations")
-
-    if not os.path.isdir(docs_dir_gcp):
-        console.print(f"[bold yellow]Warning for GCP example usage:[/] GCP documentation directory not found at: {docs_dir_gcp}")
-    if not os.path.isdir(docs_dir_aws):
-        console.print(f"[bold yellow]Warning for AWS example usage:[/] AWS documentation directory not found at: {docs_dir_aws}")
-        
-    if os.path.isdir(docs_dir_gcp):
-        console.print("\n[bold]--- Testing In-Memory (HuggingFace Embeddings - GCP Docs) ---[/bold]")
-        rag_memory_hf = RAGEngine(
-            vector_store_choice="default", 
-            documents_path_for_init=docs_dir_gcp, 
-            build_index_on_init=True, 
-            llm_for_settings=None,
-            embed_model_name="local:BAAI/bge-small-en-v1.5" # Explicitly test this
-        )
-        if rag_memory_hf.query_engine:
-            console.print("[In-Memory HF] Querying for 'create instance'...")
-            context_mem_hf = rag_memory_hf.query_docs("How to create a gcloud compute instance?")
-            console.print(Panel(context_mem_hf, title="In-Memory HF (GCP): 'create instance'", border_style="blue", expand=False))
-        else: console.print("[In-Memory HF] Failed to initialize.")
-    else:
-        console.print("\n[bold yellow]Skipping In-Memory HuggingFace (GCP Docs) test as docs_dir_gcp not found.[/bold]")
-
-    if os.path.isdir(docs_dir_gcp):
-        console.print("\n[bold]--- Testing In-Memory (Gemini Embeddings - GCP Docs) ---[/bold]")
-        if gemini_key_for_test:
-            rag_memory_gemini = RAGEngine(
-                vector_store_choice="default", 
-                documents_path_for_init=docs_dir_gcp, 
-                build_index_on_init=True, 
-                llm_for_settings=None,
-                embed_model_name=DEFAULT_EMBED_MODEL_NAME, 
-                google_api_key=gemini_key_for_test
-            )
-            if rag_memory_gemini.query_engine:
-                console.print("[In-Memory Gemini] Querying for 'create instance'...")
-                context_mem_gemini = rag_memory_gemini.query_docs("How to create a gcloud compute instance?")
-                console.print(Panel(context_mem_gemini, title="In-Memory Gemini (GCP): 'create instance'", border_style="magenta", expand=False))
-            else: console.print("[In-Memory Gemini] Failed to initialize.")
-        else:
-            console.print("[Example Usage] GOOGLE_API_KEY not found in env. Skipping Gemini In-Memory (GCP) embedding test.")
-    else:
-        console.print("\n[bold yellow]Skipping In-Memory Gemini (GCP Docs) test as docs_dir_gcp not found.[/bold]")
-
- 
-    if os.path.isdir(docs_dir_gcp):
-        console.print("\n[bold]--- Testing ChromaDB Vector Store (GCP Docs - Provider-Specific Config) ---[/bold]")
-        chroma_gcp_config = build_provider_db_config(example_config, provider="gcp", vector_store_choice="chroma")
-        console.print(f"GCP ChromaDB Config: {chroma_gcp_config}")
-        console.print("(ChromaDB GCP first run - building index...)")
-        rag_chroma_gcp = RAGEngine(
-            vector_store_choice="chroma", 
-            db_config=chroma_gcp_config, 
-            llm_for_settings=None, 
-            embed_model_name=DEFAULT_EMBED_MODEL_NAME, 
-            google_api_key=gemini_key_for_test
-        )
-        ingest_success_chroma_gcp = rag_chroma_gcp.ingest_and_build_index(documents_path=docs_dir_gcp, force_rebuild=True)
-        if ingest_success_chroma_gcp and rag_chroma_gcp.query_engine:
-            console.print("[ChromaDB GCP] Querying for 'list machine types'...")
-            context_chroma_gcp = rag_chroma_gcp.query_docs("list available gcloud machine types in a zone")
-            console.print(Panel(context_chroma_gcp, title="Chroma (GCP): 'list machine types'", border_style="green", expand=False))
-        else: console.print("[ChromaDB GCP] Failed to initialize or ingest.")
-    else:
-        console.print("\n[bold yellow]Skipping ChromaDB (GCP Docs) test as docs_dir_gcp not found.[/bold]")
- 
-    if os.path.isdir(docs_dir_aws):
-        console.print("\n[bold]--- Testing ChromaDB Vector Store (AWS Docs - Provider-Specific Config) ---[/bold]")
-        chroma_aws_config = build_provider_db_config(example_config, provider="aws", vector_store_choice="chroma")
-        console.print(f"AWS ChromaDB Config: {chroma_aws_config}")
-        console.print("(ChromaDB AWS first run - building index...)")
-        rag_chroma_aws = RAGEngine(
-            vector_store_choice="chroma", 
-            db_config=chroma_aws_config, 
-            llm_for_settings=None, 
-            embed_model_name=DEFAULT_EMBED_MODEL_NAME, 
-            google_api_key=gemini_key_for_test
-        )
-        ingest_success_chroma_aws = rag_chroma_aws.ingest_and_build_index(documents_path=docs_dir_aws, force_rebuild=True)
-        if ingest_success_chroma_aws and rag_chroma_aws.query_engine:
-            console.print("[ChromaDB AWS] Querying for 's3 list buckets'...")
-            context_chroma_aws = rag_chroma_aws.query_docs("how to list s3 buckets using aws cli")
-            console.print(Panel(context_chroma_aws, title="Chroma (AWS): 's3 list buckets'", border_style="cyan", expand=False))
-        else: console.print("[ChromaDB AWS] Failed to initialize or ingest.")
-    else:
-        console.print("\n[bold yellow]Skipping ChromaDB (AWS Docs) test as docs_dir_aws not found.[/bold]")
-
-
-    if os.path.isdir(docs_dir_gcp):
-        console.print("\n[bold]--- Testing DuckDB Vector Store (GCP Docs - Provider-Specific Config) ---[/bold]")
-        duckdb_gcp_config = build_provider_db_config(example_config, provider="gcp", vector_store_choice="duckdb")
-        console.print(f"GCP DuckDB Config: {duckdb_gcp_config}")
-        console.print("(DuckDB GCP first run - building index...)")
-        rag_duckdb_gcp = RAGEngine(
-            vector_store_choice="duckdb", 
-            db_config=duckdb_gcp_config, 
-            llm_for_settings=None, 
-            embed_model_name=DEFAULT_EMBED_MODEL_NAME, 
-            google_api_key=gemini_key_for_test
-        )
-        ingest_success_duckdb_gcp = rag_duckdb_gcp.ingest_and_build_index(documents_path=docs_dir_gcp, force_rebuild=True)
-        if ingest_success_duckdb_gcp and rag_duckdb_gcp.query_engine:
-            console.print("[DuckDB GCP] Querying for 'gcloud addresses create'...")
-            context_duckdb_gcp = rag_duckdb_gcp.query_docs("gcloud addresses create")
-            console.print(Panel(context_duckdb_gcp, title="DuckDB (GCP): 'gcloud addresses create'", border_style="purple", expand=False))
-        else: console.print("[DuckDB GCP] Failed to initialize or ingest.")
-    else:
-        console.print("\n[bold yellow]Skipping DuckDB (GCP Docs) test as docs_dir_gcp not found.[/bold]")
-        
-    if os.path.isdir(docs_dir_aws):
-        console.print("\n[bold]--- Testing DuckDB Vector Store (AWS Docs - Provider-Specific Config) ---[/bold]")
-        duckdb_aws_config = build_provider_db_config(example_config, provider="aws", vector_store_choice="duckdb")
-        console.print(f"AWS DuckDB Config: {duckdb_aws_config}")
-        console.print("(DuckDB AWS first run - building index...)")
-        rag_duckdb_aws = RAGEngine(
-            vector_store_choice="duckdb", 
-            db_config=duckdb_aws_config, 
-            llm_for_settings=None, 
-            embed_model_name=DEFAULT_EMBED_MODEL_NAME, 
-            google_api_key=gemini_key_for_test
-        )
-        ingest_success_duckdb_aws = rag_duckdb_aws.ingest_and_build_index(documents_path=docs_dir_aws, force_rebuild=True)
-        if ingest_success_duckdb_aws and rag_duckdb_aws.query_engine:
-            console.print("[DuckDB AWS] Querying for 'ec2 describe instances'...")
-            context_duckdb_aws = rag_duckdb_aws.query_docs("how to describe ec2 instances using aws cli")
-            console.print(Panel(context_duckdb_aws, title="DuckDB (AWS): 'ec2 describe instances'", border_style="yellow", expand=False))
-        else: console.print("[DuckDB AWS] Failed to initialize or ingest.")
-    else:
-        console.print("\n[bold yellow]Skipping DuckDB (AWS Docs) test as docs_dir_aws not found.[/bold]") 
+        return "".join(relevant_docs_parts) 

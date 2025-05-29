@@ -202,7 +202,12 @@ def run_command(
             google_api_key=config.get('google_api_key'),
             documents_path_for_init=config['rag_docs_path_for_init'] if config['vector_store_choice'] == 'default' else None,
             build_index_on_init=config['rag_build_on_init'],
-            llm_for_settings=None
+            llm_for_settings=None,
+            device="auto",
+            parallel_process=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
 
         if not rag_engine_instance.query_engine and config['vector_store_choice'] != 'default':
@@ -294,7 +299,13 @@ def ingest_docs_command(
             db_config=db_configuration if db_configuration else None, # Pass None if not chroma/duckdb
             embed_model_name=rag_embed_model,
             google_api_key=effective_google_api_key,
-            llm_for_settings=None # Explicitly set LlamaIndex LLM to None
+            llm_for_settings=None,
+            device="auto",
+            parallel_process=True,
+            use_context_aware_parsing=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
         
         console.print(f"Attempting to ingest and build index...")
@@ -396,7 +407,12 @@ def terraform_run_command(
             embed_model_name=config.get('rag_embedding_model', 'sentence-transformers/all-MiniLM-L6-v2'),
             google_api_key=config.get('google_api_key'),
             documents_path_for_init=config['rag_docs_path_for_init'] if config['vector_store_choice'] == 'default' else None,
-            build_index_on_init=config['vector_store_choice'] == 'default'
+            build_index_on_init=config['vector_store_choice'] == 'default',
+            device="auto",
+            parallel_process=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
 
         console.print("--- Starting Terraform Orchestrator ---")
@@ -468,7 +484,12 @@ def hybrid_run_command(
             vector_store_choice='default',
             embed_model_name='sentence-transformers/all-MiniLM-L6-v2',
             documents_path_for_init=config.get('rag_docs_path_for_init', 'internal/tools/gcloud_online_docs_markdown'),
-            build_index_on_init=True
+            build_index_on_init=True,
+            device="cuda",
+            parallel_process=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
 
         console.print("--- Starting Hybrid Orchestrator ---")

@@ -94,7 +94,7 @@ def run_command(
     project_id: Optional[str] = typer.Option(os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get('gcp_project_id'), "--project-id", help="Google Cloud Project ID. Overrides config/env."),
     creds_path: Optional[str] = typer.Option(os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get('gcp_credentials_path'), "--creds-path", help="Path to GCP service account key file (uses ADC if not provided). Overrides config/env."),
     max_retries: Optional[int] = typer.Option(int(os.getenv("MAX_RETRIES") or APP_CONFIG.get('max_retries', 5)), "--max-retries", help="Max retry attempts for the orchestrator loop."),
-    execution_mode: Optional[str] = typer.Option("auto", "--execution-mode", help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)"),
+    execution_mode: Optional[str] = typer.Option("manual", "--execution-mode", help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)"),
     rag_docs_path: Optional[str] = typer.Option(os.getenv("GCLOUD_DOCS_PATH") or APP_CONFIG.get('rag_docs_path', os.path.join(os.path.dirname(__file__), '..' , 'internal', 'tools', 'gcloud_online_docs_markdown')), "--rag-docs-path", help="Path to Markdown documents for RAG."),
     
     vector_store_cli: Optional[str] = typer.Option(None, "--vector-store", help="Vector store type: default (in-memory), chroma, duckdb. Overrides env and config.yaml."),
@@ -202,7 +202,12 @@ def run_command(
             google_api_key=config.get('google_api_key'),
             documents_path_for_init=config['rag_docs_path_for_init'] if config['vector_store_choice'] == 'default' else None,
             build_index_on_init=config['rag_build_on_init'],
-            llm_for_settings=None
+            llm_for_settings=None,
+            device="auto",
+            parallel_process=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
 
         if not rag_engine_instance.query_engine and config['vector_store_choice'] != 'default':
@@ -294,7 +299,13 @@ def ingest_docs_command(
             db_config=db_configuration if db_configuration else None, # Pass None if not chroma/duckdb
             embed_model_name=rag_embed_model,
             google_api_key=effective_google_api_key,
-            llm_for_settings=None # Explicitly set LlamaIndex LLM to None
+            llm_for_settings=None,
+            device="auto",
+            parallel_process=True,
+            use_context_aware_parsing=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
         
         console.print(f"Attempting to ingest and build index...")
@@ -396,7 +407,12 @@ def terraform_run_command(
             embed_model_name=config.get('rag_embedding_model', 'sentence-transformers/all-MiniLM-L6-v2'),
             google_api_key=config.get('google_api_key'),
             documents_path_for_init=config['rag_docs_path_for_init'] if config['vector_store_choice'] == 'default' else None,
-            build_index_on_init=config['vector_store_choice'] == 'default'
+            build_index_on_init=config['vector_store_choice'] == 'default',
+            device="auto",
+            parallel_process=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
 
         console.print("--- Starting Terraform Orchestrator ---")
@@ -468,7 +484,12 @@ def hybrid_run_command(
             vector_store_choice='default',
             embed_model_name='sentence-transformers/all-MiniLM-L6-v2',
             documents_path_for_init=config.get('rag_docs_path_for_init', 'internal/tools/gcloud_online_docs_markdown'),
-            build_index_on_init=True
+            build_index_on_init=True,
+            device="cuda",
+            parallel_process=True,
+            embed_batch_size=2048,
+            preserve_code_blocks=True,
+            preserve_command_context=True
         )
 
         console.print("--- Starting Hybrid Orchestrator ---")
