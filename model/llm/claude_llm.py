@@ -53,7 +53,6 @@ class ClaudeLLM(BaseLLMInterface):
         self.model_name = self.config.get('claude_model', 'claude-3-5-sonnet-20241022')
         print(f"Claude Interface configured for model: {self.model_name}")
         
-        # Initialize Claude client
         try:
             self.client = AsyncAnthropic(api_key=self.api_key)
             print(f"Claude client initialized for {self.model_name}.")
@@ -73,7 +72,6 @@ class ClaudeLLM(BaseLLMInterface):
             The raw response from Claude
         """
         try:
-            # Claude expects system message to be separate
             system_content = ""
             claude_messages = []
             
@@ -90,7 +88,6 @@ class ClaudeLLM(BaseLLMInterface):
                 messages=claude_messages
             )
             
-            # Convert Claude response to OpenAI-like format for compatibility
             class ClaudeResponse:
                 def __init__(self, claude_resp):
                     self.choices = [ClaudeChoice(claude_resp)]
@@ -101,7 +98,6 @@ class ClaudeLLM(BaseLLMInterface):
             
             class ClaudeMessage:
                 def __init__(self, claude_resp):
-                    # Claude returns content as a list of content blocks
                     if claude_resp.content and len(claude_resp.content) > 0:
                         self.content = claude_resp.content[0].text
                     else:

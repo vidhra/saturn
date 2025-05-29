@@ -3,7 +3,7 @@ import asyncio
 import json
 from typing import Dict, Any, List, Optional, Callable
 from rich.console import Console
-from saturn.file_build_executor import FileBuildExecutor
+from saturn.file_executor import FileBuildExecutor
 
 class FileBuildToolCaller:
     """
@@ -51,13 +51,21 @@ class FileBuildToolCaller:
                             "type": ["string", "object"],
                             "description": "Content to write (string for text, object for JSON/YAML)"
                         },
+                        "file_content": {
+                            "type": ["string", "object"],
+                            "description": "Alternative parameter name for content (for backward compatibility)"
+                        },
                         "format": {
                             "type": "string",
                             "description": "File format override (auto, .json, .yaml, .toml, .txt)",
                             "default": "auto"
                         }
                     },
-                    "required": ["file_path", "content"]
+                    "required": ["file_path"],
+                    "oneOf": [
+                        {"required": ["content"]},
+                        {"required": ["file_content"]}
+                    ]
                 }
             },
             
@@ -349,11 +357,20 @@ class FileBuildToolCaller:
             "tool": "read_file"
         }
     
-    async def write_file(self, file_path: str, content: Any, format: str = "auto") -> Dict[str, Any]:
+    async def write_file(self, file_path: str, content: Any = None, file_content: Any = None, format: str = "auto") -> Dict[str, Any]:
         """Write content to a file."""
+        # Use file_content if content is None (for backward compatibility)
+        actual_content = content if content is not None else file_content
+        if actual_content is None:
+            return {
+                "success": False,
+                "error": "Either 'content' or 'file_content' parameter is required",
+                "tool": "write_file"
+            }
+            
         success, result = await self.executor.execute(
             "write_file", 
-            {"file_path": file_path, "content": content, "format": format}, 
+            {"file_path": file_path, "content": actual_content, "format": format}, 
             self.console, 
             "write_file"
         )

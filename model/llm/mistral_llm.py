@@ -1,13 +1,12 @@
 # model/llm/mistral_llm.py
 import json
 import traceback
-from mistralai import Mistral # Updated import for new client
+from mistralai import Mistral 
 from typing import List, Dict, Any, Optional, Tuple
 
 from .base_interface import BaseLLMInterface
 
-# Helper to convert OpenAI tool format to Mistral tool format
-# (New Mistral client uses a different tool format)
+
 def convert_to_mistral_tools(openai_tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     if not openai_tools:
         return []
@@ -18,7 +17,6 @@ def convert_to_mistral_tools(openai_tools: List[Dict[str, Any]]) -> List[Dict[st
         if not func:
             continue
         
-        # New Mistral client uses this format for tools
         mistral_tool = {
             "type": "function",
             "function": {
@@ -31,15 +29,12 @@ def convert_to_mistral_tools(openai_tools: List[Dict[str, Any]]) -> List[Dict[st
     
     return mistral_tools
 
-# Helper to create Mistral message history
 def create_mistral_messages(query: str, system_prompt: str, previous_errors: Optional[List[Dict[str, Any]]]) -> List[Dict[str, str]]:
     messages = []
-    # New Mistral client handles system prompts properly
     if system_prompt:
          messages.append({"role": "system", "content": system_prompt})
          
     if previous_errors:
-        # Represent error feedback
         error_text = "The previous attempt failed. Please analyze the errors and correct the tool calls.\n"
         for err in previous_errors:
             err_args = json.dumps(err.get('arguments', {}))
@@ -80,7 +75,6 @@ class MistralLLM(BaseLLMInterface):
             The raw response from Mistral
         """
         try:
-            # Use the new client's chat.complete method
             response = await self.client.chat.complete_async(
                 model=self.model_name,
                 messages=messages
@@ -104,7 +98,6 @@ class MistralLLM(BaseLLMInterface):
         print(f"Calling Mistral API (Model: {self.model_name})...")
         
         try:
-            # Use the new client API with proper async method
             response = await self.client.chat.complete_async(
                 model=self.model_name,
                 messages=messages,
@@ -120,12 +113,10 @@ class MistralLLM(BaseLLMInterface):
             if hasattr(message, 'tool_calls') and message.tool_calls:
                 print(f"Mistral proposed {len(message.tool_calls)} tool call(s):")
                 for tool_call_obj in message.tool_calls:
-                     # New Mistral client tool call format
                     if hasattr(tool_call_obj, 'function'):
                          print(f"  - Name: {tool_call_obj.function.name}")
                          print(f"    Arguments: {tool_call_obj.function.arguments}")
                          try:
-                            # Arguments might be already parsed or JSON strings
                             if isinstance(tool_call_obj.function.arguments, str):
                                 args_dict = json.loads(tool_call_obj.function.arguments)
                             else:
@@ -137,7 +128,7 @@ class MistralLLM(BaseLLMInterface):
                             })
                          except json.JSONDecodeError as json_err:
                             print(f"  [Error] Invalid JSON arguments from LLM: {json_err}")
-                            pass # Skipping invalid call
+                            pass 
                     else:
                         print(f"  [Warning] Received unexpected tool call format: {tool_call_obj}")
             else:
@@ -156,6 +147,3 @@ class MistralLLM(BaseLLMInterface):
             print(f"Error: {e}")
             traceback.print_exc()
             return None, None
-
-        # Placeholder implementation removed
-        # ... 

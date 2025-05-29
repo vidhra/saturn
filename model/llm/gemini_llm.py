@@ -77,7 +77,6 @@ class GeminiLLM(BaseLLMInterface):
             The raw response from Gemini
         """
         try:
-            # Convert messages to Gemini format
             gemini_history = []
             system_instruction = None
             
@@ -89,7 +88,6 @@ class GeminiLLM(BaseLLMInterface):
                 elif msg["role"] == "assistant":
                     gemini_history.append({'role': 'model', 'parts': [msg["content"]]})
             
-            # Create a new model instance with system instruction if provided
             model_to_use = self.model
             if system_instruction:
                 model_to_use = genai.GenerativeModel(
@@ -97,13 +95,11 @@ class GeminiLLM(BaseLLMInterface):
                     system_instruction=system_instruction
                 )
             
-            # Use asyncio.to_thread for synchronous Gemini API
             response = await asyncio.to_thread(
                 model_to_use.generate_content,
                 gemini_history
             )
             
-            # Convert Gemini response to OpenAI-like format for compatibility
             class GeminiResponse:
                 def __init__(self, gemini_resp):
                     self.choices = [GeminiChoice(gemini_resp)]
@@ -144,7 +140,6 @@ class GeminiLLM(BaseLLMInterface):
         print(f"Calling Gemini API (Model: {self.model_name})...")
         
         try:
-            # Create model with system instruction if available
             model_to_use = self.model
             if system_prompt:
                 model_to_use = genai.GenerativeModel(
@@ -152,7 +147,6 @@ class GeminiLLM(BaseLLMInterface):
                     system_instruction=system_prompt
                 )
             
-            # Use asyncio.to_thread since Gemini API is synchronous
             response = await asyncio.to_thread(
                 model_to_use.generate_content,
                 history,
@@ -161,7 +155,6 @@ class GeminiLLM(BaseLLMInterface):
 
             print("Received response from Gemini.")
             
-            # Parse response for FunctionCall parts
             tool_calls_list = []
             llm_text_response = None
             if response.candidates and response.candidates[0].content.parts:
@@ -169,7 +162,6 @@ class GeminiLLM(BaseLLMInterface):
                     if hasattr(part, 'function_call') and part.function_call:
                         fc = part.function_call
                         print(f"  Gemini proposed call: {fc.name}")
-                        # Args are already dicts in Gemini response
                         args_dict = dict(fc.args) 
                         print(f"    Arguments: {args_dict}")
                         tool_calls_list.append({
@@ -182,7 +174,7 @@ class GeminiLLM(BaseLLMInterface):
                         
             if not tool_calls_list and not llm_text_response:
                  print("Warning: Gemini response did not contain tool calls or text.")
-                 # Consider checking response.prompt_feedback for blocking reasons
+
                  if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
                       print(f"Prompt Feedback: {response.prompt_feedback}")
                       llm_text_response = f"Request blocked or failed. Feedback: {response.prompt_feedback}"
