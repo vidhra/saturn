@@ -1,15 +1,13 @@
 # model/llm/gemini_llm.py
 import json
 import traceback
-import asyncio # Might be needed for SDK interaction
-import google.generativeai as genai # Import Gemini library
+import asyncio 
+import google.generativeai as genai 
 from google.generativeai.types import GenerationConfig, HarmCategory, FunctionDeclaration, Tool
 from typing import List, Dict, Any, Optional, Tuple
 
 from .base_interface import BaseLLMInterface
 
-# Helper to convert OpenAI tool format to Gemini FunctionDeclaration
-# (This is a basic example, might need more sophisticated mapping)
 def convert_to_gemini_tools(openai_tools: List[Dict[str, Any]]) -> Optional[Tool]:
     if not openai_tools:
         return None
@@ -18,37 +16,28 @@ def convert_to_gemini_tools(openai_tools: List[Dict[str, Any]]) -> Optional[Tool
         func = tool.get("function")
         if not func:
             continue
-        # Basic mapping - assumes OpenAI schema is compatible enough
-        # Gemini schema uses OpenAPI format directly
         function_declarations.append(
             FunctionDeclaration(
                 name=func.get("name"),
                 description=func.get("description", ""),
-                parameters=func.get("parameters") # Assuming parameters is already in OpenAPI schema format
+                parameters=func.get("parameters")
             )
         )
     if not function_declarations:
          return None
     return Tool(function_declarations=function_declarations)
 
-# Helper to create Gemini message history
+
 def create_gemini_history(query: str, system_prompt: str, previous_errors: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
     history = []
-    # Note: Gemini handles system prompts differently (via system_instruction in GenerativeModel)
-    # We might need to pass the system_prompt during model initialization instead.
-    # For history, we primarily add user/model turns.
-    
+   
     if previous_errors:
-        # Represent the error feedback as part of the history
         error_text = "The previous attempt failed with errors:\n"
         for err in previous_errors:
             err_args = json.dumps(err.get('arguments', {}))
             error_text += f"- Call: {err.get('method')}, Args: {err_args}, Error: {err.get('error')}\n"
         error_text += f"\nPlease analyze and correct. Original query was: {query}"
-        # How to represent this? Maybe as a user turn asking for correction?
         history.append({'role': 'user', 'parts': [error_text]})
-        # Need a preceding model turn that presumably made the failed call - difficult to reconstruct accurately.
-        # This error feedback loop needs careful mapping to Gemini's chat history format.
         print("Warning: Gemini error feedback history construction is complex and needs refinement.")
     else:
         history.append({'role': 'user', 'parts': [query]})
@@ -64,16 +53,12 @@ class GeminiLLM(BaseLLMInterface):
         self.api_key = self.config['gemini_api_key']
         self.model_name = self.config.get('gemini_model', 'gemini-1.5-pro-latest')
         print(f"Gemini Interface configured for model: {self.model_name}")
-        # Configure Gemini client
         try:
             genai.configure(api_key=self.api_key)
-            # System prompt can be passed here
             system_instruction = self.config.get('gemini_system_prompt') # Allow specific system prompt override
             self.model = genai.GenerativeModel(
                 self.model_name,
                 system_instruction=system_instruction 
-                # generation_config=generation_config, # Add if needed
-                # safety_settings=safety_settings # Add if needed
             )
             print(f"Gemini client initialized for {self.model_name}.")
         except ImportError:
@@ -214,6 +199,3 @@ class GeminiLLM(BaseLLMInterface):
             print(f"Error: {e}")
             traceback.print_exc()
             return None, None
-
-        # Placeholder implementation removed
-        # ... 

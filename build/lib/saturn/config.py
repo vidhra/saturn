@@ -38,63 +38,73 @@ ENV_VAR_MAP = {
     "duckdb_table_name": "DUCKDB_TABLE_NAME",
 }
 
-def load_config(config_path_override: Optional[str] = None) -> Dict[str, Any]:
+_config_loading = False
+
+def load_config(config_path_override: Optional[str] = None, debug: bool = False) -> Dict[str, Any]:
     """
     Loads configuration from a YAML file, sets environment variables from YAML if not already set,
     and then merges with direct environment variable overrides.
     Precedence for YAML loading: config_path_override > ./config.yaml > ~/.config/saturn/config.yaml
     Precedence for values: Direct Environment Vars > YAML-set Env Vars (from YAML file) > YAML file values > Defaults in code.
     """
-    paths_to_check = []
-    if config_path_override:
-        paths_to_check.append(config_path_override)
-    paths_to_check.append(os.path.join(os.getcwd(), CONFIG_FILE_NAME)) # Current working directory
-    paths_to_check.append(os.path.join(USER_CONFIG_DIR, CONFIG_FILE_NAME)) # User config directory
+    global _config_loading
     
-    yaml_config: Dict[str, Any] = {}
-    loaded_config_path = None
-
-    for path_attempt in paths_to_check:
-        print(f"[ConfigDebug] Attempting to load config from: {path_attempt}")
-        if os.path.exists(path_attempt):
-            print(f"[ConfigDebug] Found config file: {path_attempt}")
-            try:
-                with open(path_attempt, 'r') as f:
-                    loaded_data = yaml.safe_load(f)
-                    if isinstance(loaded_data, dict):
-                        yaml_config = loaded_data
-                        loaded_config_path = path_attempt
-                        print(f"[ConfigDebug] Successfully loaded config from {loaded_config_path} with keys: {list(loaded_data.keys())}")
-                        break
-                    else:
-                        print(f"[ConfigDebug] Warning: Config file {path_attempt} did not load as a dict. Loaded: {type(loaded_data)}")
-            except Exception as e:
-                print(f"[ConfigDebug] Warning: Could not read/parse config file {path_attempt}: {e}")
-        else:
-            print(f"[ConfigDebug] Config file not found: {path_attempt}")
+    if _config_loading:
+        return {}
     
-    if not loaded_config_path:
-        print(f"[ConfigDebug] No config file was successfully loaded from checked paths.")
+    _config_loading = True
+    
+    try:
+        paths_to_check = []
+        if config_path_override:
+            paths_to_check.append(config_path_override)
+        paths_to_check.append(os.path.join(os.getcwd(), CONFIG_FILE_NAME)) 
+        paths_to_check.append(os.path.join(USER_CONFIG_DIR, CONFIG_FILE_NAME)) 
+        
+        yaml_config: Dict[str, Any] = {}
+        loaded_config_path = None
 
-    for yaml_key, env_var_name in ENV_VAR_MAP.items():
-        if yaml_key in yaml_config and yaml_config[yaml_key] is not None:
-            if not os.getenv(env_var_name):
-                os.environ[env_var_name] = str(yaml_config[yaml_key])
+        for path_attempt in paths_to_check:
+            if debug:
+                print(f"[ConfigDebug] Attempting to load config from: {path_attempt}")
+            if os.path.exists(path_attempt):
+                if debug:
+                    print(f"[ConfigDebug] Found config file: {path_attempt}")
+                try:
+                    with open(path_attempt, 'r') as f:
+                        loaded_data = yaml.safe_load(f)
+                        if isinstance(loaded_data, dict):
+                            yaml_config = loaded_data
+                            loaded_config_path = path_attempt
+                            if debug:
+                                print(f"[ConfigDebug] Successfully loaded config from {loaded_config_path}")
+                            break
+                        elif debug:
+                            print(f"[ConfigDebug] Warning: Config file {path_attempt} did not load as a dict. Loaded: {type(loaded_data)}")
+                except Exception as e:
+                    if debug:
+                        print(f"[ConfigDebug] Warning: Could not read/parse config file {path_attempt}: {e}")
+            elif debug:
+                print(f"[ConfigDebug] Config file not found: {path_attempt}")
+        
+        if not loaded_config_path and debug:
+            print(f"[ConfigDebug] No config file was successfully loaded from checked paths.")
 
+        for yaml_key, env_var_name in ENV_VAR_MAP.items():
+            if yaml_key in yaml_config and yaml_config[yaml_key] is not None:
+                if not os.getenv(env_var_name):
+                    os.environ[env_var_name] = str(yaml_config[yaml_key])
 
-    current_google_api_key_in_env = os.getenv("GOOGLE_API_KEY")
-    if current_google_api_key_in_env:
-        print(f"[ConfigDebug] After potential YAML->env setting: os.getenv('GOOGLE_API_KEY') is set.")
-    else:
-        print("[ConfigDebug] After potential YAML->env setting: os.getenv('GOOGLE_API_KEY') is None.")
+        final_config = yaml_config.copy()
+        for yaml_key, env_var_name in ENV_VAR_MAP.items():
+            env_value = os.getenv(env_var_name)
+            if env_value is not None:
+                final_config[yaml_key] = env_value
 
-    final_config = yaml_config.copy()
-    for yaml_key_for_final_config, env_var_name_for_final_config in ENV_VAR_MAP.items():
-        env_value = os.getenv(env_var_name_for_final_config)
-        if env_value is not None:
-            final_config[yaml_key_for_final_config] = env_value
-
-    return final_config
+        return final_config
+        
+    finally:
+        _config_loading = False
 
 if __name__ == '__main__':
     print("\n=== Testing Config Loading ===")
@@ -106,7 +116,7 @@ if __name__ == '__main__':
     print("\nInitial state of GOOGLE_API_KEY in environment:", os.getenv('GOOGLE_API_KEY'))
     
     print("\nLoading config...")
-    settings = load_config()
+    settings = load_config(debug=True)
     
     print("\nFinal state:")
     print(f"Config keys loaded: {list(settings.keys())}")

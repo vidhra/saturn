@@ -439,13 +439,9 @@ class DockerBuilder:
                 elif dependencies_file.endswith('go.mod'):
                     dockerfile_content += "RUN go mod download\n\n"
             
-            # Copy application code
-            dockerfile_content += "COPY . .\n\n"
-            
-            # Expose common ports
+            dockerfile_content += "COPY . .\n\n" 
             dockerfile_content += "EXPOSE 8000\n\n"
             
-            # Set start command
             if start_command:
                 dockerfile_content += f"CMD {start_command}\n"
             else:

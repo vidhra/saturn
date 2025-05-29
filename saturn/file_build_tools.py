@@ -724,7 +724,6 @@ class FileBuildToolHandler:
         return results
 
 
-# Example usage for LLM integration
 def create_file_build_tools_for_llm(working_directory: str = ".") -> Dict[str, Any]:
     """
     Create file build tools interface for LLM integration.
@@ -739,61 +738,3 @@ def create_file_build_tools_for_llm(working_directory: str = ".") -> Dict[str, A
         "available_tools": handler.tool_caller.get_available_tools()
     }
 
-
-# Demo function showing how to use with LLM
-async def demo_llm_integration():
-    """Demo showing how these tools would be used with an LLM."""
-    
-    console = Console()
-    console.print("[bold green]Demo: File Build Tools for LLM Integration[/bold green]\n")
-    
-    # Create tools interface
-    tools_interface = create_file_build_tools_for_llm(".")
-    handler = tools_interface["handler"]
-    
-    console.print("Available tools for LLM:")
-    for tool in tools_interface["available_tools"]:
-        console.print(f"  • {tool}")
-    
-    # Example tool calls that an LLM might make
-    example_tool_calls = [
-        {
-            "type": "function",
-            "function": {
-                "name": "detect_project_type",
-                "arguments": {}
-            }
-        },
-        {
-            "type": "function", 
-            "function": {
-                "name": "list_files",
-                "arguments": {
-                    "pattern": "*.py",
-                    "recursive": True
-                }
-            }
-        },
-        {
-            "type": "function",
-            "function": {
-                "name": "read_file",
-                "arguments": {
-                    "file_path": "saturn/file_build_executor.py"
-                }
-            }
-        }
-    ]
-    
-    console.print(f"\n[bold blue]Executing {len(example_tool_calls)} example tool calls...[/bold blue]")
-    
-    results = await handler.execute_tool_sequence(example_tool_calls)
-    
-    console.print(f"\n[bold green]Tool execution completed. {len(results)} results generated.[/bold green]")
-    
-    return results
-
-
-if __name__ == "__main__":
-    # Run demo
-    asyncio.run(demo_llm_integration()) 

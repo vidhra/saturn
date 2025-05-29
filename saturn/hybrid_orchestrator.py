@@ -7,7 +7,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from .gcp_executor import GcloudExecutor
-from .terraform_executor import TerraformExecutor
+from .terraform_interop import TerraformExecutor
 from .orchestrator import (
     get_llm_interface,
     _generate_plan_dag,

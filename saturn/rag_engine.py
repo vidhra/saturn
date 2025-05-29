@@ -369,9 +369,9 @@ class RAGEngine:
                  preserve_command_context: bool = True,
                  # GPU and parallel processing parameters
                  device: Optional[str] = None,
-                 parallel_process: bool = False,
+                 parallel_process: bool = False,  # Default to False for stability
                  target_devices: Optional[List[str]] = None,
-                 embed_batch_size: int = 64,
+                 embed_batch_size: int = 32,  # Reduced from 64 for better stability
                  show_progress_bar: bool = False,
                  torch_dtype: Optional[str] = None
                  ):
@@ -526,7 +526,8 @@ class RAGEngine:
                     hf_kwargs = {
                         "model_name": hf_model_name,
                         "embed_batch_size": self.embed_batch_size,
-                        "show_progress_bar": self.show_progress_bar
+                        "show_progress_bar": self.show_progress_bar,
+                        "parallel_process": False  # Force disable parallel processing for stability
                     }
                     
                     if self.device == "auto" or self.device is None:
@@ -547,14 +548,7 @@ class RAGEngine:
                         hf_kwargs["device"] = self.device
                         console.print(f"[RAG Engine] Using specified device: {self.device}")
 
-                    if self.parallel_process:
-                        hf_kwargs["parallel_process"] = True
-                        if self.target_devices:
-                            hf_kwargs["target_devices"] = self.target_devices
-                            console.print(f"[RAG Engine] Enabled parallel processing on devices: {self.target_devices}")
-                        else:
-                            console.print(f"[RAG Engine] Enabled parallel processing with auto device selection")
-
+                    # Remove parallel processing configuration
                     if self.torch_dtype:
                         model_kwargs = {}
                         if self.torch_dtype == "float16":

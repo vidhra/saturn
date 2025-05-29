@@ -4,13 +4,12 @@ import asyncio
 from typing import Optional, List
 from pathlib import Path
 
-# Enhanced .env loading functionality (similar to test script)
 try:
     from dotenv import load_dotenv
     
-    # Look for .env file in current directory and parent directories
     env_file_paths = [
         Path(".env"),
+        Path(".env-temp"),
         Path("../.env"),
     ]
     
@@ -33,10 +32,10 @@ except ImportError:
 from rich.console import Console
 from rich.panel import Panel
 
-# Import from within the saturn package
+
 from .config import load_config
-from .orchestrator import run_query_with_feedback # Use the loop version
-from .knowledge_base import KnowledgeBase # Still used for something else potentially, or can be removed if not
+from .orchestrator import run_query_with_feedback 
+from .knowledge_base import KnowledgeBase 
 from .gcp_executor import GcloudExecutor
 from .rag_engine import (
     RAGEngine, 
@@ -48,10 +47,8 @@ from .rag_engine import (
     DEFAULT_DUCKDB_TABLE_NAME
 )
 
-# Load base configuration once (this will also check for additional env vars from YAML)
 APP_CONFIG = load_config()
 
-# Create Typer app
 app = typer.Typer()
 console = Console()
 
@@ -75,7 +72,6 @@ def print_env_status_cli():
     for env_var, description in env_vars.items():
         value = os.getenv(env_var)
         if value:
-            # Show first 8 and last 4 characters for API keys, full value for others
             if "key" in env_var.lower() or "api" in env_var.lower():
                 masked_value = f"{value[:8]}...{value[-4:]}" if len(value) > 12 else f"{value[:4]}..."
             else:
@@ -132,9 +128,9 @@ def run_command(
     config['rag_embedding_model'] = rag_embed_model
     config['google_api_key'] = google_api_key_cli or os.getenv("GOOGLE_API_KEY") or config.get('google_api_key')
 
-    # Determine vector_store_choice with clear precedence for diagnosis
+
     vs_choice_source = "hardcoded default in CLI"
-    resolved_vector_store = "default" # Ultimate fallback
+    resolved_vector_store = "default"
 
     if vector_store_cli:
         resolved_vector_store = vector_store_cli
@@ -145,7 +141,6 @@ def run_command(
     elif APP_CONFIG.get('vector_store'):
         resolved_vector_store = APP_CONFIG.get('vector_store')
         vs_choice_source = "config.yaml (vector_store key)"
-    # If none of the above, resolved_vector_store remains "default" from its initialization
     
     config['vector_store_choice'] = resolved_vector_store.lower()
     console.print(f"[Config] Vector store choice '{config['vector_store_choice']}' determined from: {vs_choice_source}")
@@ -169,7 +164,7 @@ def run_command(
         console.print("[bold red]Error:[/] GCP Project ID not found.")
         raise typer.Exit(code=1)
     required_api_key_name = f'{config["llm_provider"]}_api_key'
-    if not config.get(required_api_key_name) and config["llm_provider"] != "mock": # Allow mock provider
+    if not config.get(required_api_key_name) and config["llm_provider"] != "mock": 
         console.print(f"[bold red]Error:[/] {required_api_key_name.upper()} not found for provider '{config["llm_provider"]}'.")
         raise typer.Exit(code=1)
     
@@ -205,7 +200,7 @@ def run_command(
             llm_for_settings=None,
             device="auto",
             parallel_process=True,
-            embed_batch_size=2048,
+            embed_batch_size=128,
             preserve_code_blocks=True,
             preserve_command_context=True
         )
@@ -238,9 +233,7 @@ def ingest_docs_command(
         "--vector-store", 
         help="Vector store type: default (in-memory, not persistent for ingest), chroma, duckdb."
     ),
-    # db_path: Optional[str] = typer.Option(None, "--db-path", help="Base path for persistent DB (e.g., ./db/chroma_store or ./db/duckdb_store)."), # REMOVED
-    # db_name: Optional[str] = typer.Option(None, "--db-name", help="Collection name (Chroma) or DB file name (DuckDB, e.g., vectors.duckdb)."), # REMOVED
-    # table_name: Optional[str] = typer.Option(None, "--table-name", help="Table name (DuckDB only)."), # REMOVED
+
     rag_embed_model: Optional[str] = typer.Option(
         os.getenv("RAG_EMBED_MODEL") or APP_CONFIG.get('rag_embedding_model', DEFAULT_EMBED_MODEL_NAME),
         "--rag-embed-model", 
@@ -255,7 +248,6 @@ def ingest_docs_command(
     if show_env:
         print_env_status_cli()
     
-    # Import provider-specific functions from rag_engine
     from .rag_engine import get_provider_docs_path, build_provider_db_config
     
     provider = provider.lower()
@@ -263,7 +255,6 @@ def ingest_docs_command(
         console.print(f"[bold red]Error:[/] Unsupported provider '{provider}'. Use 'gcp' or 'aws'.")
         raise typer.Exit(code=1)
     
-    # Use provider-specific docs path if not explicitly provided
     if not docs_path:
         docs_path = get_provider_docs_path(APP_CONFIG, provider)
     
@@ -275,7 +266,6 @@ def ingest_docs_command(
     if vs_choice == "default":
         console.print("[bold yellow]Warning:[/] 'default' (in-memory) vector store selected. Ingestion will not be persistent. Use 'chroma' or 'duckdb' for persistence.")
 
-    # Use provider-specific database configuration
     db_configuration = build_provider_db_config(APP_CONFIG, provider, vs_choice)
     
     if vs_choice == "chroma":
@@ -303,7 +293,7 @@ def ingest_docs_command(
             device="auto",
             parallel_process=True,
             use_context_aware_parsing=True,
-            embed_batch_size=2048,
+            embed_batch_size=128,
             preserve_code_blocks=True,
             preserve_command_context=True
         )
@@ -396,21 +386,19 @@ def terraform_run_command(
         raise typer.Exit(code=1)
 
     try:
-        from .terraform_executor import TerraformExecutor
+        from .terraform_interop import TerraformExecutor
         from .hybrid_orchestrator import run_query_hybrid
         from .rag_engine import RAGEngine
 
-        # Initialize RAG engine
+        # Initialize RAG engine with simple defaults
         rag_engine_instance = RAGEngine(
-            vector_store_choice=config['vector_store_choice'],
-            db_config=None,  # Use defaults for simplicity
-            embed_model_name=config.get('rag_embedding_model', 'sentence-transformers/all-MiniLM-L6-v2'),
-            google_api_key=config.get('google_api_key'),
-            documents_path_for_init=config['rag_docs_path_for_init'] if config['vector_store_choice'] == 'default' else None,
-            build_index_on_init=config['vector_store_choice'] == 'default',
+            vector_store_choice='default',
+            embed_model_name='sentence-transformers/all-MiniLM-L6-v2',
+            documents_path_for_init=config.get('rag_docs_path_for_init', 'internal/tools/gcloud_online_docs_markdown'),
+            build_index_on_init=True,
             device="auto",
-            parallel_process=True,
-            embed_batch_size=2048,
+            parallel_process=False,  
+            embed_batch_size=32,  
             preserve_code_blocks=True,
             preserve_command_context=True
         )
@@ -479,15 +467,14 @@ def hybrid_run_command(
         from .hybrid_orchestrator import run_query_hybrid
         from .rag_engine import RAGEngine
 
-        # Initialize RAG engine with simple defaults
         rag_engine_instance = RAGEngine(
             vector_store_choice='default',
             embed_model_name='sentence-transformers/all-MiniLM-L6-v2',
             documents_path_for_init=config.get('rag_docs_path_for_init', 'internal/tools/gcloud_online_docs_markdown'),
             build_index_on_init=True,
-            device="cuda",
-            parallel_process=True,
-            embed_batch_size=2048,
+            device="auto",
+            parallel_process=False, 
+            embed_batch_size=32,  
             preserve_code_blocks=True,
             preserve_command_context=True
         )
@@ -533,20 +520,16 @@ def convert_history_command(
         from .hybrid_orchestrator import HybridOrchestrator
         from .rag_engine import RAGEngine
 
-        # Initialize a minimal RAG engine
         rag_engine_instance = RAGEngine(
             vector_store_choice='default',
-            build_index_on_init=False  # Don't need RAG for conversion
+            build_index_on_init=False
         )
 
-        # Initialize hybrid orchestrator
         orchestrator = HybridOrchestrator(config, rag_engine_instance)
         
-        # Convert the history
         result = asyncio.run(orchestrator.generate_terraform_from_gcloud_history(log_file))
         
         if result["status"] == "success":
-            # Move the generated file to the desired output location
             if output_file != result["combined_file"]:
                 import shutil
                 shutil.move(result["combined_file"], output_file)
@@ -572,6 +555,141 @@ def convert_history_command(
         else:
             console.print(f"Error: {e}")
         raise typer.Exit(code=1)
+
+@app.command("install-cli")
+def install_cli_command(
+    gcp: bool = typer.Option(True, "--gcp/--no-gcp", help="Install Google Cloud CLI"),
+    aws: bool = typer.Option(True, "--aws/--no-aws", help="Install AWS CLI"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output")
+):
+    """Install AWS and/or GCP CLI tools."""
+    
+    console.print(Panel("Installing Cloud CLI Tools", title="Saturn CLI Installation"))
+    
+    def get_os_type():
+        """Get the operating system type."""
+        system = os.uname().sysname if hasattr(os, 'uname') else os.name
+        if system == "Darwin":
+            return "macos"
+        elif system == "Linux":
+            return "linux"
+        elif system == "Windows" or os.name == "nt":
+            return "windows"
+        return "unknown"
+    
+    def install_gcp_cli():
+        """Install Google Cloud CLI based on OS."""
+        os_type = get_os_type()
+        
+        if os_type == "macos":
+            console.print("Downloading Google Cloud SDK...")
+            os.system('curl https://sdk.cloud.google.com > install.sh')
+            os.system('bash install.sh --disable-prompts')
+            os.system('rm install.sh')
+            
+
+            shell = os.environ.get('SHELL', '')
+            if 'zsh' in shell:
+                with open(os.path.expanduser('~/.zshrc'), 'a') as f:
+                    f.write('\n# Google Cloud SDK\n')
+                    f.write('source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"\n')
+                    f.write('source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"\n')
+            elif 'bash' in shell:
+                with open(os.path.expanduser('~/.bashrc'), 'a') as f:
+                    f.write('\n# Google Cloud SDK\n')
+                    f.write('source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"\n')
+                    f.write('source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"\n')
+            
+        elif os_type == "linux":
+            console.print("Installing Google Cloud SDK for Linux...")
+            os.system('echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list')
+            os.system('curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -')
+            os.system('sudo apt-get update && sudo apt-get install google-cloud-sdk')
+            
+            with open(os.path.expanduser('~/.bashrc'), 'a') as f:
+                f.write('\n# Google Cloud SDK\n')
+                f.write('source /usr/share/google-cloud-sdk/completion.bash.inc\n')
+                f.write('source /usr/share/google-cloud-sdk/path.bash.inc\n')
+            
+            if os.path.exists('/usr/share/google-cloud-sdk/completion.zsh.inc'):
+                with open(os.path.expanduser('~/.zshrc'), 'a') as f:
+                    f.write('\n# Google Cloud SDK\n')
+                    f.write('source /usr/share/google-cloud-sdk/completion.zsh.inc\n')
+                    f.write('source /usr/share/google-cloud-sdk/path.zsh.inc\n')
+            
+        elif os_type == "windows":
+            console.print("Downloading Google Cloud SDK for Windows...")
+            os.system('curl -o GoogleCloudSDKInstaller.exe https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe')
+            console.print("Please run GoogleCloudSDKInstaller.exe to complete the installation")
+            console.print("After installation, restart your terminal and run 'gcloud init'")
+            return False
+            
+        else:
+            console.print("[bold red]Error:[/] Unsupported operating system")
+            console.print("Please install manually from: https://cloud.google.com/sdk/docs/install")
+            return False
+            
+        console.print("[bold green]✓ Google Cloud CLI installed successfully![/bold green]")
+        if os_type != "windows":
+            console.print("Please restart your terminal or run 'source ~/.bashrc' (or ~/.zshrc) to update your PATH")
+        return True
+    
+    def install_aws_cli():
+        """Install AWS CLI based on OS."""
+        os_type = get_os_type()
+        
+        if os_type == "macos":
+            console.print("Installing AWS CLI using Homebrew...")
+            os.system('brew install awscli')
+            
+        elif os_type == "linux":
+            console.print("Installing AWS CLI for Linux...")
+            os.system('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
+            os.system('unzip awscliv2.zip')
+            os.system('sudo ./aws/install')
+            os.system('rm -rf aws awscliv2.zip')
+            
+        elif os_type == "windows":
+            console.print("Downloading AWS CLI for Windows...")
+            os.system('curl -o AWSCLIV2.msi https://awscli.amazonaws.com/AWSCLIV2.msi')
+            console.print("Please run AWSCLIV2.msi to complete the installation")
+            console.print("After installation, restart your terminal and run 'aws configure'")
+            return False
+            
+        else:
+            console.print("[bold red]Error:[/] Unsupported operating system")
+            console.print("Please install manually from: https://aws.amazon.com/cli/")
+            return False
+            
+        console.print("[bold green]✓ AWS CLI installed successfully![/bold green]")
+        return True
+    
+    if gcp:
+        console.print("\n[bold cyan]Installing Google Cloud CLI...[/bold cyan]")
+        try:
+            gcp_success = install_gcp_cli()
+        except Exception as e:
+            console.print(f"[bold red]Error installing Google Cloud CLI:[/] {str(e)}")
+            if verbose:
+                console.print_exception(show_locals=True)
+            raise typer.Exit(code=1)
+    
+    if aws:
+        console.print("\n[bold cyan]Installing AWS CLI...[/bold cyan]")
+        try:
+            aws_success = install_aws_cli()
+        except Exception as e:
+            console.print(f"[bold red]Error installing AWS CLI:[/] {str(e)}")
+            if verbose:
+                console.print_exception(show_locals=True)
+            raise typer.Exit(code=1)
+    
+    console.print("\n[bold green]Installation complete![/bold green]")
+    console.print("\nNext steps:")
+    if gcp and gcp_success:
+        console.print("1. Run 'gcloud init' to initialize Google Cloud CLI")
+    if aws and aws_success:
+        console.print("2. Run 'aws configure' to configure AWS CLI with your credentials")
 
 if __name__ == "__main__":
     print("test")
