@@ -1,18 +1,270 @@
 #!/bin/sh
 # pre-push.sh
 
-# Add commands here to run before pushing to a remote repository
-# For example, you might run more comprehensive tests
 
 echo "Running pre-push checks..."
 
-# Example: Run your test suite
-# echo "Running tests..."
-# python -m unittest discover -s tests
-# if [ $? -ne 0 ]; then
-#   echo "Tests failed. Push aborted."
-#   exit 1
-# fi
+# Check if we're in a Python project directory
+if [ ! -f "pyproject.toml" ] && [ ! -f "requirements.txt" ] && [ ! -f "setup.py" ]; then
+    echo "No Python project files found. Skipping Python-specific checks."
+    exit 0
+fi
 
-echo "Pre-push checks passed."
+# Store the exit code to track if any checks fail
+EXIT_CODE=0
+
+# Function to check if command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Get information about what we're pushing
+remote="$1"
+url="$2"
+
+echo "Pushing to remote: $remote"
+echo "Remote URL: $url"
+
+# Read the input to get the refs being pushed
+while read local_ref local_sha remote_ref remote_sha; do
+    if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+        # Handle delete
+        echo "Deleting $remote_ref, no checks needed."
+    else
+        echo "Pushing $local_ref ($local_sha) to $remote_ref"
+        
+        # 1. Run comprehensive test suite
+        if [ -d "tests" ] && command_exists pytest; then
+            echo "Running full test suite..."
+            pytest tests/ -v --tb=short
+            if [ $? -ne 0 ]; then
+                echo "Test suite failed. Push aborted."
+                EXIT_CODE=1
+            fi
+        elif [ -d "tests" ] && command_exists python; then
+            echo "Running tests with unittest..."
+            python -m unittest discover -s tests -v
+            if [ $? -ne 0 ]; then
+                echo "Test suite failed. Push aborted."
+                EXIT_CODE=1
+            fi
+        else
+            echo "No test framework found or tests directory missing. Skipping tests."
+        fi
+
+        # 2. Run comprehensive linting on entire codebase
+        echo "Running comprehensive linting checks..."
+        
+        # Check Python files in main directories
+        PYTHON_DIRS=""
+        for dir in "saturn" "model" "internal" "src" "app"; do
+            if [ -d "$dir" ]; then
+                PYTHON_DIRS="$PYTHON_DIRS $dir"
+            fi
+        done
+        
+        if [ ! -z "$PYTHON_DIRS" ]; then
+            # Run flake8 on entire codebase
+            if command_exists flake8; then
+                echo "Running flake8 on entire codebase..."
+                flake8 $PYTHON_DIRS
+                if [ $? -ne 0 ]; then
+                    echo "Flake8 found issues in codebase. Please fix before pushing."
+                    EXIT_CODE=1
+                fi
+            fi
+            
+            # Run ruff on entire codebase
+            if command_exists ruff; then
+                echo "Running ruff on entire codebase..."
+                ruff check $PYTHON_DIRS
+                if [ $? -ne 0 ]; then
+                    echo "Ruff found issues in codebase. Please fix before pushing."
+                    EXIT_CODE=1
+                fi
+            fi
+        fi
+
+        # 3. Security checks
+        echo "Running security checks..."
+        
+        # Run bandit security scanner
+        if command_exists bandit; then
+            echo "Running Bandit security scan..."
+            if [ ! -z "$PYTHON_DIRS" ]; then
+                bandit -r $PYTHON_DIRS -f text
+                if [ $? -ne 0 ]; then
+                    echo "Security issues found. Please review before pushing."
+                    # Don't fail push for security warnings, but notify
+                    echo "Warning: Security scan found potential issues."
+                fi
+            fi
+        fi
+        
+        # Check for secrets/API keys
+        echo "Checking for potential secrets..."
+        SECRET_PATTERNS="api[_-]?key|secret[_-]?key|password|token|auth[_-]?token|access[_-]?key|private[_-]?key|client[_-]?secret"
+        if find . -name "*.py" -type f -exec grep -l -i -E "$SECRET_PATTERNS" {} \; 2>/dev/null | head -5; then
+            echo "Warning: Found potential secrets or API keys. Please review:"
+            find . -name "*.py" -type f -exec grep -n -i -E "$SECRET_PATTERNS" {} \; 2>/dev/null | head -10
+            echo "Make sure these are not actual secrets!"
+        fi
+
+        # 4. Dependency checks
+        echo "Checking dependencies..."
+        
+        # Check if requirements.txt and pyproject.toml are in sync
+        if [ -f "requirements.txt" ] && [ -f "pyproject.toml" ]; then
+            echo "Checking dependency consistency..."
+            # Basic check for major dependencies
+            if grep -q "openai" requirements.txt && ! grep -q "openai" pyproject.toml; then
+                echo "Warning: requirements.txt and pyproject.toml may be out of sync"
+            fi
+        fi
+        
+        # Check for vulnerable dependencies
+        if command_exists safety; then
+            echo "Running safety check for vulnerable dependencies..."
+            safety check
+            if [ $? -ne 0 ]; then
+                echo "Vulnerable dependencies found. Consider updating."
+                # Don't fail push but warn
+            fi
+        fi
+
+        # 5. Code quality checks
+        echo "Running code quality checks..."
+        
+        # Check for large files that shouldn't be committed
+        echo "Checking for large files..."
+        find . -type f -size +10M -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" | while read file; do
+            echo "Warning: Large file found: $file ($(du -h "$file" | cut -f1))"
+        done
+        
+        # Check for common anti-patterns
+        if [ ! -z "$PYTHON_DIRS" ]; then
+            echo "Checking for code anti-patterns..."
+            
+            # Check for bare except clauses
+            BARE_EXCEPT=$(find $PYTHON_DIRS -name "*.py" -exec grep -l "except:" {} \; 2>/dev/null)
+            if [ ! -z "$BARE_EXCEPT" ]; then
+                echo "Warning: Found bare except clauses in:"
+                echo "$BARE_EXCEPT"
+            fi
+            
+            # Check for print statements (except in specific files)
+            PRINT_STATEMENTS=$(find $PYTHON_DIRS -name "*.py" -not -name "*cli*" -not -name "*debug*" -exec grep -l "print(" {} \; 2>/dev/null)
+            if [ ! -z "$PRINT_STATEMENTS" ]; then
+                echo "Info: Found print statements in:"
+                echo "$PRINT_STATEMENTS" | head -5
+                echo "Consider using logging instead."
+            fi
+        fi
+
+        # 6. Documentation checks
+        echo "Checking documentation..."
+        
+        # Check if README exists and is not empty
+        if [ ! -f "README.md" ] || [ ! -s "README.md" ]; then
+            echo "Warning: README.md is missing or empty."
+        fi
+        
+        # Check if main modules have docstrings
+        if [ ! -z "$PYTHON_DIRS" ]; then
+            for dir in $PYTHON_DIRS; do
+                if [ -f "$dir/__init__.py" ]; then
+                    if ! grep -q '"""' "$dir/__init__.py" && ! grep -q "'''" "$dir/__init__.py"; then
+                        echo "Warning: $dir/__init__.py lacks a docstring"
+                    fi
+                fi
+            done
+        fi
+
+        # 7. Performance checks
+        echo "Running performance checks..."
+        
+        # Check for potential performance issues
+        if [ ! -z "$PYTHON_DIRS" ]; then
+            # Look for nested loops in hot paths
+            NESTED_LOOPS=$(find $PYTHON_DIRS -name "*.py" -exec grep -l "for.*for" {} \; 2>/dev/null)
+            if [ ! -z "$NESTED_LOOPS" ]; then
+                echo "Info: Files with potential nested loops (review for performance):"
+                echo "$NESTED_LOOPS" | head -3
+            fi
+        fi
+
+        # 8. Configuration validation
+        echo "Validating configuration files..."
+        
+        # Validate YAML files
+        if command_exists python; then
+            for yaml_file in $(find . -name "*.yaml" -o -name "*.yml" | head -5); do
+                if [ -f "$yaml_file" ]; then
+                    python -c "import yaml; yaml.safe_load(open('$yaml_file'))" 2>/dev/null
+                    if [ $? -ne 0 ]; then
+                        echo "Invalid YAML syntax in $yaml_file"
+                        EXIT_CODE=1
+                    fi
+                fi
+            done
+        fi
+        
+        # Validate JSON files
+        for json_file in $(find . -name "*.json" | head -5); do
+            if [ -f "$json_file" ]; then
+                python -c "import json; json.load(open('$json_file'))" 2>/dev/null
+                if [ $? -ne 0 ]; then
+                    echo "Invalid JSON syntax in $json_file"
+                    EXIT_CODE=1
+                fi
+            fi
+        done
+
+        # 9. Environment-specific checks
+        echo "Running environment checks..."
+        
+        # Check Python version compatibility
+        if [ -f "pyproject.toml" ]; then
+            REQUIRED_PYTHON=$(grep "requires-python" pyproject.toml | sed 's/.*>=\([0-9.]*\).*/\1/')
+            if [ ! -z "$REQUIRED_PYTHON" ]; then
+                CURRENT_PYTHON=$(python --version | sed 's/Python \([0-9.]*\).*/\1/')
+                echo "Required Python: $REQUIRED_PYTHON, Current: $CURRENT_PYTHON"
+            fi
+        fi
+
+        # 10. Integration checks
+        if [ -f "docker-compose.yml" ] || [ -f "Dockerfile" ]; then
+            echo "Docker configuration detected..."
+            # Basic Docker file validation could go here
+        fi
+
+        # 11. Final validation
+        echo "Running final validation..."
+        
+        # Check that the code can be imported
+        if [ ! -z "$PYTHON_DIRS" ]; then
+            for dir in $PYTHON_DIRS; do
+                if [ -f "$dir/__init__.py" ]; then
+                    python -c "import sys; sys.path.insert(0, '.'); import $dir" 2>/dev/null
+                    if [ $? -ne 0 ]; then
+                        echo "Warning: Cannot import module $dir. Check for syntax errors."
+                    fi
+                fi
+            done
+        fi
+    fi
+done
+
+# Summary
+if [ $EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ Pre-push checks failed!"
+    echo "Please fix the issues above before pushing."
+    echo "Use 'git push --no-verify' to bypass these checks (not recommended)."
+    exit $EXIT_CODE
+fi
+
+echo ""
+echo "✅ All pre-push checks passed!"
+echo "Code is ready to be pushed."
 exit 0 

@@ -1,37 +1,190 @@
 #!/bin/sh
 # pre-commit.sh
 
-# Add commands here to run before each commit
-# For example, you might run a linter or formatter
 
 echo "Running pre-commit checks..."
 
-# Example: Run a Python linter (e.g., flake8 or ruff)
-# Ensure you have the linter installed in your environment
-# if command -v ruff >/dev/null 2>&1; then
-#   echo "Running ruff linter..."
-#   ruff check .
-#   if [ $? -ne 0 ]; then
-#     echo "Ruff linter found issues. Commit aborted."
-#     exit 1
-#   fi
-# else
-#   echo "Ruff not found, skipping linting."
-# fi
+# Check if we're in a Python project directory
+if [ ! -f "pyproject.toml" ] && [ ! -f "requirements.txt" ] && [ ! -f "setup.py" ]; then
+    echo "No Python project files found. Skipping Python-specific checks."
+    exit 0
+fi
 
-# Example: Run a Python formatter (e.g., black or ruff format)
-# if command -v ruff >/dev/null 2>&1; then
-#   echo "Running ruff formatter..."
-#   ruff format .
-#   git add . # Add any files formatted by ruff
-#   if [ $? -ne 0 ]; then
-#     echo "Ruff formatter failed. Commit aborted."
-#     exit 1
-#   fi
-# else
-#   echo "Ruff not found, skipping formatting."
-# fi
+# Store the exit code to track if any checks fail
+EXIT_CODE=0
 
+# Function to check if command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Check for changed Python files
+PYTHON_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(py)$')
+
+if [ -z "$PYTHON_FILES" ]; then
+    echo "No Python files to check."
+    exit 0
+fi
+
+echo "Checking Python files: $PYTHON_FILES"
+
+# 1. Python syntax check
+echo "Checking Python syntax..."
+for file in $PYTHON_FILES; do
+    if [ -f "$file" ]; then
+        python -m py_compile "$file"
+        if [ $? -ne 0 ]; then
+            echo "Python syntax error in $file"
+            EXIT_CODE=1
+        fi
+    fi
+done
+
+# 2. Run Black formatter (if available)
+if command_exists black; then
+    echo "Running Black formatter..."
+    black --check --diff $PYTHON_FILES
+    if [ $? -ne 0 ]; then
+        echo "Black formatting issues found. Run 'black .' to fix."
+        echo "Auto-formatting files..."
+        black $PYTHON_FILES
+        git add $PYTHON_FILES
+        echo "Files formatted and re-staged."
+    fi
+else
+    echo "Black not found. Install with: pip install black"
+fi
+
+# 3. Run isort for import sorting (if available)
+if command_exists isort; then
+    echo "Running isort for import sorting..."
+    isort --check-only --diff $PYTHON_FILES
+    if [ $? -ne 0 ]; then
+        echo "Import sorting issues found. Auto-fixing..."
+        isort $PYTHON_FILES
+        git add $PYTHON_FILES
+        echo "Imports sorted and files re-staged."
+    fi
+else
+    echo "isort not found. Install with: pip install isort"
+fi
+
+# 4. Run flake8 linter (if available)
+if command_exists flake8; then
+    echo "Running flake8 linter..."
+    flake8 $PYTHON_FILES
+    if [ $? -ne 0 ]; then
+        echo "Flake8 linting issues found. Please fix them before committing."
+        EXIT_CODE=1
+    fi
+else
+    echo "flake8 not found. Install with: pip install flake8"
+fi
+
+# 5. Run Ruff (if available) - more modern alternative to flake8
+if command_exists ruff; then
+    echo "Running Ruff linter..."
+    ruff check $PYTHON_FILES
+    if [ $? -ne 0 ]; then
+        echo "Ruff linting issues found. Attempting auto-fix..."
+        ruff check --fix $PYTHON_FILES
+        git add $PYTHON_FILES
+        echo "Auto-fixable issues resolved. Please review changes."
+        
+        # Check again for remaining issues
+        ruff check $PYTHON_FILES
+        if [ $? -ne 0 ]; then
+            echo "Some Ruff issues require manual fixing. Please address them."
+            EXIT_CODE=1
+        fi
+    fi
+else
+    echo "Ruff not found. Install with: pip install ruff"
+fi
+
+# 6. Run bandit security linter (if available)
+if command_exists bandit; then
+    echo "Running Bandit security checks..."
+    bandit -r $PYTHON_FILES -f json -o /tmp/bandit_report.json 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "Bandit found potential security issues:"
+        bandit -r $PYTHON_FILES
+        EXIT_CODE=1
+    else
+        echo "No security issues found by Bandit."
+    fi
+else
+    echo "Bandit not found. Install with: pip install bandit"
+fi
+
+# 7. Run mypy type checking (if available and mypy.ini or pyproject.toml with mypy config exists)
+if command_exists mypy; then
+    if [ -f "mypy.ini" ] || grep -q "\[tool.mypy\]" pyproject.toml 2>/dev/null; then
+        echo "Running mypy type checking..."
+        mypy $PYTHON_FILES
+        if [ $? -ne 0 ]; then
+            echo "MyPy type checking found issues. Please review."
+            # Don't fail the commit for type issues, just warn
+            echo "Warning: Type checking issues found, but commit will proceed."
+        fi
+    else
+        echo "MyPy configuration not found. Skipping type checking."
+    fi
+else
+    echo "MyPy not found. Install with: pip install mypy"
+fi
+
+# 8. Run basic tests if test files are being committed
+TEST_FILES=$(echo "$PYTHON_FILES" | grep -E 'test_.*\.py$|.*_test\.py$')
+if [ ! -z "$TEST_FILES" ]; then
+    echo "Test files detected. Running quick test validation..."
+    if command_exists pytest; then
+        # Just validate test files syntax and imports
+        for test_file in $TEST_FILES; do
+            if [ -f "$test_file" ]; then
+                python -c "import ast; ast.parse(open('$test_file').read())"
+                if [ $? -ne 0 ]; then
+                    echo "Test file $test_file has syntax errors."
+                    EXIT_CODE=1
+                fi
+            fi
+        done
+    fi
+fi
+
+# 9. Check for common issues
+echo "Checking for common issues..."
+
+# Check for debugging statements
+DEBUG_PATTERNS="pdb\.set_trace|debugger|print\(.*debug|console\.log"
+if echo "$PYTHON_FILES" | xargs grep -l -E "$DEBUG_PATTERNS" 2>/dev/null; then
+    echo "Warning: Found potential debugging statements. Please review:"
+    echo "$PYTHON_FILES" | xargs grep -n -E "$DEBUG_PATTERNS" 2>/dev/null
+    # Don't fail commit, just warn
+fi
+
+# Check for TODO/FIXME comments in committed code
+TODO_PATTERNS="TODO|FIXME|XXX|HACK"
+TODO_FOUND=$(echo "$PYTHON_FILES" | xargs grep -l -E "$TODO_PATTERNS" 2>/dev/null)
+if [ ! -z "$TODO_FOUND" ]; then
+    echo "Info: Found TODO/FIXME comments in:"
+    echo "$PYTHON_FILES" | xargs grep -n -E "$TODO_PATTERNS" 2>/dev/null
+fi
+
+# Check file sizes (warn if any file is very large)
+for file in $PYTHON_FILES; do
+    if [ -f "$file" ]; then
+        size=$(wc -l < "$file")
+        if [ "$size" -gt 1000 ]; then
+            echo "Warning: $file is quite large ($size lines). Consider refactoring."
+        fi
+    fi
+done
+
+if [ $EXIT_CODE -ne 0 ]; then
+    echo "Pre-commit checks failed. Please fix the issues above before committing."
+    exit $EXIT_CODE
+fi
 
 echo "Pre-commit checks passed."
 exit 0 
