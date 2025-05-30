@@ -340,6 +340,25 @@ class FileBuildToolCaller:
                     },
                     "required": []
                 }
+            },
+            
+            "execute_command": {
+                "function": self.execute_command,
+                "description": "Execute a shell command.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "command": {
+                            "type": "string",
+                            "description": "The command to execute"
+                        },
+                        "working_directory": {
+                            "type": "string",
+                            "description": "The working directory for the command"
+                        }
+                    },
+                    "required": ["command"]
+                }
             }
         }
     
@@ -607,6 +626,27 @@ class FileBuildToolCaller:
             "success": success,
             "result": result,
             "tool": "docker_compose_up"
+        }
+    
+    async def execute_command(
+        self,
+        command: str,
+        working_directory: str = None
+    ) -> Dict[str, Any]:
+        """Execute a shell command."""
+        success, result = await self.executor.execute(
+            "execute_command", 
+            {
+                "command": command,
+                "working_directory": working_directory or "."
+            }, 
+            self.console, 
+            "execute_command"
+        )
+        return {
+            "success": success,
+            "result": result,
+            "tool": "execute_command"
         }
     
     def get_tools_schema(self) -> List[Dict[str, Any]]:

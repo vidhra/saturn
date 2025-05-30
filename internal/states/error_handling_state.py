@@ -3,7 +3,6 @@ import json
 
 from .base_state import BaseState, StateMachineContext
 
-# Import other state classes for transitions
 from .planning_state import PlanningState
 from .failed_state import FailedState
 
@@ -23,11 +22,9 @@ class ErrorHandlingState(BaseState):
         except TypeError:
             print(context.current_errors) # Fallback
 
-        # Check if max retries for planning/execution cycle have been reached
         if context.current_attempt >= context.max_retries:
             print(f"Max attempts ({context.max_retries}) reached. Transitioning to FAILED.")
             return FailedState, context
         else:
             print(f"Attempt {context.current_attempt}/{context.max_retries}. Transitioning back to PLANNING for correction.")
-            # Keep context.current_errors - PlanningState will use them as feedback
             return PlanningState, context 

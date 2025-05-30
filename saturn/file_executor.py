@@ -2,10 +2,7 @@
 import os
 import json
 import asyncio
-import tempfile
-import subprocess
 import shutil
-import re
 import yaml
 import toml
 from datetime import datetime
@@ -15,7 +12,6 @@ from rich.console import Console
 from rich.progress import Progress, TaskID
 from rich.table import Table
 from rich.panel import Panel
-from abc import ABC, abstractmethod
 
 class FileOperationsManager:
     """
@@ -904,6 +900,8 @@ class FileBuildExecutor:
                 return await self._execute_lint_project(params, console)
             elif operation == "detect_project":
                 return await self._execute_detect_project(params, console)
+            elif operation == "execute_command":
+                return await self._execute_command(params, console)
             else:
                 return False, f"Unknown operation: {operation}"
                 
@@ -934,12 +932,16 @@ class FileBuildExecutor:
         
         file_path = params.get('file_path', params.get('path'))
         content = params.get('content')
+        file_content = params.get('file_content')
         format_type = params.get('format', 'auto')
         
-        if not file_path or content is None:
+        # Use file_content if content is None (for backward compatibility)
+        actual_content = content if content is not None else file_content
+        
+        if not file_path or actual_content is None:
             return False, "file_path and content parameters required"
         
-        result = self.file_manager.write_file(file_path, content, format_type)
+        result = self.file_manager.write_file(file_path, actual_content, format_type)
         
         if result["success"]:
             console.print(f"[green]✓ Successfully wrote file: {file_path}[/green]")
@@ -1127,13 +1129,62 @@ class FileBuildExecutor:
         
         return True, result
     
+    async def _execute_command(self, params: Dict[str, Any], console: Console) -> Tuple[bool, Any]:
+        """Execute a custom command."""
+        
+        command = params.get('command')
+        if not command:
+            return False, "command parameter required"
+        
+        try:
+            process = await asyncio.create_subprocess_exec(
+                *command.split(),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                cwd=self.base_path
+            )
+            
+            stdout, stderr = await process.communicate()
+            
+            output = stdout.decode().strip()
+            error = stderr.decode().strip()
+            
+            success = process.returncode == 0
+            
+            if console:
+                if success:
+                    console.print(f"[green]✓ Command completed successfully[/green]")
+                else:
+                    console.print(f"[red]✗ Command failed with exit code {process.returncode}[/red]")
+                
+                if output:
+                    console.print(f"[dim]Output: {output[:200]}{'...' if len(output) > 200 else ''}[/dim]")
+                if error:
+                    console.print(f"[red]Error: {error[:200]}{'...' if len(error) > 200 else ''}[/red]")
+            
+            return success, {
+                "success": success,
+                "output": output,
+                "error": error,
+                "exit_code": process.returncode,
+                "command": command
+            }
+            
+        except Exception as e:
+            return False, {
+                "success": False,
+                "error": f"Command execution failed: {str(e)}",
+                "command": command
+            }
+    
     def get_supported_operations(self) -> List[str]:
         """Get list of supported operations."""
         
         return [
             "read_file", "write_file", "list_files", "copy_file", "template_file",
             "build_docker", "run_docker", "docker_compose", "generate_dockerfile",
-            "build_project", "test_project", "lint_project", "detect_project"
+            "build_project", "test_project", "lint_project", "detect_project",
+            "execute_command"
         ]
     
     def get_operation_schema(self, operation: str) -> Dict[str, Any]:
@@ -1204,6 +1255,11 @@ class FileBuildExecutor:
                 "required": [],
                 "optional": [],
                 "description": "Auto-detect project type"
+            },
+            "execute_command": {
+                "required": ["command"],
+                "optional": [],
+                "description": "Execute a custom command"
             }
         }
         

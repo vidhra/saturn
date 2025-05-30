@@ -34,7 +34,7 @@ from rich.panel import Panel
 
 
 from .config import load_config
-from .orchestrator import run_query_with_feedback 
+from .orchestrator import run_query_with_state_machine 
 from .knowledge_base import KnowledgeBase 
 from .gcp_executor import GcloudExecutor
 from .rag_engine import (
@@ -209,7 +209,7 @@ def run_command(
             console.print(f"[bold yellow]Warning:[/] RAG query engine for '{config['vector_store_choice']}' not ready. Index may need to be ingested first using 'saturn ingest-docs'.")
 
         console.print("--- Starting Orchestrator ---")
-        asyncio.run(run_query_with_feedback(query, config, rag_engine_instance, verbose=verbose))
+        asyncio.run(run_query_with_state_machine(query, config, rag_engine_instance, verbose=verbose))
 
     except Exception as e:
         console.print(f"[bold red]\n--- An unexpected error occurred in 'run' command --- [/bold red]")

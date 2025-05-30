@@ -295,3 +295,13 @@ class KnowledgeBase:
         initial_count = len(self.raw_tools)
         self.raw_tools.extend(external_tools)
         print(f"Merged {len(external_tools)} external tools. Total tools now: {len(self.raw_tools)} (was {initial_count})")
+
+    def is_file_build_tool(self, tool_name: str) -> bool:
+        """Check if a tool is a file/build related tool."""
+        file_build_tool_names = {
+            'read_file', 'write_file', 'list_files', 'copy_file', 'template_file',
+            'detect_project_type', 'build_project', 'test_project', 'lint_project',
+            'generate_dockerfile', 'build_docker_image', 'run_docker_container',
+            'docker_compose_up', 'execute_command'
+        }
+        return tool_name in file_build_tool_names

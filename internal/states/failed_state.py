@@ -13,9 +13,8 @@ class FailedState(BaseState):
             try:
                 print(json.dumps(context.current_errors, indent=2))
             except TypeError:
-                 print(context.current_errors) # Fallback if not JSON serializable
+                 print(context.current_errors)
         else:
             print("No specific errors were recorded, but process terminated in FAILED state.")
         
-        # This is a terminal state
-        return FailedState, context # Return itself and context 
+        return FailedState, context 

@@ -27,33 +27,48 @@ class BaseState(ABC):
     def __repr__(self) -> str:
         return self.__class__.__name__
 
-# Define the context structure here or in a separate file
-# For now, defining it here for simplicity
 class StateMachineContext:
     def __init__(self,
                  original_query: str,
-                 llm_interface: Any, # Replace Any with actual LLM Interface type
-                 gcp_executor: Any,  # Replace Any with actual GCP Executor type
-                 knowledge_base: Any, # Replace Any with actual KB type
+                 llm_interface: Any,
+                 gcp_executor: Any,
+                 aws_executor: Any,
+                 knowledge_base: Any,
                  system_prompt: str,
-                 max_retries: int = 5):
+                 max_retries: int = 5,
+                 console: Optional[Any] = None,
+                 rag_engine: Optional[Any] = None,
+                 state_recorder: Optional[Any] = None,
+                 file_build_executor: Optional[Any] = None):
         self.original_query: str = original_query
         self.llm_interface: Any = llm_interface
         self.gcp_executor: Any = gcp_executor
+        self.aws_executor: Any = aws_executor
         self.knowledge_base: Any = knowledge_base
         self.system_prompt: str = system_prompt
         self.max_retries: int = max_retries
+        self.console: Optional[Any] = console
+        self.rag_engine: Optional[Any] = rag_engine
+        self.state_recorder: Optional[Any] = state_recorder
+        self.file_build_executor: Optional[Any] = file_build_executor
 
-        # State-dependent fields (initialized or updated by states)
         self.current_attempt: int = 0
-        self.dag_definition: Optional[Dict[str, Any]] = None # Or a dedicated DAG class
-        self.node_states: Dict[str, str] = {} # e.g., {'node1': 'PENDING', 'node2': 'READY'}
-        self.node_outputs: Dict[str, Any] = {} # Store results of completed nodes
-        self.current_errors: List[Dict[str, Any]] = [] # Errors from the last execution attempt
-        self.proposed_tool_calls: Optional[List[Dict[str, Any]]] = None # From LLM
-        self.llm_text_response: Optional[str] = None # From LLM
-        self.selected_tools_for_execution: List[Dict[str, Any]] = [] # Tools ready to run
-        self.execution_results: List[Tuple[str, bool, Any]] = [] # [(tool_name, success, result)]
+        
+
+        self.dag: Optional[Any] = None  # AcyclicGraph instance
+        self.step_details_map: Dict[str, Any] = {}  # Step details from planning
+        self.execution_order: List[str] = []  # Topological order of steps
+        self.step_outputs: Dict[str, Any] = {}  # Results from completed steps
+        self.file_tool_names: set = set()  # Set of file build tool names
+        
+        # Legacy state machine fields
+        self.node_states: Dict[str, str] = {} 
+        self.node_outputs: Dict[str, Any] = {} 
+        self.current_errors: List[Dict[str, Any]] = []
+        self.proposed_tool_calls: Optional[List[Dict[str, Any]]] = None
+        self.llm_text_response: Optional[str] = None
+        self.selected_tools_for_execution: List[Dict[str, Any]] = []
+        self.execution_results: List[Tuple[str, bool, Any]] = []
 
     def reset_for_new_attempt(self):
         """Resets fields that should be cleared before a planning/execution cycle."""
@@ -61,8 +76,6 @@ class StateMachineContext:
         self.llm_text_response = None
         self.selected_tools_for_execution = []
         self.execution_results = []
-        # Keep current_errors from the *previous* attempt for feedback
-        # Keep node_states and node_outputs as they represent progress
 
     def increment_attempt(self):
         self.current_attempt += 1 

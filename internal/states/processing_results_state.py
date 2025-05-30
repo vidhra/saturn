@@ -24,7 +24,6 @@ class ProcessingResultsState(BaseState):
                 return CompletedState, context
             else:
                 print("No tools executed, but prior errors existed. Assuming failure to correct.")
-                # Keep existing context.current_errors
                 from .failed_state import FailedState
                 return FailedState, context
 
