@@ -169,41 +169,5 @@ class AWSExecutor:
             
         except Exception as e:
             console.print(f"[bold red]Error executing AWS DAG:[/bold red] {str(e)}")
-            # Include any partial results if an error occurs mid-DAG
             results["dag_execution_error"] = (False, str(e))
             return results
-
-async def main_example():
-    console_instance = Console()
-    aws_config = {
-        'aws_region': 'us-west-2', 
-        'aws_profile': 'my-dev-profile'
-    }
-    executor = AWSExecutor(aws_config)
-
-    success, result = await executor.execute("aws s3 ls", console_instance)
-    if success:
-        console_instance.print("S3 LS Result:", result)
-    else:
-        console_instance.print("S3 LS Error:", result)
-
-    dag_example = {
-        "nodes": {
-            "step1_list_buckets": {
-                "command": "aws s3api list-buckets --query \"Buckets[].Name\"",
-                "description": "List all S3 bucket names.",
-                "dependencies": []
-            },
-            "step2_check_identity": {
-                "command": "aws sts get-caller-identity",
-                "description": "Check current AWS caller identity.",
-                "dependencies": [] # Can run in parallel or before/after step1
-            }
-        },
-        "execution_order": ["step1_list_buckets", "step2_check_identity"]
-    }
-    dag_results = await executor.execute_dag(dag_example, console_instance)
-    console_instance.print("\nAWS DAG Execution Results:", dag_results)
-
-if __name__ == '__main__':
-    asyncio.run(main_example()) 
