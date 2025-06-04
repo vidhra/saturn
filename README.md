@@ -1,9 +1,9 @@
 ![Saturn](https://via.placeholder.com/800x200/1f2937/ffffff?text=Saturn+-+Cloud+AI+Agents)
 
 # Saturn - Smart Assistant for Translating User Requests
-Your AI-powered control for cloud infrastructure.
+Your AI-powered control for any infrastructure.
 
-[Saturn](https://github.com/vidhra/Saturn) is an open source conversational interface that democratizes cloud operations. We specialize in translating natural language into precise cloud API calls, making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
+[Saturn](https://github.com/vidhra/Saturn) is an open source conversational interface that translates into infra operations. We help in translating natural language into precise cloud API calls, making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
 
 ## Getting Started
 - **Quick Start**: Install Saturn and run your first cloud command in minutes with our [installation guide](#setup)
@@ -29,8 +29,8 @@ saturn run "Deploy a load-balanced web application with auto-scaling enabled"
 
 ## 🚀 Key Features
 
-**🤖 Natural Language Processing**: Speak to your cloud infrastructure in plain English  
-**☁️ Multi-Cloud Ready**: Currently supports Google Cloud Platform with AWS support coming soon  
+**🤖 Natural Language Processing**: Speak to your cloud infrastructure 
+**☁️ Multi-Cloud Ready**: Currently supports Google Cloud Platform and AWS with azure support coming soon  
 **🧠 RAG-Powered Intelligence**: Leverages comprehensive cloud documentation for accurate command generation  
 **📊 State Management**: Complete audit trail and state tracking for all operations  
 **🔧 Extensible Architecture**: Easy to add new cloud providers and services  
@@ -44,13 +44,13 @@ Saturn provides a comprehensive toolkit for cloud operations:
 - **saturn ingest-docs**: Build and maintain RAG knowledge bases from cloud documentation
 - **Built-in State Tracking**: Automatic logging and state management for all operations
 - **Multi-Provider Support**: Extensible architecture for different cloud providers
-- **Rich CLI Interface**: Beautiful terminal interface with comprehensive help and options
+- **Rich CLI Interface**: Beautiful terminal interface with help and options
 
 ## Setup
 
 ### Prerequisites
 - Python 3.9 or higher
-- Google Cloud SDK (for GCP operations)
+- Google Cloud SDK and AWS CLI 
 - API keys for your preferred LLM provider (OpenAI, Google Gemini, Anthropic Claude, or Mistral)
 
 ### Quick Installation

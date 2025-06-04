@@ -13,7 +13,7 @@ For each operation, define a step with:
 - "pass_output_to_next": A boolean (true/false) indicating if the output of this step should be passed as context to subsequent steps that depend on it. Default to true if unsure.
 
 If a step requires a file operation (such as reading, writing, or templating a file), set "cloud_provider" to null, "tool_to_use" to the file tool name, and provide "tool_args" matching the tool's schema.
-
+Please make sure to use the correct tool name for the tool_to_use field and dont use any new tool names outside of the ones provided.
 Respond with ONLY a valid JSON list of these step objects. Ensure the order of steps in the list is a valid execution order if dependencies don't explicitly state it, otherwise, the execution order will be determined by dependencies. Ensure all ids are unique.
 
 Example for "Read a config file, then create a GCP VPC, then an AWS S3 bucket":
@@ -122,4 +122,57 @@ Output *only* the corrected aws CLI command. Do not include any explanations, ma
 
 Reference Documentation (AWS CLI - adapt to the specific command needed for the step):
 {aws_docs}
-""".strip() 
+""".strip()
+
+# --- HyDE (Hypothetical Document Embeddings) Prompts ---
+HYDE_GCLOUD_PROMPT_TEMPLATE = """
+You are an expert on Google Cloud Platform (GCP) gcloud CLI documentation. Generate a detailed hypothetical documentation snippet that would answer the following query about gcloud commands.
+
+Query: {query}
+
+Generate documentation that includes:
+- Command syntax and usage
+- Available flags and options
+- Examples with real-world scenarios
+- Common use cases and best practices
+- Error handling and troubleshooting tips
+
+Write as if this is from official gcloud documentation. Be specific and technical. Include code examples and command snippets.
+
+Hypothetical Documentation:
+"""
+
+HYDE_AWS_PROMPT_TEMPLATE = """
+You are an expert on Amazon Web Services (AWS) CLI documentation. Generate a detailed hypothetical documentation snippet that would answer the following query about AWS CLI commands.
+
+Query: {query}
+
+Generate documentation that includes:
+- Command syntax and usage
+- Available parameters and options
+- Examples with real-world scenarios
+- Common use cases and best practices
+- Error handling and troubleshooting tips
+
+Write as if this is from official AWS CLI documentation. Be specific and technical. Include code examples and command snippets.
+
+Hypothetical Documentation:
+"""
+
+HYDE_GENERAL_PROMPT_TEMPLATE = """
+You are an expert on cloud CLI documentation. Generate a detailed hypothetical documentation snippet that would answer the following query about cloud commands.
+
+Query: {query}
+Cloud Provider: {provider}
+
+Generate documentation that includes:
+- Command syntax and usage
+- Available parameters, flags, and options
+- Examples with real-world scenarios
+- Common use cases and best practices
+- Error handling and troubleshooting tips
+
+Write as if this is from official {provider} CLI documentation. Be specific and technical. Include code examples and command snippets.
+
+Hypothetical Documentation:
+"""

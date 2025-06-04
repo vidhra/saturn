@@ -1,31 +1,32 @@
-from typing import  Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from rich.console import Console
 from rich.panel import Panel
 
-from .gcp_executor import GcloudExecutor
-from .aws_executor import AWSExecutor 
-from model.llm.base_interface import BaseLLMInterface
-from model.llm.openai_llm import OpenAILLM
-from model.llm.gemini_llm import GeminiLLM
-from model.llm.claude_llm import ClaudeLLM
-from model.llm.mistral_llm import MistralLLM
-from .rag_engine import RAGEngine
 from internal.state_machine_runner import StateMachineRunner
+from model.llm.base_interface import BaseLLMInterface
+from model.llm.claude_llm import ClaudeLLM
+from model.llm.gemini_llm import GeminiLLM
+from model.llm.mistral_llm import MistralLLM
+from model.llm.openai_llm import OpenAILLM
+
+from .aws_executor import AWSExecutor
+from .gcp_executor import GcloudExecutor
 from .knowledge_base import KnowledgeBase
+from .rag_engine import RAGEngine
 
 console = Console()
 
 
 def get_llm_interface(config: Dict[str, Any]) -> BaseLLMInterface:
-    provider = config.get('llm_provider', 'openai').lower()
-    if provider == 'openai':
+    provider = config.get("llm_provider", "openai").lower()
+    if provider == "openai":
         return OpenAILLM(config)
-    elif provider == 'gemini':
+    elif provider == "gemini":
         return GeminiLLM(config)
-    elif provider == 'claude':
+    elif provider == "claude":
         return ClaudeLLM(config)
-    elif provider == 'mistral':
+    elif provider == "mistral":
         return MistralLLM(config)
     else:
         raise ValueError(f"Unsupported LLM provider: {provider}")
@@ -34,23 +35,31 @@ def get_llm_interface(config: Dict[str, Any]) -> BaseLLMInterface:
 async def run_query_with_state_machine(
     query: str,
     config: Dict[str, Any],
-    rag_engine: RAGEngine, 
-    max_total_attempts: int = 5, 
-    verbose: bool = False
+    rag_engine: RAGEngine,
+    max_total_attempts: int = 5,
+    verbose: bool = False,
 ) -> None:
-    console.print(Panel(f"Processing Query: [cyan]{query}[/cyan]", title="[bold blue]Saturn Orchestrator (State Machine)[/bold blue]", border_style="blue"))
-    
+    console.print(
+        Panel(
+            f"Processing Query: [cyan]{query}[/cyan]",
+            title="[bold blue]Saturn Orchestrator (State Machine)[/bold blue]",
+            border_style="blue",
+        )
+    )
+
     gcp_executor_instance: Optional[GcloudExecutor] = None
     aws_executor_instance: Optional[AWSExecutor] = None
-    
-    if config.get('gcp_project_id'):
+
+    if config.get("gcp_project_id"):
         gcp_executor_instance = GcloudExecutor(config)
         console.print("GCP Executor initialized.")
-    if config.get('aws_region') or config.get('aws_profile'):
+    if config.get("aws_region") or config.get("aws_profile"):
         aws_executor_instance = AWSExecutor(config)
         console.print("AWS Executor initialized.")
     if not gcp_executor_instance and not aws_executor_instance:
-        console.print("[bold red]Error:[/] No cloud executor could be initialized. Check GCP/AWS configurations.")
+        console.print(
+            "[bold red]Error:[/] No cloud executor could be initialized. Check GCP/AWS configurations."
+        )
         return
 
     try:
@@ -61,10 +70,12 @@ async def run_query_with_state_machine(
         return
 
     knowledge_base = KnowledgeBase(
-        api_defs_dir=config.get('api_defs_dir', './internal/api_definitions'),
-        working_directory=config.get('working_directory', '.')
+        api_defs_dir=config.get("api_defs_dir", "./internal/api_definitions"),
+        working_directory=config.get("working_directory", "."),
     )
-    console.print(f"Knowledge Base initialized with {knowledge_base.get_tool_counts()['total_tools']} total tools.")
+    console.print(
+        f"Knowledge Base initialized with {knowledge_base.get_tool_counts()['total_tools']} total tools."
+    )
 
     system_prompt = "You are a cloud infrastructure orchestrator. Generate step-by-step plans for cloud operations and file management tasks."
 
@@ -74,30 +85,36 @@ async def run_query_with_state_machine(
         aws_executor=aws_executor_instance,
         knowledge_base=knowledge_base,
         system_prompt=system_prompt,
-        config={'max_retries': max_total_attempts, 'working_directory': config.get('working_directory', '.')},
+        config={
+            "max_retries": max_total_attempts,
+            "working_directory": config.get("working_directory", "."),
+        },
         console=console,
-        rag_engine=rag_engine
+        rag_engine=rag_engine,
     )
 
     final_context = await runner.process_query(query)
-    
+
     if final_context.current_errors:
-        console.print(f"[bold red]Orchestration completed with {len(final_context.current_errors)} errors.[/bold red]")
+        console.print(
+            f"[bold red]Orchestration completed with {len(final_context.current_errors)} errors.[/bold red]"
+        )
         if verbose:
             for i, error in enumerate(final_context.current_errors):
                 console.print(f"  Error {i+1}: {error}")
     else:
         console.print("[bold green]Orchestration completed successfully![/bold green]")
 
-    console.print(f"Orchestrator finished using state machine approach.")
+    console.print("Orchestrator finished using state machine approach.")
 
 
-# Keep the old orchestrator functions for reference and backward compatibility
 async def run_query_with_feedback(
     query: str,
     config: Dict[str, Any],
-    rag_engine: RAGEngine, 
-    max_total_attempts: int = 5, 
-    verbose: bool = False
+    rag_engine: RAGEngine,
+    max_total_attempts: int = 5,
+    verbose: bool = False,
 ) -> None:
-    await run_query_with_state_machine(query, config, rag_engine, max_total_attempts, verbose) 
+    await run_query_with_state_machine(
+        query, config, rag_engine, max_total_attempts, verbose
+    )
