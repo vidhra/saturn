@@ -393,7 +393,7 @@ class ExecutingState(BaseState):
                 console.print(
                     f"[RAG] Fetching docs for: '{rag_query_for_docs[:100]}...'"
                 )
-            cli_docs_context = context.rag_engine.query_docs(rag_query_for_docs)
+            cli_docs_context = await context.rag_engine.query_docs(rag_query_for_docs)
         elif not context.rag_engine:
             if console:
                 console.print(

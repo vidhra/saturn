@@ -100,7 +100,7 @@ def create_rag_engine_with_reranking(
     return rag_engine
 
 
-def compare_with_without_reranking(query: str, rag_engine: RAGEngine):
+async def compare_with_without_reranking(query: str, rag_engine: RAGEngine):
     """
     Demonstrates the difference between queries with and without reranking.
     """
@@ -110,7 +110,9 @@ def compare_with_without_reranking(query: str, rag_engine: RAGEngine):
 
     if rag_engine.use_llm_rerank:
         console.print("\n[green]🔄 Results WITH LLM Reranking:[/green]")
-        results_with_rerank = rag_engine.query_docs(query, min_similarity_score=0.4)
+        results_with_rerank = await rag_engine.query_docs(
+            query, min_similarity_score=0.4
+        )
         console.print(
             results_with_rerank[:1000] + "..."
             if len(results_with_rerank) > 1000
@@ -119,7 +121,9 @@ def compare_with_without_reranking(query: str, rag_engine: RAGEngine):
 
         rag_engine.update_rerank_settings(use_llm_rerank=False)
         console.print("\n[yellow]📄 Results WITHOUT LLM Reranking:[/yellow]")
-        results_without_rerank = rag_engine.query_docs(query, min_similarity_score=0.4)
+        results_without_rerank = await rag_engine.query_docs(
+            query, min_similarity_score=0.4
+        )
         console.print(
             results_without_rerank[:1000] + "..."
             if len(results_without_rerank) > 1000
@@ -129,11 +133,11 @@ def compare_with_without_reranking(query: str, rag_engine: RAGEngine):
         rag_engine.update_rerank_settings(use_llm_rerank=True)
     else:
         console.print("\n[yellow]📄 Results (Reranking Disabled):[/yellow]")
-        results = rag_engine.query_docs(query, min_similarity_score=0.4)
+        results = await rag_engine.query_docs(query, min_similarity_score=0.4)
         console.print(results[:1000] + "..." if len(results) > 1000 else results)
 
 
-def main():
+async def main():
     """Main example function."""
 
     console.print(
@@ -182,7 +186,7 @@ def main():
             console.print(
                 f"[bold cyan]Test Query {i+1}/{len(test_queries)}[/bold cyan]"
             )
-            compare_with_without_reranking(query, rag_engine)
+            await compare_with_without_reranking(query, rag_engine)
 
             if i < len(test_queries) - 1:
                 input("\nPress Enter to continue to next query...")
@@ -199,7 +203,7 @@ def main():
                 if not user_query:
                     continue
 
-                compare_with_without_reranking(user_query, rag_engine)
+                await compare_with_without_reranking(user_query, rag_engine)
 
             except KeyboardInterrupt:
                 console.print("\n[yellow]Interrupted by user.[/yellow]")
@@ -221,7 +225,7 @@ def main():
         for settings in settings_to_test:
             console.print(f"\n[cyan]Testing with settings: {settings}[/cyan]")
             rag_engine.update_rerank_settings(**settings, similarity_top_k=5)
-            result = rag_engine.query_docs(test_query, min_similarity_score=0.4)
+            result = await rag_engine.query_docs(test_query, min_similarity_score=0.4)
             console.print(result[:500] + "..." if len(result) > 500 else result)
 
     except Exception as e:
@@ -234,4 +238,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+
+    asyncio.run(main())

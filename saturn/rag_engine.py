@@ -10,6 +10,7 @@ from llama_index.core.node_parser.interface import NodeParser
 from llama_index.core.schema import Document, TextNode
 from rich.console import Console
 
+
 try:
     import torch
 except ImportError:
@@ -227,9 +228,17 @@ class CLIContextAwareParser(NodeParser):
     def _extract_metadata_from_text(
         self, text: str, file_path: str = ""
     ) -> Dict[str, Any]:
-        """Extract metadata from CLI documentation text."""
         metadata = {"file_path": file_path}
-
+        command_match = self.command_patterns["command_header"].search(text)
+        service = None
+        if command_match:
+            header_text = command_match.group().strip()
+            parts = header_text.split()
+            if len(parts) > 2:
+                service = parts[1].lower()
+        if not service and "compute" in file_path.lower():
+            service = "compute"
+        metadata["service"] = service
         command_match = self.command_patterns["command_header"].search(text)
         if command_match:
             header_text = command_match.group().strip()
@@ -238,12 +247,10 @@ class CLIContextAwareParser(NodeParser):
             )
             if command_parts:
                 metadata["command"] = command_parts[0].strip()
-
         if "aws" in text.lower() or "aws" in file_path.lower():
             metadata["provider"] = "aws"
         elif "gcloud" in text.lower() or "gcp" in file_path.lower():
             metadata["provider"] = "gcp"
-
         content_types = []
         if self.command_patterns["synopsis_header"].search(text):
             content_types.append("synopsis")
@@ -255,7 +262,6 @@ class CLIContextAwareParser(NodeParser):
             content_types.append("examples")
         if self.command_patterns["subcommand_header"].search(text):
             content_types.append("subcommands")
-
         metadata["content_types"] = content_types
         return metadata
 
@@ -441,6 +447,7 @@ class RAGEngine:
 
     def __init__(
         self,
+        config: Optional[Dict[str, Any]] = None,
         vector_store_choice: str = "default",
         db_config: Optional[Dict[str, Any]] = None,
         embed_model_name: str = DEFAULT_EMBED_MODEL_NAME,
@@ -453,45 +460,17 @@ class RAGEngine:
         chunk_overlap: int = 200,
         preserve_code_blocks: bool = True,
         preserve_command_context: bool = True,
-        # GPU and parallel processing parameters
         device: Optional[str] = None,
-        parallel_process: bool = False,  # Default to False for stability
+        parallel_process: bool = False,
         target_devices: Optional[List[str]] = None,
-        embed_batch_size: int = 32,  # Reduced from 64 for better stability
+        embed_batch_size: int = 32,
         show_progress_bar: bool = False,
         torch_dtype: Optional[str] = None,
-        # HyDE parameters
         use_hyde: bool = False,
         hyde_llm: Optional[LLM] = None,
         hyde_similarity_top_k: int = 10,
     ):
-        """
-        Initializes the RAGEngine, sets up embedding model and vector store client.
-        Optionally loads documents and builds an index if specified (mainly for in-memory or initial setup).
-
-        Args:
-            vector_store_choice (str): "default" (in-memory), "chroma", "duckdb".
-            db_config (Optional[Dict[str, Any]]): Configuration for the chosen database.
-            embed_model_name (str): Name of the embedding model to use.
-            google_api_key (Optional[str]): API key for Gemini embeddings.
-            documents_path_for_init (Optional[str]): Path to documents for initial in-memory index or if build_index_on_init is True.
-            build_index_on_init (bool): If True, attempts to build index from documents_path_for_init.
-            llm_for_settings (Optional[LLM]): An LLM instance for LlamaIndex Settings, or None to disable its LLM.
-            use_context_aware_parsing (bool): Whether to use CLI-specific context-aware text parsing.
-            max_chunk_size (int): Maximum size for text chunks.
-            chunk_overlap (int): Overlap between chunks for context preservation.
-            preserve_code_blocks (bool): Whether to keep code blocks intact.
-            preserve_command_context (bool): Whether to preserve command-related context.
-            device (Optional[str]): Device to run embeddings on ("cuda", "cuda:0", "cpu", "mps", "auto"). If None, auto-detects GPU.
-            parallel_process (bool): Enable multi-process parallel embedding processing. Great for large datasets.
-            target_devices (Optional[List[str]]): List of specific devices for parallel processing, e.g. ["cuda:0", "cuda:1"].
-            embed_batch_size (int): Batch size for embedding processing. Larger values can be faster on GPU.
-            show_progress_bar (bool): Show progress bar during embedding operations.
-            torch_dtype (Optional[str]): PyTorch dtype for model weights ("float16", "bfloat16", "float32"). float16 recommended for GPU.
-            use_hyde (bool): Whether to use HyDE for query enhancement.
-            hyde_llm (Optional[LLM]): LLM instance for HyDE query enhancement.
-            hyde_similarity_top_k (int): Top-k similarity score threshold for HyDE query enhancement.
-        """
+        self.config = config or {}
         self.index: Optional[VectorStoreIndex] = None
         self.query_engine = None
         self.db_config = db_config if db_config else {}
@@ -505,7 +484,6 @@ class RAGEngine:
         self.preserve_code_blocks = preserve_code_blocks
         self.preserve_command_context = preserve_command_context
 
-        # GPU and performance parameters
         self.device = device
         self.parallel_process = parallel_process
         self.target_devices = target_devices
@@ -513,7 +491,6 @@ class RAGEngine:
         self.show_progress_bar = show_progress_bar
         self.torch_dtype = torch_dtype
 
-        # HyDE parameters
         self.use_hyde = use_hyde
         self.hyde_llm = hyde_llm
         self.hyde_similarity_top_k = hyde_similarity_top_k
@@ -676,7 +653,7 @@ class RAGEngine:
                         "model_name": hf_model_name,
                         "embed_batch_size": self.embed_batch_size,
                         "show_progress_bar": self.show_progress_bar,
-                        "parallel_process": False,  # Force disable parallel processing for stability
+                        "parallel_process": False,
                     }
 
                     if self.device == "auto" or self.device is None:
@@ -1049,7 +1026,7 @@ class RAGEngine:
             console.print_exception(show_locals=False)
             return False
 
-    def _generate_hypothetical_doc(
+    async def _generate_hypothetical_doc(
         self, query_text: str, provider: Optional[str] = None
     ) -> Optional[str]:
         """
@@ -1070,9 +1047,19 @@ class RAGEngine:
                 query=query_text, provider=provider or "cloud"
             )
         try:
-            # Synchronous call for now; you can make this async if needed
-            response = llm.complete(prompt) if hasattr(llm, "complete") else llm(prompt)
-            if hasattr(response, "text"):
+            messages = [{"role": "user", "content": prompt}]
+            response = await llm.agenerate(messages)
+            if hasattr(response, "choices") and response.choices:
+                message = (
+                    response.choices[0].message
+                    if hasattr(response.choices[0], "message")
+                    else response.choices[0]
+                )
+                if hasattr(message, "content"):
+                    return message.content.strip()
+                elif hasattr(message, "text"):
+                    return message.text.strip()
+            elif hasattr(response, "text"):
                 return response.text.strip()
             elif isinstance(response, str):
                 return response.strip()
@@ -1082,7 +1069,7 @@ class RAGEngine:
             console.print(f"[RAG Engine] [red]HyDE LLM generation failed:[/red] {e}")
             return None
 
-    def query_docs(
+    async def query_docs(
         self,
         query_text: str,
         min_similarity_score: float = 0.55,
@@ -1105,7 +1092,9 @@ class RAGEngine:
 
         hyde_doc = None
         if self.use_hyde:
-            hyde_doc = self._generate_hypothetical_doc(query_text, provider=provider)
+            hyde_doc = await self._generate_hypothetical_doc(
+                query_text, provider=provider
+            )
             if hyde_doc:
                 console.print(
                     "[RAG Engine] [cyan]Using HyDE-generated hypothetical doc for retrieval.[/cyan]"
@@ -1123,19 +1112,60 @@ class RAGEngine:
             console.print(f"[RAG Engine] [bold red]Error during query:[/] {e}")
             return "Error occurred during RAG query."
 
+        def find_best_service(query, nodes):
+            ql = query.lower()
+            services = set()
+            for n in nodes:
+                s = n.node.metadata.get("service", "")
+                if s:
+                    services.add(s)
+            best = None
+            best_len = 0
+            for s in services:
+                if s and (
+                    f" {s} " in f" {ql} "
+                    or ql.startswith(s + " ")
+                    or ql.endswith(" " + s)
+                    or ql == s
+                ):
+                    if len(s) > best_len:
+                        best = s
+                        best_len = len(s)
+            return best
+
+        target_service = None
+        if hasattr(response, "source_nodes") and response.source_nodes:
+            target_service = find_best_service(query_text, response.source_nodes)
+
         relevant_docs_parts = []
         if hyde_doc:
             relevant_docs_parts.append(
                 "# HyDE Hypothetical Documentation Used for Retrieval\n\n"
-                + hyde_doc
+                + hyde_doc[:100]
                 + "\n\n---\n"
             )
         if hasattr(response, "source_nodes") and response.source_nodes:
             console.print(
                 f"[RAG Engine] Retrieved {len(response.source_nodes)} source nodes."
             )
+            filtered_nodes = response.source_nodes
+            if target_service:
+                filtered_nodes = [
+                    n
+                    for n in response.source_nodes
+                    if n.node.metadata.get("service", "") == target_service
+                ]
+                if filtered_nodes:
+                    console.print(
+                        f"[RAG Engine] Filtered to {len(filtered_nodes)} nodes for service '{target_service}'."
+                    )
+                else:
+                    console.print(
+                        f"[RAG Engine] No nodes matched service '{target_service}', using all nodes."
+                    )
+                    filtered_nodes = response.source_nodes
             nodes_by_command = {}
-            for i, source_node in enumerate(response.source_nodes):
+            for i, source_node in enumerate(filtered_nodes):
                 score = source_node.get_score()
                 text_content = source_node.get_text()
                 metadata = source_node.node.metadata or {}
@@ -1145,6 +1175,9 @@ class RAGEngine:
                 section_title = metadata.get("section_title", "Content")
                 content_types = metadata.get("content_types", [])
                 display_score = f"{score:.2f}" if score is not None else "N/A"
+                console.print(
+                    f"text_content: {text_content[:100]}, score: {score}, min_similarity_score: {min_similarity_score}"
+                )
                 if score is not None and score < min_similarity_score:
                     console.print(
                         f"  [RAG Engine] Node {i+1} from '{file_name}' (command: {command}, section: {section_title}) skipped due to low score ({display_score} < {min_similarity_score})."
@@ -1190,8 +1223,8 @@ class RAGEngine:
                 console.print(
                     "[RAG Engine] No documents met the minimum similarity score."
                 )
-                if response.source_nodes:
-                    top_node = response.source_nodes[0]
+                if filtered_nodes:
+                    top_node = filtered_nodes[0]
                     top_node_text = top_node.get_text()
                     top_node_metadata = top_node.node.metadata or {}
                     command = top_node_metadata.get("command", "Unknown")

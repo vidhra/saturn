@@ -1,4 +1,3 @@
-
 from rich.console import Console
 
 from saturn.rag_engine import (RAGEngine, build_provider_db_config,
@@ -19,7 +18,7 @@ class MockLLM:
 console = Console()
 
 
-def test_hyde_rag():
+async def test_hyde_rag():
     provider = "gcp"
     config = {
         "chroma_db_path": "./db/chroma_db",
@@ -59,11 +58,11 @@ def test_hyde_rag():
 
     query = "How do I create a GCP VPC with custom subnets?"
     console.rule("[bold green]RAG with HyDE (GCP)")
-    result_hyde = rag_engine_hyde.query_docs(query, provider="gcp")
+    result_hyde = await rag_engine_hyde.query_docs(query, provider="gcp")
     console.print(result_hyde)
 
     console.rule("[bold blue]RAG without HyDE (GCP)")
-    result_no_hyde = rag_engine_no_hyde.query_docs(query, provider="gcp")
+    result_no_hyde = await rag_engine_no_hyde.query_docs(query, provider="gcp")
     console.print(result_no_hyde)
 
     # Repeat for AWS
@@ -91,12 +90,16 @@ def test_hyde_rag():
     )
     query_aws = "How do I create an S3 bucket with versioning enabled?"
     console.rule("[bold green]RAG with HyDE (AWS)")
-    result_hyde_aws = rag_engine_hyde_aws.query_docs(query_aws, provider="aws")
+    result_hyde_aws = await rag_engine_hyde_aws.query_docs(query_aws, provider="aws")
     console.print(result_hyde_aws)
     console.rule("[bold blue]RAG without HyDE (AWS)")
-    result_no_hyde_aws = rag_engine_no_hyde_aws.query_docs(query_aws, provider="aws")
+    result_no_hyde_aws = await rag_engine_no_hyde_aws.query_docs(
+        query_aws, provider="aws"
+    )
     console.print(result_no_hyde_aws)
 
 
 if __name__ == "__main__":
-    test_hyde_rag()
+    import asyncio
+
+    asyncio.run(test_hyde_rag())

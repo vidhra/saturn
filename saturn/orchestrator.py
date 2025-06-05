@@ -4,11 +4,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 from internal.state_machine_runner import StateMachineRunner
-from model.llm.base_interface import BaseLLMInterface
-from model.llm.claude_llm import ClaudeLLM
-from model.llm.gemini_llm import GeminiLLM
-from model.llm.mistral_llm import MistralLLM
-from model.llm.openai_llm import OpenAILLM
+from model.llm.base_interface import get_llm_interface
 
 from .aws_executor import AWSExecutor
 from .gcp_executor import GcloudExecutor
@@ -16,20 +12,6 @@ from .knowledge_base import KnowledgeBase
 from .rag_engine import RAGEngine
 
 console = Console()
-
-
-def get_llm_interface(config: Dict[str, Any]) -> BaseLLMInterface:
-    provider = config.get("llm_provider", "openai").lower()
-    if provider == "openai":
-        return OpenAILLM(config)
-    elif provider == "gemini":
-        return GeminiLLM(config)
-    elif provider == "claude":
-        return ClaudeLLM(config)
-    elif provider == "mistral":
-        return MistralLLM(config)
-    else:
-        raise ValueError(f"Unsupported LLM provider: {provider}")
 
 
 async def run_query_with_state_machine(

@@ -304,7 +304,10 @@ def run_command(
         console.print("[Config] GOOGLE_API_KEY will be used for Gemini embeddings.")
 
     try:
+        from model.llm.base_interface import get_llm_interface
+
         rag_engine_instance = RAGEngine(
+            config=APP_CONFIG,
             vector_store_choice=config["vector_store_choice"],
             db_config=config["db_config"],
             embed_model_name=config["rag_embedding_model"],
@@ -316,6 +319,9 @@ def run_command(
             ),
             build_index_on_init=config["rag_build_on_init"],
             llm_for_settings=None,
+            hyde_llm=get_llm_interface(config),
+            hyde_similarity_top_k=5,
+            use_hyde=True,
             device="auto",
             parallel_process=True,
             embed_batch_size=32,
@@ -455,6 +461,7 @@ def ingest_docs_command(
 
     try:
         rag_engine_instance = RAGEngine(
+            config=APP_CONFIG,
             vector_store_choice=vs_choice,
             db_config=(
                 db_configuration if db_configuration else None
@@ -797,6 +804,7 @@ def hybrid_run_command(
         from .rag_engine import RAGEngine
 
         rag_engine_instance = RAGEngine(
+            config=APP_CONFIG,
             vector_store_choice="default",
             embed_model_name="sentence-transformers/all-MiniLM-L6-v2",
             documents_path_for_init=config.get(

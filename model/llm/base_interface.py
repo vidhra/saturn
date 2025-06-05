@@ -1,6 +1,7 @@
 # model/llm/base_interface.py
 import abc
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any, Dict, List
+
 
 class BaseLLMInterface(abc.ABC):
     """Abstract base class for LLM interaction interfaces."""
@@ -12,42 +13,36 @@ class BaseLLMInterface(abc.ABC):
 
     @abc.abstractmethod
     def _validate_config(self):
-        """Validate that necessary configuration (like API keys) is present."""
+        """Validate the configuration."""
         pass
 
     @abc.abstractmethod
     async def agenerate(self, messages: List[Dict[str, str]]) -> Any:
-        """
-        Generate a response from the LLM using the provided messages.
-        
-        Args:
-            messages: List of message dictionaries with 'role' and 'content' keys
-            
-        Returns:
-            The raw response from the LLM
-        """
+        """Generate a response from the LLM."""
         pass
 
-    @abc.abstractmethod
-    async def get_tool_calls(
-        self,
-        query: str,
-        system_prompt: str,
-        tools: List[Dict[str, Any]],
-        previous_errors: Optional[List[Dict[str, Any]]] = None
-    ) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
-        """
-        Sends the request to the LLM and processes the response to extract tool calls.
 
-        Args:
-            query: The user's natural language query.
-            system_prompt: The system prompt guiding the LLM.
-            tools: A list of tool definitions in the format expected by the specific LLM.
-            previous_errors: Optional list of errors from previous attempts for feedback.
+def get_llm_interface(config: Dict[str, Any]) -> BaseLLMInterface:
+    """
+    Factory function to return the appropriate LLM interface based on the provider in config.
+    Imports are local to avoid circular dependencies.
+    """
+    provider = config.get("llm_provider", "openai").lower()
+    if provider == "openai":
+        from .openai_llm import OpenAILLM
 
-        Returns:
-            A tuple containing:
-            - A list of proposed tool calls (e.g., [{"name": "...", "arguments": {...}}]), or None if none proposed or error.
-            - An optional string containing the LLM's text response if no tool calls were made, or None.
-        """
-        pass 
+        return OpenAILLM(config)
+    elif provider == "gemini":
+        from .gemini_llm import GeminiLLM
+
+        return GeminiLLM(config)
+    elif provider == "claude":
+        from .claude_llm import ClaudeLLM
+
+        return ClaudeLLM(config)
+    elif provider == "mistral":
+        from .mistral_llm import MistralLLM
+
+        return MistralLLM(config)
+    else:
+        raise ValueError(f"Unsupported LLM provider: {provider}")
