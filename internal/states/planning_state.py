@@ -39,10 +39,6 @@ class PlanningState(BaseState):
                 [tool["function"]["name"] for tool in file_tool_schemas]
             )
 
-            print(f"Available file tool names: {context.file_tool_names}")
-            print(
-                f"execute_command in file_tool_names: {'execute_command' in context.file_tool_names}"
-            )
 
             # Generate DAG plan using orchestrator logic
             dag, step_details_map = await self._generate_plan_dag(
@@ -146,8 +142,6 @@ class PlanningState(BaseState):
                         f"Expected string content, got {type(content)}. Content: {content}"
                     )
                 raw_plan_str = content.strip()
-                if console:
-                    console.print(f"Raw plan: {raw_plan_str}")
             except Exception as e:
                 if console:
                     console.print(
@@ -266,13 +260,6 @@ class PlanningState(BaseState):
             for step in plan_steps:
                 tool_to_use = step.get("tool_to_use", "")
                 cloud_provider = step.get("cloud_provider")
-                if console:
-                    console.print(
-                        f"[dim]DEBUG: Validating step {step.get('id')} with tool '{tool_to_use}', cloud_provider: {cloud_provider}[/dim]"
-                    )
-                    console.print(
-                        f"[dim]DEBUG: file_tool_names = {file_tool_names}[/dim]"
-                    )
                 if not cloud_provider and tool_to_use in file_tool_names:
                     # File/build step, allow
                     pass

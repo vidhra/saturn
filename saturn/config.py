@@ -1,6 +1,10 @@
 import os
 import yaml
 from typing import Optional, Dict, Any
+from rich.console import Console
+
+console = Console()
+
 
 
 CONFIG_FILE_NAME = "config.yaml"
@@ -105,6 +109,85 @@ def load_config(config_path_override: Optional[str] = None, debug: bool = False)
         
     finally:
         _config_loading = False
+
+
+def vprint(*args, verbose: bool = True, **kwargs):
+    """
+    Verbose-aware print function that only prints when verbose is True.
+    
+    Args:
+        *args: Arguments to pass to console.print
+        verbose: Whether to print or not (default: True for backward compatibility)
+        **kwargs: Keyword arguments to pass to console.print
+    
+    Usage:
+        vprint("This will print", verbose=True)
+        vprint("This won't print", verbose=False)
+        vprint("Default behavior prints", verbose=True)  # default
+    """
+    if verbose:
+        console.print(*args, **kwargs)
+
+def vprint_debug(*args, verbose: bool = True, **kwargs):
+    """
+    Debug-level verbose print with [DEBUG] prefix.
+    
+    Args:
+        *args: Arguments to pass to console.print
+        verbose: Whether to print or not (default: True for backward compatibility)
+        **kwargs: Keyword arguments to pass to console.print
+    
+    Usage:
+        vprint_debug("Debug info", verbose=True)
+    """
+    if verbose:
+        console.print(f"[blue][DEBUG][/blue]", *args, **kwargs)
+
+def vprint_info(*args, verbose: bool = True, **kwargs):
+    """
+    Info-level verbose print with [INFO] prefix.
+    
+    Args:
+        *args: Arguments to pass to console.print
+        verbose: Whether to print or not (default: True for backward compatibility)
+        **kwargs: Keyword arguments to pass to console.print
+    
+    Usage:
+        vprint_info("Information message", verbose=True)
+    """
+    if verbose:
+        console.print(f"[green][INFO][/green]", *args, **kwargs)
+
+def vprint_warn(*args, verbose: bool = True, **kwargs):
+    """
+    Warning-level verbose print with [WARN] prefix.
+    
+    Args:
+        *args: Arguments to pass to console.print
+        verbose: Whether to print or not (default: True for backward compatibility)
+        **kwargs: Keyword arguments to pass to console.print
+    
+    Usage:
+        vprint_warn("Warning message", verbose=True)
+    """
+    if verbose:
+        console.print(f"[yellow][WARN][/yellow]", *args, **kwargs)
+
+def vprint_error(*args, verbose: bool = True, **kwargs):
+    """
+    Error-level verbose print with [ERROR] prefix.
+    
+    Args:
+        *args: Arguments to pass to console.print
+        verbose: Whether to print or not (default: True for backward compatibility)
+        **kwargs: Keyword arguments to pass to console.print
+    
+    Usage:
+        vprint_error("Error message", verbose=True)
+    """
+    if verbose:
+        console.print(f"[red][ERROR][/red]", *args, **kwargs)
+
 
 if __name__ == '__main__':
     print("\n=== Testing Config Loading ===")

@@ -10,6 +10,8 @@ from llama_index.core.node_parser.interface import NodeParser
 from llama_index.core.schema import Document, TextNode
 from rich.console import Console
 
+# Import verbose printing functions from config
+from saturn.config import vprint, vprint_debug, vprint_info, vprint_warn, vprint_error
 
 try:
     import torch
@@ -469,8 +471,10 @@ class RAGEngine:
         use_hyde: bool = False,
         hyde_llm: Optional[LLM] = None,
         hyde_similarity_top_k: int = 10,
+        verbose: bool = True,
     ):
         self.config = config or {}
+        self.verbose = verbose
         self.index: Optional[VectorStoreIndex] = None
         self.query_engine = None
         self.db_config = db_config if db_config else {}
@@ -495,19 +499,13 @@ class RAGEngine:
         self.hyde_llm = hyde_llm
         self.hyde_similarity_top_k = hyde_similarity_top_k
 
-        console.print("[RAG Engine] Initializing RAGEngine.")
-        console.print(f"[RAG Engine] Vector store choice: {self.vector_store_choice}")
-        console.print(
-            f"[RAG Engine] Attempting to use embedding model identifier: {embed_model_name}"
-        )
-        console.print(
-            f"[RAG Engine] Context-aware parsing: {'enabled' if use_context_aware_parsing else 'disabled'}"
-        )
-        console.print(f"[RAG Engine] Device: {device if device else 'auto-detect'}")
-        console.print(
-            f"[RAG Engine] Parallel processing: {'enabled' if parallel_process else 'disabled'}"
-        )
-        console.print(f"[RAG Engine] Batch size: {embed_batch_size}")
+        vprint("[RAG Engine] Initializing RAGEngine.", verbose=self.verbose)
+        vprint_info(f"Vector store choice: {self.vector_store_choice}", verbose=self.verbose)
+        vprint_debug(f"Attempting to use embedding model identifier: {embed_model_name}", verbose=self.verbose)
+        vprint(f"[RAG Engine] Context-aware parsing: {'enabled' if use_context_aware_parsing else 'disabled'}", verbose=self.verbose)
+        vprint(f"[RAG Engine] Device: {device if device else 'auto-detect'}", verbose=self.verbose)
+        vprint(f"[RAG Engine] Parallel processing: {'enabled' if parallel_process else 'disabled'}", verbose=self.verbose)
+        vprint(f"[RAG Engine] Batch size: {embed_batch_size}", verbose=self.verbose)
 
         try:
 
@@ -517,8 +515,9 @@ class RAGEngine:
 
             elif llm_for_settings:
                 Settings.llm = llm_for_settings
-                console.print(
-                    f"[RAG Engine] LlamaIndex Settings.llm configured with provided LLM: {type(llm_for_settings).__name__}"
+                vprint(
+                    f"[RAG Engine] LlamaIndex Settings.llm configured with provided LLM: {type(llm_for_settings).__name__}",
+                    verbose=self.verbose
                 )
             Settings.context_window = DEFAULT_CONTEXT_WINDOW
 
@@ -529,23 +528,26 @@ class RAGEngine:
                     preserve_code_blocks=self.preserve_code_blocks,
                     preserve_command_context=self.preserve_command_context,
                 )
-                console.print(
-                    f"[RAG Engine] Configured CLI context-aware parser (max_chunk_size={self.max_chunk_size})"
+                vprint(
+                    f"[RAG Engine] Configured CLI context-aware parser (max_chunk_size={self.max_chunk_size})",
+                    verbose=self.verbose
                 )
             else:
 
                 Settings.node_parser = SentenceSplitter(
                     chunk_size=self.max_chunk_size, chunk_overlap=self.chunk_overlap
                 )
-                console.print(
-                    f"[RAG Engine] Configured standard sentence splitter (chunk_size={self.max_chunk_size})"
+                vprint(
+                    f"[RAG Engine] Configured standard sentence splitter (chunk_size={self.max_chunk_size})",
+                    verbose=self.verbose
                 )
 
             if not self.use_context_aware_parsing:
                 Settings.chunk_size = self.max_chunk_size
                 Settings.chunk_overlap = self.chunk_overlap
-            console.print(
-                f"[RAG Engine] Set LlamaIndex Settings: context_window={Settings.context_window}, chunk_size={Settings.chunk_size}, chunk_overlap={Settings.chunk_overlap}"
+            vprint(
+                f"[RAG Engine] Set LlamaIndex Settings: context_window={Settings.context_window}, chunk_size={Settings.chunk_size}, chunk_overlap={Settings.chunk_overlap}",
+                verbose=self.verbose
             )
 
             embedding_model_configured = False
@@ -553,16 +555,17 @@ class RAGEngine:
 
             env_key = os.getenv("GOOGLE_API_KEY")
             if env_key:
-                print(f"  - From os.environ: {env_key[:2]}...{env_key[-2:]}")
+                vprint(f"  - From os.environ: {env_key[:2]}...{env_key[-2:]}", verbose=self.verbose)
             else:
-                print("  - From os.environ: None")
+                vprint("  - From os.environ: None", verbose=self.verbose)
 
             if effective_google_api_key:
-                print(
-                    f"  - Effective key chosen: {effective_google_api_key[:2]}...{effective_google_api_key[-2:]}"
+                vprint(
+                    f"  - Effective key chosen: {effective_google_api_key[:2]}...{effective_google_api_key[-2:]}",
+                    verbose=self.verbose
                 )
             else:
-                print("  - Effective key chosen: None")
+                vprint("  - Effective key chosen: None", verbose=self.verbose)
 
             final_google_model_name = embed_model_name
 
@@ -585,63 +588,73 @@ class RAGEngine:
                         console.print(
                             f"[RAG Engine] [yellow]Info:[/] Auto-prefixed Google model name to: {final_google_model_name}"
                         )
-            print(f"embed_model_name: {embed_model_name}")
+            vprint(f"embed_model_name: {embed_model_name}", verbose=self.verbose)
             is_google_model_candidate = final_google_model_name.startswith("models/")
-            print(f"is_google_model_candidate: {is_google_model_candidate}")
-            print(f"final_google_model_name: {final_google_model_name}")
+            vprint(f"is_google_model_candidate: {is_google_model_candidate}", verbose=self.verbose)
+            vprint(f"final_google_model_name: {final_google_model_name}", verbose=self.verbose)
             print(f"starts with local:: {final_google_model_name.startswith('local:')}")
 
             if is_google_model_candidate and not final_google_model_name.startswith(
                 "local:"
             ):
-                console.print(
-                    f"[RAG Engine] Configuring Google (PaLM/Vertex/Gemini) embedding model: {final_google_model_name}"
+                vprint(
+                    f"[RAG Engine] Configuring Google (PaLM/Vertex/Gemini) embedding model: {final_google_model_name}",
+                    verbose=self.verbose
                 )
                 if not effective_google_api_key:
-                    console.print(
-                        "[RAG Engine] [bold red]Error:[/] GOOGLE_API_KEY not provided for Google embeddings."
+                    vprint(
+                        "[RAG Engine] [bold red]Error:[/] GOOGLE_API_KEY not provided for Google embeddings.",
+                        verbose=self.verbose
                     )
-                    console.print(
-                        "[RAG Engine] Please set the GOOGLE_API_KEY environment variable or provide it in config.yaml"
+                    vprint(
+                        "[RAG Engine] Please set the GOOGLE_API_KEY environment variable or provide it in config.yaml",
+                        verbose=self.verbose
                     )
                     return
-                console.print(
-                    f"[RAG Engine Debug] Effective GOOGLE_API_KEY being used: {effective_google_api_key[:5]}...{effective_google_api_key[-4:] if effective_google_api_key and len(effective_google_api_key) > 9 else 'KEY_TOO_SHORT_OR_NONE'}"
+                vprint(
+                    f"[RAG Engine Debug] Effective GOOGLE_API_KEY being used: {effective_google_api_key[:5]}...{effective_google_api_key[-4:] if effective_google_api_key and len(effective_google_api_key) > 9 else 'KEY_TOO_SHORT_OR_NONE'}",
+                    verbose=self.verbose
                 )
                 try:
                     from llama_index.embeddings.google_genai import \
                         GoogleGenAIEmbedding
 
-                    print("[RAG Engine Debug] Creating GoogleGenAIEmbedding with:")
-                    print(f"  - model_name: {final_google_model_name}")
-                    print(
-                        f"  - api_key: {effective_google_api_key[:5]}...{effective_google_api_key[-4:]}"
+                    vprint("[RAG Engine Debug] Creating GoogleGenAIEmbedding with:", verbose=self.verbose)
+                    vprint(f"  - model_name: {final_google_model_name}", verbose=self.verbose)
+                    vprint(
+                        f"  - api_key: {effective_google_api_key[:5]}...{effective_google_api_key[-4:]}",
+                        verbose=self.verbose
                     )
-                    print(f"  - embed_batch_size: {self.embed_batch_size}")
+                    vprint(f"  - embed_batch_size: {self.embed_batch_size}", verbose=self.verbose)
 
                     Settings.embed_model = GoogleGenAIEmbedding(
                         model_name=final_google_model_name,
                         api_key=effective_google_api_key,
                         embed_batch_size=self.embed_batch_size,
                     )
-                    console.print(
-                        f"[RAG Engine] Configured GoogleGenAIEmbedding model: {final_google_model_name} with batch size {self.embed_batch_size}"
+                    vprint(
+                        f"[RAG Engine] Configured GoogleGenAIEmbedding model: {final_google_model_name} with batch size {self.embed_batch_size}",
+                        verbose=self.verbose
                     )
                     embedding_model_configured = True
                 except ImportError:
-                    console.print(
-                        "[RAG Engine] [bold red]Error:[/] `llama-index-embeddings-google-genai` or its dependencies not installed. Please install it."
+                    vprint(
+                        "[RAG Engine] [bold red]Error:[/] `llama-index-embeddings-google-genai` or its dependencies not installed. Please install it.",
+                        verbose=self.verbose
                     )
                 except Exception as e_google_embed:
-                    console.print(
-                        f"[RAG Engine] [bold red]Error initializing GoogleGenAIEmbedding model '{final_google_model_name}':[/] {e_google_embed}"
+                    vprint(
+                        f"[RAG Engine] [bold red]Error initializing GoogleGenAIEmbedding model '{final_google_model_name}':[/] {e_google_embed}",
+                        verbose=self.verbose
                     )
-                    print(
-                        f"[RAG Engine Debug] Full error details: {str(e_google_embed)}"
+                    vprint(
+                        f"[RAG Engine Debug] Full error details: {str(e_google_embed)}",
+                        verbose=self.verbose
                     )
                     if hasattr(e_google_embed, "__cause__"):
-                        print(
-                            f"[RAG Engine Debug] Caused by: {str(e_google_embed.__cause__)}"
+                        vprint(
+                            f"[RAG Engine Debug] Caused by: {str(e_google_embed.__cause__)}",
+                            verbose=self.verbose
                         )
             elif embed_model_name.startswith("local:"):
                 hf_model_name = embed_model_name.split("local:", 1)[1]
@@ -700,8 +713,9 @@ class RAGEngine:
 
                         if model_kwargs:
                             hf_kwargs["model_kwargs"] = model_kwargs
-                            console.print(
-                                f"[RAG Engine] Using torch dtype: {self.torch_dtype}"
+                            vprint(
+                                f"[RAG Engine] Using torch dtype: {self.torch_dtype}",
+                                verbose=self.verbose
                             )
 
                     Settings.embed_model = HuggingFaceEmbedding(**hf_kwargs)
@@ -775,8 +789,9 @@ class RAGEngine:
                     collection_name = self.db_config.get(
                         "chroma_collection_name", DEFAULT_CHROMA_COLLECTION
                     )
-                    console.print(
-                        f"[RAG Engine] ChromaDB path: {chroma_path}, Collection: {collection_name}"
+                    vprint(
+                        f"[RAG Engine] ChromaDB path: {chroma_path}, Collection: {collection_name}",
+                        verbose=self.verbose
                     )
                     os.makedirs(chroma_path, exist_ok=True)
 
@@ -790,16 +805,18 @@ class RAGEngine:
                     )
 
                     if chroma_collection.count() > 0 and not build_index_on_init:
-                        console.print(
-                            "[RAG Engine] Attempting to load index from existing Chroma collection."
+                        vprint(
+                            "[RAG Engine] Attempting to load index from existing Chroma collection.",
+                            verbose=self.verbose
                         )
                         self.index = VectorStoreIndex.from_vector_store(
                             self.vector_store, storage_context=self.storage_context
                         )
                         console.print("[RAG Engine] Index loaded from ChromaDB.")
                 except ImportError:
-                    console.print(
-                        "[RAG Engine] [bold red]Error:[/] ChromaDB deps not found. Fallback to default in-memory."
+                    vprint(
+                        "[RAG Engine] [bold red]Error:[/] ChromaDB deps not found. Fallback to default in-memory.",
+                        verbose=self.verbose
                     )
                     self.vector_store_choice = "default"
                 except Exception as e_chroma:
@@ -824,8 +841,9 @@ class RAGEngine:
                     )
                     os.makedirs(duckdb_dir, exist_ok=True)
                     full_duckdb_path = os.path.join(duckdb_dir, db_file)
-                    console.print(
-                        f"[RAG Engine] DuckDB file: {full_duckdb_path}, Table: {table_name}"
+                    vprint(
+                        f"[RAG Engine] DuckDB file: {full_duckdb_path}, Table: {table_name}",
+                        verbose=self.verbose
                     )
 
                     self.vector_store = DuckDBVectorStore(
@@ -834,21 +852,24 @@ class RAGEngine:
                     self.storage_context = StorageContext.from_defaults(
                         vector_store=self.vector_store
                     )
-                    console.print(
-                        f"[RAG Engine] DuckDB client setup. Table '{table_name}' will be used/created."
+                    vprint(
+                        f"[RAG Engine] DuckDB client setup. Table '{table_name}' will be used/created.",
+                        verbose=self.verbose
                     )
                     if not build_index_on_init:
                         try:
-                            console.print(
-                                "[RAG Engine] Attempting to load index from existing DuckDB table."
+                            vprint(
+                                "[RAG Engine] Attempting to load index from existing DuckDB table.",
+                                verbose=self.verbose
                             )
                             self.index = VectorStoreIndex.from_vector_store(
                                 self.vector_store, storage_context=self.storage_context
                             )
                             console.print("[RAG Engine] Index loaded from DuckDB.")
                         except Exception as e_duck_load_idx:
-                            console.print(
-                                f"[RAG Engine] Index not found or error loading from DuckDB table '{table_name}' ({e_duck_load_idx}). Will build if documents provided."
+                            vprint(
+                                f"[RAG Engine] Index not found or error loading from DuckDB table '{table_name}' ({e_duck_load_idx}). Will build if documents provided.",
+                                verbose=self.verbose
                             )
                 except ImportError:
                     console.print(
@@ -879,12 +900,13 @@ class RAGEngine:
                     similarity_top_k=5, llm=current_llm_setting
                 )
                 console.print(
-                    f"[RAG Engine] Query engine initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'})."
+                    f"[RAG Engine]  Query engine initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'})."
                 )
                 self._is_initialized_properly = True
             else:
                 console.print(
-                    "[RAG Engine] No index available. Query engine not initialized. Use ingest_and_build_index() or check init flags."
+                    "[RAG Engine] No index available. Query engine not initialized. Use ingest_and_build_index() or check init flags.",
+                    verbose=self.verbose
                 )
                 if self.vector_store_choice in ["chroma", "duckdb"]:
                     console.print(
