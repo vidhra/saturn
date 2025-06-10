@@ -121,6 +121,7 @@ class PlanningState(BaseState):
         )
 
         try:
+            print(f"Planning prompt: {planning_prompt}")
             response = await llm_interface.agenerate(
                 [
                     {"role": "system", "content": "You are a planning assistant."},
@@ -264,7 +265,6 @@ class PlanningState(BaseState):
                     # File/build step, allow
                     pass
                 elif not cloud_provider and tool_to_use == "cli_command_generation":
-                    # cli_command_generation without cloud provider is invalid, should use execute_command instead
                     error_msg = f"Step {step.get('id')} uses 'cli_command_generation' without a cloud_provider. For command execution, use 'execute_command' instead."
                     if console:
                         console.print(f"[bold red]Error:[/] {error_msg}")

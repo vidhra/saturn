@@ -245,6 +245,84 @@ class FileOperationsManager:
         with open(path, 'w', encoding='utf-8') as f:
             f.write(content)
 
+    def create_directory(self, directory_path: str, recursive: bool = True) -> Dict[str, Any]:
+        """Create a directory with optional recursive parent creation."""
+        
+        try:
+            full_path = self.base_path / directory_path
+            
+            if full_path.exists():
+                return {
+                    "success": False,
+                    "error": f"Directory already exists: {directory_path}",
+                    "path": str(full_path)
+                }
+            
+            if recursive:
+                full_path.mkdir(parents=True, exist_ok=True)
+            else:
+                full_path.mkdir(exist_ok=True)
+            
+            return {
+                "success": True,
+                "path": str(full_path),
+                "created": datetime.fromtimestamp(full_path.stat().st_mtime).isoformat()
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Error creating directory {directory_path}: {str(e)}",
+                "path": directory_path
+            }
+
+    def edit_file(self, file_path: str, instructions: str, code_edit: str) -> Dict[str, Any]:
+        try:
+            full_path = self.base_path / file_path
+            
+            if not full_path.exists():
+                return {
+                    "success": False,
+                    "error": f"File not found: {file_path}",
+                    "path": str(full_path)
+                }
+            
+            current_content = self.read_file(file_path)
+            if not current_content["success"]:
+                return current_content
+            
+            try:
+                sections = code_edit.split("// ... existing code ...")
+                original_content = current_content["content"]
+                
+                if len(sections) == 1:
+                    new_content = sections[0]
+                else:
+                    new_content = ""
+                    for i, section in enumerate(sections):
+                        if i == 0:
+                            new_content += section
+                        elif i == len(sections) - 1:
+                            new_content += section
+                        else:
+                            new_content += section
+                
+                return self.write_file(file_path, new_content)
+                
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Error processing edit: {str(e)}",
+                    "path": str(full_path)
+                }
+                
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Error editing file {file_path}: {str(e)}",
+                "path": file_path
+            }
+
 class DockerBuilder:
     """
     Comprehensive Docker build and management system.
@@ -902,6 +980,10 @@ class FileBuildExecutor:
                 return await self._execute_detect_project(params, console)
             elif operation == "execute_command":
                 return await self._execute_command(params, console)
+            elif operation == "create_directory":
+                return await self._execute_create_directory(params, console)
+            elif operation == "edit_file":
+                return await self._execute_edit_file(params, console)
             else:
                 return False, f"Unknown operation: {operation}"
                 
@@ -1177,14 +1259,52 @@ class FileBuildExecutor:
                 "command": command
             }
     
+    async def _execute_create_directory(self, params: Dict[str, Any], console: Console) -> Tuple[bool, Any]:
+        """Execute directory creation operation."""
+        
+        directory_path = params.get('directory_path')
+        recursive = params.get('recursive', True)
+        
+        if not directory_path:
+            return False, "directory_path parameter required"
+        
+        result = self.file_manager.create_directory(directory_path, recursive)
+        
+        if result["success"]:
+            console.print(f"[green]✓ Successfully created directory: {directory_path}[/green]")
+        else:
+            console.print(f"[red]✗ Failed to create directory: {result['error']}[/red]")
+        
+        return result["success"], result
+    
+    async def _execute_edit_file(self, params: Dict[str, Any], console: Console) -> Tuple[bool, Any]:
+        """Execute file editing operation."""
+        
+        file_path = params.get('file_path')
+        instructions = params.get('instructions')
+        code_edit = params.get('code_edit')
+        
+        if not file_path or not instructions or not code_edit:
+            return False, "file_path, instructions, and code_edit parameters required"
+        
+        result = self.file_manager.edit_file(file_path, instructions, code_edit)
+        
+        if result["success"]:
+            console.print(f"[green]✓ Successfully edited file: {file_path}[/green]")
+        else:
+            console.print(f"[red]✗ Failed to edit file: {result['error']}[/red]")
+        
+        return result["success"], result
+    
     def get_supported_operations(self) -> List[str]:
         """Get list of supported operations."""
         
         return [
             "read_file", "write_file", "list_files", "copy_file", "template_file",
+            "create_directory",
             "build_docker", "run_docker", "docker_compose", "generate_dockerfile",
             "build_project", "test_project", "lint_project", "detect_project",
-            "execute_command"
+            "execute_command", "edit_file"
         ]
     
     def get_operation_schema(self, operation: str) -> Dict[str, Any]:
@@ -1260,6 +1380,16 @@ class FileBuildExecutor:
                 "required": ["command"],
                 "optional": [],
                 "description": "Execute a custom command"
+            },
+            "create_directory": {
+                "required": ["directory_path"],
+                "optional": ["recursive"],
+                "description": "Create a new directory"
+            },
+            "edit_file": {
+                "required": ["file_path", "instructions", "code_edit"],
+                "optional": [],
+                "description": "Edit a file"
             }
         }
         

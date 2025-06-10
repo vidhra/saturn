@@ -300,6 +300,7 @@ class KnowledgeBase:
         """Check if a tool is a file/build related tool."""
         file_build_tool_names = {
             'read_file', 'write_file', 'list_files', 'copy_file', 'template_file',
+            'create_directory', 'edit_file',
             'detect_project_type', 'build_project', 'test_project', 'lint_project',
             'generate_dockerfile', 'build_docker_image', 'run_docker_container',
             'docker_compose_up', 'execute_command'

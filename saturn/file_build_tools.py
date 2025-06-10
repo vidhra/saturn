@@ -12,11 +12,10 @@ class FileBuildToolCaller:
     """
     
     def __init__(self, working_directory: str = "."):
-        self.executor = FileBuildExecutor({
-            'working_directory': working_directory
-        })
+        self.working_directory = working_directory
+        self.executor = FileBuildExecutor({"working_directory": working_directory})
         self.console = Console()
-        self._tools = self._register_tools()
+        self.tools = self._register_tools()
     
     def _register_tools(self) -> Dict[str, Dict[str, Any]]:
         """Register all available tools with their schemas."""
@@ -359,6 +358,49 @@ class FileBuildToolCaller:
                     },
                     "required": ["command"]
                 }
+            },
+            
+            "create_directory": {
+                "function": self.create_directory,
+                "description": "Create a new directory with optional recursive parent creation.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "directory_path": {
+                            "type": "string",
+                            "description": "Path of the directory to create (relative to working directory)"
+                        },
+                        "recursive": {
+                            "type": "boolean",
+                            "description": "Whether to create parent directories if they don't exist",
+                            "default": True
+                        }
+                    },
+                    "required": ["directory_path"]
+                }
+            },
+            
+            "edit_file": {
+                "function": self.edit_file,
+                "description": "Edit a file using instructions and code edit.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file_path": {
+                            "type": "string",
+                            "description": "Path of the file to edit (relative to working directory)"
+                        },
+                        "instructions": {
+                            "type": "string",
+                            "description": "Instructions describing what changes to make"
+                        },
+                        "code_edit": {
+                            "type": "string",
+                            "description": "The code edit to apply, using // ... existing code ... to indicate unchanged sections"
+                        }
+                    },
+                    "required": ["file_path", "instructions", "code_edit"]
+                }
             }
         }
     
@@ -649,12 +691,39 @@ class FileBuildToolCaller:
             "tool": "execute_command"
         }
     
+    async def create_directory(self, directory_path: str, recursive: bool = True) -> Dict[str, Any]:
+        """Create a new directory."""
+        success, result = await self.executor.execute(
+            "create_directory", 
+            {"directory_path": directory_path, "recursive": recursive}, 
+            self.console, 
+            "create_directory"
+        )
+        return {
+            "success": success,
+            "result": result,
+            "tool": "create_directory"
+        }
+    
+    async def edit_file(self, file_path: str, instructions: str, code_edit: str) -> Dict[str, Any]:
+        success, result = await self.executor.execute(
+            "edit_file", 
+            {"file_path": file_path, "instructions": instructions, "code_edit": code_edit}, 
+            self.console, 
+            "edit_file"
+        )
+        return {
+            "success": success,
+            "result": result,
+            "tool": "edit_file"
+        }
+    
     def get_tools_schema(self) -> List[Dict[str, Any]]:
         """Get OpenAI-compatible tool schema for all available tools."""
         
         tools_schema = []
         
-        for tool_name, tool_info in self._tools.items():
+        for tool_name, tool_info in self.tools.items():
             schema = {
                 "type": "function",
                 "function": {
@@ -670,8 +739,8 @@ class FileBuildToolCaller:
     def get_tool_function(self, tool_name: str) -> Optional[Callable]:
         """Get the actual function for a tool by name."""
         
-        if tool_name in self._tools:
-            return self._tools[tool_name]["function"]
+        if tool_name in self.tools:
+            return self.tools[tool_name]["function"]
         return None
     
     async def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -698,7 +767,7 @@ class FileBuildToolCaller:
     
     def get_available_tools(self) -> List[str]:
         """Get list of all available tool names."""
-        return list(self._tools.keys())
+        return list(self.tools.keys())
 
 
 class FileBuildToolHandler:
