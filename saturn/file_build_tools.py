@@ -1,9 +1,11 @@
 # LLM Tool Calling Interface for File Operations and Build Tools
-import asyncio
 import json
-from typing import Dict, Any, List, Optional, Callable
+from typing import Any, Callable, Dict, List, Optional
+
 from rich.console import Console
+
 from saturn.file_executor import FileBuildExecutor
+
 
 class FileBuildToolCaller:
     """
@@ -765,9 +767,16 @@ class FileBuildToolCaller:
                 "tool": tool_name
             }
     
-    def get_available_tools(self) -> List[str]:
-        """Get list of all available tool names."""
-        return list(self.tools.keys())
+    def get_available_tools(self) -> List[Dict[str, str]]:
+        """Get list of all available tools with their names and descriptions."""
+        return [
+            {
+                "name": tool_name,
+                "description": tool_info["description"],
+                "parameters": tool_info["parameters"]
+            }
+            for tool_name, tool_info in self.tools.items()
+        ]
 
 
 class FileBuildToolHandler:
@@ -845,7 +854,7 @@ class FileBuildToolHandler:
             
             # If a tool fails, decide whether to continue or stop
             if not result["success"]:
-                self.console.print(f"[yellow]Warning: Tool failed but continuing with sequence[/yellow]")
+                self.console.print("[yellow]Warning: Tool failed but continuing with sequence[/yellow]")
         
         return results
 

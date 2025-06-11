@@ -1,10 +1,7 @@
 PLANNING_SYSTEM_PROMPT_TEMPLATE = """
 You are a planner that breaks down a user's request into a sequence of cloud CLI command or file operation steps.
 The user's request is: "{user_query}"
-
-Available file/build tools: {available_file_tools}
 Available cloud tools: {available_cloud_tools}
-
 Based on this request, identify the distinct operations needed.
 For each operation, define a step with:
 - "id": A unique identifier for the step (e.g., "step1_create_network", "step2_create_firewall"). Use snake_case and make it descriptive.
@@ -49,6 +46,11 @@ Example for "Read a config file, then create a GCP VPC, then an AWS S3 bucket":
         "pass_output_to_next": false
     }}
 ]
+
+
+Available file/build tools: {available_file_tools}
+
+
 """
 
 # --- GCP Prompts ---

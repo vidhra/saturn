@@ -179,7 +179,7 @@ class ExecutingState(BaseState):
             tool_to_use = current_step_details.get("tool_to_use")
             cloud_provider = current_step_details.get("cloud_provider")
 
-            if tool_to_use in context.file_tool_names or (
+            if tool_to_use in [tool["name"] for tool in context.file_tools] or (
                 cloud_provider is None or str(cloud_provider).lower() == "none"
             ):
                 step_success, step_result = await self._execute_file_tool_step(

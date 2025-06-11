@@ -1,6 +1,6 @@
 import json
 import traceback
-from typing import Any, Dict, Tuple, Type
+from typing import Any, Dict, List, Tuple, Type
 
 import json_repair
 from rich.table import Table
@@ -34,18 +34,14 @@ class PlanningState(BaseState):
             file_tool_caller = FileBuildToolCaller(
                 context.file_build_executor.config.get("working_directory", ".")
             )
-            file_tool_schemas = file_tool_caller.get_tools_schema()
-            context.file_tool_names = set(
-                [tool["function"]["name"] for tool in file_tool_schemas]
-            )
-
+            context.file_tools = file_tool_caller.get_available_tools()
 
             # Generate DAG plan using orchestrator logic
             dag, step_details_map = await self._generate_plan_dag(
                 context.original_query,
                 context.llm_interface,
                 context.state_recorder,
-                context.file_tool_names,
+                context.file_tools,
                 context.console,
                 attempt_number=attempt,
             )
@@ -93,7 +89,7 @@ class PlanningState(BaseState):
         user_query: str,
         llm_interface,
         state_logger,
-        file_tool_names: set,
+        file_tools: List[Dict[str, Any]],
         console,
         attempt_number: int,
     ) -> Tuple[Any, Dict[str, Any]]:
@@ -108,8 +104,7 @@ class PlanningState(BaseState):
 
         state_logger.record_event("plan_generation_start", {"query": user_query})
 
-        # Create tools list for the prompt
-        available_file_tools = ", ".join(sorted(file_tool_names))
+        available_file_tools = file_tools
         available_cloud_tools = (
             "cli_command_generation (for gcp and aws cloud operations)"
         )
@@ -119,15 +114,15 @@ class PlanningState(BaseState):
             available_file_tools=available_file_tools,
             available_cloud_tools=available_cloud_tools,
         )
-
         try:
-            print(f"Planning prompt: {planning_prompt}")
+
             response = await llm_interface.agenerate(
                 [
                     {"role": "system", "content": "You are a planning assistant."},
                     {"role": "user", "content": planning_prompt},
                 ]
             )
+
             try:
                 choice = response.choices[0]
                 message = getattr(choice, "message", None)
@@ -215,10 +210,9 @@ class PlanningState(BaseState):
                             )
                             tool_to_use = step_data.get("tool_to_use", "")
                             cloud_provider_val = step_data.get("cloud_provider")
-                            if (
-                                not cloud_provider_val
-                                and tool_to_use in file_tool_names
-                            ):
+                            if not cloud_provider_val and tool_to_use in [
+                                tool["name"] for tool in file_tools
+                            ]:
                                 provider_disp = "FILE"
                             elif (
                                 isinstance(cloud_provider_val, str)
@@ -261,7 +255,9 @@ class PlanningState(BaseState):
             for step in plan_steps:
                 tool_to_use = step.get("tool_to_use", "")
                 cloud_provider = step.get("cloud_provider")
-                if not cloud_provider and tool_to_use in file_tool_names:
+                if not cloud_provider and tool_to_use in [
+                    tool["name"] for tool in file_tools
+                ]:
                     # File/build step, allow
                     pass
                 elif not cloud_provider and tool_to_use == "cli_command_generation":
@@ -273,7 +269,9 @@ class PlanningState(BaseState):
                         {"error": error_msg, "plan_steps": plan_steps},
                     )
                     return None, None
-                elif not cloud_provider and tool_to_use not in file_tool_names:
+                elif not cloud_provider and tool_to_use not in [
+                    tool["name"] for tool in file_tools
+                ]:
                     # Invalid file tool name - suggest corrections
                     suggestions = []
                     if "analyze" in tool_to_use or "project" in tool_to_use:
@@ -288,7 +286,7 @@ class PlanningState(BaseState):
                         if suggestions
                         else ""
                     )
-                    error_msg = f"Step {step.get('id')} uses invalid tool '{tool_to_use}'. Available file tools: {', '.join(sorted(file_tool_names))}.{suggestion_text}"
+                    error_msg = f"Step {step.get('id')} uses invalid tool '{tool_to_use}'. Available file tools: {', '.join([tool['name'] for tool in file_tools])}.{suggestion_text}"
                     if console:
                         console.print(f"[bold red]Error:[/] {error_msg}")
                     state_logger.record_event(
@@ -296,7 +294,7 @@ class PlanningState(BaseState):
                         {
                             "error": error_msg,
                             "plan_steps": plan_steps,
-                            "available_tools": list(file_tool_names),
+                            "available_tools": [tool["name"] for tool in file_tools],
                         },
                     )
                     return None, None

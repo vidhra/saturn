@@ -1,15 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Type, Tuple, Optional, List
+from typing import Any, Dict, List, Optional, Tuple, Type
+
 
 # Forward declaration for type hinting cycle
 class StateMachineContext:
     pass
 
+
 class BaseState(ABC):
     """Abstract base class for all states in the state machine."""
 
     @abstractmethod
-    async def run(self, context: 'StateMachineContext') -> Tuple[Type['BaseState'], 'StateMachineContext']:
+    async def run(
+        self, context: "StateMachineContext"
+    ) -> Tuple[Type["BaseState"], "StateMachineContext"]:
         """
         Executes the logic for this state.
 
@@ -27,19 +31,22 @@ class BaseState(ABC):
     def __repr__(self) -> str:
         return self.__class__.__name__
 
+
 class StateMachineContext:
-    def __init__(self,
-                 original_query: str,
-                 llm_interface: Any,
-                 gcp_executor: Any,
-                 aws_executor: Any,
-                 knowledge_base: Any,
-                 system_prompt: str,
-                 max_retries: int = 5,
-                 console: Optional[Any] = None,
-                 rag_engine: Optional[Any] = None,
-                 state_recorder: Optional[Any] = None,
-                 file_build_executor: Optional[Any] = None):
+    def __init__(
+        self,
+        original_query: str,
+        llm_interface: Any,
+        gcp_executor: Any,
+        aws_executor: Any,
+        knowledge_base: Any,
+        system_prompt: str,
+        max_retries: int = 5,
+        console: Optional[Any] = None,
+        rag_engine: Optional[Any] = None,
+        state_recorder: Optional[Any] = None,
+        file_build_executor: Optional[Any] = None,
+    ):
         self.original_query: str = original_query
         self.llm_interface: Any = llm_interface
         self.gcp_executor: Any = gcp_executor
@@ -53,17 +60,16 @@ class StateMachineContext:
         self.file_build_executor: Optional[Any] = file_build_executor
 
         self.current_attempt: int = 0
-        
 
         self.dag: Optional[Any] = None  # AcyclicGraph instance
         self.step_details_map: Dict[str, Any] = {}  # Step details from planning
         self.execution_order: List[str] = []  # Topological order of steps
         self.step_outputs: Dict[str, Any] = {}  # Results from completed steps
-        self.file_tool_names: set = set()  # Set of file build tool names
-        
+        self.file_tools: Dict[str, str] = {}  # Set of file build tool names
+
         # Legacy state machine fields
-        self.node_states: Dict[str, str] = {} 
-        self.node_outputs: Dict[str, Any] = {} 
+        self.node_states: Dict[str, str] = {}
+        self.node_outputs: Dict[str, Any] = {}
         self.current_errors: List[Dict[str, Any]] = []
         self.proposed_tool_calls: Optional[List[Dict[str, Any]]] = None
         self.llm_text_response: Optional[str] = None
@@ -78,4 +84,4 @@ class StateMachineContext:
         self.execution_results = []
 
     def increment_attempt(self):
-        self.current_attempt += 1 
+        self.current_attempt += 1
