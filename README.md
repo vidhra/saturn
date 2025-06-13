@@ -1,4 +1,4 @@
-![Saturn](https://via.placeholder.com/800x200/1f2937/ffffff?text=Saturn+-+Cloud+AI+Agents)
+
 
 # Saturn - Smart Assistant for Translating User Requests
 Your AI-powered control for cloud infrastructure.
