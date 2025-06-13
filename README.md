@@ -1,9 +1,9 @@
 ![Saturn](https://via.placeholder.com/800x200/1f2937/ffffff?text=Saturn+-+Cloud+AI+Agents)
 
 # Saturn - Smart Assistant for Translating User Requests
-Your AI-powered control for any infrastructure.
+Your AI-powered control for cloud infrastructure.
 
-[Saturn](https://github.com/vidhra/Saturn) is an open source conversational interface that translates into infra operations. We help in translating natural language into precise cloud API calls, making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
+[Saturn](https://github.com/vidhra/Saturn) is an open source conversational interface that translates into infra operations. We help in translating natural language into cloud API calls, making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
 
 ## Getting Started
 - **Quick Start**: Install Saturn and run your first cloud command in minutes with our [installation guide](#setup)
@@ -34,7 +34,7 @@ saturn run "Deploy a load-balanced web application with auto-scaling enabled"
 **🧠 RAG-Powered Intelligence**: Leverages comprehensive cloud documentation for accurate command generation  
 **📊 State Management**: Complete audit trail and state tracking for all operations  
 **🔧 Extensible Architecture**: Easy to add new cloud providers and services  
-**⚡ Fast & Reliable**: Built with Python and optimized for production workloads
+**⚡ Fast & Reliable**: Built with Python and trying to optimize for production workloads
 
 ## 🛠️ Saturn Tools
 
@@ -181,7 +181,7 @@ Join our growing community of cloud engineers, DevOps professionals, and develop
 
 We welcome contributions of all kinds:
 
-- **🐛 Bug Reports**: [Create an issue](https://github.com/vidhra/Saturn/issues) for any bugs you encounter
+- **🐛 Bug Reports**: [Create an issue](https://github.com/vidhra/saturn/issues) for any bugs you encounter
 - **💡 Feature Requests**: Share your ideas for new capabilities and integrations
 - **📝 Documentation**: Help improve our docs and examples
 - **🔧 Code Contributions**: Submit pull requests for bug fixes and new features
@@ -191,7 +191,7 @@ We welcome contributions of all kinds:
 
 ```bash
 # Clone and set up development environment
-git clone https://github.com/vidhra/Saturn.git
+git clone https://github.com/vidhra/saturn.git
 cd Saturn
 python -m venv venv
 source venv/bin/activate
@@ -239,12 +239,12 @@ Saturn is released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Support & Contact
 
-- **GitHub Issues**: [Report bugs and request features](https://github.com/vidhra/Saturn/issues)
-- **Email**: [hello@saturn-ai.dev](mailto:hi@vidhra.com) for general inquiries
+- **GitHub Issues**: [Report bugs and request features](https://github.com/vidhra/saturn/issues)
+- **Email**: [root@vidhra.com](root@vidhra.com) for general inquiries
 - **Documentation**: [Coming soon] - Comprehensive docs and tutorials
 
 ---
 
 ⭐ **Star us on GitHub** if Saturn helps streamline your cloud operations!
 
-*Making cloud infrastructure as easy as having a conversation.*
+*Making infrastructure as easy as having a conversation.*
