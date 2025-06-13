@@ -2,11 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 
-# Forward declaration for type hinting cycle
-class StateMachineContext:
-    pass
-
-
 class BaseState(ABC):
     """Abstract base class for all states in the state machine."""
 

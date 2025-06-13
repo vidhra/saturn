@@ -10,8 +10,7 @@ from llama_index.core.node_parser.interface import NodeParser
 from llama_index.core.schema import Document, TextNode
 from rich.console import Console
 
-# Import verbose printing functions from config
-from saturn.config import vprint, vprint_debug, vprint_info, vprint_warn, vprint_error
+from saturn.config import (vprint, vprint_debug, vprint_info)
 
 try:
     import torch

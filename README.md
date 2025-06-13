@@ -57,8 +57,8 @@ Saturn provides a comprehensive toolkit for cloud operations:
 
 1. **Clone and install:**
    ```bash
-   git clone https://github.com/vidhra/Saturn.git
-   cd Saturn
+   git clone https://github.com/vidhra/saturn.git
+   cd saturn
    python -m venv venv
    source venv/bin/activate  # On Windows: .\venv\Scripts\activate
    pip install -e .
