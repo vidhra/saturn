@@ -35,6 +35,8 @@ except ImportError:
 from rich.console import Console
 from rich.panel import Panel
 
+from saturn.textual_chat import SaturnChatApp
+
 from .config import load_config
 from .orchestrator import run_query_with_state_machine
 from .rag_engine import (DEFAULT_CHROMA_COLLECTION, DEFAULT_CHROMA_PATH,
@@ -1109,6 +1111,97 @@ def install_cli_command(
         )
 
 
+@app.command("chat")
+def chat_command(
+    provider: Optional[str] = typer.Option(
+        os.getenv("LLM_PROVIDER") or APP_CONFIG.get("llm_provider", "openai"),
+        help="LLM provider (e.g., openai, gemini, claude, mistral",
+    ),
+    model: Optional[str] = typer.Option(
+        None, help="Specific LLM model name (e.g., gpt-4o). Overrides config."
+    ),
+    project_id: Optional[str] = typer.Option(
+        os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get("gcp_project_id"),
+        "--project-id",
+        help="Google Cloud Project ID. Overrides config/env.",
+    ),
+    creds_path: Optional[str] = typer.Option(
+        os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get("gcp_credentials_path"),
+        "--creds-path",
+        help="Path to GCP service account key file (uses ADC if not provided). Overrides config/env.",
+    ),
+    max_retries: Optional[int] = typer.Option(
+        int(os.getenv("MAX_RETRIES") or APP_CONFIG.get("max_retries", 5)),
+        "--max-retries",
+        help="Max retry attempts for the orchestrator loop.",
+    ),
+    execution_mode: Optional[str] = typer.Option(
+        "manual",
+        "--execution-mode",
+        help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)",
+    ),
+    cloud_provider: Optional[str] = typer.Option(
+        "gcp",
+        "--cloud-provider",
+        help="Cloud provider for RAG database collection: gcp or aws. Defaults to gcp.",
+    ),
+    rag_docs_path: Optional[str] = typer.Option(
+        os.getenv("GCLOUD_DOCS_PATH")
+        or APP_CONFIG.get(
+            "rag_docs_path",
+            os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "internal",
+                "tools",
+                "gcloud_online_docs_markdown",
+            ),
+        ),
+        "--rag-docs-path",
+        help="Path to Markdown documents for RAG.",
+    ),
+    vector_store_cli: Optional[str] = typer.Option(
+        None,
+        "--vector-store",
+        help="Vector store type: default (in-memory), chroma, duckdb. Overrides env and config.yaml.",
+    ),
+    db_path: Optional[str] = typer.Option(
+        None,
+        "--db-path",
+        help="Path for persistent DB (e.g., ./db/chroma_store or ./db/duckdb_store/vector_store.duckdb).",
+    ),
+    db_collection_or_table: Optional[str] = typer.Option(
+        None,
+        "--db-collection-table",
+        help="Collection name (Chroma) or Table name (DuckDB).",
+    ),
+    rag_embed_model: Optional[str] = typer.Option(
+        os.getenv("RAG_EMBED_MODEL")
+        or APP_CONFIG.get("rag_embedding_model", DEFAULT_EMBED_MODEL_NAME),
+        "--rag-embed-model",
+        help="RAG embedding model name.",
+    ),
+    google_api_key_cli: Optional[str] = typer.Option(
+        None,
+        "--google-api-key",
+        help="Google API Key for Gemini Embeddings. Overrides GOOGLE_API_KEY env var.",
+    ),
+    show_env: bool = typer.Option(
+        False, "--show-env", help="Show environment variable status for debugging."
+    ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Enable verbose output, including full exception tracebacks.",
+    ),
+):
+    """
+    Launch the Saturn DevOps Assistant in a Textual TUI chat interface.
+    """
+    SaturnChatApp().run()
+    return
+
+
 if __name__ == "__main__":
-    print("test")
     app()
