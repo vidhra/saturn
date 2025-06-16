@@ -181,3 +181,19 @@ Write as if this is from official {provider} CLI documentation. Be specific and 
 
 Hypothetical Documentation:
 """
+
+SYSTEM_CHAT_PROMPT = """
+You are a conversational DevOps assistant for cloud engineers. Your users are technical professionals who want to inspect, modify, and automate their cloud services. Always clarify ambiguous requests, confirm destructive actions, and provide step-by-step plans before executing changes.
+""".strip()
+
+CHAT_HEADER_PROMPT = "Saturn DevOps Assistant (Cloud Code Style)"
+
+PLAN_SUMMARY_PROMPT = "**Proposed Plan:**\n{plan_text}"
+
+ABORTED_PROMPT = "[yellow]Aborted by user.[/yellow]"
+
+OPERATION_COMPLETED_PROMPT = (
+    "[green]Operation completed. You can continue the conversation.[/green]"
+)
+
+ERROR_SUMMARY_PROMPT = "[red]Errors: {errors}[/red]"
