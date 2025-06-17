@@ -1,183 +1,207 @@
 import asyncio
-from textual.app import App, ComposeResult
-from textual.containers import Vertical, Horizontal
-from textual.widgets import Footer, Input, Static, Markdown, Label, ListView, ListItem
-from textual.widget import Widget
-from textual.reactive import reactive
-from saturn.orchestrator import run_chat_conversational
-from .config import load_config
-from saturn.prompts import CHAT_HEADER_PROMPT
 import sys
-import io
-from textual.scroll_view import ScrollView
-import re
+from typing import AsyncGenerator, Tuple
+import os
+import shutil
+
+from .config import load_config
+from .orchestrator import run_chat_conversational
+from .prompts import SYSTEM_CHAT_PROMPT
 
 APP_CONFIG = load_config()
-USER_ICON = "👤"
-ASSISTANT_ICON = "🤖"
 
-MAX_CHAT_LINES = 15
+# ANSI color codes for terminal output
+COLORS = {
+    'blue': '\033[94m',
+    'green': '\033[92m',
+    'yellow': '\033[93m',
+    'red': '\033[91m',
+    'magenta': '\033[95m',
+    'cyan': '\033[96m',
+    'white': '\033[97m',
+    'bold': '\033[1m',
+    'reset': '\033[0m'
+}
 
-ANSI_ESCAPE_RE = re.compile(r'\x1b\[[0-9;]*[mGKHF]')
-def strip_ansi(text):
-    return ANSI_ESCAPE_RE.sub('', text)
+# Terminal control sequences
+CLEAR_SCREEN = '\033[2J'
+CLEAR_LINE = '\033[K'
+SAVE_CURSOR = '\033[s'
+RESTORE_CURSOR = '\033[u'
+MOVE_TO_BOTTOM = '\033[{};0H'
+HIDE_CURSOR = '\033[?25l'
+SHOW_CURSOR = '\033[?25h'
+MOVE_UP = '\033[A'
 
-class ChatMessageItem(ListItem):
-    def __init__(self, text: str, role: str = "user"):
-        super().__init__()
-        self.text = strip_ansi(text)
+class Message:
+    def __init__(self, text: str, role: str, color: str = 'white', bold: bool = False):
+        self.text = text
         self.role = role
+        self.color = color
+        self.bold = bold
+        
+    def format(self) -> str:
+        color_code = COLORS.get(self.color, '')
+        bold_code = COLORS['bold'] if self.bold else ''
+        return f"{color_code}{bold_code}{self.text}{COLORS['reset']}"
 
-    def compose(self) -> ComposeResult:
-        if self.role == "assistant":
-            bubble = Markdown(self.text, id="assistant-bubble")
-            icon = Label(ASSISTANT_ICON, id="assistant-icon")
-            yield Horizontal(icon, bubble, id="assistant-row")
-        elif self.role == "thinking":
-            yield Static("[italic]Thinking…[/italic]", id="thinking-indicator")
+class TerminalManager:
+    """Manages terminal display and cursor positioning."""
+    
+    def __init__(self):
+        self.terminal_height, self.terminal_width = shutil.get_terminal_size()
+        self.content_height = self.terminal_height - 2  # Reserve 2 lines for input
+        self.messages: list[Message] = []
+        self.input_line = ""
+        self.input_prefix = "👤 You: "
+        
+    def clear_screen(self):
+        """Clear the entire screen."""
+        print(CLEAR_SCREEN, end='')
+        sys.stdout.flush()
+        
+    def update_dimensions(self):
+        """Update terminal dimensions."""
+        self.terminal_height, self.terminal_width = shutil.get_terminal_size()
+        self.content_height = self.terminal_height - 2
+        
+    def add_message(self, text: str, role: str, color: str = 'white', bold: bool = False):
+        """Add a message to the history."""
+        # Split multi-line messages and preserve formatting
+        lines = text.split('\n')
+        for line in lines:
+            if line.strip():  # Only add non-empty lines
+                self.messages.append(Message(line, role, color, bold))
+        self._redraw()
+        
+    def _redraw(self):
+        """Redraw the entire screen."""
+        print(HIDE_CURSOR, end='')  # Hide cursor during redraw
+        self.clear_screen()
+        
+        # Calculate how many messages we can show
+        visible_messages = self.messages[-self.content_height:] if len(self.messages) > self.content_height else self.messages
+        
+        # Print messages
+        for msg in visible_messages:
+            print(msg.format())
+        
+        # Move to input line and show cursor
+        print(MOVE_TO_BOTTOM.format(self.terminal_height - 1), end='')
+        print(CLEAR_LINE, end='')
+        print(f"{COLORS['blue']}{COLORS['bold']}{self.input_prefix}{COLORS['reset']}", end='', flush=True)
+        print(SHOW_CURSOR, end='')  # Show cursor after positioning
+        sys.stdout.flush()
+
+terminal = TerminalManager()
+
+def print_header() -> None:
+    """Print the Saturn chat header."""
+    terminal.add_message("=" * shutil.get_terminal_size().columns, "system", 'cyan')
+    terminal.add_message("Welcome to Saturn!", "system", 'cyan', bold=True)
+    terminal.add_message("Ask, act, plan, search, or chat with your cloud.", "system", 'cyan')
+    terminal.add_message("=" * shutil.get_terminal_size().columns, "system", 'cyan')
+    terminal.add_message("", "system")  # Empty line after header
+
+def print_assistant_message(message: str) -> None:
+    """Print an assistant message with proper formatting."""
+    terminal.add_message("\n🤖 Assistant:", "assistant", 'green', bold=True)
+    # Handle markdown-style formatting
+    for line in message.split('\n'):
+        if line.startswith('**') and line.endswith('**'):
+            terminal.add_message(line.strip('*'), "assistant", 'green', bold=True)
+        elif line.startswith('[') and ']' in line:
+            color = line[1:line.index(']')].lower()
+            text = line[line.index(']')+1:].strip()
+            terminal.add_message(text, "assistant", color)
         else:
-            bubble = Static(self.text, id="user-bubble")
-            icon = Label(USER_ICON, id="user-icon")
-            yield Horizontal(bubble, icon, id="user-row")
+            terminal.add_message(line, "assistant", 'green')
 
-class StdoutCatcher(io.StringIO):
-    def __init__(self, app):
-        super().__init__()
-        self.app = app
-    def write(self, s):
-        if s.strip():
-            self.app.add_message(s.rstrip(), "system")
-        return super().write(s)
-    def flush(self):
-        pass
+def print_user_message(message: str) -> None:
+    """Print a user message with proper formatting."""
+    terminal.add_message(f"{terminal.input_prefix}{message}", "user", 'white')
 
-class SaturnChatApp(App):
-    CSS_PATH = None
-    BINDINGS = [("ctrl+c", "quit", "Quit")]
-    chat_history = reactive([])
-    thinking_item = None
+def print_thinking() -> None:
+    """Print a thinking indicator."""
+    terminal.add_message("\n🤔 Thinking...", "system", 'magenta')
 
-    def compose(self) -> ComposeResult:
-        yield Static(CHAT_HEADER_PROMPT, id="chat-header")
-        yield ScrollView(Vertical(id="chat_transcript"), id="chat_scroll")
-        yield Input(placeholder="Type your cloud query here...", id="chat_input")
-        yield Footer()
+def clear_thinking() -> None:
+    """Clear the thinking indicator."""
+    # Remove the last message if it's the thinking indicator
+    if terminal.messages and "🤔 Thinking..." in terminal.messages[-1].text:
+        terminal.messages.pop()
+        terminal._redraw()
 
-    async def on_mount(self) -> None:
-        self.query_one("#chat_input", Input).focus()
-        self.transcript_vertical = self.query_one("#chat_transcript", Vertical)
-        self.scroll_view = self.query_one("#chat_scroll", ScrollView)
-        self.add_message("Welcome to Saturn Cloud Chat! Ask me anything about your cloud.", "assistant")
-        self.user_input_queue = asyncio.Queue()
-        self.config_for_chat = APP_CONFIG.copy()
-        self.config_for_chat.setdefault("vector_store_choice", "default")
-        self.config_for_chat.setdefault("db_config", {})
-        self.config_for_chat.setdefault("rag_embedding_model", "local:BAAI/bge-small-en-v1.5")
-        self.config_for_chat.setdefault("rag_build_on_init", False)
-        self.config_for_chat.setdefault("rag_docs_path_for_init", None)
-        # Redirect stdout/stderr
-        sys.stdout = StdoutCatcher(self)
-        sys.stderr = StdoutCatcher(self)
-        self.background_task = asyncio.create_task(self.conversation_loop())
-
-    def add_message(self, text, role):
-        item = ChatMessageItem(text, role)
-        self.transcript_vertical.mount(item)
-        self.chat_history.append({"text": text, "role": role})
-        self.scroll_view.scroll_end(animate=False)
-
-    def add_thinking(self):
-        if not self.thinking_item:
-            self.thinking_item = ChatMessageItem("[italic]Thinking…[/italic]", "thinking")
-            self.transcript_vertical.mount(self.thinking_item)
-            self.scroll_view.scroll_end(animate=False)
-
-    def remove_thinking(self):
-        if self.thinking_item and self.thinking_item in self.transcript_vertical.children:
-            self.transcript_vertical.remove(self.thinking_item)
-        self.thinking_item = None
-
-    async def on_input_submitted(self, event: Input.Submitted) -> None:
-        user_text = event.value.strip()
-        if not user_text:
-            return
-        self.add_message(user_text, "user")
-        event.input.value = ""
-        self.add_thinking()
-        await asyncio.sleep(0)  # Yield to event loop so UI updates
-        await self.user_input_queue.put(user_text)
-
-    async def conversation_loop(self):
-        async def user_input_stream():
-            while True:
-                user_input = await self.user_input_queue.get()
-                yield user_input
+async def get_user_input() -> AsyncGenerator[str, None]:
+    """Asynchronously get user input."""
+    while True:
         try:
-            async for role, message in run_chat_conversational(
-                self.config_for_chat, user_input_stream()
-            ):
-                self.remove_thinking()
-                self.add_message(message, role)
+            # Position cursor and show input prefix
+            print(MOVE_TO_BOTTOM.format(terminal.terminal_height - 1), end='')
+            print(CLEAR_LINE, end='')
+            print(f"{COLORS['blue']}{COLORS['bold']}{terminal.input_prefix}{COLORS['reset']}", end='', flush=True)
+            print(SHOW_CURSOR, end='')  # Ensure cursor is visible
+            sys.stdout.flush()
+            
+            user_input = input()
+            print(HIDE_CURSOR, end='')  # Hide cursor during processing
+            
+            if user_input.strip().lower() in {'exit', 'quit', 'bye'}:
+                terminal.add_message("\n👋 Goodbye!", "system", 'cyan', bold=True)
+                break
+            if user_input.strip():
+                terminal.add_message(f"{terminal.input_prefix}{user_input.strip()}", "user", 'white')
+                yield user_input.strip()
+        except (KeyboardInterrupt, EOFError):
+            print(HIDE_CURSOR, end='')
+            terminal.add_message("\n\n👋 Goodbye!", "system", 'cyan', bold=True)
+            break
         except Exception as e:
-            self.remove_thinking()
-            self.add_message(f"[red]Error: {e}[/red]", "assistant")
+            print(HIDE_CURSOR, end='')
+            terminal.add_message(f"\nError reading input: {str(e)}", "system", 'red', bold=True)
+        finally:
+            sys.stdout.flush()
 
-    CSS = '''
-#chat-header {
-    background: #181825;
-    color: #00ff99;
-    padding: 1 2;
-    text-align: center;
-    height: 2;
-    content-align: center middle;
-    border-bottom: solid #333333;
-}
-#assistant-row {
-    align-horizontal: left;
-    margin: 1 0 0 0;
-    padding: 1 0 1 0;
-}
-#assistant-icon {
-    color: #00ff99;
-    padding-right: 1;
-}
-#assistant-bubble {
-    background: #222222;
-    color: #00ff99;
-    border: round #00ff99;
-    padding: 1 2;
-    max-width: 80%;
-}
-#user-row {
-    align-horizontal: right;
-    margin: 1 0 0 0;
-    padding: 1 0 1 0;
-}
-#user-icon {
-    color: #1e90ff;
-    padding-left: 1;
-}
-#user-bubble {
-    background: #1e90ff;
-    color: white;
-    border: round #1e90ff;
-    padding: 1 2;
-    max-width: 80%;
-}
-#thinking-indicator {
-    color: #888888;
-    text-style: italic;
-    padding: 1 2;
-    text-align: left;
-}
-#chat_transcript {
-    padding: 1 0 1 0;
-    min-height: 10;
-    height: 15;
-    max-height: 15;
-    overflow: hidden;
-}
-'''
+class SaturnChatApp:
+    """A simple but elegant command-line chat interface for Saturn."""
+    
+    def __init__(self):
+        self.config = APP_CONFIG.copy()
+        self.config.setdefault("vector_store_choice", "default")
+        self.config.setdefault("db_config", {})
+        self.config.setdefault("rag_embedding_model", "local:BAAI/bge-small-en-v1.5")
+        self.config.setdefault("rag_build_on_init", False)
+        self.config.setdefault("rag_docs_path_for_init", None)
+
+    async def run(self) -> None:
+        """Run the chat application."""
+        try:
+            # Initial setup
+            print(HIDE_CURSOR, end='')
+            terminal.clear_screen()
+            print_header()
+            
+            async for role, message in run_chat_conversational(
+                self.config, get_user_input()
+            ):
+                if role == "user":
+                    print_user_message(message)
+                    print_thinking()
+                else:
+                    clear_thinking()
+                    print_assistant_message(message)
+                    
+        except Exception as e:
+            terminal.add_message(f"\n❌ Error: {str(e)}", "system", 'red', bold=True)
+        finally:
+            # Always ensure cursor is visible when exiting
+            print(SHOW_CURSOR, end='')
+            sys.stdout.flush()
+
+def run():
+    """Entry point for the chat application."""
+    app = SaturnChatApp()
+    asyncio.run(app.run())
 
 if __name__ == "__main__":
-    SaturnChatApp().run()
+    run()

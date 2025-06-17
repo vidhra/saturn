@@ -1196,10 +1196,9 @@ def chat_command(
         help="Enable verbose output, including full exception tracebacks.",
     ),
 ):
-    """
-    Launch the Saturn DevOps Assistant in a Textual TUI chat interface.
-    """
-    SaturnChatApp().run()
+
+    from .textual_chat import run
+    run()
     return
 
 

@@ -904,8 +904,7 @@ class RAGEngine:
                 self._is_initialized_properly = True
             else:
                 console.print(
-                    "[RAG Engine] No index available. Query engine not initialized. Use ingest_and_build_index() or check init flags.",
-                    verbose=self.verbose
+                    "[RAG Engine] No index available. Query engine not initialized. Use ingest_and_build_index() or check init flags."
                 )
                 if self.vector_store_choice in ["chroma", "duckdb"]:
                     console.print(

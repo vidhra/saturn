@@ -141,7 +141,7 @@ async def run_chat_conversational(config, user_input_stream):
             "max_retries": config.get("max_retries", 5),
             "working_directory": config.get("working_directory", "."),
         },
-        console=None,
+        console=console,
         rag_engine=rag_engine_instance,
     )
     transcript = []
