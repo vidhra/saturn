@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, Optional
 
 from rich.console import Console
@@ -145,13 +146,64 @@ async def run_chat_conversational(config, user_input_stream):
         rag_engine=rag_engine_instance,
     )
     transcript = []
+    last_context = None
+
     async for user_input in user_input_stream:
         if user_input.strip().lower() in {"exit", "quit"}:
             yield ("assistant", "[cyan]Goodbye![/cyan]")
             break
+
+        if user_input.strip().lower() == "/trace":
+            if last_context and last_context.state_recorder:
+                # Get execution summary from state recorder
+                summary = last_context.state_recorder.get_dag_summary()
+                events = last_context.state_recorder.run_state_data.get("events", [])
+
+                trace_output = "[bold]Execution Trace:[/bold]\n\n"
+
+                # Add DAG summary
+                trace_output += "[bold cyan]DAG Summary:[/bold cyan]\n"
+                trace_output += f"Total Steps: {summary['total_nodes']}\n"
+                trace_output += f"Dependencies: {summary['total_edges']}\n"
+                trace_output += (
+                    f"Execution Order: {' -> '.join(summary['execution_order'])}\n\n"
+                )
+
+                # Add node states
+                trace_output += "[bold cyan]Step States:[/bold cyan]\n"
+                for node_id, state in summary["node_states"].items():
+                    trace_output += f"• {node_id}: [bold]{state}[/bold]\n"
+
+                # Add event log
+                trace_output += "\n[bold cyan]Event Log:[/bold cyan]\n"
+                for event in events:
+                    timestamp = (
+                        event["timestamp"].split("T")[1].split(".")[0]
+                    )  # Extract time
+                    trace_output += f"[{timestamp}] {event['event_type']}"
+                    if "data" in event:
+                        if "step_id" in event["data"]:
+                            trace_output += f" - Step {event['data']['step_id']}"
+                        if "description" in event["data"]:
+                            trace_output += f": {event['data']['description']}"
+                        if "error" in event["data"]:
+                            trace_output += f"\n  Error: {event['data']['error']}"
+                    trace_output += "\n"
+
+                yield ("assistant", trace_output)
+                continue
+            else:
+                yield (
+                    "assistant",
+                    "[yellow]No execution trace available. Run a command first.[/yellow]",
+                )
+                continue
+
         transcript.append(("user", user_input))
         yield ("user", user_input)
         context = await runner.process_query(user_input)
+        last_context = context
+
         if hasattr(context, "step_details_map") and context.step_details_map:
             plan = [
                 f"{i+1}. {step['description']}"
@@ -161,13 +213,47 @@ async def run_chat_conversational(config, user_input_stream):
             assistant_msg = PLAN_SUMMARY_PROMPT.format(plan_text=plan_text)
             transcript.append(("assistant", assistant_msg))
             yield ("assistant", assistant_msg)
-            # In a real UI, prompt for feedback here
-            # For now, just continue
+
         if context.current_errors:
-            summary = ERROR_SUMMARY_PROMPT.format(errors=context.current_errors)
+            summary = ERROR_SUMMARY_PROMPT.format(
+                errors=json.dumps(context.current_errors, indent=2)
+            )
             transcript.append(("assistant", summary))
             yield ("assistant", summary)
         else:
-            summary = OPERATION_COMPLETED_PROMPT
-            transcript.append(("assistant", summary))
-            yield ("assistant", summary)
+            # Generate operation summary
+            summary_parts = []
+
+            if context.step_outputs:
+                summary_parts.append("[bold cyan]Completed Steps:[/bold cyan]")
+                for step_id, output in context.step_outputs.items():
+                    step_desc = context.step_details_map.get(step_id, {}).get(
+                        "description", "Unknown step"
+                    )
+                    summary_parts.append(f"• {step_desc}")
+                    if isinstance(output, str) and output.strip():
+                        summary_parts.append(f"  Result: {output.strip()}")
+                    elif isinstance(output, dict):
+                        if "result" in output:
+                            summary_parts.append(f"  Result: {output['result']}")
+                        elif "output" in output:
+                            summary_parts.append(f"  Output: {output['output']}")
+                        elif "error" in output:
+                            summary_parts.append(
+                                f"  [yellow]Warning: {output['error']}[/yellow]"
+                            )
+
+            if context.llm_text_response:
+                summary_parts.append(
+                    f"\n[bold cyan]Additional Info:[/bold cyan]\n{context.llm_text_response}"
+                )
+
+            summary = (
+                "\n".join(summary_parts)
+                if summary_parts
+                else "Operation completed with no output."
+            )
+            summary += "\n\n[dim]Use /trace to view detailed execution logs[/dim]"
+            assistant_msg = OPERATION_COMPLETED_PROMPT.format(summary=summary)
+            transcript.append(("assistant", assistant_msg))
+            yield ("assistant", assistant_msg)

@@ -192,8 +192,17 @@ PLAN_SUMMARY_PROMPT = "**Proposed Plan:**\n{plan_text}"
 
 ABORTED_PROMPT = "[yellow]Aborted by user.[/yellow]"
 
-OPERATION_COMPLETED_PROMPT = (
-    "[green]Operation completed. You can continue the conversation.[/green]"
-)
+OPERATION_COMPLETED_PROMPT = """[green]Operation completed successfully![/green]
 
-ERROR_SUMMARY_PROMPT = "[red]Errors: {errors}[/red]"
+[bold]Summary:[/bold]
+{summary}
+
+[dim]Use /trace to view detailed execution logs[/dim]
+"""
+
+ERROR_SUMMARY_PROMPT = """[red]Operation failed![/red]
+
+[bold]Errors:[/bold]
+{errors}
+
+[dim]Use /trace to view detailed execution logs[/dim]"""
