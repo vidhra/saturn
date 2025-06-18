@@ -1,3 +1,5 @@
+import contextlib
+import io
 import json
 from typing import Any, Dict, Optional
 
@@ -105,6 +107,17 @@ async def run_query_with_feedback(
     )
 
 
+async def summarize_history(llm_interface, history):
+    summary_prompt = "Summarize the following conversation, focusing on user goals, assistant plans, results, and feedback:\n\n"
+    for role, message in history:
+        summary_prompt += f"{role}: {message}\n"
+    summary_prompt += "\nSummary:"
+    response = await llm_interface.agenerate(
+        [{"role": "user", "content": summary_prompt}]
+    )
+    return response.choices[0].message.content.strip()
+
+
 async def run_chat_conversational(config, user_input_stream):
     """
     Conversational agent backend for UI frontends (Textual, CLI, etc).
@@ -146,64 +159,42 @@ async def run_chat_conversational(config, user_input_stream):
         rag_engine=rag_engine_instance,
     )
     transcript = []
-    last_context = None
-
+    compressed_context = None
+    last_captured_output = None
+    N = 4
     async for user_input in user_input_stream:
         if user_input.strip().lower() in {"exit", "quit"}:
             yield ("assistant", "[cyan]Goodbye![/cyan]")
             break
-
         if user_input.strip().lower() == "/trace":
-            if last_context and last_context.state_recorder:
-                # Get execution summary from state recorder
-                summary = last_context.state_recorder.get_dag_summary()
-                events = last_context.state_recorder.run_state_data.get("events", [])
-
-                trace_output = "[bold]Execution Trace:[/bold]\n\n"
-
-                # Add DAG summary
-                trace_output += "[bold cyan]DAG Summary:[/bold cyan]\n"
-                trace_output += f"Total Steps: {summary['total_nodes']}\n"
-                trace_output += f"Dependencies: {summary['total_edges']}\n"
-                trace_output += (
-                    f"Execution Order: {' -> '.join(summary['execution_order'])}\n\n"
+            if last_captured_output:
+                yield (
+                    "assistant",
+                    f"[bold]Execution Output:[/bold]\n\n{last_captured_output}",
                 )
-
-                # Add node states
-                trace_output += "[bold cyan]Step States:[/bold cyan]\n"
-                for node_id, state in summary["node_states"].items():
-                    trace_output += f"• {node_id}: [bold]{state}[/bold]\n"
-
-                # Add event log
-                trace_output += "\n[bold cyan]Event Log:[/bold cyan]\n"
-                for event in events:
-                    timestamp = (
-                        event["timestamp"].split("T")[1].split(".")[0]
-                    )  # Extract time
-                    trace_output += f"[{timestamp}] {event['event_type']}"
-                    if "data" in event:
-                        if "step_id" in event["data"]:
-                            trace_output += f" - Step {event['data']['step_id']}"
-                        if "description" in event["data"]:
-                            trace_output += f": {event['data']['description']}"
-                        if "error" in event["data"]:
-                            trace_output += f"\n  Error: {event['data']['error']}"
-                    trace_output += "\n"
-
-                yield ("assistant", trace_output)
-                continue
             else:
                 yield (
                     "assistant",
                     "[yellow]No execution trace available. Run a command first.[/yellow]",
                 )
-                continue
-
+            continue
         transcript.append(("user", user_input))
-        yield ("user", user_input)
-        context = await runner.process_query(user_input)
-        last_context = context
-
+        prompt = []
+        prompt.append({"role": "system", "content": SYSTEM_CHAT_PROMPT})
+        if compressed_context:
+            prompt.append(
+                {
+                    "role": "system",
+                    "content": f"Summary of previous conversation: {compressed_context}",
+                }
+            )
+        for role, message in transcript:
+            prompt.append({"role": role, "content": message})
+        prompt.append({"role": "user", "content": user_input})
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+            context = await runner.process_query(user_input)
+        last_captured_output = buf.getvalue()
         if hasattr(context, "step_details_map") and context.step_details_map:
             plan = [
                 f"{i+1}. {step['description']}"
@@ -213,7 +204,6 @@ async def run_chat_conversational(config, user_input_stream):
             assistant_msg = PLAN_SUMMARY_PROMPT.format(plan_text=plan_text)
             transcript.append(("assistant", assistant_msg))
             yield ("assistant", assistant_msg)
-
         if context.current_errors:
             summary = ERROR_SUMMARY_PROMPT.format(
                 errors=json.dumps(context.current_errors, indent=2)
@@ -221,11 +211,9 @@ async def run_chat_conversational(config, user_input_stream):
             transcript.append(("assistant", summary))
             yield ("assistant", summary)
         else:
-            # Generate operation summary
             summary_parts = []
-
             if context.step_outputs:
-                summary_parts.append("[bold cyan]Completed Steps:[/bold cyan]")
+                summary_parts.append("Completed Steps:")
                 for step_id, output in context.step_outputs.items():
                     step_desc = context.step_details_map.get(step_id, {}).get(
                         "description", "Unknown step"
@@ -242,12 +230,8 @@ async def run_chat_conversational(config, user_input_stream):
                             summary_parts.append(
                                 f"  [yellow]Warning: {output['error']}[/yellow]"
                             )
-
             if context.llm_text_response:
-                summary_parts.append(
-                    f"\n[bold cyan]Additional Info:[/bold cyan]\n{context.llm_text_response}"
-                )
-
+                summary_parts.append(f"\nAdditional Info:\n{context.llm_text_response}")
             summary = (
                 "\n".join(summary_parts)
                 if summary_parts
@@ -257,3 +241,9 @@ async def run_chat_conversational(config, user_input_stream):
             assistant_msg = OPERATION_COMPLETED_PROMPT.format(summary=summary)
             transcript.append(("assistant", assistant_msg))
             yield ("assistant", assistant_msg)
+        if len(transcript) > 2 * N:
+            to_summarize = transcript[:-N]
+            compressed_context = await summarize_history(
+                runner.llm_interface, to_summarize
+            )
+            transcript = transcript[-N:]

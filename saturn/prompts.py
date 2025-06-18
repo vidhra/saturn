@@ -194,7 +194,7 @@ ABORTED_PROMPT = "[yellow]Aborted by user.[/yellow]"
 
 OPERATION_COMPLETED_PROMPT = """[green]Operation completed successfully![/green]
 
-[bold]Summary:[/bold]
+[bold cyan]Summary:[/bold cyan]
 {summary}
 
 [dim]Use /trace to view detailed execution logs[/dim]
