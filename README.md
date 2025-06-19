@@ -5,6 +5,8 @@ Your AI-powered control for cloud infrastructure.
 
 [Saturn](https://github.com/vidhra/Saturn) is an open source conversational interface that translates into infra operations. We help in translating natural language into cloud API calls, making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
 
+![Saturn demo GIF"](./.github/demo.gif)
+
 ## Getting Started
 - **Quick Start**: Install Saturn and run your first cloud command in minutes with our [installation guide](#setup)
 - **Documentation**: Learn everything about Saturn's capabilities in our comprehensive docs
