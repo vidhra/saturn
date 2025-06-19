@@ -131,31 +131,24 @@ def print_header() -> None:
         "Ask, act, plan, search, or chat with your cloud.", "system", "cyan"
     )
     terminal.add_message("=" * shutil.get_terminal_size().columns, "system", "cyan")
-    terminal.add_message("", "system")  # Empty line after header
 
 
 def print_assistant_message(message: str) -> None:
     """Print an assistant message with proper formatting."""
     terminal.add_message("\n🤖 Assistant:", "assistant", "green", bold=True)
     for line in message.split("\n"):
-        # Handle Rich text formatting tags
         if "[" in line and "]" in line:
-            # Process each formatting tag in the line
             while "[" in line and "]" in line:
                 start = line.find("[")
                 end = line.find("]")
                 if start > -1 and end > -1:
                     format_tag = line[start + 1 : end]
-                    # Extract color and style information
                     if format_tag.startswith("/"):
-                        # Skip closing tags as we handle them automatically
                         line = line[:start] + line[end + 1 :]
                     else:
-                        # Handle opening tags
                         parts = format_tag.split()
                         color = parts[0].lower() if parts else "white"
                         is_bold = "bold" in format_tag.lower()
-                        # Remove the tag and get the text up to the next tag or end
                         text = line[end + 1 :]
                         next_tag = text.find("[")
                         if next_tag > -1:
@@ -163,14 +156,12 @@ def print_assistant_message(message: str) -> None:
                             line = line[:start] + text + line[start + next_tag :]
                         else:
                             line = line[:start] + text
-                        # Add the message with proper formatting
                         if text.strip():
                             terminal.add_message(
                                 text.strip(), "assistant", color, is_bold
                             )
                         break
         else:
-            # No formatting tags, use default formatting
             if line.strip():
                 terminal.add_message(line, "assistant", "green")
 
