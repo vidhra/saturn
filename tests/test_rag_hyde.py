@@ -38,7 +38,7 @@ async def test_hyde_rag():
     rag_engine_hyde = RAGEngine(
         vector_store_choice="chroma",
         db_config=db_config,
-        embed_model_name="local:bge-small-en-v1.5",
+        embed_model_name="local:BAAI/bge-small-en-v1.5",
         documents_path_for_init=docs_path,
         build_index_on_init=True,
         use_context_aware_parsing=True,
@@ -49,7 +49,7 @@ async def test_hyde_rag():
     rag_engine_no_hyde = RAGEngine(
         vector_store_choice="chroma",
         db_config=db_config,
-        embed_model_name="local:bge-small-en-v1.5",
+        embed_model_name="local:BAAI/bge-small-en-v1.5",
         documents_path_for_init=docs_path,
         build_index_on_init=True,
         use_context_aware_parsing=True,
@@ -72,7 +72,7 @@ async def test_hyde_rag():
     rag_engine_hyde_aws = RAGEngine(
         vector_store_choice="chroma",
         db_config=db_config_aws,
-        embed_model_name="local:bge-small-en-v1.5",
+        embed_model_name="local:BAAI/bge-small-en-v1.5",
         documents_path_for_init=docs_path_aws,
         build_index_on_init=True,
         use_context_aware_parsing=True,
@@ -82,7 +82,7 @@ async def test_hyde_rag():
     rag_engine_no_hyde_aws = RAGEngine(
         vector_store_choice="chroma",
         db_config=db_config_aws,
-        embed_model_name="local:bge-small-en-v1.5",
+        embed_model_name="local:BAAI/bge-small-en-v1.5",
         documents_path_for_init=docs_path_aws,
         build_index_on_init=True,
         use_context_aware_parsing=True,

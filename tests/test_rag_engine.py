@@ -302,7 +302,7 @@ gcloud compute instances create my-vm --zone=us-central1-a
             return False
 
     async def test_in_memory_rag(
-        self, embed_model: str = "local:BAAI/bge-small-en-v1.5"
+        self, embed_model: str = "BAAI/bge-small-en-v1.5"
     ) -> bool:
         """Test in-memory RAG with HuggingFace embeddings."""
         console.print(f"\n=== Testing In-Memory RAG ({embed_model}) ===")
@@ -414,7 +414,7 @@ gcloud compute instances create my-vm --zone=us-central1-a
             rag_engine = RAGEngine(
                 vector_store_choice="chroma",
                 db_config=chroma_config,
-                embed_model_name="local:BAAI/bge-small-en-v1.5",
+                embed_model_name="BAAI/bge-small-en-v1.5",
                 llm_for_settings=None,
                 use_context_aware_parsing=True,
             )
@@ -472,7 +472,7 @@ gcloud compute instances create my-vm --zone=us-central1-a
             rag_engine = RAGEngine(
                 vector_store_choice="duckdb",
                 db_config=duckdb_config,
-                embed_model_name="local:BAAI/bge-small-en-v1.5",
+                embed_model_name="BAAI/bge-small-en-v1.5",
                 llm_for_settings=None,
                 use_context_aware_parsing=True,
             )
@@ -568,7 +568,7 @@ gcloud compute instances create my-vm --zone=us-central1-a
                 vector_store_choice="default",
                 documents_path_for_init=self.test_docs_dir,
                 build_index_on_init=True,
-                embed_model_name="local:BAAI/bge-small-en-v1.5",
+                embed_model_name="BAAI/bge-small-en-v1.5",
                 llm_for_settings=None,
                 use_context_aware_parsing=True,
             )

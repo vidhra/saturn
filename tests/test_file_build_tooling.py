@@ -13,7 +13,7 @@ from rich.panel import Panel
 import pytest
 
 # Import our new file build executor
-from saturn.file_build_executor import FileBuildExecutor
+from saturn.file_executor import FileBuildExecutor
 
 @pytest.mark.asyncio
 async def test_basic_file_operations():
