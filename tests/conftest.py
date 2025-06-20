@@ -24,6 +24,14 @@ async def mock_gcp_executor():
 
 
 @pytest.fixture
+async def mock_aws_executor():
+    """Mock AWS executor for testing."""
+    mock = AsyncMock()
+    mock.execute_tools.return_value = []
+    return mock
+
+
+@pytest.fixture
 async def mock_knowledge_base():
     """Mock knowledge base for testing."""
     mock = Mock()
@@ -46,12 +54,13 @@ async def mock_knowledge_base():
 
 
 @pytest.fixture
-def sample_context(mock_llm_interface, mock_gcp_executor, mock_knowledge_base):
+def sample_context(mock_llm_interface, mock_gcp_executor, mock_aws_executor, mock_knowledge_base):
     """Create a sample StateMachineContext for testing."""
     return StateMachineContext(
         original_query="Test query",
         llm_interface=mock_llm_interface,
         gcp_executor=mock_gcp_executor,
+        aws_executor=mock_aws_executor,
         knowledge_base=mock_knowledge_base,
         system_prompt="Test system prompt",
         max_retries=3

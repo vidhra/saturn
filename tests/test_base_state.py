@@ -6,12 +6,13 @@ from internal.states.base_state import BaseState, StateMachineContext
 class TestStateMachineContext:
     """Test cases for StateMachineContext class."""
 
-    def test_context_initialization(self, mock_llm_interface, mock_gcp_executor, mock_knowledge_base):
+    def test_context_initialization(self, mock_llm_interface, mock_gcp_executor, mock_aws_executor, mock_knowledge_base):
         """Test that context initializes with correct default values."""
         context = StateMachineContext(
             original_query="test query",
             llm_interface=mock_llm_interface,
             gcp_executor=mock_gcp_executor,
+            aws_executor=mock_aws_executor,
             knowledge_base=mock_knowledge_base,
             system_prompt="test prompt",
             max_retries=5
@@ -20,6 +21,7 @@ class TestStateMachineContext:
         assert context.original_query == "test query"
         assert context.llm_interface == mock_llm_interface
         assert context.gcp_executor == mock_gcp_executor
+        assert context.aws_executor == mock_aws_executor
         assert context.knowledge_base == mock_knowledge_base
         assert context.system_prompt == "test prompt"
         assert context.max_retries == 5
@@ -35,12 +37,13 @@ class TestStateMachineContext:
         assert context.selected_tools_for_execution == []
         assert context.execution_results == []
 
-    def test_context_default_max_retries(self, mock_llm_interface, mock_gcp_executor, mock_knowledge_base):
+    def test_context_default_max_retries(self, mock_llm_interface, mock_gcp_executor, mock_aws_executor, mock_knowledge_base):
         """Test that context uses default max_retries when not specified."""
         context = StateMachineContext(
             original_query="test query",
             llm_interface=mock_llm_interface,
             gcp_executor=mock_gcp_executor,
+            aws_executor=mock_aws_executor,
             knowledge_base=mock_knowledge_base,
             system_prompt="test prompt"
         )
