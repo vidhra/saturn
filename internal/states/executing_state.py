@@ -238,8 +238,9 @@ class ExecutingState(BaseState):
         step_details: Dict[str, Any],
         context: StateMachineContext,
         console,
+        max_attempts: int = 3,
     ) -> Tuple[bool, Any]:
-        """Execute a file build tool step."""
+        """Execute a file build tool step with error feedback and retry."""
         tool_to_use = step_details.get("tool_to_use")
         tool_args = step_details.get("tool_args", {})
 
@@ -252,48 +253,60 @@ class ExecutingState(BaseState):
                 )
             )
 
-        try:
-            result = await context.file_build_executor.execute(
-                tool_to_use, tool_args, console, f"exec_{tool_to_use}"
-            )
-            success = (
-                result[0] if isinstance(result, tuple) else result.get("success", False)
-            )
-            actual_result = result[1] if isinstance(result, tuple) else result
-
-            context.state_recorder.record_node_result(
-                step_id,
-                success,
-                actual_result,
-                "COMPLETED_FILE_TOOL" if success else "FAILED_FILE_TOOL",
-            )
-
-            if not success:
-                error_msg = (
-                    actual_result.get("error", "Unknown error")
-                    if isinstance(actual_result, dict)
-                    else str(actual_result)
-                )
-                if console:
-                    console.print(
-                        f"[bold red]File tool step {step_id} failed: {error_msg}[/bold red]"
-                    )
-                return False, {"error": error_msg, "step_id": step_id}
-            else:
-                if console:
-                    console.print(
-                        f"[green]File tool step {step_id} completed successfully.[/green]"
-                    )
-                return True, actual_result
-
-        except Exception as file_exc:
-            error_msg = f"Exception during file tool step {step_id}: {file_exc}"
+        attempt = 0
+        last_error = None
+        while attempt < max_attempts:
+            attempt += 1
             if console:
-                console.print(f"[bold red]{error_msg}[/bold red]")
-            context.state_recorder.record_node_result(
-                step_id, False, {"error": error_msg}, "FAILED_FILE_TOOL_EXCEPTION"
+                console.print(f"Attempt {attempt}/{max_attempts} for file tool step [cyan]{step_id}[/cyan]")
+            try:
+                result = await context.file_build_executor.execute(
+                    tool_to_use, tool_args, console, f"exec_{tool_to_use}"
+                )
+                success = (
+                    result[0] if isinstance(result, tuple) else result.get("success", False)
+                )
+                actual_result = result[1] if isinstance(result, tuple) else result
+
+                context.state_recorder.record_node_result(
+                    step_id,
+                    success,
+                    actual_result,
+                    "COMPLETED_FILE_TOOL" if success else "FAILED_FILE_TOOL",
+                )
+
+                if success:
+                    if console:
+                        console.print(
+                            f"[green]File tool step {step_id} completed successfully.[/green]"
+                        )
+                    return True, actual_result
+                else:
+                    error_msg = (
+                        actual_result.get("error", "Unknown error")
+                        if isinstance(actual_result, dict)
+                        else str(actual_result)
+                    )
+                    last_error = error_msg
+                    if console:
+                        console.print(
+                            f"[bold red]File tool step {step_id} failed (Attempt {attempt}): {error_msg}[/bold red]"
+                        )
+
+            except Exception as file_exc:
+                last_error = f"Exception during file tool step {step_id}: {file_exc}"
+                if console:
+                    console.print(f"[bold red]{last_error}[/bold red]")
+                context.state_recorder.record_node_result(
+                    step_id, False, {"error": last_error}, "FAILED_FILE_TOOL_EXCEPTION"
+                )
+
+
+        if console:
+            console.print(
+                f"[bold red]File tool step {step_id} failed after {max_attempts} attempts.[/bold red]"
             )
-            return False, {"error": error_msg, "step_id": step_id}
+        return False, {"error": last_error or "Unknown error", "step_id": step_id}
 
     async def _execute_dag_step(
         self,

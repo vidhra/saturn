@@ -1,3 +1,6 @@
+import pytest
+pytestmark = pytest.mark.asyncio
+
 from rich.console import Console
 
 from saturn.rag_engine import (RAGEngine, build_provider_db_config,

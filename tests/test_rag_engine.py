@@ -9,6 +9,9 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
+import pytest
+
+pytestmark = pytest.mark.asyncio
 
 # Load environment variables from .env file
 try:

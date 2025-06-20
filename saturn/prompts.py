@@ -131,55 +131,43 @@ Reference Documentation (AWS CLI - adapt to the specific command needed for the 
 
 # --- HyDE (Hypothetical Document Embeddings) Prompts ---
 HYDE_GCLOUD_PROMPT_TEMPLATE = """
-You are an expert on Google Cloud Platform (GCP) gcloud CLI documentation. Generate a detailed hypothetical documentation snippet that would answer the following query about gcloud commands.
+You are an expert on Google Cloud Platform (GCP) gcloud CLI documentation. Generate a detailed hypothetical command line syntax snippet that would answer the following query about gcloud commands.
 
 Query: {query}
 
 Generate documentation that includes:
-- Command syntax and usage
-- Available flags and options
-- Examples with real-world scenarios
-- Common use cases and best practices
-- Error handling and troubleshooting tips
+- Command syntax 
 
-Write as if this is from official gcloud documentation. Be specific and technical. Include code examples and command snippets.
+Just give the command line syntax for the command and nothing else.
 
-Hypothetical Documentation:
+
 """
 
 HYDE_AWS_PROMPT_TEMPLATE = """
-You are an expert on Amazon Web Services (AWS) CLI documentation. Generate a detailed hypothetical documentation snippet that would answer the following query about AWS CLI commands.
+You are an expert on Amazon Web Services (AWS) CLI documentation. Generate a detailed hypothetical command line syntax snippet that would answer the following query about AWS CLI commands.
 
 Query: {query}
 
 Generate documentation that includes:
-- Command syntax and usage
-- Available parameters and options
-- Examples with real-world scenarios
-- Common use cases and best practices
-- Error handling and troubleshooting tips
+- Command syntax 
 
-Write as if this is from official AWS CLI documentation. Be specific and technical. Include code examples and command snippets.
+Just give the command line syntax for the command and nothing else.
 
-Hypothetical Documentation:
 """
 
 HYDE_GENERAL_PROMPT_TEMPLATE = """
-You are an expert on cloud CLI documentation. Generate a detailed hypothetical documentation snippet that would answer the following query about cloud commands.
+You are an expert on cloud CLI documentation. Generate a detailed hypothetical command line syntax snippet that would answer the following query about cloud commands.
 
 Query: {query}
 Cloud Provider: {provider}
 
+Query: {query}
+
 Generate documentation that includes:
-- Command syntax and usage
-- Available parameters, flags, and options
-- Examples with real-world scenarios
-- Common use cases and best practices
-- Error handling and troubleshooting tips
+- Command syntax 
 
-Write as if this is from official {provider} CLI documentation. Be specific and technical. Include code examples and command snippets.
+Just give the command line syntax for the command and nothing else.
 
-Hypothetical Documentation:
 """
 
 SYSTEM_CHAT_PROMPT = """

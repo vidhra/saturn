@@ -8,6 +8,8 @@ import os
 import asyncio
 from typing import Dict, Any
 from pathlib import Path
+import pytest
+from unittest.mock import AsyncMock
 
 # Load environment variables from .env file
 try:
@@ -45,6 +47,16 @@ from model.llm.gemini_llm import GeminiLLM
 from model.llm.mistral_llm import MistralLLM
 from model.llm.base_interface import BaseLLMInterface
 
+@pytest.fixture
+def llm_interface():
+    mock = AsyncMock()
+    mock.agenerate.return_value = AsyncMock(choices=[AsyncMock(message=AsyncMock(content="mocked response"))])
+    mock.get_tool_calls.return_value = ([], "mocked tool call response")
+    return mock
+
+@pytest.fixture
+def provider_config():
+    return {"llm_provider": "openai", "openai_api_key": "sk-test"}
 
 async def test_llm_agenerate(llm_interface: BaseLLMInterface, provider_name: str) -> bool:
     """Test the agenerate method of an LLM interface."""
@@ -129,6 +141,7 @@ async def test_llm_tool_calls(llm_interface: BaseLLMInterface, provider_name: st
         return False
 
 
+@pytest.mark.asyncio
 async def test_provider(provider_config: Dict[str, Any], provider_name: str, llm_class) -> Dict[str, bool]:
     """Test a specific LLM provider."""
     print(f"\n{'='*50}")

@@ -962,7 +962,7 @@ class FileBuildExecutor:
                 return await self._execute_copy_file(params, console)
             elif operation == "template_file":
                 return await self._execute_template_file(params, console)
-            elif operation == "build_docker":
+            elif operation in ["build_docker", "build_docker_image"]:
                 return await self._execute_build_docker(params, console)
             elif operation == "run_docker":
                 return await self._execute_run_docker(params, console)

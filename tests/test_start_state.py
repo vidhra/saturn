@@ -1,5 +1,5 @@
-
 import pytest
+pytestmark = pytest.mark.asyncio
 
 from internal.states.planning_state import PlanningState
 from internal.states.start_state import StartState

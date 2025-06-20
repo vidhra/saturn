@@ -1,5 +1,7 @@
 import unittest
 from internal.dag.dag import AcyclicGraph, BasicEdge, Counter, MODE_DEPTH_FIRST, ORDER_DOWN, ORDER_UP
+import pytest
+pytestmark = pytest.mark.asyncio
 
 class TestAcyclicGraph(unittest.TestCase):
 
