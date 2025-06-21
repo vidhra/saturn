@@ -125,12 +125,30 @@ terminal = TerminalManager()
 
 def print_header() -> None:
     """Print the Saturn chat header."""
-    terminal.add_message("=" * shutil.get_terminal_size().columns, "system", "cyan")
-    terminal.add_message("Welcome to Saturn!", "system", "cyan", bold=True)
+    terminal_width = shutil.get_terminal_size().columns
+    saturn_art = """
+████████████████████████████████████████
+█─▄▄▄▄██▀▄─██─▄─▄─█▄─██─▄█▄─▄▄▀█▄─▀█▄─▄█
+█▄▄▄▄─██─▀─████─████─██─███─▄─▄██─█▄▀─██
+▀▄▄▄▄▄▀▄▄▀▄▄▀▀▄▄▄▀▀▀▄▄▄▄▀▀▄▄▀▄▄▀▄▄▄▀▀▄▄▀
+""".strip().split('\n')
+
+    terminal.add_message("=" * terminal_width, "system", "cyan")
+
+    for line in saturn_art:
+        terminal.add_message(line.center(terminal_width), "system", "yellow")
+
+    terminal.add_message(" ", "system", "white")  # Adds a blank line
+
+    welcome_message = "Welcome to Saturn!"
     terminal.add_message(
-        "Ask, act, plan, search, or chat with your cloud.", "system", "cyan"
+        welcome_message.center(terminal_width), "system", "cyan", bold=True
     )
-    terminal.add_message("=" * shutil.get_terminal_size().columns, "system", "cyan")
+
+    tagline = "Ask, act, plan, search, or chat with your cloud."
+    terminal.add_message(tagline.center(terminal_width), "system", "cyan")
+
+    terminal.add_message("=" * terminal_width, "system", "cyan")
 
 
 def print_assistant_message(message: str) -> None:
