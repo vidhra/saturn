@@ -19,6 +19,7 @@ class StateMachineRunner:
         config: Optional[Dict[str, Any]] = None,
         console: Optional[Any] = None,
         rag_engine: Optional[Any] = None,
+        mcp_integrator: Optional[Any] = None,
     ):
         """Initializes the runner with necessary components."""
         self.llm_interface = llm_interface
@@ -30,6 +31,7 @@ class StateMachineRunner:
         self.max_retries = self.config.get("max_retries", 5)
         self.console = console
         self.rag_engine = rag_engine
+        self.mcp_integrator = mcp_integrator
 
     async def process_query(self, query: str) -> StateMachineContext:
         """
@@ -65,6 +67,7 @@ class StateMachineRunner:
             rag_engine=self.rag_engine,
             state_recorder=state_recorder,
             file_build_executor=file_build_executor,
+            mcp_integrator=self.mcp_integrator,
         )
 
         current_state_class = StartState

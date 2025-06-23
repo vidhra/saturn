@@ -15,6 +15,7 @@ from .aws_executor import AWSExecutor
 from .gcp_executor import GcloudExecutor
 from .knowledge_base import KnowledgeBase
 from .rag_engine import RAGEngine
+from .mcp_integration import MCPToolIntegrator
 
 console = Console()
 
@@ -64,6 +65,17 @@ async def run_query_with_state_machine(
         f"Knowledge Base initialized with {knowledge_base.get_tool_counts()['total_tools']} total tools."
     )
 
+
+    mcp_integrator = None
+    if config.get("mcp_enabled", False):
+        try:
+            mcp_integrator = MCPToolIntegrator(config.get("working_directory", "."))
+            await mcp_integrator.initialize()
+            console.print(f"MCP Integration initialized with {mcp_integrator.get_tools_summary()['mcp_tools']} MCP tools.")
+        except Exception as e:
+            console.print(f"[yellow]Warning: MCP integration failed: {e}[/yellow]")
+            mcp_integrator = None
+
     system_prompt = "You are a cloud infrastructure orchestrator. Generate step-by-step plans for cloud operations and file management tasks."
 
     runner = StateMachineRunner(
@@ -78,6 +90,7 @@ async def run_query_with_state_machine(
         },
         console=console,
         rag_engine=rag_engine,
+        mcp_integrator=mcp_integrator,
     )
 
     final_context = await runner.process_query(query)

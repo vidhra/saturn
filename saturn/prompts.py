@@ -50,6 +50,8 @@ Example for "Read a config file, then create a GCP VPC, then an AWS S3 bucket":
 
 Available file/build tools: {available_file_tools}
 
+Available MCP tools: {available_mcp_tools}
+
 
 """
 

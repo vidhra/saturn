@@ -41,6 +41,7 @@ class StateMachineContext:
         rag_engine: Optional[Any] = None,
         state_recorder: Optional[Any] = None,
         file_build_executor: Optional[Any] = None,
+        mcp_integrator: Optional[Any] = None,
     ):
         self.original_query: str = original_query
         self.llm_interface: Any = llm_interface
@@ -53,6 +54,7 @@ class StateMachineContext:
         self.rag_engine: Optional[Any] = rag_engine
         self.state_recorder: Optional[Any] = state_recorder
         self.file_build_executor: Optional[Any] = file_build_executor
+        self.mcp_integrator: Optional[Any] = mcp_integrator
 
         self.current_attempt: int = 0
 
