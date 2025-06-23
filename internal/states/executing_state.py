@@ -179,7 +179,12 @@ class ExecutingState(BaseState):
             tool_to_use = current_step_details.get("tool_to_use")
             cloud_provider = current_step_details.get("cloud_provider")
 
-            if tool_to_use in [tool["name"] for tool in context.file_tools] or (
+            if tool_to_use.startswith("mcp_"):
+                # Route MCP tools to MCP integrator
+                step_success, step_result = await self._execute_mcp_tool_step(
+                    step_id, current_step_details, context, console
+                )
+            elif tool_to_use in [tool["name"] for tool in context.file_tools] or (
                 cloud_provider is None or str(cloud_provider).lower() == "none"
             ):
                 step_success, step_result = await self._execute_file_tool_step(
@@ -307,6 +312,126 @@ class ExecutingState(BaseState):
                 f"[bold red]File tool step {step_id} failed after {max_attempts} attempts.[/bold red]"
             )
         return False, {"error": last_error or "Unknown error", "step_id": step_id}
+
+    async def _execute_mcp_tool_step(
+        self,
+        step_id: str,
+        step_details: Dict[str, Any],
+        context: StateMachineContext,
+        console,
+        max_attempts: int = 3,
+    ) -> Tuple[bool, Any]:
+        """Execute an MCP tool step with error feedback and retry."""
+        tool_to_use = step_details.get("tool_to_use")
+        tool_args = step_details.get("tool_args", {})
+
+        if console:
+            console.print(
+                Panel(
+                    f"[MCP Tool] Executing MCP tool: [cyan]{tool_to_use}[/cyan] with args: {tool_args}",
+                    title=f"Step: {step_id}",
+                    border_style="purple",
+                )
+            )
+
+        # Check if MCP integrator is available
+        if not hasattr(context, 'mcp_integrator') or not context.mcp_integrator:
+            error_msg = "MCP integrator not available"
+            if console:
+                console.print(f"[bold red]MCP tool step {step_id} failed: {error_msg}[/bold red]")
+            context.state_recorder.record_node_result(
+                step_id, False, {"error": error_msg}, "FAILED_MCP_TOOL"
+            )
+            return False, {"error": error_msg}
+
+        attempt = 0
+        last_error = None
+        while attempt < max_attempts:
+            attempt += 1
+            if console:
+                console.print(f"Attempt {attempt}/{max_attempts} for MCP tool step [cyan]{step_id}[/cyan]")
+            try:
+                result = await context.mcp_integrator.call_tool(tool_to_use, tool_args)
+                success = result.get("success", False)
+
+                context.state_recorder.record_node_result(
+                    step_id,
+                    success,
+                    result,
+                    "COMPLETED_MCP_TOOL" if success else "FAILED_MCP_TOOL",
+                )
+
+                if success:
+                    if console:
+                        console.print(
+                            f"[green]MCP tool step {step_id} completed successfully.[/green]"
+                        )
+                        
+                        # Display the actual MCP tool result
+                        if result and "result" in result:
+                            mcp_result = result["result"]
+                            if "content" in mcp_result and mcp_result["content"]:
+                                result_text = ""
+                                for content_item in mcp_result["content"]:
+                                    if content_item.get("type") == "text":
+                                        result_text += content_item.get("text", "")
+                                
+                                if result_text:
+                                    console.print(
+                                        Panel(
+                                            result_text,
+                                            title=f"MCP Tool Result: {step_id}",
+                                            title_align="left",
+                                            border_style="green",
+                                        )
+                                    )
+                                else:
+                                    console.print(f"[dim]No text content in MCP result for {step_id}[/dim]")
+                            else:
+                                console.print(f"[dim]No content in MCP result for {step_id}[/dim]")
+                        else:
+                            console.print(f"[dim]No result data from MCP tool {step_id}[/dim]")
+                    return True, result
+                else:
+                    error_msg = result.get("error", "Unknown MCP error")
+                    last_error = error_msg
+                    if console:
+                        console.print(
+                            f"[bold red]MCP tool step {step_id} failed (Attempt {attempt}): {error_msg}[/bold red]"
+                        )
+                        
+                        # Also show the actual error content if available
+                        if result and "result" in result:
+                            mcp_result = result["result"]
+                            if "content" in mcp_result and mcp_result["content"]:
+                                error_text = ""
+                                for content_item in mcp_result["content"]:
+                                    if content_item.get("type") == "text":
+                                        error_text += content_item.get("text", "")
+                                
+                                if error_text:
+                                    console.print(
+                                        Panel(
+                                            error_text,
+                                            title=f"MCP Error Details: {step_id}",
+                                            title_align="left",
+                                            border_style="red",
+                                        )
+                                    )
+
+            except Exception as mcp_exc:
+                last_error = f"Exception during MCP tool step {step_id}: {mcp_exc}"
+                if console:
+                    console.print(f"[bold red]{last_error}[/bold red]")
+                context.state_recorder.record_node_result(
+                    step_id, False, {"error": last_error}, "FAILED_MCP_TOOL_EXCEPTION"
+                )
+
+        if console:
+            console.print(
+                f"[bold red]MCP tool step {step_id} failed after {max_attempts} attempts.[/bold red]"
+            )
+        return False, {"error": last_error}
 
     async def _execute_dag_step(
         self,

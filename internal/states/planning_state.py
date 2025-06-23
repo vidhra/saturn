@@ -43,6 +43,7 @@ class PlanningState(BaseState):
                 context.state_recorder,
                 context.file_tools,
                 context.console,
+                context,
                 attempt_number=attempt,
             )
 
@@ -91,6 +92,7 @@ class PlanningState(BaseState):
         state_logger,
         file_tools: List[Dict[str, Any]],
         console,
+        context,
         attempt_number: int,
     ) -> Tuple[Any, Dict[str, Any]]:
         """
@@ -109,10 +111,24 @@ class PlanningState(BaseState):
             "cli_command_generation (for gcp and aws cloud operations)"
         )
 
+        # Get MCP tools list if available
+        available_mcp_tools = ""
+        if hasattr(context, 'mcp_integrator') and context.mcp_integrator:
+            # Get actual MCP tool names that the LLM can use
+            mcp_schemas = context.mcp_integrator.mcp_manager.get_all_tools_schemas()
+            if mcp_schemas:
+                mcp_tool_names = [tool['function']['name'] for tool in mcp_schemas]
+                available_mcp_tools = f"MCP Tools ({len(mcp_tool_names)} available): {', '.join(mcp_tool_names)}"
+            else:
+                available_mcp_tools = "(No MCP tools currently available)"
+        else:
+            available_mcp_tools = "(No MCP tools currently available)"
+
         planning_prompt = PLANNING_SYSTEM_PROMPT_TEMPLATE.format(
             user_query=user_query,
             available_file_tools=available_file_tools,
             available_cloud_tools=available_cloud_tools,
+            available_mcp_tools=available_mcp_tools,
         )
         try:
 
@@ -214,6 +230,8 @@ class PlanningState(BaseState):
                                 tool["name"] for tool in file_tools
                             ]:
                                 provider_disp = "FILE"
+                            elif not cloud_provider_val and tool_to_use.startswith("mcp_"):
+                                provider_disp = "MCP"
                             elif (
                                 isinstance(cloud_provider_val, str)
                                 and cloud_provider_val
@@ -221,9 +239,10 @@ class PlanningState(BaseState):
                                 provider_disp = cloud_provider_val.upper()
                             else:
                                 provider_disp = "N/A"
-                                console.print(
-                                    f"[yellow]Warning: Step {step_id_disp} is missing a valid cloud_provider and is not a file/build step. Step: {step_data}[/yellow]"
-                                )
+                                if not tool_to_use.startswith("mcp_"):
+                                    console.print(
+                                        f"[yellow]Warning: Step {step_id_disp} is missing a valid cloud_provider and is not a file/build step. Step: {step_data}[/yellow]"
+                                    )
                             description_disp = step_data.get("description", "N/A")
                             dependencies_disp = (
                                 ", ".join(step_data.get("dependencies", [])) or "-"
@@ -271,7 +290,7 @@ class PlanningState(BaseState):
                     return None, None
                 elif not cloud_provider and tool_to_use not in [
                     tool["name"] for tool in file_tools
-                ]:
+                ] and not tool_to_use.startswith("mcp_"):
                     # Invalid file tool name - suggest corrections
                     suggestions = []
                     if "analyze" in tool_to_use or "project" in tool_to_use:
@@ -286,7 +305,16 @@ class PlanningState(BaseState):
                         if suggestions
                         else ""
                     )
-                    error_msg = f"Step {step.get('id')} uses invalid tool '{tool_to_use}'. Available file tools: {', '.join([tool['name'] for tool in file_tools])}.{suggestion_text}"
+                    
+                    # Get available MCP tools if available
+                    mcp_tools_info = ""
+                    if hasattr(context, 'mcp_integrator') and context.mcp_integrator:
+                        mcp_tools = context.mcp_integrator.get_combined_tools_schema()
+                        if mcp_tools:
+                            mcp_tool_names = [tool['function']['name'] for tool in mcp_tools]
+                            mcp_tools_info = f" Available MCP tools: {', '.join(mcp_tool_names[:5])}{'...' if len(mcp_tool_names) > 5 else ''}."
+                    
+                    error_msg = f"Step {step.get('id')} uses invalid tool '{tool_to_use}'. Available file tools: {', '.join([tool['name'] for tool in file_tools])}.{mcp_tools_info}{suggestion_text}"
                     if console:
                         console.print(f"[bold red]Error:[/] {error_msg}")
                     state_logger.record_event(
@@ -298,8 +326,8 @@ class PlanningState(BaseState):
                         },
                     )
                     return None, None
-                elif not isinstance(cloud_provider, str) or not cloud_provider:
-                    error_msg = f"Step {step.get('id')} is missing a valid cloud_provider and is not a file/build step."
+                elif (not isinstance(cloud_provider, str) or not cloud_provider) and not tool_to_use.startswith("mcp_"):
+                    error_msg = f"Step {step.get('id')} is missing a valid cloud_provider and is not a file/build/MCP step."
                     if console:
                         console.print(f"[bold red]Error:[/] {error_msg}")
                     state_logger.record_event(
