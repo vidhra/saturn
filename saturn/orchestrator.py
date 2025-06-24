@@ -14,8 +14,8 @@ from saturn.prompts import (ERROR_SUMMARY_PROMPT, OPERATION_COMPLETED_PROMPT,
 from .aws_executor import AWSExecutor
 from .gcp_executor import GcloudExecutor
 from .knowledge_base import KnowledgeBase
-from .rag_engine import RAGEngine
 from .mcp_integration import MCPToolIntegrator
+from .rag_engine import RAGEngine
 
 console = Console()
 
@@ -58,20 +58,21 @@ async def run_query_with_state_machine(
         return
 
     knowledge_base = KnowledgeBase(
-        api_defs_dir=config.get("api_defs_dir", "./internal/api_definitions"),
+        api_defs_dir=config.get("api_defs_dir", "./internal/knowledge_base"),
         working_directory=config.get("working_directory", "."),
     )
     console.print(
         f"Knowledge Base initialized with {knowledge_base.get_tool_counts()['total_tools']} total tools."
     )
 
-
     mcp_integrator = None
     if config.get("mcp_enabled", False):
         try:
             mcp_integrator = MCPToolIntegrator(config.get("working_directory", "."))
             await mcp_integrator.initialize()
-            console.print(f"MCP Integration initialized with {mcp_integrator.get_tools_summary()['mcp_tools']} MCP tools.")
+            console.print(
+                f"MCP Integration initialized with {mcp_integrator.get_tools_summary()['mcp_tools']} MCP tools."
+            )
         except Exception as e:
             console.print(f"[yellow]Warning: MCP integration failed: {e}[/yellow]")
             mcp_integrator = None
