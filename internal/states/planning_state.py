@@ -28,19 +28,44 @@ class PlanningState(BaseState):
         while attempt <= max_attempts:
             print(f"Planning attempt {attempt}/{max_attempts}")
 
-            from saturn.file_build_tools import FileBuildToolCaller
-
-            file_tool_caller = FileBuildToolCaller(
-                context.file_build_executor.config.get("working_directory", ".")
+            # Use cached tools from the state machine runner instead of creating new instances
+            working_directory = context.file_build_executor.config.get(
+                "working_directory", "."
             )
-            context.file_tools = file_tool_caller.get_available_tools()
+
+            # Get tools from runner's cache - this is much faster than creating new FileBuildToolCaller
+            if (
+                hasattr(context, "_state_machine_runner")
+                and context._state_machine_runner
+            ):
+                context.file_tools = (
+                    context._state_machine_runner.get_cached_file_tools(
+                        working_directory
+                    )
+                )
+                if context.console:
+                    context.console.print(
+                        f"[dim]Using runner's cached file tools ({len(context.file_tools)} tools)[/dim]"
+                    )
+            else:
+                # Fallback to direct creation if runner not available (shouldn't happen in normal flow)
+                from saturn.file_build_tools import FileBuildToolCaller
+
+                file_tool_caller = FileBuildToolCaller(working_directory)
+                context.file_tools = file_tool_caller.get_available_tools()
+                if context.console:
+                    context.console.print(
+                        "[dim yellow]Warning: Using direct tool discovery (runner cache not available)[/dim yellow]"
+                    )
+
             next_state_class = await self._analyze_query_for_dynamic_states(
                 context.original_query, context
             )
 
-
             if next_state_class and next_state_class != ExecutingState:
-                print(f"Dynamic routing: Transitioning to specialized state: {next_state_class.__name__}")
+                print(
+                    f"Dynamic routing: Transitioning to specialized state: {next_state_class.__name__}"
+                )
                 return next_state_class, context
 
             # Generate DAG plan using orchestrator logic
@@ -100,29 +125,41 @@ class PlanningState(BaseState):
         Framework for adding dynamic state routing based on query analysis.
         """
         query_lower = query.lower()
-        
+
         # Example: Check for Terraform operations (you already have TerraformState)
         terraform_keywords = [
-            'terraform', 'infrastructure as code', 'iac', 'terraform apply',
-            'terraform plan', 'infrastructure template', 'provisioning',
-            'tf file', '.tf', 'terraform init'
+            "terraform",
+            "infrastructure as code",
+            "iac",
+            "terraform apply",
+            "terraform plan",
+            "infrastructure template",
+            "provisioning",
+            "tf file",
+            ".tf",
+            "terraform init",
         ]
 
         if any(keyword in query_lower for keyword in terraform_keywords):
             try:
                 from .terraform_state import TerraformPlanningState
+
                 context.state_recorder.record_event(
                     "dynamic_state_detection",
-                    {"detected_type": "terraform", "keywords_matched": [kw for kw in terraform_keywords if kw in query_lower]}
+                    {
+                        "detected_type": "terraform",
+                        "keywords_matched": [
+                            kw for kw in terraform_keywords if kw in query_lower
+                        ],
+                    },
                 )
                 return TerraformPlanningState
             except ImportError:
-                print("[Warning] Terraform state not available, using default execution")
-
+                print(
+                    "[Warning] Terraform state not available, using default execution"
+                )
 
         return ExecutingState
-
-
 
     async def _generate_plan_dag(
         self,
@@ -150,13 +187,20 @@ class PlanningState(BaseState):
             "cli_command_generation (for gcp and aws cloud operations)"
         )
 
-        # Get MCP tools list if available
+        # Get MCP tools list if available - use cached version for performance
         available_mcp_tools = ""
-        if hasattr(context, 'mcp_integrator') and context.mcp_integrator:
-            # Get actual MCP tool names that the LLM can use
+        if hasattr(context, "_state_machine_runner") and context._state_machine_runner:
+            # Use cached MCP tools from runner
+            mcp_tool_names = context._state_machine_runner.get_cached_mcp_tools()
+            if mcp_tool_names:
+                available_mcp_tools = f"MCP Tools ({len(mcp_tool_names)} available): {', '.join(mcp_tool_names)}"
+            else:
+                available_mcp_tools = "(No MCP tools currently available)"
+        elif hasattr(context, "mcp_integrator") and context.mcp_integrator:
+            # Fallback to direct access if runner not available
             mcp_schemas = context.mcp_integrator.mcp_manager.get_all_tools_schemas()
             if mcp_schemas:
-                mcp_tool_names = [tool['function']['name'] for tool in mcp_schemas]
+                mcp_tool_names = [tool["function"]["name"] for tool in mcp_schemas]
                 available_mcp_tools = f"MCP Tools ({len(mcp_tool_names)} available): {', '.join(mcp_tool_names)}"
             else:
                 available_mcp_tools = "(No MCP tools currently available)"
@@ -165,26 +209,29 @@ class PlanningState(BaseState):
 
         # Include reasoning analysis if available
         reasoning_context = ""
-        if hasattr(context, 'reasoning_analysis') and context.reasoning_analysis:
+        if hasattr(context, "reasoning_analysis") and context.reasoning_analysis:
             reasoning = context.reasoning_analysis
             reasoning_context = f"""
 
-PREVIOUS REASONING ANALYSIS:
-Intent: {reasoning.get('intent', 'Not specified')}
-Complexity: {reasoning.get('complexity', 'moderate')}
-Key Components: {reasoning.get('components', 'cloud services')}
-Dependencies: {reasoning.get('dependencies', 'standard cloud access')}
-Recommended Approach: {reasoning.get('approach', 'step-by-step execution')}
+            PREVIOUS REASONING ANALYSIS:
+            Intent: {reasoning.get('intent', 'Not specified')}
+            Complexity: {reasoning.get('complexity', 'moderate')}
+            Key Components: {reasoning.get('components', 'cloud services')}
+            Dependencies: {reasoning.get('dependencies', 'standard cloud access')}
+            Recommended Approach: {reasoning.get('approach', 'step-by-step execution')}
 
-Use this reasoning analysis to inform your step planning. Focus on the identified components and approach.
-"""
+            Use this reasoning analysis to inform your step planning. Focus on the identified components and approach.
+            """
 
-        planning_prompt = PLANNING_SYSTEM_PROMPT_TEMPLATE.format(
-            user_query=user_query,
-            available_file_tools=available_file_tools,
-            available_cloud_tools=available_cloud_tools,
-            available_mcp_tools=available_mcp_tools,
-        ) + reasoning_context
+        planning_prompt = (
+            PLANNING_SYSTEM_PROMPT_TEMPLATE.format(
+                user_query=user_query,
+                available_file_tools=available_file_tools,
+                available_cloud_tools=available_cloud_tools,
+                available_mcp_tools=available_mcp_tools,
+            )
+            + reasoning_context
+        )
         try:
 
             response = await llm_interface.agenerate(
@@ -285,7 +332,9 @@ Use this reasoning analysis to inform your step planning. Focus on the identifie
                                 tool["name"] for tool in file_tools
                             ]:
                                 provider_disp = "FILE"
-                            elif not cloud_provider_val and tool_to_use.startswith("mcp_"):
+                            elif not cloud_provider_val and tool_to_use.startswith(
+                                "mcp_"
+                            ):
                                 provider_disp = "MCP"
                             elif (
                                 isinstance(cloud_provider_val, str)
@@ -343,9 +392,11 @@ Use this reasoning analysis to inform your step planning. Focus on the identifie
                         {"error": error_msg, "plan_steps": plan_steps},
                     )
                     return None, None
-                elif not cloud_provider and tool_to_use not in [
-                    tool["name"] for tool in file_tools
-                ] and not tool_to_use.startswith("mcp_"):
+                elif (
+                    not cloud_provider
+                    and tool_to_use not in [tool["name"] for tool in file_tools]
+                    and not tool_to_use.startswith("mcp_")
+                ):
                     # Invalid file tool name - suggest corrections
                     suggestions = []
                     if "analyze" in tool_to_use or "project" in tool_to_use:
@@ -360,15 +411,17 @@ Use this reasoning analysis to inform your step planning. Focus on the identifie
                         if suggestions
                         else ""
                     )
-                    
+
                     # Get available MCP tools if available
                     mcp_tools_info = ""
-                    if hasattr(context, 'mcp_integrator') and context.mcp_integrator:
+                    if hasattr(context, "mcp_integrator") and context.mcp_integrator:
                         mcp_tools = context.mcp_integrator.get_combined_tools_schema()
                         if mcp_tools:
-                            mcp_tool_names = [tool['function']['name'] for tool in mcp_tools]
+                            mcp_tool_names = [
+                                tool["function"]["name"] for tool in mcp_tools
+                            ]
                             mcp_tools_info = f" Available MCP tools: {', '.join(mcp_tool_names[:5])}{'...' if len(mcp_tool_names) > 5 else ''}."
-                    
+
                     error_msg = f"Step {step.get('id')} uses invalid tool '{tool_to_use}'. Available file tools: {', '.join([tool['name'] for tool in file_tools])}.{mcp_tools_info}{suggestion_text}"
                     if console:
                         console.print(f"[bold red]Error:[/] {error_msg}")
@@ -381,7 +434,9 @@ Use this reasoning analysis to inform your step planning. Focus on the identifie
                         },
                     )
                     return None, None
-                elif (not isinstance(cloud_provider, str) or not cloud_provider) and not tool_to_use.startswith("mcp_"):
+                elif (
+                    not isinstance(cloud_provider, str) or not cloud_provider
+                ) and not tool_to_use.startswith("mcp_"):
                     error_msg = f"Step {step.get('id')} is missing a valid cloud_provider and is not a file/build/MCP step."
                     if console:
                         console.print(f"[bold red]Error:[/] {error_msg}")

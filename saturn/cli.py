@@ -1,5 +1,6 @@
 import asyncio
 import os
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -34,8 +35,6 @@ except ImportError:
 
 from rich.console import Console
 from rich.panel import Panel
-
-from saturn.textual_chat import SaturnChatApp
 
 from .config import load_config
 from .orchestrator import run_query_with_state_machine
@@ -1111,95 +1110,108 @@ def install_cli_command(
         )
 
 
-@app.command("chat")
-def chat_command(
-    provider: Optional[str] = typer.Option(
-        os.getenv("LLM_PROVIDER") or APP_CONFIG.get("llm_provider", "openai"),
-        help="LLM provider (e.g., openai, gemini, claude, mistral",
-    ),
-    model: Optional[str] = typer.Option(
-        None, help="Specific LLM model name (e.g., gpt-4o). Overrides config."
-    ),
-    project_id: Optional[str] = typer.Option(
-        os.getenv("GCP_PROJECT_ID") or APP_CONFIG.get("gcp_project_id"),
-        "--project-id",
-        help="Google Cloud Project ID. Overrides config/env.",
-    ),
-    creds_path: Optional[str] = typer.Option(
-        os.getenv("GCP_CREDENTIALS_PATH") or APP_CONFIG.get("gcp_credentials_path"),
-        "--creds-path",
-        help="Path to GCP service account key file (uses ADC if not provided). Overrides config/env.",
-    ),
-    max_retries: Optional[int] = typer.Option(
-        int(os.getenv("MAX_RETRIES") or APP_CONFIG.get("max_retries", 5)),
-        "--max-retries",
-        help="Max retry attempts for the orchestrator loop.",
-    ),
-    execution_mode: Optional[str] = typer.Option(
-        "manual",
-        "--execution-mode",
-        help="Execution mode: auto (default), yolo (auto-execute without prompts), manual (ask for confirmation on create/update/delete only)",
-    ),
-    cloud_provider: Optional[str] = typer.Option(
-        "gcp",
-        "--cloud-provider",
-        help="Cloud provider for RAG database collection: gcp or aws. Defaults to gcp.",
-    ),
-    rag_docs_path: Optional[str] = typer.Option(
-        os.getenv("GCLOUD_DOCS_PATH")
-        or APP_CONFIG.get(
-            "rag_docs_path",
-            os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "internal",
-                "tools",
-                "gcloud_online_docs_markdown",
-            ),
-        ),
-        "--rag-docs-path",
-        help="Path to Markdown documents for RAG.",
-    ),
-    vector_store_cli: Optional[str] = typer.Option(
-        None,
-        "--vector-store",
-        help="Vector store type: default (in-memory), chroma, duckdb. Overrides env and config.yaml.",
-    ),
-    db_path: Optional[str] = typer.Option(
-        None,
-        "--db-path",
-        help="Path for persistent DB (e.g., ./db/chroma_store or ./db/duckdb_store/vector_store.duckdb).",
-    ),
-    db_collection_or_table: Optional[str] = typer.Option(
-        None,
-        "--db-collection-table",
-        help="Collection name (Chroma) or Table name (DuckDB).",
-    ),
-    rag_embed_model: Optional[str] = typer.Option(
-        os.getenv("RAG_EMBED_MODEL")
-        or APP_CONFIG.get("rag_embedding_model", DEFAULT_EMBED_MODEL_NAME),
-        "--rag-embed-model",
-        help="RAG embedding model name.",
-    ),
-    google_api_key_cli: Optional[str] = typer.Option(
-        None,
-        "--google-api-key",
-        help="Google API Key for Gemini Embeddings. Overrides GOOGLE_API_KEY env var.",
-    ),
-    show_env: bool = typer.Option(
-        False, "--show-env", help="Show environment variable status for debugging."
-    ),
+@app.command("ui")
+def ui_command():
+    """Launch Saturn's Terminal User Interface (TUI)."""
+    try:
+        from saturn.ui.saturn_app import run
+
+        run()
+    except KeyboardInterrupt:
+        console.print("\n[cyan]Saturn TUI terminated by user.[/cyan]")
+    except Exception as e:
+        console.print(f"[bold red]Error launching TUI: {e}[/bold red]")
+        raise typer.Exit(code=1)
+
+
+@app.command("cache")
+def cache_command(
+    action: str = typer.Argument(..., help="Action: 'status', 'clear', or 'stats'"),
     verbose: bool = typer.Option(
-        False,
-        "--verbose",
-        "-v",
-        help="Enable verbose output, including full exception tracebacks.",
+        False, "--verbose", "-v", help="Show detailed cache information"
     ),
 ):
+    """Manage Saturn's performance caches."""
 
-    from .textual_chat import run
-    run()
-    return
+    if action == "status":
+        console.print("[bold blue]Cache Status[/bold blue]")
+
+        # Check FileBuildToolCaller cache
+        from saturn.file_build_tools import FileBuildToolCaller
+
+        tools_cached = FileBuildToolCaller._is_tools_cache_valid()
+        cache_age = (
+            time.time() - FileBuildToolCaller._tools_cache_timestamp
+            if FileBuildToolCaller._tools_cache_timestamp > 0
+            else 0
+        )
+
+        console.print(
+            f"File Tools Cache: {'✓ Valid' if tools_cached else '✗ Invalid/Empty'}"
+        )
+        if FileBuildToolCaller._tools_cache_timestamp > 0:
+            console.print(f"  Age: {cache_age:.1f} seconds")
+            console.print(f"  TTL: {FileBuildToolCaller._tools_cache_ttl} seconds")
+            if verbose and FileBuildToolCaller._tools_schema_cache:
+                console.print(
+                    f"  Cached Tools: {len(FileBuildToolCaller._tools_schema_cache)}"
+                )
+
+        # Show performance configuration
+        console.print("\nPerformance Settings:")
+        console.print(
+            f"  Tool Cache TTL: {APP_CONFIG.get('tool_cache_ttl', 300)} seconds"
+        )
+        console.print(
+            f"  Checkpoints Enabled: {APP_CONFIG.get('enable_checkpoints', False)}"
+        )
+        console.print(
+            f"  Parallel Execution: {APP_CONFIG.get('parallel_execution', True)}"
+        )
+        console.print(
+            f"  Max Parallel Tasks: {APP_CONFIG.get('max_parallel_tasks', 3)}"
+        )
+
+    elif action == "clear":
+        console.print("[yellow]Clearing all caches...[/yellow]")
+
+        # Clear FileBuildToolCaller cache
+        from saturn.file_build_tools import FileBuildToolCaller
+
+        FileBuildToolCaller.clear_tools_cache()
+
+        console.print("[green]✓ File tools cache cleared[/green]")
+        console.print("[green]✓ All caches cleared successfully[/green]")
+
+    elif action == "stats":
+        console.print("[bold blue]Cache Performance Statistics[/bold blue]")
+
+        # This would be more useful during actual execution
+        # For now, show configuration that affects performance
+        console.print("Configuration affecting performance:")
+        performance_keys = [
+            "tool_cache_ttl",
+            "enable_checkpoints",
+            "parallel_execution",
+            "max_parallel_tasks",
+            "fail_fast",
+            "max_retries",
+        ]
+
+        for key in performance_keys:
+            value = APP_CONFIG.get(key, "Not set")
+            console.print(f"  {key}: {value}")
+
+        if verbose:
+            console.print("\nAll configuration keys:")
+            for key, value in sorted(APP_CONFIG.items()):
+                console.print(f"  {key}: {value}")
+
+    else:
+        console.print(
+            f"[bold red]Error:[/bold red] Unknown action '{action}'. Use 'status', 'clear', or 'stats'."
+        )
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":
