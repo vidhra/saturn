@@ -101,23 +101,38 @@ class TerminalManager:
 
     async def start_thinking(self):
         self._thinking_active = True
-        base = "\n🤔 Thinking"
-        dots = [".", "..", "..."]
-        idx = 0
+        thinking_phases = [
+            ["🤔 Analyzing your request...", "   Parsing natural language query", "   Identifying intent and scope"],
+            ["🔍 Breaking down query components...", "   Extracting key requirements", "   Mapping to available tools"],
+            ["🎯 Identifying key objectives...", "   Determining success criteria", "   Planning execution order"], 
+            ["🏗️  Determining execution strategy...", "   Selecting optimal approach", "   Preparing resource allocation"],
+        ]
+        phase_idx = 0
+        
         while self._thinking_active:
-            if self.messages and "🤔 Thinking" in self.messages[-1].text:
-                self.messages[-1] = Message(base + dots[idx], "system", "magenta")
-            else:
-                self.add_message(base + dots[idx], "system", "magenta")
+            current_phase = thinking_phases[phase_idx % len(thinking_phases)]
+            
+            # Remove previous thinking messages (up to 3 lines)
+            while (self.messages and 
+                   any(emoji in self.messages[-1].text for emoji in ["🤔", "🔍", "🎯", "🏗️", "   "])):
+                self.messages.pop()
+            
+            # Add current thinking phase (3 lines)
+            for line in current_phase:
+                self.add_message(line, "system", "magenta")
+            
             self._redraw()
-            idx = (idx + 1) % 3
-            await asyncio.sleep(0.5)
+            
+            phase_idx = (phase_idx + 1) % len(thinking_phases)
+            await asyncio.sleep(1.5)
 
     def stop_thinking(self):
         self._thinking_active = False
-        if self.messages and "🤔 Thinking" in self.messages[-1].text:
+        # Remove all thinking-related messages (up to 3 lines)
+        while (self.messages and 
+               any(emoji in self.messages[-1].text for emoji in ["🤔", "🔍", "🎯", "🏗️", "   "])):
             self.messages.pop()
-            self._redraw()
+        self._redraw()
 
 
 terminal = TerminalManager()

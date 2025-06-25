@@ -42,6 +42,7 @@ class StateMachineContext:
         state_recorder: Optional[Any] = None,
         file_build_executor: Optional[Any] = None,
         mcp_integrator: Optional[Any] = None,
+        config: Optional[Dict[str, Any]] = None,
     ):
         self.original_query: str = original_query
         self.llm_interface: Any = llm_interface
@@ -55,6 +56,7 @@ class StateMachineContext:
         self.state_recorder: Optional[Any] = state_recorder
         self.file_build_executor: Optional[Any] = file_build_executor
         self.mcp_integrator: Optional[Any] = mcp_integrator
+        self.config: Dict[str, Any] = config or {}
 
         self.current_attempt: int = 0
 
@@ -72,6 +74,7 @@ class StateMachineContext:
         self.llm_text_response: Optional[str] = None
         self.selected_tools_for_execution: List[Dict[str, Any]] = []
         self.execution_results: List[Tuple[str, bool, Any]] = []
+        self.reasoning_analysis: Optional[Dict[str, Any]] = None  # Store LLM reasoning analysis from ReasoningState
 
     def reset_for_new_attempt(self):
         """Resets fields that should be cleared before a planning/execution cycle."""
