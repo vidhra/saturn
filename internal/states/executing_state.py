@@ -1,8 +1,7 @@
-import json
-import shlex
-import traceback
 import asyncio
-from typing import Any, Dict, List, Tuple, Type
+import json
+import traceback
+from typing import Any, Dict, Tuple, Type
 
 from rich.panel import Panel
 from rich.table import Table
@@ -63,7 +62,9 @@ class ExecutingState(BaseState):
         else:
             return await self._execute_sequential(context, console)
 
-    async def _execute_parallel(self, context: StateMachineContext, console, max_parallel_tasks: int):
+    async def _execute_parallel(
+        self, context: StateMachineContext, console, max_parallel_tasks: int
+    ):
         """Execute DAG steps in parallel where possible."""
         if console:
             console.print(
@@ -77,7 +78,7 @@ class ExecutingState(BaseState):
         while len(completed_nodes) < len(context.step_details_map):
             # Get immediately ready nodes
             ready_nodes = context.dag.get_immediately_ready_nodes(completed_nodes)
-            
+
             if not ready_nodes:
                 # Check if we're stuck (circular dependency or other issue)
                 remaining_nodes = set(context.step_details_map.keys()) - completed_nodes
@@ -91,10 +92,12 @@ class ExecutingState(BaseState):
 
             # Limit parallel execution
             ready_nodes_list = list(ready_nodes)[:max_parallel_tasks]
-            
+
             if console:
                 if len(ready_nodes_list) > 1:
-                    console.print(f"[yellow]Executing {len(ready_nodes_list)} steps in parallel: {', '.join(ready_nodes_list)}[/yellow]")
+                    console.print(
+                        f"[yellow]Executing {len(ready_nodes_list)} steps in parallel: {', '.join(ready_nodes_list)}[/yellow]"
+                    )
                 else:
                     console.print(f"[blue]Executing step: {ready_nodes_list[0]}[/blue]")
 
@@ -107,32 +110,47 @@ class ExecutingState(BaseState):
             # Wait for all parallel tasks to complete
             try:
                 results = await asyncio.gather(*tasks, return_exceptions=True)
-                
+
                 # Process results
                 for i, (step_id, result) in enumerate(zip(ready_nodes_list, results)):
                     if isinstance(result, Exception):
                         if console:
-                            console.print(f"[bold red]Step {step_id} failed with exception: {result}[/bold red]")
-                        accumulated_errors.append({"step_id": step_id, "error": str(result)})
+                            console.print(
+                                f"[bold red]Step {step_id} failed with exception: {result}[/bold red]"
+                            )
+                        accumulated_errors.append(
+                            {"step_id": step_id, "error": str(result)}
+                        )
                         all_steps_succeeded = False
                         context.step_outputs[step_id] = {"error": str(result)}
                     else:
                         step_success, step_result = result
                         context.step_outputs[step_id] = step_result
-                        
+
                         if step_success:
                             completed_nodes.add(step_id)
                             if console:
-                                console.print(f"[green]✓ Step {step_id} completed successfully[/green]")
+                                console.print(
+                                    f"[green]✓ Step {step_id} completed successfully[/green]"
+                                )
                         else:
                             if console:
-                                console.print(f"[bold red]✗ Step {step_id} failed[/bold red]")
-                            accumulated_errors.append({"step_id": step_id, "error": step_result.get("error", "Unknown error")})
+                                console.print(
+                                    f"[bold red]✗ Step {step_id} failed[/bold red]"
+                                )
+                            accumulated_errors.append(
+                                {
+                                    "step_id": step_id,
+                                    "error": step_result.get("error", "Unknown error"),
+                                }
+                            )
                             all_steps_succeeded = False
-                            
+
             except Exception as e:
                 if console:
-                    console.print(f"[bold red]Error in parallel execution: {e}[/bold red]")
+                    console.print(
+                        f"[bold red]Error in parallel execution: {e}[/bold red]"
+                    )
                 accumulated_errors.append({"error": f"Parallel execution error: {e}"})
                 all_steps_succeeded = False
                 break
@@ -140,10 +158,14 @@ class ExecutingState(BaseState):
             # Early termination on critical failures
             if accumulated_errors and context.config.get("fail_fast", False):
                 if console:
-                    console.print("[bold red]Fail-fast mode: Stopping execution due to errors[/bold red]")
+                    console.print(
+                        "[bold red]Fail-fast mode: Stopping execution due to errors[/bold red]"
+                    )
                 break
 
-        return await self._process_execution_results(context, console, all_steps_succeeded, accumulated_errors)
+        return await self._process_execution_results(
+            context, console, all_steps_succeeded, accumulated_errors
+        )
 
     async def _execute_sequential(self, context: StateMachineContext, console):
         """Execute DAG steps sequentially (original behavior)."""
@@ -176,7 +198,9 @@ class ExecutingState(BaseState):
                 all_steps_succeeded = False
                 break
 
-            step_success, step_result = await self._execute_single_step(step_id, context, console)
+            step_success, step_result = await self._execute_single_step(
+                step_id, context, console
+            )
             context.step_outputs[step_id] = step_result
 
             if not step_success:
@@ -195,9 +219,13 @@ class ExecutingState(BaseState):
                     )
                 break
 
-        return await self._process_execution_results(context, console, all_steps_succeeded, accumulated_errors)
+        return await self._process_execution_results(
+            context, console, all_steps_succeeded, accumulated_errors
+        )
 
-    async def _execute_single_step(self, step_id: str, context: StateMachineContext, console) -> Tuple[bool, Any]:
+    async def _execute_single_step(
+        self, step_id: str, context: StateMachineContext, console
+    ) -> Tuple[bool, Any]:
         """Execute a single step and return success status and result."""
         current_step_details = context.step_details_map[step_id]
 
@@ -248,7 +276,9 @@ class ExecutingState(BaseState):
                 step_id, current_step_details, context, contextual_outputs, console
             )
 
-    async def _process_execution_results(self, context, console, all_steps_succeeded, accumulated_errors):
+    async def _process_execution_results(
+        self, context, console, all_steps_succeeded, accumulated_errors
+    ):
         """Process the final results of execution."""
         if all_steps_succeeded and not accumulated_errors:
             if console:
@@ -300,13 +330,17 @@ class ExecutingState(BaseState):
         while attempt < max_attempts:
             attempt += 1
             if console:
-                console.print(f"Attempt {attempt}/{max_attempts} for file tool step [cyan]{step_id}[/cyan]")
+                console.print(
+                    f"Attempt {attempt}/{max_attempts} for file tool step [cyan]{step_id}[/cyan]"
+                )
             try:
                 result = await context.file_build_executor.execute(
                     tool_to_use, tool_args, console, f"exec_{tool_to_use}"
                 )
                 success = (
-                    result[0] if isinstance(result, tuple) else result.get("success", False)
+                    result[0]
+                    if isinstance(result, tuple)
+                    else result.get("success", False)
                 )
                 actual_result = result[1] if isinstance(result, tuple) else result
 
@@ -343,7 +377,6 @@ class ExecutingState(BaseState):
                     step_id, False, {"error": last_error}, "FAILED_FILE_TOOL_EXCEPTION"
                 )
 
-
         if console:
             console.print(
                 f"[bold red]File tool step {step_id} failed after {max_attempts} attempts.[/bold red]"
@@ -372,10 +405,12 @@ class ExecutingState(BaseState):
             )
 
         # Check if MCP integrator is available
-        if not hasattr(context, 'mcp_integrator') or not context.mcp_integrator:
+        if not hasattr(context, "mcp_integrator") or not context.mcp_integrator:
             error_msg = "MCP integrator not available"
             if console:
-                console.print(f"[bold red]MCP tool step {step_id} failed: {error_msg}[/bold red]")
+                console.print(
+                    f"[bold red]MCP tool step {step_id} failed: {error_msg}[/bold red]"
+                )
             context.state_recorder.record_node_result(
                 step_id, False, {"error": error_msg}, "FAILED_MCP_TOOL"
             )
@@ -386,7 +421,9 @@ class ExecutingState(BaseState):
         while attempt < max_attempts:
             attempt += 1
             if console:
-                console.print(f"Attempt {attempt}/{max_attempts} for MCP tool step [cyan]{step_id}[/cyan]")
+                console.print(
+                    f"Attempt {attempt}/{max_attempts} for MCP tool step [cyan]{step_id}[/cyan]"
+                )
             try:
                 result = await context.mcp_integrator.call_tool(tool_to_use, tool_args)
                 success = result.get("success", False)
@@ -403,7 +440,7 @@ class ExecutingState(BaseState):
                         console.print(
                             f"[green]MCP tool step {step_id} completed successfully.[/green]"
                         )
-                        
+
                         # Display the actual MCP tool result
                         if result and "result" in result:
                             mcp_result = result["result"]
@@ -412,7 +449,7 @@ class ExecutingState(BaseState):
                                 for content_item in mcp_result["content"]:
                                     if content_item.get("type") == "text":
                                         result_text += content_item.get("text", "")
-                                
+
                                 if result_text:
                                     console.print(
                                         Panel(
@@ -423,11 +460,17 @@ class ExecutingState(BaseState):
                                         )
                                     )
                                 else:
-                                    console.print(f"[dim]No text content in MCP result for {step_id}[/dim]")
+                                    console.print(
+                                        f"[dim]No text content in MCP result for {step_id}[/dim]"
+                                    )
                             else:
-                                console.print(f"[dim]No content in MCP result for {step_id}[/dim]")
+                                console.print(
+                                    f"[dim]No content in MCP result for {step_id}[/dim]"
+                                )
                         else:
-                            console.print(f"[dim]No result data from MCP tool {step_id}[/dim]")
+                            console.print(
+                                f"[dim]No result data from MCP tool {step_id}[/dim]"
+                            )
                     return True, result
                 else:
                     error_msg = result.get("error", "Unknown MCP error")
@@ -436,7 +479,7 @@ class ExecutingState(BaseState):
                         console.print(
                             f"[bold red]MCP tool step {step_id} failed (Attempt {attempt}): {error_msg}[/bold red]"
                         )
-                        
+
                         # Also show the actual error content if available
                         if result and "result" in result:
                             mcp_result = result["result"]
@@ -445,7 +488,7 @@ class ExecutingState(BaseState):
                                 for content_item in mcp_result["content"]:
                                     if content_item.get("type") == "text":
                                         error_text += content_item.get("text", "")
-                                
+
                                 if error_text:
                                     console.print(
                                         Panel(
@@ -784,3 +827,11 @@ class ExecutingState(BaseState):
             "FAILED_MAX_ATTEMPTS",
         )
         return False, {"error": last_error, "step_id": step_id}
+
+    def _build_dependency_map(self, dag):
+        dep_map = {}
+        for edge in dag.edges:
+            if edge.target not in dep_map:
+                dep_map[edge.target] = []
+            dep_map[edge.target].append(edge.source)
+        return dep_map

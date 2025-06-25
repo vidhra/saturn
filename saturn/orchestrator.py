@@ -33,7 +33,7 @@ async def run_query_with_state_machine(
 ) -> None:
     """
     Enhanced orchestrator with parallel execution, state persistence, and dynamic state routing.
-    
+
     Args:
         query: The user's natural language query
         config: Configuration dictionary
@@ -52,7 +52,11 @@ async def run_query_with_state_machine(
             f"• Parallel Execution: [{'green' if enable_parallel_execution else 'red'}]{'✓' if enable_parallel_execution else '✗'}[/]\n"
             f"• State Persistence: [{'green' if enable_state_persistence else 'red'}]{'✓' if enable_state_persistence else '✗'}[/]\n"
             f"• Dynamic States: [{'green' if enable_dynamic_states else 'red'}]{'✓' if enable_dynamic_states else '✗'}[/]"
-            + (f"\n• Resuming from: [yellow]{resume_from_checkpoint}[/yellow]" if resume_from_checkpoint else ""),
+            + (
+                f"\n• Resuming from: [yellow]{resume_from_checkpoint}[/yellow]"
+                if resume_from_checkpoint
+                else ""
+            ),
             title="[bold blue]Saturn Enhanced Orchestrator[/bold blue]",
             border_style="blue",
         )
@@ -129,7 +133,9 @@ async def run_query_with_state_machine(
     if resume_from_checkpoint:
         try:
             final_context = await runner.resume_from_checkpoint(resume_from_checkpoint)
-            console.print("[bold green]Successfully resumed from checkpoint![/bold green]")
+            console.print(
+                "[bold green]Successfully resumed from checkpoint![/bold green]"
+            )
         except FileNotFoundError as e:
             console.print(f"[bold red]Checkpoint not found: {e}[/bold red]")
             return
@@ -141,10 +147,14 @@ async def run_query_with_state_machine(
             # Show available checkpoints
             checkpoints = runner.list_checkpoints()
             if checkpoints:
-                console.print(f"[dim]Available checkpoints: {len(checkpoints)} found[/dim]")
+                console.print(
+                    f"[dim]Available checkpoints: {len(checkpoints)} found[/dim]"
+                )
                 if verbose:
                     for checkpoint in checkpoints[:5]:  # Show only recent 5
-                        console.print(f"  [dim]• {checkpoint['id']} ({checkpoint['state']})[/dim]")
+                        console.print(
+                            f"  [dim]• {checkpoint['id']} ({checkpoint['state']})[/dim]"
+                        )
 
         final_context = await runner.process_query(query)
 
@@ -160,10 +170,12 @@ async def run_query_with_state_machine(
         console.print("[bold green]Orchestration completed successfully![/bold green]")
 
     # Show performance statistics if parallel execution was used
-    if enable_parallel_execution and hasattr(final_context, 'step_outputs'):
+    if enable_parallel_execution and hasattr(final_context, "step_outputs"):
         total_steps = len(final_context.step_outputs)
         if total_steps > 1:
-            console.print(f"[dim]Executed {total_steps} steps with parallel processing[/dim]")
+            console.print(
+                f"[dim]Executed {total_steps} steps with parallel processing[/dim]"
+            )
 
     console.print("Enhanced Orchestrator finished.")
 
@@ -178,63 +190,6 @@ async def run_query_with_feedback(
     """Legacy wrapper for backward compatibility."""
     await run_query_with_state_machine(
         query, config, rag_engine, max_total_attempts, verbose
-    )
-
-
-async def show_orchestrator_capabilities(config: Dict[str, Any]) -> None:
-    """Display the enhanced capabilities of the orchestrator."""
-    console.print(
-        Panel(
-            """[bold cyan]Enhanced Saturn Orchestrator Capabilities[/bold cyan]
-
-[bold yellow]1. State Persistence & Recovery[/bold yellow]
-• Automatic checkpointing at each state transition
-• Resume failed runs from any checkpoint
-• Cleanup completed run checkpoints
-• List and manage checkpoint history
-
-[bold yellow]2. Parallel DAG Execution[/bold yellow]
-• Execute independent DAG nodes concurrently
-• Configurable parallel task limits
-• Intelligent dependency resolution
-• Fail-fast or continue-on-error modes
-
-[bold yellow]3. Dynamic State Routing[/bold yellow]
-• Automatic detection of specialized workflows
-• ML/Data Science pipeline optimization
-• Security audit and compliance workflows
-• Terraform/Infrastructure as Code handling
-• LLM-based intelligent state selection
-
-[bold yellow]4. Advanced Error Handling[/bold yellow]
-• Comprehensive error tracking and logging
-• State-aware error recovery strategies
-• Detailed execution reporting
-• Performance metrics and statistics
-
-[bold green]Example Usage:[/bold green]
-```python
-# Enable all enhanced features
-await run_query_with_state_machine(
-    query="Deploy ML model with security audit",
-    config=config,
-    rag_engine=rag_engine,
-    enable_parallel_execution=True,
-    enable_state_persistence=True,
-    enable_dynamic_states=True
-)
-
-# Resume from checkpoint
-await run_query_with_state_machine(
-    query="Continue deployment",
-    config=config,
-    rag_engine=rag_engine,
-    resume_from_checkpoint="20250125_183045_PlanningState"
-)
-```""",
-            title="[bold blue]Enhanced Features Overview[/bold blue]",
-            border_style="blue",
-        )
     )
 
 
