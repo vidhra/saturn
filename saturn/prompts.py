@@ -187,12 +187,10 @@ OPERATION_COMPLETED_PROMPT = """[green]Operation completed successfully![/green]
 [bold cyan]Summary:[/bold cyan]
 {summary}
 
-[dim]Use /trace to view detailed execution logs[/dim]
 """
 
 ERROR_SUMMARY_PROMPT = """[red]Operation failed![/red]
 
 [bold]Errors:[/bold]
 {errors}
-
-[dim]Use /trace to view detailed execution logs[/dim]"""
+"""

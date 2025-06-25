@@ -77,15 +77,15 @@ class StateMachineUIBridge:
 
                 # Update status based on state
                 if "ReasoningState" in state_name:
-                    self.status_callback("🤔 Analyzing your request...", 0.1)
+                    self.status_callback("Analyzing your request...", 0.1)
                 elif "PlanningState" in state_name:
-                    self.status_callback("📋 Creating execution plan...", 0.3)
+                    self.status_callback("Creating execution plan...", 0.3)
                 elif "ExecutingState" in state_name:
-                    self.status_callback("⚡ Executing operations...", 0.5)
+                    self.status_callback("Executing operations...", 0.5)
                 elif "ProcessingResultsState" in state_name:
-                    self.status_callback("📊 Processing results...", 0.8)
+                    self.status_callback("Processing results...", 0.8)
                 elif "CompletedState" in state_name:
-                    self.status_callback("✅ Operations completed successfully", 1.0)
+                    self.status_callback("Operations completed successfully", 1.0)
                 elif "FailedState" in state_name:
                     self.status_callback("❌ Operations failed", 0.0)
 
