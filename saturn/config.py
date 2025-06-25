@@ -69,11 +69,7 @@ def load_config(config_path_override: Optional[str] = None, debug: bool = False)
         loaded_config_path = None
 
         for path_attempt in paths_to_check:
-            if debug:
-                print(f"[ConfigDebug] Attempting to load config from: {path_attempt}")
             if os.path.exists(path_attempt):
-                if debug:
-                    print(f"[ConfigDebug] Found config file: {path_attempt}")
                 try:
                     with open(path_attempt, 'r') as f:
                         loaded_data = yaml.safe_load(f)

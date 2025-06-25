@@ -19,13 +19,11 @@ try:
     for env_path in env_file_paths:
         if env_path.exists():
             load_dotenv(env_path)
-            print(f"📄 [CLI] Loaded environment variables from: {env_path.absolute()}")
             env_loaded = True
             break
 
     if not env_loaded:
         print("⚠️  [CLI] No .env file found. Using system environment variables only.")
-        print(f"   [CLI] Looked in: {', '.join(str(p) for p in env_file_paths[:3])}")
 
 except ImportError:
     print(
@@ -45,14 +43,16 @@ from .rag_engine import (DEFAULT_CHROMA_COLLECTION, DEFAULT_CHROMA_PATH,
 
 APP_CONFIG = load_config()
 
-app = typer.Typer()
+app = typer.Typer(
+    help="Saturn AI Assistant - Cloud Infrastructure Automation",
+    add_completion=False,
+    no_args_is_help=False,  # Allow running without arguments
+)
 console = Console()
 
 
 def print_env_status_cli():
     """Print the status of key environment variables for CLI debugging."""
-    console.print("\n🔧 [CLI] Environment Variable Status:")
-    console.print("-" * 50)
 
     env_vars = {
         "OPENAI_API_KEY": "OpenAI",
@@ -80,6 +80,51 @@ def print_env_status_cli():
         else:
             console.print(f"❌ {description:15} ({env_var}): Not set")
     console.print("-" * 50)
+
+
+@app.callback(invoke_without_command=True)
+def main(
+    ctx: typer.Context,
+    version: bool = typer.Option(False, "--version", "-v", help="Show version and exit"),
+    help_commands: bool = typer.Option(False, "--help-commands", help="Show available commands"),
+):
+    """
+    Saturn AI Assistant - Cloud Infrastructure Automation
+    
+    Run 'saturn' to launch the interactive UI.
+    Use 'saturn --help-commands' to see all available commands.
+    """
+    
+    if version:
+        console.print("[bold blue]Saturn AI Assistant[/bold blue] version 1.0.0")
+        console.print("Cloud Infrastructure Automation Tool")
+        raise typer.Exit()
+    
+    if help_commands:
+        console.print("[bold blue]Saturn Commands:[/bold blue]")
+        console.print("  [cyan]saturn[/cyan]              Launch interactive UI (default)")
+        console.print("  [cyan]saturn run[/cyan]          Execute a single query via CLI")
+        console.print("  [cyan]saturn ingest-docs[/cyan]  Build RAG documentation index") 
+        console.print("  [cyan]saturn terraform-run[/cyan] Terraform-focused execution")
+        console.print("  [cyan]saturn hybrid-run[/cyan]   Hybrid gcloud/terraform execution")
+        console.print("  [cyan]saturn convert-history[/cyan] Convert execution logs to Terraform")
+        console.print("  [cyan]saturn install-cli[/cyan]  Install cloud CLI tools")
+        console.print("  [cyan]saturn cache[/cyan]        Manage performance caches")
+        console.print("\nUse 'saturn <command> --help' for detailed command help.")
+        raise typer.Exit()
+    
+    # If no subcommand provided, launch UI by default
+    if ctx.invoked_subcommand is None:
+        try:
+            from saturn.ui.saturn_app import run
+            console.print("[bold blue]🚀 Launching Saturn AI Assistant...[/bold blue]")
+            run()
+        except KeyboardInterrupt:
+            console.print("\n[cyan]Saturn terminated by user.[/cyan]")
+        except Exception as e:
+            console.print(f"[bold red]Error launching Saturn: {e}[/bold red]")
+            console.print("Use 'saturn --help-commands' to see other available commands.")
+            raise typer.Exit(code=1)
 
 
 @app.command("run")
@@ -1110,107 +1155,67 @@ def install_cli_command(
         )
 
 
-@app.command("ui")
-def ui_command():
-    """Launch Saturn's Terminal User Interface (TUI)."""
-    try:
-        from saturn.ui.saturn_app import run
-
-        run()
-    except KeyboardInterrupt:
-        console.print("\n[cyan]Saturn TUI terminated by user.[/cyan]")
-    except Exception as e:
-        console.print(f"[bold red]Error launching TUI: {e}[/bold red]")
-        raise typer.Exit(code=1)
-
-
 @app.command("cache")
 def cache_command(
     action: str = typer.Argument(..., help="Action: 'status', 'clear', or 'stats'"),
-    verbose: bool = typer.Option(
-        False, "--verbose", "-v", help="Show detailed cache information"
-    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show detailed cache information")
 ):
     """Manage Saturn's performance caches."""
-
+    
     if action == "status":
         console.print("[bold blue]Cache Status[/bold blue]")
-
+        
         # Check FileBuildToolCaller cache
         from saturn.file_build_tools import FileBuildToolCaller
-
         tools_cached = FileBuildToolCaller._is_tools_cache_valid()
-        cache_age = (
-            time.time() - FileBuildToolCaller._tools_cache_timestamp
-            if FileBuildToolCaller._tools_cache_timestamp > 0
-            else 0
-        )
-
-        console.print(
-            f"File Tools Cache: {'✓ Valid' if tools_cached else '✗ Invalid/Empty'}"
-        )
+        cache_age = time.time() - FileBuildToolCaller._tools_cache_timestamp if FileBuildToolCaller._tools_cache_timestamp > 0 else 0
+        
+        console.print(f"File Tools Cache: {'✓ Valid' if tools_cached else '✗ Invalid/Empty'}")
         if FileBuildToolCaller._tools_cache_timestamp > 0:
             console.print(f"  Age: {cache_age:.1f} seconds")
             console.print(f"  TTL: {FileBuildToolCaller._tools_cache_ttl} seconds")
             if verbose and FileBuildToolCaller._tools_schema_cache:
-                console.print(
-                    f"  Cached Tools: {len(FileBuildToolCaller._tools_schema_cache)}"
-                )
-
+                console.print(f"  Cached Tools: {len(FileBuildToolCaller._tools_schema_cache)}")
+        
         # Show performance configuration
-        console.print("\nPerformance Settings:")
-        console.print(
-            f"  Tool Cache TTL: {APP_CONFIG.get('tool_cache_ttl', 300)} seconds"
-        )
-        console.print(
-            f"  Checkpoints Enabled: {APP_CONFIG.get('enable_checkpoints', False)}"
-        )
-        console.print(
-            f"  Parallel Execution: {APP_CONFIG.get('parallel_execution', True)}"
-        )
-        console.print(
-            f"  Max Parallel Tasks: {APP_CONFIG.get('max_parallel_tasks', 3)}"
-        )
-
+        console.print(f"\nPerformance Settings:")
+        console.print(f"  Tool Cache TTL: {APP_CONFIG.get('tool_cache_ttl', 300)} seconds")
+        console.print(f"  Checkpoints Enabled: {APP_CONFIG.get('enable_checkpoints', False)}")
+        console.print(f"  Parallel Execution: {APP_CONFIG.get('parallel_execution', True)}")
+        console.print(f"  Max Parallel Tasks: {APP_CONFIG.get('max_parallel_tasks', 3)}")
+        
     elif action == "clear":
         console.print("[yellow]Clearing all caches...[/yellow]")
-
+        
         # Clear FileBuildToolCaller cache
         from saturn.file_build_tools import FileBuildToolCaller
-
         FileBuildToolCaller.clear_tools_cache()
-
+        
         console.print("[green]✓ File tools cache cleared[/green]")
         console.print("[green]✓ All caches cleared successfully[/green]")
-
+        
     elif action == "stats":
         console.print("[bold blue]Cache Performance Statistics[/bold blue]")
-
+        
         # This would be more useful during actual execution
         # For now, show configuration that affects performance
         console.print("Configuration affecting performance:")
         performance_keys = [
-            "tool_cache_ttl",
-            "enable_checkpoints",
-            "parallel_execution",
-            "max_parallel_tasks",
-            "fail_fast",
-            "max_retries",
+            'tool_cache_ttl', 'enable_checkpoints', 'parallel_execution', 
+            'max_parallel_tasks', 'fail_fast', 'max_retries'
         ]
-
+        
         for key in performance_keys:
             value = APP_CONFIG.get(key, "Not set")
             console.print(f"  {key}: {value}")
-
+            
         if verbose:
-            console.print("\nAll configuration keys:")
+            console.print(f"\nAll configuration keys:")
             for key, value in sorted(APP_CONFIG.items()):
                 console.print(f"  {key}: {value}")
-
+                
     else:
-        console.print(
-            f"[bold red]Error:[/bold red] Unknown action '{action}'. Use 'status', 'clear', or 'stats'."
-        )
+        console.print(f"[bold red]Error:[/bold red] Unknown action '{action}'. Use 'status', 'clear', or 'stats'.")
         raise typer.Exit(code=1)
 
 

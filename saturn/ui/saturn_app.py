@@ -1,3 +1,4 @@
+import os
 import asyncio
 from dataclasses import dataclass
 from datetime import datetime
@@ -11,6 +12,7 @@ from textual.message import Message
 from textual.reactive import reactive
 from textual.screen import ModalScreen
 from textual.widgets import Footer, Static, TextArea
+from textual.events import Key
 
 try:
     import pyperclip
@@ -22,6 +24,9 @@ except ImportError:
 from saturn.config import load_config
 from saturn.orchestrator import run_chat_conversational
 
+# Import state tracker
+from .state_tracker import SaturnStateTracker, create_ui_aware_runner
+
 
 class SaturnPromptInput(TextArea):
     """Saturn's input widget based on Elia's PromptInput"""
@@ -32,12 +37,7 @@ class SaturnPromptInput(TextArea):
         prompt_input: "SaturnPromptInput"
 
     BINDINGS = [
-        Binding(
-            "ctrl+j,alt+enter,ctrl+enter",
-            "submit_prompt",
-            "Send message",
-            key_display="^j",
-        )
+        Binding("enter", "submit_prompt", "Send message", key_display="⏎"),
     ]
 
     submit_ready = reactive(True)
@@ -52,11 +52,20 @@ class SaturnPromptInput(TextArea):
     async def prompt_changed(self, event: TextArea.Changed) -> None:
         text_area = event.text_area
         if text_area.text.strip() != "":
-            text_area.border_subtitle = "[white]^j[/white] Send message"
+            text_area.border_subtitle = "[white]⏎[/white] Send message"
         else:
             text_area.border_subtitle = None
 
         text_area.set_class(text_area.wrapped_document.height > 1, "multiline")
+
+    async def on_key(self, event) -> None:
+        """Handle key events for submit shortcuts."""
+        if event.key == "enter":
+            # Enter: Submit message
+            event.stop()
+            self.action_submit_prompt()
+            return
+        
 
     def action_submit_prompt(self) -> None:
         if self.text.strip() == "":
@@ -80,18 +89,38 @@ class SaturnTextArea(TextArea):
     ]
 
     def action_copy_to_clipboard(self) -> None:
-        """Copy selected text or all text to clipboard"""
-        if not CLIPBOARD_AVAILABLE:
-            self.notify("Clipboard not available", severity="warning")
+        """Copy selected text or all text to clipboard - works on Windows/Mac/Linux"""
+        text_to_copy = self.selected_text if self.selected_text else self.text
+        
+        if not text_to_copy.strip():
+            self.notify("No text to copy", severity="warning")
             return
 
-        text_to_copy = self.selected_text if self.selected_text else self.text
-
         try:
-            pyperclip.copy(text_to_copy)
-            self.notify(f"Copied {len(text_to_copy)} characters", title="Copied!")
+            if CLIPBOARD_AVAILABLE:
+                # Use pyperclip if available
+                pyperclip.copy(text_to_copy)
+                self.notify(f"📋 Copied {len(text_to_copy)} characters")
+            else:
+                # Fallback to platform-specific clipboard commands
+                import subprocess
+                import platform
+                
+                system = platform.system().lower()
+                if system == "darwin":  # macOS
+                    subprocess.run(["pbcopy"], input=text_to_copy.encode(), check=True)
+                elif system == "windows":  # Windows
+                    subprocess.run(["clip"], input=text_to_copy.encode(), shell=True, check=True)
+                elif system == "linux":  # Linux
+                    try:
+                        subprocess.run(["xclip", "-selection", "clipboard"], input=text_to_copy.encode(), check=True)
+                    except FileNotFoundError:
+                        subprocess.run(["xsel", "--clipboard", "--input"], input=text_to_copy.encode(), check=True)
+                
+                self.notify(f"📋 Copied {len(text_to_copy)} characters")
+                
         except Exception as e:
-            self.notify(f"Copy failed: {str(e)}", severity="error")
+            self.notify(f"❌ Copy failed: {str(e)}", severity="error")
 
 
 class ChatMessage(Static):
@@ -123,46 +152,119 @@ class ChatMessage(Static):
 
 
 class ThinkingIndicator(Static):
-    """Real-time thinking display like Elia's ResponseStatus"""
+    """Real-time thinking display with state tracking like Elia's ResponseStatus"""
 
     def __init__(self, **kwargs):
         super().__init__("", **kwargs)
         self.visible = False
-        self.thinking_states = [
-            "⠋ Analyzing query...",
-            "⠙ Planning approach...",
-            "⠹ Executing operations...",
-            "⠸ Processing results...",
-            "⠼ Finalizing response...",
-        ]
-        self.current_state = 0
+        self.current_state = ""
+        self.current_step = ""
+        self.operation_count = 0
+        
+        # State descriptions for better UX
+        self.state_descriptions = {
+            "StartState": "Initializing Saturn AI Assistant...",
+            "ReasoningState": "Analyzing your request and understanding intent...",
+            "PlanningState": "Creating execution plan and selecting tools...",
+            "ExecutingState": "Executing operations on cloud infrastructure...",
+            "ProcessingResultsState": "Processing results and validating operations...",
+            "TerraformState": "Managing infrastructure with Terraform...",
+            "TerraformPlanningState": "Planning Terraform resource configurations...",
+            "CompletedState": "Operations completed successfully!",
+            "FailedState": "Operations failed - reviewing errors...",
+        }
+        
+        # Dynamic sub-operations for each state
+        self.sub_operations = {
+            "ReasoningState": [
+                "Parsing natural language query",
+                "Identifying cloud services mentioned", 
+                "Analyzing complexity and scope",
+                "Determining execution approach"
+            ],
+            "PlanningState": [
+                "Discovering available tools",
+                "Building dependency graph",
+                "Optimizing execution order",
+                "Validating tool parameters"
+            ],
+            "ExecutingState": [
+                "Authenticating with cloud providers",
+                "Executing infrastructure operations", 
+                "Monitoring operation progress",
+                "Collecting execution results"
+            ],
+            "ProcessingResultsState": [
+                "Validating operation results",
+                "Checking for errors or warnings",
+                "Updating state tracking",
+                "Preparing next steps"
+            ]
+        }
 
     def start_thinking(self, message: str = ""):
         """Start the thinking animation"""
         self.visible = True
         self.display = True
+        # Force immediate refresh
+        self.refresh()
         if message:
-            self.update(f"[dim yellow]{message}[/dim yellow]")
+            self.update(f"[bold yellow]▶[/bold yellow] {message}")
         else:
-            self._animate_thinking()
+            self._show_current_state()
 
-    def _animate_thinking(self):
-        """Animate the thinking display"""
+    def update_state(self, state_name: str, step: str = ""):
+        """Update current state and step information"""
+        if state_name != self.current_state:
+            self.current_state = state_name
+            self.current_step = step
+            self.operation_count = 0
+            self._show_current_state()
+        elif step and step != self.current_step:
+            self.current_step = step
+            self._show_current_state()
+
+    def _show_current_state(self):
+        """Show current state with description and sub-operations"""
         if not self.visible:
             return
+            
+        # Main state description
+        main_desc = self.state_descriptions.get(
+            self.current_state, 
+            f"Processing {self.current_state}..."
+        )
+        
+        # Show sub-operation if available
+        sub_ops = self.sub_operations.get(self.current_state, [])
+        if sub_ops and self.operation_count < len(sub_ops):
+            current_sub_op = sub_ops[self.operation_count % len(sub_ops)]
+            display_text = f"[bold yellow]▶[/bold yellow] {main_desc}\n[dim]  └─ {current_sub_op}...[/dim]"
+            self.operation_count += 1
+        elif self.current_step:
+            display_text = f"[bold yellow]▶[/bold yellow] {main_desc}\n[dim]  └─ {self.current_step}[/dim]"
+        else:
+            display_text = f"[bold yellow]▶[/bold yellow] {main_desc}"
+            
+        self.update(display_text)
+        
+        # Auto-advance sub-operations for active states  
+        if sub_ops and self.current_state in ["ReasoningState", "PlanningState", "ExecutingState"]:
+            self.set_timer(1.5, self._advance_sub_operation)
 
-        state = self.thinking_states[self.current_state % len(self.thinking_states)]
-        self.update(f"[dim yellow]{state}[/dim yellow]")
-        self.current_state += 1
-
-        # Schedule next animation
-        self.set_timer(0.1, self._animate_thinking)
+    def _advance_sub_operation(self):
+        """Advance to next sub-operation for visual progress"""
+        if self.visible and self.current_state in self.sub_operations:
+            self._show_current_state()
 
     def stop_thinking(self):
         """Stop thinking and hide"""
         self.visible = False
         self.display = False
         self.update("")
+        self.current_state = ""
+        self.current_step = ""
+        self.operation_count = 0
 
 
 class HelpScreen(ModalScreen):
@@ -178,14 +280,15 @@ class HelpScreen(ModalScreen):
             yield Static("Saturn AI Assistant", classes="help-title")
             yield Static(
                 """Commands:
-• Ctrl+J / Alt+Enter: Send message
+• Enter: Send message
 • Ctrl+L: Clear conversation  
+• Ctrl+C or Y: Copy message text
 • F1: Help • Ctrl+C: Quit
 
 Features:
 • Real-time execution feedback
 • Multi-line input support
-• Copy/paste support
+• Cross-platform clipboard (Windows/Mac/Linux)
 • Markdown rendering
 
 Cloud Operations:
@@ -216,13 +319,7 @@ class SaturnApp(App):
         margin-bottom: 1;
     }
     
-    #thinking {
-        dock: top;
-        height: 1;
-        background: #161b22;
-        padding: 0 1;
-        margin: 0;
-    }
+
     
     .user-content {
         color: #ffffff;
@@ -343,11 +440,12 @@ class SaturnApp(App):
                 "gcloud_online_docs_markdown",
             ),
         )
+        
+        # Ensure working directory is set
+        if "working_directory" not in self.config:
+            self.config["working_directory"] = os.getcwd()
 
     def compose(self) -> ComposeResult:
-        # Thinking indicator (hidden by default)
-        yield ThinkingIndicator(id="thinking")
-
         # Main chat area
         with VerticalScroll(id="chat-container") as container:
             container.can_focus = False
@@ -358,10 +456,10 @@ class SaturnApp(App):
         # Footer
         yield Footer()
 
-    async def on_mount(self) -> None:
+    def on_mount(self) -> None:
         """Initialize the app like Elia's chat screen"""
         # Welcome message
-        await self.add_system_message("Saturn AI Assistant ready")
+        self.add_system_message("Saturn AI Assistant ready")
 
         # Focus input (Elia's AUTO_FOCUS pattern)
         self.query_one("#prompt").focus()
@@ -377,79 +475,151 @@ class SaturnApp(App):
         container.refresh()
         container.scroll_end(animate=False, force=True)
 
-    @on(SaturnPromptInput.PromptSubmitted)
-    async def user_message_submitted(
-        self, event: SaturnPromptInput.PromptSubmitted
-    ) -> None:
-        """Handle user message submission like Elia's pattern"""
+    def on_saturn_prompt_input_prompt_submitted(self, event: SaturnPromptInput.PromptSubmitted) -> None:
+        """Handle user message submission immediately (synchronous)"""
         user_message = event.text
 
-        # Add user message
-        await self.add_user_message(user_message)
+        # Add user message immediately 
+        message = ChatMessage(user_message, "user")
+        self.chat_container.mount(message)
+        self.scroll_to_latest_message()
 
-        # Start thinking indicator
-        thinking = self.query_one("#thinking", ThinkingIndicator)
-        thinking.start_thinking("Analyzing DevOps requirements...")
-
-        # Disable further input
+        # Add status message to chat
+        status_msg = ChatMessage("Processing your request...", "system")
+        self.chat_container.mount(status_msg)
+        self.scroll_to_latest_message()
+        
+        # Disable further input immediately
         event.prompt_input.submit_ready = False
 
-        # Start conversation
+        # Start conversation in background
         if not self.conversation_active:
             self.conversation_active = True
-            self.stream_agent_response(user_message)
+            # Use call_later to avoid blocking
+            self.call_later(self.stream_agent_response, user_message)
 
     @work(thread=False)
     async def stream_agent_response(self, user_query: str) -> None:
-        """Stream agent response like Elia's pattern"""
+        """Stream response from Saturn orchestrator with real-time state tracking"""
+        
         try:
-            thinking = self.query_one("#thinking", ThinkingIndicator)
+            # Create state tracker using the separate module
+            state_tracker = SaturnStateTracker(self)
+            
+            try:
+                # Debug: Check config paths
+                self.add_system_message(f"Working directory: {self.config.get('working_directory', 'None')}")
+                
+                # Initialize Saturn components for real state machine
+                from model.llm.base_interface import get_llm_interface
+                from saturn.gcp_executor import GcloudExecutor
+                from saturn.aws_executor import AWSExecutor
+                from saturn.knowledge_base import KnowledgeBase
+                from saturn.rag_engine import RAGEngine
+                from saturn.mcp_integration import MCPToolIntegrator
+                from saturn.prompts import SYSTEM_CHAT_PROMPT
+                
+                # Load components like the orchestrator does
+                llm_interface = get_llm_interface(self.config)
+                
+                gcp_executor = GcloudExecutor(self.config)
+                aws_executor = AWSExecutor(self.config)
+                knowledge_base = KnowledgeBase(self.config)
+                
+                # Initialize RAG engine if configured
+                rag_engine = None
+                if self.config.get("rag_build_on_init", False):
+                    rag_engine = RAGEngine(self.config)
+                    await rag_engine.initialize()
+                
+                # Initialize MCP integration
+                mcp_integrator = MCPToolIntegrator(self.config)
+                await mcp_integrator.initialize()
+                
+                # Create UI-aware state machine runner
+                runner = await create_ui_aware_runner(
+                    state_tracker=state_tracker,
+                    llm_interface=llm_interface,
+                    gcp_executor=gcp_executor,
+                    aws_executor=aws_executor,
+                    knowledge_base=knowledge_base,
+                    system_prompt=SYSTEM_CHAT_PROMPT,
+                    config=self.config,
+                    console=None,  # We use state tracker instead of console
+                    rag_engine=rag_engine,
+                    mcp_integrator=mcp_integrator,
+                )
+                
+                # Run the real state machine with UI callbacks
+                context = await runner.process_query(user_query)
+                
+                # Get the LLM response from context
+                full_response = ""
+                if hasattr(context, 'llm_text_response') and context.llm_text_response:
+                    full_response = context.llm_text_response
+                elif hasattr(context, 'execution_results') and context.execution_results:
+                    # If no LLM response, show execution results
+                    results = []
+                    for tool_name, success, result in context.execution_results:
+                        status = "✅" if success else "❌"
+                        results.append(f"{status} {tool_name}: {result}")
+                    full_response = "\n".join(results)
+                else:
+                    full_response = "Saturn completed processing your request."
+                
+                # Add assistant message
+                assistant_message = ChatMessage(full_response, "assistant")
+                await self.chat_container.mount(assistant_message)
+                self.scroll_to_latest_message()
+                
+            except Exception as init_error:
+                # Use the original orchestrator as fallback
+                import traceback
+                error_details = traceback.format_exc()
+                self.add_system_message(f"⚠ Error details: {error_details}")
+                await state_tracker._add_state_message(f"⚠ Using fallback orchestrator: {str(init_error)}")
+                
+                async def simple_generator():
+                    yield user_query
 
-            # Show different thinking states
-            thinking.start_thinking("Planning infrastructure operations...")
-            await asyncio.sleep(0.3)
-
-            thinking.start_thinking("Executing cloud automation...")
-
-            # Create async generator for orchestrator
-            async def simple_generator():
-                yield user_query
-
-            # Run the orchestrator
-            async for role, message in run_chat_conversational(
-                self.config, simple_generator()
-            ):
-                if role == "assistant":
-                    thinking.stop_thinking()
-                    await self.add_assistant_message(message)
-                    break
+                full_response = ""
+                async for role, message in run_chat_conversational(
+                    self.config, simple_generator()
+                ):
+                    if role == "assistant":
+                        full_response += message
+                
+                assistant_message = ChatMessage(full_response, "assistant")
+                await self.chat_container.mount(assistant_message)
+                self.scroll_to_latest_message()
 
         except Exception as e:
-            thinking = self.query_one("#thinking", ThinkingIndicator)
-            thinking.stop_thinking()
-            await self.add_system_message(f"Error: {str(e)}")
+            # Show error state
+            state_tracker = SaturnStateTracker(self)
+            await state_tracker.on_error(str(e))
+            
+            error_message = ChatMessage(f"Error: {str(e)}", "system")
+            await self.chat_container.mount(error_message)
+            self.scroll_to_latest_message()
         finally:
-            # Re-enable input like Elia
+            # Ensure prompt is re-enabled
             prompt = self.query_one("#prompt", SaturnPromptInput)
             prompt.submit_ready = True
             self.conversation_active = False
 
-    async def add_user_message(self, content: str) -> None:
-        """Add user message like Elia's pattern"""
+    def add_user_message(self, content: str) -> None:
         message = ChatMessage(content, "user")
-        await self.chat_container.mount(message)
+        self.chat_container.mount(message)
         self.scroll_to_latest_message()
 
-    async def add_assistant_message(self, content: str) -> None:
-        """Add assistant message like Elia's pattern"""
+    def add_assistant_message(self, content: str) -> None:
         message = ChatMessage(content, "assistant")
-        await self.chat_container.mount(message)
+        self.chat_container.mount(message)
         self.scroll_to_latest_message()
 
-    async def add_system_message(self, content: str) -> None:
-        """Add system message like Elia's pattern"""
+    def add_system_message(self, content: str) -> None:
         message = ChatMessage(content, "system")
-        await self.chat_container.mount(message)
+        self.chat_container.mount(message)
         self.scroll_to_latest_message()
 
     def action_clear_chat(self) -> None:
