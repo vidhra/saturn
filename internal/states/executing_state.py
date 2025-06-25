@@ -1,7 +1,8 @@
 import json
 import shlex
 import traceback
-from typing import Any, Dict, Tuple, Type
+import asyncio
+from typing import Any, Dict, List, Tuple, Type
 
 from rich.panel import Panel
 from rich.table import Table
@@ -17,84 +18,30 @@ from .failed_state import FailedState
 
 
 def _parse_command(command_string: str) -> Dict[str, Any]:
-    """Parses a gcloud command string into a structured dictionary using shlex."""
-    parsed_command: Dict[str, Any] = {
-        "original_command": command_string,
-        "base_command": "",
-        "subcommands": [],
-        "flags": {},
-        "positional_args": [],
-        "parsing_error": None,
-    }
+    """
+    Parse a command string to extract the command and its arguments.
+    Handles both JSON format and plain string commands.
+    """
+    command_string = command_string.strip()
 
-    try:
-        tokens = shlex.split(command_string)
+    if command_string.startswith("{") and command_string.endswith("}"):
+        try:
+            parsed = json.loads(command_string)
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            pass
 
-        if not tokens:
-            parsed_command["parsing_error"] = "Empty command string"
-            return parsed_command
-
-        if tokens[0] not in ["gcloud", "aws"]:
-            parsed_command["parsing_error"] = (
-                f"Command does not start with gcloud or aws: {tokens[0]}"
-            )
-            parsed_command["base_command"] = tokens[0] if tokens else ""
-            parsed_command["subcommands"] = tokens[1:] if len(tokens) > 1 else []
-            return parsed_command
-
-        parsed_command["base_command"] = tokens.pop(0)
-
-        idx = 0
-        while idx < len(tokens):
-            token = tokens[idx]
-            if token.startswith("--"):
-                flag_name = token
-                if "=" in flag_name:
-                    name, value = flag_name.split("=", 1)
-                    parsed_command["flags"][name] = value
-                    idx += 1
-                elif idx + 1 < len(tokens) and not tokens[idx + 1].startswith("-"):
-                    parsed_command["flags"][flag_name] = tokens[idx + 1]
-                    idx += 2
-                else:
-                    parsed_command["flags"][flag_name] = True  # Boolean flag
-                    idx += 1
-            elif token.startswith("-") and not token.startswith("--"):
-                if "=" in token:
-                    name, value = token.split("=", 1)
-                    parsed_command["flags"][name] = value
-                    idx += 1
-                elif (
-                    len(token) == 2
-                    and idx + 1 < len(tokens)
-                    and not tokens[idx + 1].startswith("-")
-                ):
-                    parsed_command["flags"][token] = tokens[idx + 1]
-                    idx += 2
-                else:
-                    parsed_command["flags"][token] = True
-                    idx += 1
-            else:
-                if not parsed_command["flags"]:
-                    parsed_command["subcommands"].append(token)
-                else:
-                    parsed_command["positional_args"].append(token)
-                idx += 1
-
-    except Exception as e:
-        parsed_command["parsing_error"] = f"Error during command parsing: {str(e)}"
-        if not parsed_command.get("subcommands"):
-            parsed_command["subcommands"] = [command_string]
-    return parsed_command
+    return {"command": command_string}
 
 
 class ExecutingState(BaseState):
-    """State responsible for executing DAG steps in topological order."""
+    """State responsible for executing DAG steps with parallel execution support."""
 
     async def run(
         self, context: StateMachineContext
     ) -> Tuple[Type[BaseState], StateMachineContext]:
-        print("--- State: EXECUTING ---")
+        print("--- State: EXECUTING (with Parallel Support) ---")
 
         if not context.dag or not context.step_details_map:
             print("No DAG or step details available for execution.")
@@ -107,6 +54,99 @@ class ExecutingState(BaseState):
             )
             return FailedState, context
 
+        console = context.console
+        parallel_execution = context.config.get("parallel_execution", True)
+        max_parallel_tasks = context.config.get("max_parallel_tasks", 3)
+
+        if parallel_execution:
+            return await self._execute_parallel(context, console, max_parallel_tasks)
+        else:
+            return await self._execute_sequential(context, console)
+
+    async def _execute_parallel(self, context: StateMachineContext, console, max_parallel_tasks: int):
+        """Execute DAG steps in parallel where possible."""
+        if console:
+            console.print(
+                f"[cyan]Executing DAG with parallel execution (max {max_parallel_tasks} concurrent tasks)[/cyan]"
+            )
+
+        completed_nodes = set()
+        all_steps_succeeded = True
+        accumulated_errors = []
+
+        while len(completed_nodes) < len(context.step_details_map):
+            # Get immediately ready nodes
+            ready_nodes = context.dag.get_immediately_ready_nodes(completed_nodes)
+            
+            if not ready_nodes:
+                # Check if we're stuck (circular dependency or other issue)
+                remaining_nodes = set(context.step_details_map.keys()) - completed_nodes
+                if remaining_nodes:
+                    error_msg = f"No nodes are ready to execute, but {len(remaining_nodes)} remain: {remaining_nodes}"
+                    if console:
+                        console.print(f"[bold red]Error: {error_msg}[/bold red]")
+                    accumulated_errors.append({"error": error_msg})
+                    all_steps_succeeded = False
+                break
+
+            # Limit parallel execution
+            ready_nodes_list = list(ready_nodes)[:max_parallel_tasks]
+            
+            if console:
+                if len(ready_nodes_list) > 1:
+                    console.print(f"[yellow]Executing {len(ready_nodes_list)} steps in parallel: {', '.join(ready_nodes_list)}[/yellow]")
+                else:
+                    console.print(f"[blue]Executing step: {ready_nodes_list[0]}[/blue]")
+
+            # Execute ready nodes in parallel
+            tasks = []
+            for step_id in ready_nodes_list:
+                task = self._execute_single_step(step_id, context, console)
+                tasks.append(task)
+
+            # Wait for all parallel tasks to complete
+            try:
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                # Process results
+                for i, (step_id, result) in enumerate(zip(ready_nodes_list, results)):
+                    if isinstance(result, Exception):
+                        if console:
+                            console.print(f"[bold red]Step {step_id} failed with exception: {result}[/bold red]")
+                        accumulated_errors.append({"step_id": step_id, "error": str(result)})
+                        all_steps_succeeded = False
+                        context.step_outputs[step_id] = {"error": str(result)}
+                    else:
+                        step_success, step_result = result
+                        context.step_outputs[step_id] = step_result
+                        
+                        if step_success:
+                            completed_nodes.add(step_id)
+                            if console:
+                                console.print(f"[green]✓ Step {step_id} completed successfully[/green]")
+                        else:
+                            if console:
+                                console.print(f"[bold red]✗ Step {step_id} failed[/bold red]")
+                            accumulated_errors.append({"step_id": step_id, "error": step_result.get("error", "Unknown error")})
+                            all_steps_succeeded = False
+                            
+            except Exception as e:
+                if console:
+                    console.print(f"[bold red]Error in parallel execution: {e}[/bold red]")
+                accumulated_errors.append({"error": f"Parallel execution error: {e}"})
+                all_steps_succeeded = False
+                break
+
+            # Early termination on critical failures
+            if accumulated_errors and context.config.get("fail_fast", False):
+                if console:
+                    console.print("[bold red]Fail-fast mode: Stopping execution due to errors[/bold red]")
+                break
+
+        return await self._process_execution_results(context, console, all_steps_succeeded, accumulated_errors)
+
+    async def _execute_sequential(self, context: StateMachineContext, console):
+        """Execute DAG steps sequentially (original behavior)."""
         if not context.execution_order:
             print("No execution order available.")
             context.current_errors.append(
@@ -118,7 +158,6 @@ class ExecutingState(BaseState):
             )
             return FailedState, context
 
-        console = context.console
         if console:
             console.print(
                 f"Executing DAG with {len(context.execution_order)} steps in order: {' -> '.join(context.execution_order)}"
@@ -137,64 +176,7 @@ class ExecutingState(BaseState):
                 all_steps_succeeded = False
                 break
 
-            current_step_details = context.step_details_map[step_id]
-
-            step_dependencies = [
-                edge.source for edge in context.dag.edges if edge.target == step_id
-            ]
-            contextual_outputs = {}
-            for dep_id in step_dependencies:
-                if dep_id in context.step_outputs:
-                    dep_details = context.step_details_map.get(dep_id, {})
-                    if dep_details.get("pass_output_to_next", True):
-                        if (
-                            isinstance(context.step_outputs[dep_id], dict)
-                            and "error" in context.step_outputs[dep_id]
-                        ):
-                            dep_error_info = context.step_outputs[dep_id]["error"]
-                            if console:
-                                console.print(
-                                    f"[yellow]Warning: Dependency '{dep_id}' (marked to pass output) for step '{step_id}' failed. Its error was: {dep_error_info}. Passing error as context.[/yellow]"
-                                )
-                            contextual_outputs[dep_id] = {
-                                "status": "FAILED",
-                                "output": dep_error_info,
-                            }
-                        else:
-                            contextual_outputs[dep_id] = {
-                                "status": "SUCCESS",
-                                "output": context.step_outputs[dep_id],
-                            }
-                elif (
-                    dep_id in context.step_details_map
-                    and not context.step_details_map[dep_id].get(
-                        "pass_output_to_next", True
-                    )
-                ):
-                    if console:
-                        console.print(
-                            f"[info]Output of dependency '{dep_id}' for step '{step_id}' was not passed as per 'pass_output_to_next' flag.[/info]"
-                        )
-
-            tool_to_use = current_step_details.get("tool_to_use")
-            cloud_provider = current_step_details.get("cloud_provider")
-
-            if tool_to_use.startswith("mcp_"):
-                # Route MCP tools to MCP integrator
-                step_success, step_result = await self._execute_mcp_tool_step(
-                    step_id, current_step_details, context, console
-                )
-            elif tool_to_use in [tool["name"] for tool in context.file_tools] or (
-                cloud_provider is None or str(cloud_provider).lower() == "none"
-            ):
-                step_success, step_result = await self._execute_file_tool_step(
-                    step_id, current_step_details, context, console
-                )
-            else:
-                step_success, step_result = await self._execute_dag_step(
-                    step_id, current_step_details, context, contextual_outputs, console
-                )
-
+            step_success, step_result = await self._execute_single_step(step_id, context, console)
             context.step_outputs[step_id] = step_result
 
             if not step_success:
@@ -213,6 +195,61 @@ class ExecutingState(BaseState):
                     )
                 break
 
+        return await self._process_execution_results(context, console, all_steps_succeeded, accumulated_errors)
+
+    async def _execute_single_step(self, step_id: str, context: StateMachineContext, console) -> Tuple[bool, Any]:
+        """Execute a single step and return success status and result."""
+        current_step_details = context.step_details_map[step_id]
+
+        # Collect dependency outputs
+        step_dependencies = [
+            edge.source for edge in context.dag.edges if edge.target == step_id
+        ]
+        contextual_outputs = {}
+        for dep_id in step_dependencies:
+            if dep_id in context.step_outputs:
+                dep_details = context.step_details_map.get(dep_id, {})
+                if dep_details.get("pass_output_to_next", True):
+                    if (
+                        isinstance(context.step_outputs[dep_id], dict)
+                        and "error" in context.step_outputs[dep_id]
+                    ):
+                        dep_error_info = context.step_outputs[dep_id]["error"]
+                        if console:
+                            console.print(
+                                f"[yellow]Warning: Dependency '{dep_id}' (marked to pass output) for step '{step_id}' failed. Its error was: {dep_error_info}. Passing error as context.[/yellow]"
+                            )
+                        contextual_outputs[dep_id] = {
+                            "status": "FAILED",
+                            "output": dep_error_info,
+                        }
+                    else:
+                        contextual_outputs[dep_id] = {
+                            "status": "SUCCESS",
+                            "output": context.step_outputs[dep_id],
+                        }
+
+        tool_to_use = current_step_details.get("tool_to_use")
+        cloud_provider = current_step_details.get("cloud_provider")
+
+        # Route to appropriate execution method
+        if tool_to_use.startswith("mcp_"):
+            return await self._execute_mcp_tool_step(
+                step_id, current_step_details, context, console
+            )
+        elif tool_to_use in [tool["name"] for tool in context.file_tools] or (
+            cloud_provider is None or str(cloud_provider).lower() == "none"
+        ):
+            return await self._execute_file_tool_step(
+                step_id, current_step_details, context, console
+            )
+        else:
+            return await self._execute_dag_step(
+                step_id, current_step_details, context, contextual_outputs, console
+            )
+
+    async def _process_execution_results(self, context, console, all_steps_succeeded, accumulated_errors):
+        """Process the final results of execution."""
         if all_steps_succeeded and not accumulated_errors:
             if console:
                 console.print(

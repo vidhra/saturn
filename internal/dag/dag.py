@@ -382,6 +382,156 @@ class AcyclicGraph(Graph):
         else:
             return list(reversed(order))
 
+    def get_parallel_ready_nodes(self, completed_nodes: Set = None) -> List[Set]:
+        """
+        Returns groups of nodes that can be executed in parallel.
+        Each group contains nodes with no dependencies on each other or on incomplete nodes.
+        
+        Args:
+            completed_nodes: Set of already completed node IDs
+            
+        Returns:
+            List of sets, where each set contains nodes that can run in parallel
+        """
+        if completed_nodes is None:
+            completed_nodes = set()
+            
+        ready_groups = []
+        remaining_nodes = self.vertices - completed_nodes
+        processed = set()
+        
+        while remaining_nodes - processed:
+            # Find nodes that have no incomplete dependencies
+            current_ready = set()
+            
+            for node in remaining_nodes - processed:
+                dependencies = self.down_edges.get(node, set())
+                incomplete_deps = dependencies - completed_nodes
+                
+                if not incomplete_deps:  # All dependencies are complete
+                    current_ready.add(node)
+            
+            if not current_ready:
+                # If no nodes are ready, we might have a circular dependency
+                # or incomplete analysis - break to avoid infinite loop
+                break
+                
+            ready_groups.append(current_ready)
+            processed.update(current_ready)
+            # Simulate these nodes as completed for next iteration
+            completed_nodes.update(current_ready)
+            
+        return ready_groups
+
+    def get_immediately_ready_nodes(self, completed_nodes: Set = None) -> Set:
+        """
+        Returns nodes that are immediately ready to execute (have no incomplete dependencies).
+        
+        Args:
+            completed_nodes: Set of already completed node IDs
+            
+        Returns:
+            Set of node IDs that can be executed immediately
+        """
+        if completed_nodes is None:
+            completed_nodes = set()
+            
+        ready_nodes = set()
+        
+        for node in self.vertices - completed_nodes:
+            dependencies = self.down_edges.get(node, set())
+            incomplete_deps = dependencies - completed_nodes
+            
+            if not incomplete_deps:  # All dependencies are complete
+                ready_nodes.add(node)
+                
+        return ready_nodes
+
+    def get_node_level(self, node) -> int:
+        """
+        Returns the execution level of a node (distance from root nodes).
+        Nodes at the same level can potentially be executed in parallel.
+        
+        Args:
+            node: The node to get the level for
+            
+        Returns:
+            Integer representing the execution level (0 for root nodes)
+        """
+        if node not in self.vertices:
+            return -1
+            
+        # Find the longest path to this node from any root
+        def dfs_depth(current_node, visited):
+            if current_node in visited:
+                return 0  # Avoid cycles
+            
+            visited.add(current_node)
+            dependencies = self.down_edges.get(current_node, set())
+            
+            if not dependencies:
+                visited.remove(current_node)
+                return 0  # Root node
+            
+            max_depth = 0
+            for dep in dependencies:
+                depth = dfs_depth(dep, visited)
+                max_depth = max(max_depth, depth + 1)
+            
+            visited.remove(current_node)
+            return max_depth
+        
+        return dfs_depth(node, set())
+
+    def get_parallel_execution_plan(self, completed_nodes: Set = None) -> Dict[int, Set]:
+        """
+        Returns a complete parallel execution plan organized by levels.
+        
+        Args:
+            completed_nodes: Set of already completed node IDs
+            
+        Returns:
+            Dictionary mapping level -> set of nodes that can execute at that level
+        """
+        if completed_nodes is None:
+            completed_nodes = set()
+            
+        execution_plan = {}
+        remaining_nodes = self.vertices - completed_nodes
+        
+        # Group nodes by their execution level
+        for node in remaining_nodes:
+            level = self.get_node_level(node)
+            if level not in execution_plan:
+                execution_plan[level] = set()
+            execution_plan[level].add(node)
+            
+        return execution_plan
+
+    def can_execute_parallel(self, node1, node2, completed_nodes: Set = None) -> bool:
+        """
+        Check if two nodes can be executed in parallel (no dependencies between them).
+        
+        Args:
+            node1, node2: Nodes to check
+            completed_nodes: Set of already completed node IDs
+            
+        Returns:
+            True if nodes can execute in parallel, False otherwise
+        """
+        if completed_nodes is None:
+            completed_nodes = set()
+            
+        # Check if either node depends on the other
+        if node2 in self.ancestors(node1) or node1 in self.ancestors(node2):
+            return False
+            
+        # Check if both nodes have their dependencies satisfied
+        deps1 = self.down_edges.get(node1, set()) - completed_nodes
+        deps2 = self.down_edges.get(node2, set()) - completed_nodes
+        
+        return len(deps1) == 0 and len(deps2) == 0
+
 
 # --- A helper class for testing performance of vertex naming ---
 

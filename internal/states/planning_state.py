@@ -15,12 +15,12 @@ from .failed_state import FailedState
 
 
 class PlanningState(BaseState):
-    """State responsible for generating a DAG-based execution plan using LLM."""
+    """State responsible for generating a DAG-based execution plan using LLM with dynamic state routing."""
 
     async def run(
         self, context: StateMachineContext
     ) -> Tuple[Type[BaseState], StateMachineContext]:
-        print("--- State: PLANNING ---")
+        print("--- State: PLANNING (with Dynamic State Detection) ---")
 
         max_attempts = 5
         attempt = 1
@@ -28,13 +28,20 @@ class PlanningState(BaseState):
         while attempt <= max_attempts:
             print(f"Planning attempt {attempt}/{max_attempts}")
 
-            # Get file build tool names for DAG planning
             from saturn.file_build_tools import FileBuildToolCaller
 
             file_tool_caller = FileBuildToolCaller(
                 context.file_build_executor.config.get("working_directory", ".")
             )
             context.file_tools = file_tool_caller.get_available_tools()
+            next_state_class = await self._analyze_query_for_dynamic_states(
+                context.original_query, context
+            )
+
+
+            if next_state_class and next_state_class != ExecutingState:
+                print(f"Dynamic routing: Transitioning to specialized state: {next_state_class.__name__}")
+                return next_state_class, context
 
             # Generate DAG plan using orchestrator logic
             dag, step_details_map = await self._generate_plan_dag(
@@ -85,6 +92,38 @@ class PlanningState(BaseState):
             print("Planning completed successfully. Transitioning to EXECUTING.")
             return ExecutingState, context
 
+    async def _analyze_query_for_dynamic_states(
+        self, query: str, context: StateMachineContext
+    ) -> Type[BaseState]:
+        """
+        Analyze the query to determine if specialized states should be used.
+        Framework for adding dynamic state routing based on query analysis.
+        """
+        query_lower = query.lower()
+        
+        # Example: Check for Terraform operations (you already have TerraformState)
+        terraform_keywords = [
+            'terraform', 'infrastructure as code', 'iac', 'terraform apply',
+            'terraform plan', 'infrastructure template', 'provisioning',
+            'tf file', '.tf', 'terraform init'
+        ]
+
+        if any(keyword in query_lower for keyword in terraform_keywords):
+            try:
+                from .terraform_state import TerraformPlanningState
+                context.state_recorder.record_event(
+                    "dynamic_state_detection",
+                    {"detected_type": "terraform", "keywords_matched": [kw for kw in terraform_keywords if kw in query_lower]}
+                )
+                return TerraformPlanningState
+            except ImportError:
+                print("[Warning] Terraform state not available, using default execution")
+
+
+        return ExecutingState
+
+
+
     async def _generate_plan_dag(
         self,
         user_query: str,
@@ -124,12 +163,28 @@ class PlanningState(BaseState):
         else:
             available_mcp_tools = "(No MCP tools currently available)"
 
+        # Include reasoning analysis if available
+        reasoning_context = ""
+        if hasattr(context, 'reasoning_analysis') and context.reasoning_analysis:
+            reasoning = context.reasoning_analysis
+            reasoning_context = f"""
+
+PREVIOUS REASONING ANALYSIS:
+Intent: {reasoning.get('intent', 'Not specified')}
+Complexity: {reasoning.get('complexity', 'moderate')}
+Key Components: {reasoning.get('components', 'cloud services')}
+Dependencies: {reasoning.get('dependencies', 'standard cloud access')}
+Recommended Approach: {reasoning.get('approach', 'step-by-step execution')}
+
+Use this reasoning analysis to inform your step planning. Focus on the identified components and approach.
+"""
+
         planning_prompt = PLANNING_SYSTEM_PROMPT_TEMPLATE.format(
             user_query=user_query,
             available_file_tools=available_file_tools,
             available_cloud_tools=available_cloud_tools,
             available_mcp_tools=available_mcp_tools,
-        )
+        ) + reasoning_context
         try:
 
             response = await llm_interface.agenerate(

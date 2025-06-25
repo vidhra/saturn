@@ -15,7 +15,7 @@ class StartState(BaseState):
         context.node_states = {}
         context.node_outputs = {}
         context.current_errors = []
-        print("Transitioning to PLANNING")
-        from .planning_state import PlanningState
+        print("Transitioning to REASONING")
+        from .reasoning_state import ReasoningState
 
-        return PlanningState, context
+        return ReasoningState, context
