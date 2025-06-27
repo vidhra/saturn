@@ -1,23 +1,18 @@
-import os
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Optional
+"""
+Saturn TUI Application - Main Application File
 
-from textual import on, work
+A modern terminal user interface for the Saturn AI Assistant,
+featuring real-time chat, model selection, and cloud operations.
+"""
+
+import os
+from datetime import datetime
+
+from textual import work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, VerticalScroll
-from textual.message import Message
-from textual.reactive import reactive
-from textual.screen import ModalScreen
-from textual.widgets import Footer, Static, TextArea
-
-try:
-    import pyperclip
-
-    CLIPBOARD_AVAILABLE = True
-except ImportError:
-    CLIPBOARD_AVAILABLE = False
+from textual.widgets import Footer
 
 from saturn.config import load_config
 from saturn.orchestrator import run_chat_conversational
@@ -25,332 +20,13 @@ from saturn.orchestrator import run_chat_conversational
 # Import state tracker
 from .state_tracker import SaturnStateTracker, create_ui_aware_runner
 
-
-class SaturnPromptInput(TextArea):
-    """Saturn's input widget based on PromptInput"""
-
-    @dataclass
-    class PromptSubmitted(Message):
-        text: str
-        prompt_input: "SaturnPromptInput"
-
-    BINDINGS = [
-        Binding("enter", "submit_prompt", "Send message", key_display="⏎"),
-    ]
-
-    submit_ready = reactive(True)
-
-    def __init__(self, **kwargs):
-        super().__init__(text="", language=None, **kwargs)
-
-    def on_mount(self):
-        self.border_title = "Enter your message..."
-
-    @on(TextArea.Changed)
-    async def prompt_changed(self, event: TextArea.Changed) -> None:
-        text_area = event.text_area
-        if text_area.text.strip() != "":
-            text_area.border_subtitle = "[white]⏎[/white] Send message"
-        else:
-            text_area.border_subtitle = None
-
-        text_area.set_class(text_area.wrapped_document.height > 1, "multiline")
-
-    async def on_key(self, event) -> None:
-        """Handle key events for submit shortcuts."""
-        if event.key == "enter":
-            # Enter: Submit message
-            event.stop()
-            self.action_submit_prompt()
-            return
-
-    def action_submit_prompt(self) -> None:
-        if self.text.strip() == "":
-            self.notify("Cannot send empty message!")
-            return
-
-        if self.submit_ready:
-            message = self.PromptSubmitted(self.text, prompt_input=self)
-            self.clear()
-            self.post_message(message)
-        else:
-            self.app.bell()
-            self.notify("Please wait for response to complete.")
-
-
-class SaturnTextArea(TextArea):
-    """Enhanced TextArea with copy functionality"""
-
-    BINDINGS = [
-        Binding("ctrl+c,y", "copy_to_clipboard", "Copy", show=False),
-    ]
-
-    def action_copy_to_clipboard(self) -> None:
-        """Copy selected text or all text to clipboard - works on Windows/Mac/Linux"""
-        text_to_copy = self.selected_text if self.selected_text else self.text
-
-        if not text_to_copy.strip():
-            self.notify("No text to copy", severity="warning")
-            return
-
-        try:
-            if CLIPBOARD_AVAILABLE:
-                # Use pyperclip if available
-                pyperclip.copy(text_to_copy)
-                self.notify(f"📋 Copied {len(text_to_copy)} characters")
-            else:
-                # Fallback to platform-specific clipboard commands
-                import platform
-                import subprocess
-
-                system = platform.system().lower()
-                if system == "darwin":  # macOS
-                    subprocess.run(["pbcopy"], input=text_to_copy.encode(), check=True)
-                elif system == "windows":  # Windows
-                    subprocess.run(
-                        ["clip"], input=text_to_copy.encode(), shell=True, check=True
-                    )
-                elif system == "linux":  # Linux
-                    try:
-                        subprocess.run(
-                            ["xclip", "-selection", "clipboard"],
-                            input=text_to_copy.encode(),
-                            check=True,
-                        )
-                    except FileNotFoundError:
-                        subprocess.run(
-                            ["xsel", "--clipboard", "--input"],
-                            input=text_to_copy.encode(),
-                            check=True,
-                        )
-
-                self.notify(f"📋 Copied {len(text_to_copy)} characters")
-
-        except Exception as e:
-            self.notify(f"❌ Copy failed: {str(e)}", severity="error")
-
-
-class ChatMessage(Static):
-    """Individual chat message like Chatbox"""
-
-    BINDINGS = [
-        Binding("ctrl+c,y", "copy_message", "Copy message", show=False),
-    ]
-
-    def __init__(
-        self, content: str, role: str, timestamp: Optional[str] = None, **kwargs
-    ):
-        super().__init__(**kwargs)
-        self.content = content
-        self.role = role
-        self.timestamp = timestamp or datetime.now().strftime("%H:%M:%S")
-        # Make messages focusable
-        self.can_focus = True
-
-    def compose(self) -> ComposeResult:
-        # Header with role and timestamp
-
-        if self.role == "user":
-            yield SaturnTextArea(
-                text=self.content,
-                read_only=True,
-                classes="user-content",
-                id="message-content",
-            )
-        elif self.role == "assistant":
-            yield Static(
-                f"[bold green]⟨saturn⟩[/bold green] [dim]{self.timestamp}[/dim]"
-            )
-            yield SaturnTextArea(
-                text=self.content,
-                read_only=True,
-                classes="assistant-content",
-                id="message-content",
-            )
-        else:
-            yield SaturnTextArea(
-                text=self.content,
-                read_only=True,
-                classes="system-content",
-                id="message-content",
-            )
-
-    def action_copy_message(self) -> None:
-        """Copy this message's content using the existing SaturnTextArea copy functionality"""
-        try:
-            # Get the SaturnTextArea that contains the message content
-            content_area = self.query_one("#message-content", SaturnTextArea)
-            # Use the existing copy functionality
-            content_area.action_copy_to_clipboard()
-        except Exception as e:
-            self.notify(f"❌ Copy failed: {str(e)}", severity="error")
-
-    def on_focus(self) -> None:
-        """Visual feedback when message is focused"""
-        self.add_class("focused-message")
-
-    def on_blur(self) -> None:
-        """Remove visual feedback when message loses focus"""
-        self.remove_class("focused-message")
-
-
-class ThinkingIndicator(Static):
-    """Real-time thinking display with state tracking like ResponseStatus"""
-
-    def __init__(self, **kwargs):
-        super().__init__("", **kwargs)
-        self.visible = False
-        self.current_state = ""
-        self.current_step = ""
-        self.operation_count = 0
-
-        # State descriptions for better UX
-        self.state_descriptions = {
-            "StartState": "Initializing Saturn AI Assistant...",
-            "ReasoningState": "Analyzing your request and understanding intent...",
-            "PlanningState": "Creating execution plan and selecting tools...",
-            "ExecutingState": "Executing operations on cloud infrastructure...",
-            "ProcessingResultsState": "Processing results and validating operations...",
-            "TerraformState": "Managing infrastructure with Terraform...",
-            "TerraformPlanningState": "Planning Terraform resource configurations...",
-            "CompletedState": "Operations completed successfully!",
-            "FailedState": "Operations failed - reviewing errors...",
-        }
-
-        # Dynamic sub-operations for each state
-        self.sub_operations = {
-            "ReasoningState": [
-                "Parsing natural language query",
-                "Identifying cloud services mentioned",
-                "Analyzing complexity and scope",
-                "Determining execution approach",
-            ],
-            "PlanningState": [
-                "Discovering available tools",
-                "Building dependency graph",
-                "Optimizing execution order",
-                "Validating tool parameters",
-            ],
-            "ExecutingState": [
-                "Authenticating with cloud providers",
-                "Executing infrastructure operations",
-                "Monitoring operation progress",
-                "Collecting execution results",
-            ],
-            "ProcessingResultsState": [
-                "Validating operation results",
-                "Checking for errors or warnings",
-                "Updating state tracking",
-                "Preparing next steps",
-            ],
-        }
-
-    def start_thinking(self, message: str = ""):
-        """Start the thinking animation"""
-        self.visible = True
-        self.display = True
-        # Force immediate refresh
-        self.refresh()
-        if message:
-            self.update(f"[bold yellow]▶[/bold yellow] {message}")
-        else:
-            self._show_current_state()
-
-    def update_state(self, state_name: str, step: str = ""):
-        """Update current state and step information"""
-        if state_name != self.current_state:
-            self.current_state = state_name
-            self.current_step = step
-            self.operation_count = 0
-            self._show_current_state()
-        elif step and step != self.current_step:
-            self.current_step = step
-            self._show_current_state()
-
-    def _show_current_state(self):
-        """Show current state with description and sub-operations"""
-        if not self.visible:
-            return
-
-        # Main state description
-        main_desc = self.state_descriptions.get(
-            self.current_state, f"Processing {self.current_state}..."
-        )
-
-        # Show sub-operation if available
-        sub_ops = self.sub_operations.get(self.current_state, [])
-        if sub_ops and self.operation_count < len(sub_ops):
-            current_sub_op = sub_ops[self.operation_count % len(sub_ops)]
-            display_text = f"[bold yellow]▶[/bold yellow] {main_desc}\n[dim]  └─ {current_sub_op}...[/dim]"
-            self.operation_count += 1
-        elif self.current_step:
-            display_text = f"[bold yellow]▶[/bold yellow] {main_desc}\n[dim]  └─ {self.current_step}[/dim]"
-        else:
-            display_text = f"[bold yellow]▶[/bold yellow] {main_desc}"
-
-        self.update(display_text)
-
-        # Auto-advance sub-operations for active states
-        if sub_ops and self.current_state in [
-            "ReasoningState",
-            "PlanningState",
-            "ExecutingState",
-        ]:
-            self.set_timer(1.5, self._advance_sub_operation)
-
-    def _advance_sub_operation(self):
-        """Advance to next sub-operation for visual progress"""
-        if self.visible and self.current_state in self.sub_operations:
-            self._show_current_state()
-
-    def stop_thinking(self):
-        """Stop thinking and hide"""
-        self.visible = False
-        self.display = False
-        self.update("")
-        self.current_state = ""
-        self.current_step = ""
-        self.operation_count = 0
-
-
-class HelpScreen(ModalScreen):
-    """Professional help modal"""
-
-    BINDINGS = [
-        Binding("escape", "dismiss", "Close"),
-        Binding("q", "dismiss", "Close"),
-    ]
-
-    def compose(self) -> ComposeResult:
-        with Container(classes="help-modal"):
-
-            yield Static("Saturn AI Assistant", classes="help-title")
-            yield Static(
-                """Commands:
-• Enter: Send message
-• Ctrl+L: Clear conversation  
-• ↑/K: Focus previous message
-• ↓/J: Focus next message
-• Tab: Focus input field
-• Ctrl+C or Y: Copy focused message
-• F1: Help • Ctrl+C: Quit
-
-Features:
-• Real-time execution feedback
-• Multi-line input support
-• Cross-platform clipboard (Windows/Mac/Linux)
-• Message navigation and copying
-• Markdown rendering
-
-Cloud Operations:
-• AWS, GCP, Azure automation
-• Infrastructure as Code
-• Terraform, CloudFormation
-• Monitoring & troubleshooting
-
-Press ESC to close
-            """,
-                classes="help-content",
+# Import UI components
+from .components import (
+    ChatMessage,
+    HelpScreen,
+    ModelSelectorScreen,
+    ModeSelector,
+    SaturnPromptInput,
             )
 
 
@@ -421,9 +97,10 @@ class SaturnApp(App):
         dock: bottom;
         height: auto;
         max-height: 30%;
-        background: #161b22;
+        background: #000000;
         border: solid #21262d;
-        margin: 1;
+        margin: 1 3 1 1;
+        
     }
     
     SaturnPromptInput:focus {
@@ -449,6 +126,71 @@ class SaturnApp(App):
         color: #f0f6fc;
     }
     
+    /* Model Selector Modal Styles */
+    .model-selector-modal {
+        width: 80;
+        height: 25;
+        background: #161b22;
+        border: solid #58a6ff;
+        padding: 1;
+    }
+    
+    .modal-title {
+        text-align: center;
+        text-style: bold;
+        color: #58a6ff;
+        margin-bottom: 1;
+    }
+    
+    .model-content {
+        height: 1fr;
+        margin-bottom: 1;
+    }
+    
+    .provider-panel {
+        width: 1fr;
+        margin-right: 1;
+    }
+    
+    .model-panel {
+        width: 2fr;
+    }
+    
+    .panel-label {
+        text-style: bold;
+        color: #f0f6fc;
+        margin-bottom: 1;
+    }
+    
+    .button-bar {
+        height: 4;
+        align: center middle;
+    }
+    
+    .button-bar Button {
+        margin: 0 1;
+    }
+    
+    .help-text {
+        text-align: center;
+        color: #7d8590;
+        text-style: italic;
+        margin: 1 0;
+    }
+    
+    OptionList {
+        border: solid #000000;
+        background: #000000;
+    }
+    
+    OptionList:focus {
+        border: solid #58a6ff;
+    }
+    
+
+    
+
+    
     Footer {
         background: #161b22;
         color: #7d8590;
@@ -461,6 +203,7 @@ class SaturnApp(App):
     BINDINGS = [
         Binding("ctrl+c", "quit", "Quit"),
         Binding("ctrl+l", "clear_chat", "Clear"),
+        Binding("ctrl+m", "show_model_selector", "Models", show=True),
         Binding("f1", "help", "Help"),
         Binding("up,k", "focus_previous_message", "Previous message", show=False),
         Binding("down,j", "focus_next_message", "Next message", show=False),
@@ -472,6 +215,40 @@ class SaturnApp(App):
         self.config = load_config()
         self._setup_config()
         self.conversation_active = False
+        # Track current model settings
+        self.current_provider = self.config.get("llm_provider", "gemini")
+        self.current_model = self._get_current_model_name()
+        # Track current mode
+        self.app_mode = "auto"
+
+    def _get_current_model_name(self) -> str:
+        """Get the current model name based on provider"""
+        provider = self.current_provider
+        if provider == "openai":
+            return self.config.get('openai_model', 'gpt-4o')
+        elif provider == "gemini":
+            return self.config.get('gemini_model', 'gemini-1.5-pro')
+        elif provider == "claude":
+            return self.config.get('claude_model', 'claude-3-5-sonnet-20241022')
+        elif provider == "mistral":
+            return self.config.get('mistral_model', 'mistral-large-latest')
+        else:
+            return "unknown"
+
+    def _update_model_config(self, provider: str, model: str) -> None:
+        """Update the configuration with new model selection"""
+        self.config["llm_provider"] = provider
+        self.current_provider = provider
+        self.current_model = model
+        
+        if provider == "openai":
+            self.config["openai_model"] = model
+        elif provider == "gemini":
+            self.config["gemini_model"] = model
+        elif provider == "claude":
+            self.config["claude_model"] = model
+        elif provider == "mistral":
+            self.config["mistral_model"] = model
 
     def _setup_config(self):
         """Setup configuration similar to CLI preprocessing"""
@@ -527,6 +304,9 @@ class SaturnApp(App):
             )
 
     def compose(self) -> ComposeResult:
+        # Mode selector in top right
+        yield ModeSelector(current_mode=self.app_mode)
+        
         # Main chat area
         with VerticalScroll(id="chat-container") as container:
             container.can_focus = False
@@ -539,9 +319,11 @@ class SaturnApp(App):
 
     def on_mount(self) -> None:
         """Initialize the app like chat screen"""
-        # Welcome message
+        # Welcome message with current model info
         self.timestamp = datetime.now().strftime("%H:%M:%S")
-        self.add_system_message("Saturn AI Assistant ready: " + self.timestamp)
+        model_info = f"{self.current_provider.title()}: {self.current_model}"
+        mode_info = f"Mode: {self.app_mode.title()}"
+        self.add_system_message(f"Saturn AI Assistant ready ({model_info}, {mode_info}) - {self.timestamp}")
 
         # Focus input
         self.query_one("#prompt").focus()
@@ -774,6 +556,34 @@ class SaturnApp(App):
 
             # Scroll to ensure the focused message is visible
             self.chat_container.scroll_to_widget(target_message, animate=True)
+
+    def action_show_model_selector(self) -> None:
+        """Show the model selector modal"""
+        def on_model_selected(selection) -> None:
+            if selection:
+                provider, model = selection
+                old_model = f"{self.current_provider}: {self.current_model}"
+                self._update_model_config(provider, model)
+                new_model = f"{provider}: {model}"
+                self.add_system_message(f"Model changed from {old_model} to {new_model}")
+                self.notify(f"Model changed to {provider.title()}: {model}")
+
+        model_selector = ModelSelectorScreen(
+            current_provider=self.current_provider,
+            current_model=self.current_model
+        )
+        self.push_screen(model_selector, callback=on_model_selected)
+
+    def on_mode_selector_mode_changed(self, event: ModeSelector.ModeChanged) -> None:
+        """Handle mode changes from the mode selector"""
+        old_mode = self.app_mode
+        self.app_mode = event.mode
+        
+        mode_icons = {"auto": "🤖", "agent": "🧠", "command": "⚡"}
+        icon = mode_icons.get(event.mode, "")
+        
+        self.add_system_message(f"Mode changed from {old_mode.title()} to {event.mode.title()}")
+        self.notify(f"{icon} Switched to {event.mode.title()} mode")
 
 
 def run():
