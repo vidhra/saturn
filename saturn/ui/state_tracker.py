@@ -130,105 +130,38 @@ class UIAwareStateMachineRunner(StateMachineRunner):
         """Override process_query to provide real-time UI updates"""
         await self.state_tracker._add_state_message(f"🚀 Starting Saturn for: {query}")
         
-        # Call the original process_query but with UI callbacks
-        return await self._process_query_with_ui_callbacks(query)
-    
-    async def _process_query_with_ui_callbacks(self, query: str):
-        """Process query with UI state callbacks"""
+        # Capture output from the real state machine
+        import io
+        import contextlib
+        from rich.console import Console
+        
+        # Create a string buffer to capture output
+        output_buffer = io.StringIO()
+        ui_console = Console(file=output_buffer, width=120)
+        
+        # Save original console
+        original_console = self.console
+        self.console = ui_console
+        
         try:
-            # Import required modules
-            from internal.state_recorder import RunStateLogger
-            from saturn.file_executor import FileBuildExecutor
-            from internal.states.base_state import StateMachineContext
+            # Call the REAL StateMachineRunner.process_query method
+            context = await super().process_query(query)
             
-            # Initialize components
-            state_recorder = RunStateLogger(query)
-            file_build_executor = FileBuildExecutor(
-                {"working_directory": self.config.get("working_directory", ".")}
-            )
-            
-            # Create context
-            context = StateMachineContext(
-                original_query=query,
-                llm_interface=self.llm_interface,
-                gcp_executor=self.gcp_executor,
-                aws_executor=self.aws_executor,
-                knowledge_base=self.knowledge_base,
-                system_prompt=self.system_prompt,
-                max_retries=self.max_retries,
-                console=self.console,
-                rag_engine=self.rag_engine,
-                state_recorder=state_recorder,
-                file_build_executor=file_build_executor,
-                mcp_integrator=self.mcp_integrator,
-                config=self.config,
-            )
-            
-            # Pass runner instance to context
-            context._state_machine_runner = self
-            
-            current_state_class = StartState
-            
-            # Main state machine loop with UI callbacks
-            while current_state_class not in [CompletedState, FailedState]:
-                current_state_instance = current_state_class()
-                state_name = current_state_instance.__class__.__name__
-                
-                # Notify UI of state entry
-                await self.state_tracker.on_state_enter(state_name, context)
-                
-                # Handle checkpointing
-                enable_checkpoints = self.config.get("enable_checkpoints", False)
-                if enable_checkpoints:
-                    checkpoint_id = await self._save_checkpoint(context, current_state_class)
-                    await self.state_tracker.on_checkpoint_saved(checkpoint_id)
-                
-                try:
-                    # Execute state
-                    next_state_class, context = await current_state_instance.run(context)
-                    current_state_class = next_state_class
-                    
-                except Exception as e:
-                    await self.state_tracker.on_error(f"Unhandled exception in {state_name}: {str(e)}")
-                    current_state_class = FailedState
-                    context.current_errors.append({
-                        "method": f"RUNNER ({current_state_instance!r})",
-                        "error": f"Unhandled state execution error: {e}",
-                        "arguments": {},
-                    })
-            
-            # Execute terminal state
-            terminal_state_instance = current_state_class()
-            terminal_state_name = terminal_state_instance.__class__.__name__
-            await self.state_tracker.on_state_enter(terminal_state_name, context)
-            
-            _, context = await terminal_state_instance.run(context)
-            
-            # Finalize state recorder
-            if context.state_recorder:
-                if context.current_errors:
-                    context.state_recorder.set_final_run_status("FAILED", context.current_errors)
-                else:
-                    context.state_recorder.set_final_run_status("COMPLETED", [])
-                context.state_recorder.save_state()
-            
-            # Show cache statistics
-            cache_stats = self.tool_cache.get_cache_stats()
-            await self.state_tracker.on_cache_operation(
-                "Cache Statistics",
-                f"{cache_stats['file_tools_cached']} file tools, {cache_stats['mcp_tools_cached']} MCP tools cached"
-            )
-            
-            # Cleanup checkpoints
-            enable_checkpoints = self.config.get("enable_checkpoints", False)
-            if enable_checkpoints:
-                await self._cleanup_checkpoints(context.state_recorder.run_start_time)
+            # Get captured output and show it in UI
+            captured_output = output_buffer.getvalue()
+            if captured_output.strip():
+                # Split output into lines and show each as a system message
+                for line in captured_output.strip().split('\n'):
+                    if line.strip():
+                        await self.state_tracker._add_state_message(line.strip())
             
             return context
             
-        except Exception as e:
-            await self.state_tracker.on_error(f"Critical error in state machine: {str(e)}")
-            raise
+        finally:
+            # Restore original console
+            self.console = original_console
+    
+
 
 
 class MockStateRunner:

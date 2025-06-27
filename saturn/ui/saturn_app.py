@@ -42,14 +42,21 @@ class SaturnApp(App):
     #chat-container {
         height: 1fr;
         background: #000000;
-        padding: 0 1;
+        padding: 0 1 0 1;
         margin-bottom: 1;
+    }
+    
+    /* Reduce spacing between chat messages - apply to ChatMessage containers */
+    ChatMessage {
+        margin: 0;
+        padding: 0;
+        height: auto;
     }
     
     .user-content {
         color: #ffffff;
         background: #000000;
-        margin: 0 0 0 0;
+        margin: 0;
         padding: 1;
         border: none;
         height: auto;
@@ -59,7 +66,7 @@ class SaturnApp(App):
     .assistant-content {
         background: #000000;
         border: solid #ffffff;
-        margin: 0 0 0 0;
+        margin: 0;
         padding: 1;
         min-height: 1;
     }
@@ -67,7 +74,7 @@ class SaturnApp(App):
     .system-content {
         color: #888888;
         background: #000000;
-        margin: 0 0 1 1;
+        margin: 0 0 0 1;
         padding: 1;
         border: none;
         height: auto;
@@ -201,7 +208,8 @@ class SaturnApp(App):
     SUB_TITLE = "AI Assistant"
 
     BINDINGS = [
-        Binding("ctrl+c", "quit", "Quit"),
+        Binding("ctrl+q", "quit", "Quit"),
+        Binding("ctrl+c", "copy_last_message", "Copy", show=True),
         Binding("ctrl+l", "clear_chat", "Clear"),
         Binding("ctrl+m", "show_model_selector", "Models", show=True),
         Binding("f1", "help", "Help"),
@@ -378,6 +386,18 @@ class SaturnApp(App):
                     f"Working directory: {self.config.get('working_directory', 'None')}"
                 )
 
+                # Set up execution mode based on app mode (if mode selector is implemented)
+                runtime_config = self.config.copy()
+                if hasattr(self, 'app_mode'):
+                    mode_mapping = {
+                        "auto": "auto",      # Standard execution with progress display
+                        "agent": "yolo",     # Auto-execute without prompts (agent mode)
+                        "command": "manual"  # Ask for confirmation on destructive operations
+                    }
+                    execution_mode = mode_mapping.get(self.app_mode, "auto")
+                    runtime_config["execution_mode"] = execution_mode
+                    self.add_system_message(f"🔧 Execution mode: {execution_mode} (based on {self.app_mode} mode)")
+
                 # Initialize Saturn components for real state machine
                 from model.llm.base_interface import get_llm_interface
                 from saturn.aws_executor import AWSExecutor
@@ -388,26 +408,26 @@ class SaturnApp(App):
                 from saturn.rag_engine import RAGEngine
 
                 # Load components like the orchestrator does
-                llm_interface = get_llm_interface(self.config)
+                llm_interface = get_llm_interface(runtime_config)
 
-                gcp_executor = GcloudExecutor(self.config)
-                aws_executor = AWSExecutor(self.config)
+                gcp_executor = GcloudExecutor(runtime_config)
+                aws_executor = AWSExecutor(runtime_config)
                 knowledge_base = KnowledgeBase(
-                    api_defs_dir=self.config.get(
+                    api_defs_dir=runtime_config.get(
                         "api_defs_dir", "./internal/knowledge_base"
                     ),
-                    working_directory=self.config.get("working_directory", "."),
+                    working_directory=runtime_config.get("working_directory", "."),
                 )
 
                 # Initialize RAG engine if configured
                 rag_engine = None
-                if self.config.get("rag_build_on_init", False):
-                    rag_engine = RAGEngine(self.config)
+                if runtime_config.get("rag_build_on_init", False):
+                    rag_engine = RAGEngine(runtime_config)
                     await rag_engine.initialize()
 
                 # Initialize MCP integration
                 mcp_integrator = MCPToolIntegrator(
-                    self.config.get("working_directory", ".")
+                    runtime_config.get("working_directory", ".")
                 )
                 await mcp_integrator.initialize()
 
@@ -419,7 +439,7 @@ class SaturnApp(App):
                     aws_executor=aws_executor,
                     knowledge_base=knowledge_base,
                     system_prompt=SYSTEM_CHAT_PROMPT,
-                    config=self.config,
+                    config=runtime_config,
                     console=None,  # We use state tracker instead of console
                     rag_engine=rag_engine,
                     mcp_integrator=mcp_integrator,
@@ -464,7 +484,7 @@ class SaturnApp(App):
 
                 full_response = ""
                 async for role, message in run_chat_conversational(
-                    self.config, simple_generator()
+                    runtime_config, simple_generator()
                 ):
                     if role == "assistant":
                         full_response += message
@@ -506,6 +526,26 @@ class SaturnApp(App):
         """Clear the chat conversation"""
         self.chat_container.remove_children()
         self.notify("Chat cleared")
+
+    def action_copy_last_message(self) -> None:
+        """Copy the last assistant message to clipboard"""
+        chat_messages = self.chat_container.query(ChatMessage)
+        if not chat_messages:
+            self.notify("No messages to copy", severity="warning")
+            return
+        
+        # Find the last assistant message
+        last_assistant_message = None
+        for message in reversed(chat_messages):
+            if message.role == "assistant":
+                last_assistant_message = message
+                break
+        
+        if last_assistant_message:
+            # Use the message's copy functionality
+            last_assistant_message.action_copy_message()
+        else:
+            self.notify("No assistant messages found", severity="warning")
 
     def action_help(self) -> None:
         """Show help information"""

@@ -26,51 +26,81 @@ class ChatMessage(Static):
         self.content = content
         self.role = role
         self.timestamp = timestamp or datetime.now().strftime("%H:%M:%S")
-        # Make messages focusable
-        self.can_focus = True
+        # Disable focus for messages to prevent tab navigation
+        self.can_focus = False
 
     def compose(self) -> ComposeResult:
         # Header with role and timestamp
 
         if self.role == "user":
-            yield SaturnTextArea(
+            text_area = SaturnTextArea(
                 text=self.content,
                 read_only=True,
                 classes="user-content",
                 id="message-content",
             )
+            text_area.can_focus = False  # Disable tab focus for message content
+            yield text_area
         elif self.role == "assistant":
             yield Static(
                 f"[bold green]⟨saturn⟩[/bold green] [dim]{self.timestamp}[/dim]"
             )
-            yield SaturnTextArea(
+            text_area = SaturnTextArea(
                 text=self.content,
                 read_only=True,
                 classes="assistant-content",
                 id="message-content",
             )
+            text_area.can_focus = False  # Disable tab focus for message content
+            yield text_area
         else:
-            yield SaturnTextArea(
+            text_area = SaturnTextArea(
                 text=self.content,
                 read_only=True,
                 classes="system-content",
                 id="message-content",
             )
+            text_area.can_focus = False  # Disable tab focus for message content
+            yield text_area
 
     def action_copy_message(self) -> None:
-        """Copy this message's content using the existing SaturnTextArea copy functionality"""
+        """Copy this message's content directly"""
         try:
-            # Get the SaturnTextArea that contains the message content
-            content_area = self.query_one("#message-content", SaturnTextArea)
-            # Use the existing copy functionality
-            content_area.action_copy_to_clipboard()
+            # Import here to avoid circular imports
+            import platform
+            import subprocess
+            
+            text_to_copy = self.content
+            
+            if not text_to_copy.strip():
+                self.notify("No text to copy", severity="warning")
+                return
+
+            # Use platform-specific clipboard commands
+            system = platform.system().lower()
+            if system == "darwin":  # macOS
+                subprocess.run(["pbcopy"], input=text_to_copy.encode(), check=True)
+            elif system == "windows":  # Windows
+                subprocess.run(
+                    ["clip"], input=text_to_copy.encode(), shell=True, check=True
+                )
+            elif system == "linux":  # Linux
+                try:
+                    subprocess.run(
+                        ["xclip", "-selection", "clipboard"],
+                        input=text_to_copy.encode(),
+                        check=True,
+                    )
+                except FileNotFoundError:
+                    subprocess.run(
+                        ["xsel", "--clipboard", "--input"],
+                        input=text_to_copy.encode(),
+                        check=True,
+                    )
+
+            self.notify(f"📋 Copied {len(text_to_copy)} characters")
+
         except Exception as e:
             self.notify(f"❌ Copy failed: {str(e)}", severity="error")
 
-    def on_focus(self) -> None:
-        """Visual feedback when message is focused"""
-        self.add_class("focused-message")
-
-    def on_blur(self) -> None:
-        """Remove visual feedback when message loses focus"""
-        self.remove_class("focused-message") 
+ 
