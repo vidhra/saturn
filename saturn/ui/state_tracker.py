@@ -113,9 +113,33 @@ class SaturnStateTracker:
             await self._add_state_message(f"🗃️ {operation}")
     
     async def _add_state_message(self, text: str):
-        """Add a state update message to the chat"""
+        """Add a state update message to the chat (async version)"""
         # Use the chat_app's method to avoid circular imports
         self.chat_app.add_system_message(text)
+    
+    def _add_state_message_sync(self, text: str):
+        """Add a state update message to the chat (synchronous version)"""
+        # Use the chat_app's method to avoid circular imports
+        self.chat_app.add_system_message(text)
+    
+    def on_operation_sync(self, operation: str, context=None):
+        """Called for specific operations within states (synchronous)"""
+        self._add_state_message_sync(f"  └─ {operation}")
+    
+    def on_error_sync(self, error: str, context=None):
+        """Called when an error occurs (synchronous)"""
+        self._add_state_message_sync(f"⚠ Error: {error}")
+    
+    def on_checkpoint_saved_sync(self, checkpoint_id: str):
+        """Called when a checkpoint is saved (synchronous)"""
+        self._add_state_message_sync(f"💾 Checkpoint saved: {checkpoint_id}")
+    
+    def on_cache_operation_sync(self, operation: str, details: str = ""):
+        """Called for cache operations (synchronous)"""
+        if details:
+            self._add_state_message_sync(f"🗃️ {operation}: {details}")
+        else:
+            self._add_state_message_sync(f"🗃️ {operation}")
 
 
 class UIAwareStateMachineRunner(StateMachineRunner):
@@ -125,41 +149,151 @@ class UIAwareStateMachineRunner(StateMachineRunner):
         super().__init__(*args, **kwargs)
         self.state_tracker = state_tracker
         self.original_print = print
+        self._setup_real_time_console()
+        
+    def _setup_real_time_console(self):
+        """Set up console to stream output in real-time to UI"""
+        from rich.console import Console
+        import io
+        import asyncio
+        
+        class UIStreamingConsole(Console):
+            def __init__(self, state_tracker, chat_app, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.state_tracker = state_tracker
+                self.chat_app = chat_app
+                self.last_message = ""  # Track last message to avoid duplicates
+                
+            def print(self, *args, **kwargs):
+                # Convert args to string representation
+                message_parts = []
+                for arg in args:
+                    # Handle Rich renderables
+                    if hasattr(arg, '__rich__') or hasattr(arg, '__rich_console__'):
+                        try:
+                            # Try to render Rich objects to plain text
+                            from io import StringIO
+                            temp_console = Console(file=StringIO(), width=100, legacy_windows=False)
+                            temp_console.print(arg)
+                            rendered = temp_console.file.getvalue()
+                            message_parts.append(rendered.strip())
+                        except:
+                            message_parts.append(str(arg))
+                    elif hasattr(arg, '__str__'):
+                        message_parts.append(str(arg))
+                    else:
+                        message_parts.append(repr(arg))
+                
+                message = ' '.join(message_parts)
+                if message.strip():
+                    # Clean up the message (remove ANSI codes and extra whitespace)
+                    import re
+                    clean_message = re.sub(r'\x1b\[[0-9;]*[mK]', '', message).strip()
+                    
+                    # Avoid duplicate messages
+                    if clean_message and clean_message != self.last_message:
+                        self.last_message = clean_message
+                        
+                        # Filter out some noisy/irrelevant messages
+                        skip_patterns = [
+                            r'^\s*$',  # Empty lines
+                            r'^Loading\.\.\.$',  # Generic loading messages
+                            r'^.*\d+%.*$',  # Progress percentages (handled separately)
+                        ]
+                        
+                        should_skip = any(re.match(pattern, clean_message) for pattern in skip_patterns)
+                        
+                        if not should_skip:
+                            # Add emoji indicators for common message types
+                            if 'error' in clean_message.lower() or 'failed' in clean_message.lower():
+                                clean_message = f"❌ {clean_message}"
+                            elif 'success' in clean_message.lower() or 'completed' in clean_message.lower():
+                                clean_message = f"✅ {clean_message}"
+                            elif 'warning' in clean_message.lower():
+                                clean_message = f"⚠️ {clean_message}"
+                            elif any(word in clean_message.lower() for word in ['loading', 'initializing', 'starting']):
+                                clean_message = f"🔄 {clean_message}"
+                            
+                            # Add the message to UI synchronously through the chat app
+                            self.chat_app.add_system_message(clean_message)
+            
+            def status(self, message):
+                """Handle Rich status messages"""
+                clean_message = str(message).strip()
+                if clean_message:
+                    self.chat_app.add_system_message(f"📊 {clean_message}")
+            
+            def log(self, *args, **kwargs):
+                """Handle logging calls"""
+                self.print(*args, **kwargs)
+        
+        # Replace console with UI-aware version
+        self.console = UIStreamingConsole(
+            self.state_tracker, 
+            self.state_tracker.chat_app, 
+            width=120, 
+            force_terminal=False,
+            legacy_windows=False
+        )
         
     async def process_query(self, query: str):
         """Override process_query to provide real-time UI updates"""
         await self.state_tracker._add_state_message(f"🚀 Starting Saturn for: {query}")
         
-        # Capture output from the real state machine
-        import io
-        import contextlib
-        from rich.console import Console
-        
-        # Create a string buffer to capture output
-        output_buffer = io.StringIO()
-        ui_console = Console(file=output_buffer, width=120)
-        
-        # Save original console
-        original_console = self.console
-        self.console = ui_console
-        
         try:
             # Call the REAL StateMachineRunner.process_query method
+            # Now console output will stream in real-time via our custom console
             context = await super().process_query(query)
-            
-            # Get captured output and show it in UI
-            captured_output = output_buffer.getvalue()
-            if captured_output.strip():
-                # Split output into lines and show each as a system message
-                for line in captured_output.strip().split('\n'):
-                    if line.strip():
-                        await self.state_tracker._add_state_message(line.strip())
-            
             return context
             
-        finally:
-            # Restore original console
-            self.console = original_console
+        except Exception as e:
+            await self.state_tracker.on_error(f"State machine error: {str(e)}")
+            raise
+    
+    async def transition_to_state(self, state_class, context):
+        """Override state transitions to provide real-time updates"""
+        state_name = state_class.__name__
+        await self.state_tracker.on_state_enter(state_name, context)
+        
+        # Call parent method
+        try:
+            result = await super().transition_to_state(state_class, context)
+            return result
+        except AttributeError:
+            # If transition_to_state doesn't exist in parent, just return
+            return context
+    
+    def log_operation(self, operation: str, details: str = ""):
+        """Log an operation in real-time"""
+        message = f"🔧 {operation}"
+        if details:
+            message += f": {details}"
+        self.state_tracker.chat_app.add_system_message(message)
+    
+    def log_tool_execution(self, tool_name: str, status: str = "executing"):
+        """Log tool execution in real-time"""
+        status_icons = {
+            "executing": "⚙️",
+            "success": "✅", 
+            "error": "❌",
+            "warning": "⚠️"
+        }
+        icon = status_icons.get(status, "🔧")
+        message = f"{icon} {tool_name}"
+        if status != "executing":
+            message += f" - {status}"
+        self.state_tracker.chat_app.add_system_message(message)
+    
+    def log_checkpoint(self, checkpoint_id: str):
+        """Log checkpoint creation in real-time"""
+        self.state_tracker.chat_app.add_system_message(f"💾 Checkpoint: {checkpoint_id}")
+    
+    def log_cache_operation(self, operation: str, details: str = ""):
+        """Log cache operations in real-time"""
+        message = f"🗃️ {operation}"
+        if details:
+            message += f": {details}"
+        self.state_tracker.chat_app.add_system_message(message)
     
 
 

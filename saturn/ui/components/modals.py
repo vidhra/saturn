@@ -32,8 +32,15 @@ class HelpScreen(ModalScreen):
 • ↑/K: Focus previous message
 • ↓/J: Focus next message
 • Tab: Focus input field
-• Ctrl+C or Y: Copy focused message
-• F1: Help • Ctrl+C: Quit
+• Ctrl+C: Copy selection or last message
+• Esc: Clear text selection
+• F1: Help • Ctrl+Q: Quit
+
+Text Selection:
+• Click & drag across multiple messages
+• Continuous selection spans message boundaries
+• Copy preserves message context and role
+• Automatic deselection when moving to new nodes
 
 Modes:
 • 🤖 Auto: Intelligent mode selection
@@ -45,6 +52,7 @@ Features:
 • Multi-model support (OpenAI, Gemini, Claude, Mistral)
 • Multi-line input support
 • Cross-platform clipboard (Windows/Mac/Linux)
+• Multi-node text selection and copying
 • Message navigation and copying
 • Markdown rendering
 

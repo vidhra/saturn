@@ -36,28 +36,29 @@ class SaturnApp(App):
     CSS = """
     Screen {
         background: #000000;
-        color: #f0f6fc;
+        color: #ffffff;
     }
     
     #chat-container {
         height: 1fr;
         background: #000000;
-        padding: 0 1 0 1;
-        margin-bottom: 1;
+        padding: 0;
+        margin: 0;
     }
     
-    /* Reduce spacing between chat messages - apply to ChatMessage containers */
+    /* Terminal-like spacing - minimal gaps between messages */
     ChatMessage {
         margin: 0;
         padding: 0;
         height: auto;
+        border: none;
     }
     
     .user-content {
         color: #ffffff;
         background: #000000;
         margin: 0;
-        padding: 1;
+        padding: 0 1;
         border: none;
         height: auto;
         min-height: 1;
@@ -65,24 +66,25 @@ class SaturnApp(App):
     
     .assistant-content {
         background: #000000;
-        border: solid #ffffff;
+        border: none;
         margin: 0;
-        padding: 1;
+        padding: 0 1;
         min-height: 1;
+        color: #ffffff;
     }
     
     .system-content {
         color: #888888;
         background: #000000;
-        margin: 0 0 0 1;
-        padding: 1;
+        margin: 0;
+        padding: 0 1;
         border: none;
         height: auto;
         min-height: 1;
         text-style: italic;
     }
     
-    /* Focused message styling */
+    /* Focused message styling - use visible colors for Mac terminal */
     ChatMessage.focused-message {
         border: solid #ffffff;
         background: #000000;
@@ -100,52 +102,91 @@ class SaturnApp(App):
         border: solid #ffffff;
     }
     
+    /* Multi-node selection styling */
+    ChatMessage.fully-selected {
+        background: #333333;
+    }
+    
+    ChatMessage.fully-selected .user-content {
+        background: #333333;
+        color: #ffffff;
+    }
+    
+    ChatMessage.fully-selected .assistant-content {
+        background: #333333;
+        color: #ffffff;
+    }
+    
+    ChatMessage.fully-selected .system-content {
+        background: #333333;
+        color: #ffffff;
+    }
+    
+    ChatMessage.partially-selected {
+        background: #222222;
+    }
+    
+    ChatMessage.partially-selected .user-content {
+        background: #222222;
+        color: #ffffff;
+    }
+    
+    ChatMessage.partially-selected .assistant-content {
+        background: #222222;
+        color: #ffffff;
+    }
+    
+    ChatMessage.partially-selected .system-content {
+        background: #222222;
+        color: #ffffff;
+    }
+    
     SaturnPromptInput {
         dock: bottom;
         height: auto;
         max-height: 30%;
         background: #000000;
-        border: solid #21262d;
-        margin: 1 3 1 1;
+        border: solid #ffffff;
+        margin: 0 1 1 1;
         
     }
     
     SaturnPromptInput:focus {
-        border: solid #58a6ff;
+        border: solid #ffffff;
     }
     
     .help-modal {
         width: 50;
         height: 20;
-        background: #161b22;
-        border: solid #21262d;
+        background: #000000;
+        border: solid #ffffff;
         padding: 2;
     }
     
     .help-title {
         text-align: center;
         text-style: bold;
-        color: #58a6ff;
+        color: #ffffff;
         margin-bottom: 1;
     }
     
     .help-content {
-        color: #f0f6fc;
+        color: #ffffff;
     }
     
     /* Model Selector Modal Styles */
     .model-selector-modal {
         width: 80;
         height: 25;
-        background: #161b22;
-        border: solid #58a6ff;
+        background: #000000;
+        border: solid #ffffff;
         padding: 1;
     }
     
     .modal-title {
         text-align: center;
         text-style: bold;
-        color: #58a6ff;
+        color: #ffffff;
         margin-bottom: 1;
     }
     
@@ -165,7 +206,7 @@ class SaturnApp(App):
     
     .panel-label {
         text-style: bold;
-        color: #f0f6fc;
+        color: #ffffff;
         margin-bottom: 1;
     }
     
@@ -180,27 +221,23 @@ class SaturnApp(App):
     
     .help-text {
         text-align: center;
-        color: #7d8590;
+        color: #888888;
         text-style: italic;
         margin: 1 0;
     }
     
     OptionList {
-        border: solid #000000;
+        border: solid #ffffff;
         background: #000000;
     }
     
     OptionList:focus {
-        border: solid #58a6ff;
+        border: solid #ffffff;
     }
     
-
-    
-
-    
     Footer {
-        background: #161b22;
-        color: #7d8590;
+        background: #000000;
+        color: #888888;
     }
     """
 
@@ -213,6 +250,7 @@ class SaturnApp(App):
         Binding("ctrl+l", "clear_chat", "Clear"),
         Binding("ctrl+m", "show_model_selector", "Models", show=True),
         Binding("f1", "help", "Help"),
+        Binding("escape", "clear_selection", "Clear Selection", show=False),
         Binding("up,k", "focus_previous_message", "Previous message", show=False),
         Binding("down,j", "focus_next_message", "Next message", show=False),
         Binding("tab", "focus_input", "Focus input", show=False),
@@ -327,6 +365,11 @@ class SaturnApp(App):
 
     def on_mount(self) -> None:
         """Initialize the app like chat screen"""
+        # Initialize selection manager
+        from .components.chat_message import SelectionManager
+        chat_container = self.chat_container
+        self.selection_manager = SelectionManager(chat_container)
+        
         # Welcome message with current model info
         self.timestamp = datetime.now().strftime("%H:%M:%S")
         model_info = f"{self.current_provider.title()}: {self.current_model}"
@@ -358,11 +401,6 @@ class SaturnApp(App):
         self.chat_container.mount(message)
         self.scroll_to_latest_message()
 
-        # Add status message to chat
-        status_msg = ChatMessage("Processing your request...", "system")
-        self.chat_container.mount(status_msg)
-        self.scroll_to_latest_message()
-
         # Disable further input immediately
         event.prompt_input.submit_ready = False
 
@@ -381,11 +419,6 @@ class SaturnApp(App):
             state_tracker = SaturnStateTracker(self)
 
             try:
-                # Debug: Check config paths
-                self.add_system_message(
-                    f"Working directory: {self.config.get('working_directory', 'None')}"
-                )
-
                 # Set up execution mode based on app mode (if mode selector is implemented)
                 runtime_config = self.config.copy()
                 if hasattr(self, 'app_mode'):
@@ -396,7 +429,6 @@ class SaturnApp(App):
                     }
                     execution_mode = mode_mapping.get(self.app_mode, "auto")
                     runtime_config["execution_mode"] = execution_mode
-                    self.add_system_message(f"🔧 Execution mode: {execution_mode} (based on {self.app_mode} mode)")
 
                 # Initialize Saturn components for real state machine
                 from model.llm.base_interface import get_llm_interface
@@ -474,20 +506,23 @@ class SaturnApp(App):
                 import traceback
 
                 error_details = traceback.format_exc()
-                self.add_system_message(f"⚠ Error details: {error_details}")
-                await state_tracker._add_state_message(
-                    f"⚠ Using fallback orchestrator: {str(init_error)}"
-                )
+                self.add_system_message(f"⚠ Using fallback orchestrator: {str(init_error)}")
 
                 async def simple_generator():
                     yield user_query
 
                 full_response = ""
+                await state_tracker._add_state_message("🔄 Running fallback orchestrator...")
+                
                 async for role, message in run_chat_conversational(
                     runtime_config, simple_generator()
                 ):
                     if role == "assistant":
+                        # Show assistant response in chunks for real-time feel
                         full_response += message
+                        if len(message) > 100:  # Show chunks for long responses
+                            chunk_preview = message[:100] + "..."
+                            await state_tracker._add_state_message(f"💬 {chunk_preview}")
 
                 assistant_message = ChatMessage(full_response, "assistant")
                 await self.chat_container.mount(assistant_message)
@@ -526,9 +561,57 @@ class SaturnApp(App):
         """Clear the chat conversation"""
         self.chat_container.remove_children()
         self.notify("Chat cleared")
+        
+    def action_clear_selection(self) -> None:
+        """Clear the current text selection"""
+        if hasattr(self, 'selection_manager'):
+            self.selection_manager.clear_selection()
+            self.notify("Selection cleared")
 
     def action_copy_last_message(self) -> None:
-        """Copy the last assistant message to clipboard"""
+        """Copy the current selection or last assistant message to clipboard"""
+        # Check if there's an active selection first
+        if hasattr(self, 'selection_manager') and self.selection_manager.selected_messages:
+            try:
+                import platform
+                import subprocess
+                
+                text_to_copy = self.selection_manager.get_selected_text()
+                
+                if not text_to_copy.strip():
+                    self.notify("No text in selection", severity="warning")
+                    return
+
+                # Use platform-specific clipboard commands
+                system = platform.system().lower()
+                if system == "darwin":  # macOS
+                    subprocess.run(["pbcopy"], input=text_to_copy.encode(), check=True)
+                elif system == "windows":  # Windows
+                    subprocess.run(
+                        ["clip"], input=text_to_copy.encode(), shell=True, check=True
+                    )
+                elif system == "linux":  # Linux
+                    try:
+                        subprocess.run(
+                            ["xclip", "-selection", "clipboard"],
+                            input=text_to_copy.encode(),
+                            check=True,
+                        )
+                    except FileNotFoundError:
+                        subprocess.run(
+                            ["xsel", "--clipboard", "--input"],
+                            input=text_to_copy.encode(),
+                            check=True,
+                        )
+
+                self.notify(f"📋 Copied selection ({len(text_to_copy)} characters)")
+                return
+
+            except Exception as e:
+                self.notify(f"❌ Copy failed: {str(e)}", severity="error")
+                return
+        
+        # Fallback to copying last assistant message
         chat_messages = self.chat_container.query(ChatMessage)
         if not chat_messages:
             self.notify("No messages to copy", severity="warning")
