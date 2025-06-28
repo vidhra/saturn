@@ -28,7 +28,7 @@ class TestStateMachineContext:
         
         # Check default values
         assert context.current_attempt == 0
-        assert context.dag_definition is None
+        assert context.dag is None
         assert context.node_states == {}
         assert context.node_outputs == {}
         assert context.current_errors == []

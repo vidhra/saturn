@@ -58,7 +58,7 @@ def llm_interface():
 def provider_config():
     return {"llm_provider": "openai", "openai_api_key": "sk-test"}
 
-async def test_llm_agenerate(llm_interface: BaseLLMInterface, provider_name: str) -> bool:
+async def check_llm_agenerate(llm_interface: BaseLLMInterface, provider_name: str) -> bool:
     """Test the agenerate method of an LLM interface."""
     try:
         print(f"\n=== Testing {provider_name} agenerate ===")
@@ -84,7 +84,7 @@ async def test_llm_agenerate(llm_interface: BaseLLMInterface, provider_name: str
         return False
 
 
-async def test_llm_tool_calls(llm_interface: BaseLLMInterface, provider_name: str) -> bool:
+async def check_llm_tool_calls(llm_interface: BaseLLMInterface, provider_name: str) -> bool:
     """Test the get_tool_calls method of an LLM interface."""
     try:
         print(f"\n=== Testing {provider_name} get_tool_calls ===")
@@ -141,8 +141,7 @@ async def test_llm_tool_calls(llm_interface: BaseLLMInterface, provider_name: st
         return False
 
 
-@pytest.mark.asyncio
-async def test_provider(provider_config: Dict[str, Any], provider_name: str, llm_class) -> Dict[str, bool]:
+async def check_provider(provider_config: Dict[str, Any], provider_name: str, llm_class) -> Dict[str, bool]:
     """Test a specific LLM provider."""
     print(f"\n{'='*50}")
     print(f"Testing {provider_name}")
@@ -157,10 +156,10 @@ async def test_provider(provider_config: Dict[str, Any], provider_name: str, llm
         print(f"✅ {provider_name} initialization successful")
         
         # Test agenerate
-        results["agenerate"] = await test_llm_agenerate(llm_interface, provider_name)
+        results["agenerate"] = await check_llm_agenerate(llm_interface, provider_name)
         
         # Test tool calls
-        results["tool_calls"] = await test_llm_tool_calls(llm_interface, provider_name)
+        results["tool_calls"] = await check_llm_tool_calls(llm_interface, provider_name)
         
     except Exception as e:
         print(f"❌ {provider_name} initialization failed: {str(e)}")
@@ -232,7 +231,7 @@ async def main():
             all_results[provider_name] = {"init": False, "agenerate": False, "tool_calls": False, "skipped": True}
             continue
         
-        results = await test_provider(
+        results = await check_provider(
             provider_config=test_config["config"],
             provider_name=provider_name,
             llm_class=test_config["class"]
