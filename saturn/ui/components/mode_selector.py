@@ -27,26 +27,28 @@ class ModeSelector(Widget):
         width: 1fr;
         height: 3;
         background: #000000;
-        border: solid #21262d;
+        border: solid #ffffff;
         text-align: left;
         padding: 0 1;
+        color: #ffffff;
     }
     
     #mode-button:hover {
-        border: solid #58a6ff;
+        border: solid #ffffff;
     }
     
     #mode-button.active {
-        border: solid #58a6ff;
-        background: #0d1117;
+        border: solid #ffffff;
+        background: #000000;
     }
     
     #mode-dropdown {
         width: 1fr;
         height: 5;
-        background: #0d1117;
-        border: solid #58a6ff;
+        background: #000000;
+        border: solid #ffffff;
         display: none;
+        color: #ffffff;
     }
     
     #mode-dropdown:focus {
