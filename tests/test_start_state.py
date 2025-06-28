@@ -1,7 +1,6 @@
 import pytest
-pytestmark = pytest.mark.asyncio
 
-from internal.states.planning_state import PlanningState
+from internal.states.reasoning_state import ReasoningState
 from internal.states.start_state import StartState
 
 
@@ -10,7 +9,7 @@ class TestStartState:
 
     @pytest.mark.asyncio
     async def test_start_state_run(self, sample_context):
-        """Test that StartState properly initializes context and transitions to PlanningState."""
+        """Test that StartState properly initializes context and transitions to ReasoningState."""
         # Modify context to have some existing state
         sample_context.current_attempt = 5
         sample_context.node_states = {"existing": "state"}
@@ -21,7 +20,7 @@ class TestStartState:
         next_state_class, returned_context = await state.run(sample_context)
 
         # Check state transition
-        assert next_state_class == PlanningState
+        assert next_state_class == ReasoningState
         assert returned_context == sample_context
 
         # Check context reset
@@ -57,8 +56,8 @@ class TestStartState:
         assert repr(state) == "StartState"
 
     @pytest.mark.asyncio
-    async def test_start_state_always_transitions_to_planning(self, sample_context):
-        """Test that StartState always transitions to PlanningState regardless of context state."""
+    async def test_start_state_always_transitions_to_reasoning(self, sample_context):
+        """Test that StartState always transitions to ReasoningState regardless of context state."""
         contexts_to_test = [
             sample_context,
         ]
@@ -74,7 +73,7 @@ class TestStartState:
         for context in contexts_to_test:
             state = StartState()
             next_state_class, _ = await state.run(context)
-            assert next_state_class == PlanningState
+            assert next_state_class == ReasoningState
 
     @pytest.mark.asyncio
     async def test_start_state_idempotent(self, sample_context):
@@ -84,7 +83,7 @@ class TestStartState:
         next_state1, context1 = await state.run(sample_context)
         next_state2, context2 = await state.run(sample_context)
 
-        assert next_state1 == next_state2 == PlanningState
+        assert next_state1 == next_state2 == ReasoningState
         assert context1.current_attempt == context2.current_attempt == 0
         assert context1.node_states == context2.node_states == {}
         assert context1.node_outputs == context2.node_outputs == {}

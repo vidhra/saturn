@@ -8,7 +8,7 @@ from internal.states.base_state import StateMachineContext
 
 
 @pytest.fixture
-async def mock_llm_interface():
+def mock_llm_interface():
     """Mock LLM interface for testing."""
     mock = AsyncMock()
     mock.get_tool_calls.return_value = ([], "Mock response")
@@ -16,7 +16,7 @@ async def mock_llm_interface():
 
 
 @pytest.fixture
-async def mock_gcp_executor():
+def mock_gcp_executor():
     """Mock GCP executor for testing."""
     mock = AsyncMock()
     mock.execute_tools.return_value = []
@@ -24,7 +24,7 @@ async def mock_gcp_executor():
 
 
 @pytest.fixture
-async def mock_aws_executor():
+def mock_aws_executor():
     """Mock AWS executor for testing."""
     mock = AsyncMock()
     mock.execute_tools.return_value = []
@@ -32,7 +32,7 @@ async def mock_aws_executor():
 
 
 @pytest.fixture
-async def mock_knowledge_base():
+def mock_knowledge_base():
     """Mock knowledge base for testing."""
     mock = Mock()
     mock.get_formatted_tools.return_value = [
@@ -107,7 +107,7 @@ def context_with_errors(sample_context):
 @pytest.fixture
 def context_with_dag(sample_context):
     """Context with DAG definition for testing."""
-    sample_context.dag_definition = {
+    sample_context.dag = {
         "nodes": {
             "node1": {"tool": "test_tool", "dependencies": []},
             "node2": {"tool": "another_tool", "dependencies": ["node1"]}

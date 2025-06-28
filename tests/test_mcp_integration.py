@@ -12,6 +12,7 @@ Tests cover:
 
 import asyncio
 import pytest
+import pytest_asyncio
 import sys
 from pathlib import Path
 
@@ -25,7 +26,7 @@ from saturn.prompts import PLANNING_SYSTEM_PROMPT_TEMPLATE
 class TestMCPIntegration:
     """Test suite for MCP integration functionality."""
     
-    @pytest.fixture
+    @pytest_asyncio.fixture
     async def integrator(self):
         """Create an MCP integrator instance for testing."""
         integrator = MCPToolIntegrator(".")
@@ -40,6 +41,7 @@ class TestMCPIntegration:
         assert hasattr(manager, 'servers')
         assert isinstance(manager.servers, dict)
     
+    @pytest.mark.asyncio
     async def test_mcp_tool_integrator_creation(self):
         """Test MCP tool integrator can be created."""
         integrator = MCPToolIntegrator(".")
@@ -48,6 +50,7 @@ class TestMCPIntegration:
         assert hasattr(integrator, 'saturn_tools')
         await integrator.shutdown()
     
+    @pytest.mark.asyncio
     async def test_saturn_tools_available(self, integrator):
         """Test that Saturn tools are available through the integrator."""
         tools_summary = integrator.get_tools_summary()
@@ -62,6 +65,7 @@ class TestMCPIntegration:
         for expected_tool in expected_tools:
             assert expected_tool in tool_names
     
+    @pytest.mark.asyncio
     async def test_tool_schemas_format(self, integrator):
         """Test that tool schemas are in correct OpenAI format."""
         combined_schemas = integrator.get_combined_tools_schema()
@@ -74,6 +78,7 @@ class TestMCPIntegration:
             assert "description" in schema["function"]
             assert "parameters" in schema["function"]
     
+    @pytest.mark.asyncio
     async def test_saturn_tool_routing(self, integrator):
         """Test that Saturn tools are routed correctly."""
         # Test a Saturn tool call
@@ -87,6 +92,7 @@ class TestMCPIntegration:
             assert "result" in result
             assert isinstance(result["result"], dict)
     
+    @pytest.mark.asyncio
     async def test_mcp_tool_routing(self, integrator):
         """Test that MCP tools would be routed correctly."""
         # Test with a mock MCP tool name
@@ -97,6 +103,7 @@ class TestMCPIntegration:
         assert result["success"] == False  # Expected since no server connected
         assert "error" in result
     
+    @pytest.mark.asyncio
     async def test_system_prompt_integration(self, integrator):
         """Test integration with existing system prompts."""
         tools_summary = integrator.get_tools_summary()
@@ -125,6 +132,7 @@ class TestMCPIntegration:
         assert "read_file" in formatted_prompt
         assert "Available MCP tools:" in formatted_prompt
     
+    @pytest.mark.asyncio
     async def test_mcp_tools_description_format(self, integrator):
         """Test MCP tools description formatting."""
         description = integrator.get_mcp_tools_description()
@@ -144,6 +152,7 @@ class TestMCPIntegration:
         assert True  # Placeholder - actual config testing would go here
 
 
+@pytest.mark.asyncio
 async def test_basic_functionality():
     """Standalone test for basic MCP functionality."""
     print("🧪 Basic MCP Integration Test")
@@ -182,6 +191,7 @@ async def test_basic_functionality():
         return False
 
 
+@pytest.mark.asyncio
 async def test_prompt_integration():
     """Test integration with system prompts."""
     print("🎯 Testing MCP Integration with System Prompts")
