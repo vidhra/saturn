@@ -217,11 +217,81 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                             # Add the message to UI synchronously through the chat app
                             self.chat_app.add_system_message(clean_message)
             
-            def status(self, message):
-                """Handle Rich status messages"""
+            def status(self, message, **kwargs):
+                """Handle Rich status messages with full Rich Console compatibility"""
                 clean_message = str(message).strip()
                 if clean_message:
-                    self.chat_app.add_system_message(f"📊 {clean_message}")
+                    # Add spinner indicator if one was specified
+                    if 'spinner' in kwargs:
+                        spinner_name = kwargs.get('spinner', 'dots')
+                        # Map common spinner names to emojis for visual feedback
+                        spinner_emojis = {
+                            'dots': '⚪',
+                            'dots2': '🔵', 
+                            'dots3': '🟢',
+                            'line': '➖',
+                            'line2': '📏',
+                            'pipe': '│',
+                            'star': '⭐',
+                            'star2': '✨',
+                            'flip': '🔄',
+                            'hamburger': '🍔',
+                            'growHorizontal': '↔️',
+                            'growVertical': '↕️',
+                            'balloon': '🎈',
+                            'balloon2': '🎈',
+                            'noise': '📡',
+                            'bounce': '⚽',
+                            'boxBounce': '📦',
+                            'boxBounce2': '📦',
+                            'triangle': '🔺',
+                            'arc': '🌙',
+                            'circle': '⭕',
+                            'squareCorners': '⬜',
+                            'circleQuarters': '◐',
+                            'circleHalves': '◑',
+                            'squish': '🟦',
+                            'toggle': '🔘',
+                            'toggle2': '🔘',
+                            'toggle3': '🔘',
+                            'toggle4': '🔘',
+                            'toggle5': '🔘',
+                            'toggle6': '🔘',
+                            'toggle7': '🔘',
+                            'toggle8': '🔘',
+                            'toggle9': '🔘',
+                            'toggle10': '🔘',
+                            'toggle11': '🔘',
+                            'toggle12': '🔘',
+                            'toggle13': '🔘',
+                            'arrow': '➡️',
+                            'arrow2': '⬆️',
+                            'arrow3': '⬅️',
+                            'bouncingBar': '📊',
+                            'bouncingBall': '⚽'
+                        }
+                        spinner_emoji = spinner_emojis.get(spinner_name, '🔄')
+                        self.chat_app.add_system_message(f"{spinner_emoji} {clean_message}")
+                    else:
+                        self.chat_app.add_system_message(f"📊 {clean_message}")
+                
+                # Return a mock status context manager that does nothing
+                class MockStatus:
+                    def __init__(self, chat_app):
+                        self.chat_app = chat_app
+                        
+                    def __enter__(self):
+                        return self
+                        
+                    def __exit__(self, *args):
+                        pass
+                        
+                    def update(self, message):
+                        clean_msg = str(message).strip()
+                        if clean_msg:
+                            self.chat_app.add_system_message(f"🔄 {clean_msg}")
+                
+                return MockStatus(self.chat_app)
             
             def log(self, *args, **kwargs):
                 """Handle logging calls"""

@@ -22,16 +22,16 @@ from .state_tracker import SaturnStateTracker, create_ui_aware_runner
 
 # Import UI components
 from .components import (
-    ChatMessage,
     HelpScreen,
     ModelSelectorScreen,
     ModeSelector,
     SaturnPromptInput,
-            )
+)
+from .components.chat_display import ChatDisplay
 
 
 class SaturnApp(App):
-    """Saturn Chat Application based on proven architecture"""
+    """Saturn Chat Application with native text selection support"""
 
     CSS = """
     Screen {
@@ -39,105 +39,29 @@ class SaturnApp(App):
         color: #ffffff;
     }
     
-    #chat-container {
+    #chat-display {
         height: 1fr;
         background: #000000;
-        padding: 0;
-        margin: 0;
-    }
-    
-    /* Terminal-like spacing - minimal gaps between messages */
-    ChatMessage {
-        margin: 0;
-        padding: 0;
-        height: auto;
-        border: none;
-    }
-    
-    .user-content {
-        color: #ffffff;
-        background: #000000;
-        margin: 0;
-        padding: 0 1;
-        border: none;
-        height: auto;
-        min-height: 1;
-    }
-    
-    .assistant-content {
-        background: #000000;
         border: none;
         margin: 0;
-        padding: 0 1;
-        min-height: 1;
+        padding: 1;
         color: #ffffff;
     }
     
-    .system-content {
-        color: #888888;
-        background: #000000;
-        margin: 0;
-        padding: 0 1;
+    #chat-display:focus {
         border: none;
-        height: auto;
-        min-height: 1;
-        text-style: italic;
-    }
-    
-    /* Focused message styling - use visible colors for Mac terminal */
-    ChatMessage.focused-message {
-        border: solid #ffffff;
         background: #000000;
     }
     
-    ChatMessage.focused-message .user-content {
-        border: solid #ffffff;
-    }
-    
-    ChatMessage.focused-message .assistant-content {
-        border: solid #ffffff;
-    }
-    
-    ChatMessage.focused-message .system-content {
-        border: solid #ffffff;
-    }
-    
-    /* Multi-node selection styling */
-    ChatMessage.fully-selected {
-        background: #333333;
-    }
-    
-    ChatMessage.fully-selected .user-content {
+    /* Ensure text selection is visible against black background */
+    #chat-display .text-area--selection {
         background: #333333;
         color: #ffffff;
     }
     
-    ChatMessage.fully-selected .assistant-content {
-        background: #333333;
-        color: #ffffff;
-    }
-    
-    ChatMessage.fully-selected .system-content {
-        background: #333333;
-        color: #ffffff;
-    }
-    
-    ChatMessage.partially-selected {
-        background: #222222;
-    }
-    
-    ChatMessage.partially-selected .user-content {
-        background: #222222;
-        color: #ffffff;
-    }
-    
-    ChatMessage.partially-selected .assistant-content {
-        background: #222222;
-        color: #ffffff;
-    }
-    
-    ChatMessage.partially-selected .system-content {
-        background: #222222;
+    /* Remove any other TextArea styling that might interfere */
+    TextArea {
+        background: #000000;
         color: #ffffff;
     }
     
@@ -148,30 +72,10 @@ class SaturnApp(App):
         background: #000000;
         border: solid #ffffff;
         margin: 0 1 1 1;
-        
     }
     
     SaturnPromptInput:focus {
         border: solid #ffffff;
-    }
-    
-    .help-modal {
-        width: 50;
-        height: 20;
-        background: #000000;
-        border: solid #ffffff;
-        padding: 2;
-    }
-    
-    .help-title {
-        text-align: center;
-        text-style: bold;
-        color: #ffffff;
-        margin-bottom: 1;
-    }
-    
-    .help-content {
-        color: #ffffff;
     }
     
     /* Model Selector Modal Styles */
@@ -246,14 +150,15 @@ class SaturnApp(App):
 
     BINDINGS = [
         Binding("ctrl+q", "quit", "Quit"),
-        Binding("ctrl+c", "copy_last_message", "Copy", show=True),
+        Binding("ctrl+c", "copy_selection", "Copy", show=True),
+        Binding("ctrl+shift+c", "copy_last_message", "Copy Last", show=False),
+        Binding("ctrl+a", "select_all", "Select All", show=True),
         Binding("ctrl+l", "clear_chat", "Clear"),
         Binding("ctrl+m", "show_model_selector", "Models", show=True),
         Binding("f1", "help", "Help"),
         Binding("escape", "clear_selection", "Clear Selection", show=False),
-        Binding("up,k", "focus_previous_message", "Previous message", show=False),
-        Binding("down,j", "focus_next_message", "Next message", show=False),
         Binding("tab", "focus_input", "Focus input", show=False),
+        Binding("shift+tab", "focus_chat", "Focus chat", show=False),
     ]
 
     def __init__(self):
@@ -353,42 +258,30 @@ class SaturnApp(App):
         # Mode selector in top right
         yield ModeSelector(current_mode=self.app_mode)
         
-        # Main chat area
-        with VerticalScroll(id="chat-container") as container:
-            container.can_focus = False
+        # Main chat display with native text selection
+        yield ChatDisplay(id="chat-display")
 
-        # Input area ( PromptInput)
+        # Input area
         yield SaturnPromptInput(id="prompt")
 
         # Footer
         yield Footer()
 
     def on_mount(self) -> None:
-        """Initialize the app like chat screen"""
-        # Initialize selection manager
-        from .components.chat_message import SelectionManager
-        chat_container = self.chat_container
-        self.selection_manager = SelectionManager(chat_container)
-        
+        """Initialize the app"""
         # Welcome message with current model info
         self.timestamp = datetime.now().strftime("%H:%M:%S")
         model_info = f"{self.current_provider.title()}: {self.current_model}"
         mode_info = f"Mode: {self.app_mode.title()}"
         self.add_system_message(f"Saturn AI Assistant ready ({model_info}, {mode_info}) - {self.timestamp}")
 
-        # Focus input
+        # Focus input by default
         self.query_one("#prompt").focus()
 
     @property
-    def chat_container(self) -> VerticalScroll:
-        """Get chat container"""
-        return self.query_one("#chat-container", VerticalScroll)
-
-    def scroll_to_latest_message(self):
-        """Scroll to latest message"""
-        container = self.chat_container
-        container.refresh()
-        container.scroll_end(animate=False, force=True)
+    def chat_display(self) -> ChatDisplay:
+        """Get the chat display widget"""
+        return self.query_one("#chat-display", ChatDisplay)
 
     def on_saturn_prompt_input_prompt_submitted(
         self, event: SaturnPromptInput.PromptSubmitted
@@ -397,9 +290,7 @@ class SaturnApp(App):
         user_message = event.text
 
         # Add user message immediately
-        message = ChatMessage(user_message, "user")
-        self.chat_container.mount(message)
-        self.scroll_to_latest_message()
+        self.add_user_message(user_message)
 
         # Disable further input immediately
         event.prompt_input.submit_ready = False
@@ -419,7 +310,7 @@ class SaturnApp(App):
             state_tracker = SaturnStateTracker(self)
 
             try:
-                # Set up execution mode based on app mode (if mode selector is implemented)
+                # Set up execution mode based on app mode
                 runtime_config = self.config.copy()
                 if hasattr(self, 'app_mode'):
                     mode_mapping = {
@@ -497,9 +388,7 @@ class SaturnApp(App):
                     full_response = "Saturn completed processing your request."
 
                 # Add assistant message
-                assistant_message = ChatMessage(full_response, "assistant")
-                await self.chat_container.mount(assistant_message)
-                self.scroll_to_latest_message()
+                self.add_assistant_message(full_response)
 
             except Exception as init_error:
                 # Use the original orchestrator as fallback
@@ -524,18 +413,13 @@ class SaturnApp(App):
                             chunk_preview = message[:100] + "..."
                             await state_tracker._add_state_message(f"💬 {chunk_preview}")
 
-                assistant_message = ChatMessage(full_response, "assistant")
-                await self.chat_container.mount(assistant_message)
-                self.scroll_to_latest_message()
+                self.add_assistant_message(full_response)
 
         except Exception as e:
             # Show error state
             state_tracker = SaturnStateTracker(self)
             await state_tracker.on_error(str(e))
-
-            error_message = ChatMessage(f"Error: {str(e)}", "system")
-            await self.chat_container.mount(error_message)
-            self.scroll_to_latest_message()
+            self.add_system_message(f"Error: {str(e)}")
         finally:
             # Ensure prompt is re-enabled
             prompt = self.query_one("#prompt", SaturnPromptInput)
@@ -543,142 +427,60 @@ class SaturnApp(App):
             self.conversation_active = False
 
     def add_user_message(self, content: str) -> None:
-        message = ChatMessage(content, "user")
-        self.chat_container.mount(message)
-        self.scroll_to_latest_message()
+        """Add a user message to the chat"""
+        self.chat_display.add_message(content, "user")
 
     def add_assistant_message(self, content: str) -> None:
-        message = ChatMessage(content, "assistant")
-        self.chat_container.mount(message)
-        self.scroll_to_latest_message()
+        """Add an assistant message to the chat"""
+        self.chat_display.add_message(content, "assistant")
 
     def add_system_message(self, content: str) -> None:
-        message = ChatMessage(content, "system")
-        self.chat_container.mount(message)
-        self.scroll_to_latest_message()
+        """Add a system message to the chat"""
+        self.chat_display.add_message(content, "system")
 
     def action_clear_chat(self) -> None:
         """Clear the chat conversation"""
-        self.chat_container.remove_children()
+        self.chat_display.clear_messages()
         self.notify("Chat cleared")
         
     def action_clear_selection(self) -> None:
         """Clear the current text selection"""
-        if hasattr(self, 'selection_manager'):
-            self.selection_manager.clear_selection()
-            self.notify("Selection cleared")
+        self.clear_selection()
+        self.notify("Selection cleared")
+
+    def action_copy_selection(self) -> None:
+        """Copy the current selection to clipboard"""
+        chat_display = self.chat_display
+        if chat_display.selected_text.strip():
+            chat_display.action_copy_selection()
+        else:
+            self.notify("No text selected", severity="warning")
 
     def action_copy_last_message(self) -> None:
-        """Copy the current selection or last assistant message to clipboard"""
-        # Check if there's an active selection first
-        if hasattr(self, 'selection_manager') and self.selection_manager.selected_messages:
-            try:
-                import platform
-                import subprocess
-                
-                text_to_copy = self.selection_manager.get_selected_text()
-                
-                if not text_to_copy.strip():
-                    self.notify("No text in selection", severity="warning")
-                    return
-
-                # Use platform-specific clipboard commands
-                system = platform.system().lower()
-                if system == "darwin":  # macOS
-                    subprocess.run(["pbcopy"], input=text_to_copy.encode(), check=True)
-                elif system == "windows":  # Windows
-                    subprocess.run(
-                        ["clip"], input=text_to_copy.encode(), shell=True, check=True
-                    )
-                elif system == "linux":  # Linux
-                    try:
-                        subprocess.run(
-                            ["xclip", "-selection", "clipboard"],
-                            input=text_to_copy.encode(),
-                            check=True,
-                        )
-                    except FileNotFoundError:
-                        subprocess.run(
-                            ["xsel", "--clipboard", "--input"],
-                            input=text_to_copy.encode(),
-                            check=True,
-                        )
-
-                self.notify(f"📋 Copied selection ({len(text_to_copy)} characters)")
-                return
-
-            except Exception as e:
-                self.notify(f"❌ Copy failed: {str(e)}", severity="error")
-                return
+        """Copy the last assistant message to clipboard"""
+        chat_display = self.chat_display
+        last_message = chat_display.get_last_assistant_message()
         
-        # Fallback to copying last assistant message
-        chat_messages = self.chat_container.query(ChatMessage)
-        if not chat_messages:
-            self.notify("No messages to copy", severity="warning")
-            return
-        
-        # Find the last assistant message
-        last_assistant_message = None
-        for message in reversed(chat_messages):
-            if message.role == "assistant":
-                last_assistant_message = message
-                break
-        
-        if last_assistant_message:
-            # Use the message's copy functionality
-            last_assistant_message.action_copy_message()
+        if last_message.strip():
+            chat_display._copy_to_clipboard(last_message, "last assistant message")
         else:
             self.notify("No assistant messages found", severity="warning")
+
+    def action_select_all(self) -> None:
+        """Select all text in the chat"""
+        self.chat_display.action_select_all()
 
     def action_help(self) -> None:
         """Show help information"""
         self.push_screen(HelpScreen())
 
-    def action_focus_previous_message(self) -> None:
-        """Focus the previous chat message"""
-        self._navigate_messages(direction="up")
-
-    def action_focus_next_message(self) -> None:
-        """Focus the next chat message"""
-        self._navigate_messages(direction="down")
-
     def action_focus_input(self) -> None:
         """Focus the input field"""
         self.query_one("#prompt").focus()
 
-    def _navigate_messages(self, direction: str) -> None:
-        """Navigate between chat messages"""
-        chat_messages = self.chat_container.query(ChatMessage)
-        if not chat_messages:
-            return
-
-        focused = self.app.focused
-        current_index = None
-
-        # Find currently focused message
-        if isinstance(focused, ChatMessage):
-            try:
-                current_index = list(chat_messages).index(focused)
-            except ValueError:
-                current_index = None
-
-        # Determine next message to focus
-        if current_index is None:
-            # No message currently focused, focus first or last based on direction
-            target_index = 0 if direction == "down" else len(chat_messages) - 1
-        else:
-            if direction == "up":
-                target_index = max(0, current_index - 1)
-            else:  # direction == "down"
-                target_index = min(len(chat_messages) - 1, current_index + 1)
-
-        # Focus the target message
-        if 0 <= target_index < len(chat_messages):
-            target_message = chat_messages[target_index]
-            target_message.focus()
-
-            # Scroll to ensure the focused message is visible
-            self.chat_container.scroll_to_widget(target_message, animate=True)
+    def action_focus_chat(self) -> None:
+        """Focus the chat display"""
+        self.query_one("#chat-display").focus()
 
     def action_show_model_selector(self) -> None:
         """Show the model selector modal"""
