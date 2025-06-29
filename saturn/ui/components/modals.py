@@ -29,18 +29,21 @@ class HelpScreen(ModalScreen):
 • Ctrl+L: Clear conversation  
 • Ctrl+M: Select AI model
 • Ctrl+I: Select mode (Auto/Agent/Command)
-• ↑/K: Focus previous message
-• ↓/J: Focus next message
-• Tab: Focus input field
-• Ctrl+C: Copy selection or last message
+• Tab: Focus input • Shift+Tab: Focus chat
+• Ctrl+C: Copy selected text
+• Ctrl+Shift+C: Copy last assistant message
+• Ctrl+A / Cmd+A: Select all chat text
 • Esc: Clear text selection
 • F1: Help • Ctrl+Q: Quit
 
-Text Selection:
-• Click & drag across multiple messages
-• Continuous selection spans message boundaries
-• Copy preserves message context and role
-• Automatic deselection when moving to new nodes
+Text Selection (Native Support):
+• Click & drag to select text naturally
+• Shift+Arrow keys for precise selection
+• Double-click to select words
+• Triple-click to select lines
+• Selection works across all messages seamlessly
+• Standard copy/paste shortcuts work
+• Full keyboard navigation support
 
 Modes:
 • 🤖 Auto: Intelligent mode selection
@@ -48,13 +51,12 @@ Modes:
 • ⚡ Command: Direct command execution
 
 Features:
-• Real-time execution feedback
+• Native text selection with standard shortcuts
 • Multi-model support (OpenAI, Gemini, Claude, Mistral)
 • Multi-line input support
 • Cross-platform clipboard (Windows/Mac/Linux)
-• Multi-node text selection and copying
-• Message navigation and copying
-• Markdown rendering
+• Real-time execution feedback
+• Full keyboard navigation
 
 Cloud Operations:
 • AWS, GCP, Azure automation
@@ -97,7 +99,9 @@ class ModelSelectorScreen(ModalScreen):
                 ("gpt-3.5-turbo", "GPT-3.5 Turbo"),
             ],
             "gemini": [
-                ("gemini-2.0-flash-exp", "Gemini 2.0 Flash (Experimental)"),
+                ("gemini-2.5-pro", "Gemini 2.5 Pro"),
+                ("gemini-2.5-flash", "Gemini 2.5 Flash"),
+                ("gemini-2.0-flash", "Gemini 2.0 Flash"),
                 ("gemini-1.5-pro", "Gemini 1.5 Pro"),
                 ("gemini-1.5-flash", "Gemini 1.5 Flash"),
                 ("gemini-1.0-pro", "Gemini 1.0 Pro"),
