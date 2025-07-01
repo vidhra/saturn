@@ -756,9 +756,9 @@ class FileBuildToolHandler:
             tool_name = function_info.get("name")
             arguments = function_info.get("arguments", {})
 
-            # If arguments is a string (JSON), parse it
+            # If arguments is a string (JSON), parse it with proper error handling
             if isinstance(arguments, str):
-                arguments = json.loads(arguments)
+                arguments = self._parse_json_arguments_safely(arguments)
 
             self.console.print(f"\n[bold cyan]LLM Tool Call: {tool_name}[/bold cyan]")
             self.console.print(f"Arguments: {arguments}")
@@ -780,6 +780,140 @@ class FileBuildToolHandler:
             error_msg = f"Tool call handler error: {str(e)}"
             self.console.print(f"[bold red]{error_msg}[/bold red]")
             return {"success": False, "error": error_msg}
+
+    def _parse_json_arguments_safely(self, arguments_str: str) -> Dict[str, Any]:
+        """
+        Safely parse JSON arguments with proper error handling.
+        This handles cases where code content contains unescaped quotes.
+        """
+        try:
+            # First, try standard JSON parsing
+            return json.loads(arguments_str)
+        except json.JSONDecodeError as e:
+            self.console.print(f"[yellow]⚠️  JSON parsing failed: {e}[/yellow]")
+            self.console.print(
+                "[yellow]🔧 Attempting to fix common JSON issues...[/yellow]"
+            )
+
+            # Try to fix common JSON issues in code content
+            try:
+                # Method 1: Try to fix unescaped quotes in string values
+                fixed_str = self._fix_json_string_escaping(arguments_str)
+                return json.loads(fixed_str)
+            except json.JSONDecodeError:
+                pass
+
+            # Method 2: If still failing, extract content manually for write_file operations
+            if '"file_path"' in arguments_str and '"content"' in arguments_str:
+                self.console.print(
+                    "[cyan]📝 Detected write_file operation, extracting content manually[/cyan]"
+                )
+                return self._extract_write_file_params(arguments_str)
+
+            # Method 3: Last resort - return minimal valid structure
+            self.console.print(
+                "[red]❌ Could not parse JSON arguments, using fallback[/red]"
+            )
+            return {
+                "error": f"JSON parsing failed: {str(e)}",
+                "raw_input": arguments_str,
+            }
+
+    def _fix_json_string_escaping(self, json_str: str) -> str:
+        """
+        Fix common JSON escaping issues in string values.
+        """
+        import re
+
+        # Find string values and properly escape quotes within them
+        # This is a simplified approach - in production you'd want more robust parsing
+        # Pattern to match string values (content between quotes that aren't already escaped)
+        def escape_quotes_in_strings(match):
+            content = match.group(1)
+            # Escape internal quotes that aren't already escaped
+            escaped_content = content.replace(
+                '\\"', "___ESCAPED_QUOTE___"
+            )  # Temp placeholder
+            escaped_content = escaped_content.replace('"', '\\"')
+            escaped_content = escaped_content.replace("___ESCAPED_QUOTE___", '\\"')
+            return f'"{escaped_content}"'
+
+        # Apply escaping to string values
+        # This regex finds quoted strings that contain unescaped quotes
+        fixed_str = re.sub(
+            r'"([^"]*(?:[^\\]"[^"]*)*)"', escape_quotes_in_strings, json_str
+        )
+
+        return fixed_str
+
+    def _extract_write_file_params(self, json_str: str) -> Dict[str, Any]:
+        """
+        Extract parameters for write_file operations when JSON parsing fails.
+        This handles the specific case where code content breaks JSON parsing.
+        """
+        import re
+
+        # Extract file_path
+        file_path_match = re.search(r'"file_path"\s*:\s*"([^"]+)"', json_str)
+        file_path = file_path_match.group(1) if file_path_match else None
+
+        # Extract content - this is trickier because it may contain unescaped quotes
+        # Look for "content": " and then find the matching closing quote/brace
+        content_start = json_str.find('"content"')
+        if content_start != -1:
+            # Find the start of the content value
+            colon_pos = json_str.find(":", content_start)
+            if colon_pos != -1:
+                # Skip whitespace and opening quote
+                content_value_start = colon_pos + 1
+                while (
+                    content_value_start < len(json_str)
+                    and json_str[content_value_start] in " \t\n"
+                ):
+                    content_value_start += 1
+
+                if (
+                    content_value_start < len(json_str)
+                    and json_str[content_value_start] == '"'
+                ):
+                    content_value_start += 1  # Skip opening quote
+
+                    # Find the end - look for closing quote followed by , or }
+                    # This is simplified - a more robust solution would track nesting
+                    rest_of_string = json_str[content_value_start:]
+
+                    # Try to find logical end points
+                    possible_ends = []
+                    for i, char in enumerate(rest_of_string):
+                        if char == '"' and (
+                            i + 1 >= len(rest_of_string)
+                            or rest_of_string[i + 1] in ",}"
+                        ):
+                            possible_ends.append(i)
+
+                    # Use the last reasonable end point
+                    if possible_ends:
+                        content_end = possible_ends[-1]
+                        content = rest_of_string[:content_end]
+                    else:
+                        # Fallback - take everything until we hit a closing brace at the end
+                        content = rest_of_string.rstrip('"}').rstrip()
+                else:
+                    content = None
+        else:
+            content = None
+
+        result = {}
+        if file_path:
+            result["file_path"] = file_path
+        if content is not None:
+            result["content"] = content
+
+        self.console.print(
+            f"[cyan]📝 Extracted parameters: file_path='{file_path}', content length={len(content) if content else 0}[/cyan]"
+        )
+
+        return result
 
     def get_tools_for_llm(self) -> List[Dict[str, Any]]:
         """Get tool schema in format expected by LLM APIs."""
