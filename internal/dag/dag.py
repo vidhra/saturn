@@ -405,7 +405,7 @@ class AcyclicGraph(Graph):
             current_ready = set()
             
             for node in remaining_nodes - processed:
-                dependencies = self.down_edges.get(node, set())
+                dependencies = self.up_edges.get(node, set())
                 incomplete_deps = dependencies - completed_nodes
                 
                 if not incomplete_deps:  # All dependencies are complete
@@ -439,7 +439,7 @@ class AcyclicGraph(Graph):
         ready_nodes = set()
         
         for node in self.vertices - completed_nodes:
-            dependencies = self.down_edges.get(node, set())
+            dependencies = self.up_edges.get(node, set())
             incomplete_deps = dependencies - completed_nodes
             
             if not incomplete_deps:  # All dependencies are complete
@@ -467,7 +467,7 @@ class AcyclicGraph(Graph):
                 return 0  # Avoid cycles
             
             visited.add(current_node)
-            dependencies = self.down_edges.get(current_node, set())
+            dependencies = self.up_edges.get(current_node, set())
             
             if not dependencies:
                 visited.remove(current_node)
@@ -527,8 +527,8 @@ class AcyclicGraph(Graph):
             return False
             
         # Check if both nodes have their dependencies satisfied
-        deps1 = self.down_edges.get(node1, set()) - completed_nodes
-        deps2 = self.down_edges.get(node2, set()) - completed_nodes
+        deps1 = self.up_edges.get(node1, set()) - completed_nodes
+        deps2 = self.up_edges.get(node2, set()) - completed_nodes
         
         return len(deps1) == 0 and len(deps2) == 0
 

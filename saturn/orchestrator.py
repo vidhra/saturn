@@ -48,10 +48,6 @@ async def run_query_with_state_machine(
     console.print(
         Panel(
             f"Processing Query: [cyan]{query}[/cyan]\n"
-            f"Enhanced Features:\n"
-            f"• Parallel Execution: [{'green' if enable_parallel_execution else 'red'}]{'✓' if enable_parallel_execution else '✗'}[/]\n"
-            f"• State Persistence: [{'green' if enable_state_persistence else 'red'}]{'✓' if enable_state_persistence else '✗'}[/]\n"
-            f"• Dynamic States: [{'green' if enable_dynamic_states else 'red'}]{'✓' if enable_dynamic_states else '✗'}[/]"
             + (
                 f"\n• Resuming from: [yellow]{resume_from_checkpoint}[/yellow]"
                 if resume_from_checkpoint

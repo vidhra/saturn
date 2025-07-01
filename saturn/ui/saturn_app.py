@@ -208,9 +208,9 @@ class SaturnApp(App):
         vector_store = self.config.get("vector_store", "chroma")
         self.config["vector_store_choice"] = vector_store.lower()
 
-        # Set up other required config keys
+        # Set up other required config keys - enable RAG for all valid vector stores
         self.config["rag_build_on_init"] = (
-            True if self.config["vector_store_choice"] == "default" else False
+            self.config["vector_store_choice"] in ["default", "chroma", "duckdb"]
         )
 
         # Set up database configuration
@@ -345,8 +345,27 @@ class SaturnApp(App):
                 # Initialize RAG engine if configured
                 rag_engine = None
                 if runtime_config.get("rag_build_on_init", False):
-                    rag_engine = RAGEngine(runtime_config)
-                    await rag_engine.initialize()
+                    # Get the docs path for building the index
+                    docs_path = runtime_config.get(
+                        "rag_docs_path_for_init",
+                        os.path.join(
+                            os.path.dirname(__file__),
+                            "..",
+                            "..",
+                            "internal",
+                            "tools", 
+                            "gcloud_online_docs_markdown",
+                        ),
+                    )
+                    
+                    rag_engine = RAGEngine(
+                        config=runtime_config,
+                        vector_store_choice=runtime_config.get("vector_store_choice", "chroma"),
+                        db_config=runtime_config.get("db_config"),
+                        documents_path_for_init=docs_path,
+                        build_index_on_init=False,  # Try to load existing index first
+                        verbose=True,
+                    )
 
                 # Initialize MCP integration
                 mcp_integrator = MCPToolIntegrator(

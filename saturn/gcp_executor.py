@@ -67,7 +67,6 @@ class GcloudExecutor:
                 
                 if process.returncode == 0:
                     result = stdout.decode().strip()
-                    console.print(f"[green]  Command executed successfully: [bold cyan]{command}[/bold cyan][/green]")
                     return True, result
                 else:
                     error = stderr.decode().strip()

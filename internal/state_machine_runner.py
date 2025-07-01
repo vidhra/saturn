@@ -358,10 +358,6 @@ class StateMachineRunner:
                 context.state_recorder.set_final_run_status("COMPLETED", [])
             context.state_recorder.save_state()
 
-        # Display cache statistics for performance debugging
-        if self.console:
-            cache_stats = self.tool_cache.get_cache_stats()
-            self.console.print(f"[dim]Cache Statistics: {cache_stats}[/dim]")
 
         # Cleanup checkpoints only if checkpointing was enabled
         enable_checkpoints = self.config.get("enable_checkpoints", False)
