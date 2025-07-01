@@ -75,7 +75,6 @@ class AWSExecutor:
                 
                 if process.returncode == 0:
                     result_str = stdout.decode().strip()
-                    console.print(f"[green]  Command executed successfully: [bold cyan]{command}[/bold cyan][/green]")
                     try:
                         result_json = json.loads(result_str)
                         return True, result_json
