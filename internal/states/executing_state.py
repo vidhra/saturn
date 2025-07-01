@@ -72,22 +72,39 @@ class ExecutingState(BaseState):
             )
 
         completed_nodes = set()
+        failed_nodes = set()  # Track failed nodes to prevent infinite loops
         all_steps_succeeded = True
         accumulated_errors = []
+        
+        # Circuit breaker to detect infinite loops
+        consecutive_failed_rounds = 0
+        max_failed_rounds = 3  # Allow 3 rounds of all failures before giving up
+        last_ready_nodes = set()
 
-        while len(completed_nodes) < len(context.step_details_map):
-            # Get immediately ready nodes
+        while len(completed_nodes) + len(failed_nodes) < len(context.step_details_map):
+            # Get immediately ready nodes, excluding both completed and failed nodes
             ready_nodes = context.dag.get_immediately_ready_nodes(completed_nodes)
+            ready_nodes = ready_nodes - failed_nodes  # Exclude failed nodes
 
             if not ready_nodes:
                 # Check if we're stuck (circular dependency or other issue)
-                remaining_nodes = set(context.step_details_map.keys()) - completed_nodes
+                remaining_nodes = set(context.step_details_map.keys()) - completed_nodes - failed_nodes
                 if remaining_nodes:
                     error_msg = f"No nodes are ready to execute, but {len(remaining_nodes)} remain: {remaining_nodes}"
                     if console:
                         console.print(f"[bold red]Error: {error_msg}[/bold red]")
                     accumulated_errors.append({"error": error_msg})
                     all_steps_succeeded = False
+                break
+
+            # Circuit breaker: if we're trying the same nodes repeatedly and they keep failing
+            if ready_nodes == last_ready_nodes and consecutive_failed_rounds >= max_failed_rounds:
+                error_msg = f"Circuit breaker triggered: Same nodes failing repeatedly ({consecutive_failed_rounds} rounds). Stopping execution to prevent infinite loop."
+                if console:
+                    console.print(f"[bold red]Error: {error_msg}[/bold red]")
+                    console.print(f"[red]Problematic nodes: {', '.join(ready_nodes)}[/red]")
+                accumulated_errors.append({"error": error_msg, "problematic_nodes": list(ready_nodes)})
+                all_steps_succeeded = False
                 break
 
             # Limit parallel execution
@@ -108,6 +125,7 @@ class ExecutingState(BaseState):
                 tasks.append(task)
 
             # Wait for all parallel tasks to complete
+            round_had_failures = False
             try:
                 results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -123,6 +141,8 @@ class ExecutingState(BaseState):
                         )
                         all_steps_succeeded = False
                         context.step_outputs[step_id] = {"error": str(result)}
+                        failed_nodes.add(step_id)  # Mark as failed to prevent retry
+                        round_had_failures = True
                     else:
                         step_success, step_result = result
                         context.step_outputs[step_id] = step_result
@@ -145,6 +165,8 @@ class ExecutingState(BaseState):
                                 }
                             )
                             all_steps_succeeded = False
+                            failed_nodes.add(step_id)  # Mark as failed to prevent retry
+                            round_had_failures = True
 
             except Exception as e:
                 if console:
@@ -153,7 +175,15 @@ class ExecutingState(BaseState):
                     )
                 accumulated_errors.append({"error": f"Parallel execution error: {e}"})
                 all_steps_succeeded = False
+                round_had_failures = True
                 break
+
+            # Update circuit breaker state
+            if round_had_failures and ready_nodes == last_ready_nodes:
+                consecutive_failed_rounds += 1
+            else:
+                consecutive_failed_rounds = 0
+            last_ready_nodes = ready_nodes.copy()
 
             # Early termination on critical failures
             if accumulated_errors and context.config.get("fail_fast", False):
@@ -162,6 +192,16 @@ class ExecutingState(BaseState):
                         "[bold red]Fail-fast mode: Stopping execution due to errors[/bold red]"
                     )
                 break
+
+            # Additional safety check: if we have failed nodes and no more can be executed
+            if failed_nodes and not ready_nodes:
+                remaining_nodes = set(context.step_details_map.keys()) - completed_nodes - failed_nodes
+                if not remaining_nodes:  # All nodes are either completed or failed
+                    if console:
+                        console.print(
+                            f"[yellow]Execution complete: {len(completed_nodes)} succeeded, {len(failed_nodes)} failed[/yellow]"
+                        )
+                    break
 
         return await self._process_execution_results(
             context, console, all_steps_succeeded, accumulated_errors
@@ -298,6 +338,16 @@ class ExecutingState(BaseState):
                         border_style="red",
                     )
                 )
+                
+                # Show summary of failed steps
+                if accumulated_errors:
+                    console.print("\n[bold red]Failed Steps Summary:[/bold red]")
+                    for error in accumulated_errors:
+                        if "step_id" in error:
+                            console.print(f"  • {error['step_id']}: {error.get('error', 'Unknown error')}")
+                        else:
+                            console.print(f"  • {error.get('error', 'Unknown error')}")
+                            
             context.current_errors.extend(accumulated_errors)
             context.state_recorder.set_final_run_status(
                 "FAILED_AT_STEP", accumulated_errors
@@ -756,9 +806,6 @@ class ExecutingState(BaseState):
 
                 if success:
                     if console:
-                        console.print(
-                            f"[bold green]Step {step_id} ({cloud_provider.upper()}) executed successfully![/bold green]"
-                        )
 
                         if isinstance(result_or_error, str) and result_or_error.strip():
                             console.print(
