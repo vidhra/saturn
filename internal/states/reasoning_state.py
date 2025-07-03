@@ -4,19 +4,6 @@ from typing import Tuple, Type
 
 from .base_state import BaseState, StateMachineContext
 
-
-class ToolValidationError(Exception):
-    """Raised when tool parameters are invalid."""
-
-    pass
-
-
-class DependencyError(Exception):
-    """Raised when there are issues with step dependencies."""
-
-    pass
-
-
 class ReasoningState(BaseState):
     """
     Reasoning state that analyzes the query and shows thinking process.
@@ -34,13 +21,9 @@ class ReasoningState(BaseState):
         """
         from .planning_state import PlanningState
 
-        # Show reasoning process with overwriting display AND do actual LLM reasoning
+
         reasoning_result = await self._perform_llm_reasoning(context)
-
-        # Store reasoning result in context for planning state to use
         context.reasoning_analysis = reasoning_result
-
-        # Record reasoning completion
         context.state_recorder.record_event(
             "reasoning_completed",
             {
@@ -53,18 +36,15 @@ class ReasoningState(BaseState):
             },
         )
 
-        # Transition to planning
         print("\n🧠 Reasoning complete. Moving to planning...")
         return PlanningState, context
 
     async def _perform_llm_reasoning(self, context: StateMachineContext) -> dict:
         """Actually perform LLM-based reasoning while showing visual progress."""
 
-        # Start the visual display
         display_task = asyncio.create_task(self._show_reasoning_process(context))
 
         try:
-            # Perform actual LLM reasoning
             reasoning_prompt = f"""
                 You are analyzing a user query to understand its intent and requirements before creating an execution plan.
 
@@ -107,7 +87,6 @@ class ReasoningState(BaseState):
             }
 
         except Exception as e:
-            # Fallback reasoning if LLM fails
             reasoning_result = {
                 "raw_analysis": f"LLM reasoning failed: {e}",
                 "intent": "Parse user query for cloud operations",
@@ -166,10 +145,8 @@ class ReasoningState(BaseState):
     async def _show_reasoning_process(self, context: StateMachineContext):
         """Show dynamic reasoning process that overwrites itself."""
 
-        # Check if we're in a console context that supports rich formatting
         has_console = context.console is not None
 
-        # Multi-line thinking process
         thinking_lines = [
             ["Analyzing your request..."],
             ["Breaking down query components..."],
