@@ -7,7 +7,7 @@ from rich.table import Table
 
 from internal.dag.dag import ORDER_UP, AcyclicGraph, Edge
 # Import prompts from orchestrator
-from saturn.prompts import PLANNING_SYSTEM_PROMPT_TEMPLATE
+from saturn.prompts import PLANNING_SYSTEM_PROMPT_TEMPLATE, PREVIOUS_REASONING_ANALYSIS_PROMPT
 
 from .base_state import BaseState, StateMachineContext
 from .executing_state import ExecutingState
@@ -211,17 +211,7 @@ class PlanningState(BaseState):
         reasoning_context = ""
         if hasattr(context, "reasoning_analysis") and context.reasoning_analysis:
             reasoning = context.reasoning_analysis
-            reasoning_context = f"""
-
-            PREVIOUS REASONING ANALYSIS:
-            Intent: {reasoning.get('intent', 'Not specified')}
-            Complexity: {reasoning.get('complexity', 'moderate')}
-            Key Components: {reasoning.get('components', 'cloud services')}
-            Dependencies: {reasoning.get('dependencies', 'standard cloud access')}
-            Recommended Approach: {reasoning.get('approach', 'step-by-step execution')}
-
-            Use this reasoning analysis to inform your step planning. Focus on the identified components and approach.
-            """
+            reasoning_context = PREVIOUS_REASONING_ANALYSIS_PROMPT
 
         planning_prompt = (
             PLANNING_SYSTEM_PROMPT_TEMPLATE.format(

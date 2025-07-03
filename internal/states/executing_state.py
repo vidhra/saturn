@@ -171,9 +171,9 @@ class ExecutingState(BaseState):
             except Exception as e:
                 if console:
                     console.print(
-                        f"[bold red]Error in parallel execution: {e}[/bold red]"
+                        f"[bold red]Error in execution: {e}[/bold red]"
                     )
-                accumulated_errors.append({"error": f"Parallel execution error: {e}"})
+                accumulated_errors.append({"error": f" execution error: {e}"})
                 all_steps_succeeded = False
                 round_had_failures = True
                 break

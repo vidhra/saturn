@@ -1,3 +1,13 @@
+PREVIOUS_REASONING_ANALYSIS_PROMPT = """
+Intent: {reasoning.get('intent', 'Not specified')}
+Complexity: {reasoning.get('complexity', 'moderate')}
+Key Components: {reasoning.get('components', 'cloud services')}
+Dependencies: {reasoning.get('dependencies', 'standard cloud access')}
+Recommended Approach: {reasoning.get('approach', 'step-by-step execution')}
+
+Use this reasoning analysis to inform your step planning. Focus on the identified components and approach.
+            """
+
 PLANNING_SYSTEM_PROMPT_TEMPLATE = """
 You are a planner that breaks down a user's request into a sequence of cloud CLI command or file operation steps.
 The user's request is: "{user_query}"

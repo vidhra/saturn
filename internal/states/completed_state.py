@@ -7,7 +7,6 @@ class CompletedState(BaseState):
 
     async def run(self, context: StateMachineContext) -> Tuple[Type[BaseState], StateMachineContext]:
         print("--- State: COMPLETED ---")
-        print("Process finished successfully.")
         if context.node_outputs:
             print("Final node outputs:")
             try:
