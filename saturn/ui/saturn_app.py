@@ -17,10 +17,8 @@ from textual.widgets import Footer
 from saturn.config import load_config
 from saturn.orchestrator import run_chat_conversational
 
-# Import state tracker
 from .state_tracker import SaturnStateTracker, create_ui_aware_runner
 
-# Import UI components
 from .components import (
     HelpScreen,
     ModelSelectorScreen,
@@ -166,23 +164,21 @@ class SaturnApp(App):
         self.config = load_config()
         self._setup_config()
         self.conversation_active = False
-        # Track current model settings
         self.current_provider = self.config.get("llm_provider", "gemini")
         self.current_model = self._get_current_model_name()
-        # Track current mode
         self.app_mode = "auto"
 
     def _get_current_model_name(self) -> str:
         """Get the current model name based on provider"""
         provider = self.current_provider
         if provider == "openai":
-            return self.config.get('openai_model', 'gpt-4o')
+            return self.config.get('openai_model', 'gpt-4.1')
         elif provider == "gemini":
-            return self.config.get('gemini_model', 'gemini-1.5-pro')
+            return self.config.get('gemini_model', 'gemini-2.5-pro')
         elif provider == "claude":
-            return self.config.get('claude_model', 'claude-3-5-sonnet-20241022')
+            return self.config.get('claude_model', 'claude-sonnet-4-20250514')
         elif provider == "mistral":
-            return self.config.get('mistral_model', 'mistral-large-latest')
+            return self.config.get('mistral_model', 'mistral-medium-2506')
         else:
             return "unknown"
 
@@ -204,19 +200,15 @@ class SaturnApp(App):
     def _setup_config(self):
         """Setup configuration similar to CLI preprocessing"""
 
-        # Convert vector_store to vector_store_choice (like CLI does)
         vector_store = self.config.get("vector_store", "chroma")
         self.config["vector_store_choice"] = vector_store.lower()
-
-        # Set up other required config keys - enable RAG for all valid vector stores
         self.config["rag_build_on_init"] = (
             self.config["vector_store_choice"] in ["default", "chroma", "duckdb"]
         )
 
-        # Set up database configuration
         from saturn.rag_engine import build_provider_db_config
 
-        cloud_provider = "gcp"  # Default for TUI
+        cloud_provider = "gcp"  
 
         if self.config["vector_store_choice"] == "chroma":
             db_configuration = build_provider_db_config(
@@ -231,7 +223,6 @@ class SaturnApp(App):
 
         self.config["db_config"] = db_configuration
 
-        # Set up RAG docs path for init
         self.config["rag_docs_path_for_init"] = self.config.get(
             "rag_docs_path",
             os.path.join(
@@ -244,38 +235,31 @@ class SaturnApp(App):
             ),
         )
 
-        # Ensure working directory is set
         if "working_directory" not in self.config:
             self.config["working_directory"] = os.getcwd()
 
-        # Set up API definitions directory
         if "api_defs_dir" not in self.config:
             self.config["api_defs_dir"] = os.path.join(
                 os.path.dirname(__file__), "..", "..", "internal", "knowledge_base"
             )
 
     def compose(self) -> ComposeResult:
-        # Mode selector in top right
+
         yield ModeSelector(current_mode=self.app_mode)
-        
-        # Main chat display with native text selection
+
         yield ChatDisplay(id="chat-display")
 
-        # Input area
         yield SaturnPromptInput(id="prompt")
 
-        # Footer
         yield Footer()
 
     def on_mount(self) -> None:
         """Initialize the app"""
-        # Welcome message with current model info
         self.timestamp = datetime.now().strftime("%H:%M:%S")
         model_info = f"{self.current_provider.title()}: {self.current_model}"
         mode_info = f"Mode: {self.app_mode.title()}"
         self.add_system_message(f"Saturn AI Assistant ready ({model_info}, {mode_info}) - {self.timestamp}")
 
-        # Focus input by default
         self.query_one("#prompt").focus()
 
     @property
@@ -289,16 +273,12 @@ class SaturnApp(App):
         """Handle user message submission immediately (synchronous)"""
         user_message = event.text
 
-        # Add user message immediately
         self.add_user_message(user_message)
 
-        # Disable further input immediately
         event.prompt_input.submit_ready = False
 
-        # Start conversation in background
         if not self.conversation_active:
             self.conversation_active = True
-            # Use call_later to avoid blocking
             self.call_later(self.stream_agent_response, user_message)
 
     @work(thread=False)
@@ -306,22 +286,20 @@ class SaturnApp(App):
         """Stream response from Saturn orchestrator with real-time state tracking"""
 
         try:
-            # Create state tracker using the separate module
             state_tracker = SaturnStateTracker(self)
 
             try:
-                # Set up execution mode based on app mode
+
                 runtime_config = self.config.copy()
                 if hasattr(self, 'app_mode'):
                     mode_mapping = {
-                        "auto": "auto",      # Standard execution with progress display
-                        "agent": "yolo",     # Auto-execute without prompts (agent mode)
-                        "command": "manual"  # Ask for confirmation on destructive operations
+                        "auto": "auto",   
+                        "agent": "yolo",    
+                        "command": "manual"  
                     }
                     execution_mode = mode_mapping.get(self.app_mode, "auto")
                     runtime_config["execution_mode"] = execution_mode
 
-                # Initialize Saturn components for real state machine
                 from model.llm.base_interface import get_llm_interface
                 from saturn.aws_executor import AWSExecutor
                 from saturn.gcp_executor import GcloudExecutor
@@ -330,7 +308,6 @@ class SaturnApp(App):
                 from saturn.prompts import SYSTEM_CHAT_PROMPT
                 from saturn.rag_engine import RAGEngine
 
-                # Load components like the orchestrator does
                 llm_interface = get_llm_interface(runtime_config)
 
                 gcp_executor = GcloudExecutor(runtime_config)
@@ -385,6 +362,7 @@ class SaturnApp(App):
                     console=None,  # We use state tracker instead of console
                     rag_engine=rag_engine,
                     mcp_integrator=mcp_integrator,
+                    question_handler=self.ui_question_handler,
                 )
 
                 # Run the real state machine with UI callbacks
@@ -528,6 +506,64 @@ class SaturnApp(App):
         
         self.add_system_message(f"Mode changed from {old_mode.title()} to {event.mode.title()}")
         self.notify(f"{icon} Switched to {event.mode.title()} mode")
+
+    async def ui_question_handler(self, formatted_question: str, suggested_answers: list = None) -> str:
+        """Handle questions in UI mode by creating an interactive dialog."""
+        import asyncio
+        from textual.widgets import Input, Button, Vertical, Label
+        from textual.containers import Container
+        from textual.screen import ModalScreen
+        
+        class QuestionScreen(ModalScreen):
+            def __init__(self, question: str, suggested_answers: list = None):
+                super().__init__()
+                self.question = question
+                self.suggested_answers = suggested_answers or []
+                self.user_response = None
+                self.response_event = asyncio.Event()
+            
+            def compose(self):
+                with Container():
+                    yield Label(self.question, id="question-label")
+                    if self.suggested_answers:
+                        yield Label("Suggested options:", id="options-label")
+                        for i, answer in enumerate(self.suggested_answers, 1):
+                            yield Label(f"{i}. {answer}", classes="option-item")
+                    yield Input(placeholder="Your answer...", id="answer-input")
+                    with Vertical():
+                        yield Button("Submit", variant="primary", id="submit-btn")
+                        yield Button("Skip", variant="default", id="skip-btn")
+            
+            def on_button_pressed(self, event: Button.Pressed) -> None:
+                if event.button.id == "submit-btn":
+                    input_widget = self.query_one("#answer-input", Input)
+                    answer = input_widget.value.strip()
+                    
+                    # Check if it's a number for suggested answers
+                    if self.suggested_answers and answer.isdigit():
+                        index = int(answer) - 1
+                        if 0 <= index < len(self.suggested_answers):
+                            self.user_response = self.suggested_answers[index]
+                        else:
+                            self.user_response = answer
+                    else:
+                        self.user_response = answer if answer else "NO_ANSWER"
+                    
+                    self.response_event.set()
+                    self.dismiss()
+                elif event.button.id == "skip-btn":
+                    self.user_response = "SKIPPED_BY_USER"
+                    self.response_event.set()
+                    self.dismiss()
+        
+        # Create and push the question screen
+        question_screen = QuestionScreen(formatted_question, suggested_answers)
+        self.push_screen(question_screen)
+        
+        # Wait for user response
+        await question_screen.response_event.wait()
+        
+        return question_screen.user_response or "NO_ANSWER"
 
 
 def run():

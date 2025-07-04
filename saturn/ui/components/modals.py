@@ -93,30 +93,25 @@ class ModelSelectorScreen(ModalScreen):
         self.models_by_provider = {
             "openai": [
                 ("gpt-4o", "GPT-4o (Latest)"),
-                ("gpt-4o-mini", "GPT-4o Mini"),
-                ("gpt-4-turbo", "GPT-4 Turbo"),
-                ("gpt-4", "GPT-4"),
-                ("gpt-3.5-turbo", "GPT-3.5 Turbo"),
+                ("gpt-4.1", "GPT-4.1"),
+                ("o3-mini", "o3-mini"),
+                ("o3","o3")
             ],
             "gemini": [
                 ("gemini-2.5-pro", "Gemini 2.5 Pro"),
                 ("gemini-2.5-flash", "Gemini 2.5 Flash"),
-                ("gemini-2.0-flash", "Gemini 2.0 Flash"),
-                ("gemini-1.5-pro", "Gemini 1.5 Pro"),
-                ("gemini-1.5-flash", "Gemini 1.5 Flash"),
-                ("gemini-1.0-pro", "Gemini 1.0 Pro"),
             ],
             "claude": [
-                ("claude-3-5-sonnet-20241022", "Claude 3.5 Sonnet (Latest)"),
+                ("claude-opus-4-20250514", "Claude 4 Opus"),
+                ("claude-sonnet-4-20250514", "Claude 4 Sonnet"),
+                ("claude-3-7-sonnet-20250219", "Claude 3.7 Sonnet (Latest)"),
                 ("claude-3-5-haiku-20241022", "Claude 3.5 Haiku"),
-                ("claude-3-opus-20240229", "Claude 3 Opus"),
-                ("claude-3-sonnet-20240229", "Claude 3 Sonnet"),
+
             ],
             "mistral": [
-                ("mistral-large-latest", "Mistral Large (Latest)"),
-                ("mistral-medium-latest", "Mistral Medium"),
-                ("mistral-small-latest", "Mistral Small"),
-                ("codestral-latest", "Codestral (Code-focused)"),
+                ("mistral-large-2411", "Mistral Large (Latest)"),
+                ("mistral-medium-2505", "Mistral Medium"),
+                ("codestral-2501", "Codestral (Code-focused)"),
             ],
         }
 

@@ -984,6 +984,8 @@ class FileBuildExecutor:
                 return await self._execute_create_directory(params, console)
             elif operation == "edit_file":
                 return await self._execute_edit_file(params, console)
+            elif operation == "ask_question":
+                return await self._execute_ask_question(params, console)
             else:
                 return False, f"Unknown operation: {operation}"
                 
@@ -1296,6 +1298,45 @@ class FileBuildExecutor:
         
         return result["success"], result
     
+    async def _execute_ask_question(self, params: Dict[str, Any], console: Console) -> Tuple[bool, Any]:
+        """Execute ask question operation."""
+        
+        question = params.get('question')
+        context = params.get('context', '')
+        suggested_answers = params.get('suggested_answers', [])
+        required_for = params.get('required_for', '')
+        
+        if not question:
+            return False, "question parameter required"
+        
+        # Format the question for display
+        formatted_question = f"\n🤔 **Question needed to proceed:**\n"
+        formatted_question += f"**Context:** {context}\n"
+        if required_for:
+            formatted_question += f"**Required for:** {required_for}\n"
+        formatted_question += f"**Question:** {question}\n"
+        
+        if suggested_answers:
+            formatted_question += f"**Suggested options:**\n"
+            for i, answer in enumerate(suggested_answers, 1):
+                formatted_question += f"  {i}. {answer}\n"
+        
+        formatted_question += "\nPlease provide your answer:"
+        
+        console.print(formatted_question)
+        
+        # For now, return a placeholder response
+        # This will be overridden by the question handler mechanism
+        return True, {
+            "success": True,
+            "question": question,
+            "context": context,
+            "suggested_answers": suggested_answers,
+            "required_for": required_for,
+            "formatted_question": formatted_question,
+            "user_response": None,  # Will be filled by question handler
+        }
+    
     def get_supported_operations(self) -> List[str]:
         """Get list of supported operations."""
         
@@ -1304,7 +1345,7 @@ class FileBuildExecutor:
             "create_directory",
             "build_docker", "run_docker", "docker_compose", "generate_dockerfile",
             "build_project", "test_project", "lint_project", "detect_project",
-            "execute_command", "edit_file"
+            "execute_command", "edit_file", "ask_question"
         ]
     
     def get_operation_schema(self, operation: str) -> Dict[str, Any]:
@@ -1390,6 +1431,11 @@ class FileBuildExecutor:
                 "required": ["file_path", "instructions", "code_edit"],
                 "optional": [],
                 "description": "Edit a file"
+            },
+            "ask_question": {
+                "required": ["question"],
+                "optional": ["context", "suggested_answers", "required_for"],
+                "description": "Ask the user a clarifying question during execution"
             }
         }
         

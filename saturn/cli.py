@@ -399,7 +399,7 @@ def run_command(
         console.print("--- Starting Orchestrator ---")
         asyncio.run(
             run_query_with_state_machine(
-                query, config, rag_engine_instance, verbose=verbose
+                query, config, rag_engine_instance, verbose=verbose, question_handler=cli_question_handler
             )
         )
 
@@ -1217,6 +1217,46 @@ def cache_command(
     else:
         console.print(f"[bold red]Error:[/bold red] Unknown action '{action}'. Use 'status', 'clear', or 'stats'.")
         raise typer.Exit(code=1)
+
+
+# Add CLI question handler
+async def cli_question_handler(formatted_question: str, suggested_answers: list = None) -> str:
+    """Handle questions in CLI mode by prompting user for input."""
+    from rich.console import Console
+    from rich.prompt import Prompt
+    
+    console = Console()
+    console.print(formatted_question)
+    
+    if suggested_answers:
+        console.print("\n[dim]You can type the number (1, 2, etc.) or the full answer.[/dim]")
+    
+    while True:
+        try:
+            answer = Prompt.ask("\n[bold yellow]Your answer[/bold yellow]")
+            
+            # If suggested answers exist, check if user provided a number
+            if suggested_answers and answer.strip().isdigit():
+                index = int(answer.strip()) - 1
+                if 0 <= index < len(suggested_answers):
+                    return suggested_answers[index]
+                else:
+                    console.print(f"[red]Please enter a number between 1 and {len(suggested_answers)} or type your answer.[/red]")
+                    continue
+            
+            # Return the answer as-is
+            if answer.strip():
+                return answer.strip()
+            else:
+                console.print("[red]Please provide an answer.[/red]")
+                continue
+                
+        except KeyboardInterrupt:
+            console.print("\n[yellow]Skipping question...[/yellow]")
+            return "SKIPPED_BY_USER"
+        except Exception as e:
+            console.print(f"[red]Error getting input: {e}[/red]")
+            return "ERROR_GETTING_INPUT"
 
 
 if __name__ == "__main__":

@@ -123,6 +123,25 @@ class StateMachineRunner:
         self.checkpoint_dir = self.config.get("checkpoint_dir", "./checkpoints")
         os.makedirs(self.checkpoint_dir, exist_ok=True)
 
+    def set_question_handler(self, question_handler):
+        """Set a question handler for interactive questions during execution."""
+        self._question_handler = question_handler
+
+    def _setup_file_tools_with_question_handler(self, working_directory: str):
+        """Set up file tools with the question handler if available."""
+        if hasattr(self, '_question_handler') and self._question_handler:
+            # Initialize file tool caller if not already done
+            if (
+                self._cached_file_tool_caller is None
+                or self._cached_working_directory != working_directory
+            ):
+                from saturn.file_build_tools import FileBuildToolCaller
+                self._cached_file_tool_caller = FileBuildToolCaller(working_directory)
+                self._cached_working_directory = working_directory
+            
+            # Set the question handler on the file tool caller
+            self._cached_file_tool_caller.set_question_handler(self._question_handler)
+
     def get_cached_file_tools(self, working_directory: str) -> List[Dict[str, Any]]:
         """Get file tools with caching to avoid repeated expensive discovery."""
         # Check cache first
@@ -281,6 +300,10 @@ class StateMachineRunner:
         file_build_executor = FileBuildExecutor(
             {"working_directory": self.config.get("working_directory", ".")}
         )
+
+        # Set up file tools with question handler if available
+        working_directory = self.config.get("working_directory", ".")
+        self._setup_file_tools_with_question_handler(working_directory)
 
         context = StateMachineContext(
             original_query=query,

@@ -31,7 +31,6 @@ class SaturnStateTracker:
         self.chat_app = chat_app
         self.current_state = None
         
-        # Load state descriptions from actual classes
         self.state_classes = {
             "StartState": StartState,
             "ReasoningState": ReasoningState, 
@@ -44,7 +43,6 @@ class SaturnStateTracker:
             "ErrorHandlingState": ErrorHandlingState,
         }
         
-        # Curated descriptions for UI display
         self.state_descriptions = {
             "StartState": "Initializing Saturn AI Assistant",
             "ReasoningState": "Analyzing request and understanding intent", 
@@ -57,7 +55,6 @@ class SaturnStateTracker:
             "ErrorHandlingState": "Handling errors and retrying operations",
         }
         
-        # Sub-operations for detailed progress
         self.sub_operations = {
             "ReasoningState": [
                 "Parsing user query and extracting intent",
@@ -87,10 +84,9 @@ class SaturnStateTracker:
         description = self.state_descriptions.get(state_name, f"Processing {state_name}")
         await self._add_state_message(f"➤ {description}")
         
-        # Show sub-operations for detailed states
         if state_name in self.sub_operations:
             for sub_op in self.sub_operations[state_name]:
-                await asyncio.sleep(0.8)  # Realistic timing
+                await asyncio.sleep(0.8)  
                 await self._add_state_message(f"  └─ {sub_op}")
     
     async def on_operation(self, operation: str, context=None):
@@ -114,12 +110,10 @@ class SaturnStateTracker:
     
     async def _add_state_message(self, text: str):
         """Add a state update message to the chat (async version)"""
-        # Use the chat_app's method to avoid circular imports
         self.chat_app.add_system_message(text)
     
     def _add_state_message_sync(self, text: str):
         """Add a state update message to the chat (synchronous version)"""
-        # Use the chat_app's method to avoid circular imports
         self.chat_app.add_system_message(text)
     
     def on_operation_sync(self, operation: str, context=None):
@@ -162,16 +156,14 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                 super().__init__(*args, **kwargs)
                 self.state_tracker = state_tracker
                 self.chat_app = chat_app
-                self.last_message = ""  # Track last message to avoid duplicates
+                self.last_message = ""  
                 
             def print(self, *args, **kwargs):
-                # Convert args to string representation
                 message_parts = []
                 for arg in args:
-                    # Handle Rich renderables
                     if hasattr(arg, '__rich__') or hasattr(arg, '__rich_console__'):
                         try:
-                            # Try to render Rich objects to plain text
+
                             from io import StringIO
                             temp_console = Console(file=StringIO(), width=100, legacy_windows=False)
                             temp_console.print(arg)
@@ -186,7 +178,6 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                 
                 message = ' '.join(message_parts)
                 if message.strip():
-                    # Clean up the message (remove ANSI codes and extra whitespace)
                     import re
                     clean_message = re.sub(r'\x1b\[[0-9;]*[mK]', '', message).strip()
                     
@@ -194,7 +185,6 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                     if clean_message and clean_message != self.last_message:
                         self.last_message = clean_message
                         
-                        # Filter out some noisy/irrelevant messages
                         skip_patterns = [
                             r'^\s*$',  # Empty lines
                             r'^Loading\.\.\.$',  # Generic loading messages
@@ -221,10 +211,8 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                 """Handle Rich status messages with full Rich Console compatibility"""
                 clean_message = str(message).strip()
                 if clean_message:
-                    # Add spinner indicator if one was specified
                     if 'spinner' in kwargs:
                         spinner_name = kwargs.get('spinner', 'dots')
-                        # Map common spinner names to emojis for visual feedback
                         spinner_emojis = {
                             'dots': '⚪',
                             'dots2': '🔵', 
@@ -275,7 +263,6 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                     else:
                         self.chat_app.add_system_message(f"📊 {clean_message}")
                 
-                # Return a mock status context manager that does nothing
                 class MockStatus:
                     def __init__(self, chat_app):
                         self.chat_app = chat_app
@@ -297,7 +284,6 @@ class UIAwareStateMachineRunner(StateMachineRunner):
                 """Handle logging calls"""
                 self.print(*args, **kwargs)
         
-        # Replace console with UI-aware version
         self.console = UIStreamingConsole(
             self.state_tracker, 
             self.state_tracker.chat_app, 
@@ -311,8 +297,6 @@ class UIAwareStateMachineRunner(StateMachineRunner):
         await self.state_tracker._add_state_message(f"🚀 Starting Saturn for: {query}")
         
         try:
-            # Call the REAL StateMachineRunner.process_query method
-            # Now console output will stream in real-time via our custom console
             context = await super().process_query(query)
             return context
             
@@ -325,12 +309,10 @@ class UIAwareStateMachineRunner(StateMachineRunner):
         state_name = state_class.__name__
         await self.state_tracker.on_state_enter(state_name, context)
         
-        # Call parent method
         try:
             result = await super().transition_to_state(state_class, context)
             return result
         except AttributeError:
-            # If transition_to_state doesn't exist in parent, just return
             return context
     
     def log_operation(self, operation: str, details: str = ""):
@@ -367,39 +349,6 @@ class UIAwareStateMachineRunner(StateMachineRunner):
     
 
 
-
-class MockStateRunner:
-    """Mock state runner for demonstration purposes until real integration"""
-    
-    def __init__(self, state_tracker: SaturnStateTracker):
-        self.tracker = state_tracker
-    
-    async def run_demo_progression(self):
-        """Run a demonstration of state progression"""
-        # Start state
-        await self.tracker.on_state_enter("StartState")
-        await asyncio.sleep(1.0)
-        
-        # Reasoning state with sub-operations
-        await self.tracker.on_state_enter("ReasoningState")
-        await asyncio.sleep(1.5)
-        
-        # Planning state with sub-operations  
-        await self.tracker.on_state_enter("PlanningState")
-        await asyncio.sleep(1.5)
-        
-        # Executing state with sub-operations
-        await self.tracker.on_state_enter("ExecutingState")
-        await asyncio.sleep(1.5)
-        
-        # Processing results
-        await self.tracker.on_state_enter("ProcessingResultsState")
-        await asyncio.sleep(1.0)
-        
-        # Complete
-        await self.tracker.on_state_enter("CompletedState")
-
-
 async def create_ui_aware_runner(
     state_tracker: SaturnStateTracker,
     llm_interface: Any,
@@ -411,9 +360,10 @@ async def create_ui_aware_runner(
     console: Any = None,
     rag_engine: Any = None,
     mcp_integrator: Any = None,
+    question_handler: Any = None,
 ) -> UIAwareStateMachineRunner:
     """Factory function to create a UI-aware state machine runner"""
-    return UIAwareStateMachineRunner(
+    runner = UIAwareStateMachineRunner(
         state_tracker=state_tracker,
         llm_interface=llm_interface,
         gcp_executor=gcp_executor,
@@ -425,6 +375,12 @@ async def create_ui_aware_runner(
         rag_engine=rag_engine,
         mcp_integrator=mcp_integrator,
     )
+    
+    # Set up question handler if provided
+    if question_handler:
+        runner.set_question_handler(question_handler)
+    
+    return runner
 
 
 def get_state_class_info(state_name: str) -> dict:
