@@ -30,6 +30,7 @@ async def run_query_with_state_machine(
     enable_state_persistence: bool = True,
     enable_dynamic_states: bool = True,
     resume_from_checkpoint: Optional[str] = None,
+    question_handler: Optional[callable] = None,
 ) -> None:
     """
     Enhanced orchestrator with parallel execution, state persistence, and dynamic state routing.
@@ -44,6 +45,7 @@ async def run_query_with_state_machine(
         enable_state_persistence: Enable checkpoint/resume functionality
         enable_dynamic_states: Enable dynamic state routing based on query analysis
         resume_from_checkpoint: Checkpoint ID to resume from (if any)
+        question_handler: Optional callable for interactive questions during execution
     """
     console.print(
         Panel(
@@ -124,6 +126,10 @@ async def run_query_with_state_machine(
         rag_engine=rag_engine,
         mcp_integrator=mcp_integrator,
     )
+
+    # Set up question handler if provided
+    if question_handler:
+        runner.set_question_handler(question_handler)
 
     # Display available checkpoints if resuming
     if resume_from_checkpoint:

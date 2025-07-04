@@ -23,6 +23,7 @@ class FileBuildToolCaller:
         self.working_directory = working_directory
         self.executor = FileBuildExecutor({"working_directory": working_directory})
         self.console = Console()
+        self.question_handler = None  # Initialize question handler as None
 
         # Use cached tools if available and valid
         if self._is_tools_cache_valid():
@@ -410,6 +411,33 @@ class FileBuildToolCaller:
                     "required": ["file_path", "instructions", "code_edit"],
                 },
             },
+            "ask_question": {
+                "function": self.ask_question,
+                "description": "Ask the user a clarifying question during execution.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "question": {
+                            "type": "string",
+                            "description": "The question to ask the user",
+                        },
+                        "context": {
+                            "type": "string",
+                            "description": "Brief context about why this question is being asked",
+                        },
+                        "suggested_answers": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "Optional list of suggested answers",
+                        },
+                        "required_for": {
+                            "type": "string",
+                            "description": "What operation/step requires this information",
+                        },
+                    },
+                    "required": ["question"],
+                },
+            },
         }
 
     async def read_file(self, file_path: str) -> Dict[str, Any]:
@@ -720,6 +748,56 @@ class FileBuildToolCaller:
             for tool_name, tool_info in self.tools.items()
         ]
 
+    def set_question_handler(self, question_handler):
+        """Set the question handler for interactive questions during execution."""
+        self.question_handler = question_handler
+
+    async def ask_question(
+        self,
+        question: str,
+        context: str = None,
+        suggested_answers: list = None,
+        required_for: str = None,
+    ) -> Dict[str, Any]:
+        """Ask a question to the user with optional context and suggestions."""
+        if self.question_handler:
+            try:
+                # Format the question for the handler
+                formatted_question = f"🤔 **Question needed to proceed:**\n"
+                if context:
+                    formatted_question += f"**Context:** {context}\n"
+                if required_for:
+                    formatted_question += f"**Required for:** {required_for}\n"
+                formatted_question += f"**Question:** {question}\n"
+                
+                if suggested_answers:
+                    formatted_question += f"**Suggested options:**\n"
+                    for i, answer in enumerate(suggested_answers, 1):
+                        formatted_question += f"  {i}. {answer}\n"
+                
+                result = await self.question_handler(formatted_question, suggested_answers)
+                return {
+                    "success": True,
+                    "result": result,
+                    "question": question,
+                    "context": context,
+                    "suggested_answers": suggested_answers,
+                    "required_for": required_for,
+                    "tool": "ask_question",
+                }
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Question handler error: {str(e)}",
+                    "tool": "ask_question",
+                }
+        else:
+            return {
+                "success": False,
+                "error": "No question handler set",
+                "tool": "ask_question",
+            }
+
 
 class FileBuildToolHandler:
     """
@@ -787,7 +865,6 @@ class FileBuildToolHandler:
         Based on OpenAI's function calling best practices.
         """
         try:
-            # First, try standard JSON parsing
             return json.loads(arguments_str)
         except json.JSONDecodeError as e:
             self.console.print(f"[yellow]JSON parsing failed: {str(e)}[/yellow]")
@@ -795,7 +872,6 @@ class FileBuildToolHandler:
                 f"[dim]Raw input (first 200 chars): {arguments_str[:200]}...[/dim]"
             )
 
-            # Try to fix common JSON escaping issues
             try:
                 fixed_arguments = self._fix_json_escaping(arguments_str)
                 result = json.loads(fixed_arguments)
@@ -804,7 +880,6 @@ class FileBuildToolHandler:
             except json.JSONDecodeError:
                 pass
 
-            # If all else fails, return error with context
             return {
                 "error": f"JSON parsing failed: {str(e)}",
                 "raw_input": arguments_str[:500],  # Limit to avoid token waste
@@ -817,40 +892,28 @@ class FileBuildToolHandler:
         """
         import re
 
-        # This is a simplified approach that handles the most common case:
-        # Unescaped quotes within string values
-        # First, let's identify string values that need fixing
-        # Look for patterns like: "content": "some text with "quotes" inside"
 
         def fix_string_value(match):
             key = match.group(1)
             value = match.group(2)
 
-            # Escape any unescaped quotes in the value
-            # But preserve already escaped quotes
             fixed_value = ""
             i = 0
             while i < len(value):
                 if value[i] == '"':
-                    # Check if it's already escaped
                     if i > 0 and value[i - 1] == "\\":
-                        # Already escaped, keep as is
                         fixed_value += value[i]
                     else:
-                        # Not escaped, escape it
                         fixed_value += '\\"'
                 elif value[i] == "\\" and i + 1 < len(value) and value[i + 1] == '"':
-                    # This is an escaped quote, keep as is
                     fixed_value += value[i : i + 2]
-                    i += 1  # Skip the next character since we processed it
+                    i += 1 
                 else:
                     fixed_value += value[i]
                 i += 1
 
             return f'"{key}": "{fixed_value}"'
 
-        # Match patterns like "key": "value with potential "quotes" inside"
-        # This regex is more conservative to avoid breaking valid JSON
         pattern = r'"([^"]+)"\s*:\s*"([^"]*(?:[^\\]"[^"]*)*)"'
 
         fixed_str = re.sub(pattern, fix_string_value, json_str)
@@ -875,7 +938,6 @@ class FileBuildToolHandler:
             result = await self.handle_tool_call(tool_call)
             results.append(result)
 
-            # If a tool fails, decide whether to continue or stop
             if not result["success"]:
                 self.console.print(
                     "[yellow]Warning: Tool failed but continuing with sequence[/yellow]"
