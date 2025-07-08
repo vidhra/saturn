@@ -138,7 +138,7 @@ class ModeSelector(Widget):
         print(f"DEBUG: Option selected, index={event.option_index}")
         try:
             if event.option_index is not None:
-                modes = ["auto", "agent", "command"]
+                modes = ["agent"]
                 selected_mode = modes[event.option_index]
                 
                 # Update current mode

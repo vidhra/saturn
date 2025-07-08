@@ -7,6 +7,7 @@ featuring real-time chat, model selection, and cloud operations.
 
 import os
 from datetime import datetime
+from typing import List, Dict, Any
 
 from textual import work
 from textual.app import App, ComposeResult
@@ -18,6 +19,7 @@ from saturn.config import load_config
 from saturn.orchestrator import run_chat_conversational
 
 from .state_tracker import SaturnStateTracker, create_ui_aware_runner
+from .context_engine import ContextEngine
 
 from .components import (
     HelpScreen,
@@ -152,7 +154,9 @@ class SaturnApp(App):
         Binding("ctrl+shift+c", "copy_last_message", "Copy Last", show=False),
         Binding("ctrl+a", "select_all", "Select All", show=True),
         Binding("ctrl+l", "clear_chat", "Clear"),
+        Binding("ctrl+n", "new_conversation", "New Chat", show=True),
         Binding("ctrl+m", "show_model_selector", "Models", show=True),
+        Binding("ctrl+i", "show_context_info", "Context Info", show=False),
         Binding("f1", "help", "Help"),
         Binding("escape", "clear_selection", "Clear Selection", show=False),
         Binding("tab", "focus_input", "Focus input", show=False),
@@ -167,6 +171,23 @@ class SaturnApp(App):
         self.current_provider = self.config.get("llm_provider", "gemini")
         self.current_model = self._get_current_model_name()
         self.app_mode = "auto"
+        
+        # Initialize context engine for Cursor-style context management
+        # Add a debug flag to disable context engine if needed
+        self.context_engine_enabled = self.config.get("enable_context_engine", True)
+        
+        if self.context_engine_enabled:
+            try:
+                self.context_engine = ContextEngine(
+                    working_directory=self.config.get("working_directory", "."),
+                    config=self.config
+                )
+            except Exception as e:
+                print(f"WARNING: Context engine failed to initialize: {e}")
+                self.context_engine = None
+                self.context_engine_enabled = False
+        else:
+            self.context_engine = None
 
     def _get_current_model_name(self) -> str:
         """Get the current model name based on provider"""
@@ -247,7 +268,10 @@ class SaturnApp(App):
 
         yield ModeSelector(current_mode=self.app_mode)
 
-        yield ChatDisplay(id="chat-display")
+        yield ChatDisplay(
+            context_engine=self.context_engine if self.context_engine_enabled else None, 
+            id="chat-display"
+        )
 
         yield SaturnPromptInput(id="prompt")
 
@@ -283,12 +307,33 @@ class SaturnApp(App):
 
     @work(thread=False)
     async def stream_agent_response(self, user_query: str) -> None:
-        """Stream response from Saturn orchestrator with real-time state tracking"""
+        """Stream response from Saturn orchestrator with real-time state tracking and intelligent context injection"""
 
         try:
             state_tracker = SaturnStateTracker(self)
 
             try:
+                # Get compressed context for the current query (Cursor-style)
+                try:
+                    context_messages = await self.chat_display.get_context_for_query(user_query)
+                    
+                    # Ensure context_messages is a proper list
+                    if not isinstance(context_messages, list):
+                        self.add_system_message(f"⚠ Context error: got {type(context_messages)} instead of list")
+                        context_messages = []
+                    
+                    # Show context stats if available
+                    if context_messages:
+                        context_stats = self.chat_display.get_conversation_summary()
+                        if context_stats.get('context_available'):
+                            self.add_system_message(
+                                f"🧠 Context: {context_stats['total_messages']} messages, "
+                                f"{context_stats['total_tokens']} tokens, "
+                                f"{context_stats['compression_ratio']:.1f}% compressed"
+                            )
+                except Exception as context_error:
+                    self.add_system_message(f"⚠ Context engine error: {str(context_error)}")
+                    context_messages = []  # Fallback to empty context
 
                 runtime_config = self.config.copy()
                 if hasattr(self, 'app_mode'):
@@ -308,7 +353,9 @@ class SaturnApp(App):
                 from saturn.prompts import SYSTEM_CHAT_PROMPT
                 from saturn.rag_engine import RAGEngine
 
-                llm_interface = get_llm_interface(runtime_config)
+                # Create LLM interface with context injection capability
+                base_llm_interface = get_llm_interface(runtime_config)
+                llm_interface = self._create_context_aware_llm(base_llm_interface, context_messages, user_query)
 
                 gcp_executor = GcloudExecutor(runtime_config)
                 aws_executor = AWSExecutor(runtime_config)
@@ -564,6 +611,94 @@ class SaturnApp(App):
         await question_screen.response_event.wait()
         
         return question_screen.user_response or "NO_ANSWER"
+    
+    def _create_context_aware_llm(self, base_llm, context_messages: List[dict], current_query: str):
+        """Create a wrapper around the LLM that injects compressed context"""
+        
+        class ContextAwareLLMWrapper:
+            def __init__(self, base_llm, context_messages, current_query):
+                self.base_llm = base_llm
+                self.context_messages = context_messages
+                self.current_query = current_query
+            
+            async def agenerate(self, messages, **kwargs):
+                """Inject context before generating response"""
+                enhanced_messages = []
+                
+                try:
+                    # Add context messages first (if any)
+                    if self.context_messages:
+                        # Verify context_messages is iterable and contains dicts
+                        if not isinstance(self.context_messages, list):
+                            print(f"ERROR: context_messages is {type(self.context_messages)}, expected list")
+                            # Skip context injection if it's not a proper list
+                        else:
+                            enhanced_messages.extend(self.context_messages)
+                    
+                    # Add the original messages
+                    enhanced_messages.extend(messages)
+                    
+                    # Ensure we have context separation
+                    if self.context_messages and isinstance(self.context_messages, list) and enhanced_messages:
+                        # Add a separator to clearly distinguish context from current conversation
+                        enhanced_messages.insert(len(self.context_messages), {
+                            "role": "system",
+                            "content": "--- Current Conversation ---"
+                        })
+                    
+                    return await self.base_llm.agenerate(enhanced_messages, **kwargs)
+                    
+                except Exception as e:
+                    print(f"ERROR in context injection: {e}")
+                    print(f"context_messages type: {type(self.context_messages)}")
+                    print(f"context_messages value: {self.context_messages}")
+                    # Fallback: just use original messages without context
+                    return await self.base_llm.agenerate(messages, **kwargs)
+            
+            def __getattr__(self, name):
+                """Delegate all other attributes to the base LLM"""
+                return getattr(self.base_llm, name)
+        
+        return ContextAwareLLMWrapper(base_llm, context_messages, current_query)
+    
+    def action_new_conversation(self) -> None:
+        """Start a new conversation"""
+        old_stats = self.chat_display.get_conversation_summary()
+        conversation_id = self.chat_display.context_engine.start_new_conversation()
+        self.chat_display.clear_messages()
+        
+        # Show transition message
+        if old_stats.get('context_available'):
+            self.add_system_message(
+                f"💬 Started new conversation (previous: {old_stats['total_messages']} messages)"
+            )
+        else:
+            self.add_system_message("💬 Started new conversation")
+        
+        self.notify("🆕 New conversation started")
+    
+    def action_show_context_info(self) -> None:
+        """Show information about current context and compression"""
+        stats = self.chat_display.get_conversation_summary()
+        
+        if not stats.get('context_available'):
+            self.notify("No context engine available", severity="warning")
+            return
+        
+        info_lines = [
+            f"📊 Conversation ID: {stats['conversation_id']}",
+            f"💬 Total Messages: {stats['total_messages']}",
+            f"🗜️ Compression Ratio: {stats['compression_ratio']:.1f}%",
+            f"🎯 Recent Messages: {stats['recent_messages']}",
+            f"📏 Total Tokens: {stats['total_tokens']}",
+        ]
+        
+        # Get conversation list
+        conversations = self.chat_display.get_conversation_list()
+        if conversations:
+            info_lines.append(f"📂 Available Conversations: {len(conversations)}")
+        
+        self.add_system_message("\n".join(info_lines))
 
 
 def run():
