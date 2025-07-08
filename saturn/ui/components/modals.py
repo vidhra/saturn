@@ -27,8 +27,9 @@ class HelpScreen(ModalScreen):
                 """Commands:
 • Enter: Send message
 • Ctrl+L: Clear conversation  
+• Ctrl+N: Start new conversation
 • Ctrl+M: Select AI model
-• Ctrl+I: Select mode (Auto/Agent/Command)
+• Ctrl+I: Show context info
 • Tab: Focus input • Shift+Tab: Focus chat
 • Ctrl+C: Copy selected text
 • Ctrl+Shift+C: Copy last assistant message
@@ -49,6 +50,14 @@ Modes:
 • 🤖 Auto: Intelligent mode selection
 • 🧠 Agent: AI assistant mode  
 • ⚡ Command: Direct command execution
+
+Context Engine (Cursor-style):
+• 🧠 Intelligent conversation compression
+• 🎯 Relevance-based context selection
+• 📊 Technical context extraction
+• 💾 Persistent conversation storage
+• 🗜️ Automatic message summarization
+• ⚡ Real-time context injection to LLM
 
 Features:
 • Native text selection with standard shortcuts
