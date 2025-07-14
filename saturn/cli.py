@@ -103,7 +103,8 @@ def main(
     if help_commands:
         console.print("[bold blue]Saturn Commands:[/bold blue]")
         console.print("  [cyan]saturn[/cyan]              Launch interactive UI (default)")
-        console.print("  [cyan]saturn run[/cyan]          Execute a single query via CLI")
+        console.print("  [cyan]saturn run[/cyan]          Execute a query or .sat workflow file")
+        console.print("  [cyan]saturn workflow[/cyan]     Manage .sat workflow files (list/validate/info)")
         console.print("  [cyan]saturn ingest-docs[/cyan]  Build RAG documentation index") 
         console.print("  [cyan]saturn terraform-run[/cyan] Terraform-focused execution")
         console.print("  [cyan]saturn hybrid-run[/cyan]   Hybrid gcloud/terraform execution")
@@ -111,6 +112,11 @@ def main(
         console.print("  [cyan]saturn install-cli[/cyan]  Install cloud CLI tools")
         console.print("  [cyan]saturn cache[/cyan]        Manage performance caches")
         console.print("\nUse 'saturn <command> --help' for detailed command help.")
+        console.print("\n[bold blue]Saturn Workflow (.sat) Files:[/bold blue]")
+        console.print("  • Workflows are automatically saved after successful planning")
+        console.print("  • Run workflows: [cyan]saturn run example.sat[/cyan]")
+        console.print("  • List workflows: [cyan]saturn workflow list[/cyan]")
+        console.print("  • View workflow: [cyan]saturn workflow info --path example.sat[/cyan]")
         raise typer.Exit()
     
     # If no subcommand provided, launch UI by default
@@ -130,7 +136,7 @@ def main(
 @app.command("run")
 def run_command(
     query: str = typer.Argument(
-        ..., help="The natural language query for the GCP agent."
+        ..., help="The natural language query for the GCP agent, or path to a .sat workflow file."
     ),
     provider: Optional[str] = typer.Option(
         os.getenv("LLM_PROVIDER") or APP_CONFIG.get("llm_provider", "openai"),
@@ -226,12 +232,25 @@ def run_command(
         )
         raise typer.Exit(code=1)
 
-    console.print(
-        Panel(
-            f"Processing query: '[bold cyan]{query}[/bold cyan]'",
-            title="Saturn Command",
+    # Check if query is a .sat file
+    is_sat_file = query.endswith('.sat') and os.path.exists(query)
+    
+    if is_sat_file:
+        console.print(
+            Panel(
+                f"Loading Saturn workflow: '[bold cyan]{query}[/bold cyan]'",
+                title="Saturn Workflow Execution",
+            )
         )
-    )
+        # For .sat files, we don't need most of the configuration validation
+        # as the workflow contains all necessary step information
+    else:
+        console.print(
+            Panel(
+                f"Processing query: '[bold cyan]{query}[/bold cyan]'",
+                title="Saturn Command",
+            )
+        )
 
     config = APP_CONFIG.copy()
     config["llm_provider"] = provider
@@ -313,10 +332,20 @@ def run_command(
     if not config.get("gcp_project_id"):
         console.print("[bold red]Error:[/] GCP Project ID not found.")
         raise typer.Exit(code=1)
-    required_api_key_name = f'{config["llm_provider"]}_api_key'
-    if not config.get(required_api_key_name) and config["llm_provider"] != "mock":
+    
+    # Map LLM providers to their corresponding API key names
+    provider_api_key_map = {
+        "openai": "openai_api_key",
+        "claude": "anthropic_api_key",
+        "gemini": "gemini_api_key", 
+        "mistral": "mistral_api_key"
+    }
+    
+    provider = config["llm_provider"]
+    required_api_key_name = provider_api_key_map.get(provider, f'{provider}_api_key')
+    if not config.get(required_api_key_name) and provider != "mock":
         console.print(
-            f"[bold red]Error:[/] {required_api_key_name.upper()} not found for provider '{config["llm_provider"]}'."
+            f"[bold red]Error:[/] {required_api_key_name.upper()} not found for provider '{provider}'."
         )
         raise typer.Exit(code=1)
 
@@ -1216,6 +1245,161 @@ def cache_command(
                 
     else:
         console.print(f"[bold red]Error:[/bold red] Unknown action '{action}'. Use 'status', 'clear', or 'stats'.")
+        raise typer.Exit(code=1)
+
+
+@app.command("workflow")
+def workflow_command(
+    action: str = typer.Argument(..., help="Action: 'list', 'validate', or 'info'"),
+    workflow_path: Optional[str] = typer.Option(
+        None, "--path", "-p", help="Path to specific .sat workflow file (for validate/info actions)"
+    ),
+    directory: Optional[str] = typer.Option(
+        ".", "--dir", "-d", help="Directory to search for .sat files (for list action)"
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show detailed information")
+):
+    """Manage Saturn workflow (.sat) files."""
+    
+    if action == "list":
+        console.print(f"[bold blue]Saturn Workflows in {directory}[/bold blue]")
+        
+        try:
+            from internal.saturn_workflow import SaturnWorkflow
+            workflow_handler = SaturnWorkflow()
+            workflows = workflow_handler.list_workflows(directory)
+            
+            if not workflows:
+                console.print(f"[yellow]No .sat workflow files found in {directory}[/yellow]")
+                return
+            
+            from rich.table import Table
+            table = Table(title=f"Found {len(workflows)} workflow(s)")
+            table.add_column("Filename", style="cyan")
+            table.add_column("Created", style="dim")
+            table.add_column("Steps", justify="right", style="green")
+            table.add_column("Dependencies", justify="right", style="blue")
+            if verbose:
+                table.add_column("Original Query", style="dim")
+            
+            for workflow in workflows:
+                created = workflow["created_at"][:19].replace("T", " ") if workflow["created_at"] != "Unknown" else "Unknown"
+                row = [
+                    workflow["filename"],
+                    created,
+                    str(workflow["step_count"]),
+                    str(workflow["edge_count"])
+                ]
+                if verbose:
+                    query = workflow["original_query"][:50] + "..." if len(workflow["original_query"]) > 50 else workflow["original_query"]
+                    row.append(query)
+                table.add_row(*row)
+            
+            console.print(table)
+            
+        except Exception as e:
+            console.print(f"[bold red]Error listing workflows: {e}[/bold red]")
+            raise typer.Exit(code=1)
+    
+    elif action == "validate":
+        if not workflow_path:
+            console.print("[bold red]Error:[/bold red] --path is required for validate action")
+            raise typer.Exit(code=1)
+        
+        try:
+            from internal.saturn_workflow import SaturnWorkflow
+            workflow_handler = SaturnWorkflow()
+            
+            console.print(f"[cyan]Validating workflow: {workflow_path}[/cyan]")
+            is_valid = workflow_handler.validate_workflow(workflow_path)
+            
+            if is_valid:
+                console.print("[green]✓ Workflow is valid and ready for execution[/green]")
+            else:
+                console.print("[red]✗ Workflow validation failed[/red]")
+                raise typer.Exit(code=1)
+                
+        except FileNotFoundError:
+            console.print(f"[bold red]Error:[/bold red] Workflow file not found: {workflow_path}")
+            raise typer.Exit(code=1)
+        except Exception as e:
+            console.print(f"[bold red]Error validating workflow: {e}[/bold red]")
+            raise typer.Exit(code=1)
+    
+    elif action == "info":
+        if not workflow_path:
+            console.print("[bold red]Error:[/bold red] --path is required for info action")
+            raise typer.Exit(code=1)
+        
+        try:
+            from internal.saturn_workflow import SaturnWorkflow
+            workflow_handler = SaturnWorkflow()
+            
+            dag, step_details_map, execution_order, original_query = workflow_handler.load_workflow(workflow_path)
+            
+            from rich.panel import Panel
+            from rich.table import Table
+            
+            # Workflow metadata
+            console.print(Panel(
+                f"[bold]Original Query:[/bold] {original_query}\n"
+                f"[bold]Steps:[/bold] {len(step_details_map)}\n"
+                f"[bold]Dependencies:[/bold] {len(dag.edges)}\n"
+                f"[bold]Execution Order:[/bold] {' → '.join(execution_order)}",
+                title=f"Workflow Info: {os.path.basename(workflow_path)}",
+                border_style="blue"
+            ))
+            
+            # Step details table
+            steps_table = Table(title="Step Details")
+            steps_table.add_column("Step ID", style="cyan")
+            steps_table.add_column("Provider", style="dim")
+            steps_table.add_column("Tool", style="green")
+            steps_table.add_column("Description")
+            
+            for step_id in execution_order:
+                details = step_details_map[step_id]
+                provider = details.get("cloud_provider", "")
+                if not provider:
+                    tool_name = details.get("tool_to_use", "")
+                    if tool_name.startswith("mcp_"):
+                        provider = "MCP"
+                    else:
+                        provider = "FILE"
+                else:
+                    provider = provider.upper()
+                
+                steps_table.add_row(
+                    step_id,
+                    provider,
+                    details.get("tool_to_use", ""),
+                    details.get("description", "")
+                )
+            
+            console.print(steps_table)
+            
+            if verbose:
+                # Dependencies table
+                deps_table = Table(title="Dependencies")
+                deps_table.add_column("Step", style="cyan")
+                deps_table.add_column("Depends On", style="yellow")
+                
+                for step_id, details in step_details_map.items():
+                    deps = details.get("dependencies", [])
+                    if deps:
+                        deps_table.add_row(step_id, ", ".join(deps))
+                
+                if deps_table.rows:
+                    console.print(deps_table)
+                else:
+                    console.print("[dim]No dependencies found[/dim]")
+                
+        except Exception as e:
+            console.print(f"[bold red]Error reading workflow info: {e}[/bold red]")
+            raise typer.Exit(code=1)
+    
+    else:
+        console.print(f"[bold red]Error:[/bold red] Unknown action '{action}'. Use 'list', 'validate', or 'info'.")
         raise typer.Exit(code=1)
 
 

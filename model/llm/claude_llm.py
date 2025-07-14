@@ -1,5 +1,6 @@
 # model/llm/claude_llm.py
 import json
+import os
 import traceback
 from anthropic import AsyncAnthropic # Import Claude library
 from typing import List, Dict, Any, Optional, Tuple
@@ -46,20 +47,23 @@ def create_claude_messages(query: str, system_prompt: str, previous_errors: Opti
 class ClaudeLLM(BaseLLMInterface):
     """LLM interface implementation for Anthropic Claude models."""
 
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self._validate_config()
+
     def _validate_config(self):
-        if not self.config.get('anthropic_api_key'):
-            raise ValueError("Anthropic API key ('anthropic_api_key') missing in configuration.")
-        self.api_key = self.config['anthropic_api_key']
+        """Validate the configuration for Claude."""
+        api_key = self.config.get('anthropic_api_key') or os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError("Anthropic API key missing. Set 'anthropic_api_key' in config or ANTHROPIC_API_KEY environment variable.")
+        
         self.model_name = self.config.get('claude_model', 'claude-3-5-sonnet-20241022')
-        print(f"Claude Interface configured for model: {self.model_name}")
         
         try:
-            self.client = AsyncAnthropic(api_key=self.api_key)
-            print(f"Claude client initialized for {self.model_name}.")
+            import anthropic
+            self.client = anthropic.AsyncAnthropic(api_key=api_key)
         except ImportError:
-            raise RuntimeError("anthropic library not installed. Please install it: pip install anthropic")
-        except Exception as e:
-            raise RuntimeError(f"Error initializing Anthropic client: {e}")
+            raise ImportError("anthropic library not installed. Install with: pip install anthropic")
 
     async def agenerate(self, messages: List[Dict[str, str]]) -> Any:
         """
@@ -120,8 +124,6 @@ class ClaudeLLM(BaseLLMInterface):
         
         claude_tools = convert_to_claude_tools(tools)
         system_content, claude_messages = create_claude_messages(query, system_prompt, previous_errors)
-        print(f"Calling Claude API (Model: {self.model_name})...")
-        
         try:
             response = await self.client.messages.create(
                 model=self.model_name,
@@ -131,16 +133,13 @@ class ClaudeLLM(BaseLLMInterface):
                 tools=claude_tools if claude_tools else None
             )
             
-            print("Received response from Claude.")
-            
             tool_calls_list = []
             llm_text_response = None
             
             if response.content:
                 for content_block in response.content:
                     if content_block.type == "tool_use":
-                        print(f"  Claude proposed call: {content_block.name}")
-                        print(f"    Arguments: {content_block.input}")
+                        
                         tool_calls_list.append({
                             "name": content_block.name,
                             "arguments": content_block.input

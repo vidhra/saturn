@@ -75,6 +75,7 @@ class StateMachineContext:
         self.selected_tools_for_execution: List[Dict[str, Any]] = []
         self.execution_results: List[Tuple[str, bool, Any]] = []
         self.reasoning_analysis: Optional[Dict[str, Any]] = None  # Store LLM reasoning analysis from ReasoningState
+        self.generated_sat_file: Optional[str] = None  # Path to generated .sat file (if any)
 
     def reset_for_new_attempt(self):
         """Resets fields that should be cleared before a planning/execution cycle."""

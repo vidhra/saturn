@@ -284,16 +284,31 @@ class StateMachineRunner:
         Processes a given query through the state machine.
 
         Args:
-            query: The user's natural language query.
+            query: The user's natural language query or path to .sat file.
 
         Returns:
             The final StateMachineContext after reaching a terminal state.
         """
-        print(f"\n=== Starting State Machine for Query ===\nQuery: {query}\n")
+        # Check if query is a .sat file path
+        is_sat_file = query.endswith('.sat') and os.path.exists(query)
+        
+        if is_sat_file:
+            print(f"\n=== Starting State Machine for Saturn Workflow ===\nFile: {query}\n")
+            # For .sat files, we'll load the original query from the file for logging
+            try:
+                from internal.saturn_workflow import SaturnWorkflow
+                workflow_handler = SaturnWorkflow()
+                _, _, _, original_query = workflow_handler.load_workflow(query)
+                display_query = f"[Workflow] {original_query}"
+            except:
+                display_query = f"[Workflow] {query}"
+        else:
+            print(f"\n=== Starting State Machine for Query ===\nQuery: {query}\n")
+            display_query = query
 
         from internal.state_recorder import RunStateLogger
 
-        state_recorder = RunStateLogger(query)
+        state_recorder = RunStateLogger(display_query)
 
         from saturn.file_executor import FileBuildExecutor
 
@@ -304,6 +319,11 @@ class StateMachineRunner:
         # Set up file tools with question handler if available
         working_directory = self.config.get("working_directory", ".")
         self._setup_file_tools_with_question_handler(working_directory)
+
+        # Prepare config for .sat file handling
+        config_for_context = self.config.copy()
+        if is_sat_file:
+            config_for_context["sat_file_path"] = query
 
         context = StateMachineContext(
             original_query=query,
@@ -318,13 +338,20 @@ class StateMachineRunner:
             state_recorder=state_recorder,
             file_build_executor=file_build_executor,
             mcp_integrator=self.mcp_integrator,
-            config=self.config,
+            config=config_for_context,
         )
 
         # Pass runner instance to context so states can access cached tools
         context._state_machine_runner = self
 
-        current_state_class = StartState
+        # Determine initial state based on input type
+        if is_sat_file:
+            from internal.states.load_workflow_state import LoadWorkflowState
+            current_state_class = LoadWorkflowState
+            if self.console:
+                self.console.print("[dim]Starting with LoadWorkflowState for .sat file[/dim]")
+        else:
+            current_state_class = StartState
 
         while current_state_class not in [CompletedState, FailedState]:
             current_state_instance = current_state_class()
@@ -562,6 +589,13 @@ class StateMachineRunner:
             from .states.executing_state import ExecutingState
 
             state_mapping["ExecutingState"] = ExecutingState
+        except ImportError:
+            pass
+
+        try:
+            from .states.load_workflow_state import LoadWorkflowState
+
+            state_mapping["LoadWorkflowState"] = LoadWorkflowState
         except ImportError:
             pass
 

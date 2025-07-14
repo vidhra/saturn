@@ -12,6 +12,7 @@ from saturn.prompts import PLANNING_SYSTEM_PROMPT_TEMPLATE, PREVIOUS_REASONING_A
 from .base_state import BaseState, StateMachineContext
 from .executing_state import ExecutingState
 from .failed_state import FailedState
+from .completed_state import CompletedState
 
 
 class PlanningState(BaseState):
@@ -20,102 +21,105 @@ class PlanningState(BaseState):
     async def run(
         self, context: StateMachineContext
     ) -> Tuple[Type[BaseState], StateMachineContext]:
-        print("--- State: PLANNING (with Dynamic State Detection) ---")
 
-        max_attempts = 5
-        attempt = 1
-
-        while attempt <= max_attempts:
-            print(f"Planning attempt {attempt}/{max_attempts}")
-
-            # Use cached tools from the state machine runner instead of creating new instances
-            working_directory = context.file_build_executor.config.get(
-                "working_directory", "."
-            )
-
-            # Get tools from runner's cache - this is much faster than creating new FileBuildToolCaller
-            if (
-                hasattr(context, "_state_machine_runner")
-                and context._state_machine_runner
-            ):
-                context.file_tools = (
-                    context._state_machine_runner.get_cached_file_tools(
-                        working_directory
-                    )
-                )
-                if context.console:
-                    context.console.print(
-                        f"[dim]Using runner's cached file tools ({len(context.file_tools)} tools)[/dim]"
-                    )
-            else:
-                # Fallback to direct creation if runner not available (shouldn't happen in normal flow)
-                from saturn.file_build_tools import FileBuildToolCaller
-
-                file_tool_caller = FileBuildToolCaller(working_directory)
-                context.file_tools = file_tool_caller.get_available_tools()
-                if context.console:
-                    context.console.print(
-                        "[dim yellow]Warning: Using direct tool discovery (runner cache not available)[/dim yellow]"
-                    )
-
-            next_state_class = await self._analyze_query_for_dynamic_states(
-                context.original_query, context
-            )
-
-            if next_state_class and next_state_class != ExecutingState:
-                print(
-                    f"Dynamic routing: Transitioning to specialized state: {next_state_class.__name__}"
-                )
-                return next_state_class, context
-
-            # Generate DAG plan using orchestrator logic
-            dag, step_details_map = await self._generate_plan_dag(
-                context.original_query,
-                context.llm_interface,
-                context.state_recorder,
-                context.file_tools,
-                context.console,
-                context,
-                attempt_number=attempt,
-            )
-
-            if not dag or not step_details_map:
-                print("Failed to generate a valid execution plan.")
-                context.current_errors.append(
-                    {
-                        "method": "PLANNING",
-                        "error": "Failed to generate DAG plan",
-                        "arguments": {"query": context.original_query},
-                    }
-                )
-                return FailedState, context
-
-            # Store DAG information in context
-            context.dag = dag
-            context.step_details_map = step_details_map
-
+        max_attempts = context.config.get("max_planning_attempts", 3)
+        
+        for attempt in range(1, max_attempts + 1):
             try:
-                context.execution_order = dag.topo_order(ORDER_UP)
-                print(f"DAG Execution Order: {' -> '.join(context.execution_order)}")
+                if context.original_query.lower().strip() in ["exit", "quit"]:
+                    return CompletedState, context
+
+                # Use cached tools from the state machine runner instead of creating new instances
+                working_directory = context.file_build_executor.config.get(
+                    "working_directory", "."
+                )
+
+                # Get tools from runner's cache - this is much faster than creating new FileBuildToolCaller
+                if (
+                    hasattr(context, "_state_machine_runner")
+                    and context._state_machine_runner
+                ):
+                    context.file_tools = (
+                        context._state_machine_runner.get_cached_file_tools(
+                            working_directory
+                        )
+                    )
+                    if context.console:
+                        context.console.print(
+                            f"[dim]Using runner's cached file tools ({len(context.file_tools)} tools)[/dim]"
+                        )
+                else:
+                    # Fallback to direct creation if runner not available (shouldn't happen in normal flow)
+                    from saturn.file_build_tools import FileBuildToolCaller
+
+                    file_tool_caller = FileBuildToolCaller(working_directory)
+                    context.file_tools = file_tool_caller.get_available_tools()
+
+                next_state_class = await self._analyze_query_for_dynamic_states(
+                    context.original_query, context
+                )
+
+                if next_state_class and next_state_class != ExecutingState:
+                    return next_state_class, context
+
+                # Generate DAG plan using orchestrator logic
+                dag, step_details_map = await self._generate_plan_dag(
+                    context.original_query,
+                    context.llm_interface,
+                    context.state_recorder,
+                    context.file_tools,
+                    context.console,
+                    context,
+                    attempt_number=attempt,
+                )
+
+                if not dag or not step_details_map:
+                    context.current_errors.append(
+                        {
+                            "method": "PLANNING",
+                            "error": "Failed to generate DAG plan",
+                            "arguments": {"query": context.original_query},
+                        }
+                    )
+                    return FailedState, context
+
+                # Store DAG information in context
+                context.dag = dag
+                context.step_details_map = step_details_map
+
+                try:
+                    context.execution_order = dag.topo_order(ORDER_UP)
+                except Exception as e:
+                    error_msg = f"Failed to get execution order from DAG: {e}"
+                    context.current_errors.append(
+                        {"method": "PLANNING", "error": error_msg, "arguments": {}}
+                    )
+                    return FailedState, context
+
+                context.state_recorder.record_event(
+                    "plan_generation_success",
+                    {
+                        "dag_nodes": len(dag.vertices),
+                        "dag_edges": len(dag.edges),
+                        "execution_order": context.execution_order,
+                    },
+                )
+
+                # Don't save workflow during planning - will save after execution with actual commands
+                # Store workflow metadata for later saving in CompletedState
+                context.save_workflow_after_execution = context.config.get("save_workflow", True)
+
+                return ExecutingState, context
+
             except Exception as e:
-                error_msg = f"Failed to get execution order from DAG: {e}"
-                print(f"Error: {error_msg}")
+                error_msg = f"Planning attempt {attempt}/{max_attempts} failed: {e}"
                 context.current_errors.append(
                     {"method": "PLANNING", "error": error_msg, "arguments": {}}
                 )
-                return FailedState, context
+                if attempt == max_attempts:
+                    return FailedState, context
 
-            context.state_recorder.record_event(
-                "plan_generation_success",
-                {
-                    "dag_nodes": len(dag.vertices),
-                    "dag_edges": len(dag.edges),
-                    "execution_order": context.execution_order,
-                },
-            )
-
-            print("Planning completed successfully. Transitioning to EXECUTING.")
-            return ExecutingState, context
+        return FailedState, context
 
     async def _analyze_query_for_dynamic_states(
         self, query: str, context: StateMachineContext
