@@ -113,6 +113,8 @@ async def run_query_with_state_machine(
         "fail_fast": config.get("fail_fast", False),
         "enable_llm_state_detection": enable_dynamic_states,
         "checkpoint_dir": config.get("checkpoint_dir", "./checkpoints"),
+        "save_workflow": config.get("save_workflow", True),
+        "workflows_dir": config.get("workflows_dir", "workflows"),
     }
 
     runner = StateMachineRunner(

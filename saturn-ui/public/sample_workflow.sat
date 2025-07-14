@@ -1,0 +1,78 @@
+{
+  "workflow_id": "sample_aws_ec2_workflow",
+  "workflow_name": "List AWS EC2 Instances",
+  "description": "A sample workflow that lists AWS EC2 instances",
+  "created_at": "2025-07-14T20:16:57.123456",
+  "version": "1.0",
+  "step_details_map": {
+    "step1_check_aws_config": {
+      "id": "step1_check_aws_config",
+      "description": "Check AWS configuration and credentials",
+      "cloud_provider": "aws",
+      "tool_to_use": "cli_command_generation",
+      "tool_args": {},
+      "dependencies": [],
+      "pass_output_to_next": true,
+      "executed_command": "aws configure list",
+      "execution_successful": true
+    },
+    "step2_list_instances": {
+      "id": "step2_list_instances", 
+      "description": "List all EC2 instances in the current region",
+      "cloud_provider": "aws",
+      "tool_to_use": "cli_command_generation",
+      "tool_args": {},
+      "dependencies": ["step1_check_aws_config"],
+      "pass_output_to_next": true,
+      "executed_command": "aws ec2 describe-instances",
+      "execution_successful": true
+    },
+    "step3_get_instance_status": {
+      "id": "step3_get_instance_status",
+      "description": "Get detailed status of all instances",
+      "cloud_provider": "aws", 
+      "tool_to_use": "cli_command_generation",
+      "tool_args": {},
+      "dependencies": ["step2_list_instances"],
+      "pass_output_to_next": true,
+      "executed_command": "aws ec2 describe-instance-status",
+      "execution_successful": true
+    },
+    "step4_save_to_file": {
+      "id": "step4_save_to_file",
+      "description": "Save instance information to a JSON file",
+      "cloud_provider": null,
+      "tool_to_use": "write_file",
+      "tool_args": {
+        "file_path": "ec2_instances.json",
+        "content": "instances data"
+      },
+      "dependencies": ["step3_get_instance_status"],
+      "pass_output_to_next": false,
+      "file_tool_name": "write_file",
+      "file_tool_args": {
+        "file_path": "ec2_instances.json",
+        "content": "instances data"
+      },
+      "executed_command": "file_tool: write_file with args: {\"file_path\": \"ec2_instances.json\", \"content\": \"instances data\"}",
+      "execution_successful": true
+    }
+  },
+  "dag": {
+    "nodes": ["step1_check_aws_config", "step2_list_instances", "step3_get_instance_status", "step4_save_to_file"],
+    "edges": [
+      {
+        "source": "step1_check_aws_config",
+        "target": "step2_list_instances"
+      },
+      {
+        "source": "step2_list_instances", 
+        "target": "step3_get_instance_status"
+      },
+      {
+        "source": "step3_get_instance_status",
+        "target": "step4_save_to_file"
+      }
+    ]
+  }
+} 

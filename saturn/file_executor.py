@@ -934,9 +934,7 @@ class FileBuildExecutor:
         self.docker_builder = DockerBuilder(self.base_path)
         self.build_executor = BuildToolExecutor(self.base_path)
         
-        print(f"File Build Executor initialized")
-        print(f"Base path: {self.base_path}")
-        print(f"Capabilities: File operations, Docker builds, Multi-language builds")
+
     
     async def execute(
         self,

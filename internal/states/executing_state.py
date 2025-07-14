@@ -40,10 +40,8 @@ class ExecutingState(BaseState):
     async def run(
         self, context: StateMachineContext
     ) -> Tuple[Type[BaseState], StateMachineContext]:
-        print("--- State: EXECUTING (with Parallel Support) ---")
 
         if not context.dag or not context.step_details_map:
-            print("No DAG or step details available for execution.")
             context.current_errors.append(
                 {
                     "method": "EXECUTING",
@@ -210,7 +208,6 @@ class ExecutingState(BaseState):
     async def _execute_sequential(self, context: StateMachineContext, console):
         """Execute DAG steps sequentially (original behavior)."""
         if not context.execution_order:
-            print("No execution order available.")
             context.current_errors.append(
                 {
                     "method": "EXECUTING",
@@ -231,7 +228,6 @@ class ExecutingState(BaseState):
         for step_id in context.execution_order:
             if step_id not in context.step_details_map:
                 error_msg = f"Step ID '{step_id}' from execution order not found in step details. Skipping."
-                print(f"Error: {error_msg}")
                 accumulated_errors.append(
                     {"step_id": step_id, "error": "Step details not found"}
                 )
@@ -301,7 +297,12 @@ class ExecutingState(BaseState):
         cloud_provider = current_step_details.get("cloud_provider")
 
         # Route to appropriate execution method
-        if tool_to_use.startswith("mcp_"):
+        # Check if this is a loaded workflow with stored commands for any tool type
+        if getattr(context, 'is_loaded_workflow', False) and current_step_details.get('executed_command'):
+            return await self._execute_stored_command(
+                step_id, current_step_details, context, console
+            )
+        elif tool_to_use.startswith("mcp_"):
             return await self._execute_mcp_tool_step(
                 step_id, current_step_details, context, console
             )
@@ -406,6 +407,15 @@ class ExecutingState(BaseState):
                         console.print(
                             f"[green]File tool step {step_id} completed successfully.[/green]"
                         )
+                    
+                    # Store the successful file tool call in step details for .sat file generation
+                    if step_id in context.step_details_map:
+                        file_command = f"file_tool: {tool_to_use} with args: {tool_args}"
+                        context.step_details_map[step_id]["executed_command"] = file_command
+                        context.step_details_map[step_id]["execution_successful"] = True
+                        context.step_details_map[step_id]["file_tool_name"] = tool_to_use
+                        context.step_details_map[step_id]["file_tool_args"] = tool_args
+                    
                     return True, actual_result
                 else:
                     error_msg = (
@@ -521,6 +531,15 @@ class ExecutingState(BaseState):
                             console.print(
                                 f"[dim]No result data from MCP tool {step_id}[/dim]"
                             )
+                    
+                    # Store the successful MCP tool call in step details for .sat file generation
+                    if step_id in context.step_details_map:
+                        mcp_command = f"mcp_tool: {tool_to_use} with args: {tool_args}"
+                        context.step_details_map[step_id]["executed_command"] = mcp_command
+                        context.step_details_map[step_id]["execution_successful"] = True
+                        context.step_details_map[step_id]["mcp_tool_name"] = tool_to_use
+                        context.step_details_map[step_id]["mcp_tool_args"] = tool_args
+                    
                     return True, result
                 else:
                     error_msg = result.get("error", "Unknown MCP error")
@@ -574,8 +593,15 @@ class ExecutingState(BaseState):
     ) -> Tuple[bool, Any]:
         """
         Executes a single step from the DAG using the orchestrator's logic.
-        Generates a cloud command using LLM, executes it, and handles retries.
+        For loaded workflows (.sat files), uses stored commands directly.
+        Otherwise, generates a cloud command using LLM, executes it, and handles retries.
         """
+        
+        # Check if this is a loaded workflow with stored commands
+        if getattr(context, 'is_loaded_workflow', False) and step_details.get('executed_command'):
+            return await self._execute_stored_command(
+                step_id, step_details, context, console
+            )
         if console:
             console.print(
                 Panel(
@@ -833,6 +859,12 @@ class ExecutingState(BaseState):
                     context.state_recorder.record_node_result(
                         step_id, True, success_payload, "COMPLETED_SUCCESS"
                     )
+                    
+                    # Store the successful command in step details for .sat file generation
+                    if step_id in context.step_details_map:
+                        context.step_details_map[step_id]["executed_command"] = command_to_execute
+                        context.step_details_map[step_id]["execution_successful"] = True
+                    
                     return True, result_or_error
                 else:
                     last_error = str(result_or_error)
@@ -874,6 +906,188 @@ class ExecutingState(BaseState):
             "FAILED_MAX_ATTEMPTS",
         )
         return False, {"error": last_error, "step_id": step_id}
+
+    async def _execute_stored_command(
+        self,
+        step_id: str,
+        step_details: Dict[str, Any],
+        context: StateMachineContext,
+        console,
+    ) -> Tuple[bool, Any]:
+        """
+        Execute a stored command from a loaded .sat workflow file.
+        This bypasses LLM generation and uses the exact command that was successful before.
+        """
+        if console:
+            console.print(
+                Panel(
+                    f"Executing Stored Command for Step: [cyan]{step_id}[/cyan]\n"
+                    f"Description: {step_details.get('description', 'N/A')}\n"
+                    f"[dim]Using stored command from .sat file[/dim]",
+                    title="[bold green]Stored Command Execution[/bold green]",
+                    border_style="green",
+                )
+            )
+
+        context.state_recorder.record_event(
+            "stored_command_execution_start",
+            {"step_id": step_id, "description": step_details.get("description")},
+        )
+        context.state_recorder.record_node_status_change(step_id, "RUNNING")
+
+        stored_command = step_details.get("executed_command")
+        cloud_provider = step_details.get("cloud_provider")
+
+        try:
+            # Handle different types of stored commands
+            if step_details.get("mcp_tool_name"):
+                # This is an MCP tool execution
+                tool_name = step_details.get("mcp_tool_name")
+                tool_args = step_details.get("mcp_tool_args", {})
+                
+                if console:
+                    console.print(f"[cyan]Executing stored MCP tool: {tool_name}[/cyan]")
+                    console.print(f"[dim]Arguments: {tool_args}[/dim]")
+                
+                if not hasattr(context, "mcp_integrator") or not context.mcp_integrator:
+                    error_msg = "MCP integrator not available for stored MCP command"
+                    if console:
+                        console.print(f"[bold red]Error: {error_msg}[/bold red]")
+                    context.state_recorder.record_node_result(
+                        step_id, False, {"error": error_msg}, "FAILED_STORED_MCP"
+                    )
+                    return False, {"error": error_msg}
+                
+                result = await context.mcp_integrator.call_tool(tool_name, tool_args)
+                success = result.get("success", False)
+                
+                context.state_recorder.record_node_result(
+                    step_id, success, result, "COMPLETED_STORED_MCP" if success else "FAILED_STORED_MCP"
+                )
+                
+                if success:
+                    if console:
+                        console.print(f"[green]✓ Stored MCP command executed successfully[/green]")
+                    return True, result
+                else:
+                    error_msg = result.get("error", "Unknown MCP error")
+                    if console:
+                        console.print(f"[bold red]✗ Stored MCP command failed: {error_msg}[/bold red]")
+                    return False, {"error": error_msg}
+                    
+            elif step_details.get("file_tool_name"):
+                # This is a file tool execution
+                tool_name = step_details.get("file_tool_name")
+                tool_args = step_details.get("file_tool_args", {})
+                
+                if console:
+                    console.print(f"[cyan]Executing stored file tool: {tool_name}[/cyan]")
+                    console.print(f"[dim]Arguments: {tool_args}[/dim]")
+                
+                result = await context.file_build_executor.execute(
+                    tool_name, tool_args, console, f"stored_{tool_name}"
+                )
+                success = (
+                    result[0] if isinstance(result, tuple) else result.get("success", False)
+                )
+                actual_result = result[1] if isinstance(result, tuple) else result
+                
+                context.state_recorder.record_node_result(
+                    step_id, success, actual_result, "COMPLETED_STORED_FILE" if success else "FAILED_STORED_FILE"
+                )
+                
+                if success:
+                    if console:
+                        console.print(f"[green]✓ Stored file tool executed successfully[/green]")
+                    return True, actual_result
+                else:
+                    error_msg = (
+                        actual_result.get("error", "Unknown error")
+                        if isinstance(actual_result, dict)
+                        else str(actual_result)
+                    )
+                    if console:
+                        console.print(f"[bold red]✗ Stored file tool failed: {error_msg}[/bold red]")
+                    return False, {"error": error_msg}
+                    
+            elif cloud_provider in ["gcp", "aws"]:
+                # This is a cloud CLI command
+                if console:
+                    console.print(f"[cyan]Executing stored {cloud_provider.upper()} command:[/cyan]")
+                    console.print(f"[bold]{stored_command}[/bold]")
+                
+                # Validate cloud provider executor availability
+                if cloud_provider == "gcp" and not context.gcp_executor:
+                    error_msg = f"GCP Executor not available for stored command: {step_id}"
+                    if console:
+                        console.print(f"[bold red]Error: {error_msg}[/bold red]")
+                    context.state_recorder.record_node_result(
+                        step_id, False, {"error": error_msg}, "FAILED_STORED_EXECUTOR_MISSING"
+                    )
+                    return False, {"error": error_msg}
+                elif cloud_provider == "aws" and not context.aws_executor:
+                    error_msg = f"AWS Executor not available for stored command: {step_id}"
+                    if console:
+                        console.print(f"[bold red]Error: {error_msg}[/bold red]")
+                    context.state_recorder.record_node_result(
+                        step_id, False, {"error": error_msg}, "FAILED_STORED_EXECUTOR_MISSING"
+                    )
+                    return False, {"error": error_msg}
+                
+                # Execute the stored command
+                if cloud_provider == "gcp":
+                    success, result_or_error = await context.gcp_executor.execute(
+                        stored_command, console, f"stored_{step_id}"
+                    )
+                elif cloud_provider == "aws":
+                    success, result_or_error = await context.aws_executor.execute(
+                        stored_command, console, f"stored_{step_id}"
+                    )
+                
+                if success:
+                    if console:
+                        console.print(f"[green]✓ Stored {cloud_provider.upper()} command executed successfully[/green]")
+                        
+                        if isinstance(result_or_error, str) and result_or_error.strip():
+                            console.print(
+                                Panel(
+                                    result_or_error,
+                                    title=f"Result for Step: {step_id}",
+                                    title_align="left",
+                                    border_style="green",
+                                )
+                            )
+                    
+                    context.state_recorder.record_node_result(
+                        step_id, True, {"result": result_or_error, "executed_command_str": stored_command}, "COMPLETED_STORED_SUCCESS"
+                    )
+                    return True, result_or_error
+                else:
+                    error_msg = str(result_or_error)
+                    if console:
+                        console.print(f"[bold red]✗ Stored {cloud_provider.upper()} command failed: {error_msg}[/bold red]")
+                    
+                    context.state_recorder.record_node_result(
+                        step_id, False, {"error": error_msg, "executed_command_str": stored_command}, "FAILED_STORED_COMMAND"
+                    )
+                    return False, {"error": error_msg}
+            else:
+                error_msg = f"Unknown stored command type for step {step_id}: {stored_command}"
+                if console:
+                    console.print(f"[bold red]Error: {error_msg}[/bold red]")
+                context.state_recorder.record_node_result(
+                    step_id, False, {"error": error_msg}, "FAILED_STORED_UNKNOWN_TYPE"
+                )
+                return False, {"error": error_msg}
+                
+        except Exception as e:
+            error_msg = f"Exception during stored command execution for {step_id}: {str(e)}"
+            if console:
+                console.print(f"[bold red]{error_msg}[/bold red]")
+            context.state_recorder.record_node_result(
+                step_id, False, {"error": error_msg}, "FAILED_STORED_EXCEPTION"
+            )
+            return False, {"error": error_msg}
 
     def _build_dependency_map(self, dag):
         dep_map = {}
