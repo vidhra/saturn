@@ -1,9 +1,9 @@
 
 
-# Saturn - Smart Assistant for Translating User Requests
+# Saturn
 Your AI-powered control for cloud infrastructure.
 
-[Saturn](https://github.com/vidhra/Saturn) is an open source conversational interface that translates into infra operations. We help in translating natural language into cloud API calls, making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
+[Saturn](https://github.com/vidhra/Saturn) is an open source cli interface that translates into infra operations. We help in making cloud infrastructure management accessible to everyone - from DevOps engineers to developers who want to focus on building, not configuring.
 
 ![Saturn demo GIF"](./.github/demo.gif)
 
