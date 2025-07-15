@@ -51,11 +51,40 @@ Saturn provides a comprehensive toolkit for cloud operations:
 ## Setup
 
 ### Prerequisites
-- Python 3.9 or higher
+- Python 3.10 or higher
 - Google Cloud SDK and AWS CLI 
 - API keys for your preferred LLM provider (OpenAI, Google Gemini, Anthropic Claude, or Mistral)
 
 ### Quick Installation
+
+#### Option 1: Using UV (Recommended - Faster)
+
+1. **Install UV (if not already installed):**
+   ```bash
+   # On macOS and Linux
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   
+   # On Windows
+   powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+   
+   # Or via pip
+   pip install uv
+   ```
+
+2. **Clone and install:**
+   ```bash
+   git clone https://github.com/vidhra/saturn.git
+   cd saturn
+   uv sync
+   saturn --help  # Verify installation
+   ```
+
+3. **For GPU support:**
+   ```bash
+   uv sync --extra gpu-support
+   ```
+
+#### Option 2: Traditional pip Installation
 
 1. **Clone and install:**
    ```bash
@@ -64,10 +93,12 @@ Saturn provides a comprehensive toolkit for cloud operations:
    python -m venv venv
    source venv/bin/activate  # On Windows: .\venv\Scripts\activate
    pip install -e .
-   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 # for gpu support
+   pip install torch --index-url https://download.pytorch.org/whl/cu121 # for gpu support
    ```
 
-2. **Configure your environment:**
+### Configuration
+
+1. **Configure your environment:**
    ```bash
    # Create your configuration
    cp config.yaml.example config.yaml
@@ -77,13 +108,17 @@ Saturn provides a comprehensive toolkit for cloud operations:
    echo "GCP_PROJECT_ID=your-project-id" >> .env
    ```
 
-3. **Authenticate with Google Cloud:**
+2. **Authenticate with Google Cloud:**
    ```bash
    gcloud auth application-default login
    ```
 
-4. **Ready to go!**
+3. **Ready to go!**
    ```bash
+   # With UV
+   saturn run "List all my compute instances"
+   
+   # With pip (in activated venv)
    saturn run "List all my compute instances"
    ```
 
@@ -191,10 +226,31 @@ We welcome contributions of all kinds:
 
 ### Development Setup
 
+#### With UV (Recommended for Development)
+
 ```bash
 # Clone and set up development environment
 git clone https://github.com/vidhra/saturn.git
-cd Saturn
+cd saturn
+uv sync --dev  # Install with development dependencies
+
+# Run tests
+pytest
+
+# Run linting
+black saturn/
+flake8 saturn/
+
+# Run the application
+saturn run "Your query here"
+```
+
+#### Traditional Development Setup
+
+```bash
+# Clone and set up development environment
+git clone https://github.com/vidhra/saturn.git
+cd saturn
 python -m venv venv
 source venv/bin/activate
 pip install -e ".[dev]"
@@ -206,6 +262,18 @@ python -m pytest
 black saturn/
 flake8 saturn/
 ```
+
+### Why UV?
+
+UV is a fast Python package manager that offers several advantages over traditional pip:
+
+- **🚀 Speed**: 10-100x faster dependency resolution and installation
+- **🔒 Reliability**: Consistent, reproducible environments with lock files
+- **💾 Disk Space**: Efficient caching and deduplication
+- **🔄 Compatibility**: Works with existing pip and pyproject.toml workflows
+- **🛠️ Developer Experience**: Better error messages and modern tooling
+
+The `uv.lock` file ensures all developers and CI/CD systems use identical dependency versions, preventing "works on my machine" issues.
 
 ## Roadmap
 
