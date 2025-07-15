@@ -263,18 +263,6 @@ black saturn/
 flake8 saturn/
 ```
 
-### Why UV?
-
-UV is a fast Python package manager that offers several advantages over traditional pip:
-
-- **🚀 Speed**: 10-100x faster dependency resolution and installation
-- **🔒 Reliability**: Consistent, reproducible environments with lock files
-- **💾 Disk Space**: Efficient caching and deduplication
-- **🔄 Compatibility**: Works with existing pip and pyproject.toml workflows
-- **🛠️ Developer Experience**: Better error messages and modern tooling
-
-The `uv.lock` file ensures all developers and CI/CD systems use identical dependency versions, preventing "works on my machine" issues.
-
 ## Roadmap
 
 🚀 **Coming Soon:**
