@@ -4,6 +4,7 @@ import os
 import glob
 import copy
 from typing import List, Dict, Any, Optional
+from saturn.config import vprint
 from saturn.file_build_tools import FileBuildToolCaller
 
 
@@ -49,10 +50,6 @@ class KnowledgeBase:
             except Exception as e:
                 print(f"  Error loading types from {type_file}: {e}")
         
-        if not self.tools_data:
-             print(f"Warning: No tool definitions found in {self.api_defs_dir}")
-        if not self.types_data:
-             print(f"Warning: No type definitions found in {self.api_defs_dir}")
 
     def _load_file_build_tools(self):
         try:
@@ -93,7 +90,7 @@ class KnowledgeBase:
         Builds the initial list of OpenAI tool definitions from loaded data.
         Refactored and generalized from build_openai_tools in call.py.
         """
-        print("Building initial tool definitions...")
+        vprint("Building initial tool definitions...", verbose=False)
         all_tools = []
         request_types_map = {}
 

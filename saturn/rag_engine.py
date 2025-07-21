@@ -430,8 +430,9 @@ class CLIContextAwareParser(NodeParser):
                         nodes.append(node)
 
         if show_progress:
-            console.print(
-                f"[green]Created {len(nodes)} context-aware text nodes[/green]"
+            vprint(
+                f"[green]Created {len(nodes)} context-aware text nodes[/green]",
+                verbose=self.verbose
             )
 
         return nodes
@@ -584,8 +585,9 @@ class RAGEngine:
                         or "gemini-embedding-exp-03-07" in embed_model_name
                     ):
                         final_google_model_name = f"models/{embed_model_name}"
-                        console.print(
-                            f"[RAG Engine] [yellow]Info:[/] Auto-prefixed Google model name to: {final_google_model_name}"
+                        vprint(
+                            f"[RAG Engine] [yellow]Info:[/] Auto-prefixed Google model name to: {final_google_model_name}",
+                            verbose=self.verbose
                         )
             vprint(f"embed_model_name: {embed_model_name}", verbose=self.verbose)
             is_google_model_candidate = final_google_model_name.startswith("models/")
@@ -672,8 +674,9 @@ class RAGEngine:
                         try:
                             if torch and torch.cuda.is_available():
                                 hf_kwargs["device"] = "cuda"
-                                console.print(
-                                    "[RAG Engine] Auto-detected CUDA device for embeddings"
+                                vprint(
+                                    "[RAG Engine] Auto-detected CUDA device for embeddings",
+                                    verbose=self.verbose
                                 )
                             elif (
                                 torch
@@ -681,23 +684,27 @@ class RAGEngine:
                                 and torch.backends.mps.is_available()
                             ):
                                 hf_kwargs["device"] = "mps"
-                                console.print(
-                                    "[RAG Engine] Auto-detected MPS device for embeddings"
+                                vprint(
+                                    "[RAG Engine] Auto-detected MPS device for embeddings",
+                                    verbose=self.verbose
                                 )
                             else:
                                 hf_kwargs["device"] = "cpu"
-                                console.print(
-                                    "[RAG Engine] Auto-detected CPU device for embeddings"
+                                vprint(
+                                    "[RAG Engine] Auto-detected CPU device for embeddings",
+                                    verbose=self.verbose
                                 )
                         except Exception as e:
                             hf_kwargs["device"] = "cpu"
-                            console.print(
-                                f"[RAG Engine] Exception during device detection: {e}, using CPU for embeddings"
+                            vprint(
+                                f"[RAG Engine] Exception during device detection: {e}, using CPU for embeddings",
+                                verbose=self.verbose
                             )
                     else:
                         hf_kwargs["device"] = self.device
-                        console.print(
-                            f"[RAG Engine] Using specified device: {self.device}"
+                        vprint(
+                            f"[RAG Engine] Using specified device: {self.device}",
+                            verbose=self.verbose
                         )
 
                     # Remove parallel processing configuration
@@ -733,52 +740,60 @@ class RAGEngine:
                                 memory_reserved = (
                                     torch.cuda.memory_reserved(device_id) / 1024**3
                                 )
-                                console.print(
-                                    f"[RAG Engine] GPU Memory - Allocated: {memory_allocated:.2f}GB, Reserved: {memory_reserved:.2f}GB"
+                                vprint(
+                                    f"[RAG Engine] GPU Memory - Allocated: {memory_allocated:.2f}GB, Reserved: {memory_reserved:.2f}GB",
+                                    verbose=self.verbose
                                 )
                         except Exception as e_mem:
-                            console.print(
-                                f"[RAG Engine] Could not check GPU memory: {e_mem}"
+                            vprint(
+                                f"[RAG Engine] Could not check GPU memory: {e_mem}",
+                                verbose=self.verbose
                             )
 
-                    console.print(
-                        f"[RAG Engine] Configured local HuggingFace embedding model: {hf_model_name}"
+                    vprint(
+                        f"[RAG Engine] Configured local HuggingFace embedding model: {hf_model_name}",
+                        verbose=self.verbose
                     )
                     embedding_model_configured = True
                 except ImportError:
-                    console.print(
+                    vprint(
                         "[RAG Engine] [bold red]Error:[/] `llama-index-embeddings-huggingface` not installed."
                     )
                 except Exception as e_hf_embed:
-                    console.print(
-                        f"[RAG Engine] [bold red]Error initializing local HuggingFace model '{hf_model_name}':[/] {e_hf_embed}"
+                    vprint(
+                        f"[RAG Engine] [bold red]Error initializing local HuggingFace model '{hf_model_name}':[/] {e_hf_embed}",
+                        verbose=self.verbose
                     )
             elif embed_model_name and embed_model_name != "default":
                 try:
                     Settings.embed_model = embed_model_name
-                    console.print(
-                        f"[RAG Engine] Attempting to use explicitly named embedding model: {embed_model_name}"
+                    vprint(
+                        f"[RAG Engine] Attempting to use explicitly named embedding model: {embed_model_name}",
+                        verbose=self.verbose
                     )
                     embedding_model_configured = True
                 except Exception as e_named_embed:
-                    console.print(
-                        f"[RAG Engine] [bold red]Error setting named embedding model '{embed_model_name}':[/] {e_named_embed}"
+                    vprint(
+                        f"[RAG Engine] [bold red]Error setting named embedding model '{embed_model_name}':[/] {e_named_embed}",
+                        verbose=self.verbose
                     )
             else:
-                console.print(
-                    "[RAG Engine] [bold yellow]Warning:[/] Using LlamaIndex default embedding model resolution. If OPENAI_API_KEY is not set, this may fail."
+                vprint(
+                    "[RAG Engine] [bold yellow]Warning:[/] Using LlamaIndex default embedding model resolution. If OPENAI_API_KEY is not set, this may fail.",
+                    verbose=self.verbose
                 )
                 Settings.embed_model = "default"
                 embedding_model_configured = True
 
             if not embedding_model_configured:
-                console.print(
-                    "[RAG Engine] [bold red]CRITICAL:[/] Embedding model could not be configured. RAG engine will not be functional."
+                vprint(
+                    "[RAG Engine] [bold red]CRITICAL:[/] Embedding model could not be configured. RAG engine will not be functional.",
+                    verbose=self.verbose
                 )
                 return
 
             if self.vector_store_choice == "chroma":
-                console.print("[RAG Engine] Setting up ChromaDB vector store client...")
+                vprint("[RAG Engine] Setting up ChromaDB vector store client...", verbose=self.verbose)
                 try:
                     import chromadb
                     from llama_index.vector_stores.chroma import \
@@ -811,7 +826,7 @@ class RAGEngine:
                         self.index = VectorStoreIndex.from_vector_store(
                             self.vector_store, storage_context=self.storage_context
                         )
-                        console.print("[RAG Engine] Index loaded from ChromaDB.")
+                        vprint("[RAG Engine] Index loaded from ChromaDB.", verbose=self.verbose)
                 except ImportError:
                     vprint(
                         "[RAG Engine] [bold red]Error:[/] ChromaDB deps not found. Fallback to default in-memory.",
@@ -819,13 +834,14 @@ class RAGEngine:
                     )
                     self.vector_store_choice = "default"
                 except Exception as e_chroma:
-                    console.print(
-                        f"[RAG Engine] [bold red]Error setting up ChromaDB:[/] {e_chroma}. Fallback to default."
+                    vprint(
+                        f"[RAG Engine] [bold red]Error setting up ChromaDB:[/] {e_chroma}. Fallback to default.",
+                        verbose=self.verbose
                     )
                     self.vector_store_choice = "default"
 
             elif self.vector_store_choice == "duckdb":
-                console.print("[RAG Engine] Setting up DuckDB vector store client...")
+                vprint("[RAG Engine] Setting up DuckDB vector store client...", verbose=self.verbose)
                 try:
                     import duckdb
                     from llama_index.vector_stores.duckdb import \
@@ -864,20 +880,22 @@ class RAGEngine:
                             self.index = VectorStoreIndex.from_vector_store(
                                 self.vector_store, storage_context=self.storage_context
                             )
-                            console.print("[RAG Engine] Index loaded from DuckDB.")
+                            vprint("[RAG Engine] Index loaded from DuckDB.", verbose=self.verbose)
                         except Exception as e_duck_load_idx:
                             vprint(
                                 f"[RAG Engine] Index not found or error loading from DuckDB table '{table_name}' ({e_duck_load_idx}). Will build if documents provided.",
                                 verbose=self.verbose
                             )
                 except ImportError:
-                    console.print(
-                        "[RAG Engine] [bold red]Error:[/] DuckDB deps not found. Fallback to default in-memory."
+                    vprint(
+                        "[RAG Engine] [bold red]Error:[/] DuckDB deps not found. Fallback to default in-memory.",
+                        verbose=self.verbose
                     )
                     self.vector_store_choice = "default"
                 except Exception as e_duck:
-                    console.print(
-                        f"[RAG Engine] [bold red]Error setting up DuckDB:[/] {e_duck}. Fallback to default."
+                    vprint(
+                        f"[RAG Engine] [bold red]Error setting up DuckDB:[/] {e_duck}. Fallback to default.",
+                        verbose=self.verbose
                     )
                     self.vector_store_choice = "default"
 
@@ -886,8 +904,9 @@ class RAGEngine:
                     documents_path_for_init, force_rebuild=False
                 )
             elif self.vector_store_choice == "default" and documents_path_for_init:
-                console.print(
-                    "[RAG Engine] Building in-memory index from provided documents_path_for_init."
+                vprint(
+                    "[RAG Engine] Building in-memory index from provided documents_path_for_init.",
+                    verbose=self.verbose
                 )
                 self.ingest_and_build_index(
                     documents_path_for_init, force_rebuild=False
@@ -898,22 +917,26 @@ class RAGEngine:
                 self.query_engine = self.index.as_query_engine(
                     similarity_top_k=5, llm=current_llm_setting
                 )
-                console.print(
-                    f"[RAG Engine]  Query engine initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'})."
+                vprint(
+                    f"[RAG Engine]  Query engine initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'}).",
+                    verbose=self.verbose
                 )
                 self._is_initialized_properly = True
             else:
-                console.print(
-                    "[RAG Engine] No index available. Query engine not initialized. Use ingest_and_build_index() or check init flags."
+                vprint(
+                    "[RAG Engine] No index available. Query engine not initialized. Use ingest_and_build_index() or check init flags.",
+                    verbose=self.verbose
                 )
                 if self.vector_store_choice in ["chroma", "duckdb"]:
-                    console.print(
-                        f"[RAG Engine] [yellow]Hint:[/] For persistent store '{self.vector_store_choice}', run 'saturn ingest-docs' to build the index first."
+                    vprint(
+                        f"[RAG Engine] [yellow]Hint:[/] For persistent store '{self.vector_store_choice}', run 'saturn ingest-docs' to build the index first.",
+                        verbose=self.verbose
                     )
 
         except Exception as e:
-            console.print(
-                f"[RAG Engine] [bold red]Critical error during RAGEngine __init__:[/] {e}"
+            vprint(
+                f"[RAG Engine] [bold red]Critical error during RAGEngine __init__:[/] {e}",
+                verbose=self.verbose
             )
             console.print_exception(show_locals=False)
 
@@ -930,28 +953,32 @@ class RAGEngine:
         Returns:
             bool: True if index building was successful, False otherwise.
         """
-        console.print(f"[RAG Engine] Starting ingestion from: {documents_path}")
+        vprint(f"[RAG Engine] Starting ingestion from: {documents_path}", verbose=self.verbose)
         if not os.path.exists(documents_path):
-            console.print(
-                f"[RAG Engine] [bold red]Error:[/] Documents path for ingestion does not exist: {documents_path}"
+            vprint(
+                f"[RAG Engine] [bold red]Error:[/] Documents path for ingestion does not exist: {documents_path}",
+                verbose=self.verbose
             )
             return False
 
         try:
-            console.print(
-                f"[RAG Engine] Loading documents for ingestion from {documents_path}..."
+            vprint(
+                f"[RAG Engine] Loading documents for ingestion from {documents_path}...",
+                verbose=self.verbose
             )
             reader = SimpleDirectoryReader(
                 documents_path, required_exts=[".md"], recursive=True
             )
             documents = reader.load_data()
             if not documents:
-                console.print(
-                    f"[RAG Engine] [bold yellow]Warning:[/] No documents found at {documents_path} for ingestion."
+                vprint(
+                    f"[RAG Engine] [bold yellow]Warning:[/] No documents found at {documents_path} for ingestion.",
+                    verbose=self.verbose
                 )
                 return False
-            console.print(
-                f"[RAG Engine] Loaded {len(documents)} documents for ingestion."
+            vprint(
+                f"[RAG Engine] Loaded {len(documents)} documents for ingestion.",
+                verbose=self.verbose
             )
 
             if self.vector_store_choice == "chroma" and force_rebuild:
@@ -963,8 +990,9 @@ class RAGEngine:
                     collection_name = self.db_config.get(
                         "chroma_collection_name", DEFAULT_CHROMA_COLLECTION
                     )
-                    console.print(
-                        f"[RAG Engine] ChromaDB force_rebuild: Deleting collection '{collection_name}'..."
+                    vprint(
+                        f"[RAG Engine] ChromaDB force_rebuild: Deleting collection '{collection_name}'...",
+                        verbose=self.verbose
                     )
                     try:
                         self.vector_store.client.delete_collection(name=collection_name)
@@ -976,13 +1004,15 @@ class RAGEngine:
                         self.storage_context = StorageContext.from_defaults(
                             vector_store=self.vector_store
                         )
-                        console.print(
-                            f"[RAG Engine] ChromaDB collection '{collection_name}' re-created."
+                        vprint(
+                            f"[RAG Engine] ChromaDB collection '{collection_name}' re-created.",
+                            verbose=self.verbose
                         )
                         self.index = None
                     except Exception as e_delete_chroma:
-                        console.print(
-                            f"[RAG Engine] [bold red]Error deleting/re-creating Chroma collection '{collection_name}':[/] {e_delete_chroma}"
+                        vprint(
+                            f"[RAG Engine] [bold red]Error deleting/re-creating Chroma collection '{collection_name}':[/] {e_delete_chroma}",
+                            verbose=self.verbose
                         )
 
             elif self.vector_store_choice == "duckdb" and force_rebuild:
@@ -990,37 +1020,42 @@ class RAGEngine:
                     table_name = self.db_config.get(
                         "duckdb_table_name", DEFAULT_DUCKDB_TABLE_NAME
                     )
-                    console.print(
-                        f"[RAG Engine] DuckDB force_rebuild: Dropping table '{table_name}'..."
+                    vprint(
+                        f"[RAG Engine] DuckDB force_rebuild: Dropping table '{table_name}'...",
+                        verbose=self.verbose
                     )
                     try:
                         self.vector_store._conn.execute(
                             f'DROP TABLE IF EXISTS "{table_name}"'
                         )
-                        console.print(
-                            f"[RAG Engine] DuckDB table '{table_name}' dropped."
+                        vprint(
+                            f"[RAG Engine] DuckDB table '{table_name}' dropped.",
+                            verbose=self.verbose
                         )
                         self.index = None
                     except Exception as e_drop_duckdb:
-                        console.print(
-                            f"[RAG Engine] [bold red]Error dropping DuckDB table '{table_name}':[/] {e_drop_duckdb}"
+                        vprint(
+                            f"[RAG Engine] [bold red]Error dropping DuckDB table '{table_name}':[/] {e_drop_duckdb}",
+                            verbose=self.verbose
                         )
 
-            console.print(
-                f"[RAG Engine] Building/updating index with {len(documents)} documents for '{self.vector_store_choice}' store..."
+            vprint(
+                f"[RAG Engine] Building/updating index with {len(documents)} documents for '{self.vector_store_choice}' store...",
+                verbose=self.verbose
             )
             if self.vector_store_choice == "default" or not self.storage_context:
                 self.index = VectorStoreIndex.from_documents(
                     documents, show_progress=True
                 )
-                console.print("[RAG Engine] Built new in-memory index.")
+                vprint("[RAG Engine] Built new in-memory index.", verbose=self.verbose)
             else:
 
                 self.index = VectorStoreIndex.from_documents(
                     documents, storage_context=self.storage_context, show_progress=True
                 )
-                console.print(
-                    f"[RAG Engine] Index built/updated for {self.vector_store_choice}."
+                vprint(
+                    f"[RAG Engine] Index built/updated for {self.vector_store_choice}.",
+                    verbose=self.verbose
                 )
 
             if self.index:
@@ -1029,19 +1064,22 @@ class RAGEngine:
                 self.query_engine = self.index.as_query_engine(
                     similarity_top_k=6, llm=current_llm_setting
                 )
-                console.print(
-                    f"[RAG Engine] Query engine (re)initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'})."
+                vprint(
+                    f"[RAG Engine] Query engine (re)initialized (using LLM: {type(current_llm_setting).__name__ if current_llm_setting else 'None'}).",
+                    verbose=self.verbose
                 )
                 self._is_initialized_properly = True
                 return True
             else:
-                console.print(
-                    "[RAG Engine] [bold red]Error:[/] Index build/update failed."
+                vprint(
+                    "[RAG Engine] [bold red]Error:[/] Index build/update failed.",
+                    verbose=self.verbose
                 )
                 return False
         except Exception as e:
-            console.print(
-                f"[RAG Engine] [bold red]Error during document ingestion and index building:[/] {e}"
+            vprint(
+                f"[RAG Engine] [bold red]Error during document ingestion and index building:[/] {e}",
+                verbose=self.verbose
             )
             console.print_exception(show_locals=False)
             return False
@@ -1054,8 +1092,9 @@ class RAGEngine:
         """
         llm = self.hyde_llm or Settings.llm
         if llm is None:
-            console.print(
-                "[RAG Engine] [yellow]HyDE LLM not configured. Skipping HyDE generation.[/yellow]"
+            vprint(
+                "[RAG Engine] [yellow]HyDE LLM not configured. Skipping HyDE generation.[/yellow]",
+                verbose=self.verbose
             )
             return None
         if provider == "gcp":
@@ -1086,7 +1125,7 @@ class RAGEngine:
             else:
                 return str(response)
         except Exception as e:
-            console.print(f"[RAG Engine] [red]HyDE LLM generation failed:[/red] {e}")
+            vprint(f"[RAG Engine] [red]HyDE LLM generation failed:[/red] {e}", verbose=self.verbose)
             return None
 
     async def query_docs(
@@ -1100,8 +1139,9 @@ class RAGEngine:
         If HyDE is enabled, generates a hypothetical doc and uses it as the retrieval query.
         """
         if not self._is_initialized_properly or not self.query_engine:
-            console.print(
-                "[RAG Engine] Query engine not properly initialized or index not built. Cannot query."
+            vprint(
+                "[RAG Engine] Query engine not properly initialized or index not built. Cannot query.",
+                verbose=self.verbose
             )
             fallback_message = "RAG Engine not available or failed to initialize."
             if self.vector_store_choice in ["chroma", "duckdb"]:
@@ -1116,8 +1156,9 @@ class RAGEngine:
                 query_text, provider=provider
             )
             if hyde_doc:
-                console.print(
-                    "[RAG Engine] [cyan]Using HyDE-generated hypothetical doc for retrieval.[/cyan]"
+                vprint(
+                    "[RAG Engine] [cyan]Using HyDE-generated hypothetical doc for retrieval.[/cyan]",
+                    verbose=self.verbose
                 )
                 retrieval_query = hyde_doc
             else:
@@ -1125,11 +1166,11 @@ class RAGEngine:
         else:
             retrieval_query = query_text
 
-        console.print(f"[RAG Engine] Querying with: '{retrieval_query[:300]}...'")
+        vprint(f"[RAG Engine] Querying with: '{retrieval_query[:300]}...'", verbose=self.verbose)
         try:
             response = self.query_engine.query(retrieval_query)
         except Exception as e:
-            console.print(f"[RAG Engine] [bold red]Error during query:[/] {e}")
+            vprint(f"[RAG Engine] [bold red]Error during query:[/] {e}", verbose=self.verbose)
             return "Error occurred during RAG query."
 
         def find_best_service(query, nodes):
@@ -1165,8 +1206,9 @@ class RAGEngine:
                 + "\n\n---\n"
             )
         if hasattr(response, "source_nodes") and response.source_nodes:
-            console.print(
-                f"[RAG Engine] Retrieved {len(response.source_nodes)} source nodes."
+            vprint(
+                f"[RAG Engine] Retrieved {len(response.source_nodes)} source nodes.",
+                verbose=self.verbose
             )
             filtered_nodes = response.source_nodes
             if target_service:
@@ -1176,12 +1218,14 @@ class RAGEngine:
                     if n.node.metadata.get("service", "") == target_service
                 ]
                 if filtered_nodes:
-                    console.print(
-                        f"[RAG Engine] Filtered to {len(filtered_nodes)} nodes for service '{target_service}'."
+                    vprint(
+                        f"[RAG Engine] Filtered to {len(filtered_nodes)} nodes for service '{target_service}'.",
+                        verbose=self.verbose
                     )
                 else:
-                    console.print(
-                        f"[RAG Engine] No nodes matched service '{target_service}', using all nodes."
+                    vprint(
+                        f"[RAG Engine] No nodes matched service '{target_service}', using all nodes.",
+                        verbose=self.verbose
                     )
                     filtered_nodes = response.source_nodes
             nodes_by_command = {}
@@ -1195,12 +1239,14 @@ class RAGEngine:
                 section_title = metadata.get("section_title", "Content")
                 content_types = metadata.get("content_types", [])
                 display_score = f"{score:.2f}" if score is not None else "N/A"
-                console.print(
-                    f"text_content: {text_content[:100]}, score: {score}, min_similarity_score: {min_similarity_score}"
+                vprint(
+                    f"text_content: {text_content[:100]}, score: {score}, min_similarity_score: {min_similarity_score}",
+                    verbose=self.verbose
                 )
                 if score is not None and score < min_similarity_score:
-                    console.print(
-                        f"  [RAG Engine] Node {i+1} from '{file_name}' (command: {command}, section: {section_title}) skipped due to low score ({display_score} < {min_similarity_score})."
+                    vprint(
+                        f"  [RAG Engine] Node {i+1} from '{file_name}' (command: {command}, section: {section_title}) skipped due to low score ({display_score} < {min_similarity_score}).",
+                        verbose=self.verbose
                     )
                     continue
                 command_key = (
@@ -1240,8 +1286,9 @@ class RAGEngine:
                             f"### {header}\n\n{text_content}\n\n---\n"
                         )
             else:
-                console.print(
-                    "[RAG Engine] No documents met the minimum similarity score."
+                vprint(
+                    "[RAG Engine] No documents met the minimum similarity score.",
+                    verbose=self.verbose
                 )
                 if filtered_nodes:
                     top_node = filtered_nodes[0]
@@ -1249,16 +1296,18 @@ class RAGEngine:
                     top_node_metadata = top_node.node.metadata or {}
                     command = top_node_metadata.get("command", "Unknown")
                     provider_val = top_node_metadata.get("provider", "Unknown")
-                    console.print(
-                        f"[RAG Engine] Returning most relevant document as fallback (command: {command}, provider: {provider_val})."
+                    vprint(
+                        f"[RAG Engine] Returning most relevant document as fallback (command: {command}, provider: {provider_val}).",
+                        verbose=self.verbose
                     )
                     return f"**Potentially relevant content** (similarity score may be low):\n\n**Command:** {command} ({provider_val})\n\n{top_node_text}"
                 return "No sufficiently relevant documents found."
         else:
-            console.print("[RAG Engine] No source nodes retrieved from query response.")
+            vprint("[RAG Engine] No source nodes retrieved from query response.", verbose=self.verbose)
             if response.response:
-                console.print(
-                    "[RAG Engine] Returning direct response from query engine."
+                vprint(
+                    "[RAG Engine] Returning direct response from query engine.",
+                    verbose=self.verbose
                 )
                 return response.response
             return "No relevant documents found by RAG engine."

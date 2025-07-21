@@ -3,6 +3,7 @@ import io
 import json
 from typing import Any, Dict, Optional
 
+from saturn.config import vprint
 from rich.console import Console
 from rich.panel import Panel
 
@@ -65,10 +66,10 @@ async def run_query_with_state_machine(
 
     if config.get("gcp_project_id"):
         gcp_executor_instance = GcloudExecutor(config)
-        console.print("GCP Executor initialized.")
+        vprint("GCP Executor initialized.", verbose=verbose)
     if config.get("aws_region") or config.get("aws_profile"):
         aws_executor_instance = AWSExecutor(config)
-        console.print("AWS Executor initialized.")
+        vprint("AWS Executor initialized.", verbose=verbose)
     if not gcp_executor_instance and not aws_executor_instance:
         console.print(
             "[bold red]Error:[/] No cloud executor could be initialized. Check GCP/AWS configurations."
@@ -86,8 +87,9 @@ async def run_query_with_state_machine(
         api_defs_dir=config.get("api_defs_dir", "./internal/knowledge_base"),
         working_directory=config.get("working_directory", "."),
     )
-    console.print(
-        f"Knowledge Base initialized with {knowledge_base.get_tool_counts()['total_tools']} total tools."
+    vprint(
+        f"Knowledge Base initialized with {knowledge_base.get_tool_counts()['total_tools']} total tools.",
+        verbose=verbose,
     )
 
     mcp_integrator = None
@@ -95,8 +97,9 @@ async def run_query_with_state_machine(
         try:
             mcp_integrator = MCPToolIntegrator(config.get("working_directory", "."))
             await mcp_integrator.initialize()
-            console.print(
-                f"MCP Integration initialized with {mcp_integrator.get_tools_summary()['mcp_tools']} MCP tools."
+            vprint(
+                f"MCP Integration initialized with {mcp_integrator.get_tools_summary()['mcp_tools']} MCP tools.",
+                verbose=verbose,
             )
         except Exception as e:
             console.print(f"[yellow]Warning: MCP integration failed: {e}[/yellow]")
@@ -235,6 +238,7 @@ async def run_chat_conversational(config, user_input_stream):
         embed_batch_size=32,
         preserve_code_blocks=True,
         preserve_command_context=True,
+        verbose=False,
     )
     runner = StateMachineRunner(
         llm_interface=get_llm_interface(config),

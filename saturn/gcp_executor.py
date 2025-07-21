@@ -11,6 +11,7 @@ from google.protobuf.json_format import MessageToDict
 from rich.console import Console 
 from rich.prompt import Confirm
 import subprocess
+from saturn.config import vprint
 
 from .knowledge_base import KnowledgeBase
 
@@ -21,8 +22,9 @@ class GcloudExecutor:
         self.gcp_project_id = config.get('gcp_project_id')
         self.credentials_path = config.get('gcp_credentials_path')
         self.execution_mode = config.get('execution_mode', 'auto')
-        print(f"Gcloud Executor initialized for project: {self.gcp_project_id}")
-        print(f"Execution mode: {self.execution_mode}")
+        verbose = config.get('verbose', False)
+        vprint(f"Gcloud Executor initialized for project: {self.gcp_project_id}", verbose=verbose)
+        vprint(f"Execution mode: {self.execution_mode}", verbose=verbose)
 
     async def execute(
         self,

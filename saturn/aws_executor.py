@@ -3,6 +3,7 @@ import asyncio
 import json
 from typing import Dict, Any, Tuple
 
+from saturn.config import vprint
 from rich.console import Console
 from rich.prompt import Confirm
 
@@ -13,8 +14,9 @@ class AWSExecutor:
         self.aws_region = config.get('aws_region', config.get('aws_default_region', 'us-west-2'))
         self.aws_profile = config.get('aws_profile')
         self.execution_mode = config.get('execution_mode', 'auto')
-        print(f"AWS Executor initialized for region: {self.aws_region}")
-        print(f"Execution mode: {self.execution_mode}")
+        verbose = config.get('verbose', False)
+        vprint(f"AWS Executor initialized for region: {self.aws_region}", verbose=verbose)
+        vprint(f"Execution mode: {self.execution_mode}", verbose=verbose)
 
     async def execute(
         self,

@@ -388,7 +388,7 @@ class SaturnApp(App):
                         db_config=runtime_config.get("db_config"),
                         documents_path_for_init=docs_path,
                         build_index_on_init=False,  # Try to load existing index first
-                        verbose=True,
+                        verbose=runtime_config.get("verbose", False),
                     )
 
                 # Initialize MCP integration

@@ -149,10 +149,6 @@ class ReasoningState(BaseState):
 
         thinking_lines = [
             ["Analyzing your request..."],
-            ["Breaking down query components..."],
-            ["Identifying key objectives..."],
-            ["Determining execution strategy..."],
-            ["Reasoning complete!"],
         ]
 
         if has_console:

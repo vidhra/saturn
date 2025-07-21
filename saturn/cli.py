@@ -402,6 +402,7 @@ def run_command(
             embed_batch_size=32,
             preserve_code_blocks=True,
             preserve_command_context=True,
+            verbose=verbose,
         )
 
         if (
@@ -473,6 +474,12 @@ def ingest_docs_command(
         False,
         "--force-rebuild",
         help="Force rebuild of the index, deleting existing data in persistent stores.",
+    ),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        "-v",
+        help="Enable verbose output, including full exception tracebacks.",
     ),
 ):
     """Ingests documents into the specified vector store with provider-specific configurations."""
@@ -550,6 +557,7 @@ def ingest_docs_command(
             embed_batch_size=32,
             preserve_code_blocks=True,
             preserve_command_context=True,
+            verbose=verbose,
         )
 
         console.print("Attempting to ingest and build index...")
@@ -754,6 +762,7 @@ def terraform_run_command(
             embed_batch_size=32,
             preserve_code_blocks=True,
             preserve_command_context=True,
+            verbose=verbose,
         )
 
         console.print("--- Starting Terraform Orchestrator ---")
@@ -891,6 +900,7 @@ def hybrid_run_command(
             embed_batch_size=32,
             preserve_code_blocks=True,
             preserve_command_context=True,
+            verbose=verbose,
         )
 
         console.print("--- Starting Hybrid Orchestrator ---")
@@ -973,7 +983,7 @@ def convert_history_command(
         from .rag_engine import RAGEngine
 
         rag_engine_instance = RAGEngine(
-            vector_store_choice="default", build_index_on_init=False
+            vector_store_choice="default", build_index_on_init=False, verbose=verbose
         )
 
         orchestrator = HybridOrchestrator(config, rag_engine_instance)
