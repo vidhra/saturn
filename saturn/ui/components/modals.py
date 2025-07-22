@@ -83,12 +83,14 @@ class ModelSelectorScreen(ModalScreen):
     """Model selection modal similar to Elia's interface"""
 
     BINDINGS = [
-        Binding("escape", "dismiss", "Close"),
-        Binding("q", "dismiss", "Close"),
-        Binding("enter", "select_model", "Select"),
+        Binding("escape", "dismiss", "Close", show=True, priority=True),
+        Binding("q", "dismiss", "Close", show=True, priority=True),
+        Binding("ctrl+q", "dismiss", "Close", show=False, priority=True),
+        Binding("enter", "select_model", "Select", show=True),
+        Binding("ctrl+m", "select_model", "Select", show=False, priority=True),
         Binding("left", "focus_provider", "Focus Provider", show=False),
         Binding("right", "focus_model", "Focus Model", show=False),
-        Binding("tab", "focus_next", "Next Panel", show=False),
+        Binding("tab", "focus_next", "Next Panel", show=True),
     ]
 
     def __init__(self, current_provider: str, current_model: str, **kwargs):
@@ -206,23 +208,47 @@ class ModelSelectorScreen(ModalScreen):
         # Return the selection to the parent app
         self.dismiss((self.selected_provider, self.selected_model))
 
+    def action_dismiss(self) -> None:
+        """Dismiss the modal screen"""
+        self.dismiss()
+
     def action_focus_provider(self) -> None:
         """Focus the provider list"""
-        self.query_one("#provider-list", OptionList).focus()
+        try:
+            self.query_one("#provider-list", OptionList).focus()
+        except Exception:
+            pass  # Handle case where widget doesn't exist yet
 
     def action_focus_model(self) -> None:
         """Focus the model list"""
-        self.query_one("#model-list", OptionList).focus()
+        try:
+            self.query_one("#model-list", OptionList).focus()
+        except Exception:
+            pass  # Handle case where widget doesn't exist yet
 
     def action_focus_next(self) -> None:
         """Focus next panel (tab between provider and model lists)"""
-        provider_list = self.query_one("#provider-list", OptionList)
-        model_list = self.query_one("#model-list", OptionList)
-        
-        if provider_list.has_focus:
-            model_list.focus()
-        else:
-            provider_list.focus()
+        try:
+            provider_list = self.query_one("#provider-list", OptionList)
+            model_list = self.query_one("#model-list", OptionList)
+            
+            if provider_list.has_focus:
+                model_list.focus()
+            else:
+                provider_list.focus()
+        except Exception:
+            pass  # Handle case where widgets don't exist yet
+
+    def on_key(self, event) -> None:
+        """Debug key presses"""
+        self.app.bell()  # Make a sound to confirm key is received
+        if event.key in ["ctrl+q", "ctrl+m"]:
+            # Force the action manually if it's not working through bindings
+            if event.key == "ctrl+q":
+                self.action_dismiss()
+            elif event.key == "ctrl+m":
+                self.action_select_model()
+            event.prevent_default()
 
     def _update_model_list(self, provider: str) -> None:
         """Update the model list for the selected provider"""
@@ -258,14 +284,25 @@ class ModelSelectorScreen(ModalScreen):
                 model_list.highlighted = i
                 break
 
+    def on_mount(self) -> None:
+        """Called when the modal is mounted - ensure proper focus"""
+        # Set focus to the provider list initially
+        try:
+            provider_list = self.query_one("#provider-list", OptionList)
+            provider_list.focus()
+        except Exception:
+            pass  # Fallback if widgets aren't ready yet
+
 
 class ModeSelectorScreen(ModalScreen):
     """Simple mode selector modal"""
 
     BINDINGS = [
-        Binding("escape", "dismiss", "Close"),
-        Binding("q", "dismiss", "Close"),
-        Binding("enter", "select_mode", "Select"),
+        Binding("escape", "dismiss", "Close", show=True, priority=True),
+        Binding("q", "dismiss", "Close", show=True, priority=True),
+        Binding("ctrl+q", "dismiss", "Close", show=False, priority=True),
+        Binding("enter", "select_mode", "Select", show=True),
+        Binding("ctrl+m", "select_mode", "Select", show=False, priority=True),
     ]
 
     def __init__(self, current_mode: str = "auto", **kwargs):
@@ -278,7 +315,7 @@ class ModeSelectorScreen(ModalScreen):
             yield Static("🔧 Select Mode", classes="mode-title")
             
             mode_options = [
-                Option(f"🤖 Auto {'✓' if self.current_mode == 'auto' else ''}", id="auto"),
+                Option(f"🤖 Ask {'✓' if self.current_mode == 'ask' else ''}", id="auto"),
                 Option(f"🧠 Agent {'✓' if self.current_mode == 'agent' else ''}", id="agent"),
                 Option(f"⚡ Command {'✓' if self.current_mode == 'command' else ''}", id="command"),
             ]
@@ -311,3 +348,27 @@ class ModeSelectorScreen(ModalScreen):
         
         # Return the selection to the parent app
         self.dismiss(self.selected_mode)
+
+    def action_dismiss(self) -> None:
+        """Dismiss the modal screen"""
+        self.dismiss()
+
+    def on_mount(self) -> None:
+        """Called when the modal is mounted - ensure proper focus"""
+        # Set focus to the mode list initially
+        try:
+            mode_list = self.query_one("#mode-list", OptionList)
+            mode_list.focus()
+        except Exception:
+            pass  # Fallback if widget isn't ready yet
+
+    def on_key(self, event) -> None:
+        """Debug key presses"""
+        self.app.bell()  # Make a sound to confirm key is received
+        if event.key in ["ctrl+q", "ctrl+m"]:
+            # Force the action manually if it's not working through bindings
+            if event.key == "ctrl+q":
+                self.action_dismiss()
+            elif event.key == "ctrl+m":
+                self.action_select_mode()
+            event.prevent_default()

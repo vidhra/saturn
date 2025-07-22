@@ -7,6 +7,7 @@ from rich.table import Table
 
 from internal.dag.dag import ORDER_UP, AcyclicGraph, Edge
 # Import prompts from orchestrator
+from saturn.config import vprint
 from saturn.prompts import PLANNING_SYSTEM_PROMPT_TEMPLATE, PREVIOUS_REASONING_ANALYSIS_PROMPT
 
 from .base_state import BaseState, StateMachineContext
@@ -45,8 +46,8 @@ class PlanningState(BaseState):
                         )
                     )
                     if context.console:
-                        context.console.print(
-                            f"[dim]Using runner's cached file tools ({len(context.file_tools)} tools)[/dim]"
+                        vprint(
+                            f"[dim]Using runner's cached file tools ({len(context.file_tools)} tools)[/dim]",verbose=context.config.get("verbose", False)
                         )
                 else:
                     # Fallback to direct creation if runner not available (shouldn't happen in normal flow)

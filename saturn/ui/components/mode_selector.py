@@ -80,7 +80,7 @@ class ModeSelector(Widget):
             
             # Dropdown
             options = [
-                "🤖 Auto",
+                "🤖 Ask",
                 "🧠 Agent", 
                 "⚡ Command",
             ]
@@ -125,7 +125,7 @@ class ModeSelector(Widget):
             
             # Focus the dropdown and pre-select current mode
             dropdown.focus()
-            modes = ["auto", "agent", "command"]
+            modes = ["ask", "agent", "command"]
             if self.current_mode in modes:
                 dropdown.highlighted = modes.index(self.current_mode)
                 print(f"DEBUG: Highlighted mode {self.current_mode}")

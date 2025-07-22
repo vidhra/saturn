@@ -3,6 +3,8 @@ import os
 import time
 from typing import Any, Dict, List, Optional
 
+from saturn.config import vprint
+
 from .states.base_state import StateMachineContext
 from .states.completed_state import CompletedState
 from .states.failed_state import FailedState
@@ -155,7 +157,7 @@ class StateMachineRunner:
 
         # Cache miss - perform expensive discovery
         if self.console:
-            self.console.print("[dim]Discovering file tools (cache miss)...[/dim]")
+            vprint("[dim]Discovering file tools (cache miss)...[/dim]",verbose=self.config.get("verbose", False))
 
         from saturn.file_build_tools import FileBuildToolCaller
 
@@ -173,8 +175,8 @@ class StateMachineRunner:
         self.tool_cache.set_file_tools(working_directory, tools)
 
         if self.console:
-            self.console.print(
-                f"[dim]File tools discovered and cached ({len(tools)} tools)[/dim]"
+            vprint(
+                f"[dim]File tools discovered and cached ({len(tools)} tools)[/dim]",verbose=self.config.get("verbose", False)
             )
 
         return tools
@@ -203,7 +205,7 @@ class StateMachineRunner:
 
         # Cache miss - get MCP tools
         if self.console:
-            self.console.print("[dim]Discovering MCP tools (cache miss)...[/dim]")
+            vprint("[dim]Discovering MCP tools (cache miss)...[/dim]",verbose=self.config.get("verbose", False))
 
         try:
             mcp_schemas = self.mcp_integrator.mcp_manager.get_all_tools_schemas()
@@ -217,15 +219,15 @@ class StateMachineRunner:
             self.tool_cache.set_mcp_tools(mcp_config_hash, tools)
 
             if self.console:
-                self.console.print(
-                    f"[dim]MCP tools discovered and cached ({len(tools)} tools)[/dim]"
+                vprint(
+                    f"[dim]MCP tools discovered and cached ({len(tools)} tools)[/dim]",verbose=self.config.get("verbose", False)
                 )
 
             return tools
         except Exception as e:
             if self.console:
-                self.console.print(
-                    f"[dim yellow]Warning: Failed to get MCP tools: {e}[/dim yellow]"
+                vprint(
+                    f"[dim yellow]Warning: Failed to get MCP tools: {e}[/dim yellow]",verbose=self.config.get("verbose", False)
                 )
             return []
 
@@ -241,7 +243,7 @@ class StateMachineRunner:
 
         # Cache miss - detect project type
         if self.console:
-            self.console.print("[dim]Detecting project type (cache miss)...[/dim]")
+            vprint("[dim]Detecting project type (cache miss)...[/dim]",verbose=self.config.get("verbose", False))
 
         try:
             if (
@@ -267,15 +269,15 @@ class StateMachineRunner:
             self.tool_cache.set_project_type(working_directory, project_type)
 
             if self.console:
-                self.console.print(
-                    f"[dim]Project type detected and cached: {project_type}[/dim]"
+                vprint(
+                    f"[dim]Project type detected and cached: {project_type}[/dim]",verbose=self.config.get("verbose", False)
                 )
 
             return project_type
         except Exception as e:
             if self.console:
-                self.console.print(
-                    f"[dim yellow]Warning: Failed to detect project type: {e}[/dim yellow]"
+                vprint(
+                    f"[dim yellow]Warning: Failed to detect project type: {e}[/dim yellow]",verbose=self.config.get("verbose", False)
                 )
             return "unknown"
 
@@ -349,7 +351,7 @@ class StateMachineRunner:
             from internal.states.load_workflow_state import LoadWorkflowState
             current_state_class = LoadWorkflowState
             if self.console:
-                self.console.print("[dim]Starting with LoadWorkflowState for .sat file[/dim]")
+                vprint("[dim]Starting with LoadWorkflowState for .sat file[/dim]",verbose=self.config.get("verbose", False))
         else:
             current_state_class = StartState
 
@@ -364,11 +366,6 @@ class StateMachineRunner:
                 checkpoint_id = await self._save_checkpoint(
                     context, current_state_class
                 )
-            else:
-                if self.console:
-                    self.console.print(
-                        "[dim]Checkpointing disabled for performance[/dim]"
-                    )
 
             try:
                 next_state_class, context = await current_state_instance.run(context)
@@ -494,7 +491,7 @@ class StateMachineRunner:
             json.dump(checkpoint_data, f, indent=2)
 
         if self.console:
-            self.console.print(f"[dim]Checkpoint saved: {checkpoint_id}[/dim]")
+            vprint(f"[dim]Checkpoint saved: {checkpoint_id}[/dim]",verbose=self.config.get("verbose", False))
 
         return checkpoint_id
 
@@ -627,8 +624,8 @@ class StateMachineRunner:
                 try:
                     os.remove(checkpoint_path)
                     if self.console:
-                        self.console.print(
-                            f"[dim]Cleaned up checkpoint: {filename}[/dim]"
+                        vprint(
+                            f"[dim]Cleaned up checkpoint: {filename}[/dim]",verbose=self.config.get("verbose", False)
                         )
                 except OSError:
                     pass  # Ignore cleanup errors

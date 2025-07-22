@@ -338,9 +338,9 @@ class SaturnApp(App):
                 runtime_config = self.config.copy()
                 if hasattr(self, 'app_mode'):
                     mode_mapping = {
-                        "auto": "auto",   
+                        "ask": "ask",   
                         "agent": "yolo",    
-                        "command": "manual"  
+                        "command": "command"  
                     }
                     execution_mode = mode_mapping.get(self.app_mode, "auto")
                     runtime_config["execution_mode"] = execution_mode
